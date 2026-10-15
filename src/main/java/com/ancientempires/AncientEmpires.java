@@ -6,6 +6,7 @@ import com.ancientempires.entity.npc.NpcEntity;
 import com.ancientempires.registry.ModCreativeTabs;
 import com.ancientempires.registry.ModEntities;
 import com.ancientempires.registry.ModItems;
+import com.ancientempires.registry.ModMenus;
 import com.mojang.logging.LogUtils;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
@@ -24,7 +25,8 @@ import org.slf4j.Logger;
  * <p>Packages:
  * config — ranges, wind-up, and cooldowns
  * registry — entity, spawn egg, and creative tab
- * entity.npc — the NPC, its equipment, and its owner
+ * entity.npc — the NPC, its inventory, and its owner
+ * inventory — the NPC container menu
  * combat — attack profiles, the melee goal, and the optional Better Combat reader
  * client — the NPC renderer and Better Combat poses
  */
@@ -41,6 +43,7 @@ public class AncientEmpires
         ModEntities.ENTITIES.register(modBus);
         ModItems.ITEMS.register(modBus);
         ModCreativeTabs.TABS.register(modBus);
+        ModMenus.MENUS.register(modBus);
 
         modBus.addListener(this::commonSetup);
         modBus.addListener(this::registerAttributes);

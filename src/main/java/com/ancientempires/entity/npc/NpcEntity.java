@@ -1,19 +1,25 @@
 package com.ancientempires.entity.npc;
 
+import com.ancientempires.AncientEmpires;
 import com.ancientempires.combat.AttackSwing;
 import com.ancientempires.combat.NpcMeleeAttackGoal;
 import com.ancientempires.config.AncientEmpiresConfig;
+import com.ancientempires.inventory.NpcMenu;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.SimpleMenuProvider;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -26,19 +32,27 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.event.entity.living.MobSpawnEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Optional;
 import java.util.UUID;
 
 /**
- * The base soldier. Equipment uses the vanilla slots, which already apply weapon
- * attributes. A storage inventory, jobs, and upkeep stay off this class until the
- * attack path is in place. Ownership is an NBT id so later orders can attach
- * without a subclass.
+ * The base soldier. The main hand is a vanilla equipment slot, so weapon
+ * attributes still apply. Extra slots live in {@link NpcInventory}. Jobs and
+ * upkeep stay off this class. The owner is the player who placed the spawn egg,
+ * or the first player to open an unowned NPC.
  */
+@Mod.EventBusSubscriber(modid = AncientEmpires.MOD_ID)
 public class NpcEntity extends PathfinderMob
 {
     private static final String OWNER_KEY = "Owner";
+    private static final ThreadLocal<UUID> SPAWN_OWNER = new ThreadLocal<>();
+    private static final EntityDataAccessor<Optional<UUID>> DATA_OWNER = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.OPTIONAL_UUID);
     private static final EntityDataAccessor<Boolean> DATA_ATTACK_WINDOW = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<String> DATA_ATTACK_ANIMATION = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<String> DATA_PRESENTATION_ID = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.STRING);
@@ -46,8 +60,7 @@ public class NpcEntity extends PathfinderMob
     private static final EntityDataAccessor<Float> DATA_PRESENTATION_UPSWING = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Integer> DATA_PRESENTATION_SERIAL = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.INT);
 
-    @Nullable
-    private UUID owner;
+    private final NpcInventory inventory = new NpcInventory(this);
 
     private int comboIndex;
     private int ticksSinceSwing;
@@ -74,6 +87,7 @@ public class NpcEntity extends PathfinderMob
     protected void defineSynchedData()
     {
         super.defineSynchedData();
+        this.entityData.define(DATA_OWNER, Optional.empty());
         this.entityData.define(DATA_ATTACK_WINDOW, false);
         this.entityData.define(DATA_ATTACK_ANIMATION, "");
         this.entityData.define(DATA_PRESENTATION_ID, "");
@@ -115,15 +129,62 @@ public class NpcEntity extends PathfinderMob
         return 1.62F;
     }
 
+    /**
+     * Held across the spawn egg's {@code useOn}. {@link #onFinalizeSpawn} reads
+     * it before the entity is tracked. Empty for dispensers and commands.
+     */
+    public static void beginSpawnClaim(UUID ownerId)
+    {
+        SPAWN_OWNER.set(ownerId);
+    }
+
+    public static void endSpawnClaim()
+    {
+        SPAWN_OWNER.remove();
+    }
+
+    @SubscribeEvent
+    public static void onFinalizeSpawn(MobSpawnEvent.FinalizeSpawn event)
+    {
+        if (!(event.getEntity() instanceof NpcEntity npc) || npc.getOwner() != null)
+        {
+            return;
+        }
+        UUID pending = SPAWN_OWNER.get();
+        if (pending != null)
+        {
+            npc.setOwner(pending);
+        }
+    }
+
+    public NpcInventory getInventory()
+    {
+        return this.inventory;
+    }
+
     @Nullable
     public UUID getOwner()
     {
-        return this.owner;
+        return this.entityData.get(DATA_OWNER).orElse(null);
     }
 
     public void setOwner(@Nullable UUID owner)
     {
-        this.owner = owner;
+        this.entityData.set(DATA_OWNER, Optional.ofNullable(owner));
+    }
+
+    public boolean canOpenInventory(Player player)
+    {
+        if (player.isSpectator())
+        {
+            return false;
+        }
+        if (player.getAbilities().instabuild)
+        {
+            return true;
+        }
+        UUID owner = this.getOwner();
+        return owner == null || owner.equals(player.getUUID());
     }
 
     public int getComboIndex()
@@ -278,55 +339,57 @@ public class NpcEntity extends PathfinderMob
     }
 
     /**
-     * Right-click with an item to put one of it in the main hand. Sneak with an
-     * empty hand to take the weapon back. This is the test path until an
-     * inventory screen exists.
+     * Right-click opens the inventory. Giving and taking happen in that screen.
+     * An unowned NPC is claimed by the first player who opens it.
      */
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand)
     {
-        if (hand != InteractionHand.MAIN_HAND)
+        if (hand != InteractionHand.MAIN_HAND || player.isSpectator())
         {
             return InteractionResult.PASS;
         }
-
-        ItemStack held = player.getItemInHand(hand);
-        ItemStack current = this.getMainHandItem();
-        boolean takeBack = player.isShiftKeyDown() && held.isEmpty() && !current.isEmpty();
-        boolean give = !player.isShiftKeyDown() && !held.isEmpty();
-        if (!takeBack && !give)
+        if (!this.canOpenInventory(player))
         {
-            return InteractionResult.PASS;
-        }
-        if (this.level().isClientSide)
-        {
-            return InteractionResult.SUCCESS;
-        }
-
-        if (takeBack)
-        {
-            player.setItemInHand(hand, current.copy());
-            this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
-        }
-        else
-        {
-            ItemStack given = player.getAbilities().instabuild ? held.copyWithCount(1) : held.split(1);
-            this.setItemSlot(EquipmentSlot.MAINHAND, given);
-            if (!current.isEmpty() && !player.addItem(current))
+            if (!this.level().isClientSide)
             {
-                player.drop(current, false);
+                player.displayClientMessage(Component.translatable("message.ancientempires.npc.not_owner"), true);
             }
+            return InteractionResult.CONSUME;
         }
-        return InteractionResult.CONSUME;
+        if (!this.level().isClientSide && player instanceof ServerPlayer serverPlayer)
+        {
+            if (this.getOwner() == null)
+            {
+                this.setOwner(player.getUUID());
+            }
+            NetworkHooks.openScreen(serverPlayer, new SimpleMenuProvider(
+                    (containerId, playerInventory, opener) -> new NpcMenu(containerId, playerInventory, this),
+                    this.getDisplayName()
+            ), buffer -> buffer.writeVarInt(this.getId()));
+        }
+        return InteractionResult.sidedSuccess(this.level().isClientSide);
+    }
+
+    @Override
+    protected void dropCustomDeathLoot(DamageSource source, int looting, boolean hitByPlayer)
+    {
+        super.dropCustomDeathLoot(source, looting, hitByPlayer);
+        for (ItemStack stack : this.inventory.removeBackpack())
+        {
+            this.spawnAtLocation(stack);
+        }
     }
 
     @Override
     public void addAdditionalSaveData(CompoundTag tag)
     {
         super.addAdditionalSaveData(tag);
-        if (this.owner != null)
+        this.inventory.save(tag);
+        UUID owner = this.getOwner();
+        if (owner != null)
         {
-            tag.putUUID(OWNER_KEY, this.owner);
+            tag.putUUID(OWNER_KEY, owner);
         }
     }
 
@@ -334,7 +397,8 @@ public class NpcEntity extends PathfinderMob
     public void readAdditionalSaveData(CompoundTag tag)
     {
         super.readAdditionalSaveData(tag);
-        this.owner = tag.hasUUID(OWNER_KEY) ? tag.getUUID(OWNER_KEY) : null;
+        this.inventory.load(tag);
+        this.setOwner(tag.hasUUID(OWNER_KEY) ? tag.getUUID(OWNER_KEY) : null);
     }
 
     @Override
