@@ -15,10 +15,9 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * While a Better Combat attack or hold pose is on the vanilla model, hand the
- * arm rotations to EMF Compat the same way it does for players. EMF keeps the
- * body only when neither pose is active. Hold poses are published for NPCs
- * even when EMF Compat leaves player weapon stances off.
+ * While a Better Combat attack or hold pose is already on the model, hand that
+ * one pose to EMF Compat so it does not overwrite the arms. Attack and hold
+ * are not published together. EMF keeps the body when neither is active.
  */
 final class NpcEmfCompat
 {

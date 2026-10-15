@@ -36,9 +36,10 @@ import java.util.Optional;
 import java.util.WeakHashMap;
 
 /**
- * Better Combat's own attack stack and weapon poses, applied to the NPC model.
- * Player Animation Library only copies its stack onto players, so this ticks
- * the same layers and writes them onto the NPC's player model.
+ * Fallback pose stack used when Better Mob Combat is absent. Player Animation
+ * Library only copies its stack onto players, so this ticks the same Better
+ * Combat layers and writes them onto the NPC's player model. When Better Mob
+ * Combat is loaded, Mob Player Animator already does that and this stack stays idle.
  */
 final class NpcBetterCombatDriver
 {
@@ -90,12 +91,29 @@ final class NpcBetterCombatDriver
     static void bendHeldArm(NpcEntity npc, HumanoidArm arm, PoseStack pose)
     {
         Session session = SESSIONS.get(npc);
-        if (session == null || !session.applier.isActive())
+        if (session != null)
+        {
+            bend(session.applier, arm, pose);
+        }
+    }
+
+    static void placeHeldItem(NpcEntity npc, HumanoidArm arm, PoseStack pose)
+    {
+        Session session = SESSIONS.get(npc);
+        if (session != null)
+        {
+            place(session.applier, arm, pose);
+        }
+    }
+
+    static void bend(AnimationApplier applier, HumanoidArm arm, PoseStack pose)
+    {
+        if (applier == null || !applier.isActive())
         {
             return;
         }
         String part = arm == HumanoidArm.LEFT ? "leftArm" : "rightArm";
-        Vec3f bend = session.applier.get3DTransform(part, TransformType.BEND, new Vec3f(0.0F, 0.0F, 0.0F));
+        Vec3f bend = applier.get3DTransform(part, TransformType.BEND, new Vec3f(0.0F, 0.0F, 0.0F));
         float bendX = bend.getX().floatValue();
         float bendY = bend.getY().floatValue();
         if (bendX == 0.0F && bendY == 0.0F)
@@ -108,16 +126,15 @@ final class NpcBetterCombatDriver
         pose.translate(0.0F, -0.25F, 0.0F);
     }
 
-    static void placeHeldItem(NpcEntity npc, HumanoidArm arm, PoseStack pose)
+    static void place(AnimationApplier applier, HumanoidArm arm, PoseStack pose)
     {
-        Session session = SESSIONS.get(npc);
-        if (session == null || !session.applier.isActive())
+        if (applier == null || !applier.isActive())
         {
             return;
         }
         String part = arm == HumanoidArm.LEFT ? "leftItem" : "rightItem";
-        Vec3f rotation = session.applier.get3DTransform(part, TransformType.ROTATION, new Vec3f(0.0F, 0.0F, 0.0F));
-        Vec3f position = session.applier.get3DTransform(part, TransformType.POSITION, new Vec3f(0.0F, 0.0F, 0.0F)).scale(1.0F / 16.0F);
+        Vec3f rotation = applier.get3DTransform(part, TransformType.ROTATION, new Vec3f(0.0F, 0.0F, 0.0F));
+        Vec3f position = applier.get3DTransform(part, TransformType.POSITION, new Vec3f(0.0F, 0.0F, 0.0F)).scale(1.0F / 16.0F);
         float x = position.getX().floatValue();
         float y = position.getY().floatValue();
         float z = position.getZ().floatValue();

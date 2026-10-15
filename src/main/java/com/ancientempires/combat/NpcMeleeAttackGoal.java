@@ -5,7 +5,9 @@ import com.ancientempires.entity.npc.NpcEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
@@ -16,9 +18,9 @@ import net.minecraftforge.registries.ForgeRegistries;
 import java.util.EnumSet;
 
 /**
- * Closes to weapon range, winds up, then applies one hit. The goal owns the
- * timer and the damage. Better Combat, when present, has already been reduced
- * to numbers on the {@link AttackSwing}.
+ * Closes to weapon range, winds up, then applies one hit. Better Mob Combat,
+ * when present, owns the upswing clock and the attack clip. This goal still
+ * applies the damage. Without that mod, the goal's own timer is the clock.
  */
 public class NpcMeleeAttackGoal extends Goal
 {
@@ -35,6 +37,9 @@ public class NpcMeleeAttackGoal extends Goal
     private int recoveryLeft;
     private int pathCooldown;
     private boolean stoppedForWindup;
+    private boolean mobCombatSwing;
+    private boolean mobCombatHitDone;
+    private boolean mobCombatCancelled;
     private AttackSwing active;
 
     private AttackSwing preview;
@@ -73,13 +78,27 @@ public class NpcMeleeAttackGoal extends Goal
         this.pathCooldown = 0;
         this.recoveryLeft = 0;
         this.stoppedForWindup = false;
+        this.mobCombatSwing = false;
+        this.mobCombatHitDone = false;
+        this.mobCombatCancelled = false;
     }
 
     @Override
     public void stop()
     {
         this.npc.getNavigation().stop();
-        if (this.phase == Phase.WINDUP)
+        if (this.mobCombatSwing)
+        {
+            AttackSwing swing = this.active;
+            boolean landed = this.mobCombatHitDone;
+            this.mobCombatCancelled = true;
+            MobCombatBridge.cancel(this.npc);
+            if (landed && swing != null)
+            {
+                this.npc.completeSwing(swing.cooldownTicks());
+            }
+        }
+        else if (this.phase == Phase.WINDUP)
         {
             this.npc.cancelAttackPresentation();
         }
@@ -92,6 +111,7 @@ public class NpcMeleeAttackGoal extends Goal
         this.recoveryLeft = 0;
         this.active = null;
         this.stoppedForWindup = false;
+        this.mobCombatSwing = false;
         this.preview = null;
     }
 
@@ -124,6 +144,11 @@ public class NpcMeleeAttackGoal extends Goal
             this.moveToward(target, AncientEmpiresConfig.approachSpeed);
             return;
         }
+        if (MobCombatBridge.owns(this.npc) && !MobCombatBridge.attackReady(this.npc))
+        {
+            this.npc.getNavigation().stop();
+            return;
+        }
 
         this.npc.getNavigation().stop();
         this.beginWindup(next);
@@ -135,7 +160,16 @@ public class NpcMeleeAttackGoal extends Goal
         if (swing == null)
         {
             this.phase = Phase.APPROACH;
-            this.npc.cancelAttackPresentation();
+            if (this.mobCombatSwing)
+            {
+                this.mobCombatCancelled = true;
+                MobCombatBridge.cancel(this.npc);
+                this.mobCombatSwing = false;
+            }
+            else
+            {
+                this.npc.cancelAttackPresentation();
+            }
             return;
         }
 
@@ -154,6 +188,16 @@ public class NpcMeleeAttackGoal extends Goal
             this.moveToward(target, AncientEmpiresConfig.windupMoveSpeed);
         }
 
+        if (this.mobCombatSwing)
+        {
+            if (MobCombatBridge.upswinging(this.npc))
+            {
+                return;
+            }
+            this.finishMobCombatSwing(swing);
+            return;
+        }
+
         this.windupLeft--;
         this.npc.tickAttackWindow();
         if (this.windupLeft > 0)
@@ -164,7 +208,7 @@ public class NpcMeleeAttackGoal extends Goal
         boolean inRange = this.within(target, swing.range()) || !AncientEmpiresConfig.cancelIfOutOfRange;
         if (inRange && this.hasLineOfSight(target) && this.facing(target, swing.angleDegrees()))
         {
-            this.applyHit(target, swing);
+            this.applyHit(target, swing, true);
         }
 
         this.npc.completeSwing(swing.cooldownTicks());
@@ -178,8 +222,26 @@ public class NpcMeleeAttackGoal extends Goal
 
     private void beginWindup(AttackSwing swing)
     {
+        if (MobCombatBridge.owns(this.npc))
+        {
+            this.mobCombatCancelled = false;
+            this.mobCombatHitDone = false;
+            if (!MobCombatBridge.tryStart(this.npc, this::onMobCombatHit))
+            {
+                return;
+            }
+            this.active = swing;
+            this.phase = Phase.WINDUP;
+            this.mobCombatSwing = true;
+            this.windupLeft = 0;
+            this.stoppedForWindup = false;
+            this.pathCooldown = 0;
+            // No vanilla swing. That flag makes Better Mob Combat drop the hold pose mid-clip.
+            return;
+        }
         this.active = swing;
         this.phase = Phase.WINDUP;
+        this.mobCombatSwing = false;
         this.windupLeft = swing.windupTicks();
         this.stoppedForWindup = false;
         this.pathCooldown = 0;
@@ -188,10 +250,53 @@ public class NpcMeleeAttackGoal extends Goal
         this.playSwingSound(swing);
     }
 
-    private void applyHit(LivingEntity target, AttackSwing swing)
+    private void finishMobCombatSwing(AttackSwing swing)
+    {
+        this.npc.completeSwing(swing.cooldownTicks());
+        this.recoveryLeft = Math.max(0, MobCombatBridge.attackCooldown(this.npc));
+        this.phase = Phase.APPROACH;
+        this.active = null;
+        this.mobCombatSwing = false;
+        this.stoppedForWindup = false;
+        this.preview = null;
+    }
+
+    /**
+     * Better Mob Combat calls this when its upswing reaches the hit. It has
+     * already put the combo multiplier on the attack damage attribute, and it
+     * has already chosen the targets. Only the goal's own target is hurt.
+     */
+    private void onMobCombatHit(Mob mob, Entity struck)
+    {
+        if (mob != this.npc || this.mobCombatCancelled || this.mobCombatHitDone || !this.mobCombatSwing)
+        {
+            return;
+        }
+        if (!(struck instanceof LivingEntity target) || target != this.npc.getTarget())
+        {
+            return;
+        }
+        AttackSwing swing = this.active;
+        if (swing == null)
+        {
+            return;
+        }
+        boolean inRange = this.within(target, swing.range()) || !AncientEmpiresConfig.cancelIfOutOfRange;
+        if (!inRange || !this.hasLineOfSight(target) || !this.facing(target, swing.angleDegrees()))
+        {
+            return;
+        }
+        this.applyHit(target, swing, false);
+        this.mobCombatHitDone = true;
+    }
+
+    private void applyHit(LivingEntity target, AttackSwing swing, boolean scaleDamage)
     {
         float damage = (float) this.npc.getAttributeValue(Attributes.ATTACK_DAMAGE);
-        damage *= swing.damageMultiplier();
+        if (scaleDamage)
+        {
+            damage *= swing.damageMultiplier();
+        }
         damage += EnchantmentHelper.getDamageBonus(this.npc.getMainHandItem(), target.getMobType());
         if (damage < 0.0F)
         {

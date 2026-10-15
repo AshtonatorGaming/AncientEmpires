@@ -2,6 +2,7 @@ package com.ancientempires.client;
 
 import com.ancientempires.AncientEmpires;
 import com.ancientempires.combat.BetterCombatBridge;
+import com.ancientempires.combat.MobCombatBridge;
 import com.ancientempires.entity.npc.NpcEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
@@ -15,14 +16,16 @@ import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 
 /**
- * Better Combat and Player Animation Library are the pose path. EMF is asked
- * to yield its arms only while one of those poses is active. Either animation
- * mod being absent leaves the vanilla arm pose in place.
+ * Better Mob Combat and Mob Player Animator own the pose when they are loaded.
+ * The hand-built Better Combat stack is only the fallback. EMF is asked to
+ * yield its arms while one of those poses is active, and it does not receive
+ * a second pose of our own.
  */
 @Mod.EventBusSubscriber(modid = AncientEmpires.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public final class NpcCombatAnimations
 {
     private static final String PLAYER_ANIMATOR = "playeranimator";
+    private static final String MOB_ANIMATOR = "mobplayeranimator";
     private static final String EMF = "entity_model_features";
     private static final String EMF_COMPAT = "emf_compat_core";
 
@@ -35,6 +38,7 @@ public final class NpcCombatAnimations
     }
 
     private static Status poses = Status.UNCHECKED;
+    private static Status mobCombat = Status.UNCHECKED;
     private static Status emf = Status.UNCHECKED;
 
     private NpcCombatAnimations()
@@ -44,7 +48,7 @@ public final class NpcCombatAnimations
     @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent event)
     {
-        if (event.phase != TickEvent.Phase.END || !posesReady())
+        if (event.phase != TickEvent.Phase.END || mobAnimatorOwnsModel() || !posesReady())
         {
             return;
         }
@@ -70,12 +74,12 @@ public final class NpcCombatAnimations
     }
 
     /**
-     * Copies the active Better Combat stack onto the model. Returns false when
-     * there is nothing to play, including when the animation mods are absent.
+     * Copies the fallback Better Combat stack onto the model. Returns false when
+     * Better Mob Combat is already posing the model, or when there is nothing to play.
      */
     public static boolean apply(NpcEntity npc, PlayerModel<NpcEntity> model, float partialTick)
     {
-        if (!posesReady())
+        if (mobAnimatorOwnsModel() || !posesReady())
         {
             return false;
         }
@@ -92,6 +96,22 @@ public final class NpcCombatAnimations
 
     public static void bendHeldArm(NpcEntity npc, HumanoidArm arm, PoseStack pose)
     {
+        if (mobAnimatorOwnsModel())
+        {
+            if (mobCombat != Status.READY)
+            {
+                return;
+            }
+            try
+            {
+                NpcMobCombatClient.bendHeldArm(npc, arm, pose);
+            }
+            catch (Throwable exception)
+            {
+                failMobCombat(exception);
+            }
+            return;
+        }
         if (!posesReady())
         {
             return;
@@ -108,6 +128,22 @@ public final class NpcCombatAnimations
 
     public static void placeHeldItem(NpcEntity npc, HumanoidArm arm, PoseStack pose)
     {
+        if (mobAnimatorOwnsModel())
+        {
+            if (mobCombat != Status.READY)
+            {
+                return;
+            }
+            try
+            {
+                NpcMobCombatClient.placeHeldItem(npc, arm, pose);
+            }
+            catch (Throwable exception)
+            {
+                failMobCombat(exception);
+            }
+            return;
+        }
         if (!posesReady())
         {
             return;
@@ -151,17 +187,79 @@ public final class NpcCombatAnimations
         }
         try
         {
-            boolean attack = poses == Status.READY && NpcBetterCombatDriver.attackActive(npc);
-            boolean hold = poses == Status.READY && NpcBetterCombatDriver.holdActive(npc);
-            if (!attack && npc.isAttackWindowOpen())
+            boolean attack;
+            boolean hold;
+            if (mobCombat == Status.READY)
             {
-                attack = true;
+                try
+                {
+                    attack = NpcMobCombatClient.attackActive(npc);
+                    // One arm pose at a time. The attack clip replaces the hold, then the hold comes back.
+                    hold = !attack && NpcMobCombatClient.holdActive(npc);
+                }
+                catch (Throwable exception)
+                {
+                    failMobCombat(exception);
+                    return;
+                }
+            }
+            else
+            {
+                attack = poses == Status.READY && NpcBetterCombatDriver.attackActive(npc);
+                hold = poses == Status.READY && NpcBetterCombatDriver.holdActive(npc);
+                if (!attack && npc.isAttackWindowOpen())
+                {
+                    attack = true;
+                }
             }
             NpcEmfCompat.afterPose(npc, model, attack, hold, limbSwingAmount);
         }
         catch (Throwable exception)
         {
             failEmf(exception);
+        }
+    }
+
+    /**
+     * True once Better Mob Combat's own stack is on the mob. A failed read still
+     * leaves that stack in place, so the fallback stack must stay idle.
+     */
+    private static boolean mobAnimatorOwnsModel()
+    {
+        mobCombatReady();
+        return mobCombat == Status.READY || mobCombat == Status.FAILED;
+    }
+
+    private static boolean mobCombatReady()
+    {
+        if (mobCombat == Status.READY)
+        {
+            return true;
+        }
+        if (mobCombat != Status.UNCHECKED)
+        {
+            return false;
+        }
+        if (!ModList.get().isLoaded(MobCombatBridge.MOD_ID)
+                || !ModList.get().isLoaded(MOB_ANIMATOR)
+                || !ModList.get().isLoaded(BetterCombatBridge.MOD_ID)
+                || !ModList.get().isLoaded(PLAYER_ANIMATOR))
+        {
+            mobCombat = Status.ABSENT;
+            return false;
+        }
+        try
+        {
+            Class.forName("me.Thelnfamous1.bettermobcombat.api.MobAttackAnimation");
+            Class.forName("me.Thelnfamous1.mobplayeranimator.api.PlayerAnimatorHelper");
+            mobCombat = Status.READY;
+            AncientEmpires.LOGGER.info("Better Mob Combat and Mob Player Animator are posing NPCs. The fallback stack stays idle.");
+            return true;
+        }
+        catch (Throwable exception)
+        {
+            failMobCombat(exception);
+            return false;
         }
     }
 
@@ -220,6 +318,15 @@ public final class NpcCombatAnimations
         {
             failEmf(exception);
             return false;
+        }
+    }
+
+    private static void failMobCombat(Throwable exception)
+    {
+        if (mobCombat != Status.FAILED)
+        {
+            mobCombat = Status.FAILED;
+            AncientEmpires.LOGGER.warn("Better Mob Combat poses could not be read. NPCs will keep Mob Player Animator's stack and skip the fallback stack.", exception);
         }
     }
 

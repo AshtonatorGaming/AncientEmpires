@@ -6,8 +6,9 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.world.entity.HumanoidArm;
 
 /**
- * Player model with Better Combat's stack applied after the vanilla pose.
- * Without that stack, a swing in progress holds the main arm up.
+ * Player model. Better Mob Combat's stack is applied inside the vanilla setup
+ * when that mod is loaded. Otherwise the fallback stack is copied on here.
+ * Without either, a swing in progress holds the main arm up.
  */
 public class NpcModel extends PlayerModel<NpcEntity>
 {
