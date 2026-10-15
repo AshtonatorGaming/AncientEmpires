@@ -4,6 +4,7 @@ import com.ancientempires.config.AncientEmpiresConfig;
 import com.ancientempires.entity.npc.NpcEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -12,7 +13,6 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.EnumSet;
@@ -40,6 +40,9 @@ public class NpcMeleeAttackGoal extends Goal
     private boolean mobCombatSwing;
     private boolean mobCombatHitDone;
     private boolean mobCombatCancelled;
+    private int facingWait;
+    private int facedOnTick = -1;
+    private boolean forcedSwing;
     private AttackSwing active;
 
     private AttackSwing preview;
@@ -81,6 +84,9 @@ public class NpcMeleeAttackGoal extends Goal
         this.mobCombatSwing = false;
         this.mobCombatHitDone = false;
         this.mobCombatCancelled = false;
+        this.facingWait = 0;
+        this.forcedSwing = false;
+        this.facedOnTick = -1;
     }
 
     @Override
@@ -112,6 +118,8 @@ public class NpcMeleeAttackGoal extends Goal
         this.active = null;
         this.stoppedForWindup = false;
         this.mobCombatSwing = false;
+        this.facingWait = 0;
+        this.forcedSwing = false;
         this.preview = null;
     }
 
@@ -123,7 +131,7 @@ public class NpcMeleeAttackGoal extends Goal
         {
             return;
         }
-        this.npc.getLookControl().setLookAt(target, 40.0F, 40.0F);
+        this.faceTarget(target);
 
         if (this.recoveryLeft > 0)
         {
@@ -141,7 +149,13 @@ public class NpcMeleeAttackGoal extends Goal
         AttackSwing next = this.preview();
         if (!this.within(target, next.range()) || !this.hasLineOfSight(target))
         {
+            this.facingWait = 0;
             this.moveToward(target, AncientEmpiresConfig.approachSpeed);
+            return;
+        }
+        if (!this.canCommitFacing(target, next))
+        {
+            this.npc.getNavigation().stop();
             return;
         }
         if (MobCombatBridge.owns(this.npc) && !MobCombatBridge.attackReady(this.npc))
@@ -206,7 +220,7 @@ public class NpcMeleeAttackGoal extends Goal
         }
 
         boolean inRange = this.within(target, swing.range()) || !AncientEmpiresConfig.cancelIfOutOfRange;
-        if (inRange && this.hasLineOfSight(target) && this.facing(target, swing.angleDegrees()))
+        if (inRange && this.hasLineOfSight(target) && this.hitFacing(target, swing))
         {
             this.applyHit(target, swing, true);
         }
@@ -230,6 +244,8 @@ public class NpcMeleeAttackGoal extends Goal
             {
                 return;
             }
+            this.forcedSwing = !this.bodyAligned(this.npc.getTarget(), swing);
+            this.facingWait = 0;
             this.active = swing;
             this.phase = Phase.WINDUP;
             this.mobCombatSwing = true;
@@ -239,6 +255,8 @@ public class NpcMeleeAttackGoal extends Goal
             // No vanilla swing. That flag makes Better Mob Combat drop the hold pose mid-clip.
             return;
         }
+        this.forcedSwing = !this.bodyAligned(this.npc.getTarget(), swing);
+        this.facingWait = 0;
         this.active = swing;
         this.phase = Phase.WINDUP;
         this.mobCombatSwing = false;
@@ -281,8 +299,9 @@ public class NpcMeleeAttackGoal extends Goal
         {
             return;
         }
+        this.faceTarget(target);
         boolean inRange = this.within(target, swing.range()) || !AncientEmpiresConfig.cancelIfOutOfRange;
-        if (!inRange || !this.hasLineOfSight(target) || !this.facing(target, swing.angleDegrees()))
+        if (!inRange || !this.hasLineOfSight(target) || !this.hitFacing(target, swing))
         {
             return;
         }
@@ -352,22 +371,73 @@ public class NpcMeleeAttackGoal extends Goal
         return !AncientEmpiresConfig.requireLineOfSight || this.npc.getSensing().hasLineOfSight(target);
     }
 
-    private boolean facing(LivingEntity target, double angleDegrees)
+    /**
+     * Steps body yaw toward the target. Look control only handles pitch, so it
+     * does not add a second yaw step. In range the step is the faster config.
+     */
+    private void faceTarget(LivingEntity target)
     {
-        if (angleDegrees >= 360.0D)
+        if (this.npc.tickCount == this.facedOnTick)
+        {
+            return;
+        }
+        this.facedOnTick = this.npc.tickCount;
+
+        AttackSwing swing = this.phase == Phase.WINDUP && this.active != null ? this.active : this.preview();
+        boolean inRange = this.within(target, swing.range());
+        float speed = (float) (inRange ? AncientEmpiresConfig.turnSpeedInRange : AncientEmpiresConfig.turnSpeed);
+        float desired = this.desiredYaw(target);
+        float delta = Mth.wrapDegrees(desired - this.npc.getYRot());
+        float step = Mth.clamp(delta, -speed, speed);
+        float yaw = this.npc.getYRot() + step;
+        this.npc.setYRot(yaw);
+        this.npc.setYBodyRot(yaw);
+        this.npc.setYHeadRot(yaw);
+        this.npc.getLookControl().setLookAt(target.getX(), AttackProfiles.aimY(this.npc, target), target.getZ(), 0.0F, 40.0F);
+    }
+
+    private boolean canCommitFacing(LivingEntity target, AttackSwing swing)
+    {
+        if (this.bodyAligned(target, swing))
+        {
+            this.facingWait = 0;
+            return true;
+        }
+        this.facingWait++;
+        int force = AncientEmpiresConfig.forceSwingTicks;
+        return force > 0 && this.facingWait >= force;
+    }
+
+    private boolean hitFacing(LivingEntity target, AttackSwing swing)
+    {
+        return this.forcedSwing || this.bodyAligned(target, swing);
+    }
+
+    private boolean bodyAligned(LivingEntity target, AttackSwing swing)
+    {
+        if (target == null || swing.angleDegrees() >= 360.0D)
         {
             return true;
         }
-        Vec3 look = this.npc.getLookAngle();
-        Vec3 toTarget = target.getEyePosition().subtract(this.npc.getEyePosition());
-        double length = toTarget.length();
-        if (length < 1.0E-4D)
-        {
-            return true;
-        }
-        double dot = look.dot(toTarget.scale(1.0D / length));
-        double limit = Math.cos(Math.toRadians(angleDegrees * 0.5D));
-        return dot >= limit;
+        return this.yawError(target) <= this.yawLimit(swing);
+    }
+
+    private double yawLimit(AttackSwing swing)
+    {
+        double halfArc = swing.angleDegrees() * 0.5D;
+        return Math.min(halfArc, AncientEmpiresConfig.maxYawError);
+    }
+
+    private float yawError(LivingEntity target)
+    {
+        return Math.abs(Mth.wrapDegrees(this.npc.yBodyRot - this.desiredYaw(target)));
+    }
+
+    private float desiredYaw(LivingEntity target)
+    {
+        double dx = target.getX() - this.npc.getX();
+        double dz = target.getZ() - this.npc.getZ();
+        return (float) (Mth.atan2(dz, dx) * (180.0D / Math.PI) - 90.0D);
     }
 
     private void moveToward(LivingEntity target, double speed)

@@ -4,6 +4,7 @@ import com.ancientempires.config.AncientEmpiresConfig;
 import com.ancientempires.entity.npc.NpcEntity;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.Nullable;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShieldItem;
@@ -63,7 +64,7 @@ public final class AttackProfiles
         int cooldown = Math.max(AncientEmpiresConfig.unarmedWindupTicks + 1, AncientEmpiresConfig.unarmedCooldownTicks);
         int windup = Mth.clamp(AncientEmpiresConfig.unarmedWindupTicks, 1, cooldown - 1);
         return new AttackSwing(
-                AncientEmpiresConfig.unarmedRange,
+                effectiveRange(npc, AncientEmpiresConfig.unarmedRange),
                 windup,
                 cooldown - windup,
                 (float) AncientEmpiresConfig.unarmedDamageMultiplier,
@@ -84,7 +85,7 @@ public final class AttackProfiles
         int cooldown = cooldownTicks(attackSpeed(npc), AncientEmpiresConfig.vanillaMinCooldownTicks);
         int windup = windupTicks(cooldown, AncientEmpiresConfig.vanillaWindupFraction);
         return new AttackSwing(
-                AncientEmpiresConfig.vanillaRange,
+                effectiveRange(npc, AncientEmpiresConfig.vanillaRange),
                 windup,
                 cooldown - windup,
                 1.0F,
@@ -131,7 +132,7 @@ public final class AttackProfiles
         }
 
         return new AttackSwing(
-                range,
+                effectiveRange(npc, range),
                 windup,
                 cooldown - windup,
                 damageMultiplier,
@@ -207,6 +208,49 @@ public final class AttackProfiles
             }
         }
         return true;
+    }
+
+    /**
+     * Weapon reach times the NPC's height relative to a 1.8-block body.
+     * A normal soldier stays at about 1.0x. Shorter and taller bodies clamp
+     * into the configured scale, with no size categories.
+     */
+    public static double effectiveRange(LivingEntity npc, double weaponRange)
+    {
+        double baseline = AncientEmpiresConfig.rangeScaleBaseline;
+        if (baseline < 0.01D)
+        {
+            baseline = 1.8D;
+        }
+        double min = Math.min(AncientEmpiresConfig.rangeScaleMin, AncientEmpiresConfig.rangeScaleMax);
+        double max = Math.max(AncientEmpiresConfig.rangeScaleMin, AncientEmpiresConfig.rangeScaleMax);
+        double scale = Mth.clamp(npc.getBbHeight() / baseline, min, max);
+        return weaponRange * scale;
+    }
+
+    /**
+     * Eye height, unless this body is significantly taller than the target.
+     * Then the aim drops to the target's center, plus the configured pitch.
+     * Equal heights do not qualify.
+     */
+    public static double aimY(LivingEntity npc, LivingEntity target)
+    {
+        double eyes = target.getEyeY();
+        double factor = AncientEmpiresConfig.tallAimFactor;
+        if (factor <= 0.0D || npc.getBbHeight() <= target.getBbHeight() * factor)
+        {
+            return eyes;
+        }
+        double aim = target.getY() + target.getBbHeight() * 0.5D;
+        double offset = AncientEmpiresConfig.tallPitchOffset;
+        if (offset > 0.0D)
+        {
+            double dx = target.getX() - npc.getX();
+            double dz = target.getZ() - npc.getZ();
+            double horizontal = Math.sqrt(dx * dx + dz * dz);
+            aim -= horizontal * Math.tan(Math.toRadians(offset));
+        }
+        return Math.max(target.getY(), aim);
     }
 
     private static double angleFor(BetterCombatBridge.AttackSnapshot attack)

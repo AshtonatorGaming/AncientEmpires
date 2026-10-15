@@ -32,6 +32,15 @@ public final class AncientEmpiresConfig
 
     private static final ForgeConfigSpec.DoubleValue FORWARD_ANGLE;
     private static final ForgeConfigSpec.DoubleValue SWEEP_ANGLE;
+    private static final ForgeConfigSpec.DoubleValue TURN_SPEED;
+    private static final ForgeConfigSpec.DoubleValue TURN_SPEED_IN_RANGE;
+    private static final ForgeConfigSpec.DoubleValue MAX_YAW_ERROR;
+    private static final ForgeConfigSpec.IntValue FORCE_SWING_TICKS;
+    private static final ForgeConfigSpec.DoubleValue RANGE_SCALE_BASELINE;
+    private static final ForgeConfigSpec.DoubleValue RANGE_SCALE_MIN;
+    private static final ForgeConfigSpec.DoubleValue RANGE_SCALE_MAX;
+    private static final ForgeConfigSpec.DoubleValue TALL_AIM_FACTOR;
+    private static final ForgeConfigSpec.DoubleValue TALL_PITCH_OFFSET;
     private static final ForgeConfigSpec.BooleanValue CANCEL_IF_OUT_OF_RANGE;
     private static final ForgeConfigSpec.DoubleValue WINDUP_RANGE_SLACK;
     private static final ForgeConfigSpec.BooleanValue STOP_MOVING_DURING_WINDUP;
@@ -98,6 +107,33 @@ public final class AncientEmpiresConfig
         SWEEP_ANGLE = builder
                 .comment("Arc, in degrees, used when a sweeping attack does not specify its own angle.")
                 .defineInRange("sweepAngle", 120.0D, 1.0D, 360.0D);
+        TURN_SPEED = builder
+                .comment("Degrees of body yaw the NPC may turn per tick while chasing. The body, not the look vector, has to face the target.")
+                .defineInRange("turnSpeed", 12.0D, 1.0D, 180.0D);
+        TURN_SPEED_IN_RANGE = builder
+                .comment("Degrees of body yaw per tick once the target is inside weapon range. Faster than turnSpeed so the swing is not stuck on the last step.")
+                .defineInRange("turnSpeedInRange", 24.0D, 1.0D, 180.0D);
+        MAX_YAW_ERROR = builder
+                .comment("Largest body-yaw error, in degrees, that can still land a hit. The weapon arc is also required, so this cannot widen a narrow attack. 180 leaves the weapon arc in charge.")
+                .defineInRange("maxYawError", 180.0D, 1.0D, 180.0D);
+        FORCE_SWING_TICKS = builder
+                .comment("Ticks spent in range but not yet facing before the NPC swings anyway. Stops a bad turn from freezing combat. 0 waits forever.")
+                .defineInRange("forceSwingTicks", 10, 0, 200);
+        RANGE_SCALE_BASELINE = builder
+                .comment("Hitbox height, in blocks, that counts as 1.0x weapon range. A 1.8-tall NPC keeps the weapon's own reach.")
+                .defineInRange("rangeScaleBaseline", 1.8D, 0.5D, 8.0D);
+        RANGE_SCALE_MIN = builder
+                .comment("Smallest reach multiplier from hitbox height. Ready for a shorter NPC later.")
+                .defineInRange("rangeScaleMin", 0.25D, 0.05D, 4.0D);
+        RANGE_SCALE_MAX = builder
+                .comment("Largest reach multiplier from hitbox height. Ready for a taller NPC later.")
+                .defineInRange("rangeScaleMax", 4.0D, 1.0D, 16.0D);
+        TALL_AIM_FACTOR = builder
+                .comment("When the NPC's hitbox is taller than the target's times this factor, the swing aims at the target's body instead of its eyes. A 1.8 NPC against a 1.8 target does not qualify at 1.5.")
+                .defineInRange("tallAimFactor", 1.5D, 1.0D, 8.0D);
+        TALL_PITCH_OFFSET = builder
+                .comment("Extra degrees downward added to that tall aim. Ignored when the height test does not pass.")
+                .defineInRange("tallPitchOffset", 15.0D, 0.0D, 80.0D);
         CANCEL_IF_OUT_OF_RANGE = builder
                 .comment("Drop a wind-up that leaves weapon range before the hit frame. The swing still goes on cooldown.")
                 .define("cancelIfOutOfRange", true);
@@ -147,6 +183,15 @@ public final class AncientEmpiresConfig
 
     public static double forwardAngle = 50.0D;
     public static double sweepAngle = 120.0D;
+    public static double turnSpeed = 12.0D;
+    public static double turnSpeedInRange = 24.0D;
+    public static double maxYawError = 180.0D;
+    public static int forceSwingTicks = 10;
+    public static double rangeScaleBaseline = 1.8D;
+    public static double rangeScaleMin = 0.25D;
+    public static double rangeScaleMax = 4.0D;
+    public static double tallAimFactor = 1.5D;
+    public static double tallPitchOffset = 15.0D;
     public static boolean cancelIfOutOfRange = true;
     public static double windupRangeSlack = 0.5D;
     public static boolean stopMovingDuringWindup = true;
@@ -190,6 +235,15 @@ public final class AncientEmpiresConfig
 
         forwardAngle = FORWARD_ANGLE.get();
         sweepAngle = SWEEP_ANGLE.get();
+        turnSpeed = TURN_SPEED.get();
+        turnSpeedInRange = TURN_SPEED_IN_RANGE.get();
+        maxYawError = MAX_YAW_ERROR.get();
+        forceSwingTicks = FORCE_SWING_TICKS.get();
+        rangeScaleBaseline = RANGE_SCALE_BASELINE.get();
+        rangeScaleMin = RANGE_SCALE_MIN.get();
+        rangeScaleMax = RANGE_SCALE_MAX.get();
+        tallAimFactor = TALL_AIM_FACTOR.get();
+        tallPitchOffset = TALL_PITCH_OFFSET.get();
         cancelIfOutOfRange = CANCEL_IF_OUT_OF_RANGE.get();
         windupRangeSlack = WINDUP_RANGE_SLACK.get();
         stopMovingDuringWindup = STOP_MOVING_DURING_WINDUP.get();
