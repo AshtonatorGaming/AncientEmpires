@@ -1,0 +1,203 @@
+package com.ancientempires.config;
+
+import com.ancientempires.AncientEmpires;
+import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.config.ModConfigEvent;
+
+/**
+ * Combat timing and reach. Every value the attack goal reads lives here so a pack
+ * can tune soldiers without another mod.
+ */
+@Mod.EventBusSubscriber(modid = AncientEmpires.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+public final class AncientEmpiresConfig
+{
+    public static final ForgeConfigSpec SPEC;
+
+    private static final ForgeConfigSpec.DoubleValue UNARMED_RANGE;
+    private static final ForgeConfigSpec.IntValue UNARMED_WINDUP_TICKS;
+    private static final ForgeConfigSpec.IntValue UNARMED_COOLDOWN_TICKS;
+    private static final ForgeConfigSpec.DoubleValue UNARMED_DAMAGE_MULTIPLIER;
+    private static final ForgeConfigSpec.BooleanValue UNARMED_PREFER_BETTER_COMBAT;
+
+    private static final ForgeConfigSpec.DoubleValue VANILLA_RANGE;
+    private static final ForgeConfigSpec.DoubleValue VANILLA_WINDUP_FRACTION;
+    private static final ForgeConfigSpec.IntValue VANILLA_MIN_COOLDOWN_TICKS;
+
+    private static final ForgeConfigSpec.BooleanValue BETTER_COMBAT_ENABLED;
+    private static final ForgeConfigSpec.DoubleValue UPSWING_MULTIPLIER;
+    private static final ForgeConfigSpec.BooleanValue READ_UPSWING_FROM_MOD;
+    private static final ForgeConfigSpec.IntValue MIN_ATTACK_INTERVAL;
+
+    private static final ForgeConfigSpec.DoubleValue FORWARD_ANGLE;
+    private static final ForgeConfigSpec.DoubleValue SWEEP_ANGLE;
+    private static final ForgeConfigSpec.BooleanValue CANCEL_IF_OUT_OF_RANGE;
+    private static final ForgeConfigSpec.DoubleValue WINDUP_RANGE_SLACK;
+    private static final ForgeConfigSpec.BooleanValue STOP_MOVING_DURING_WINDUP;
+    private static final ForgeConfigSpec.DoubleValue WINDUP_MOVE_SPEED;
+    private static final ForgeConfigSpec.DoubleValue APPROACH_SPEED;
+    private static final ForgeConfigSpec.IntValue PATH_RECALC_TICKS;
+    private static final ForgeConfigSpec.BooleanValue REQUIRE_LINE_OF_SIGHT;
+    private static final ForgeConfigSpec.BooleanValue BYPASS_HURT_COOLDOWN;
+    private static final ForgeConfigSpec.DoubleValue COMBO_RESET_RATE;
+
+    static
+    {
+        ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
+        builder.push("combat");
+
+        builder.push("unarmed");
+        UNARMED_RANGE = builder
+                .comment("Reach of an empty-hand attack, in blocks, when Better Combat's fist profile is not used.")
+                .defineInRange("range", 2.0D, 0.5D, 8.0D);
+        UNARMED_WINDUP_TICKS = builder
+                .comment("Ticks after the swing starts before an empty-hand hit lands.")
+                .defineInRange("windupTicks", 4, 1, 200);
+        UNARMED_COOLDOWN_TICKS = builder
+                .comment("Ticks from the start of one empty-hand swing until the next can start. Includes the wind-up.")
+                .defineInRange("cooldownTicks", 10, 1, 200);
+        UNARMED_DAMAGE_MULTIPLIER = builder
+                .comment("Multiplies the NPC attack damage attribute for an empty-hand hit.")
+                .defineInRange("damageMultiplier", 1.0D, 0.0D, 100.0D);
+        UNARMED_PREFER_BETTER_COMBAT = builder
+                .comment("When Better Combat is loaded, empty hands use its fist weapon attributes instead of the values above. No item is equipped.")
+                .define("preferBetterCombatProfile", true);
+        builder.pop();
+
+        builder.push("vanilla");
+        VANILLA_RANGE = builder
+                .comment("Reach used for a held weapon that has no Better Combat attributes.")
+                .defineInRange("range", 2.5D, 0.5D, 16.0D);
+        VANILLA_WINDUP_FRACTION = builder
+                .comment("Fraction of the weapon cooldown spent winding up when Better Combat timing is unavailable.")
+                .defineInRange("windupFraction", 0.35D, 0.0D, 1.0D);
+        VANILLA_MIN_COOLDOWN_TICKS = builder
+                .comment("Shortest weapon cooldown, in ticks, for the internal fallback.")
+                .defineInRange("minCooldownTicks", 6, 1, 200);
+        builder.pop();
+
+        builder.push("betterCombat");
+        BETTER_COMBAT_ENABLED = builder
+                .comment("Read Better Combat weapon attributes when that mod is loaded. Turn this off to force the internal fallback.")
+                .define("enabled", true);
+        UPSWING_MULTIPLIER = builder
+                .comment("Scales a Better Combat attack's upswing. 0.5 matches Better Combat's default and lands the hit about 25% through a 0.5-upswing weapon.")
+                .defineInRange("upswingMultiplier", 0.5D, 0.2D, 1.0D);
+        READ_UPSWING_FROM_MOD = builder
+                .comment("When true, and Better Combat is loaded, use its server upswing_multiplier instead of upswingMultiplier above.")
+                .define("readUpswingFromMod", true);
+        MIN_ATTACK_INTERVAL = builder
+                .comment("Minimum ticks between the starts of two attacks driven by Better Combat attributes.")
+                .defineInRange("minAttackInterval", 2, 1, 40);
+        builder.pop();
+
+        FORWARD_ANGLE = builder
+                .comment("Cone, in degrees, for punches, stabs, and other attacks that do not define a sweep angle. The target must sit inside this arc in front of the NPC.")
+                .defineInRange("forwardAngle", 50.0D, 1.0D, 360.0D);
+        SWEEP_ANGLE = builder
+                .comment("Arc, in degrees, used when a sweeping attack does not specify its own angle.")
+                .defineInRange("sweepAngle", 120.0D, 1.0D, 360.0D);
+        CANCEL_IF_OUT_OF_RANGE = builder
+                .comment("Drop a wind-up that leaves weapon range before the hit frame. The swing still goes on cooldown.")
+                .define("cancelIfOutOfRange", true);
+        WINDUP_RANGE_SLACK = builder
+                .comment("Extra blocks of reach allowed during wind-up so stopping to swing does not instantly cancel. The hit itself uses the real range.")
+                .defineInRange("windupRangeSlack", 0.5D, 0.0D, 4.0D);
+        STOP_MOVING_DURING_WINDUP = builder
+                .comment("Stop pathing once the target is in range during wind-up.")
+                .define("stopMovingDuringWindup", true);
+        WINDUP_MOVE_SPEED = builder
+                .comment("Path speed multiplier while winding up and still short of the target.")
+                .defineInRange("windupMoveSpeed", 0.7D, 0.0D, 2.0D);
+        APPROACH_SPEED = builder
+                .comment("Path speed multiplier while closing to weapon range.")
+                .defineInRange("approachSpeed", 1.0D, 0.1D, 2.0D);
+        PATH_RECALC_TICKS = builder
+                .comment("Ticks between path recalculations while chasing.")
+                .defineInRange("pathRecalcTicks", 8, 1, 40);
+        REQUIRE_LINE_OF_SIGHT = builder
+                .comment("Require line of sight before starting a swing and again on the hit frame.")
+                .define("requireLineOfSight", true);
+        BYPASS_HURT_COOLDOWN = builder
+                .comment("NPC hits ignore the target's short hurt invulnerability so fast weapons and fists land.")
+                .define("bypassHurtCooldown", true);
+        COMBO_RESET_RATE = builder
+                .comment("Combo step resets after this many weapon-cooldowns without a swing.")
+                .defineInRange("comboResetRate", 3.0D, 0.5D, 20.0D);
+
+        builder.pop();
+        SPEC = builder.build();
+    }
+
+    public static double unarmedRange = 2.0D;
+    public static int unarmedWindupTicks = 4;
+    public static int unarmedCooldownTicks = 10;
+    public static double unarmedDamageMultiplier = 1.0D;
+    public static boolean unarmedPreferBetterCombat = true;
+
+    public static double vanillaRange = 2.5D;
+    public static double vanillaWindupFraction = 0.35D;
+    public static int vanillaMinCooldownTicks = 6;
+
+    public static boolean betterCombatEnabled = true;
+    public static double upswingMultiplier = 0.5D;
+    public static boolean readUpswingFromMod = true;
+    public static int minAttackInterval = 2;
+
+    public static double forwardAngle = 50.0D;
+    public static double sweepAngle = 120.0D;
+    public static boolean cancelIfOutOfRange = true;
+    public static double windupRangeSlack = 0.5D;
+    public static boolean stopMovingDuringWindup = true;
+    public static double windupMoveSpeed = 0.7D;
+    public static double approachSpeed = 1.0D;
+    public static int pathRecalcTicks = 8;
+    public static boolean requireLineOfSight = true;
+    public static boolean bypassHurtCooldown = true;
+    public static double comboResetRate = 3.0D;
+
+    private AncientEmpiresConfig()
+    {
+    }
+
+    @SubscribeEvent
+    static void onLoad(ModConfigEvent event)
+    {
+        if (event.getConfig().getSpec() != SPEC)
+        {
+            return;
+        }
+        bake();
+    }
+
+    private static void bake()
+    {
+        unarmedRange = UNARMED_RANGE.get();
+        unarmedWindupTicks = UNARMED_WINDUP_TICKS.get();
+        unarmedCooldownTicks = UNARMED_COOLDOWN_TICKS.get();
+        unarmedDamageMultiplier = UNARMED_DAMAGE_MULTIPLIER.get();
+        unarmedPreferBetterCombat = UNARMED_PREFER_BETTER_COMBAT.get();
+
+        vanillaRange = VANILLA_RANGE.get();
+        vanillaWindupFraction = VANILLA_WINDUP_FRACTION.get();
+        vanillaMinCooldownTicks = VANILLA_MIN_COOLDOWN_TICKS.get();
+
+        betterCombatEnabled = BETTER_COMBAT_ENABLED.get();
+        upswingMultiplier = UPSWING_MULTIPLIER.get();
+        readUpswingFromMod = READ_UPSWING_FROM_MOD.get();
+        minAttackInterval = MIN_ATTACK_INTERVAL.get();
+
+        forwardAngle = FORWARD_ANGLE.get();
+        sweepAngle = SWEEP_ANGLE.get();
+        cancelIfOutOfRange = CANCEL_IF_OUT_OF_RANGE.get();
+        windupRangeSlack = WINDUP_RANGE_SLACK.get();
+        stopMovingDuringWindup = STOP_MOVING_DURING_WINDUP.get();
+        windupMoveSpeed = WINDUP_MOVE_SPEED.get();
+        approachSpeed = APPROACH_SPEED.get();
+        pathRecalcTicks = PATH_RECALC_TICKS.get();
+        requireLineOfSight = REQUIRE_LINE_OF_SIGHT.get();
+        bypassHurtCooldown = BYPASS_HURT_COOLDOWN.get();
+        comboResetRate = COMBO_RESET_RATE.get();
+    }
+}
