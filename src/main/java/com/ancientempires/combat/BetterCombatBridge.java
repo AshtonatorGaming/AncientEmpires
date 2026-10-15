@@ -15,9 +15,10 @@ import java.util.Optional;
 
 /**
  * Reads Better Combat weapon attributes through reflection so this mod still
- * compiles and runs when Better Combat is absent. Only attribute data is used:
- * range, the attack list, upswing, damage multiplier, angle, animation id, and
- * swing sound. Better Combat never applies the hit.
+ * compiles and runs when Better Combat is absent. Attribute data only:
+ * range, the attack list, upswing, damage multiplier, angle, animation id,
+ * swing sound, idle pose, and whether the weapon is two-handed. Better Combat
+ * never applies the hit.
  */
 public final class BetterCombatBridge
 {
@@ -45,6 +46,10 @@ public final class BetterCombatBridge
     private static Method upswing;
     private static Method angle;
     private static Method animation;
+    @Nullable
+    private static Method pose;
+    @Nullable
+    private static Method twoHanded;
     @Nullable
     private static Method conditions;
     @Nullable
@@ -191,6 +196,8 @@ public final class BetterCombatBridge
         upswing = attackType.getMethod("upswing");
         angle = attackType.getMethod("angle");
         animation = attackType.getMethod("animation");
+        pose = findOptional(attributesType, "pose");
+        twoHanded = findOptional(attributesType, "isTwoHanded");
         conditions = findOptional(attackType, "conditions");
         hitbox = findOptional(attackType, "hitbox");
         swingSound = findOptional(attackType, "swingSound");
@@ -321,7 +328,32 @@ public final class BetterCombatBridge
         {
             return Optional.empty();
         }
-        return Optional.of(new WeaponSnapshot(range, List.copyOf(parsed)));
+        return Optional.of(new WeaponSnapshot(range, List.copyOf(parsed), readPose(attributes), readTwoHanded(attributes)));
+    }
+
+    @Nullable
+    private static String readPose(Object attributes) throws ReflectiveOperationException
+    {
+        if (pose == null)
+        {
+            return null;
+        }
+        Object value = pose.invoke(attributes);
+        if (value instanceof String text && !text.isEmpty())
+        {
+            return text;
+        }
+        return null;
+    }
+
+    private static boolean readTwoHanded(Object attributes) throws ReflectiveOperationException
+    {
+        if (twoHanded == null)
+        {
+            return false;
+        }
+        Object value = twoHanded.invoke(attributes);
+        return value instanceof Boolean flag && flag;
     }
 
     private static AttackSnapshot readAttack(Object attack) throws ReflectiveOperationException
@@ -451,7 +483,7 @@ public final class BetterCombatBridge
         }
     }
 
-    public record WeaponSnapshot(double range, List<AttackSnapshot> attacks)
+    public record WeaponSnapshot(double range, List<AttackSnapshot> attacks, @Nullable String pose, boolean twoHanded)
     {
     }
 

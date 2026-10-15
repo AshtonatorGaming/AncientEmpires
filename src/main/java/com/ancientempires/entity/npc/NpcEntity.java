@@ -4,6 +4,9 @@ import com.ancientempires.combat.AttackSwing;
 import com.ancientempires.combat.NpcMeleeAttackGoal;
 import com.ancientempires.config.AncientEmpiresConfig;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityDimensions;
@@ -36,6 +39,12 @@ import java.util.UUID;
 public class NpcEntity extends PathfinderMob
 {
     private static final String OWNER_KEY = "Owner";
+    private static final EntityDataAccessor<Boolean> DATA_ATTACK_WINDOW = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<String> DATA_ATTACK_ANIMATION = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.STRING);
+    private static final EntityDataAccessor<String> DATA_PRESENTATION_ID = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.STRING);
+    private static final EntityDataAccessor<Integer> DATA_PRESENTATION_LENGTH = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Float> DATA_PRESENTATION_UPSWING = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Integer> DATA_PRESENTATION_SERIAL = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.INT);
 
     @Nullable
     private UUID owner;
@@ -59,6 +68,18 @@ public class NpcEntity extends PathfinderMob
         {
             this.setDropChance(slot, 1.0F);
         }
+    }
+
+    @Override
+    protected void defineSynchedData()
+    {
+        super.defineSynchedData();
+        this.entityData.define(DATA_ATTACK_WINDOW, false);
+        this.entityData.define(DATA_ATTACK_ANIMATION, "");
+        this.entityData.define(DATA_PRESENTATION_ID, "");
+        this.entityData.define(DATA_PRESENTATION_LENGTH, 0);
+        this.entityData.define(DATA_PRESENTATION_UPSWING, 0.0F);
+        this.entityData.define(DATA_PRESENTATION_SERIAL, 0);
     }
 
     public static AttributeSupplier.Builder createAttributes()
@@ -125,6 +146,18 @@ public class NpcEntity extends PathfinderMob
         this.attackWindowOpen = true;
         this.attackWindupRemaining = swing.windupTicks();
         this.attackAnimation = swing.animationId();
+        String id = swing.animationId() == null ? "" : swing.animationId();
+        this.entityData.set(DATA_ATTACK_WINDOW, true);
+        this.entityData.set(DATA_ATTACK_ANIMATION, id);
+        if (id.isEmpty())
+        {
+            this.clearPresentation();
+            return;
+        }
+        this.entityData.set(DATA_PRESENTATION_ID, id);
+        this.entityData.set(DATA_PRESENTATION_LENGTH, Math.max(1, swing.cooldownTicks()));
+        this.entityData.set(DATA_PRESENTATION_UPSWING, swing.animationUpswing());
+        this.entityData.set(DATA_PRESENTATION_SERIAL, this.entityData.get(DATA_PRESENTATION_SERIAL) + 1);
     }
 
     public void tickAttackWindow()
@@ -140,10 +173,39 @@ public class NpcEntity extends PathfinderMob
         this.attackWindowOpen = false;
         this.attackWindupRemaining = 0;
         this.attackAnimation = null;
+        this.entityData.set(DATA_ATTACK_WINDOW, false);
+        this.entityData.set(DATA_ATTACK_ANIMATION, "");
+    }
+
+    /**
+     * Stops the swing and the animation that was started for it. A finished
+     * wind-up uses {@link #closeAttackWindow()} instead, so the follow-through
+     * can keep playing for the rest of the cooldown.
+     */
+    public void cancelAttackPresentation()
+    {
+        this.closeAttackWindow();
+        this.clearPresentation();
+    }
+
+    private void clearPresentation()
+    {
+        if (this.entityData.get(DATA_PRESENTATION_ID).isEmpty() && this.entityData.get(DATA_PRESENTATION_SERIAL) == 0)
+        {
+            return;
+        }
+        this.entityData.set(DATA_PRESENTATION_ID, "");
+        this.entityData.set(DATA_PRESENTATION_LENGTH, 0);
+        this.entityData.set(DATA_PRESENTATION_UPSWING, 0.0F);
+        this.entityData.set(DATA_PRESENTATION_SERIAL, this.entityData.get(DATA_PRESENTATION_SERIAL) + 1);
     }
 
     public boolean isAttackWindowOpen()
     {
+        if (this.level().isClientSide)
+        {
+            return this.entityData.get(DATA_ATTACK_WINDOW);
+        }
         return this.attackWindowOpen;
     }
 
@@ -154,13 +216,42 @@ public class NpcEntity extends PathfinderMob
 
     /**
      * Animation id from the swing that is currently winding up. Empty when the
-     * NPC is not in an attack window. Later animation mods read this instead of
-     * starting their own swing.
+     * NPC is not in an attack window. The client copy reads the synced value.
      */
     @Nullable
     public String getAttackAnimation()
     {
+        if (this.level().isClientSide)
+        {
+            String synced = this.entityData.get(DATA_ATTACK_ANIMATION);
+            return synced.isEmpty() ? null : synced;
+        }
         return this.attackAnimation;
+    }
+
+    /**
+     * Animation started when the attack window opened. It stays set through the
+     * recovery so the client can finish the same clip Better Combat would play
+     * for the full cooldown. Empty after a cancelled swing.
+     */
+    public String getAttackPresentationId()
+    {
+        return this.entityData.get(DATA_PRESENTATION_ID);
+    }
+
+    public int getAttackPresentationLength()
+    {
+        return this.entityData.get(DATA_PRESENTATION_LENGTH);
+    }
+
+    public float getAttackPresentationUpswing()
+    {
+        return this.entityData.get(DATA_PRESENTATION_UPSWING);
+    }
+
+    public int getAttackPresentationSerial()
+    {
+        return this.entityData.get(DATA_PRESENTATION_SERIAL);
     }
 
     @Override

@@ -26,7 +26,7 @@ import org.slf4j.Logger;
  * registry — entity, spawn egg, and creative tab
  * entity.npc — the NPC, its equipment, and its owner
  * combat — attack profiles, the melee goal, and the optional Better Combat reader
- * client — the NPC renderer
+ * client — the NPC renderer and Better Combat poses
  */
 @Mod(AncientEmpires.MOD_ID)
 public class AncientEmpires

@@ -79,6 +79,14 @@ description='''${mod_description}'''
     versionRange="[0,)"
     ordering="AFTER"
     side="BOTH"
+# Player Animator plays Better Combat's attack and idle poses on the client.
+# The NPC still swings without it.
+[[dependencies.${mod_id}]]
+    modId="playeranimator"
+    mandatory=false
+    versionRange="[0,)"
+    ordering="AFTER"
+    side="CLIENT"
 
 # Features are specific properties of the game environment, that you may want to declare you require. This example declares
 # that your mod requires GL version 3.2 or higher. Other features will be added. They are side aware so declaring this won't

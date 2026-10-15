@@ -5,6 +5,8 @@ import org.jetbrains.annotations.Nullable;
 /**
  * One committed swing. The melee goal winds up for {@code windupTicks}, applies
  * the hit, then waits {@code recoveryTicks} before the next swing can start.
+ * {@code animationUpswing} is Better Combat's raw upswing fraction, before its
+ * config multiplier. The animation player applies that multiplier itself.
  */
 public record AttackSwing(
         double range,
@@ -13,6 +15,7 @@ public record AttackSwing(
         float damageMultiplier,
         double angleDegrees,
         @Nullable String animationId,
+        float animationUpswing,
         @Nullable String swingSoundId,
         float swingVolume,
         float swingPitch,
@@ -42,6 +45,14 @@ public record AttackSwing(
         if (angleDegrees < 0.0D)
         {
             angleDegrees = 0.0D;
+        }
+        if (animationUpswing < 0.0F)
+        {
+            animationUpswing = 0.0F;
+        }
+        else if (animationUpswing > 1.0F)
+        {
+            animationUpswing = 1.0F;
         }
         if (swingVolume <= 0.0F)
         {

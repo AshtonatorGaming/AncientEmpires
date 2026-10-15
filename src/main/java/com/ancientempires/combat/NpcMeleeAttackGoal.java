@@ -79,7 +79,14 @@ public class NpcMeleeAttackGoal extends Goal
     public void stop()
     {
         this.npc.getNavigation().stop();
-        this.npc.closeAttackWindow();
+        if (this.phase == Phase.WINDUP)
+        {
+            this.npc.cancelAttackPresentation();
+        }
+        else
+        {
+            this.npc.closeAttackWindow();
+        }
         this.phase = Phase.APPROACH;
         this.windupLeft = 0;
         this.recoveryLeft = 0;
@@ -128,7 +135,7 @@ public class NpcMeleeAttackGoal extends Goal
         if (swing == null)
         {
             this.phase = Phase.APPROACH;
-            this.npc.closeAttackWindow();
+            this.npc.cancelAttackPresentation();
             return;
         }
 
