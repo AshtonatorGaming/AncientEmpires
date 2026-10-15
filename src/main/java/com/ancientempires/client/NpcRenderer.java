@@ -5,9 +5,13 @@ import com.ancientempires.entity.npc.NpcEntity;
 import com.ancientempires.registry.ModEntities;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelLayers;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
 import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
+import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
@@ -23,6 +27,7 @@ import net.minecraftforge.fml.common.Mod;
 public class NpcRenderer extends HumanoidMobRenderer<NpcEntity, NpcModel>
 {
     private static final ResourceLocation TEXTURE = ResourceLocation.parse("textures/entity/player/wide/steve.png");
+    private boolean heldItemsCollapsed;
 
     public NpcRenderer(EntityRendererProvider.Context context)
     {
@@ -32,6 +37,37 @@ public class NpcRenderer extends HumanoidMobRenderer<NpcEntity, NpcModel>
                 new HumanoidModel<>(context.bakeLayer(ModelLayers.PLAYER_OUTER_ARMOR)),
                 context.getModelManager()));
         this.addLayer(new NpcHeldItemLayer(this, context.getItemInHandRenderer()));
+        this.keepSingleHeldItemLayer();
+    }
+
+    @Override
+    public void render(NpcEntity entity, float entityYaw, float partialTick, PoseStack pose, MultiBufferSource buffer, int packedLight)
+    {
+        if (!this.heldItemsCollapsed)
+        {
+            this.heldItemsCollapsed = true;
+            this.keepSingleHeldItemLayer();
+        }
+        super.render(entity, entityYaw, partialTick, pose, buffer, packedLight);
+    }
+
+    private void keepSingleHeldItemLayer()
+    {
+        RenderLayer<NpcEntity, NpcModel> kept = null;
+        for (RenderLayer<NpcEntity, NpcModel> layer : this.layers)
+        {
+            if (layer instanceof NpcHeldItemLayer)
+            {
+                kept = layer;
+                break;
+            }
+        }
+        if (kept == null)
+        {
+            return;
+        }
+        RenderLayer<NpcEntity, NpcModel> single = kept;
+        this.layers.removeIf(layer -> layer instanceof ItemInHandLayer && layer != single);
     }
 
     @Override

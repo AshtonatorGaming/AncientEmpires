@@ -37,5 +37,6 @@ public class NpcModel extends PlayerModel<NpcEntity>
             this.leftPants.copyFrom(this.leftLeg);
             this.rightPants.copyFrom(this.rightLeg);
         }
+        NpcCombatAnimations.yieldToEmf(entity, this, limbSwingAmount);
     }
 }

@@ -87,6 +87,25 @@ description='''${mod_description}'''
     versionRange="[0,)"
     ordering="AFTER"
     side="CLIENT"
+# EMF keeps the idle body. Its compat mod yields the arms while a Better Combat pose is playing.
+[[dependencies.${mod_id}]]
+    modId="entity_model_features"
+    mandatory=false
+    versionRange="[0,)"
+    ordering="AFTER"
+    side="CLIENT"
+[[dependencies.${mod_id}]]
+    modId="emf_compat_core"
+    mandatory=false
+    versionRange="[0,)"
+    ordering="AFTER"
+    side="CLIENT"
+[[dependencies.${mod_id}]]
+    modId="emf_compat_better_combat"
+    mandatory=false
+    versionRange="[0,)"
+    ordering="AFTER"
+    side="CLIENT"
 
 # Features are specific properties of the game environment, that you may want to declare you require. This example declares
 # that your mod requires GL version 3.2 or higher. Other features will be added. They are side aware so declaring this won't

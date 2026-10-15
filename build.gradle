@@ -115,11 +115,10 @@ repositories {
     // Put repositories for dependencies here
     // ForgeGradle automatically adds the Forge maven and Maven Central for you
 
-    // If you have mod jar dependencies in ./libs, you can declare them as a repository like so.
-    // See https://docs.gradle.org/current/userguide/declaring_repositories.html#sub:flat_dir_resolver
-    // flatDir {
-    //     dir 'libs'
-    // }
+    // Jars in ./libs. The group id is ignored. fg.deobf below remaps them.
+    flatDir {
+        dir 'libs'
+    }
 }
 
 dependencies {
@@ -129,6 +128,15 @@ dependencies {
     // If the group id is "net.minecraft" and the artifact id is one of ["client", "server", "joined"],
     // then special handling is done to allow a setup of a vanilla dependency without the use of an external repository.
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+
+    // Soft dependencies, compile-only. The mod still runs when they are absent.
+    // fg.deobf remaps the jars in libs onto the official names used in dev.
+    compileOnly fg.deobf("blank:bettercombat-forge:1.9.0+1.20.1")
+    compileOnly fg.deobf("blank:player-animation-lib-forge:1.0.2-rc1+1.20")
+    compileOnly fg.deobf("blank:entity_model_features:3.2.4-1.20.1-forge")
+    // These filenames have no hyphen for Gradle to split into a version, so files() is the resolution that works.
+    compileOnly files("libs/emf_compat_core_forge_1.20.1_2.3.0.jar")
+    compileOnly files("libs/emf_compat_better_combat_forge_1.20.1_2.1.0.jar")
 
     // Example mod dependency with JEI - using fg.deobf() ensures the dependency is remapped to your development mappings
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime

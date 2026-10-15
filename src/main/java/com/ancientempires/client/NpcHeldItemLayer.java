@@ -14,8 +14,9 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 
 /**
- * The vanilla held-item placement, plus the item bend Player Animation Library
- * would apply to a player. The library's own hook only sees player entities.
+ * One held item. When EMF has an arm attachment, the vanilla method is the
+ * draw EMF repositions. Otherwise this layer is the only draw, including the
+ * item bend Player Animation Library would apply to a player.
  */
 public class NpcHeldItemLayer extends ItemInHandLayer<NpcEntity, NpcModel>
 {
@@ -32,6 +33,11 @@ public class NpcHeldItemLayer extends ItemInHandLayer<NpcEntity, NpcModel>
     {
         if (stack.isEmpty() || !(entity instanceof NpcEntity npc))
         {
+            return;
+        }
+        if (NpcCombatAnimations.emfPlacesArm(arm))
+        {
+            super.renderArmWithItem(entity, stack, context, arm, pose, buffer, light);
             return;
         }
         pose.pushPose();
