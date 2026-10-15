@@ -26,7 +26,6 @@ import net.bettercombat.logic.WeaponRegistry;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.HumanoidArm;
-import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.ItemStack;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
@@ -85,8 +84,7 @@ final class NpcBetterCombatDriver
     static boolean holdActive(NpcEntity npc)
     {
         Session session = SESSIONS.get(npc);
-        // The body channel is the arm stance. The item channel only shifts the weapon.
-        return session != null && session.bodyPose.base.isActive();
+        return session != null && (session.bodyPose.base.isActive() || session.itemPose.base.isActive());
     }
 
     static void bendHeldArm(NpcEntity npc, HumanoidArm arm, PoseStack pose)
@@ -239,13 +237,17 @@ final class NpcBetterCombatDriver
 
         private void updatePose(NpcEntity npc)
         {
-            ItemStack held = npc.getMainHandItem();
-            boolean busy = npc.swinging || npc.isSwimming() || npc.isUsingItem() || CrossbowItem.isCharged(held);
-            boolean moving = !npc.isDeadOrDying() && npc.getDeltaMovement().horizontalDistanceSqr() > 0.0009D;
             boolean left = npc.getMainArm() == HumanoidArm.LEFT;
+            if (this.attackOwnsArms(npc))
+            {
+                this.poseMisses = 0;
+                this.itemPose.setPose(null, left);
+                this.bodyPose.setPose(null, left);
+                return;
+            }
+            ItemStack held = npc.getMainHandItem();
             KeyframeAnimation pose = null;
-            boolean twoHanded = false;
-            if (AncientEmpiresConfig.betterCombatEnabled && !held.isEmpty() && !busy)
+            if (AncientEmpiresConfig.betterCombatEnabled && !held.isEmpty())
             {
                 WeaponAttributes weapon = null;
                 try
@@ -269,17 +271,23 @@ final class NpcBetterCombatDriver
                         }
                         return;
                     }
-                    twoHanded = weapon.isTwoHanded();
                 }
             }
             this.poseMisses = 0;
-            KeyframeAnimation body = pose;
-            if (!twoHanded && (moving || npc.isCrouching()))
-            {
-                body = null;
-            }
+            // Walking and crouching keep the weapon stance. The body channel is what
+            // holds two-handers, halberds, and greatswords; the item channel only shifts the weapon.
             this.itemPose.setPose(pose, left);
-            this.bodyPose.setPose(body, left);
+            this.bodyPose.setPose(pose, left);
+        }
+
+        private boolean attackOwnsArms(NpcEntity npc)
+        {
+            Object animation = this.attack.base.getAnimation();
+            if (animation instanceof IAnimation playing && playing.isActive())
+            {
+                return true;
+            }
+            return npc.isAttackWindowOpen();
         }
 
         private boolean apply(PlayerModel<NpcEntity> model, float partialTick)

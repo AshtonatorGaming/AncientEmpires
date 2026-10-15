@@ -17,9 +17,8 @@ import java.util.UUID;
 /**
  * While a Better Combat attack or hold pose is on the vanilla model, hand the
  * arm rotations to EMF Compat the same way it does for players. EMF keeps the
- * body when neither pose is active. Hold poses are published whenever Better
- * Combat is playing one: EMF Compat leaves player weapon stances off unless
- * the user opts in, which would hide two-handers on NPCs.
+ * body only when neither pose is active. Hold poses are published for NPCs
+ * even when EMF Compat leaves player weapon stances off.
  */
 final class NpcEmfCompat
 {
