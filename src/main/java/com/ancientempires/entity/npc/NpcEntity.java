@@ -5,8 +5,10 @@ import com.ancientempires.combat.AttackSwing;
 import com.ancientempires.combat.NpcMeleeAttackGoal;
 import com.ancientempires.config.AncientEmpiresConfig;
 import com.ancientempires.inventory.NpcMenu;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -59,6 +61,16 @@ public class NpcEntity extends PathfinderMob
     private static final EntityDataAccessor<Integer> DATA_PRESENTATION_LENGTH = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Float> DATA_PRESENTATION_UPSWING = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Integer> DATA_PRESENTATION_SERIAL = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Boolean> DATA_FOLLOWING = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> DATA_CREATIVE = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Optional<BlockPos>> DATA_HOME = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+    private static final EntityDataAccessor<String> DATA_HOME_DIM = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.STRING);
+    private static final EntityDataAccessor<String> DATA_SKIN = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.STRING);
+    private static final String FOLLOWING_KEY = "Following";
+    private static final String CREATIVE_KEY = "Creative";
+    private static final String HOME_KEY = "Home";
+    private static final String HOME_DIM_KEY = "HomeDim";
+    private static final String SKIN_KEY = "Skin";
 
     private final NpcInventory inventory = new NpcInventory(this);
 
@@ -94,6 +106,11 @@ public class NpcEntity extends PathfinderMob
         this.entityData.define(DATA_PRESENTATION_LENGTH, 0);
         this.entityData.define(DATA_PRESENTATION_UPSWING, 0.0F);
         this.entityData.define(DATA_PRESENTATION_SERIAL, 0);
+        this.entityData.define(DATA_FOLLOWING, false);
+        this.entityData.define(DATA_CREATIVE, false);
+        this.entityData.define(DATA_HOME, Optional.empty());
+        this.entityData.define(DATA_HOME_DIM, "");
+        this.entityData.define(DATA_SKIN, "");
     }
 
     public static AttributeSupplier.Builder createAttributes()
@@ -115,9 +132,11 @@ public class NpcEntity extends PathfinderMob
     {
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(2, new NpcMeleeAttackGoal(this));
-        this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 0.8D));
-        this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
-        this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(4, new NpcFollowOwnerGoal(this, 1.0D, 3.0F));
+        this.goalSelector.addGoal(5, new NpcReturnHomeGoal(this, 0.9D, 2.0F));
+        this.goalSelector.addGoal(6, new WaterAvoidingRandomStrollGoal(this, 0.8D));
+        this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 8.0F));
+        this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
 
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Monster.class, true));
@@ -185,6 +204,181 @@ public class NpcEntity extends PathfinderMob
         }
         UUID owner = this.getOwner();
         return owner == null || owner.equals(player.getUUID());
+    }
+
+    public boolean isFollowing()
+    {
+        return this.entityData.get(DATA_FOLLOWING);
+    }
+
+    public void setFollowing(boolean following)
+    {
+        this.entityData.set(DATA_FOLLOWING, following);
+    }
+
+    public boolean isCreative()
+    {
+        return this.entityData.get(DATA_CREATIVE);
+    }
+
+    public void setCreative(boolean creative)
+    {
+        this.entityData.set(DATA_CREATIVE, creative);
+        this.applyDropChances();
+    }
+
+    @Nullable
+    public BlockPos getHome()
+    {
+        return this.entityData.get(DATA_HOME).orElse(null);
+    }
+
+    public String getHomeDimension()
+    {
+        return this.entityData.get(DATA_HOME_DIM);
+    }
+
+    public String getSkinId()
+    {
+        return this.entityData.get(DATA_SKIN);
+    }
+
+    /**
+     * Empty string, or a resource location a skin pack can render. Invalid text is ignored.
+     */
+    @Nullable
+    public static ResourceLocation parseSkinId(String skin)
+    {
+        if (skin == null || skin.isEmpty())
+        {
+            return null;
+        }
+        try
+        {
+            return ResourceLocation.parse(skin);
+        }
+        catch (IllegalArgumentException exception)
+        {
+            return null;
+        }
+    }
+
+    /**
+     * Container buttons from the inventory screen. The id values live on {@link NpcMenu}.
+     */
+    public boolean handleMenuButton(Player player, int id)
+    {
+        if (!this.canOpenInventory(player))
+        {
+            return false;
+        }
+        if (id == NpcMenu.BUTTON_FOLLOW)
+        {
+            this.toggleFollow(player);
+            return true;
+        }
+        if (id == NpcMenu.BUTTON_SET_HOME)
+        {
+            this.entityData.set(DATA_HOME, Optional.of(this.blockPosition()));
+            this.entityData.set(DATA_HOME_DIM, this.level().dimension().location().toString());
+            player.displayClientMessage(Component.translatable("message.ancientempires.npc.home_set"), true);
+            return true;
+        }
+        if (id == NpcMenu.BUTTON_CLEAR_HOME)
+        {
+            this.entityData.set(DATA_HOME, Optional.empty());
+            this.entityData.set(DATA_HOME_DIM, "");
+            player.displayClientMessage(Component.translatable("message.ancientempires.npc.home_cleared"), true);
+            return true;
+        }
+        if (id == NpcMenu.BUTTON_REPACK)
+        {
+            this.inventory.repack();
+            player.displayClientMessage(Component.translatable("message.ancientempires.npc.repacked"), true);
+            return true;
+        }
+        if (id == NpcMenu.BUTTON_CREATIVE)
+        {
+            this.toggleCreative(player);
+            return true;
+        }
+        return false;
+    }
+
+    public void applyCustomName(Player player, String name)
+    {
+        if (!this.canOpenInventory(player) || this.distanceToSqr(player) > 64.0D)
+        {
+            return;
+        }
+        String trimmed = name == null ? "" : name.replace('\r', ' ').replace('\n', ' ').trim();
+        if (trimmed.length() > 32)
+        {
+            trimmed = trimmed.substring(0, 32);
+        }
+        if (trimmed.isEmpty())
+        {
+            this.setCustomName(null);
+            this.setCustomNameVisible(false);
+            return;
+        }
+        this.setCustomName(Component.literal(trimmed));
+        this.setCustomNameVisible(true);
+    }
+
+    public void applySkin(Player player, String skin)
+    {
+        if (!this.canOpenInventory(player) || this.distanceToSqr(player) > 64.0D)
+        {
+            return;
+        }
+        String trimmed = skin == null ? "" : skin.trim();
+        if (trimmed.length() > 128)
+        {
+            trimmed = trimmed.substring(0, 128);
+        }
+        if (!trimmed.isEmpty() && parseSkinId(trimmed) == null)
+        {
+            return;
+        }
+        this.entityData.set(DATA_SKIN, trimmed);
+    }
+
+    private void toggleFollow(Player player)
+    {
+        if (this.getOwner() == null)
+        {
+            player.displayClientMessage(Component.translatable("message.ancientempires.npc.follow_no_owner"), true);
+            return;
+        }
+        boolean following = !this.isFollowing();
+        this.setFollowing(following);
+        player.displayClientMessage(Component.translatable(following
+                ? "message.ancientempires.npc.follow_on"
+                : "message.ancientempires.npc.follow_off"), true);
+    }
+
+    private void toggleCreative(Player player)
+    {
+        if (!player.getAbilities().instabuild)
+        {
+            player.displayClientMessage(Component.translatable("message.ancientempires.npc.creative_denied"), true);
+            return;
+        }
+        boolean creative = !this.isCreative();
+        this.setCreative(creative);
+        player.displayClientMessage(Component.translatable(creative
+                ? "message.ancientempires.npc.creative_on"
+                : "message.ancientempires.npc.creative_off"), true);
+    }
+
+    private void applyDropChances()
+    {
+        float chance = this.isCreative() ? 0.0F : 1.0F;
+        for (EquipmentSlot slot : EquipmentSlot.values())
+        {
+            this.setDropChance(slot, chance);
+        }
     }
 
     public int getComboIndex()
@@ -375,6 +569,10 @@ public class NpcEntity extends PathfinderMob
     protected void dropCustomDeathLoot(DamageSource source, int looting, boolean hitByPlayer)
     {
         super.dropCustomDeathLoot(source, looting, hitByPlayer);
+        if (this.isCreative())
+        {
+            return;
+        }
         for (ItemStack stack : this.inventory.removeBackpack())
         {
             this.spawnAtLocation(stack);
@@ -391,6 +589,18 @@ public class NpcEntity extends PathfinderMob
         {
             tag.putUUID(OWNER_KEY, owner);
         }
+        tag.putBoolean(FOLLOWING_KEY, this.isFollowing());
+        tag.putBoolean(CREATIVE_KEY, this.isCreative());
+        BlockPos home = this.getHome();
+        if (home != null)
+        {
+            tag.putLong(HOME_KEY, home.asLong());
+            tag.putString(HOME_DIM_KEY, this.getHomeDimension());
+        }
+        if (!this.getSkinId().isEmpty())
+        {
+            tag.putString(SKIN_KEY, this.getSkinId());
+        }
     }
 
     @Override
@@ -399,6 +609,19 @@ public class NpcEntity extends PathfinderMob
         super.readAdditionalSaveData(tag);
         this.inventory.load(tag);
         this.setOwner(tag.hasUUID(OWNER_KEY) ? tag.getUUID(OWNER_KEY) : null);
+        this.setFollowing(tag.getBoolean(FOLLOWING_KEY));
+        this.setCreative(tag.getBoolean(CREATIVE_KEY));
+        if (tag.contains(HOME_KEY))
+        {
+            this.entityData.set(DATA_HOME, Optional.of(BlockPos.of(tag.getLong(HOME_KEY))));
+            this.entityData.set(DATA_HOME_DIM, tag.getString(HOME_DIM_KEY));
+        }
+        else
+        {
+            this.entityData.set(DATA_HOME, Optional.empty());
+            this.entityData.set(DATA_HOME_DIM, "");
+        }
+        this.entityData.set(DATA_SKIN, tag.getString(SKIN_KEY));
     }
 
     @Override

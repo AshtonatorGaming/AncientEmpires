@@ -2,5 +2,22 @@
   "entity.ancientempires.npc": "NPC",
   "item.ancientempires.npc_spawn_egg": "NPC Spawn Egg",
   "itemGroup.ancientempires": "Ancient Empires",
-  "message.ancientempires.npc.not_owner": "This NPC belongs to someone else"
+  "gui.ancientempires.npc.name": "Name",
+  "gui.ancientempires.npc.follow": "Toggle Follow",
+  "gui.ancientempires.npc.set_home": "Set Home",
+  "gui.ancientempires.npc.clear_home": "Clear Home",
+  "gui.ancientempires.npc.repack": "Repack",
+  "gui.ancientempires.npc.creative": "Creative",
+  "gui.ancientempires.npc.skin": "Skin",
+  "message.ancientempires.npc.not_owner": "This NPC belongs to someone else",
+  "message.ancientempires.npc.skin_unavailable": "Skin packs are not installed",
+  "message.ancientempires.npc.follow_on": "Following",
+  "message.ancientempires.npc.follow_off": "Stopped following",
+  "message.ancientempires.npc.follow_no_owner": "This NPC has no one to follow",
+  "message.ancientempires.npc.home_set": "Home set",
+  "message.ancientempires.npc.home_cleared": "Home cleared",
+  "message.ancientempires.npc.repacked": "Backpack packed",
+  "message.ancientempires.npc.creative_on": "Creative gear on",
+  "message.ancientempires.npc.creative_off": "Creative gear off",
+  "message.ancientempires.npc.creative_denied": "Creative mode is required"
 }

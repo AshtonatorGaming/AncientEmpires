@@ -6,6 +6,7 @@ import com.ancientempires.entity.npc.NpcEntity;
 import com.ancientempires.registry.ModCreativeTabs;
 import com.ancientempires.registry.ModEntities;
 import com.ancientempires.registry.ModItems;
+import com.ancientempires.network.ModNetwork;
 import com.ancientempires.registry.ModMenus;
 import com.mojang.logging.LogUtils;
 import net.minecraft.world.item.CreativeModeTabs;
@@ -27,6 +28,7 @@ import org.slf4j.Logger;
  * registry — entity, spawn egg, and creative tab
  * entity.npc — the NPC, its inventory, and its owner
  * inventory — the NPC container menu
+ * network — name and skin packets for the NPC screen
  * combat — attack profiles, the melee goal, and the optional Better Combat reader
  * client — the NPC renderer and Better Combat poses
  */
@@ -44,6 +46,7 @@ public class AncientEmpires
         ModItems.ITEMS.register(modBus);
         ModCreativeTabs.TABS.register(modBus);
         ModMenus.MENUS.register(modBus);
+        ModNetwork.register();
 
         modBus.addListener(this::commonSetup);
         modBus.addListener(this::registerAttributes);

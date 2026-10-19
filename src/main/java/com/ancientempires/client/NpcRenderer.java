@@ -73,7 +73,8 @@ public class NpcRenderer extends HumanoidMobRenderer<NpcEntity, NpcModel>
     @Override
     public ResourceLocation getTextureLocation(NpcEntity entity)
     {
-        return TEXTURE;
+        ResourceLocation skin = NpcEntity.parseSkinId(entity.getSkinId());
+        return skin != null ? skin : TEXTURE;
     }
 
     @SubscribeEvent

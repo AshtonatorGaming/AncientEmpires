@@ -3,25 +3,34 @@ package com.ancientempires.inventory;
 import com.ancientempires.entity.npc.NpcEntity;
 import com.ancientempires.entity.npc.NpcInventory;
 import com.ancientempires.registry.ModMenus;
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Dispenser-sized menu. The first slot is the NPC's main hand. The other eight
- * are the backpack. The lower slots are the player's own inventory.
+ * Hands, armor, and a 3x3 backpack, then the player's inventory. Slot positions
+ * match {@link NpcLayout} because the fields are final. Clicks still travel on
+ * the vanilla container packet.
  */
 public class NpcMenu extends AbstractContainerMenu
 {
-    private static final int PLAYER_START_Y = 84;
-    private static final int HOTBAR_Y = 142;
+    public static final int BUTTON_FOLLOW = 0;
+    public static final int BUTTON_SET_HOME = 1;
+    public static final int BUTTON_CLEAR_HOME = 2;
+    public static final int BUTTON_REPACK = 3;
+    public static final int BUTTON_CREATIVE = 4;
 
     @Nullable
     private final NpcEntity npc;
@@ -35,23 +44,28 @@ public class NpcMenu extends AbstractContainerMenu
         checkContainerSize(this.inventory, NpcInventory.SLOT_COUNT);
         this.inventory.startOpen(playerInventory.player);
 
-        for (int row = 0; row < 3; row++)
+        this.addGear(NpcInventory.MAIN_HAND_SLOT, EquipmentSlot.MAINHAND, false, null);
+        this.addGear(NpcInventory.OFFHAND_SLOT, EquipmentSlot.OFFHAND, false, InventoryMenu.EMPTY_ARMOR_SLOT_SHIELD);
+        this.addGear(NpcInventory.HEAD_SLOT, EquipmentSlot.HEAD, true, InventoryMenu.EMPTY_ARMOR_SLOT_HELMET);
+        this.addGear(NpcInventory.CHEST_SLOT, EquipmentSlot.CHEST, true, InventoryMenu.EMPTY_ARMOR_SLOT_CHESTPLATE);
+        this.addGear(NpcInventory.LEGS_SLOT, EquipmentSlot.LEGS, true, InventoryMenu.EMPTY_ARMOR_SLOT_LEGGINGS);
+        this.addGear(NpcInventory.FEET_SLOT, EquipmentSlot.FEET, true, InventoryMenu.EMPTY_ARMOR_SLOT_BOOTS);
+        for (int slot = NpcInventory.BACKPACK_START; slot < NpcInventory.SLOT_COUNT; slot++)
         {
-            for (int column = 0; column < 3; column++)
-            {
-                this.addSlot(new Slot(this.inventory, column + row * 3, 62 + column * 18, 17 + row * 18));
-            }
+            this.addSlot(new Slot(this.inventory, slot, NpcLayout.slotX(slot), NpcLayout.slotY(slot)));
         }
         for (int row = 0; row < 3; row++)
         {
             for (int column = 0; column < 9; column++)
             {
-                this.addSlot(new Slot(playerInventory, column + row * 9 + 9, 8 + column * 18, PLAYER_START_Y + row * 18));
+                int index = NpcInventory.SLOT_COUNT + column + row * 9;
+                this.addSlot(new Slot(playerInventory, column + row * 9 + 9, NpcLayout.slotX(index), NpcLayout.slotY(index)));
             }
         }
         for (int column = 0; column < 9; column++)
         {
-            this.addSlot(new Slot(playerInventory, column, 8 + column * 18, HOTBAR_Y));
+            int index = NpcInventory.SLOT_COUNT + 27 + column;
+            this.addSlot(new Slot(playerInventory, column, NpcLayout.slotX(index), NpcLayout.slotY(index)));
         }
     }
 
@@ -60,6 +74,17 @@ public class NpcMenu extends AbstractContainerMenu
         Entity entity = playerInventory.player.level().getEntity(data.readVarInt());
         NpcEntity npc = entity instanceof NpcEntity found ? found : null;
         return new NpcMenu(containerId, playerInventory, npc);
+    }
+
+    private void addGear(int index, EquipmentSlot equipmentSlot, boolean armorOnly, @Nullable ResourceLocation icon)
+    {
+        this.addSlot(new GearSlot(this.inventory, index, equipmentSlot, armorOnly, icon, NpcLayout.slotX(index), NpcLayout.slotY(index)));
+    }
+
+    @Nullable
+    public NpcEntity getNpc()
+    {
+        return this.npc;
     }
 
     @Override
@@ -77,6 +102,16 @@ public class NpcMenu extends AbstractContainerMenu
     }
 
     @Override
+    public boolean clickMenuButton(Player player, int id)
+    {
+        if (this.npc == null)
+        {
+            return false;
+        }
+        return this.npc.handleMenuButton(player, id);
+    }
+
+    @Override
     public ItemStack quickMoveStack(Player player, int index)
     {
         Slot slot = this.slots.get(index);
@@ -86,15 +121,14 @@ public class NpcMenu extends AbstractContainerMenu
         }
         ItemStack stack = slot.getItem();
         ItemStack original = stack.copy();
-        int npcSlots = this.inventory.getContainerSize();
-        if (index < npcSlots)
+        if (index < NpcInventory.SLOT_COUNT)
         {
-            if (!this.moveItemStackTo(stack, npcSlots, this.slots.size(), true))
+            if (!this.moveItemStackTo(stack, NpcInventory.SLOT_COUNT, this.slots.size(), true))
             {
                 return ItemStack.EMPTY;
             }
         }
-        else if (!this.moveItemStackTo(stack, 0, npcSlots, false))
+        else if (!this.moveToNpc(stack))
         {
             return ItemStack.EMPTY;
         }
@@ -109,10 +143,107 @@ public class NpcMenu extends AbstractContainerMenu
         return original;
     }
 
+    /**
+     * Armor and shields prefer their equipment slot. Anything left over tries
+     * the main hand, then the offhand, then the backpack. {@code mayPlace}
+     * keeps a sword out of the helmet slot.
+     */
+    private boolean moveToNpc(ItemStack stack)
+    {
+        int before = stack.getCount();
+        EquipmentSlot preferred = Mob.getEquipmentSlotForItem(stack);
+        if (preferred.getType() == EquipmentSlot.Type.ARMOR || preferred == EquipmentSlot.OFFHAND)
+        {
+            int index = this.equipmentIndex(preferred);
+            this.moveItemStackTo(stack, index, index + 1, false);
+        }
+        if (!stack.isEmpty())
+        {
+            this.moveItemStackTo(stack, NpcInventory.MAIN_HAND_SLOT, NpcInventory.MAIN_HAND_SLOT + 1, false);
+        }
+        if (!stack.isEmpty() && preferred != EquipmentSlot.OFFHAND)
+        {
+            this.moveItemStackTo(stack, NpcInventory.OFFHAND_SLOT, NpcInventory.OFFHAND_SLOT + 1, false);
+        }
+        if (!stack.isEmpty())
+        {
+            this.moveItemStackTo(stack, NpcInventory.BACKPACK_START, NpcInventory.SLOT_COUNT, false);
+        }
+        return stack.getCount() != before;
+    }
+
+    private int equipmentIndex(EquipmentSlot slot)
+    {
+        if (slot == EquipmentSlot.OFFHAND)
+        {
+            return NpcInventory.OFFHAND_SLOT;
+        }
+        if (slot == EquipmentSlot.HEAD)
+        {
+            return NpcInventory.HEAD_SLOT;
+        }
+        if (slot == EquipmentSlot.CHEST)
+        {
+            return NpcInventory.CHEST_SLOT;
+        }
+        if (slot == EquipmentSlot.LEGS)
+        {
+            return NpcInventory.LEGS_SLOT;
+        }
+        if (slot == EquipmentSlot.FEET)
+        {
+            return NpcInventory.FEET_SLOT;
+        }
+        return NpcInventory.MAIN_HAND_SLOT;
+    }
+
     @Override
     public void removed(Player player)
     {
         super.removed(player);
         this.inventory.stopOpen(player);
+    }
+
+    /**
+     * Armor slots accept only the matching equipment and stack to one. Hands
+     * accept any item. The empty icon is the vanilla armor sprite.
+     */
+    private static final class GearSlot extends Slot
+    {
+        private final EquipmentSlot equipmentSlot;
+        private final boolean armorOnly;
+        @Nullable
+        private final Pair<ResourceLocation, ResourceLocation> icon;
+
+        private GearSlot(Container container, int index, EquipmentSlot equipmentSlot, boolean armorOnly, @Nullable ResourceLocation icon, int x, int y)
+        {
+            super(container, index, x, y);
+            this.equipmentSlot = equipmentSlot;
+            this.armorOnly = armorOnly;
+            this.icon = icon == null ? null : Pair.of(InventoryMenu.BLOCK_ATLAS, icon);
+        }
+
+        @Override
+        public boolean mayPlace(ItemStack stack)
+        {
+            if (!this.armorOnly)
+            {
+                return true;
+            }
+            return Mob.getEquipmentSlotForItem(stack) == this.equipmentSlot;
+        }
+
+        @Override
+        public int getMaxStackSize()
+        {
+            return this.armorOnly ? 1 : super.getMaxStackSize();
+        }
+
+        @Override
+        @Nullable
+        public Pair<ResourceLocation, ResourceLocation> getNoItemIcon()
+        {
+            return this.icon;
+        }
     }
 }
