@@ -4,6 +4,7 @@ import brachy.modularui.api.IMuiScreen;
 import brachy.modularui.screen.ClientScreenHandler;
 import brachy.modularui.screen.ModularPanel;
 import brachy.modularui.screen.ModularScreen;
+import brachy.modularui.screen.UISettings;
 import com.ancientempires.AncientEmpires;
 import com.ancientempires.inventory.NpcLayout;
 import com.ancientempires.inventory.NpcMenu;
@@ -30,13 +31,16 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 public class NpcScreen extends AbstractContainerScreen<NpcMenu> implements IMuiScreen
 {
     private final ModularScreen modularScreen;
+    private boolean contentReady;
 
     public NpcScreen(NpcMenu menu, Inventory playerInventory, Component title)
     {
         super(menu, playerInventory, title);
         this.imageWidth = NpcLayout.WIDTH;
         this.imageHeight = NpcLayout.HEIGHT;
-        ModularPanel<?> panel = NpcInventoryPanel.create(menu);
+        // ModularScreen needs a panel before the screen opens. The shell stays empty here.
+        // construct only binds this wrapper. It does not initialise widgets.
+        ModularPanel<?> panel = ModularPanel.defaultPanel("npc_inventory", NpcLayout.WIDTH, NpcLayout.HEIGHT);
         this.modularScreen = new NpcModularScreen(panel);
         this.modularScreen.pausesGame(false);
         this.modularScreen.construct(this);
@@ -53,6 +57,17 @@ public class NpcScreen extends AbstractContainerScreen<NpcMenu> implements IMuiS
     {
         this.imageWidth = NpcLayout.WIDTH;
         this.imageHeight = NpcLayout.HEIGHT;
+        // Opening has already made this the current screen. Settings have to exist
+        // before Init.Post, which is what initialises the panel and its widgets.
+        if (!this.modularScreen.getContext().hasSettings())
+        {
+            this.modularScreen.getContext().setSettings(new UISettings());
+        }
+        if (!this.contentReady)
+        {
+            NpcInventoryPanel.populate(this.modularScreen.getMainPanel(), this.menu);
+            this.contentReady = true;
+        }
         super.init();
     }
 

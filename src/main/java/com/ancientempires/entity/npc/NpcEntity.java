@@ -83,6 +83,9 @@ public class NpcEntity extends PathfinderMob
     @Nullable
     private String attackAnimation;
 
+    /** Client render flag. The inventory preview sets this so the nametag is skipped for that draw. */
+    private boolean nameplateSuppressed;
+
     public NpcEntity(EntityType<? extends NpcEntity> type, Level level)
     {
         super(type, level);
@@ -323,7 +326,18 @@ public class NpcEntity extends PathfinderMob
             return;
         }
         this.setCustomName(Component.literal(trimmed));
-        this.setCustomNameVisible(true);
+        // The client renderer decides whether the world nametag is drawn.
+        this.setCustomNameVisible(false);
+    }
+
+    public void setNameplateSuppressed(boolean suppressed)
+    {
+        this.nameplateSuppressed = suppressed;
+    }
+
+    public boolean isNameplateSuppressed()
+    {
+        return this.nameplateSuppressed;
     }
 
     public void applySkin(Player player, String skin)
@@ -519,6 +533,20 @@ public class NpcEntity extends PathfinderMob
         {
             this.comboIndex = 0;
         }
+    }
+
+    /**
+     * Replacing a worn stack must not spawn the previous one. Drop chance stays
+     * at 0 while the slot changes, then returns to the death-loot chance.
+     * The stored stack is a copy, so the cursor can keep the stack it passed in.
+     */
+    @Override
+    public void setItemSlot(EquipmentSlot slot, ItemStack stack)
+    {
+        float chance = this.getEquipmentDropChance(slot);
+        this.setDropChance(slot, 0.0F);
+        super.setItemSlot(slot, stack.isEmpty() ? ItemStack.EMPTY : stack.copy());
+        this.setDropChance(slot, this.isCreative() ? 0.0F : chance);
     }
 
     @Override

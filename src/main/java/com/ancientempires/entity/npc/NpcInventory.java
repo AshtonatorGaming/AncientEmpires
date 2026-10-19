@@ -180,6 +180,11 @@ public class NpcInventory implements Container
     @Override
     public ItemStack removeItem(int slot, int amount)
     {
+        EquipmentSlot equipment = equipmentSlot(slot);
+        if (equipment != null)
+        {
+            return this.replaceEquipment(equipment, amount);
+        }
         ItemStack existing = this.getItem(slot);
         if (existing.isEmpty() || amount <= 0)
         {
@@ -203,13 +208,7 @@ public class NpcInventory implements Container
         EquipmentSlot equipment = equipmentSlot(slot);
         if (equipment != null)
         {
-            ItemStack existing = this.npc.getItemBySlot(equipment);
-            if (existing.isEmpty())
-            {
-                return ItemStack.EMPTY;
-            }
-            this.npc.setItemSlot(equipment, ItemStack.EMPTY);
-            return existing;
+            return this.replaceEquipment(equipment, Integer.MAX_VALUE);
         }
         int backpackSlot = slot - BACKPACK_START;
         if (backpackSlot < 0 || backpackSlot >= BACKPACK_SLOTS)
@@ -225,7 +224,7 @@ public class NpcInventory implements Container
         EquipmentSlot equipment = equipmentSlot(slot);
         if (equipment != null)
         {
-            this.npc.setItemSlot(equipment, stack);
+            this.npc.setItemSlot(equipment, stack.isEmpty() ? ItemStack.EMPTY : stack.copy());
         }
         else
         {
@@ -236,6 +235,25 @@ public class NpcInventory implements Container
             }
         }
         this.setChanged();
+    }
+
+    /**
+     * Takes up to {@code amount} off a copy of the worn stack, then writes the
+     * remainder back to the same {@link EquipmentSlot}. The cursor never shares
+     * the entity's stack, so a click cannot zero the offhand and drop it.
+     */
+    private ItemStack replaceEquipment(EquipmentSlot equipment, int amount)
+    {
+        ItemStack existing = this.npc.getItemBySlot(equipment);
+        if (existing.isEmpty() || amount <= 0)
+        {
+            return ItemStack.EMPTY;
+        }
+        ItemStack remainder = existing.copy();
+        ItemStack taken = remainder.split(amount);
+        this.npc.setItemSlot(equipment, remainder.isEmpty() ? ItemStack.EMPTY : remainder);
+        this.setChanged();
+        return taken;
     }
 
     @Override

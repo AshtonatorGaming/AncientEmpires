@@ -9,6 +9,8 @@
   "gui.ancientempires.npc.repack": "Repack",
   "gui.ancientempires.npc.creative": "Creative",
   "gui.ancientempires.npc.skin": "Skin",
+  "gui.ancientempires.npc.backpack": "Backpack",
+  "gui.ancientempires.npc.inventory": "Inventory",
   "message.ancientempires.npc.not_owner": "This NPC belongs to someone else",
   "message.ancientempires.npc.skin_unavailable": "Skin packs are not installed",
   "message.ancientempires.npc.follow_on": "Following",

@@ -1,6 +1,7 @@
 package com.ancientempires;
 
 import com.ancientempires.combat.BetterCombatBridge;
+import com.ancientempires.config.AncientEmpiresClientConfig;
 import com.ancientempires.config.AncientEmpiresConfig;
 import com.ancientempires.entity.npc.NpcEntity;
 import com.ancientempires.registry.ModCreativeTabs;
@@ -53,6 +54,7 @@ public class AncientEmpires
         modBus.addListener(this::addCreative);
 
         context.registerConfig(ModConfig.Type.COMMON, AncientEmpiresConfig.SPEC);
+        context.registerConfig(ModConfig.Type.CLIENT, AncientEmpiresClientConfig.SPEC);
     }
 
     private void commonSetup(FMLCommonSetupEvent event)

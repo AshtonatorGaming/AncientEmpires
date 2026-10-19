@@ -1,6 +1,7 @@
 package com.ancientempires.client;
 
 import com.ancientempires.AncientEmpires;
+import com.ancientempires.config.AncientEmpiresClientConfig;
 import com.ancientempires.entity.npc.NpcEntity;
 import com.ancientempires.registry.ModEntities;
 import net.minecraft.client.model.HumanoidModel;
@@ -15,6 +16,9 @@ import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.client.event.RenderNameTagEvent;
+import net.minecraftforge.eventbus.api.Event;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -70,6 +74,27 @@ public class NpcRenderer extends HumanoidMobRenderer<NpcEntity, NpcModel>
         this.layers.removeIf(layer -> layer instanceof ItemInHandLayer && layer != single);
     }
 
+    /**
+     * World nametags stay off unless the client config enables them. The
+     * inventory preview sets {@link NpcEntity#isNameplateSuppressed()} for the
+     * draw, so the plate is skipped there even when the setting is on.
+     */
+    @Override
+    protected boolean shouldShowName(NpcEntity entity)
+    {
+        if (entity.isNameplateSuppressed() || !AncientEmpiresClientConfig.showNametags)
+        {
+            return false;
+        }
+        if (entity.getCustomName() == null)
+        {
+            return false;
+        }
+        double distance = this.entityRenderDispatcher.distanceToSqr(entity);
+        float range = entity.isDiscrete() ? 32.0F : 64.0F;
+        return distance < (double) (range * range);
+    }
+
     @Override
     public ResourceLocation getTextureLocation(NpcEntity entity)
     {
@@ -81,5 +106,30 @@ public class NpcRenderer extends HumanoidMobRenderer<NpcEntity, NpcModel>
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event)
     {
         event.registerEntityRenderer(ModEntities.NPC.get(), NpcRenderer::new);
+    }
+
+    /**
+     * {@code RenderNameTagEvent} can force a plate even when
+     * {@link #shouldShowName} returns false. Deny that for a hidden NPC.
+     */
+    @Mod.EventBusSubscriber(modid = AncientEmpires.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
+    private static final class Nameplates
+    {
+        private Nameplates()
+        {
+        }
+
+        @SubscribeEvent(priority = EventPriority.LOW)
+        public static void onNameTag(RenderNameTagEvent event)
+        {
+            if (!(event.getEntity() instanceof NpcEntity npc))
+            {
+                return;
+            }
+            if (npc.isNameplateSuppressed() || !AncientEmpiresClientConfig.showNametags)
+            {
+                event.setResult(Event.Result.DENY);
+            }
+        }
     }
 }

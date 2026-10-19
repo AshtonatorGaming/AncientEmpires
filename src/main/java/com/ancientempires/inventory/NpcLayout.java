@@ -29,6 +29,9 @@ public final class NpcLayout
     public static final int PLAYER_X = (WIDTH - 9 * SLOT) / 2;
     public static final int PLAYER_Y = BUTTON_Y + BUTTON_SIZE + 12;
     public static final int HOTBAR_Y = PLAYER_Y + 3 * SLOT + 4;
+    public static final int SECTION_LABEL_H = 10;
+    public static final int BACKPACK_LABEL_Y = BACKPACK_Y - SECTION_LABEL_H - 1;
+    public static final int PLAYER_LABEL_Y = PLAYER_Y - SECTION_LABEL_H - 1;
 
     private NpcLayout()
     {

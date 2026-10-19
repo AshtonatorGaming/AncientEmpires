@@ -11,6 +11,7 @@ import brachy.modularui.value.StringValue;
 import brachy.modularui.widget.ParentWidget;
 import brachy.modularui.widget.Widget;
 import brachy.modularui.widgets.ButtonWidget;
+import brachy.modularui.widgets.TextWidget;
 import brachy.modularui.widgets.layout.Grid;
 import brachy.modularui.widgets.textfield.TextFieldWidget;
 import com.ancientempires.entity.npc.NpcEntity;
@@ -55,6 +56,9 @@ public final class NpcInventoryPanel
     private static final int PLAYER_X = NpcLayout.PLAYER_X;
     private static final int PLAYER_Y = NpcLayout.PLAYER_Y;
     private static final int HOTBAR_Y = NpcLayout.HOTBAR_Y;
+    private static final int SECTION_LABEL_H = NpcLayout.SECTION_LABEL_H;
+    private static final int BACKPACK_LABEL_Y = NpcLayout.BACKPACK_LABEL_Y;
+    private static final int PLAYER_LABEL_Y = NpcLayout.PLAYER_LABEL_Y;
 
     private static final int PARCHMENT = 0xFF4A3B2A;
     private static final int GOLD = 0xFFC6A56A;
@@ -70,17 +74,18 @@ public final class NpcInventoryPanel
     {
     }
 
-    public static ModularPanel<?> create(NpcMenu menu)
+    public static void populate(ModularPanel<?> panel, NpcMenu menu)
     {
         NpcEntity npc = menu.getNpc();
-        ModularPanel<?> panel = ModularPanel.defaultPanel("npc_inventory", NpcLayout.WIDTH, NpcLayout.HEIGHT);
         panel.background(
                 GuiTextures.MC_BACKGROUND.withColorOverride(PARCHMENT),
                 new Rectangle().color(GOLD).hollow(1.25F));
         panel.child(nameField(menu));
         panel.child(cross(menu));
         panel.child(preview(menu, npc));
+        panel.child(sectionLabel(BACKPACK_X, BACKPACK_LABEL_Y, SLOT * 3, "gui.ancientempires.npc.backpack"));
         panel.child(itemGrid(BACKPACK_X, BACKPACK_Y, 3, 3, NpcInventory.BACKPACK_START, menu));
+        panel.child(sectionLabel(PLAYER_X, PLAYER_LABEL_Y, SLOT * 9, "gui.ancientempires.npc.inventory"));
         panel.child(itemGrid(PLAYER_X, PLAYER_Y, 9, 3, NpcInventory.SLOT_COUNT, menu));
         panel.child(itemGrid(PLAYER_X, HOTBAR_Y, 9, 1, NpcInventory.SLOT_COUNT + 27, menu));
         panel.child(command(0, GuiTextures.MOVE_TO, "gui.ancientempires.npc.follow", NpcMenu.BUTTON_FOLLOW, menu, active(npc, NpcEntity::isFollowing)));
@@ -88,7 +93,6 @@ public final class NpcInventoryPanel
         panel.child(command(2, GuiTextures.CROSS, "gui.ancientempires.npc.clear_home", NpcMenu.BUTTON_CLEAR_HOME, menu, null));
         panel.child(command(3, GuiTextures.REFRESH, "gui.ancientempires.npc.repack", NpcMenu.BUTTON_REPACK, menu, null));
         panel.child(command(4, GuiTextures.FAVORITE, "gui.ancientempires.npc.creative", NpcMenu.BUTTON_CREATIVE, menu, active(npc, NpcEntity::isCreative)));
-        return panel;
     }
 
     private static TextFieldWidget nameField(NpcMenu menu)
@@ -147,7 +151,11 @@ public final class NpcInventoryPanel
                 .background(new Rectangle().color(INK), GuiTextures.DISPLAY.withColorOverride(FRAME));
         if (npc != null)
         {
-            frame.child(new EntityDrawable<>(npc).followMouse().asWidget()
+            frame.child(new EntityDrawable<>(npc)
+                    .followMouse()
+                    .preDraw((graphics, entity) -> entity.setNameplateSuppressed(true))
+                    .postDraw((graphics, entity) -> entity.setNameplateSuppressed(false))
+                    .asWidget()
                     .pos(4, 4)
                     .size(PREVIEW_W - 16, PREVIEW_H - 20));
         }
@@ -174,6 +182,16 @@ public final class NpcInventoryPanel
             NpcSkinHooks.open(npc);
         }
         return true;
+    }
+
+    private static TextWidget<?> sectionLabel(int x, int y, int width, String key)
+    {
+        return new TextWidget<>(Component.translatable(key))
+                .pos(x, y)
+                .size(width, SECTION_LABEL_H)
+                .maxWidth(width)
+                .color(NAME_INK)
+                .shadow(Boolean.TRUE);
     }
 
     private static Grid itemGrid(int x, int y, int columns, int rows, int firstIndex, NpcMenu menu)

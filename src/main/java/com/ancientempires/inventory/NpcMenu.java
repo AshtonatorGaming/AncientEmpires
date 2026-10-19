@@ -78,7 +78,7 @@ public class NpcMenu extends AbstractContainerMenu
 
     private void addGear(int index, EquipmentSlot equipmentSlot, boolean armorOnly, @Nullable ResourceLocation icon)
     {
-        this.addSlot(new GearSlot(this.inventory, index, equipmentSlot, armorOnly, icon, NpcLayout.slotX(index), NpcLayout.slotY(index)));
+        this.addSlot(new GearSlot(this.inventory, index, this.npc, equipmentSlot, armorOnly, icon, NpcLayout.slotX(index), NpcLayout.slotY(index)));
     }
 
     @Nullable
@@ -119,22 +119,27 @@ public class NpcMenu extends AbstractContainerMenu
         {
             return ItemStack.EMPTY;
         }
-        ItemStack stack = slot.getItem();
+        // Hands and armor share the entity's stack. Shift-click moves a copy
+        // and writes the remainder back, so the offhand is replaced and not dropped.
+        boolean gear = slot instanceof GearSlot;
+        ItemStack stack = gear ? slot.getItem().copy() : slot.getItem();
         ItemStack original = stack.copy();
+        boolean moved;
         if (index < NpcInventory.SLOT_COUNT)
         {
-            if (!this.moveItemStackTo(stack, NpcInventory.SLOT_COUNT, this.slots.size(), true))
-            {
-                return ItemStack.EMPTY;
-            }
+            moved = this.moveItemStackTo(stack, NpcInventory.SLOT_COUNT, this.slots.size(), true);
         }
-        else if (!this.moveToNpc(stack))
+        else
+        {
+            moved = this.moveToNpc(stack);
+        }
+        if (!moved)
         {
             return ItemStack.EMPTY;
         }
-        if (stack.isEmpty())
+        if (gear || stack.isEmpty())
         {
-            slot.setByPlayer(ItemStack.EMPTY);
+            slot.setByPlayer(stack.isEmpty() ? ItemStack.EMPTY : stack);
         }
         else
         {
@@ -207,20 +212,68 @@ public class NpcMenu extends AbstractContainerMenu
     /**
      * Armor slots accept only the matching equipment and stack to one. Hands
      * accept any item. The empty icon is the vanilla armor sprite.
+     * The slot index and this equipment value stay paired: menu index 1 is
+     * {@link EquipmentSlot#OFFHAND}. Clicks and shift-clicks write that slot
+     * by copying the stack, so the cursor and the entity do not share one.
      */
     private static final class GearSlot extends Slot
     {
+        @Nullable
+        private final NpcEntity npc;
         private final EquipmentSlot equipmentSlot;
         private final boolean armorOnly;
         @Nullable
         private final Pair<ResourceLocation, ResourceLocation> icon;
 
-        private GearSlot(Container container, int index, EquipmentSlot equipmentSlot, boolean armorOnly, @Nullable ResourceLocation icon, int x, int y)
+        private GearSlot(Container container, int index, @Nullable NpcEntity npc, EquipmentSlot equipmentSlot, boolean armorOnly, @Nullable ResourceLocation icon, int x, int y)
         {
             super(container, index, x, y);
+            this.npc = npc;
             this.equipmentSlot = equipmentSlot;
             this.armorOnly = armorOnly;
             this.icon = icon == null ? null : Pair.of(InventoryMenu.BLOCK_ATLAS, icon);
+        }
+
+        @Override
+        public ItemStack getItem()
+        {
+            if (this.npc == null)
+            {
+                return super.getItem();
+            }
+            // Live stack so a shift-click can grow an existing offhand stack in place.
+            // set and remove copy before they replace it.
+            return this.npc.getItemBySlot(this.equipmentSlot);
+        }
+
+        @Override
+        public void set(ItemStack stack)
+        {
+            if (this.npc == null)
+            {
+                super.set(stack);
+                return;
+            }
+            this.npc.setItemSlot(this.equipmentSlot, stack.isEmpty() ? ItemStack.EMPTY : stack.copy());
+            this.setChanged();
+        }
+
+        @Override
+        public ItemStack remove(int amount)
+        {
+            if (this.npc == null)
+            {
+                return super.remove(amount);
+            }
+            ItemStack existing = this.npc.getItemBySlot(this.equipmentSlot);
+            if (existing.isEmpty() || amount <= 0)
+            {
+                return ItemStack.EMPTY;
+            }
+            ItemStack remainder = existing.copy();
+            ItemStack taken = remainder.split(amount);
+            this.set(remainder);
+            return taken;
         }
 
         @Override

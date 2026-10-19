@@ -172,10 +172,11 @@ public class MenuItemSlot extends ItemSlot
                     amount = shown.getCount();
                 }
                 GuiDraw.drawStandardSlotAmountText(context, amount, format, this.getArea(), depth);
-                int cachedCount = shown.getCount();
-                shown.setCount(1);
-                context.getGraphics().renderItemDecorations(((ScreenAccessor) guiScreen).getFont(), shown, 1, 1, null);
-                shown.setCount(cachedCount);
+                // Decorations hide the count by drawing a one-stack. That copy
+                // must not be the entity's offhand stack, or the count sticks at 1.
+                ItemStack decorated = shown.copy();
+                decorated.setCount(1);
+                context.getGraphics().renderItemDecorations(((ScreenAccessor) guiScreen).getFont(), decorated, 1, 1, null);
                 RenderSystem.disableDepthTest();
             }
         }
