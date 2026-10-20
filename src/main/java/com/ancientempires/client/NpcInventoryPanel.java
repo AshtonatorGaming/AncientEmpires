@@ -1,7 +1,6 @@
 package com.ancientempires.client;
 
 import brachy.modularui.api.drawable.IDrawable;
-import brachy.modularui.api.widget.IWidget;
 import brachy.modularui.drawable.GuiDraw;
 import brachy.modularui.drawable.GuiTextures;
 import brachy.modularui.drawable.Icon;
@@ -16,7 +15,6 @@ import brachy.modularui.widget.ParentWidget;
 import brachy.modularui.widget.Widget;
 import brachy.modularui.widgets.ButtonWidget;
 import brachy.modularui.widgets.TextWidget;
-import brachy.modularui.widgets.layout.Grid;
 import brachy.modularui.widgets.textfield.TextFieldWidget;
 import com.ancientempires.entity.npc.NpcEntity;
 import com.ancientempires.entity.npc.NpcInventory;
@@ -30,8 +28,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.BooleanSupplier;
 import java.util.function.Predicate;
 
@@ -78,8 +74,7 @@ public final class NpcInventoryPanel
     private static final int NAME_HINT = 0xFF8A7050;
     private static final int SLOT_FILL = 0xFF2C241C;
     private static final int SLOT_HOVER = 0xFF3A2E24;
-    private static final int BEVEL_LIGHT = 0xFFE0C48A;
-    private static final int BEVEL_DARK = 0xFF241C14;
+    private static final int GOLD = 0xFFC6A56A;
 
     private NpcInventoryPanel()
     {
@@ -88,9 +83,10 @@ public final class NpcInventoryPanel
     public static void populate(ModularPanel<?> panel, NpcMenu menu)
     {
         NpcEntity npc = menu.getNpc();
-        panel.background(new SlotBevel(PARCHMENT, true, true, true, true));
+        panel.background(new SlotBevel(PARCHMENT, false, false));
+        panel.hoverBackground(new SlotBevel(PARCHMENT, false, false));
         panel.child(nameField(menu));
-        panel.child(cross(menu));
+        addCross(panel, menu);
         panel.child(preview(menu, npc));
         panel.child(sectionLabel(BACKPACK_X, BACKPACK_LABEL_Y, SLOT * 3, "gui.ancientempires.npc.backpack", Alignment.Center));
         panel.child(itemGrid(BACKPACK_X, BACKPACK_Y, 3, 3, NpcInventory.BACKPACK_START, menu));
@@ -104,13 +100,34 @@ public final class NpcInventoryPanel
     {
         boolean creative = showCreative();
         int origin = NpcLayout.buttonRowX(creative ? 5 : 4);
-        panel.child(command(origin, 0, GuiTextures.MOVE_RIGHT, "gui.ancientempires.npc.follow", NpcMenu.BUTTON_FOLLOW, menu, active(npc, NpcEntity::isFollowing)));
-        panel.child(command(origin, 1, GuiTextures.BOOKMARK, "gui.ancientempires.npc.set_home", NpcMenu.BUTTON_SET_HOME, menu, active(npc, entity -> entity.getHome() != null)));
-        panel.child(command(origin, 2, GuiTextures.CROSS, "gui.ancientempires.npc.clear_home", NpcMenu.BUTTON_CLEAR_HOME, menu, null));
-        panel.child(command(origin, 3, GuiTextures.REFRESH, "gui.ancientempires.npc.repack", NpcMenu.BUTTON_REPACK, menu, null));
-        if (creative)
+        ButtonWidget<?>[] row = new ButtonWidget<?>[5];
+        row[0] = command(origin, 0, GuiTextures.MOVE_RIGHT, "gui.ancientempires.npc.follow", NpcMenu.BUTTON_FOLLOW, menu, active(npc, NpcEntity::isFollowing));
+        row[1] = command(origin, 1, GuiTextures.BOOKMARK, "gui.ancientempires.npc.set_home", NpcMenu.BUTTON_SET_HOME, menu, active(npc, entity -> entity.getHome() != null));
+        row[2] = command(origin, 2, GuiTextures.CROSS, "gui.ancientempires.npc.clear_home", NpcMenu.BUTTON_CLEAR_HOME, menu, null);
+        row[3] = command(origin, 3, GuiTextures.REFRESH, "gui.ancientempires.npc.repack", NpcMenu.BUTTON_REPACK, menu, null);
+        row[4] = command(origin, 4, GuiTextures.FAVORITE, "gui.ancientempires.npc.creative", NpcMenu.BUTTON_CREATIVE, menu, active(npc, NpcEntity::isCreative));
+        row[4].setEnabled(creative);
+        row[4].onUpdateListener(widget -> layoutCommands(row, widget), true);
+        for (ButtonWidget<?> button : row)
         {
-            panel.child(command(origin, 4, GuiTextures.FAVORITE, "gui.ancientempires.npc.creative", NpcMenu.BUTTON_CREATIVE, menu, active(npc, NpcEntity::isCreative)));
+            panel.child(button);
+        }
+    }
+
+    private static void layoutCommands(ButtonWidget<?>[] row, ButtonWidget<?> creative)
+    {
+        boolean show = showCreative();
+        if (creative.isEnabled() == show)
+        {
+            return;
+        }
+        creative.setEnabled(show);
+        int shown = show ? row.length : row.length - 1;
+        int origin = NpcLayout.buttonRowX(shown);
+        for (int index = 0; index < shown; index++)
+        {
+            row[index].pos(origin + index * (BUTTON_SIZE + BUTTON_GAP), BUTTON_Y);
+            row[index].scheduleResize();
         }
     }
 
@@ -153,19 +170,15 @@ public final class NpcInventoryPanel
         ModNetwork.sendName(npc.getId(), value);
     }
 
-    private static Grid cross(NpcMenu menu)
+    private static void addCross(ModularPanel<?> panel, NpcMenu menu)
     {
-        Grid grid = new Grid()
-                .pos(CROSS_X, CROSS_Y)
-                .size(SLOT * 3, SLOT * 4)
-                .minColWidth(SLOT)
-                .minRowHeight(SLOT)
-                .minElementMargin(0);
-        grid.row(spacer(), slot(menu, NpcInventory.HEAD_SLOT), spacer());
-        grid.row(slot(menu, NpcInventory.MAIN_HAND_SLOT), slot(menu, NpcInventory.CHEST_SLOT), slot(menu, NpcInventory.OFFHAND_SLOT));
-        grid.row(spacer(), slot(menu, NpcInventory.LEGS_SLOT), spacer());
-        grid.row(spacer(), slot(menu, NpcInventory.FEET_SLOT), spacer());
-        return grid;
+        // Panel coordinates from NpcLayout. Each widget is one 18 px cell. Empty cells stay empty.
+        panel.child(slot(menu, NpcInventory.HEAD_SLOT, CROSS_X + SLOT, CROSS_Y, false, true));
+        panel.child(slot(menu, NpcInventory.CHEST_SLOT, CROSS_X + SLOT, CROSS_Y + SLOT, true, true));
+        panel.child(slot(menu, NpcInventory.MAIN_HAND_SLOT, CROSS_X, CROSS_Y + SLOT, true, false));
+        panel.child(slot(menu, NpcInventory.OFFHAND_SLOT, CROSS_X + 2 * SLOT, CROSS_Y + SLOT, false, false));
+        panel.child(slot(menu, NpcInventory.LEGS_SLOT, CROSS_X + SLOT, CROSS_Y + 2 * SLOT, false, true));
+        panel.child(slot(menu, NpcInventory.FEET_SLOT, CROSS_X + SLOT, CROSS_Y + 3 * SLOT, false, false));
     }
 
     private static ParentWidget<?> preview(NpcMenu menu, NpcEntity npc)
@@ -173,7 +186,8 @@ public final class NpcInventoryPanel
         ParentWidget<?> frame = new ParentWidget<>()
                 .pos(PREVIEW_X, PREVIEW_Y)
                 .size(PREVIEW_W, PREVIEW_H)
-                .background(new SlotBevel(INK, true, true, true, true));
+                .background(new SlotBevel(INK, false, false))
+                .hoverBackground(new SlotBevel(INK, false, false));
         if (npc != null)
         {
             frame.child(new NpcEntityPreview(npc)
@@ -217,55 +231,43 @@ public final class NpcInventoryPanel
                 .textAlign(align);
     }
 
-    private static Grid itemGrid(int x, int y, int columns, int rows, int firstIndex, NpcMenu menu)
+    private static ParentWidget<?> itemGrid(int x, int y, int columns, int rows, int firstIndex, NpcMenu menu)
     {
-        Grid grid = new Grid()
-                .pos(x, y)
-                .size(columns * SLOT, rows * SLOT)
-                .minColWidth(SLOT)
-                .minRowHeight(SLOT)
-                .minElementMargin(0);
+        ParentWidget<?> grid = cellGrid(x, y, columns, rows);
         for (int row = 0; row < rows; row++)
         {
-            List<IWidget> line = new ArrayList<>();
             for (int column = 0; column < columns; column++)
             {
-                line.add(slot(menu, firstIndex + row * columns + column));
+                boolean shareRight = column + 1 < columns;
+                boolean shareBottom = row + 1 < rows;
+                grid.child(slot(menu, firstIndex + row * columns + column, column * SLOT, row * SLOT, shareRight, shareBottom));
             }
-            grid.row(line);
         }
         return grid;
     }
 
-    private static MenuItemSlot slot(NpcMenu menu, int index)
+    private static ParentWidget<?> cellGrid(int x, int y, int columns, int rows)
     {
-        boolean drawRight = !hasNeighbor(index, 1, 0);
-        boolean drawBottom = !hasNeighbor(index, 0, 1);
+        ParentWidget<?> grid = new ParentWidget<>();
+        grid.pos(x, y);
+        grid.size(columns * SLOT, rows * SLOT);
+        grid.padding(0);
+        grid.margin(0);
+        grid.disableCoverChildren();
+        grid.disableThemeBackground(true);
+        grid.disableHoverThemeBackground(true);
+        return grid;
+    }
+
+    private static MenuItemSlot slot(NpcMenu menu, int index, int x, int y, boolean shareRight, boolean shareBottom)
+    {
         MenuItemSlot slot = new MenuItemSlot(menu.getSlot(index));
-        // Each slot draws its top and left. The slot to the right or below owns the shared edge.
-        slot.background(new SlotBevel(SLOT_FILL, true, true, drawBottom, drawRight));
-        slot.hoverBackground(new SlotBevel(SLOT_HOVER, true, true, drawBottom, drawRight));
+        slot.place(x, y);
+        slot.background(new SlotBevel(SLOT_FILL, shareBottom, shareRight));
+        slot.hoverBackground(new SlotBevel(SLOT_HOVER, shareBottom, shareRight));
+        slot.disableThemeBackground(true);
+        slot.disableHoverThemeBackground(true);
         return slot;
-    }
-
-    private static boolean hasNeighbor(int index, int dx, int dy)
-    {
-        int x = NpcLayout.cellX(index) + dx * SLOT;
-        int y = NpcLayout.cellY(index) + dy * SLOT;
-        int limit = NpcInventory.SLOT_COUNT + 36;
-        for (int other = 0; other < limit; other++)
-        {
-            if (other != index && NpcLayout.cellX(other) == x && NpcLayout.cellY(other) == y)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private static Widget<?> spacer()
-    {
-        return new Widget<>().size(SLOT);
     }
 
     private static ButtonWidget<?> command(int origin, int index, UITexture icon, String tooltip, int buttonId, NpcMenu menu, BooleanSupplier active)
@@ -319,24 +321,20 @@ public final class NpcInventoryPanel
     }
 
     /**
-     * One-pixel bevel. Top and left are the light edge. Bottom and right are
-     * the dark edge, and only the slot that owns a shared side draws it.
+     * Fill and a 1px gold stroke on the same rectangle. The slot below or to
+     * the right owns a shared edge, so the join stays a single line.
      */
     private static final class SlotBevel implements IDrawable
     {
         private final int fill;
-        private final boolean top;
-        private final boolean left;
-        private final boolean bottom;
-        private final boolean right;
+        private final boolean neighborBottom;
+        private final boolean neighborRight;
 
-        private SlotBevel(int fill, boolean top, boolean left, boolean bottom, boolean right)
+        private SlotBevel(int fill, boolean neighborBottom, boolean neighborRight)
         {
             this.fill = fill;
-            this.top = top;
-            this.left = left;
-            this.bottom = bottom;
-            this.right = right;
+            this.neighborBottom = neighborBottom;
+            this.neighborRight = neighborRight;
         }
 
         @Override
@@ -344,21 +342,15 @@ public final class NpcInventoryPanel
         {
             GuiGraphics graphics = context.getGraphics();
             GuiDraw.drawRect(graphics, x, y, width, height, this.fill);
-            if (this.top)
+            GuiDraw.drawRect(graphics, x, y, width, 1, GOLD);
+            GuiDraw.drawRect(graphics, x, y, 1, height, GOLD);
+            if (!this.neighborBottom)
             {
-                GuiDraw.drawRect(graphics, x, y, width, 1, BEVEL_LIGHT);
+                GuiDraw.drawRect(graphics, x, y + height - 1, width, 1, GOLD);
             }
-            if (this.left)
+            if (!this.neighborRight)
             {
-                GuiDraw.drawRect(graphics, x, y, 1, height, BEVEL_LIGHT);
-            }
-            if (this.bottom)
-            {
-                GuiDraw.drawRect(graphics, x, y + height - 1, width, 1, BEVEL_DARK);
-            }
-            if (this.right)
-            {
-                GuiDraw.drawRect(graphics, x + width - 1, y, 1, height, BEVEL_DARK);
+                GuiDraw.drawRect(graphics, x + width - 1, y, 1, height, GOLD);
             }
         }
     }

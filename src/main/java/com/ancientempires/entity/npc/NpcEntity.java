@@ -373,11 +373,13 @@ public class NpcEntity extends PathfinderMob
     }
 
     /**
-     * Creative mode, or a player allowed to use cheat commands.
+     * Creative game mode, or a player who already has the instabuild ability.
+     * The inventory screen polls this every tick. Permission level is not the
+     * gate: a survival host with cheats is still level 2 or higher.
      */
     public static boolean mayToggleCreative(Player player)
     {
-        return player.getAbilities().instabuild || player.hasPermissions(2);
+        return player.isCreative() || player.getAbilities().instabuild;
     }
 
     private void toggleCreative(Player player)

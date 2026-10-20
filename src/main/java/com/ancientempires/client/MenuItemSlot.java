@@ -3,18 +3,20 @@ package com.ancientempires.client;
 import brachy.modularui.api.widget.Interactable;
 import brachy.modularui.core.mixins.client.AbstractContainerScreenAccessor;
 import brachy.modularui.core.mixins.client.ScreenAccessor;
+import brachy.modularui.core.mixins.client.SlotAccessor;
 import brachy.modularui.drawable.GuiDraw;
 import brachy.modularui.integration.recipeviewer.entry.item.ItemStackList;
 import brachy.modularui.screen.ClientScreenHandler;
 import brachy.modularui.screen.RichTooltip;
 import brachy.modularui.screen.viewport.ModularGuiContext;
 import brachy.modularui.theme.WidgetThemeEntry;
+import brachy.modularui.widget.sizer.Area;
 import brachy.modularui.widgets.slot.ItemSlot;
+import com.ancientempires.inventory.NpcLayout;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.ChatFormatting;
-import com.ancientempires.entity.npc.NpcInventory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -23,7 +25,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -35,15 +36,61 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public class MenuItemSlot extends ItemSlot
 {
-    private static final ItemStack GHOST_SWORD = new ItemStack(Items.IRON_SWORD);
-    private static final int GHOST_WASH = 0x802C241C;
-    private static final int GHOST_WASH_HOVER = 0x803A2E24;
+    /** Vanilla cell. The item is 16 px, inset by 1 px, with no extra padding. */
+    private static final int CELL = NpcLayout.SLOT;
+    private static final int ITEM = 16;
+    private static final int INSET = (CELL - ITEM) / 2;
 
     private final Slot vanillaSlot;
+    /** Position relative to the immediate parent. Cross slots are parented to the panel. */
+    private int cellX;
+    private int cellY;
 
     public MenuItemSlot(Slot vanillaSlot)
     {
         this.vanillaSlot = vanillaSlot;
+    }
+
+    public void place(int x, int y)
+    {
+        this.cellX = x;
+        this.cellY = y;
+        this.pos(x, y);
+        this.size(CELL, CELL);
+        this.margin(0);
+        this.padding(0);
+    }
+
+    @Override
+    public void onInit()
+    {
+        super.onInit();
+        // ItemSlot.onInit sets the size again. Keep the cell at 18 and clear padding.
+        this.place(this.cellX, this.cellY);
+        this.disableThemeBackground(true);
+        this.disableHoverThemeBackground(true);
+    }
+
+    @Override
+    public void postResize()
+    {
+        super.postResize();
+        // The resizer can leave a box other than the 18 px cell. The item is drawn
+        // at a fixed 16 px, so a larger box shows as empty padding and a shifted
+        // origin opens a gap between neighbors.
+        Area area = this.getArea();
+        Area parent = this.getParentArea();
+        area.setRelativePos(this.cellX, this.cellY);
+        area.x = parent.x + this.cellX;
+        area.y = parent.y + this.cellY;
+        area.width = CELL;
+        area.height = CELL;
+        area.getPadding().all(0);
+        area.getMargin().all(0);
+        Area panel = this.getPanel().getArea();
+        SlotAccessor access = (SlotAccessor) this.vanillaSlot;
+        access.setX(area.x - panel.x + INSET);
+        access.setY(area.y - panel.y + INSET);
     }
 
     @Override
@@ -53,10 +100,9 @@ public class MenuItemSlot extends ItemSlot
     }
 
     @Override
-    public int getSlotHoverColor()
+    protected void drawOverlay(ModularGuiContext context)
     {
-        // ItemSlot paints this as a 16x16 rect over the item. Gold, not the theme's white wash.
-        return 0x40C6A56A;
+        // ItemSlot draws a 16x16 hover rect at (1, 1). The slot fill is the full cell.
     }
 
     @Override
@@ -165,8 +211,6 @@ public class MenuItemSlot extends ItemSlot
             }
         }
 
-        this.drawEmptyIcon(context);
-
         float depth = context.getCurrentDrawingZ() + 100.0F;
         context.graphicsPose().pushPose();
         context.graphicsPose().translate(0.0F, 0.0F, depth);
@@ -174,16 +218,16 @@ public class MenuItemSlot extends ItemSlot
         {
             if (dragPreview)
             {
-                GuiDraw.drawRect(context.getGraphics(), 1, 1, 16, 16, 0x80FFFFFF);
+                GuiDraw.drawRect(context.getGraphics(), INSET, INSET, ITEM, ITEM, 0x80FFFFFF);
             }
-            if (shown.isEmpty() && this.vanillaSlot.index == NpcInventory.MAIN_HAND_SLOT)
+            if (shown.isEmpty())
             {
-                this.drawGhost(context);
+                this.drawEmptyIcon(context);
             }
             if (!shown.isEmpty())
             {
                 RenderSystem.enableDepthTest();
-                context.getGraphics().renderItem(shown, 1, 1);
+                context.getGraphics().renderItem(shown, INSET, INSET);
                 if (amount < 0)
                 {
                     amount = shown.getCount();
@@ -193,23 +237,10 @@ public class MenuItemSlot extends ItemSlot
                 // must not be the entity's offhand stack, or the count sticks at 1.
                 ItemStack decorated = shown.copy();
                 decorated.setCount(1);
-                context.getGraphics().renderItemDecorations(((ScreenAccessor) guiScreen).getFont(), decorated, 1, 1, null);
+                context.getGraphics().renderItemDecorations(((ScreenAccessor) guiScreen).getFont(), decorated, INSET, INSET, null);
                 RenderSystem.disableDepthTest();
             }
         }
-        context.graphicsPose().popPose();
-    }
-
-    private void drawGhost(ModularGuiContext context)
-    {
-        // Item rendering ignores shader alpha. A slot-colored wash over the icon
-        // keeps it from reading as a real stack. Jobs are not synced yet, so the
-        // empty main hand is a sword; a worker role would use a pickaxe.
-        context.getGraphics().renderItem(GHOST_SWORD, 1, 1);
-        context.graphicsPose().pushPose();
-        context.graphicsPose().translate(0.0F, 0.0F, 400.0F);
-        int wash = this.isHovering() ? GHOST_WASH_HOVER : GHOST_WASH;
-        GuiDraw.drawRect(context.getGraphics(), 1, 1, 16, 16, wash);
         context.graphicsPose().popPose();
     }
 
@@ -225,6 +256,7 @@ public class MenuItemSlot extends ItemSlot
             return;
         }
         TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(icon.getFirst()).apply(icon.getSecond());
-        context.getGraphics().blit(1, 1, 0, 16, 16, sprite);
+        RenderSystem.disableDepthTest();
+        context.getGraphics().blit(INSET, INSET, 0, ITEM, ITEM, sprite);
     }
 }
