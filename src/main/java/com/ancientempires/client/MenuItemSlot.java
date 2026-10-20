@@ -42,9 +42,11 @@ public class MenuItemSlot extends ItemSlot
     private static final int INSET = (CELL - ITEM) / 2;
 
     private final Slot vanillaSlot;
-    /** Position relative to the immediate parent. Cross slots are parented to the panel. */
+    /** Position and size relative to the immediate parent. Cross slots are parented to the panel. */
     private int cellX;
     private int cellY;
+    private int cellW = CELL;
+    private int cellH = CELL;
 
     public MenuItemSlot(Slot vanillaSlot)
     {
@@ -53,10 +55,17 @@ public class MenuItemSlot extends ItemSlot
 
     public void place(int x, int y)
     {
+        this.place(x, y, CELL, CELL);
+    }
+
+    public void place(int x, int y, int width, int height)
+    {
         this.cellX = x;
         this.cellY = y;
+        this.cellW = width;
+        this.cellH = height;
         this.pos(x, y);
-        this.size(CELL, CELL);
+        this.size(width, height);
         this.margin(0);
         this.padding(0);
     }
@@ -65,8 +74,8 @@ public class MenuItemSlot extends ItemSlot
     public void onInit()
     {
         super.onInit();
-        // ItemSlot.onInit sets the size again. Keep the cell at 18 and clear padding.
-        this.place(this.cellX, this.cellY);
+        // ItemSlot.onInit sets both axes to 18. Put the placed size back.
+        this.place(this.cellX, this.cellY, this.cellW, this.cellH);
         this.disableThemeBackground(true);
         this.disableHoverThemeBackground(true);
     }
@@ -75,16 +84,15 @@ public class MenuItemSlot extends ItemSlot
     public void postResize()
     {
         super.postResize();
-        // The resizer can leave a box other than the 18 px cell. The item is drawn
-        // at a fixed 16 px, so a larger box shows as empty padding and a shifted
-        // origin opens a gap between neighbors.
+        // The resizer can leave a box other than the placed cell. The item is drawn
+        // at a fixed 16 px, so a larger box shows as empty padding.
         Area area = this.getArea();
         Area parent = this.getParentArea();
         area.setRelativePos(this.cellX, this.cellY);
         area.x = parent.x + this.cellX;
         area.y = parent.y + this.cellY;
-        area.width = CELL;
-        area.height = CELL;
+        area.width = this.cellW;
+        area.height = this.cellH;
         area.getPadding().all(0);
         area.getMargin().all(0);
         Area panel = this.getPanel().getArea();

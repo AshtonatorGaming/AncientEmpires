@@ -58,7 +58,6 @@ public final class NpcInventoryPanel
     private static final int BUTTON_SIZE = NpcLayout.BUTTON_SIZE;
     private static final int BUTTON_GAP = NpcLayout.BUTTON_GAP;
     private static final int BUTTON_Y = NpcLayout.BUTTON_Y;
-    private static final int PLAYER_X = NpcLayout.PLAYER_X;
     private static final int PLAYER_Y = NpcLayout.PLAYER_Y;
     private static final int HOTBAR_Y = NpcLayout.HOTBAR_Y;
     private static final int SECTION_LABEL_H = NpcLayout.SECTION_LABEL_H;
@@ -88,11 +87,14 @@ public final class NpcInventoryPanel
         panel.child(nameField(menu));
         addCross(panel, menu);
         panel.child(preview(menu, npc));
-        panel.child(sectionLabel(BACKPACK_X, BACKPACK_LABEL_Y, SLOT * 3, "gui.ancientempires.npc.backpack", Alignment.Center));
+        int backpackW = span(3);
+        int inventoryW = span(9);
+        int inventoryX = (NpcLayout.WIDTH - inventoryW) / 2;
+        panel.child(sectionLabel(BACKPACK_X, BACKPACK_LABEL_Y, backpackW, "gui.ancientempires.npc.backpack", Alignment.Center));
         panel.child(itemGrid(BACKPACK_X, BACKPACK_Y, 3, 3, NpcInventory.BACKPACK_START, menu));
-        panel.child(sectionLabel(PLAYER_X, PLAYER_LABEL_Y, SLOT * 9, "gui.ancientempires.npc.inventory", Alignment.CenterLeft));
-        panel.child(itemGrid(PLAYER_X, PLAYER_Y, 9, 3, NpcInventory.SLOT_COUNT, menu));
-        panel.child(itemGrid(PLAYER_X, HOTBAR_Y, 9, 1, NpcInventory.SLOT_COUNT + 27, menu));
+        panel.child(sectionLabel(inventoryX, PLAYER_LABEL_Y, inventoryW, "gui.ancientempires.npc.inventory", Alignment.CenterLeft));
+        panel.child(itemGrid(inventoryX, PLAYER_Y, 9, 3, NpcInventory.SLOT_COUNT, menu));
+        panel.child(itemGrid(inventoryX, HOTBAR_Y, 9, 1, NpcInventory.SLOT_COUNT + 27, menu));
         addCommands(panel, menu, npc);
     }
 
@@ -172,13 +174,24 @@ public final class NpcInventoryPanel
 
     private static void addCross(ModularPanel<?> panel, NpcMenu menu)
     {
-        // Panel coordinates from NpcLayout. Each widget is one 18 px cell. Empty cells stay empty.
+        // Panel coordinates from NpcLayout. Empty cells stay empty.
+        // The chest's right edge is its last pixel. The offhand has to start one
+        // pixel left of CROSS_X + 2 * SLOT or a parchment gap shows between them.
+        // The chest's bottom edge is the legs' top line, one pixel under an 18 px
+        // box, so the hands extend down by that pixel.
         panel.child(slot(menu, NpcInventory.HEAD_SLOT, CROSS_X + SLOT, CROSS_Y, false, true));
         panel.child(slot(menu, NpcInventory.CHEST_SLOT, CROSS_X + SLOT, CROSS_Y + SLOT, true, true));
-        panel.child(slot(menu, NpcInventory.MAIN_HAND_SLOT, CROSS_X, CROSS_Y + SLOT, true, false));
-        panel.child(slot(menu, NpcInventory.OFFHAND_SLOT, CROSS_X + 2 * SLOT, CROSS_Y + SLOT, false, false));
+        panel.child(handSlot(menu, NpcInventory.MAIN_HAND_SLOT, CROSS_X, CROSS_Y + SLOT, true));
+        panel.child(handSlot(menu, NpcInventory.OFFHAND_SLOT, CROSS_X + 2 * SLOT - 1, CROSS_Y + SLOT, false));
         panel.child(slot(menu, NpcInventory.LEGS_SLOT, CROSS_X + SLOT, CROSS_Y + 2 * SLOT, false, true));
         panel.child(slot(menu, NpcInventory.FEET_SLOT, CROSS_X + SLOT, CROSS_Y + 3 * SLOT, false, false));
+    }
+
+    private static MenuItemSlot handSlot(NpcMenu menu, int index, int x, int y, boolean shareRight)
+    {
+        MenuItemSlot slot = slot(menu, index, x, y, shareRight, false);
+        slot.place(x, y, SLOT, SLOT + 1);
+        return slot;
     }
 
     private static ParentWidget<?> preview(NpcMenu menu, NpcEntity npc)
@@ -231,16 +244,23 @@ public final class NpcInventoryPanel
                 .textAlign(align);
     }
 
+    /** Adjacent 18 px slots overlap by 1 px so they share a border and the 16 px item meets it. */
+    private static int span(int count)
+    {
+        return SLOT + (count - 1) * (SLOT - 1);
+    }
+
     private static ParentWidget<?> itemGrid(int x, int y, int columns, int rows, int firstIndex, NpcMenu menu)
     {
         ParentWidget<?> grid = cellGrid(x, y, columns, rows);
+        int step = SLOT - 1;
         for (int row = 0; row < rows; row++)
         {
             for (int column = 0; column < columns; column++)
             {
                 boolean shareRight = column + 1 < columns;
                 boolean shareBottom = row + 1 < rows;
-                grid.child(slot(menu, firstIndex + row * columns + column, column * SLOT, row * SLOT, shareRight, shareBottom));
+                grid.child(slot(menu, firstIndex + row * columns + column, column * step, row * step, shareRight, shareBottom));
             }
         }
         return grid;
@@ -250,7 +270,7 @@ public final class NpcInventoryPanel
     {
         ParentWidget<?> grid = new ParentWidget<>();
         grid.pos(x, y);
-        grid.size(columns * SLOT, rows * SLOT);
+        grid.size(span(columns), span(rows));
         grid.padding(0);
         grid.margin(0);
         grid.disableCoverChildren();
