@@ -16,11 +16,14 @@ public final class NpcLayout
     public static final int PREVIEW_Y = 28;
     public static final int PREVIEW_W = 84;
     public static final int PREVIEW_H = 104;
-    /** Entity box inside the preview. The bottom stays 16px clear of the skin button. */
-    public static final int PREVIEW_ENTITY_X = 4;
-    public static final int PREVIEW_ENTITY_Y = 10;
-    public static final int PREVIEW_ENTITY_W = PREVIEW_W - 16;
-    public static final int PREVIEW_ENTITY_H = PREVIEW_H - 16 - PREVIEW_ENTITY_Y;
+    /** Entity box inside the preview frame. The bottom stays clear of the skin button. */
+    public static final int PREVIEW_ENTITY_X = 1;
+    public static final int PREVIEW_ENTITY_Y = 1;
+    public static final int PREVIEW_ENTITY_W = PREVIEW_W - 2;
+    public static final int PREVIEW_ENTITY_H = PREVIEW_H - 16;
+    public static final int PREVIEW_HEAD_MARGIN = 4;
+    public static final int PREVIEW_FOOT_MARGIN = 2;
+    public static final int PREVIEW_SIDE_MARGIN = 3;
     public static final int CROSS_X = 8;
     public static final int CROSS_Y = PREVIEW_Y + (PREVIEW_H - SLOT * 4) / 2;
     public static final int BACKPACK_X = PREVIEW_X + PREVIEW_W + 8;
@@ -31,6 +34,12 @@ public final class NpcLayout
     public static final int BUTTON_GAP = 4;
     public static final int BUTTON_Y = PREVIEW_Y + PREVIEW_H + 6;
     public static final int BUTTON_X = (WIDTH - (5 * BUTTON_SIZE + 4 * BUTTON_GAP)) / 2;
+
+    public static int buttonRowX(int count)
+    {
+        int shown = Math.max(count, 1);
+        return (WIDTH - (shown * BUTTON_SIZE + (shown - 1) * BUTTON_GAP)) / 2;
+    }
     public static final int PLAYER_X = (WIDTH - 9 * SLOT) / 2;
     public static final int PLAYER_Y = BUTTON_Y + BUTTON_SIZE + 12;
     public static final int HOTBAR_Y = PLAYER_Y + 3 * SLOT + 4;

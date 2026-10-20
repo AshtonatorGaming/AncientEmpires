@@ -14,6 +14,7 @@ import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.ChatFormatting;
+import com.ancientempires.entity.npc.NpcInventory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -22,6 +23,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -33,6 +35,10 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public class MenuItemSlot extends ItemSlot
 {
+    private static final ItemStack GHOST_SWORD = new ItemStack(Items.IRON_SWORD);
+    private static final int GHOST_WASH = 0x802C241C;
+    private static final int GHOST_WASH_HOVER = 0x803A2E24;
+
     private final Slot vanillaSlot;
 
     public MenuItemSlot(Slot vanillaSlot)
@@ -170,6 +176,10 @@ public class MenuItemSlot extends ItemSlot
             {
                 GuiDraw.drawRect(context.getGraphics(), 1, 1, 16, 16, 0x80FFFFFF);
             }
+            if (shown.isEmpty() && this.vanillaSlot.index == NpcInventory.MAIN_HAND_SLOT)
+            {
+                this.drawGhost(context);
+            }
             if (!shown.isEmpty())
             {
                 RenderSystem.enableDepthTest();
@@ -187,6 +197,19 @@ public class MenuItemSlot extends ItemSlot
                 RenderSystem.disableDepthTest();
             }
         }
+        context.graphicsPose().popPose();
+    }
+
+    private void drawGhost(ModularGuiContext context)
+    {
+        // Item rendering ignores shader alpha. A slot-colored wash over the icon
+        // keeps it from reading as a real stack. Jobs are not synced yet, so the
+        // empty main hand is a sword; a worker role would use a pickaxe.
+        context.getGraphics().renderItem(GHOST_SWORD, 1, 1);
+        context.graphicsPose().pushPose();
+        context.graphicsPose().translate(0.0F, 0.0F, 400.0F);
+        int wash = this.isHovering() ? GHOST_WASH_HOVER : GHOST_WASH;
+        GuiDraw.drawRect(context.getGraphics(), 1, 1, 16, 16, wash);
         context.graphicsPose().popPose();
     }
 

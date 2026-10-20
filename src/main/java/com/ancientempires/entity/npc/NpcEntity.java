@@ -372,9 +372,17 @@ public class NpcEntity extends PathfinderMob
                 : "message.ancientempires.npc.follow_off"), true);
     }
 
+    /**
+     * Creative mode, or a player allowed to use cheat commands.
+     */
+    public static boolean mayToggleCreative(Player player)
+    {
+        return player.getAbilities().instabuild || player.hasPermissions(2);
+    }
+
     private void toggleCreative(Player player)
     {
-        if (!player.getAbilities().instabuild)
+        if (!mayToggleCreative(player))
         {
             player.displayClientMessage(Component.translatable("message.ancientempires.npc.creative_denied"), true);
             return;
