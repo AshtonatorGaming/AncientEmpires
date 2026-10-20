@@ -22,7 +22,7 @@ public class NpcModel extends PlayerModel<NpcEntity>
     {
         super.setupAnim(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
         boolean posed = NpcCombatAnimations.apply(entity, this, ageInTicks - entity.tickCount);
-        if (!posed && entity.isAttackWindowOpen())
+        if (!posed && entity.isAttackWindowOpen() && !NpcCombatAnimations.attackClipOwnsArms(entity))
         {
             ModelPart arm = entity.getMainArm() == HumanoidArm.LEFT ? this.leftArm : this.rightArm;
             arm.xRot = -1.2F;

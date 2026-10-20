@@ -245,7 +245,9 @@ final class NpcBetterCombatDriver
                     new TransmissionSpeedModifier.Gear(length * upswing, downwind),
                     new TransmissionSpeedModifier.Gear(length, speed)
             ));
-            this.attack.mirror.setEnabled(npc.getMainArm() == HumanoidArm.LEFT);
+            // Better Combat mirrors an off-hand swing, then mirrors again when the body is left-handed.
+            boolean leftHanded = npc.getMainArm() == HumanoidArm.LEFT;
+            this.attack.mirror.setEnabled(leftHanded != npc.isAttackOffhand());
             KeyframeAnimationPlayer player = new CustomAnimationPlayer(copy.build(), 0);
             int fadeTicks = Math.max(0, copy.beginTick);
             this.attack.base.replaceAnimationWithFade(AbstractFadeModifier.standardFadeIn(fadeTicks, Ease.INOUTSINE), player);

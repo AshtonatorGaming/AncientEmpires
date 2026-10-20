@@ -2,7 +2,9 @@ package com.ancientempires.combat;
 
 import me.Thelnfamous1.bettermobcombat.api.MobAttackWindup;
 import me.Thelnfamous1.bettermobcombat.logic.MobCombatHelper;
+import me.Thelnfamous1.bettermobcombat.platform.Services;
 import net.bettercombat.api.WeaponAttributes;
+import net.bettercombat.logic.AnimatedHand;
 import net.bettercombat.logic.WeaponRegistry;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
@@ -40,6 +42,23 @@ final class MobCombatHooks
         }
         ((MobAttackWindup) mob).bettermobcombat$startUpswing(weapon, hit);
         return ((MobAttackWindup) mob).bettermobcombat$getUpswingTicks() > 0;
+    }
+
+    /**
+     * Plays the animation id already chosen from a weapon preset. Empty hands
+     * pass the id from {@code bettercombat:fist}, so a pack that replaces that
+     * preset's attack replaces the clip too. This does not invent an id.
+     * {@code offHand} is the dual-wield off-hand beat. A held weapon stays on the main hand.
+     */
+    static void playAttackAnimation(Mob mob, String animationId, float length, float upswing, boolean offHand)
+    {
+        AnimatedHand hand = offHand ? AnimatedHand.OFF_HAND : AnimatedHand.MAIN_HAND;
+        Services.PLATFORM.playMobAttackAnimation(mob, hand, animationId, length, upswing);
+    }
+
+    static void stopAttackAnimation(Mob mob, int fadeTicks)
+    {
+        Services.PLATFORM.stopMobAttackAnimation(mob, Math.max(0, fadeTicks));
     }
 
     static boolean upswinging(Mob mob)

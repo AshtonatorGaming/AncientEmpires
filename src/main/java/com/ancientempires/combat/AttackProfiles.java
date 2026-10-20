@@ -14,12 +14,19 @@ import java.util.List;
 
 /**
  * Picks the swing the NPC is about to commit to.
- * Empty hands use an internal unarmed profile, optionally replaced by Better
- * Combat's fist data. A held weapon uses Better Combat attributes when they
- * exist, and otherwise a cooldown taken from attack speed.
+ * Both hands empty use Better Combat's fist preset on each hand, so the combo
+ * alternates the way dual-wielding does. Any held item, including a two-handed
+ * weapon, keeps the weapon path. A held weapon uses Better Combat attributes
+ * when they exist, and otherwise a cooldown taken from attack speed.
  */
 public final class AttackProfiles
 {
+    /**
+     * Vanilla sword pace: base attack speed 4 plus the sword's -2.4 modifier.
+     * The NPC's own attack speed is 4, which is a fist's pace and is too fast here.
+     */
+    private static final float ONE_HANDED_WEAPON_SPEED = 1.6F;
+
     private AttackProfiles()
     {
     }
@@ -29,7 +36,11 @@ public final class AttackProfiles
         ItemStack stack = npc.getMainHandItem();
         if (stack.isEmpty())
         {
-            return unarmed(npc);
+            if (npc.getOffhandItem().isEmpty())
+            {
+                return fists(npc);
+            }
+            return bare(npc);
         }
         if (AncientEmpiresConfig.betterCombatEnabled)
         {
@@ -46,7 +57,11 @@ public final class AttackProfiles
         return vanilla(npc);
     }
 
-    private static AttackSwing unarmed(NpcEntity npc)
+    /**
+     * Both hands empty. The fist preset is applied to each hand. A two-handed
+     * weapon is a held item, so it never reaches this method.
+     */
+    private static AttackSwing fists(NpcEntity npc)
     {
         if (AncientEmpiresConfig.betterCombatEnabled && AncientEmpiresConfig.unarmedPreferBetterCombat)
         {
@@ -60,7 +75,11 @@ public final class AttackProfiles
                 }
             }
         }
+        return bare(npc);
+    }
 
+    private static AttackSwing bare(NpcEntity npc)
+    {
         int cooldown = Math.max(AncientEmpiresConfig.unarmedWindupTicks + 1, AncientEmpiresConfig.unarmedCooldownTicks);
         int windup = Mth.clamp(AncientEmpiresConfig.unarmedWindupTicks, 1, cooldown - 1);
         return new AttackSwing(
@@ -76,6 +95,7 @@ public final class AttackProfiles
                 1.0F,
                 0.0F,
                 true,
+                false,
                 "unarmed"
         );
     }
@@ -97,6 +117,7 @@ public final class AttackProfiles
                 1.0F,
                 0.0F,
                 false,
+                false,
                 "vanilla"
         );
     }
@@ -104,12 +125,15 @@ public final class AttackProfiles
     @Nullable
     private static AttackSwing fromBetterCombat(NpcEntity npc, BetterCombatBridge.WeaponSnapshot weapon, boolean unarmed)
     {
-        List<BetterCombatBridge.AttackSnapshot> usable = usableAttacks(npc, weapon);
+        int combo = npc.getComboIndex();
+        boolean offHand = unarmed && Math.floorMod(combo, 2) == 1;
+        int step = unarmed ? Math.floorDiv(combo, 2) : combo;
+        List<BetterCombatBridge.AttackSnapshot> usable = usableAttacks(npc, weapon, unarmed, offHand);
         if (usable.isEmpty())
         {
             return null;
         }
-        BetterCombatBridge.AttackSnapshot attack = usable.get(Math.floorMod(npc.getComboIndex(), usable.size()));
+        BetterCombatBridge.AttackSnapshot attack = usable.get(Math.floorMod(step, usable.size()));
 
         double range = weapon.range();
         if (range <= 0.0D)
@@ -118,7 +142,8 @@ public final class AttackProfiles
         }
 
         int minimum = Math.max(1, BetterCombatBridge.attackIntervalCap(AncientEmpiresConfig.minAttackInterval));
-        int cooldown = cooldownTicks(attackSpeed(npc), minimum);
+        float speed = unarmed ? ONE_HANDED_WEAPON_SPEED : attackSpeed(npc);
+        int cooldown = cooldownTicks(speed, minimum);
         float upswingMultiplier = AncientEmpiresConfig.readUpswingFromMod
                 ? BetterCombatBridge.upswingMultiplier((float) AncientEmpiresConfig.upswingMultiplier)
                 : (float) AncientEmpiresConfig.upswingMultiplier;
@@ -144,11 +169,12 @@ public final class AttackProfiles
                 attack.swingPitch(),
                 attack.swingPitchRandomness(),
                 unarmed,
+                offHand,
                 unarmed ? "bettercombat_fist" : "bettercombat"
         );
     }
 
-    private static List<BetterCombatBridge.AttackSnapshot> usableAttacks(NpcEntity npc, BetterCombatBridge.WeaponSnapshot weapon)
+    private static List<BetterCombatBridge.AttackSnapshot> usableAttacks(NpcEntity npc, BetterCombatBridge.WeaponSnapshot weapon, boolean dualFist, boolean offHand)
     {
         boolean mounted = npc.isPassenger();
         boolean shield = npc.getOffhandItem().getItem() instanceof ShieldItem;
@@ -156,7 +182,7 @@ public final class AttackProfiles
         List<BetterCombatBridge.AttackSnapshot> usable = new ArrayList<>();
         for (BetterCombatBridge.AttackSnapshot attack : weapon.attacks())
         {
-            if (accepts(attack.conditions(), mounted, shield, offhandEmpty))
+            if (accepts(attack.conditions(), mounted, shield, offhandEmpty, dualFist, offHand))
             {
                 usable.add(attack);
             }
@@ -165,20 +191,42 @@ public final class AttackProfiles
     }
 
     /**
-     * Dual-wield and off-hand steps are skipped. This NPC swings the main hand
-     * only, so those attacks would describe a hand it is not using.
+     * Weapon swings skip dual-wield and off-hand steps. Empty-hand fists are the
+     * exception: both hands carry the fist preset, so those conditions match and
+     * the combo alternates hands.
      */
-    private static boolean accepts(List<String> conditions, boolean mounted, boolean shield, boolean offhandEmpty)
+    private static boolean accepts(List<String> conditions, boolean mounted, boolean shield, boolean offhandEmpty, boolean dualFist, boolean offHand)
     {
         for (String condition : conditions)
         {
             switch (condition)
             {
                 case "OFF_HAND_ONLY":
+                    if (!dualFist || !offHand)
+                    {
+                        return false;
+                    }
+                    break;
+                case "MAIN_HAND_ONLY":
+                    if (dualFist && offHand)
+                    {
+                        return false;
+                    }
+                    break;
                 case "DUAL_WIELDING_ANY":
                 case "DUAL_WIELDING_SAME":
                 case "DUAL_WIELDING_SAME_CATEGORY":
-                    return false;
+                    if (!dualFist)
+                    {
+                        return false;
+                    }
+                    break;
+                case "NOT_DUAL_WIELDING":
+                    if (dualFist)
+                    {
+                        return false;
+                    }
+                    break;
                 case "MOUNTED":
                     if (!mounted)
                     {
@@ -198,7 +246,7 @@ public final class AttackProfiles
                     }
                     break;
                 case "NO_OFFHAND_ITEM":
-                    if (!offhandEmpty)
+                    if (dualFist || !offhandEmpty)
                     {
                         return false;
                     }

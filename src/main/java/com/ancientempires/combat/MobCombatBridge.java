@@ -92,6 +92,47 @@ public final class MobCombatBridge
         }
     }
 
+    /**
+     * Sends a preset's attack clip to clients. Used when Better Mob Combat will
+     * not start an upswing on its own, which is the case for an empty hand:
+     * {@code WeaponRegistry.getAttributes} does not resolve {@code bettercombat:fist}.
+     * {@code offHand} selects that mod's off-hand clip so an empty-hand combo alternates.
+     * Returns false when that mod is absent so the caller can use the other animation path.
+     */
+    public static boolean playAttackAnimation(NpcEntity npc, String animationId, float length, float upswing, boolean offHand)
+    {
+        if (!ready() || animationId == null || animationId.isEmpty())
+        {
+            return false;
+        }
+        try
+        {
+            MobCombatHooks.playAttackAnimation(npc, animationId, Math.max(1.0F, length), upswing, offHand);
+            return true;
+        }
+        catch (Throwable exception)
+        {
+            fail(exception);
+            return false;
+        }
+    }
+
+    public static void stopAttackAnimation(NpcEntity npc, int fadeTicks)
+    {
+        if (status != Status.READY)
+        {
+            return;
+        }
+        try
+        {
+            MobCombatHooks.stopAttackAnimation(npc, fadeTicks);
+        }
+        catch (Throwable exception)
+        {
+            fail(exception);
+        }
+    }
+
     public static void cancel(NpcEntity npc)
     {
         if (status != Status.READY)

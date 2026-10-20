@@ -221,6 +221,15 @@ public final class NpcCombatAnimations
     }
 
     /**
+     * The mob animator is playing the attack clip that was started for this swing.
+     * The model's static raised arm would replace that clip on the same frame.
+     */
+    public static boolean attackClipOwnsArms(NpcEntity npc)
+    {
+        return mobAnimatorOwnsModel() && !npc.getAttackPresentationId().isEmpty();
+    }
+
+    /**
      * True once Better Mob Combat's own stack is on the mob. A failed read still
      * leaves that stack in place, so the fallback stack must stay idle.
      */

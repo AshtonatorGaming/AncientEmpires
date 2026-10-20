@@ -66,6 +66,8 @@ public class NpcEntity extends PathfinderMob
     private static final EntityDataAccessor<Optional<BlockPos>> DATA_HOME = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.OPTIONAL_BLOCK_POS);
     private static final EntityDataAccessor<String> DATA_HOME_DIM = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<String> DATA_SKIN = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.STRING);
+    /** Off-hand beat of an empty-hand fist combo. Cleared with the presentation, not the attack window. */
+    private static final EntityDataAccessor<Boolean> DATA_ATTACK_OFFHAND = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.BOOLEAN);
     private static final String FOLLOWING_KEY = "Following";
     private static final String CREATIVE_KEY = "Creative";
     private static final String HOME_KEY = "Home";
@@ -114,6 +116,7 @@ public class NpcEntity extends PathfinderMob
         this.entityData.define(DATA_HOME, Optional.empty());
         this.entityData.define(DATA_HOME_DIM, "");
         this.entityData.define(DATA_SKIN, "");
+        this.entityData.define(DATA_ATTACK_OFFHAND, false);
     }
 
     public static AttributeSupplier.Builder createAttributes()
@@ -436,6 +439,7 @@ public class NpcEntity extends PathfinderMob
         this.entityData.set(DATA_PRESENTATION_ID, id);
         this.entityData.set(DATA_PRESENTATION_LENGTH, Math.max(1, swing.cooldownTicks()));
         this.entityData.set(DATA_PRESENTATION_UPSWING, swing.animationUpswing());
+        this.entityData.set(DATA_ATTACK_OFFHAND, swing.offHand());
         this.entityData.set(DATA_PRESENTATION_SERIAL, this.entityData.get(DATA_PRESENTATION_SERIAL) + 1);
     }
 
@@ -476,6 +480,7 @@ public class NpcEntity extends PathfinderMob
         this.entityData.set(DATA_PRESENTATION_ID, "");
         this.entityData.set(DATA_PRESENTATION_LENGTH, 0);
         this.entityData.set(DATA_PRESENTATION_UPSWING, 0.0F);
+        this.entityData.set(DATA_ATTACK_OFFHAND, false);
         this.entityData.set(DATA_PRESENTATION_SERIAL, this.entityData.get(DATA_PRESENTATION_SERIAL) + 1);
     }
 
@@ -531,6 +536,16 @@ public class NpcEntity extends PathfinderMob
     public int getAttackPresentationSerial()
     {
         return this.entityData.get(DATA_PRESENTATION_SERIAL);
+    }
+
+    /**
+     * True when the current presentation is the off-hand beat of an empty-hand
+     * fist combo. A held weapon never sets this. It stays set through recovery
+     * and clears only when the presentation itself is cleared.
+     */
+    public boolean isAttackOffhand()
+    {
+        return this.entityData.get(DATA_ATTACK_OFFHAND);
     }
 
     @Override

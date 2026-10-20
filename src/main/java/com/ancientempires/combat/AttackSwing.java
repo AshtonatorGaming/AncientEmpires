@@ -21,6 +21,7 @@ public record AttackSwing(
         float swingPitch,
         float swingPitchRandomness,
         boolean unarmed,
+        boolean offHand,
         String source
 )
 {

@@ -43,11 +43,13 @@ public class NpcMeleeAttackGoal extends Goal
     private int facingWait;
     private int facedOnTick = -1;
     private boolean forcedSwing;
+    private boolean fistClip;
     private AttackSwing active;
 
     private AttackSwing preview;
     private int previewCombo = -1;
     private ItemStack previewStack = ItemStack.EMPTY;
+    private ItemStack previewOffhand = ItemStack.EMPTY;
 
     public NpcMeleeAttackGoal(NpcEntity npc)
     {
@@ -86,7 +88,10 @@ public class NpcMeleeAttackGoal extends Goal
         this.mobCombatCancelled = false;
         this.facingWait = 0;
         this.forcedSwing = false;
+        this.fistClip = false;
         this.facedOnTick = -1;
+        this.preview = null;
+        this.previewOffhand = ItemStack.EMPTY;
     }
 
     @Override
@@ -106,6 +111,7 @@ public class NpcMeleeAttackGoal extends Goal
         }
         else if (this.phase == Phase.WINDUP)
         {
+            this.stopFistClip();
             this.npc.cancelAttackPresentation();
         }
         else
@@ -120,7 +126,9 @@ public class NpcMeleeAttackGoal extends Goal
         this.mobCombatSwing = false;
         this.facingWait = 0;
         this.forcedSwing = false;
+        this.fistClip = false;
         this.preview = null;
+        this.previewOffhand = ItemStack.EMPTY;
     }
 
     @Override
@@ -182,6 +190,7 @@ public class NpcMeleeAttackGoal extends Goal
             }
             else
             {
+                this.stopFistClip();
                 this.npc.cancelAttackPresentation();
             }
             return;
@@ -231,6 +240,8 @@ public class NpcMeleeAttackGoal extends Goal
         this.phase = Phase.APPROACH;
         this.active = null;
         this.stoppedForWindup = false;
+        // The punch clip is timed to the whole cooldown, so recovery leaves it playing.
+        this.fistClip = false;
         this.preview = null;
     }
 
@@ -264,8 +275,50 @@ public class NpcMeleeAttackGoal extends Goal
         this.stoppedForWindup = false;
         this.pathCooldown = 0;
         this.npc.openAttackWindow(swing);
-        this.npc.swing(InteractionHand.MAIN_HAND);
+        this.fistClip = false;
+        if (this.usesFistClip(swing))
+        {
+            // Better Mob Combat will not start this swing: an empty hand has no
+            // item attributes, so its upswing bails and the vanilla arm swing is
+            // all that remains. The id is the fist preset's own attack animation.
+            this.fistClip = MobCombatBridge.playAttackAnimation(
+                    this.npc,
+                    swing.animationId(),
+                    swing.cooldownTicks(),
+                    swing.animationUpswing(),
+                    swing.offHand());
+            if (!this.fistClip && !BetterCombatBridge.isModLoaded())
+            {
+                this.npc.swing(InteractionHand.MAIN_HAND);
+            }
+        }
+        else
+        {
+            this.npc.swing(InteractionHand.MAIN_HAND);
+        }
         this.playSwingSound(swing);
+    }
+
+    /**
+     * Combat NPCs with nothing in either hand use the fist preset. The melee
+     * goal is the combat path; an NPC that is not attacking never reaches this.
+     */
+    private boolean usesFistClip(AttackSwing swing)
+    {
+        return swing.unarmed()
+                && swing.animationId() != null
+                && this.npc.getMainHandItem().isEmpty()
+                && this.npc.getOffhandItem().isEmpty();
+    }
+
+    private void stopFistClip()
+    {
+        if (!this.fistClip)
+        {
+            return;
+        }
+        this.fistClip = false;
+        MobCombatBridge.stopAttackAnimation(this.npc, 4);
     }
 
     private void finishMobCombatSwing(AttackSwing swing)
@@ -350,11 +403,16 @@ public class NpcMeleeAttackGoal extends Goal
     private AttackSwing preview()
     {
         ItemStack hand = this.npc.getMainHandItem();
+        ItemStack offhand = this.npc.getOffhandItem();
         int combo = this.npc.getComboIndex();
-        if (this.preview == null || combo != this.previewCombo || !ItemStack.isSameItemSameTags(this.previewStack, hand))
+        if (this.preview == null
+                || combo != this.previewCombo
+                || !ItemStack.isSameItemSameTags(this.previewStack, hand)
+                || !ItemStack.isSameItemSameTags(this.previewOffhand, offhand))
         {
             this.previewCombo = combo;
             this.previewStack = hand.copy();
+            this.previewOffhand = offhand.copy();
             this.preview = AttackProfiles.resolve(this.npc);
         }
         return this.preview;
