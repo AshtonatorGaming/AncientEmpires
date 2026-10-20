@@ -7,6 +7,7 @@ import brachy.modularui.drawable.Icon;
 import brachy.modularui.drawable.Rectangle;
 import brachy.modularui.drawable.UITexture;
 import brachy.modularui.screen.ModularPanel;
+import brachy.modularui.utils.Alignment;
 import brachy.modularui.value.StringValue;
 import brachy.modularui.widget.ParentWidget;
 import brachy.modularui.widget.Widget;
@@ -43,6 +44,10 @@ public final class NpcInventoryPanel
     private static final int PREVIEW_Y = NpcLayout.PREVIEW_Y;
     private static final int PREVIEW_W = NpcLayout.PREVIEW_W;
     private static final int PREVIEW_H = NpcLayout.PREVIEW_H;
+    private static final int PREVIEW_ENTITY_X = NpcLayout.PREVIEW_ENTITY_X;
+    private static final int PREVIEW_ENTITY_Y = NpcLayout.PREVIEW_ENTITY_Y;
+    private static final int PREVIEW_ENTITY_W = NpcLayout.PREVIEW_ENTITY_W;
+    private static final int PREVIEW_ENTITY_H = NpcLayout.PREVIEW_ENTITY_H;
     private static final int CROSS_X = NpcLayout.CROSS_X;
     private static final int CROSS_Y = NpcLayout.CROSS_Y;
     private static final int BACKPACK_X = NpcLayout.BACKPACK_X;
@@ -69,6 +74,8 @@ public final class NpcInventoryPanel
     private static final int BUTTON_HOVER = 0xFF8A6A3C;
     private static final int NAME_INK = 0xFFE6D2A2;
     private static final int NAME_HINT = 0xFF8A7050;
+    private static final int SLOT_FILL = 0xFF2C241C;
+    private static final int SLOT_HOVER = 0xFF3A2E24;
 
     private NpcInventoryPanel()
     {
@@ -156,8 +163,8 @@ public final class NpcInventoryPanel
                     .preDraw((graphics, entity) -> entity.setNameplateSuppressed(true))
                     .postDraw((graphics, entity) -> entity.setNameplateSuppressed(false))
                     .asWidget()
-                    .pos(4, 4)
-                    .size(PREVIEW_W - 16, PREVIEW_H - 20));
+                    .pos(PREVIEW_ENTITY_X, PREVIEW_ENTITY_Y)
+                    .size(PREVIEW_ENTITY_W, PREVIEW_ENTITY_H));
         }
         frame.child(new ButtonWidget<>()
                 .pos(PREVIEW_W - 14, PREVIEW_H - 14)
@@ -191,7 +198,8 @@ public final class NpcInventoryPanel
                 .size(width, SECTION_LABEL_H)
                 .maxWidth(width)
                 .color(NAME_INK)
-                .shadow(Boolean.TRUE);
+                .shadow(Boolean.TRUE)
+                .textAlign(Alignment.Center);
     }
 
     private static Grid itemGrid(int x, int y, int columns, int rows, int firstIndex, NpcMenu menu)
@@ -216,7 +224,10 @@ public final class NpcInventoryPanel
 
     private static MenuItemSlot slot(NpcMenu menu, int index)
     {
-        return new MenuItemSlot(menu.getSlot(index));
+        MenuItemSlot slot = new MenuItemSlot(menu.getSlot(index));
+        slot.background(new Rectangle().color(SLOT_FILL), new Rectangle().color(GOLD).hollow(1.0F));
+        slot.hoverBackground(new Rectangle().color(SLOT_HOVER), new Rectangle().color(GOLD).hollow(1.0F));
+        return slot;
     }
 
     private static Widget<?> spacer()

@@ -16,6 +16,11 @@ public final class NpcLayout
     public static final int PREVIEW_Y = 28;
     public static final int PREVIEW_W = 84;
     public static final int PREVIEW_H = 104;
+    /** Entity box inside the preview. The bottom stays 16px clear of the skin button. */
+    public static final int PREVIEW_ENTITY_X = 4;
+    public static final int PREVIEW_ENTITY_Y = 10;
+    public static final int PREVIEW_ENTITY_W = PREVIEW_W - 16;
+    public static final int PREVIEW_ENTITY_H = PREVIEW_H - 16 - PREVIEW_ENTITY_Y;
     public static final int CROSS_X = 8;
     public static final int CROSS_Y = PREVIEW_Y + (PREVIEW_H - SLOT * 4) / 2;
     public static final int BACKPACK_X = PREVIEW_X + PREVIEW_W + 8;

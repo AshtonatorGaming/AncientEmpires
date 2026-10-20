@@ -47,6 +47,13 @@ public class MenuItemSlot extends ItemSlot
     }
 
     @Override
+    public int getSlotHoverColor()
+    {
+        // ItemSlot paints this as a 16x16 rect over the item. Gold, not the theme's white wash.
+        return 0x40C6A56A;
+    }
+
+    @Override
     public void draw(ModularGuiContext context, WidgetThemeEntry<?> widgetTheme)
     {
         Lighting.setupFor3DItems();
