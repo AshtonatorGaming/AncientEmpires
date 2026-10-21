@@ -1,0 +1,859 @@
+{
+  "factions": [
+    {
+      "id": "empire",
+      "name": "Empire",
+      "entries": [
+        {"id": "empire.soldier", "subtype": "soldier", "name": "Empire Spearman", "skin": "empire.soldier", "item": "empire_faction_soldier_spawn_egg", "glyph": "soldier", "mainhand": "spartanweaponry:iron_spear", "mainFallback": "minecraft:iron_sword", "offhand": "minecraft:shield", "health": 20},
+        {"id": "empire.soldier.elite", "subtype": "soldier.elite", "name": "Empire Halberdier", "skin": "empire.soldier.elite", "item": "empire_soldier_elite_spawn_egg", "glyph": "soldier", "mainhand": "spartanweaponry:iron_halberd", "mainFallback": "minecraft:iron_sword", "health": 30},
+        {"id": "empire.archer", "subtype": "archer", "name": "Empire Peasant", "skin": "empire.archer", "item": "empire_faction_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 20},
+        {"id": "empire.archer.elite", "subtype": "archer.elite", "name": "Empire Archer", "skin": "empire.archer.elite", "item": "empire_archer_elite_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 30},
+        {"id": "empire.cavalry", "subtype": "cavalry", "name": "Empire Knight", "skin": "empire.cavalry", "item": "empire_cavalry_spawn_egg", "glyph": "soldier", "mainhand": "spartanweaponry:iron_lance", "mainFallback": "minecraft:iron_sword", "offhand": "minecraft:shield", "health": 65},
+        {"id": "empire.mounted_archer", "subtype": "mounted_archer", "name": "Empire Retainer", "skin": "empire.mounted_archer", "item": "empire_mounted_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 30},
+        {"id": "empire.leader", "subtype": "leader", "name": "Empire Captain", "skin": "empire.leader", "item": "empire_leader_spawn_egg", "glyph": "commander", "mainhand": "minecraft:diamond_axe", "offhand": "minecraft:shield", "health": 50},
+        {"id": "empire.leader.elite", "subtype": "leader.elite", "name": "Empire Nobleman", "skin": "empire.leader.elite", "item": "empire_leader_elite_spawn_egg", "glyph": "commander", "mainhand": "minecraft:diamond_sword", "health": 60},
+        {"id": "empire.siege_engineer", "subtype": "siege_engineer", "name": "Empire Artificier", "skin": "empire.siege_engineer", "item": "empire_siege_engineer_spawn_egg", "glyph": "siege_engineer", "health": 30},
+        {"id": "empire.priest", "subtype": "priest", "name": "Empire Priest", "skin": "empire.priest", "item": "empire_priest_spawn_egg", "glyph": "priest", "mainhand": "minecraft:book", "health": 40},
+        {"id": "empire.spellcaster", "subtype": "spellcaster", "name": "Empire Mage", "skin": "empire.spellcaster", "item": "empire_spellcaster_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 20},
+        {"id": "empire.spellcaster.1", "subtype": "spellcaster.1", "name": "Empire Conjurer", "skin": "empire.spellcaster.1", "item": "empire_spellcaster_1_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:book", "health": 20},
+        {"id": "empire.spellcaster.2", "subtype": "spellcaster.2", "name": "Empire Enchanter", "skin": "empire.spellcaster.2", "item": "empire_spellcaster_2_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 30},
+        {"id": "empire.spellcaster.3", "subtype": "spellcaster.3", "name": "Empire Magician", "skin": "empire.spellcaster.3", "item": "empire_spellcaster_3_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 35},
+        {"id": "empire.spellcaster.4", "subtype": "spellcaster.4", "name": "Empire Wizard", "skin": "empire.spellcaster.4", "item": "empire_spellcaster_4_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 40},
+        {"id": "empire.bard", "subtype": "bard", "name": "Empire Bard", "skin": "empire.bard", "item": "empire_bard_spawn_egg", "glyph": "bard", "mainhand": "minecraft:stick", "health": 50},
+        {"id": "empire.trader", "subtype": "trader", "name": "Empire Merchant", "skin": "empire.trader", "item": "empire_trader_spawn_egg", "glyph": "trader", "mainhand": "minecraft:book", "health": 50},
+        {"id": "empire.civilian.female", "subtype": "civilian.female", "name": "Empire Goodwife", "skin": "empire.civilian.female", "item": "empire_civilian_female_spawn_egg", "glyph": "civilian_female", "health": 10},
+        {"id": "empire.civilian.male", "subtype": "civilian.male", "name": "Empire Serf", "skin": "empire.civilian.male", "item": "empire_civilian_male_spawn_egg", "glyph": "civilian_male", "health": 10}
+      ]
+    },
+    {
+      "id": "norska",
+      "name": "Norska",
+      "entries": [
+        {"id": "norska.soldier", "subtype": "soldier", "name": "Norska Warrior", "skin": "norska.soldier", "item": "norska_faction_soldier_spawn_egg", "glyph": "soldier", "mainhand": "minecraft:iron_sword", "offhand": "minecraft:shield", "health": 30},
+        {"id": "norska.soldier.elite", "subtype": "soldier.elite", "name": "Norska Berserker", "skin": "norska.soldier.elite", "item": "norska_soldier_elite_spawn_egg", "glyph": "soldier", "mainhand": "minecraft:iron_axe", "offhand": "minecraft:iron_axe", "scale": 1.056, "health": 50},
+        {"id": "norska.archer", "subtype": "archer", "name": "Norska Archer", "skin": "norska.archer", "item": "norska_faction_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 20},
+        {"id": "norska.archer.elite", "subtype": "archer.elite", "name": "Norska Swiftshooter", "skin": "norska.archer.elite", "item": "norska_archer_elite_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 30},
+        {"id": "norska.cavalry", "subtype": "cavalry", "name": "Norska Bear Master", "skin": "norska.cavalry", "item": "norska_cavalry_spawn_egg", "glyph": "soldier", "mainhand": "spartanweaponry:iron_spear", "mainFallback": "minecraft:iron_sword", "offhand": "minecraft:shield", "health": 40},
+        {"id": "norska.mounted_archer", "subtype": "mounted_archer", "name": "Norska Raider", "skin": "norska.mounted_archer", "item": "norska_mounted_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 30},
+        {"id": "norska.leader", "subtype": "leader", "name": "Norska Jarl", "skin": "norska.leader", "item": "norska_leader_spawn_egg", "glyph": "commander", "mainhand": "minecraft:diamond_axe", "offhand": "minecraft:shield", "health": 70},
+        {"id": "norska.leader.elite", "subtype": "leader.elite", "name": "Norska Blood Jarl", "skin": "norska.leader.elite", "item": "norska_leader_elite_spawn_egg", "glyph": "commander", "mainhand": "minecraft:diamond_axe", "offhand": "minecraft:shield", "health": 100},
+        {"id": "norska.siege_engineer", "subtype": "siege_engineer", "name": "Norska Floki", "skin": "norska.siege_engineer", "item": "norska_siege_engineer_spawn_egg", "glyph": "siege_engineer", "health": 30},
+        {"id": "norska.priest", "subtype": "priest", "name": "Norska Rune Priest", "skin": "norska.priest", "item": "norska_priest_spawn_egg", "glyph": "priest", "mainhand": "minecraft:book", "health": 40},
+        {"id": "norska.spellcaster", "subtype": "spellcaster", "name": "Norska Spellcaster", "skin": "norska.spellcaster", "item": "norska_spellcaster_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:skull", "health": 30},
+        {"id": "norska.spellcaster.1", "subtype": "spellcaster.1", "name": "Norska Runecaster", "skin": "norska.spellcaster.1", "item": "norska_spellcaster_1_spawn_egg", "glyph": "spellcaster", "health": 40},
+        {"id": "norska.spellcaster.2", "subtype": "spellcaster.2", "name": "Norska Seidhr", "skin": "norska.spellcaster.2", "item": "norska_spellcaster_2_spawn_egg", "glyph": "spellcaster", "health": 30},
+        {"id": "norska.spellcaster.3", "subtype": "spellcaster.3", "name": "Norska Goddi", "skin": "norska.spellcaster.3", "item": "norska_spellcaster_3_spawn_egg", "glyph": "spellcaster", "health": 60},
+        {"id": "norska.spellcaster.4", "subtype": "spellcaster.4", "name": "Norska Varulfur", "skin": "norska.spellcaster.4", "item": "norska_spellcaster_4_spawn_egg", "glyph": "spellcaster", "health": 80},
+        {"id": "norska.bard", "subtype": "bard", "name": "Norska Saga Teller", "skin": "norska.bard", "item": "norska_bard_spawn_egg", "glyph": "bard", "mainhand": "minecraft:stick", "health": 50},
+        {"id": "norska.trader", "subtype": "trader", "name": "Norska Trader", "skin": "norska.trader", "item": "norska_trader_spawn_egg", "glyph": "trader", "mainhand": "minecraft:book", "health": 50},
+        {"id": "norska.civilian.female", "subtype": "civilian.female", "name": "Norska Matron", "skin": "norska.civilian.female", "item": "norska_civilian_female_spawn_egg", "glyph": "civilian_female", "health": 10},
+        {"id": "norska.civilian.male", "subtype": "civilian.male", "name": "Norska Farmer", "skin": "norska.civilian.male", "item": "norska_civilian_male_spawn_egg", "glyph": "civilian_male", "health": 10}
+      ]
+    },
+    {
+      "id": "brigand",
+      "name": "Brigand",
+      "entries": [
+        {"id": "brigand.soldier", "subtype": "soldier", "name": "Brigand", "skin": "brigand.soldier", "item": "brigand_faction_soldier_spawn_egg", "glyph": "soldier", "mainhand": "minecraft:iron_axe", "health": 15},
+        {"id": "brigand.soldier.elite", "subtype": "soldier.elite", "name": "Brigand Cuthroat", "skin": "brigand.soldier.elite", "item": "brigand_soldier_elite_spawn_egg", "glyph": "soldier", "mainhand": "minecraft:iron_sword", "health": 20},
+        {"id": "brigand.archer", "subtype": "archer", "name": "Brigand Backshooter", "skin": "brigand.archer", "item": "brigand_faction_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 15},
+        {"id": "brigand.archer.elite", "subtype": "archer.elite", "name": "Brigand Lookout", "skin": "brigand.archer.elite", "item": "brigand_archer_elite_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 15},
+        {"id": "brigand.cavalry", "subtype": "cavalry", "name": "Brigand Reiver", "skin": "brigand.cavalry", "item": "brigand_cavalry_spawn_egg", "glyph": "soldier", "mainhand": "minecraft:iron_sword", "health": 20},
+        {"id": "brigand.mounted_archer", "subtype": "mounted_archer", "name": "Highwayman", "skin": "brigand.mounted_archer", "item": "brigand_mounted_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 20},
+        {"id": "brigand.leader", "subtype": "leader", "name": "Brigand Chief", "skin": "brigand.leader", "item": "brigand_leader_spawn_egg", "glyph": "commander", "mainhand": "minecraft:iron_sword", "health": 40},
+        {"id": "brigand.leader.elite", "subtype": "leader.elite", "name": "Brigand Warlord", "skin": "brigand.leader.elite", "item": "brigand_leader_elite_spawn_egg", "glyph": "commander", "mainhand": "spartanweaponry:iron_halberd", "mainFallback": "minecraft:iron_sword", "health": 60},
+        {"id": "brigand.siege_engineer", "subtype": "siege_engineer", "name": "Renegade Artificier", "skin": "brigand.siege_engineer", "item": "brigand_siege_engineer_spawn_egg", "glyph": "siege_engineer", "health": 30},
+        {"id": "brigand.priest", "subtype": "priest", "name": "Heretic Priest", "skin": "brigand.priest", "item": "brigand_priest_spawn_egg", "glyph": "priest", "mainhand": "minecraft:book", "health": 40},
+        {"id": "brigand.bard", "subtype": "bard", "name": "Brigand Talespinner", "skin": "brigand.bard", "item": "brigand_bard_spawn_egg", "glyph": "bard", "mainhand": "minecraft:stick", "health": 50},
+        {"id": "brigand.trader", "subtype": "trader", "name": "Brigand Fence", "skin": "brigand.trader", "item": "brigand_trader_spawn_egg", "glyph": "trader", "mainhand": "minecraft:book", "health": 50},
+        {"id": "brigand.civilian.female", "subtype": "civilian.female", "name": "Brigandess", "skin": "brigand.civilian.female", "item": "brigand_civilian_female_spawn_egg", "glyph": "civilian_female", "health": 10},
+        {"id": "brigand.civilian.male", "subtype": "civilian.male", "name": "Brigand", "skin": "brigand.civilian.male", "item": "brigand_civilian_male_spawn_egg", "glyph": "civilian_male", "health": 10}
+      ]
+    },
+    {
+      "id": "pirate",
+      "name": "Pirate",
+      "entries": [
+        {"id": "pirate.soldier", "subtype": "soldier", "name": "Pirate", "skin": "pirate.soldier", "item": "pirate_faction_soldier_spawn_egg", "glyph": "soldier", "mainhand": "minecraft:iron_sword", "health": 15},
+        {"id": "pirate.soldier.elite", "subtype": "soldier.elite", "name": "Pirate Ravager", "skin": "pirate.soldier.elite", "item": "pirate_soldier_elite_spawn_egg", "glyph": "soldier", "mainhand": "minecraft:iron_sword", "health": 30},
+        {"id": "pirate.archer", "subtype": "archer", "name": "Pirate Bowman", "skin": "pirate.archer", "item": "pirate_faction_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 15},
+        {"id": "pirate.archer.elite", "subtype": "archer.elite", "name": "Pirate Lookout", "skin": "pirate.archer.elite", "item": "pirate_archer_elite_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 15},
+        {"id": "pirate.cavalry", "subtype": "cavalry", "name": "Smuggler Nightrider", "skin": "pirate.cavalry", "item": "pirate_cavalry_spawn_egg", "glyph": "soldier", "mainhand": "minecraft:iron_sword", "health": 20},
+        {"id": "pirate.mounted_archer", "subtype": "mounted_archer", "name": "Smuggler Raider", "skin": "pirate.mounted_archer", "item": "pirate_mounted_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 20},
+        {"id": "pirate.leader", "subtype": "leader", "name": "Pirate Captain", "skin": "pirate.leader", "item": "pirate_leader_spawn_egg", "glyph": "commander", "mainhand": "minecraft:diamond_sword", "health": 40},
+        {"id": "pirate.leader.elite", "subtype": "leader.elite", "name": "Pirate Admiral", "skin": "pirate.leader.elite", "item": "pirate_leader_elite_spawn_egg", "glyph": "commander", "mainhand": "minecraft:diamond_sword", "health": 60},
+        {"id": "pirate.siege_engineer", "subtype": "siege_engineer", "name": "Pirate Gunner", "skin": "pirate.siege_engineer", "item": "pirate_siege_engineer_spawn_egg", "glyph": "siege_engineer", "health": 30},
+        {"id": "pirate.priest", "subtype": "priest", "name": "Pirate Voodoo Healer", "skin": "pirate.priest", "item": "pirate_priest_spawn_egg", "glyph": "priest", "mainhand": "minecraft:book", "health": 40},
+        {"id": "pirate.spellcaster", "subtype": "spellcaster", "name": "Voodoo Priest", "skin": "pirate.spellcaster", "item": "pirate_spellcaster_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:skull", "health": 20},
+        {"id": "pirate.spellcaster.1", "subtype": "spellcaster.1", "name": "Voodoo Zombie Priest", "skin": "pirate.spellcaster.1", "item": "pirate_spellcaster_1_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:book", "health": 30},
+        {"id": "pirate.spellcaster.2", "subtype": "spellcaster.2", "name": "Voodoo Bone Priest", "skin": "pirate.spellcaster.2", "item": "pirate_spellcaster_2_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 30},
+        {"id": "pirate.spellcaster.3", "subtype": "spellcaster.3", "name": "Voodoo Death Bringer", "skin": "pirate.spellcaster.3", "item": "pirate_spellcaster_3_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 40},
+        {"id": "pirate.spellcaster.4", "subtype": "spellcaster.4", "name": "Baron Samedi", "skin": "pirate.spellcaster.4", "item": "pirate_spellcaster_4_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:skull", "health": 60},
+        {"id": "pirate.bard", "subtype": "bard", "name": "Pirate Shantyman", "skin": "pirate.bard", "item": "pirate_bard_spawn_egg", "glyph": "bard", "mainhand": "minecraft:stick", "health": 50},
+        {"id": "pirate.trader", "subtype": "trader", "name": "Smuggler Dealer", "skin": "pirate.trader", "item": "pirate_trader_spawn_egg", "glyph": "trader", "mainhand": "minecraft:book", "health": 50},
+        {"id": "pirate.civilian.female", "subtype": "civilian.female", "name": "Pirate Strumpet", "skin": "pirate.civilian.female", "item": "pirate_civilian_female_spawn_egg", "glyph": "civilian_female", "health": 10},
+        {"id": "pirate.civilian.male", "subtype": "civilian.male", "name": "Pirate Drunkard", "skin": "pirate.civilian.male", "item": "pirate_civilian_male_spawn_egg", "glyph": "civilian_male", "health": 10}
+      ]
+    },
+    {
+      "id": "xoltec",
+      "name": "Xoltec",
+      "entries": [
+        {"id": "xoltec.soldier", "subtype": "soldier", "name": "Xoltec Spearman", "skin": "xoltec.soldier", "item": "xoltec_faction_soldier_spawn_egg", "glyph": "soldier", "mainhand": "spartanweaponry:iron_spear", "mainFallback": "minecraft:iron_sword", "offhand": "minecraft:shield", "health": 20},
+        {"id": "xoltec.soldier.elite", "subtype": "soldier.elite", "name": "Xoltec Jaguar Knight", "skin": "xoltec.soldier.elite", "item": "xoltec_soldier_elite_spawn_egg", "glyph": "soldier", "mainhand": "minecraft:wooden_sword", "mainFallback": "minecraft:stone_sword", "health": 40},
+        {"id": "xoltec.archer", "subtype": "archer", "name": "Xoltec Archer", "skin": "xoltec.archer", "item": "xoltec_faction_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 20},
+        {"id": "xoltec.archer.elite", "subtype": "archer.elite", "name": "Xoltec Eagle Knight", "skin": "xoltec.archer.elite", "item": "xoltec_archer_elite_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 40},
+        {"id": "xoltec.cavalry", "subtype": "cavalry", "name": "Xoltec Temple Guard", "skin": "xoltec.cavalry", "item": "xoltec_cavalry_spawn_egg", "glyph": "soldier", "mainhand": "spartanweaponry:iron_spear", "mainFallback": "minecraft:iron_sword", "offhand": "minecraft:shield", "health": 60},
+        {"id": "xoltec.mounted_archer", "subtype": "mounted_archer", "name": "Xoltec Falcon Knight", "skin": "xoltec.mounted_archer", "item": "xoltec_mounted_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 30},
+        {"id": "xoltec.leader", "subtype": "leader", "name": "Xoltec Warlord", "skin": "xoltec.leader", "item": "xoltec_leader_spawn_egg", "glyph": "commander", "mainhand": "minecraft:wooden_sword", "mainFallback": "minecraft:stone_sword", "health": 50},
+        {"id": "xoltec.leader.elite", "subtype": "leader.elite", "name": "Xoltec Noble", "skin": "xoltec.leader.elite", "item": "xoltec_leader_elite_spawn_egg", "glyph": "commander", "mainhand": "minecraft:wooden_sword", "mainFallback": "minecraft:stone_sword", "offhand": "minecraft:wooden_sword", "offFallback": "minecraft:stone_sword", "health": 100},
+        {"id": "xoltec.siege_engineer", "subtype": "siege_engineer", "name": "Xoltec Artificier", "skin": "xoltec.siege_engineer", "item": "xoltec_siege_engineer_spawn_egg", "glyph": "siege_engineer", "health": 30},
+        {"id": "xoltec.priest", "subtype": "priest", "name": "Xoltec Heart-Reaper", "skin": "xoltec.priest", "item": "xoltec_priest_spawn_egg", "glyph": "priest", "mainhand": "minecraft:book", "health": 50},
+        {"id": "xoltec.spellcaster", "subtype": "spellcaster", "name": "Xoltec Demonist", "skin": "xoltec.spellcaster", "item": "xoltec_spellcaster_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:skull", "health": 20},
+        {"id": "xoltec.spellcaster.1", "subtype": "spellcaster.1", "name": "Heart ripper", "skin": "xoltec.spellcaster.1", "item": "xoltec_spellcaster_1_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:book", "health": 30},
+        {"id": "xoltec.spellcaster.2", "subtype": "spellcaster.2", "name": "Sacrificer", "skin": "xoltec.spellcaster.2", "item": "xoltec_spellcaster_2_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 30},
+        {"id": "xoltec.spellcaster.3", "subtype": "spellcaster.3", "name": "Soul Ripper", "skin": "xoltec.spellcaster.3", "item": "xoltec_spellcaster_3_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 40},
+        {"id": "xoltec.spellcaster.4", "subtype": "spellcaster.4", "name": "Demon Master", "skin": "xoltec.spellcaster.4", "item": "xoltec_spellcaster_4_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:skull", "health": 60},
+        {"id": "xoltec.bard", "subtype": "bard", "name": "Xoltec Codex Keeper", "skin": "xoltec.bard", "item": "xoltec_bard_spawn_egg", "glyph": "bard", "mainhand": "minecraft:stick", "health": 50},
+        {"id": "xoltec.trader", "subtype": "trader", "name": "Xoltec Trader", "skin": "xoltec.trader", "item": "xoltec_trader_spawn_egg", "glyph": "trader", "mainhand": "minecraft:book", "health": 50},
+        {"id": "xoltec.civilian.female", "subtype": "civilian.female", "name": "Xoltec Matron", "skin": "xoltec.civilian.female", "item": "xoltec_civilian_female_spawn_egg", "glyph": "civilian_female", "health": 10},
+        {"id": "xoltec.civilian.male", "subtype": "civilian.male", "name": "Xoltec Slave", "skin": "xoltec.civilian.male", "item": "xoltec_civilian_male_spawn_egg", "glyph": "civilian_male", "health": 10}
+      ]
+    },
+    {
+      "id": "sarkonid",
+      "name": "Sarkonid",
+      "entries": [
+        {"id": "sarkonid.soldier", "subtype": "soldier", "name": "Sarkonid Warrior", "skin": "sarkonid.soldier", "item": "sarkonid_soldier_spawn_egg", "glyph": "soldier", "mainhand": "spartanweaponry:golden_spear", "mainFallback": "minecraft:golden_sword", "offhand": "minecraft:shield", "health": 20},
+        {"id": "sarkonid.soldier.elite", "subtype": "soldier.elite", "name": "Sarkonid Palace Guard", "skin": "sarkonid.soldier.elite", "item": "sarkonid_soldier_elite_spawn_egg", "glyph": "soldier", "mainhand": "minecraft:golden_sword", "offhand": "minecraft:golden_sword", "health": 30},
+        {"id": "sarkonid.archer", "subtype": "archer", "name": "Sarkonid Archer", "skin": "sarkonid.archer", "item": "sarkonid_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 20},
+        {"id": "sarkonid.archer.elite", "subtype": "archer.elite", "name": "Sarkonid Guard", "skin": "sarkonid.archer.elite", "item": "sarkonid_archer_elite_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 30},
+        {"id": "sarkonid.cavalry", "subtype": "cavalry", "name": "Sarkonid Knight", "skin": "sarkonid.cavalry", "item": "sarkonid_cavalry_spawn_egg", "glyph": "soldier", "mainhand": "spartanweaponry:golden_lance", "mainFallback": "minecraft:golden_sword", "health": 50},
+        {"id": "sarkonid.mounted_archer", "subtype": "mounted_archer", "name": "Sarkonid Horse Archer", "skin": "sarkonid.mounted_archer", "item": "sarkonid_mounted_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 30},
+        {"id": "sarkonid.leader", "subtype": "leader", "name": "Sarkonid Warlord", "skin": "sarkonid.leader", "item": "sarkonid_leader_spawn_egg", "glyph": "commander", "mainhand": "spartanweaponry:golden_halberd", "mainFallback": "minecraft:golden_sword", "health": 50},
+        {"id": "sarkonid.leader.elite", "subtype": "leader.elite", "name": "Sarkonid Noble", "skin": "sarkonid.leader.elite", "item": "sarkonid_leader_elite_spawn_egg", "glyph": "commander", "mainhand": "minecraft:golden_sword", "offhand": "minecraft:shield", "health": 60},
+        {"id": "sarkonid.siege_engineer", "subtype": "siege_engineer", "name": "Sarkonid Cannoneer", "skin": "sarkonid.siege_engineer", "item": "sarkonid_siege_engineer_spawn_egg", "glyph": "siege_engineer", "health": 30},
+        {"id": "sarkonid.priest", "subtype": "priest", "name": "Sarkonid Fire Priest", "skin": "sarkonid.priest", "item": "sarkonid_priest_spawn_egg", "glyph": "priest", "mainhand": "minecraft:book", "health": 40},
+        {"id": "sarkonid.spellcaster", "subtype": "spellcaster", "name": "Sarkonid Spellcaster", "skin": "sarkonid.spellcaster", "item": "sarkonid_spellcaster_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:skull", "health": 20},
+        {"id": "sarkonid.spellcaster.1", "subtype": "spellcaster.1", "name": "Sarkonid Magician", "skin": "sarkonid.spellcaster.1", "item": "sarkonid_spellcaster_1_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:book", "health": 30},
+        {"id": "sarkonid.spellcaster.2", "subtype": "spellcaster.2", "name": "Sarkonid Conjurer", "skin": "sarkonid.spellcaster.2", "item": "sarkonid_spellcaster_2_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 30},
+        {"id": "sarkonid.spellcaster.3", "subtype": "spellcaster.3", "name": "Sarkonid Sorcerer", "skin": "sarkonid.spellcaster.3", "item": "sarkonid_spellcaster_3_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 40},
+        {"id": "sarkonid.spellcaster.4", "subtype": "spellcaster.4", "name": "Sarkonid Archimagi", "skin": "sarkonid.spellcaster.4", "item": "sarkonid_spellcaster_4_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:skull", "health": 60},
+        {"id": "sarkonid.bard", "subtype": "bard", "name": "Sarkonid Storyteller", "skin": "sarkonid.bard", "item": "sarkonid_bard_spawn_egg", "glyph": "bard", "mainhand": "minecraft:stick", "health": 50},
+        {"id": "sarkonid.trader", "subtype": "trader", "name": "Sarkonid Bazaari", "skin": "sarkonid.trader", "item": "sarkonid_trader_spawn_egg", "glyph": "trader", "mainhand": "minecraft:book", "health": 50},
+        {"id": "sarkonid.civilian.female", "subtype": "civilian.female", "name": "Sarkonid woman", "skin": "sarkonid.civilian.female", "item": "sarkonid_civilian_female_spawn_egg", "glyph": "civilian_female", "health": 10},
+        {"id": "sarkonid.civilian.male", "subtype": "civilian.male", "name": "Sarkonid man", "skin": "sarkonid.civilian.male", "item": "sarkonid_civilian_male_spawn_egg", "glyph": "civilian_male", "health": 10}
+      ]
+    },
+    {
+      "id": "witchbane",
+      "name": "Witchbane",
+      "entries": [
+        {"id": "witchbane.soldier", "subtype": "soldier", "name": "Witchbane Spearman", "skin": "witchbane.soldier", "item": "witchbane_soldier_spawn_egg", "glyph": "soldier", "mainhand": "spartanweaponry:iron_spear", "mainFallback": "minecraft:iron_sword", "offhand": "minecraft:shield", "health": 40},
+        {"id": "witchbane.soldier.elite", "subtype": "soldier.elite", "name": "Witchbane Sergeant", "skin": "witchbane.soldier.elite", "item": "witchbane_soldier_elite_spawn_egg", "glyph": "soldier", "mainhand": "spartanweaponry:iron_halberd", "mainFallback": "minecraft:iron_sword", "health": 60},
+        {"id": "witchbane.archer", "subtype": "archer", "name": "Witchbane Archer", "skin": "witchbane.archer", "item": "witchbane_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 20},
+        {"id": "witchbane.archer.elite", "subtype": "archer.elite", "name": "Witchbane Sentry", "skin": "witchbane.archer.elite", "item": "witchbane_archer_elite_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 30},
+        {"id": "witchbane.cavalry", "subtype": "cavalry", "name": "Witchbane Knight", "skin": "witchbane.cavalry", "item": "witchbane_cavalry_spawn_egg", "glyph": "soldier", "mainhand": "spartanweaponry:iron_lance", "mainFallback": "minecraft:iron_sword", "offhand": "minecraft:shield", "health": 60},
+        {"id": "witchbane.mounted_archer", "subtype": "mounted_archer", "name": "Witchbane Retainer", "skin": "witchbane.mounted_archer", "item": "witchbane_mounted_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 30},
+        {"id": "witchbane.leader", "subtype": "leader", "name": "Witchbane Master", "skin": "witchbane.leader", "item": "witchbane_leader_spawn_egg", "glyph": "commander", "mainhand": "minecraft:golden_sword", "offhand": "minecraft:shield", "health": 70},
+        {"id": "witchbane.leader.elite", "subtype": "leader.elite", "name": "Witchbane Grandmaster", "skin": "witchbane.leader.elite", "item": "witchbane_leader_elite_spawn_egg", "glyph": "commander", "mainhand": "minecraft:diamond_sword", "offhand": "minecraft:shield", "health": 100},
+        {"id": "witchbane.siege_engineer", "subtype": "siege_engineer", "name": "Witchbane Artificier", "skin": "witchbane.siege_engineer", "item": "witchbane_siege_engineer_spawn_egg", "glyph": "siege_engineer", "health": 50},
+        {"id": "witchbane.priest", "subtype": "priest", "name": "Witchbane Priest", "skin": "witchbane.priest", "item": "witchbane_priest_spawn_egg", "glyph": "priest", "mainhand": "minecraft:book", "health": 50},
+        {"id": "witchbane.bard", "subtype": "bard", "name": "Witchbane Hymn Singer", "skin": "witchbane.bard", "item": "witchbane_bard_spawn_egg", "glyph": "bard", "mainhand": "minecraft:stick", "health": 50},
+        {"id": "witchbane.trader", "subtype": "trader", "name": "Witchbane Trader", "skin": "witchbane.trader", "item": "witchbane_trader_spawn_egg", "glyph": "trader", "mainhand": "minecraft:book", "health": 50},
+        {"id": "witchbane.civilian.female", "subtype": "civilian.female", "name": "Witchbane Nun", "skin": "witchbane.civilian.female", "item": "witchbane_civilian_female_spawn_egg", "glyph": "civilian_female", "health": 10},
+        {"id": "witchbane.civilian.male", "subtype": "civilian.male", "name": "Witchbane Monk", "skin": "witchbane.civilian.male", "item": "witchbane_civilian_male_spawn_egg", "glyph": "civilian_male", "health": 10}
+      ]
+    },
+    {
+      "id": "nogg",
+      "name": "Nogg",
+      "entries": [
+        {"id": "nogg.soldier", "subtype": "soldier", "name": "Nogg Militiaman", "skin": "nogg.soldier", "item": "nogg_soldier_spawn_egg", "glyph": "soldier", "mainhand": "spartanweaponry:iron_halberd", "mainFallback": "minecraft:iron_sword", "health": 30},
+        {"id": "nogg.soldier.elite", "subtype": "soldier.elite", "name": "Nogg Adventurer", "skin": "nogg.soldier.elite", "item": "nogg_soldier_elite_spawn_egg", "glyph": "soldier", "mainhand": "minecraft:iron_sword", "health": 40},
+        {"id": "nogg.archer", "subtype": "archer", "name": "Nogg Forester", "skin": "nogg.archer", "item": "nogg_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 30},
+        {"id": "nogg.archer.elite", "subtype": "archer.elite", "name": "Nogg Archer", "skin": "nogg.archer.elite", "item": "nogg_archer_elite_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 40},
+        {"id": "nogg.cavalry", "subtype": "cavalry", "name": "Nogg Knight", "skin": "nogg.cavalry", "item": "nogg_cavalry_spawn_egg", "glyph": "soldier", "mainhand": "spartanweaponry:iron_lance", "mainFallback": "minecraft:iron_sword", "offhand": "minecraft:shield", "health": 65},
+        {"id": "nogg.mounted_archer", "subtype": "mounted_archer", "name": "Nogg Retainer", "skin": "nogg.mounted_archer", "item": "nogg_mounted_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 30},
+        {"id": "nogg.leader", "subtype": "leader", "name": "Nogg Captain", "skin": "nogg.leader", "item": "nogg_leader_spawn_egg", "glyph": "commander", "mainhand": "minecraft:diamond_sword", "health": 50},
+        {"id": "nogg.leader.elite", "subtype": "leader.elite", "name": "Nogg Lord", "skin": "nogg.leader.elite", "item": "nogg_leader_elite_spawn_egg", "glyph": "commander", "mainhand": "minecraft:diamond_sword", "health": 60},
+        {"id": "nogg.siege_engineer", "subtype": "siege_engineer", "name": "Nogg Tinkerer", "skin": "nogg.siege_engineer", "item": "nogg_siege_engineer_spawn_egg", "glyph": "siege_engineer", "health": 40},
+        {"id": "nogg.priest", "subtype": "priest", "name": "Nogg Healer", "skin": "nogg.priest", "item": "nogg_priest_spawn_egg", "glyph": "priest", "mainhand": "minecraft:book", "health": 50},
+        {"id": "nogg.bard", "subtype": "bard", "name": "Nogg Songsmith", "skin": "nogg.bard", "item": "nogg_bard_spawn_egg", "glyph": "bard", "mainhand": "minecraft:stick", "health": 50},
+        {"id": "nogg.trader", "subtype": "trader", "name": "Nogg Fairtrader", "skin": "nogg.trader", "item": "nogg_trader_spawn_egg", "glyph": "trader", "mainhand": "minecraft:book", "health": 50},
+        {"id": "nogg.civilian.female", "subtype": "civilian.female", "name": "Nogg Woman", "skin": "nogg.civilian.female", "item": "nogg_civilian_female_spawn_egg", "glyph": "civilian_female", "health": 10},
+        {"id": "nogg.civilian.male", "subtype": "civilian.male", "name": "Nogg Man", "skin": "nogg.civilian.male", "item": "nogg_civilian_male_spawn_egg", "glyph": "civilian_male", "health": 10}
+      ]
+    },
+    {
+      "id": "buffloka",
+      "name": "Buffloka",
+      "entries": [
+        {"id": "buffloka.soldier", "subtype": "soldier", "name": "Buffloka Warrior", "skin": "buffloka.soldier", "item": "buffloka_soldier_spawn_egg", "glyph": "soldier", "mainhand": "spartanweaponry:stone_spear", "mainFallback": "minecraft:stone_sword", "offhand": "minecraft:shield", "health": 20},
+        {"id": "buffloka.soldier.elite", "subtype": "soldier.elite", "name": "Buffloka Brave", "skin": "buffloka.soldier.elite", "item": "buffloka_soldier_elite_spawn_egg", "glyph": "soldier", "mainhand": "minecraft:stone_axe", "health": 30},
+        {"id": "buffloka.archer", "subtype": "archer", "name": "Buffloka Bowman", "skin": "buffloka.archer", "item": "buffloka_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 20},
+        {"id": "buffloka.archer.elite", "subtype": "archer.elite", "name": "Buffloka Lookout", "skin": "buffloka.archer.elite", "item": "buffloka_archer_elite_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 30},
+        {"id": "buffloka.cavalry", "subtype": "cavalry", "name": "Buffloka Raider", "skin": "buffloka.cavalry", "item": "buffloka_cavalry_spawn_egg", "glyph": "soldier", "mainhand": "spartanweaponry:stone_spear", "mainFallback": "minecraft:stone_sword", "offhand": "minecraft:shield", "health": 40},
+        {"id": "buffloka.mounted_archer", "subtype": "mounted_archer", "name": "Buffloka Hunter", "skin": "buffloka.mounted_archer", "item": "buffloka_mounted_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 30},
+        {"id": "buffloka.leader", "subtype": "leader", "name": "Buffloka Chief", "skin": "buffloka.leader", "item": "buffloka_leader_spawn_egg", "glyph": "commander", "mainhand": "spartanweaponry:diamond_spear", "mainFallback": "minecraft:diamond_sword", "health": 50},
+        {"id": "buffloka.leader.elite", "subtype": "leader.elite", "name": "Buffloka Big Chief", "skin": "buffloka.leader.elite", "item": "buffloka_leader_elite_spawn_egg", "glyph": "commander", "mainhand": "minecraft:diamond_axe", "health": 60},
+        {"id": "buffloka.siege_engineer", "subtype": "siege_engineer", "name": "Buffloka Bigshot", "skin": "buffloka.siege_engineer", "item": "buffloka_siege_engineer_spawn_egg", "glyph": "siege_engineer", "health": 30},
+        {"id": "buffloka.priest", "subtype": "priest", "name": "Buffloka Medicine Man", "skin": "buffloka.priest", "item": "buffloka_priest_spawn_egg", "glyph": "priest", "mainhand": "minecraft:stick", "health": 40},
+        {"id": "buffloka.bard", "subtype": "bard", "name": "Buffloka Legendweaver", "skin": "buffloka.bard", "item": "buffloka_bard_spawn_egg", "glyph": "bard", "mainhand": "minecraft:stick", "health": 50},
+        {"id": "buffloka.trader", "subtype": "trader", "name": "Buffloka Bargainer", "skin": "buffloka.trader", "item": "buffloka_trader_spawn_egg", "glyph": "trader", "mainhand": "minecraft:feather", "health": 50},
+        {"id": "buffloka.civilian.female", "subtype": "civilian.female", "name": "Buffloka Woman", "skin": "buffloka.civilian.female", "item": "buffloka_civilian_female_spawn_egg", "glyph": "civilian_female", "health": 10},
+        {"id": "buffloka.civilian.male", "subtype": "civilian.male", "name": "Buffloka Man", "skin": "buffloka.civilian.male", "item": "buffloka_civilian_male_spawn_egg", "glyph": "civilian_male", "health": 10}
+      ]
+    },
+    {
+      "id": "reiksgard",
+      "name": "Reiksgard",
+      "entries": [
+        {"id": "reiksgard.soldier", "subtype": "soldier", "name": "Reiksgard Soldner", "skin": "reiksgard.soldier", "item": "reiksgard_soldier_spawn_egg", "glyph": "soldier", "mainhand": "spartanweaponry:iron_spear", "mainFallback": "minecraft:iron_sword", "offhand": "minecraft:shield", "health": 20},
+        {"id": "reiksgard.soldier.elite", "subtype": "soldier.elite", "name": "Reiksgard Doppelsoldner", "skin": "reiksgard.soldier.elite", "item": "reiksgard_soldier_elite_spawn_egg", "glyph": "soldier", "mainhand": "spartanweaponry:iron_halberd", "mainFallback": "minecraft:iron_sword", "health": 30},
+        {"id": "reiksgard.archer", "subtype": "archer", "name": "Reiksgard Archer", "skin": "reiksgard.archer", "item": "reiksgard_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 20},
+        {"id": "reiksgard.archer.elite", "subtype": "archer.elite", "name": "Elite Reiksgard Sentry", "skin": "reiksgard.archer.elite", "item": "reiksgard_archer_elite_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 30},
+        {"id": "reiksgard.cavalry", "subtype": "cavalry", "name": "Reiksgard Reiter", "skin": "reiksgard.cavalry", "item": "reiksgard_cavalry_spawn_egg", "glyph": "soldier", "mainhand": "spartanweaponry:iron_lance", "mainFallback": "minecraft:iron_sword", "offhand": "minecraft:shield", "health": 65},
+        {"id": "reiksgard.mounted_archer", "subtype": "mounted_archer", "name": "Reiksgard Borderer", "skin": "reiksgard.mounted_archer", "item": "reiksgard_mounted_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 30},
+        {"id": "reiksgard.leader", "subtype": "leader", "name": "Reiksgard Kapitan", "skin": "reiksgard.leader", "item": "reiksgard_leader_spawn_egg", "glyph": "commander", "mainhand": "minecraft:diamond_sword", "offhand": "minecraft:shield", "health": 50},
+        {"id": "reiksgard.leader.elite", "subtype": "leader.elite", "name": "Reiksgard Edelman", "skin": "reiksgard.leader.elite", "item": "reiksgard_leader_elite_spawn_egg", "glyph": "commander", "mainhand": "minecraft:diamond_sword", "health": 60},
+        {"id": "reiksgard.siege_engineer", "subtype": "siege_engineer", "name": "Reiksgard Cannoneer", "skin": "reiksgard.siege_engineer", "item": "reiksgard_siege_engineer_spawn_egg", "glyph": "siege_engineer", "health": 30},
+        {"id": "reiksgard.priest", "subtype": "priest", "name": "Reiksgard Priest", "skin": "reiksgard.priest", "item": "reiksgard_priest_spawn_egg", "glyph": "priest", "mainhand": "minecraft:book", "health": 40},
+        {"id": "reiksgard.spellcaster", "subtype": "spellcaster", "name": "Reiksgard Wizard", "skin": "reiksgard.spellcaster", "item": "reiksgard_spellcaster_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 20},
+        {"id": "reiksgard.spellcaster.1", "subtype": "spellcaster.1", "name": "Reiksgard Water Wizard", "skin": "reiksgard.spellcaster.1", "item": "reiksgard_spellcaster_1_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:book", "health": 20},
+        {"id": "reiksgard.spellcaster.2", "subtype": "spellcaster.2", "name": "Reiksgard Earth Wizard", "skin": "reiksgard.spellcaster.2", "item": "reiksgard_spellcaster_2_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 30},
+        {"id": "reiksgard.spellcaster.3", "subtype": "spellcaster.3", "name": "Reiksgard Air Wizard", "skin": "reiksgard.spellcaster.3", "item": "reiksgard_spellcaster_3_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 35},
+        {"id": "reiksgard.spellcaster.4", "subtype": "spellcaster.4", "name": "Reiksgard Fire Wizard", "skin": "reiksgard.spellcaster.4", "item": "reiksgard_spellcaster_4_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 40},
+        {"id": "reiksgard.bard", "subtype": "bard", "name": "Reiksgard Drummer", "skin": "reiksgard.bard", "item": "reiksgard_bard_spawn_egg", "glyph": "bard", "mainhand": "minecraft:stick", "health": 50},
+        {"id": "reiksgard.trader", "subtype": "trader", "name": "Reiksgard Trader", "skin": "reiksgard.trader", "item": "reiksgard_trader_spawn_egg", "glyph": "trader", "mainhand": "minecraft:book", "health": 50},
+        {"id": "reiksgard.civilian.female", "subtype": "civilian.female", "name": "Reiksgard Trossfrau", "skin": "reiksgard.civilian.female", "item": "reiksgard_civilian_female_spawn_egg", "glyph": "civilian_female", "health": 10},
+        {"id": "reiksgard.civilian.male", "subtype": "civilian.male", "name": "Reiksgard Trossmann", "skin": "reiksgard.civilian.male", "item": "reiksgard_civilian_male_spawn_egg", "glyph": "civilian_male", "health": 10}
+      ]
+    },
+    {
+      "id": "zimba",
+      "name": "Zimba",
+      "entries": [
+        {"id": "zimba.soldier", "subtype": "soldier", "name": "Zimba Warrior", "skin": "zimba.soldier", "item": "zimba_soldier_spawn_egg", "glyph": "soldier", "mainhand": "spartanweaponry:iron_spear", "mainFallback": "minecraft:iron_sword", "offhand": "minecraft:shield", "health": 20},
+        {"id": "zimba.soldier.elite", "subtype": "soldier.elite", "name": "Zimba Lionheart", "skin": "zimba.soldier.elite", "item": "zimba_soldier_elite_spawn_egg", "glyph": "soldier", "mainhand": "minecraft:iron_sword", "offhand": "minecraft:shield", "health": 30},
+        {"id": "zimba.archer", "subtype": "archer", "name": "Zimba Bowman", "skin": "zimba.archer", "item": "zimba_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 20},
+        {"id": "zimba.archer.elite", "subtype": "archer.elite", "name": "Zimba Lookout", "skin": "zimba.archer.elite", "item": "zimba_archer_elite_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 30},
+        {"id": "zimba.cavalry", "subtype": "cavalry", "name": "Zimba Hero", "skin": "zimba.cavalry", "item": "zimba_cavalry_spawn_egg", "glyph": "soldier", "mainhand": "spartanweaponry:iron_spear", "mainFallback": "minecraft:iron_sword", "offhand": "minecraft:shield", "health": 40},
+        {"id": "zimba.mounted_archer", "subtype": "mounted_archer", "name": "Zimba Scout", "skin": "zimba.mounted_archer", "item": "zimba_mounted_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 30},
+        {"id": "zimba.leader", "subtype": "leader", "name": "Zimba Chief", "skin": "zimba.leader", "item": "zimba_leader_spawn_egg", "glyph": "commander", "mainhand": "minecraft:diamond_sword", "offhand": "minecraft:shield", "health": 50},
+        {"id": "zimba.leader.elite", "subtype": "leader.elite", "name": "Zimba King", "skin": "zimba.leader.elite", "item": "zimba_leader_elite_spawn_egg", "glyph": "commander", "mainhand": "minecraft:diamond_sword", "health": 60},
+        {"id": "zimba.siege_engineer", "subtype": "siege_engineer", "name": "Zimba Farshooter", "skin": "zimba.siege_engineer", "item": "zimba_siege_engineer_spawn_egg", "glyph": "siege_engineer", "health": 30},
+        {"id": "zimba.priest", "subtype": "priest", "name": "Zimba Witchdoctor", "skin": "zimba.priest", "item": "zimba_priest_spawn_egg", "glyph": "priest", "mainhand": "minecraft:stick", "health": 40},
+        {"id": "zimba.bard", "subtype": "bard", "name": "Zimba Chanter", "skin": "zimba.bard", "item": "zimba_bard_spawn_egg", "glyph": "bard", "mainhand": "minecraft:stick", "health": 50},
+        {"id": "zimba.trader", "subtype": "trader", "name": "Zimba Haggler", "skin": "zimba.trader", "item": "zimba_trader_spawn_egg", "glyph": "trader", "mainhand": "minecraft:stick", "health": 50},
+        {"id": "zimba.civilian.female", "subtype": "civilian.female", "name": "Zimba Woman", "skin": "zimba.civilian.female", "item": "zimba_civilian_female_spawn_egg", "glyph": "civilian_female", "health": 10},
+        {"id": "zimba.civilian.male", "subtype": "civilian.male", "name": "Zimba Man", "skin": "zimba.civilian.male", "item": "zimba_civilian_male_spawn_egg", "glyph": "civilian_male", "health": 10}
+      ]
+    },
+    {
+      "id": "kong",
+      "name": "Kong",
+      "entries": [
+        {"id": "kong.soldier", "subtype": "soldier", "name": "Kong Stabber", "skin": "kong.soldier", "item": "kong_soldier_spawn_egg", "glyph": "soldier", "mainhand": "spartanweaponry:wooden_spear", "mainFallback": "minecraft:wooden_sword", "health": 15},
+        {"id": "kong.soldier.elite", "subtype": "soldier.elite", "name": "Kong Blood Spirit", "skin": "kong.soldier.elite", "item": "kong_soldier_elite_spawn_egg", "glyph": "soldier", "mainhand": "minecraft:wooden_axe", "health": 30},
+        {"id": "kong.archer", "subtype": "archer", "name": "Kong Sneaker", "skin": "kong.archer", "item": "kong_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 15},
+        {"id": "kong.archer.elite", "subtype": "archer.elite", "name": "Kong lookout", "skin": "kong.archer.elite", "item": "kong_archer_elite_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 20},
+        {"id": "kong.leader", "subtype": "leader", "name": "Kong Ape", "skin": "kong.leader", "item": "kong_leader_spawn_egg", "glyph": "commander", "scale": 1.639, "health": 100},
+        {"id": "kong.leader.elite", "subtype": "leader.elite", "name": "Kong Great Chief", "skin": "kong.leader.elite", "item": "kong_leader_elite_spawn_egg", "glyph": "commander", "mainhand": "spartanweaponry:golden_battleaxe", "mainFallback": "minecraft:golden_axe", "health": 60},
+        {"id": "kong.priest", "subtype": "priest", "name": "Kong Pot Chief", "skin": "kong.priest", "item": "kong_priest_spawn_egg", "glyph": "priest", "mainhand": "minecraft:rotten_flesh", "health": 40},
+        {"id": "kong.trader", "subtype": "trader", "name": "Kong Swapper", "skin": "kong.trader", "item": "kong_trader_spawn_egg", "glyph": "trader", "mainhand": "minecraft:bone", "health": 50},
+        {"id": "kong.civilian.female", "subtype": "civilian.female", "name": "Kong Woman", "skin": "kong.civilian.female", "item": "kong_civilian_female_spawn_egg", "glyph": "civilian_female", "health": 10},
+        {"id": "kong.civilian.male", "subtype": "civilian.male", "name": "Kong Slave", "skin": "kong.civilian.male", "item": "kong_civilian_male_spawn_egg", "glyph": "civilian_male", "health": 10}
+      ]
+    },
+    {
+      "id": "orc",
+      "name": "Orc",
+      "entries": [
+        {"id": "orc.soldier", "subtype": "soldier", "name": "Orc", "skin": "orc.soldier", "item": "orc_soldier_spawn_egg", "glyph": "soldier", "mainhand": "minecraft:iron_sword", "offhand": "minecraft:shield", "health": 15},
+        {"id": "orc.soldier.elite", "subtype": "soldier.elite", "name": "Orc Uruk", "skin": "orc.soldier.elite", "item": "orc_soldier_elite_spawn_egg", "glyph": "soldier", "mainhand": "spartanweaponry:iron_battleaxe", "mainFallback": "minecraft:iron_axe", "offhand": "spartanweaponry:iron_battleaxe", "offFallback": "minecraft:iron_axe", "scale": 1.056, "health": 50},
+        {"id": "orc.archer", "subtype": "archer", "name": "Orc Arrow lobber", "skin": "orc.archer", "item": "orc_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 15},
+        {"id": "orc.archer.elite", "subtype": "archer.elite", "name": "Orc Lookout", "skin": "orc.archer.elite", "item": "orc_archer_elite_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 30},
+        {"id": "orc.cavalry", "subtype": "cavalry", "name": "Orc Warlord", "skin": "orc.cavalry", "item": "orc_cavalry_spawn_egg", "glyph": "soldier", "mainhand": "spartanweaponry:iron_spear", "mainFallback": "minecraft:iron_sword", "health": 50},
+        {"id": "orc.mounted_archer", "subtype": "mounted_archer", "name": "Orc Ravager", "skin": "orc.mounted_archer", "item": "orc_mounted_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 20},
+        {"id": "orc.leader", "subtype": "leader", "name": "Orc Clan Lord", "skin": "orc.leader", "item": "orc_leader_spawn_egg", "glyph": "commander", "mainhand": "spartanweaponry:iron_battleaxe", "mainFallback": "minecraft:iron_axe", "health": 50},
+        {"id": "orc.leader.elite", "subtype": "leader.elite", "name": "Orc Warlord", "skin": "orc.leader.elite", "item": "orc_leader_elite_spawn_egg", "glyph": "commander", "mainhand": "minecraft:diamond_sword", "health": 60},
+        {"id": "orc.siege_engineer", "subtype": "siege_engineer", "name": "Bugbear Bigshot", "skin": "orc.siege_engineer", "item": "orc_siege_engineer_spawn_egg", "glyph": "siege_engineer", "health": 30},
+        {"id": "orc.priest", "subtype": "priest", "name": "Orc Shaman", "skin": "orc.priest", "item": "orc_priest_spawn_egg", "glyph": "priest", "mainhand": "minecraft:skull", "health": 40},
+        {"id": "orc.spellcaster", "subtype": "spellcaster", "name": "Orc Corrupter", "skin": "orc.spellcaster", "item": "orc_spellcaster_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 20},
+        {"id": "orc.spellcaster.1", "subtype": "spellcaster.1", "name": "Orc Corrupter", "skin": "orc.spellcaster.1", "item": "orc_spellcaster_1_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:book", "health": 30},
+        {"id": "orc.spellcaster.2", "subtype": "spellcaster.2", "name": "Orc Stormcaller", "skin": "orc.spellcaster.2", "item": "orc_spellcaster_2_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 40},
+        {"id": "orc.spellcaster.3", "subtype": "spellcaster.3", "name": "Orc Soulwalker", "skin": "orc.spellcaster.3", "item": "orc_spellcaster_3_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 40},
+        {"id": "orc.bard", "subtype": "bard", "name": "Orc Braggart", "skin": "orc.bard", "item": "orc_bard_spawn_egg", "glyph": "bard", "mainhand": "minecraft:stick", "health": 50},
+        {"id": "orc.trader", "subtype": "trader", "name": "Orc Cheater", "skin": "orc.trader", "item": "orc_trader_spawn_egg", "glyph": "trader", "mainhand": "minecraft:feather", "health": 50},
+        {"id": "orc.civilian.female", "subtype": "civilian.female", "name": "Orc Breeder", "skin": "orc.civilian.female", "item": "orc_civilian_female_spawn_egg", "glyph": "civilian_female", "health": 10},
+        {"id": "orc.civilian.male", "subtype": "civilian.male", "name": "Orc Runt", "skin": "orc.civilian.male", "item": "orc_civilian_male_spawn_egg", "glyph": "civilian_male", "health": 10}
+      ]
+    },
+    {
+      "id": "evil",
+      "name": "Evil",
+      "entries": [
+        {"id": "evil.soldier", "subtype": "soldier", "name": "Malice Guard", "skin": "evil.soldier", "item": "evil_soldier_spawn_egg", "glyph": "soldier", "mainhand": "spartanweaponry:iron_spear", "mainFallback": "minecraft:iron_sword", "offhand": "minecraft:shield", "health": 20},
+        {"id": "evil.soldier.elite", "subtype": "soldier.elite", "name": "Malice Monster", "skin": "evil.soldier.elite", "item": "evil_soldier_elite_spawn_egg", "glyph": "soldier", "mainhand": "minecraft:iron_axe", "offhand": "minecraft:iron_sword", "scale": 1.139, "health": 60},
+        {"id": "evil.archer", "subtype": "archer", "name": "Malice Cultist", "skin": "evil.archer", "item": "evil_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 20},
+        {"id": "evil.archer.elite", "subtype": "archer.elite", "name": "Malice Sentry", "skin": "evil.archer.elite", "item": "evil_archer_elite_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 30},
+        {"id": "evil.cavalry", "subtype": "cavalry", "name": "Malice Knight", "skin": "evil.cavalry", "item": "evil_cavalry_spawn_egg", "glyph": "soldier", "mainhand": "spartanweaponry:diamond_lance", "mainFallback": "minecraft:diamond_sword", "offhand": "minecraft:shield", "health": 40},
+        {"id": "evil.mounted_archer", "subtype": "mounted_archer", "name": "Malice Death Rider", "skin": "evil.mounted_archer", "item": "evil_mounted_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 30},
+        {"id": "evil.leader", "subtype": "leader", "name": "Malice Warlord", "skin": "evil.leader", "item": "evil_leader_spawn_egg", "glyph": "commander", "mainhand": "minecraft:diamond_sword", "health": 75},
+        {"id": "evil.leader.elite", "subtype": "leader.elite", "name": "Malice Master", "skin": "evil.leader.elite", "item": "evil_leader_elite_spawn_egg", "glyph": "commander", "mainhand": "spartanweaponry:diamond_halberd", "mainFallback": "minecraft:diamond_sword", "health": 100},
+        {"id": "evil.siege_engineer", "subtype": "siege_engineer", "name": "Malice Artificier", "skin": "evil.siege_engineer", "item": "evil_siege_engineer_spawn_egg", "glyph": "siege_engineer", "health": 30},
+        {"id": "evil.priest", "subtype": "priest", "name": "Malice Cult Hierarch", "skin": "evil.priest", "item": "evil_priest_spawn_egg", "glyph": "priest", "mainhand": "minecraft:book", "health": 50},
+        {"id": "evil.spellcaster", "subtype": "spellcaster", "name": "Malice Spellcaster", "skin": "evil.spellcaster", "item": "evil_spellcaster_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 30},
+        {"id": "evil.spellcaster.1", "subtype": "spellcaster.1", "name": "Malice Mage", "skin": "evil.spellcaster.1", "item": "evil_spellcaster_1_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:book", "health": 30},
+        {"id": "evil.spellcaster.2", "subtype": "spellcaster.2", "name": "Malice Warlock", "skin": "evil.spellcaster.2", "item": "evil_spellcaster_2_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 35},
+        {"id": "evil.spellcaster.3", "subtype": "spellcaster.3", "name": "Malice Demonist", "skin": "evil.spellcaster.3", "item": "evil_spellcaster_3_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 40},
+        {"id": "evil.spellcaster.4", "subtype": "spellcaster.4", "name": "Malice Sorceror", "skin": "evil.spellcaster.4", "item": "evil_spellcaster_4_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 50},
+        {"id": "evil.bard", "subtype": "bard", "name": "Malice Spell Chanter", "skin": "evil.bard", "item": "evil_bard_spawn_egg", "glyph": "bard", "mainhand": "minecraft:stick", "health": 50},
+        {"id": "evil.trader", "subtype": "trader", "name": "Malice Bargainer", "skin": "evil.trader", "item": "evil_trader_spawn_egg", "glyph": "trader", "mainhand": "minecraft:book", "health": 50},
+        {"id": "evil.civilian.female", "subtype": "civilian.female", "name": "Malice Concubine", "skin": "evil.civilian.female", "item": "evil_civilian_female_spawn_egg", "glyph": "civilian_female", "health": 10},
+        {"id": "evil.civilian.male", "subtype": "civilian.male", "name": "Malice Slave", "skin": "evil.civilian.male", "item": "evil_civilian_male_spawn_egg", "glyph": "civilian_male", "health": 10}
+      ]
+    },
+    {
+      "id": "good",
+      "name": "Good",
+      "entries": [
+        {"id": "good.soldier", "subtype": "soldier", "name": "Guardian Greenwood Ranger", "skin": "good.soldier", "item": "good_soldier_spawn_egg", "glyph": "soldier", "mainhand": "spartanweaponry:golden_spear", "mainFallback": "minecraft:golden_sword", "health": 30},
+        {"id": "good.soldier.elite", "subtype": "soldier.elite", "name": "Guardian Druidic Construct", "skin": "good.soldier.elite", "item": "good_soldier_elite_spawn_egg", "glyph": "soldier", "scale": 1.444, "health": 70},
+        {"id": "good.archer", "subtype": "archer", "name": "Guardian Archer", "skin": "good.archer", "item": "good_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 30},
+        {"id": "good.archer.elite", "subtype": "archer.elite", "name": "Guardian Lookout", "skin": "good.archer.elite", "item": "good_archer_elite_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 30},
+        {"id": "good.cavalry", "subtype": "cavalry", "name": "Guardian Questing Knight", "skin": "good.cavalry", "item": "good_cavalry_spawn_egg", "glyph": "soldier", "mainhand": "spartanweaponry:golden_lance", "mainFallback": "minecraft:golden_sword", "offhand": "minecraft:shield", "health": 60},
+        {"id": "good.mounted_archer", "subtype": "mounted_archer", "name": "Guardian Hooded Man", "skin": "good.mounted_archer", "item": "good_mounted_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 30},
+        {"id": "good.leader", "subtype": "leader", "name": "Guardian Warlord", "skin": "good.leader", "item": "good_leader_spawn_egg", "glyph": "commander", "mainhand": "minecraft:diamond_sword", "health": 50},
+        {"id": "good.leader.elite", "subtype": "leader.elite", "name": "Guardian Great Wizard", "skin": "good.leader.elite", "item": "good_leader_elite_spawn_egg", "glyph": "commander", "mainhand": "minecraft:diamond_sword", "health": 100},
+        {"id": "good.siege_engineer", "subtype": "siege_engineer", "name": "Guardian Weaponsmith", "skin": "good.siege_engineer", "item": "good_siege_engineer_spawn_egg", "glyph": "siege_engineer", "health": 30},
+        {"id": "good.priest", "subtype": "priest", "name": "Guardian Druid", "skin": "good.priest", "item": "good_priest_spawn_egg", "glyph": "priest", "mainhand": "minecraft:book", "health": 50},
+        {"id": "good.spellcaster", "subtype": "spellcaster", "name": "Guardian Conjurer", "skin": "good.spellcaster", "item": "good_spellcaster_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:skull", "health": 20},
+        {"id": "good.spellcaster.1", "subtype": "spellcaster.1", "name": "Guardian Wizard", "skin": "good.spellcaster.1", "item": "good_spellcaster_1_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:book", "health": 30},
+        {"id": "good.spellcaster.2", "subtype": "spellcaster.2", "name": "Guardian Enchanter", "skin": "good.spellcaster.2", "item": "good_spellcaster_2_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 30},
+        {"id": "good.spellcaster.3", "subtype": "spellcaster.3", "name": "Guardian Sorcerer", "skin": "good.spellcaster.3", "item": "good_spellcaster_3_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 40},
+        {"id": "good.spellcaster.4", "subtype": "spellcaster.4", "name": "Guardian Archimage", "skin": "good.spellcaster.4", "item": "good_spellcaster_4_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:skull", "health": 60},
+        {"id": "good.bard", "subtype": "bard", "name": "Guardian Fable Teller", "skin": "good.bard", "item": "good_bard_spawn_egg", "glyph": "bard", "mainhand": "minecraft:stick", "health": 50},
+        {"id": "good.trader", "subtype": "trader", "name": "Guardian Fair Trader", "skin": "good.trader", "item": "good_trader_spawn_egg", "glyph": "trader", "mainhand": "minecraft:book", "health": 50},
+        {"id": "good.civilian.female", "subtype": "civilian.female", "name": "Guardian Good Wife", "skin": "good.civilian.female", "item": "good_civilian_female_spawn_egg", "glyph": "civilian_female", "health": 10},
+        {"id": "good.civilian.male", "subtype": "civilian.male", "name": "Guardian Good Man", "skin": "good.civilian.male", "item": "good_civilian_male_spawn_egg", "glyph": "civilian_male", "health": 10}
+      ]
+    },
+    {
+      "id": "coven",
+      "name": "Coven",
+      "entries": [
+        {"id": "coven.soldier", "subtype": "soldier", "name": "Coven Scarecrow", "skin": "coven.soldier", "item": "coven_soldier_spawn_egg", "glyph": "soldier", "mainhand": "minecraft:iron_hoe", "health": 20},
+        {"id": "coven.soldier.elite", "subtype": "soldier.elite", "name": "Coven Witch Puppet", "skin": "coven.soldier.elite", "item": "coven_soldier_elite_spawn_egg", "glyph": "soldier", "scale": 1.139, "health": 55},
+        {"id": "coven.archer", "subtype": "archer", "name": "Coven Satyr", "skin": "coven.archer", "item": "coven_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 20},
+        {"id": "coven.archer.elite", "subtype": "archer.elite", "name": "Coven Dryad", "skin": "coven.archer.elite", "item": "coven_archer_elite_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 30},
+        {"id": "coven.cavalry", "subtype": "cavalry", "name": "Coven Headless Horseman", "skin": "coven.cavalry", "item": "coven_cavalry_spawn_egg", "glyph": "soldier", "mainhand": "spartanweaponry:iron_halberd", "mainFallback": "minecraft:iron_hoe", "health": 40},
+        {"id": "coven.leader", "subtype": "leader", "name": "Coven Familiar", "skin": "coven.leader", "item": "coven_leader_spawn_egg", "glyph": "commander", "scale": 0.611, "health": 45},
+        {"id": "coven.leader.elite", "subtype": "leader.elite", "name": "Coven Leader", "skin": "coven.leader.elite", "item": "coven_leader_elite_spawn_egg", "glyph": "commander", "mainhand": "minecraft:iron_hoe", "health": 75},
+        {"id": "coven.priest", "subtype": "priest", "name": "Coven Witch", "skin": "coven.priest", "item": "coven_priest_spawn_egg", "glyph": "priest", "mainhand": "minecraft:book", "health": 40},
+        {"id": "coven.spellcaster", "subtype": "spellcaster", "name": "Coven Spellcaster", "skin": "coven.spellcaster", "item": "coven_spellcaster_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:skull", "health": 20},
+        {"id": "coven.spellcaster.1", "subtype": "spellcaster.1", "name": "Coven Crone", "skin": "coven.spellcaster.1", "item": "coven_spellcaster_1_spawn_egg", "glyph": "spellcaster", "health": 30},
+        {"id": "coven.spellcaster.2", "subtype": "spellcaster.2", "name": "Coven Hag", "skin": "coven.spellcaster.2", "item": "coven_spellcaster_2_spawn_egg", "glyph": "spellcaster", "health": 30},
+        {"id": "coven.spellcaster.3", "subtype": "spellcaster.3", "name": "Coven Witch", "skin": "coven.spellcaster.3", "item": "coven_spellcaster_3_spawn_egg", "glyph": "spellcaster", "health": 40},
+        {"id": "coven.spellcaster.4", "subtype": "spellcaster.4", "name": "Coven Enchantress", "skin": "coven.spellcaster.4", "item": "coven_spellcaster_4_spawn_egg", "glyph": "spellcaster", "health": 50},
+        {"id": "coven.trader", "subtype": "trader", "name": "Coven Enchantress", "skin": "coven.trader", "item": "coven_trader_spawn_egg", "glyph": "trader", "mainhand": "minecraft:book", "health": 50}
+      ]
+    },
+    {
+      "id": "elf",
+      "name": "Elf",
+      "entries": [
+        {"id": "elf.soldier", "subtype": "soldier", "name": "Elf Warrior", "skin": "elf.soldier", "item": "elf_soldier_spawn_egg", "glyph": "soldier", "mainhand": "spartanweaponry:golden_spear", "mainFallback": "minecraft:golden_sword", "offhand": "minecraft:shield", "scale": 1.111, "health": 50},
+        {"id": "elf.soldier.elite", "subtype": "soldier.elite", "name": "Elf Hero", "skin": "elf.soldier.elite", "item": "elf_soldier_elite_spawn_egg", "glyph": "soldier", "mainhand": "minecraft:golden_sword", "offhand": "minecraft:shield", "scale": 1.111, "health": 70},
+        {"id": "elf.archer", "subtype": "archer", "name": "Elf Archer", "skin": "elf.archer", "item": "elf_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "scale": 1.111, "health": 40},
+        {"id": "elf.archer.elite", "subtype": "archer.elite", "name": "Elf Guardian", "skin": "elf.archer.elite", "item": "elf_archer_elite_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "scale": 1.111, "health": 30},
+        {"id": "elf.cavalry", "subtype": "cavalry", "name": "Elf Lancer", "skin": "elf.cavalry", "item": "elf_cavalry_spawn_egg", "glyph": "soldier", "mainhand": "spartanweaponry:golden_lance", "mainFallback": "minecraft:golden_sword", "offhand": "minecraft:shield", "scale": 1.111, "health": 70},
+        {"id": "elf.mounted_archer", "subtype": "mounted_archer", "name": "Elf Hunter", "skin": "elf.mounted_archer", "item": "elf_mounted_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "scale": 1.111, "health": 30},
+        {"id": "elf.leader", "subtype": "leader", "name": "Elf Leader", "skin": "elf.leader", "item": "elf_leader_spawn_egg", "glyph": "commander", "mainhand": "spartanweaponry:diamond_halberd", "mainFallback": "minecraft:diamond_sword", "scale": 1.111, "health": 70},
+        {"id": "elf.leader.elite", "subtype": "leader.elite", "name": "Elf Noble", "skin": "elf.leader.elite", "item": "elf_leader_elite_spawn_egg", "glyph": "commander", "mainhand": "minecraft:diamond_sword", "offhand": "minecraft:diamond_sword", "scale": 1.111, "health": 100},
+        {"id": "elf.siege_engineer", "subtype": "siege_engineer", "name": "Elf Warcrafter", "skin": "elf.siege_engineer", "item": "elf_siege_engineer_spawn_egg", "glyph": "siege_engineer", "scale": 1.111, "health": 30},
+        {"id": "elf.priest", "subtype": "priest", "name": "Elf Healer", "skin": "elf.priest", "item": "elf_priest_spawn_egg", "glyph": "priest", "mainhand": "minecraft:book", "scale": 1.111, "health": 50},
+        {"id": "elf.spellcaster", "subtype": "spellcaster", "name": "Elf Mage", "skin": "elf.spellcaster", "item": "elf_spellcaster_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:skull", "scale": 1.111, "health": 20},
+        {"id": "elf.spellcaster.1", "subtype": "spellcaster.1", "name": "Elf Enchanter", "skin": "elf.spellcaster.1", "item": "elf_spellcaster_1_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:book", "scale": 1.111, "health": 30},
+        {"id": "elf.spellcaster.2", "subtype": "spellcaster.2", "name": "Elf Spell Binder", "skin": "elf.spellcaster.2", "item": "elf_spellcaster_2_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "scale": 1.111, "health": 30},
+        {"id": "elf.spellcaster.3", "subtype": "spellcaster.3", "name": "Elf Spell Weaver", "skin": "elf.spellcaster.3", "item": "elf_spellcaster_3_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "scale": 1.111, "health": 40},
+        {"id": "elf.spellcaster.4", "subtype": "spellcaster.4", "name": "Elf Spell Lord", "skin": "elf.spellcaster.4", "item": "elf_spellcaster_4_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:skull", "scale": 1.111, "health": 60},
+        {"id": "elf.bard", "subtype": "bard", "name": "Elf Lore keeper", "skin": "elf.bard", "item": "elf_bard_spawn_egg", "glyph": "bard", "mainhand": "minecraft:stick", "scale": 1.111, "health": 50},
+        {"id": "elf.trader", "subtype": "trader", "name": "Elf Merchant", "skin": "elf.trader", "item": "elf_trader_spawn_egg", "glyph": "trader", "mainhand": "minecraft:book", "scale": 1.111, "health": 50},
+        {"id": "elf.civilian.female", "subtype": "civilian.female", "name": "Elf Maiden", "skin": "elf.civilian.female", "item": "elf_civilian_female_spawn_egg", "glyph": "civilian_female", "scale": 1.111, "health": 10},
+        {"id": "elf.civilian.male", "subtype": "civilian.male", "name": "Elf Wanderer", "skin": "elf.civilian.male", "item": "elf_civilian_male_spawn_egg", "glyph": "civilian_male", "scale": 1.111, "health": 10}
+      ]
+    },
+    {
+      "id": "barbarian",
+      "name": "Barbarian",
+      "entries": [
+        {"id": "barbarian.soldier", "subtype": "soldier", "name": "Barbarian Warrior", "skin": "barbarian.soldier", "item": "barbarian_soldier_spawn_egg", "glyph": "soldier", "mainhand": "minecraft:stone_axe", "offhand": "minecraft:shield", "health": 20},
+        {"id": "barbarian.archer", "subtype": "archer", "name": "Barbarian Archer", "skin": "barbarian.archer", "item": "barbarian_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 20},
+        {"id": "barbarian.leader", "subtype": "leader", "name": "Barbarian Chief", "skin": "barbarian.leader", "item": "barbarian_leader_spawn_egg", "glyph": "commander", "mainhand": "spartanweaponry:stone_battleaxe", "mainFallback": "minecraft:stone_axe", "offhand": "minecraft:shield", "scale": 1.083, "health": 60},
+        {"id": "barbarian.priest", "subtype": "priest", "name": "Barbarian Shaman", "skin": "barbarian.priest", "item": "barbarian_priest_spawn_egg", "glyph": "priest", "mainhand": "minecraft:skull", "offhand": "minecraft:stone_axe", "health": 40}
+      ]
+    },
+    {
+      "id": "dwarf",
+      "name": "Dwarf",
+      "entries": [
+        {"id": "dwarf.soldier", "subtype": "soldier", "name": "Dwarf Warrior", "skin": "dwarf.soldier", "item": "dwarf_faction_soldier_spawn_egg", "glyph": "soldier", "mainhand": "spartanweaponry:iron_halberd", "mainFallback": "minecraft:iron_sword", "scale": 0.75, "health": 50},
+        {"id": "dwarf.soldier.elite", "subtype": "soldier.elite", "name": "Dwarf Hero", "skin": "dwarf.soldier.elite", "item": "dwarf_soldier_elite_spawn_egg", "glyph": "soldier", "mainhand": "minecraft:iron_axe", "scale": 0.75, "health": 60},
+        {"id": "dwarf.archer", "subtype": "archer", "name": "Dwarf Crossbowman", "skin": "dwarf.archer", "item": "dwarf_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "scale": 0.75, "health": 30},
+        {"id": "dwarf.archer.elite", "subtype": "archer.elite", "name": "Dwarf Sentinel", "skin": "dwarf.archer.elite", "item": "dwarf_archer_elite_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "scale": 0.75, "health": 30},
+        {"id": "dwarf.leader", "subtype": "leader", "name": "Dwarf Warlord", "skin": "dwarf.leader", "item": "dwarf_leader_spawn_egg", "glyph": "commander", "mainhand": "spartanweaponry:golden_halberd", "mainFallback": "minecraft:golden_sword", "scale": 0.75, "health": 70},
+        {"id": "dwarf.leader.elite", "subtype": "leader.elite", "name": "Dwarf Noble", "skin": "dwarf.leader.elite", "item": "dwarf_leader_elite_spawn_egg", "glyph": "commander", "mainhand": "minecraft:diamond_axe", "scale": 0.75, "health": 120},
+        {"id": "dwarf.siege_engineer", "subtype": "siege_engineer", "name": "Dwarf Artificier", "skin": "dwarf.siege_engineer", "item": "dwarf_siege_engineer_spawn_egg", "glyph": "siege_engineer", "scale": 0.75, "health": 30},
+        {"id": "dwarf.priest", "subtype": "priest", "name": "Dwarf Priest", "skin": "dwarf.priest", "item": "dwarf_priest_spawn_egg", "glyph": "priest", "mainhand": "minecraft:book", "scale": 0.75, "health": 50},
+        {"id": "dwarf.spellcaster", "subtype": "spellcaster", "name": "Dwarf Wizard", "skin": "dwarf.spellcaster", "item": "dwarf_spellcaster_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:skull", "scale": 0.75, "health": 20},
+        {"id": "dwarf.spellcaster.1", "subtype": "spellcaster.1", "name": "Dwarf Emerald Wizard", "skin": "dwarf.spellcaster.1", "item": "dwarf_spellcaster_1_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:book", "scale": 0.75, "health": 30},
+        {"id": "dwarf.spellcaster.2", "subtype": "spellcaster.2", "name": "Dwarf Ruby Wizard", "skin": "dwarf.spellcaster.2", "item": "dwarf_spellcaster_2_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "scale": 0.75, "health": 30},
+        {"id": "dwarf.spellcaster.3", "subtype": "spellcaster.3", "name": "Dwarf Sapphire Wizard", "skin": "dwarf.spellcaster.3", "item": "dwarf_spellcaster_3_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "scale": 0.75, "health": 40},
+        {"id": "dwarf.spellcaster.4", "subtype": "spellcaster.4", "name": "Dwarf Diamond Wizard", "skin": "dwarf.spellcaster.4", "item": "dwarf_spellcaster_4_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:skull", "scale": 0.75, "health": 60},
+        {"id": "dwarf.bard", "subtype": "bard", "name": "Dwarf Bard", "skin": "dwarf.bard", "item": "dwarf_bard_spawn_egg", "glyph": "bard", "mainhand": "minecraft:stick", "scale": 0.75, "health": 50},
+        {"id": "dwarf.trader", "subtype": "trader", "name": "Dwarf Trader", "skin": "dwarf.trader", "item": "dwarf_trader_spawn_egg", "glyph": "trader", "mainhand": "minecraft:book", "scale": 0.75, "health": 50},
+        {"id": "dwarf.civilian.female", "subtype": "civilian.female", "name": "Dwarf Matron", "skin": "dwarf.civilian.female", "item": "dwarf_civilian_female_spawn_egg", "glyph": "civilian_female", "scale": 0.75, "health": 10},
+        {"id": "dwarf.civilian.male", "subtype": "civilian.male", "name": "Dwarf Worker", "skin": "dwarf.civilian.male", "item": "dwarf_civilian_male_spawn_egg", "glyph": "civilian_male", "scale": 0.75, "health": 10}
+      ]
+    },
+    {
+      "id": "shakayana",
+      "name": "Shakayana",
+      "entries": [
+        {"id": "shakayana.soldier", "subtype": "soldier", "name": "Shakayana Warrior", "skin": "shakayana.soldier", "item": "shakayana_soldier_spawn_egg", "glyph": "soldier", "mainhand": "spartanweaponry:golden_spear", "mainFallback": "minecraft:golden_sword", "offhand": "minecraft:shield", "health": 20},
+        {"id": "shakayana.soldier.elite", "subtype": "soldier.elite", "name": "Shakayana Palace Guard", "skin": "shakayana.soldier.elite", "item": "shakayana_soldier_elite_spawn_egg", "glyph": "soldier", "mainhand": "minecraft:golden_sword", "offhand": "minecraft:golden_axe", "health": 30},
+        {"id": "shakayana.archer", "subtype": "archer", "name": "Shakayana Archer", "skin": "shakayana.archer", "item": "shakayana_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 20},
+        {"id": "shakayana.archer.elite", "subtype": "archer.elite", "name": "Shakayana Guard", "skin": "shakayana.archer.elite", "item": "shakayana_archer_elite_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 30},
+        {"id": "shakayana.cavalry", "subtype": "cavalry", "name": "Shakayana Noble", "skin": "shakayana.cavalry", "item": "shakayana_cavalry_spawn_egg", "glyph": "soldier", "mainhand": "spartanweaponry:golden_lance", "mainFallback": "minecraft:golden_sword", "health": 50},
+        {"id": "shakayana.mounted_archer", "subtype": "mounted_archer", "name": "Shakayana Swift Rider", "skin": "shakayana.mounted_archer", "item": "shakayana_mounted_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 30},
+        {"id": "shakayana.leader", "subtype": "leader", "name": "Shakayana Warlord", "skin": "shakayana.leader", "item": "shakayana_leader_spawn_egg", "glyph": "commander", "mainhand": "spartanweaponry:golden_halberd", "mainFallback": "minecraft:golden_sword", "health": 50},
+        {"id": "shakayana.leader.elite", "subtype": "leader.elite", "name": "Shakayana King", "skin": "shakayana.leader.elite", "item": "shakayana_leader_elite_spawn_egg", "glyph": "commander", "mainhand": "minecraft:golden_sword", "offhand": "minecraft:shield", "health": 60},
+        {"id": "shakayana.siege_engineer", "subtype": "siege_engineer", "name": "Shakayana Cannoneer", "skin": "shakayana.siege_engineer", "item": "shakayana_siege_engineer_spawn_egg", "glyph": "siege_engineer", "health": 30},
+        {"id": "shakayana.priest", "subtype": "priest", "name": "Shakayana Brahma", "skin": "shakayana.priest", "item": "shakayana_priest_spawn_egg", "glyph": "priest", "mainhand": "minecraft:book", "health": 40},
+        {"id": "shakayana.spellcaster", "subtype": "spellcaster", "name": "Shakayana Magi", "skin": "shakayana.spellcaster", "item": "shakayana_spellcaster_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:skull", "health": 20},
+        {"id": "shakayana.spellcaster.1", "subtype": "spellcaster.1", "name": "Shakayana Air Magi", "skin": "shakayana.spellcaster.1", "item": "shakayana_spellcaster_1_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:book", "health": 30},
+        {"id": "shakayana.spellcaster.2", "subtype": "spellcaster.2", "name": "Shakayana Earth Magi", "skin": "shakayana.spellcaster.2", "item": "shakayana_spellcaster_2_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 30},
+        {"id": "shakayana.spellcaster.3", "subtype": "spellcaster.3", "name": "Shakayana Water Magi", "skin": "shakayana.spellcaster.3", "item": "shakayana_spellcaster_3_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 40},
+        {"id": "shakayana.spellcaster.4", "subtype": "spellcaster.4", "name": "Shakayana Fire Magi", "skin": "shakayana.spellcaster.4", "item": "shakayana_spellcaster_4_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:skull", "health": 60},
+        {"id": "shakayana.bard", "subtype": "bard", "name": "Shakayana Harpist", "skin": "shakayana.bard", "item": "shakayana_bard_spawn_egg", "glyph": "bard", "mainhand": "minecraft:stick", "health": 50},
+        {"id": "shakayana.trader", "subtype": "trader", "name": "Shakayana Merchant", "skin": "shakayana.trader", "item": "shakayana_trader_spawn_egg", "glyph": "trader", "mainhand": "minecraft:book", "health": 50},
+        {"id": "shakayana.civilian.female", "subtype": "civilian.female", "name": "Shakayana woman", "skin": "shakayana.civilian.female", "item": "shakayana_civilian_female_spawn_egg", "glyph": "civilian_female", "health": 10},
+        {"id": "shakayana.civilian.male", "subtype": "civilian.male", "name": "Shakayana man", "skin": "shakayana.civilian.male", "item": "shakayana_civilian_male_spawn_egg", "glyph": "civilian_male", "health": 10}
+      ]
+    },
+    {
+      "id": "smingol",
+      "name": "Smingol",
+      "entries": [
+        {"id": "smingol.soldier", "subtype": "soldier", "name": "Smingol Warrior", "skin": "smingol.soldier", "item": "smingol_soldier_spawn_egg", "glyph": "soldier", "mainhand": "spartanweaponry:iron_spear", "mainFallback": "minecraft:iron_sword", "offhand": "minecraft:shield", "health": 20},
+        {"id": "smingol.soldier.elite", "subtype": "soldier.elite", "name": "Smingol Mangudai", "skin": "smingol.soldier.elite", "item": "smingol_soldier_elite_spawn_egg", "glyph": "soldier", "mainhand": "minecraft:iron_sword", "offhand": "minecraft:iron_sword", "health": 30},
+        {"id": "smingol.archer", "subtype": "archer", "name": "Smingol Archer", "skin": "smingol.archer", "item": "smingol_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 20},
+        {"id": "smingol.archer.elite", "subtype": "archer.elite", "name": "Smingol Lookout", "skin": "smingol.archer.elite", "item": "smingol_archer_elite_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 30},
+        {"id": "smingol.cavalry", "subtype": "cavalry", "name": "Smingol Noble", "skin": "smingol.cavalry", "item": "smingol_cavalry_spawn_egg", "glyph": "soldier", "mainhand": "spartanweaponry:iron_lance", "mainFallback": "minecraft:iron_sword", "offhand": "minecraft:shield", "health": 65},
+        {"id": "smingol.mounted_archer", "subtype": "mounted_archer", "name": "Smingol Raider", "skin": "smingol.mounted_archer", "item": "smingol_mounted_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 30},
+        {"id": "smingol.leader", "subtype": "leader", "name": "Smingol Warlord", "skin": "smingol.leader", "item": "smingol_leader_spawn_egg", "glyph": "commander", "mainhand": "minecraft:diamond_sword", "offhand": "minecraft:shield", "health": 50},
+        {"id": "smingol.leader.elite", "subtype": "leader.elite", "name": "Smingol Khan", "skin": "smingol.leader.elite", "item": "smingol_leader_elite_spawn_egg", "glyph": "commander", "mainhand": "minecraft:diamond_sword", "health": 60},
+        {"id": "smingol.siege_engineer", "subtype": "siege_engineer", "name": "Smingol Cannoneer", "skin": "smingol.siege_engineer", "item": "smingol_siege_engineer_spawn_egg", "glyph": "siege_engineer", "health": 30},
+        {"id": "smingol.priest", "subtype": "priest", "name": "Smingol Priest", "skin": "smingol.priest", "item": "smingol_priest_spawn_egg", "glyph": "priest", "mainhand": "minecraft:book", "health": 50},
+        {"id": "smingol.spellcaster", "subtype": "spellcaster", "name": "Smingol Magus", "skin": "smingol.spellcaster", "item": "smingol_spellcaster_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:skull", "health": 20},
+        {"id": "smingol.spellcaster.1", "subtype": "spellcaster.1", "name": "Smingol Magus", "skin": "smingol.spellcaster.1", "item": "smingol_spellcaster_1_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:skull", "health": 30},
+        {"id": "smingol.spellcaster.2", "subtype": "spellcaster.2", "name": "Smingol Lesser Magus", "skin": "smingol.spellcaster.2", "item": "smingol_spellcaster_2_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:skull", "health": 30},
+        {"id": "smingol.spellcaster.3", "subtype": "spellcaster.3", "name": "Smingol Spellcaster", "skin": "smingol.spellcaster.3", "item": "smingol_spellcaster_3_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:skull", "health": 40},
+        {"id": "smingol.spellcaster.4", "subtype": "spellcaster.4", "name": "Smingol Great Spellcaster", "skin": "smingol.spellcaster.4", "item": "smingol_spellcaster_4_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:skull", "health": 60},
+        {"id": "smingol.bard", "subtype": "bard", "name": "Smingol Throat Singer", "skin": "smingol.bard", "item": "smingol_bard_spawn_egg", "glyph": "bard", "mainhand": "minecraft:stick", "health": 50},
+        {"id": "smingol.trader", "subtype": "trader", "name": "Smingol Trader", "skin": "smingol.trader", "item": "smingol_trader_spawn_egg", "glyph": "trader", "mainhand": "minecraft:book", "health": 50},
+        {"id": "smingol.civilian.female", "subtype": "civilian.female", "name": "Smingol woman", "skin": "smingol.civilian.female", "item": "smingol_civilian_female_spawn_egg", "glyph": "civilian_female", "health": 10},
+        {"id": "smingol.civilian.male", "subtype": "civilian.male", "name": "Smingol man", "skin": "smingol.civilian.male", "item": "smingol_civilian_male_spawn_egg", "glyph": "civilian_male", "health": 10}
+      ]
+    },
+    {
+      "id": "lizardman",
+      "name": "Lizardman",
+      "entries": [
+        {"id": "lizardman.soldier", "subtype": "soldier", "name": "Lizardman Warrior", "skin": "lizardman.soldier", "item": "lizardman_soldier_spawn_egg", "glyph": "soldier", "mainhand": "spartanweaponry:stone_battleaxe", "mainFallback": "minecraft:stone_axe", "scale": 1.167, "health": 20},
+        {"id": "lizardman.soldier.elite", "subtype": "soldier.elite", "name": "Lizardman Battlebeast", "skin": "lizardman.soldier.elite", "item": "lizardman_soldier_elite_spawn_egg", "glyph": "soldier", "scale": 1.333, "health": 80},
+        {"id": "lizardman.archer", "subtype": "archer", "name": "Lizardman Archer", "skin": "lizardman.archer", "item": "lizardman_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "scale": 1.167, "health": 20},
+        {"id": "lizardman.leader", "subtype": "leader", "name": "Lizardman Chief", "skin": "lizardman.leader", "item": "lizardman_leader_spawn_egg", "glyph": "commander", "mainhand": "spartanweaponry:iron_battleaxe", "mainFallback": "minecraft:iron_axe", "scale": 1.167, "health": 80},
+        {"id": "lizardman.leader.elite", "subtype": "leader.elite", "name": "Lizardman Brood Mother", "skin": "lizardman.leader.elite", "item": "lizardman_leader_elite_spawn_egg", "glyph": "commander", "scale": 1.528, "health": 120},
+        {"id": "lizardman.priest", "subtype": "priest", "name": "Lizardman Priest", "skin": "lizardman.priest", "item": "lizardman_priest_spawn_egg", "glyph": "priest", "scale": 0.917, "health": 30},
+        {"id": "lizardman.spellcaster", "subtype": "spellcaster", "name": "Serpentman Mage", "skin": "lizardman.spellcaster", "item": "lizardman_spellcaster_spawn_egg", "glyph": "spellcaster", "scale": 0.917, "health": 80},
+        {"id": "lizardman.spellcaster.1", "subtype": "spellcaster.1", "name": "Serpentman Deceiver", "skin": "lizardman.spellcaster.1", "item": "lizardman_spellcaster_1_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:skull", "scale": 0.917, "health": 80}
+      ]
+    },
+    {
+      "id": "zamurai",
+      "name": "Zamurai",
+      "entries": [
+        {"id": "zamurai.soldier", "subtype": "soldier", "name": "Zamurai Warrior", "skin": "zamurai.soldier", "item": "zamurai_soldier_spawn_egg", "glyph": "soldier", "mainhand": "spartanweaponry:iron_spear", "mainFallback": "minecraft:iron_sword", "offhand": "minecraft:shield", "health": 20},
+        {"id": "zamurai.soldier.elite", "subtype": "soldier.elite", "name": "Zamurai Gem Warrior", "skin": "zamurai.soldier.elite", "item": "zamurai_soldier_elite_spawn_egg", "glyph": "soldier", "mainhand": "minecraft:iron_sword", "health": 30},
+        {"id": "zamurai.archer", "subtype": "archer", "name": "Zamurai Archer", "skin": "zamurai.archer", "item": "zamurai_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 20},
+        {"id": "zamurai.archer.elite", "subtype": "archer.elite", "name": "Zamurai Guard", "skin": "zamurai.archer.elite", "item": "zamurai_archer_elite_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 30},
+        {"id": "zamurai.cavalry", "subtype": "cavalry", "name": "Zamurai Noble", "skin": "zamurai.cavalry", "item": "zamurai_cavalry_spawn_egg", "glyph": "soldier", "mainhand": "minecraft:iron_sword", "health": 50},
+        {"id": "zamurai.mounted_archer", "subtype": "mounted_archer", "name": "Zamurai Retainer", "skin": "zamurai.mounted_archer", "item": "zamurai_mounted_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 30},
+        {"id": "zamurai.leader", "subtype": "leader", "name": "Zamurai Warlord", "skin": "zamurai.leader", "item": "zamurai_leader_spawn_egg", "glyph": "commander", "mainhand": "spartanweaponry:iron_halberd", "mainFallback": "minecraft:iron_sword", "health": 50},
+        {"id": "zamurai.leader.elite", "subtype": "leader.elite", "name": " Zamurai Shogun", "skin": "zamurai.leader.elite", "item": "zamurai_leader_elite_spawn_egg", "glyph": "commander", "mainhand": "minecraft:golden_sword", "offhand": "minecraft:shield", "health": 60},
+        {"id": "zamurai.siege_engineer", "subtype": "siege_engineer", "name": "Zamurai Artificier", "skin": "zamurai.siege_engineer", "item": "zamurai_siege_engineer_spawn_egg", "glyph": "siege_engineer", "health": 30},
+        {"id": "zamurai.priest", "subtype": "priest", "name": "Zamurai Priest", "skin": "zamurai.priest", "item": "zamurai_priest_spawn_egg", "glyph": "priest", "mainhand": "minecraft:book", "health": 40},
+        {"id": "zamurai.spellcaster", "subtype": "spellcaster", "name": "Zamurai Sorceror", "skin": "zamurai.spellcaster", "item": "zamurai_spellcaster_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:skull", "health": 20},
+        {"id": "zamurai.spellcaster.1", "subtype": "spellcaster.1", "name": "Zamurai Spellcaster", "skin": "zamurai.spellcaster.1", "item": "zamurai_spellcaster_1_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:book", "health": 30},
+        {"id": "zamurai.spellcaster.2", "subtype": "spellcaster.2", "name": "Zamurai Spellbinder", "skin": "zamurai.spellcaster.2", "item": "zamurai_spellcaster_2_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 30},
+        {"id": "zamurai.spellcaster.3", "subtype": "spellcaster.3", "name": "Zamurai Spellbreaker", "skin": "zamurai.spellcaster.3", "item": "zamurai_spellcaster_3_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 40},
+        {"id": "zamurai.spellcaster.4", "subtype": "spellcaster.4", "name": "Zamurai Spellmaster", "skin": "zamurai.spellcaster.4", "item": "zamurai_spellcaster_4_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:skull", "health": 60},
+        {"id": "zamurai.bard", "subtype": "bard", "name": "Zamurai Bard", "skin": "zamurai.bard", "item": "zamurai_bard_spawn_egg", "glyph": "bard", "mainhand": "minecraft:stick", "health": 50},
+        {"id": "zamurai.trader", "subtype": "trader", "name": "Zamurai Trader", "skin": "zamurai.trader", "item": "zamurai_trader_spawn_egg", "glyph": "trader", "mainhand": "minecraft:book", "health": 50},
+        {"id": "zamurai.civilian.female", "subtype": "civilian.female", "name": "Zamurai woman", "skin": "zamurai.civilian.female", "item": "zamurai_civilian_female_spawn_egg", "glyph": "civilian_female", "health": 10},
+        {"id": "zamurai.civilian.male", "subtype": "civilian.male", "name": "Zamurai man", "skin": "zamurai.civilian.male", "item": "zamurai_civilian_male_spawn_egg", "glyph": "civilian_male", "health": 10}
+      ]
+    },
+    {
+      "id": "rakshasa",
+      "name": "Rakshasa",
+      "entries": [
+        {"id": "rakshasa.soldier.elite", "subtype": "soldier.elite", "name": "Rakshasa Tiger Warrior", "skin": "rakshasa.soldier.elite", "item": "rakshasa_soldier_elite_spawn_egg", "glyph": "soldier", "mainhand": "spartanweaponry:golden_battleaxe", "mainFallback": "minecraft:golden_axe", "offhand": "minecraft:shield", "health": 30},
+        {"id": "rakshasa.leader.elite", "subtype": "leader.elite", "name": "Rakshasa Lord", "skin": "rakshasa.leader.elite", "item": "rakshasa_leader_elite_spawn_egg", "glyph": "commander", "mainhand": "spartanweaponry:golden_battleaxe", "mainFallback": "minecraft:golden_axe", "health": 75},
+        {"id": "rakshasa.spellcaster", "subtype": "spellcaster", "name": "Rakshasa Mage", "skin": "rakshasa.spellcaster", "item": "rakshasa_spellcaster_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:skull", "health": 20},
+        {"id": "rakshasa.spellcaster.1", "subtype": "spellcaster.1", "name": "Rakshasa Mage", "skin": "rakshasa.spellcaster.1", "item": "rakshasa_spellcaster_1_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:book", "health": 30},
+        {"id": "rakshasa.spellcaster.2", "subtype": "spellcaster.2", "name": "Rakshasa Sorcerer", "skin": "rakshasa.spellcaster.2", "item": "rakshasa_spellcaster_2_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 30},
+        {"id": "rakshasa.spellcaster.3", "subtype": "spellcaster.3", "name": "Rakshasa Warlock", "skin": "rakshasa.spellcaster.3", "item": "rakshasa_spellcaster_3_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 40},
+        {"id": "rakshasa.spellcaster.4", "subtype": "spellcaster.4", "name": "Rakshasa Demi-God", "skin": "rakshasa.spellcaster.4", "item": "rakshasa_spellcaster_4_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:skull", "health": 60}
+      ]
+    },
+    {
+      "id": "klown",
+      "name": "Klown",
+      "entries": [
+        {"id": "klown.soldier", "subtype": "soldier", "name": "Klown Rag Doll", "skin": "klown.soldier", "item": "klown_soldier_spawn_egg", "glyph": "soldier", "mainhand": "spartanweaponry:iron_battleaxe", "mainFallback": "minecraft:iron_axe", "scale": 0.333, "health": 6},
+        {"id": "klown.soldier.elite", "subtype": "soldier.elite", "name": "Killer Klown", "skin": "klown.soldier.elite", "item": "klown_soldier_elite_spawn_egg", "glyph": "soldier", "mainhand": "minecraft:iron_axe", "health": 30},
+        {"id": "klown.cavalry", "subtype": "cavalry", "name": "Klown Harlequin", "skin": "klown.cavalry", "item": "klown_cavalry_spawn_egg", "glyph": "soldier", "mainhand": "spartanweaponry:iron_battleaxe", "mainFallback": "minecraft:iron_axe", "health": 40},
+        {"id": "klown.mounted_archer", "subtype": "mounted_archer", "name": "Klown Monkey", "skin": "klown.mounted_archer", "item": "klown_mounted_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "scale": 0.389, "health": 6},
+        {"id": "klown.leader", "subtype": "leader", "name": "Klown Strongman", "skin": "klown.leader", "item": "klown_leader_spawn_egg", "glyph": "commander", "mainhand": "spartanweaponry:iron_flanged_mace", "mainFallback": "minecraft:wooden_axe", "scale": 1.889, "health": 100},
+        {"id": "klown.leader.elite", "subtype": "leader.elite", "name": "IT", "skin": "klown.leader.elite", "item": "klown_leader_elite_spawn_egg", "glyph": "commander", "mainhand": "spartanweaponry:iron_battleaxe", "mainFallback": "minecraft:iron_axe", "scale": 1.111, "health": 120},
+        {"id": "klown.priest", "subtype": "priest", "name": "Klown Ringmaster", "skin": "klown.priest", "item": "klown_priest_spawn_egg", "glyph": "priest", "mainhand": "minecraft:book", "health": 40},
+        {"id": "klown.spellcaster", "subtype": "spellcaster", "name": "IT", "skin": "klown.spellcaster", "item": "klown_spellcaster_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:skull", "health": 20},
+        {"id": "klown.spellcaster.1", "subtype": "spellcaster.1", "name": "IT", "skin": "klown.spellcaster.1", "item": "klown_spellcaster_1_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:book", "health": 30},
+        {"id": "klown.spellcaster.2", "subtype": "spellcaster.2", "name": "IT", "skin": "klown.spellcaster.2", "item": "klown_spellcaster_2_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 30},
+        {"id": "klown.spellcaster.3", "subtype": "spellcaster.3", "name": "IT", "skin": "klown.spellcaster.3", "item": "klown_spellcaster_3_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 40},
+        {"id": "klown.spellcaster.4", "subtype": "spellcaster.4", "name": "IT", "skin": "klown.spellcaster.4", "item": "klown_spellcaster_4_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:skull", "health": 60}
+      ]
+    },
+    {
+      "id": "ishtari",
+      "name": "Ishtari",
+      "entries": [
+        {"id": "ishtari.soldier", "subtype": "soldier", "name": "Ishtari Mummy", "skin": "ishtari.soldier", "item": "ishtari_soldier_spawn_egg", "glyph": "soldier", "health": 20},
+        {"id": "ishtari.soldier.elite", "subtype": "soldier.elite", "name": "Ishtari Zombie", "skin": "ishtari.soldier.elite", "item": "ishtari_soldier_elite_spawn_egg", "glyph": "soldier", "mainhand": "minecraft:golden_sword", "health": 30},
+        {"id": "ishtari.archer", "subtype": "archer", "name": "Ishtari High Priest", "skin": "ishtari.archer", "item": "ishtari_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 20},
+        {"id": "ishtari.leader", "subtype": "leader", "name": "Ishtari Anubite", "skin": "ishtari.leader", "item": "ishtari_leader_spawn_egg", "glyph": "commander", "mainhand": "spartanweaponry:golden_halberd", "mainFallback": "minecraft:golden_sword", "scale": 1.667, "health": 80},
+        {"id": "ishtari.leader.elite", "subtype": "leader.elite", "name": "Ishtari Pharoah", "skin": "ishtari.leader.elite", "item": "ishtari_leader_elite_spawn_egg", "glyph": "commander", "mainhand": "minecraft:diamond_sword", "health": 60}
+      ]
+    },
+    {
+      "id": "icelord",
+      "name": "Icelord",
+      "entries": [
+        {"id": "icelord.soldier", "subtype": "soldier", "name": "Icelord Draugr", "skin": "icelord.soldier", "item": "icelord_soldier_spawn_egg", "glyph": "soldier", "health": 20},
+        {"id": "icelord.soldier.elite", "subtype": "soldier.elite", "name": "Icelord Winter Walker", "skin": "icelord.soldier.elite", "item": "icelord_soldier_elite_spawn_egg", "glyph": "soldier", "health": 45},
+        {"id": "icelord.archer", "subtype": "archer", "name": "Icelord Zombie", "skin": "icelord.archer", "item": "icelord_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 20},
+        {"id": "icelord.archer.elite", "subtype": "archer.elite", "name": "Icelord Sentinel", "skin": "icelord.archer.elite", "item": "icelord_archer_elite_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 30},
+        {"id": "icelord.cavalry", "subtype": "cavalry", "name": "Icelord Revenant", "skin": "icelord.cavalry", "item": "icelord_cavalry_spawn_egg", "glyph": "soldier", "mainhand": "spartanweaponry:iron_spear", "mainFallback": "minecraft:iron_sword", "offhand": "minecraft:shield", "health": 40},
+        {"id": "icelord.leader", "subtype": "leader", "name": "Icelord Beast", "skin": "icelord.leader", "item": "icelord_leader_spawn_egg", "glyph": "commander", "scale": 1.389, "health": 60},
+        {"id": "icelord.leader.elite", "subtype": "leader.elite", "name": "Icelord Winter King", "skin": "icelord.leader.elite", "item": "icelord_leader_elite_spawn_egg", "glyph": "commander", "mainhand": "minecraft:diamond_axe", "scale": 1.167, "health": 100},
+        {"id": "icelord.priest", "subtype": "priest", "name": "Icelord Liche", "skin": "icelord.priest", "item": "icelord_priest_spawn_egg", "glyph": "priest", "health": 40},
+        {"id": "icelord.spellcaster", "subtype": "spellcaster", "name": "Icelord Spell Liche", "skin": "icelord.spellcaster", "item": "icelord_spellcaster_spawn_egg", "glyph": "spellcaster", "health": 20},
+        {"id": "icelord.spellcaster.1", "subtype": "spellcaster.1", "name": "Icelord Frost Prophet", "skin": "icelord.spellcaster.1", "item": "icelord_spellcaster_1_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:book", "health": 20},
+        {"id": "icelord.spellcaster.2", "subtype": "spellcaster.2", "name": "Icelord Coldbringer", "skin": "icelord.spellcaster.2", "item": "icelord_spellcaster_2_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:book", "health": 100}
+      ]
+    },
+    {
+      "id": "guild",
+      "name": "Guild",
+      "entries": [
+        {"id": "guild.soldier", "subtype": "soldier", "name": "Merchant Guild Guard", "skin": "guild.soldier", "item": "guild_soldier_spawn_egg", "glyph": "soldier", "mainhand": "spartanweaponry:iron_spear", "mainFallback": "minecraft:iron_sword", "offhand": "minecraft:shield", "health": 20},
+        {"id": "guild.archer", "subtype": "archer", "name": "Merchant Guild Archer", "skin": "guild.archer", "item": "guild_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 20},
+        {"id": "guild.archer.elite", "subtype": "archer.elite", "name": "Merchant Guild Sentry", "skin": "guild.archer.elite", "item": "guild_archer_elite_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 30},
+        {"id": "guild.leader", "subtype": "leader", "name": "Merchant Guild Captain", "skin": "guild.leader", "item": "guild_leader_spawn_egg", "glyph": "commander", "mainhand": "spartanweaponry:iron_halberd", "mainFallback": "minecraft:iron_sword", "health": 50},
+        {"id": "guild.trader", "subtype": "trader", "name": "Merchant Guild Trader", "skin": "guild.trader", "item": "guild_trader_spawn_egg", "glyph": "trader", "mainhand": "minecraft:book", "health": 50}
+      ]
+    },
+    {
+      "id": "wizardly",
+      "name": "Wizardly",
+      "entries": [
+        {"id": "wizardly.soldier", "subtype": "soldier", "name": "Wizardly Guard", "skin": "wizardly.soldier", "item": "wizardly_soldier_spawn_egg", "glyph": "soldier", "mainhand": "spartanweaponry:golden_halberd", "mainFallback": "minecraft:golden_sword", "health": 30},
+        {"id": "wizardly.soldier.elite", "subtype": "soldier.elite", "name": "Wizardly Guardian", "skin": "wizardly.soldier.elite", "item": "wizardly_soldier_elite_spawn_egg", "glyph": "soldier", "scale": 0.556, "health": 30},
+        {"id": "wizardly.archer", "subtype": "archer", "name": "Wizardly Archer", "skin": "wizardly.archer", "item": "wizardly_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 30},
+        {"id": "wizardly.archer.elite", "subtype": "archer.elite", "name": "Wizardly Sentinel", "skin": "wizardly.archer.elite", "item": "wizardly_archer_elite_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 30},
+        {"id": "wizardly.leader", "subtype": "leader", "name": "Wizardly Teacher", "skin": "wizardly.leader", "item": "wizardly_leader_spawn_egg", "glyph": "commander", "mainhand": "minecraft:stick", "health": 55},
+        {"id": "wizardly.leader.elite", "subtype": "leader.elite", "name": "Wizardly Groundkeeper", "skin": "wizardly.leader.elite", "item": "wizardly_leader_elite_spawn_egg", "glyph": "commander", "mainhand": "minecraft:iron_axe", "scale": 1.5, "health": 70},
+        {"id": "wizardly.siege_engineer", "subtype": "siege_engineer", "name": "Wizardly Artificier", "skin": "wizardly.siege_engineer", "item": "wizardly_siege_engineer_spawn_egg", "glyph": "siege_engineer", "health": 30},
+        {"id": "wizardly.priest", "subtype": "priest", "name": "Wizardly Healer", "skin": "wizardly.priest", "item": "wizardly_priest_spawn_egg", "glyph": "priest", "mainhand": "minecraft:golden_apple", "health": 50},
+        {"id": "wizardly.spellcaster", "subtype": "spellcaster", "name": "Wizardly Spellcaster", "skin": "wizardly.spellcaster", "item": "wizardly_spellcaster_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:skull", "health": 20},
+        {"id": "wizardly.spellcaster.1", "subtype": "spellcaster.1", "name": "Wizardly Spell Teacher", "skin": "wizardly.spellcaster.1", "item": "wizardly_spellcaster_1_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:book", "health": 30},
+        {"id": "wizardly.spellcaster.2", "subtype": "spellcaster.2", "name": "Wizardly Spell Master", "skin": "wizardly.spellcaster.2", "item": "wizardly_spellcaster_2_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 30},
+        {"id": "wizardly.spellcaster.3", "subtype": "spellcaster.3", "name": "Wizardly Spell Binder", "skin": "wizardly.spellcaster.3", "item": "wizardly_spellcaster_3_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 40},
+        {"id": "wizardly.spellcaster.4", "subtype": "spellcaster.4", "name": "Wizardly Archimage", "skin": "wizardly.spellcaster.4", "item": "wizardly_spellcaster_4_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:skull", "health": 60},
+        {"id": "wizardly.bard", "subtype": "bard", "name": "Wizardly Spellsinger", "skin": "wizardly.bard", "item": "wizardly_bard_spawn_egg", "glyph": "bard", "mainhand": "minecraft:stick", "health": 50},
+        {"id": "wizardly.trader", "subtype": "trader", "name": "Wizardly Apprentice", "skin": "wizardly.trader", "item": "wizardly_trader_spawn_egg", "glyph": "trader", "mainhand": "minecraft:book", "health": 50},
+        {"id": "wizardly.civilian.female", "subtype": "civilian.female", "name": "Wizardly Girl Student", "skin": "wizardly.civilian.female", "item": "wizardly_civilian_female_spawn_egg", "glyph": "civilian_female", "mainhand": "minecraft:book", "scale": 0.667, "health": 10},
+        {"id": "wizardly.civilian.male", "subtype": "civilian.male", "name": "Wizardly Boy Student", "skin": "wizardly.civilian.male", "item": "wizardly_civilian_male_spawn_egg", "glyph": "civilian_male", "mainhand": "minecraft:book", "scale": 0.667, "health": 10}
+      ]
+    },
+    {
+      "id": "amazon",
+      "name": "Amazon",
+      "entries": [
+        {"id": "amazon.soldier", "subtype": "soldier", "name": "Amazon Mankiller", "skin": "amazon.soldier", "item": "amazon_soldier_spawn_egg", "glyph": "soldier", "mainhand": "spartanweaponry:golden_spear", "mainFallback": "minecraft:golden_sword", "offhand": "minecraft:shield", "health": 20},
+        {"id": "amazon.soldier.elite", "subtype": "soldier.elite", "name": "Amazon Heroine", "skin": "amazon.soldier.elite", "item": "amazon_soldier_elite_spawn_egg", "glyph": "soldier", "mainhand": "spartanweaponry:golden_halberd", "mainFallback": "minecraft:golden_sword", "health": 30},
+        {"id": "amazon.archer", "subtype": "archer", "name": "Amazon Widowmaker", "skin": "amazon.archer", "item": "amazon_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 20},
+        {"id": "amazon.archer.elite", "subtype": "archer.elite", "name": "Amazon Sentinel", "skin": "amazon.archer.elite", "item": "amazon_archer_elite_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 30},
+        {"id": "amazon.cavalry", "subtype": "cavalry", "name": "Amazon Cataphract", "skin": "amazon.cavalry", "item": "amazon_cavalry_spawn_egg", "glyph": "soldier", "mainhand": "spartanweaponry:golden_spear", "mainFallback": "minecraft:golden_sword", "offhand": "minecraft:shield", "health": 40},
+        {"id": "amazon.mounted_archer", "subtype": "mounted_archer", "name": "Amazon Headhunter", "skin": "amazon.mounted_archer", "item": "amazon_mounted_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 30},
+        {"id": "amazon.leader", "subtype": "leader", "name": "Amazon Princess", "skin": "amazon.leader", "item": "amazon_leader_spawn_egg", "glyph": "commander", "mainhand": "spartanweaponry:golden_halberd", "mainFallback": "minecraft:golden_sword", "health": 50},
+        {"id": "amazon.leader.elite", "subtype": "leader.elite", "name": "Amazon Queen", "skin": "amazon.leader.elite", "item": "amazon_leader_elite_spawn_egg", "glyph": "commander", "mainhand": "minecraft:golden_sword", "health": 60},
+        {"id": "amazon.siege_engineer", "subtype": "siege_engineer", "name": "Amazon Warmaker", "skin": "amazon.siege_engineer", "item": "amazon_siege_engineer_spawn_egg", "glyph": "siege_engineer", "health": 30},
+        {"id": "amazon.priest", "subtype": "priest", "name": "Amazon Priestess", "skin": "amazon.priest", "item": "amazon_priest_spawn_egg", "glyph": "priest", "mainhand": "minecraft:book", "health": 40},
+        {"id": "amazon.bard", "subtype": "bard", "name": "Amazon Singer", "skin": "amazon.bard", "item": "amazon_bard_spawn_egg", "glyph": "bard", "mainhand": "minecraft:stick", "health": 50},
+        {"id": "amazon.trader", "subtype": "trader", "name": "Amazon Bargainer", "skin": "amazon.trader", "item": "amazon_trader_spawn_egg", "glyph": "trader", "mainhand": "minecraft:book", "health": 50},
+        {"id": "amazon.civilian.female", "subtype": "civilian.female", "name": "Amazon Childbearer", "skin": "amazon.civilian.female", "item": "amazon_civilian_female_spawn_egg", "glyph": "civilian_female", "health": 10},
+        {"id": "amazon.civilian.male", "subtype": "civilian.male", "name": "Amazon Male Slave", "skin": "amazon.civilian.male", "item": "amazon_civilian_male_spawn_egg", "glyph": "civilian_male", "health": 10}
+      ]
+    },
+    {
+      "id": "minossian",
+      "name": "Minossian",
+      "entries": [
+        {"id": "minossian.soldier", "subtype": "soldier", "name": "Talos", "skin": "minossian.soldier", "item": "minossian_soldier_spawn_egg", "glyph": "soldier", "scale": 3.556, "health": 100},
+        {"id": "minossian.soldier.elite", "subtype": "soldier.elite", "name": "Minossian Warrior", "skin": "minossian.soldier.elite", "item": "minossian_soldier_elite_spawn_egg", "glyph": "soldier", "mainhand": "minecraft:iron_axe", "scale": 1.222, "health": 40},
+        {"id": "minossian.leader", "subtype": "leader", "name": "Minossian Bull Golem", "skin": "minossian.leader", "item": "minossian_leader_spawn_egg", "glyph": "commander", "scale": 1.278, "health": 75},
+        {"id": "minossian.leader.elite", "subtype": "leader.elite", "name": "Minossian Chief", "skin": "minossian.leader.elite", "item": "minossian_leader_elite_spawn_egg", "glyph": "commander", "mainhand": "minecraft:diamond_axe", "scale": 1.306, "health": 65},
+        {"id": "minossian.priest", "subtype": "priest", "name": "Minossian Priest", "skin": "minossian.priest", "item": "minossian_priest_spawn_egg", "glyph": "priest", "mainhand": "minecraft:book", "health": 40},
+        {"id": "minossian.spellcaster", "subtype": "spellcaster", "name": "Minossian Magi", "skin": "minossian.spellcaster", "item": "minossian_spellcaster_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:skull", "health": 20},
+        {"id": "minossian.spellcaster.1", "subtype": "spellcaster.1", "name": "Minossian Magi", "skin": "minossian.spellcaster.1", "item": "minossian_spellcaster_1_spawn_egg", "glyph": "spellcaster", "health": 30},
+        {"id": "minossian.spellcaster.2", "subtype": "spellcaster.2", "name": "Minossian Water Magi", "skin": "minossian.spellcaster.2", "item": "minossian_spellcaster_2_spawn_egg", "glyph": "spellcaster", "health": 30},
+        {"id": "minossian.spellcaster.3", "subtype": "spellcaster.3", "name": "Minossian Fire Magi", "skin": "minossian.spellcaster.3", "item": "minossian_spellcaster_3_spawn_egg", "glyph": "spellcaster", "health": 40},
+        {"id": "minossian.spellcaster.4", "subtype": "spellcaster.4", "name": "Minossian Archi Magi", "skin": "minossian.spellcaster.4", "item": "minossian_spellcaster_4_spawn_egg", "glyph": "spellcaster", "health": 50}
+      ]
+    },
+    {
+      "id": "sealsker",
+      "name": "Sealsker",
+      "entries": [
+        {"id": "sealsker.soldier", "subtype": "soldier", "name": "Sealsker Walrusser", "skin": "sealsker.soldier", "item": "sealsker_soldier_spawn_egg", "glyph": "soldier", "mainhand": "spartanweaponry:iron_spear", "mainFallback": "minecraft:iron_sword", "health": 20},
+        {"id": "sealsker.soldier.elite", "subtype": "soldier.elite", "name": "Sealsker Harpooner", "skin": "sealsker.soldier.elite", "item": "sealsker_soldier_elite_spawn_egg", "glyph": "soldier", "mainhand": "spartanweaponry:iron_spear", "mainFallback": "minecraft:iron_sword", "health": 50},
+        {"id": "sealsker.archer", "subtype": "archer", "name": "Sealsker Hunter", "skin": "sealsker.archer", "item": "sealsker_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 20},
+        {"id": "sealsker.archer.elite", "subtype": "archer.elite", "name": "Sealsker Lookout", "skin": "sealsker.archer.elite", "item": "sealsker_archer_elite_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 40},
+        {"id": "sealsker.leader", "subtype": "leader", "name": "Sealsker Chieftain", "skin": "sealsker.leader", "item": "sealsker_leader_spawn_egg", "glyph": "commander", "mainhand": "spartanweaponry:iron_spear", "mainFallback": "minecraft:iron_sword", "health": 60},
+        {"id": "sealsker.leader.elite", "subtype": "leader.elite", "name": "Sealsker Snow Fox", "skin": "sealsker.leader.elite", "item": "sealsker_leader_elite_spawn_egg", "glyph": "commander", "scale": 0.722, "health": 40},
+        {"id": "sealsker.priest", "subtype": "priest", "name": "Sealsker Shaman", "skin": "sealsker.priest", "item": "sealsker_priest_spawn_egg", "glyph": "priest", "mainhand": "minecraft:book", "health": 50},
+        {"id": "sealsker.spellcaster", "subtype": "spellcaster", "name": "Sealsker Magician", "skin": "sealsker.spellcaster", "item": "sealsker_spellcaster_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:skull", "health": 20},
+        {"id": "sealsker.spellcaster.1", "subtype": "spellcaster.1", "name": "Sealsker Spellcaster 1", "skin": "sealsker.spellcaster.1", "item": "sealsker_spellcaster_1_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:book", "health": 30},
+        {"id": "sealsker.spellcaster.2", "subtype": "spellcaster.2", "name": "Sealsker Spellcaster 2", "skin": "sealsker.spellcaster.2", "item": "sealsker_spellcaster_2_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 30},
+        {"id": "sealsker.spellcaster.3", "subtype": "spellcaster.3", "name": "Sealsker Spellcaster 3", "skin": "sealsker.spellcaster.3", "item": "sealsker_spellcaster_3_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 40},
+        {"id": "sealsker.spellcaster.4", "subtype": "spellcaster.4", "name": "Sealsker Spellcaster 4", "skin": "sealsker.spellcaster.4", "item": "sealsker_spellcaster_4_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:skull", "health": 60},
+        {"id": "sealsker.trader", "subtype": "trader", "name": "Sealsker Gatherer", "skin": "sealsker.trader", "item": "sealsker_trader_spawn_egg", "glyph": "trader", "mainhand": "minecraft:book", "health": 50},
+        {"id": "sealsker.civilian.female", "subtype": "civilian.female", "name": "Sealsker Huntress", "skin": "sealsker.civilian.female", "item": "sealsker_civilian_female_spawn_egg", "glyph": "civilian_female", "health": 10},
+        {"id": "sealsker.civilian.male", "subtype": "civilian.male", "name": "Sealsker Fisher", "skin": "sealsker.civilian.male", "item": "sealsker_civilian_male_spawn_egg", "glyph": "civilian_male", "health": 10}
+      ]
+    },
+    {
+      "id": "vyncan",
+      "name": "Vyncan",
+      "entries": [
+        {"id": "vyncan.soldier", "subtype": "soldier", "name": "Vyncan Warrior", "skin": "vyncan.soldier", "item": "vyncan_soldier_spawn_egg", "glyph": "soldier", "mainhand": "spartanweaponry:iron_spear", "mainFallback": "minecraft:iron_sword", "offhand": "minecraft:shield", "health": 20},
+        {"id": "vyncan.soldier.elite", "subtype": "soldier.elite", "name": "Vyncan Blood Warrior", "skin": "vyncan.soldier.elite", "item": "vyncan_soldier_elite_spawn_egg", "glyph": "soldier", "mainhand": "minecraft:wooden_sword", "mainFallback": "minecraft:stone_sword", "health": 50},
+        {"id": "vyncan.archer", "subtype": "archer", "name": "Vyncan Archer", "skin": "vyncan.archer", "item": "vyncan_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 20},
+        {"id": "vyncan.archer.elite", "subtype": "archer.elite", "name": "Vyncan Guard", "skin": "vyncan.archer.elite", "item": "vyncan_archer_elite_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 40},
+        {"id": "vyncan.leader", "subtype": "leader", "name": "Vyncan Summoned Beast", "skin": "vyncan.leader", "item": "vyncan_leader_spawn_egg", "glyph": "commander", "scale": 1.167, "health": 80},
+        {"id": "vyncan.leader.elite", "subtype": "leader.elite", "name": "Vyncan Chieftain", "skin": "vyncan.leader.elite", "item": "vyncan_leader_elite_spawn_egg", "glyph": "commander", "mainhand": "minecraft:diamond_sword", "health": 60},
+        {"id": "vyncan.priest", "subtype": "priest", "name": "Vyncan Priest", "skin": "vyncan.priest", "item": "vyncan_priest_spawn_egg", "glyph": "priest", "mainhand": "minecraft:book", "health": 50},
+        {"id": "vyncan.spellcaster", "subtype": "spellcaster", "name": "Vyncan Spellcaster", "skin": "vyncan.spellcaster", "item": "vyncan_spellcaster_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:skull", "health": 20},
+        {"id": "vyncan.spellcaster.1", "subtype": "spellcaster.1", "name": "Vyncan Spellweaver", "skin": "vyncan.spellcaster.1", "item": "vyncan_spellcaster_1_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:book", "health": 30},
+        {"id": "vyncan.spellcaster.2", "subtype": "spellcaster.2", "name": "Vyncan Spellbinder", "skin": "vyncan.spellcaster.2", "item": "vyncan_spellcaster_2_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 30},
+        {"id": "vyncan.spellcaster.3", "subtype": "spellcaster.3", "name": "Vyncan Spellcharmer", "skin": "vyncan.spellcaster.3", "item": "vyncan_spellcaster_3_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 40},
+        {"id": "vyncan.spellcaster.4", "subtype": "spellcaster.4", "name": "Vyncan Spellmaster", "skin": "vyncan.spellcaster.4", "item": "vyncan_spellcaster_4_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:skull", "health": 60},
+        {"id": "vyncan.trader", "subtype": "trader", "name": "Vyncan Maiden", "skin": "vyncan.trader", "item": "vyncan_trader_spawn_egg", "glyph": "trader", "mainhand": "minecraft:book", "health": 50},
+        {"id": "vyncan.civilian.female", "subtype": "civilian.female", "name": "Vyncan Woman", "skin": "vyncan.civilian.female", "item": "vyncan_civilian_female_spawn_egg", "glyph": "civilian_female", "health": 10},
+        {"id": "vyncan.civilian.male", "subtype": "civilian.male", "name": "Vyncan Slave", "skin": "vyncan.civilian.male", "item": "vyncan_civilian_male_spawn_egg", "glyph": "civilian_male", "health": 10}
+      ]
+    },
+    {
+      "id": "hobbit",
+      "name": "Hobbit",
+      "entries": [
+        {"id": "hobbit.soldier", "subtype": "soldier", "name": "Hobbit Militiaman", "skin": "hobbit.soldier", "item": "hobbit_soldier_spawn_egg", "glyph": "soldier", "mainhand": "spartanweaponry:iron_spear", "mainFallback": "minecraft:iron_sword", "scale": 0.694, "health": 50},
+        {"id": "hobbit.soldier.elite", "subtype": "soldier.elite", "name": "Hobbit Captain", "skin": "hobbit.soldier.elite", "item": "hobbit_soldier_elite_spawn_egg", "glyph": "soldier", "mainhand": "spartanweaponry:iron_scythe", "mainFallback": "minecraft:iron_sword", "scale": 0.694, "health": 60},
+        {"id": "hobbit.archer", "subtype": "archer", "name": "Hobbit Gamekeeper", "skin": "hobbit.archer", "item": "hobbit_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "scale": 0.694, "health": 30},
+        {"id": "hobbit.archer.elite", "subtype": "archer.elite", "name": "Hobbit Sentry", "skin": "hobbit.archer.elite", "item": "hobbit_archer_elite_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "scale": 0.694, "health": 30},
+        {"id": "hobbit.leader", "subtype": "leader", "name": "Hobbit Hero", "skin": "hobbit.leader", "item": "hobbit_leader_spawn_egg", "glyph": "commander", "mainhand": "minecraft:iron_sword", "scale": 0.694, "health": 70},
+        {"id": "hobbit.priest", "subtype": "priest", "name": "Hobbit Vicar", "skin": "hobbit.priest", "item": "hobbit_priest_spawn_egg", "glyph": "priest", "mainhand": "minecraft:book", "scale": 0.694, "health": 50},
+        {"id": "hobbit.bard", "subtype": "bard", "name": "Hobbit Tavern Singer", "skin": "hobbit.bard", "item": "hobbit_bard_spawn_egg", "glyph": "bard", "mainhand": "minecraft:stick", "scale": 0.694, "health": 50},
+        {"id": "hobbit.trader", "subtype": "trader", "name": "Hobbit Trader", "skin": "hobbit.trader", "item": "hobbit_trader_spawn_egg", "glyph": "trader", "mainhand": "minecraft:book", "scale": 0.694, "health": 50},
+        {"id": "hobbit.civilian.female", "subtype": "civilian.female", "name": "Hobbit Goodwife", "skin": "hobbit.civilian.female", "item": "hobbit_civilian_female_spawn_egg", "glyph": "civilian_female", "scale": 0.694, "health": 10},
+        {"id": "hobbit.civilian.male", "subtype": "civilian.male", "name": "Hobbit Goodman", "skin": "hobbit.civilian.male", "item": "hobbit_civilian_male_spawn_egg", "glyph": "civilian_male", "scale": 0.694, "health": 10}
+      ]
+    },
+    {
+      "id": "giant",
+      "name": "Giant",
+      "entries": [
+        {"id": "giant.soldier", "subtype": "soldier", "name": "Hill Giant", "skin": "giant.soldier", "item": "giant_soldier_spawn_egg", "glyph": "soldier", "mainhand": "spartanweaponry:iron_flanged_mace", "mainFallback": "minecraft:wooden_axe", "scale": 2.111, "health": 100},
+        {"id": "giant.soldier.elite", "subtype": "soldier.elite", "name": "Frost Giant", "skin": "giant.soldier.elite", "item": "giant_soldier_elite_spawn_egg", "glyph": "soldier", "mainhand": "spartanweaponry:iron_spear", "mainFallback": "minecraft:iron_sword", "scale": 3.333, "health": 150},
+        {"id": "giant.leader", "subtype": "leader", "name": "Fire Giant", "skin": "giant.leader", "item": "giant_leader_spawn_egg", "glyph": "commander", "scale": 3.333, "health": 150},
+        {"id": "giant.leader.elite", "subtype": "leader.elite", "name": "Mountain Giant", "skin": "giant.leader.elite", "item": "giant_leader_elite_spawn_egg", "glyph": "commander", "mainhand": "spartanweaponry:iron_flanged_mace", "mainFallback": "minecraft:wooden_axe", "scale": 3.778, "health": 250}
+      ]
+    },
+    {
+      "id": "beast",
+      "name": "Beast",
+      "entries": [
+        {"id": "beast.soldier", "subtype": "soldier", "name": "Kobold", "skin": "beast.soldier", "item": "beast_soldier_spawn_egg", "glyph": "soldier", "mainhand": "minecraft:stone_axe", "scale": 0.611, "health": 10},
+        {"id": "beast.soldier.elite", "subtype": "soldier.elite", "name": "Gargoyle", "skin": "beast.soldier.elite", "item": "beast_soldier_elite_spawn_egg", "glyph": "soldier", "scale": 1.056, "health": 30},
+        {"id": "beast.leader", "subtype": "leader", "name": "Owlbear", "skin": "beast.leader", "item": "beast_leader_spawn_egg", "glyph": "commander", "scale": 1.417, "health": 50},
+        {"id": "beast.leader.elite", "subtype": "leader.elite", "name": "Huorn", "skin": "beast.leader.elite", "item": "beast_leader_elite_spawn_egg", "glyph": "commander", "scale": 3.222, "health": 70}
+      ]
+    },
+    {
+      "id": "ent",
+      "name": "Ent",
+      "entries": [
+        {"id": "ent.soldier", "subtype": "soldier", "name": "Spriggan", "skin": "ent.soldier", "item": "ent_soldier_spawn_egg", "glyph": "soldier", "health": 35},
+        {"id": "ent.soldier.elite", "subtype": "soldier.elite", "name": "Entling", "skin": "ent.soldier.elite", "item": "ent_soldier_elite_spawn_egg", "glyph": "soldier", "scale": 2.028, "health": 85},
+        {"id": "ent.archer", "subtype": "archer", "name": "Wosey", "skin": "ent.archer", "item": "ent_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 20},
+        {"id": "ent.leader", "subtype": "leader", "name": "Ent Mother", "skin": "ent.leader", "item": "ent_leader_spawn_egg", "glyph": "commander", "scale": 2.333, "health": 100},
+        {"id": "ent.leader.elite", "subtype": "leader.elite", "name": "Ent Father", "skin": "ent.leader.elite", "item": "ent_leader_elite_spawn_egg", "glyph": "commander", "scale": 2.667, "health": 150},
+        {"id": "ent.priest", "subtype": "priest", "name": "Druidess", "skin": "ent.priest", "item": "ent_priest_spawn_egg", "glyph": "priest", "mainhand": "minecraft:book", "health": 40},
+        {"id": "ent.trader", "subtype": "trader", "name": "Druid", "skin": "ent.trader", "item": "ent_trader_spawn_egg", "glyph": "trader", "mainhand": "minecraft:book", "health": 50}
+      ]
+    },
+    {
+      "id": "gnome",
+      "name": "Gnome",
+      "entries": [
+        {"id": "gnome.soldier", "subtype": "soldier", "name": "Gnome Stickitupem", "skin": "gnome.soldier", "item": "gnome_soldier_spawn_egg", "glyph": "soldier", "mainhand": "spartanweaponry:iron_spear", "mainFallback": "minecraft:iron_sword", "scale": 0.444, "health": 20},
+        {"id": "gnome.soldier.elite", "subtype": "soldier.elite", "name": "Gnomepoleon", "skin": "gnome.soldier.elite", "item": "gnome_soldier_elite_spawn_egg", "glyph": "soldier", "mainhand": "minecraft:iron_sword", "scale": 0.444, "health": 40},
+        {"id": "gnome.archer", "subtype": "archer", "name": "Gnome Needler", "skin": "gnome.archer", "item": "gnome_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "scale": 0.444, "health": 20},
+        {"id": "gnome.cavalry", "subtype": "cavalry", "name": "Gnome Chicken Cuirassier", "skin": "gnome.cavalry", "item": "gnome_cavalry_spawn_egg", "glyph": "soldier", "mainhand": "spartanweaponry:iron_spear", "mainFallback": "minecraft:iron_sword", "offhand": "minecraft:shield", "scale": 0.444, "health": 20},
+        {"id": "gnome.mounted_archer", "subtype": "mounted_archer", "name": "Gnome Chicken Chassuer", "skin": "gnome.mounted_archer", "item": "gnome_mounted_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "scale": 0.444, "health": 20},
+        {"id": "gnome.leader", "subtype": "leader", "name": "Gnome Mole Beast", "skin": "gnome.leader", "item": "gnome_leader_spawn_egg", "glyph": "commander", "scale": 2, "health": 100},
+        {"id": "gnome.leader.elite", "subtype": "leader.elite", "name": "Gnome Mole Rat", "skin": "gnome.leader.elite", "item": "gnome_leader_elite_spawn_egg", "glyph": "commander", "scale": 1.333, "health": 60},
+        {"id": "gnome.priest", "subtype": "priest", "name": "Gnome God Botherer", "skin": "gnome.priest", "item": "gnome_priest_spawn_egg", "glyph": "priest", "mainhand": "minecraft:book", "scale": 0.444, "health": 40},
+        {"id": "gnome.trader", "subtype": "trader", "name": "Gnome Collector", "skin": "gnome.trader", "item": "gnome_trader_spawn_egg", "glyph": "trader", "mainhand": "minecraft:brown_mushroom", "scale": 0.444, "health": 20}
+      ]
+    },
+    {
+      "id": "gremlin",
+      "name": "Gremlin",
+      "entries": [
+        {"id": "gremlin.soldier", "subtype": "soldier", "name": "Gremlin Slicer", "skin": "gremlin.soldier", "item": "gremlin_soldier_spawn_egg", "glyph": "soldier", "mainhand": "minecraft:iron_sword", "scale": 0.5, "health": 20},
+        {"id": "gremlin.archer", "subtype": "archer", "name": "Gremlin Shooter", "skin": "gremlin.archer", "item": "gremlin_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "scale": 0.5, "health": 20},
+        {"id": "gremlin.cavalry", "subtype": "cavalry", "name": "Gremlin Spider Rider", "skin": "gremlin.cavalry", "item": "gremlin_cavalry_spawn_egg", "glyph": "soldier", "mainhand": "minecraft:iron_axe", "scale": 0.5, "health": 20},
+        {"id": "gremlin.mounted_archer", "subtype": "mounted_archer", "name": "Gremlin Raider", "skin": "gremlin.mounted_archer", "item": "gremlin_mounted_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "scale": 0.5, "health": 20},
+        {"id": "gremlin.leader", "subtype": "leader", "name": "Gremlin Stripey", "skin": "gremlin.leader", "item": "gremlin_leader_spawn_egg", "glyph": "commander", "mainhand": "minecraft:iron_sword", "scale": 0.556, "health": 30},
+        {"id": "gremlin.leader.elite", "subtype": "leader.elite", "name": "Gremlin Mohawky", "skin": "gremlin.leader.elite", "item": "gremlin_leader_elite_spawn_egg", "glyph": "commander", "mainhand": "minecraft:diamond_sword", "scale": 0.556, "health": 50},
+        {"id": "gremlin.priest", "subtype": "priest", "name": "Gremlin Brains", "skin": "gremlin.priest", "item": "gremlin_priest_spawn_egg", "glyph": "priest", "mainhand": "minecraft:torch", "scale": 0.5, "health": 20},
+        {"id": "gremlin.spellcaster", "subtype": "spellcaster", "name": "Gremlin Mischiever", "skin": "gremlin.spellcaster", "item": "gremlin_spellcaster_spawn_egg", "glyph": "spellcaster", "scale": 0.5, "health": 20},
+        {"id": "gremlin.spellcaster.1", "subtype": "spellcaster.1", "name": "Gremlin Spellcaster 1", "skin": "gremlin.spellcaster.1", "item": "gremlin_spellcaster_1_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:book", "scale": 0.5, "health": 20},
+        {"id": "gremlin.spellcaster.2", "subtype": "spellcaster.2", "name": "Gremlin Spellcaster 2", "skin": "gremlin.spellcaster.2", "item": "gremlin_spellcaster_2_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:book", "scale": 0.5, "health": 25}
+      ]
+    },
+    {
+      "id": "monster",
+      "name": "Monster",
+      "entries": [
+        {"id": "monster.soldier", "subtype": "soldier", "name": "Horrible Monster", "skin": "monster.soldier", "item": "monster_soldier_spawn_egg", "glyph": "soldier", "scale": 1.139, "health": 65},
+        {"id": "monster.soldier.elite", "subtype": "soldier.elite", "name": "Savage Monster", "skin": "monster.soldier.elite", "item": "monster_soldier_elite_spawn_egg", "glyph": "soldier", "scale": 1.333, "health": 85},
+        {"id": "monster.leader", "subtype": "leader", "name": "Ravenous Monster", "skin": "monster.leader", "item": "monster_leader_spawn_egg", "glyph": "commander", "scale": 1.639, "health": 100},
+        {"id": "monster.leader.elite", "subtype": "leader.elite", "name": "Horrific Monster", "skin": "monster.leader.elite", "item": "monster_leader_elite_spawn_egg", "glyph": "commander", "scale": 1.833, "health": 150}
+      ]
+    },
+    {
+      "id": "vampire",
+      "name": "Vampire",
+      "entries": [
+        {"id": "vampire.soldier", "subtype": "soldier", "name": "Frankenstein Monster", "skin": "vampire.soldier", "item": "vampire_soldier_spawn_egg", "glyph": "soldier", "scale": 1.278, "health": 40},
+        {"id": "vampire.soldier.elite", "subtype": "soldier.elite", "name": "Vampire Bride", "skin": "vampire.soldier.elite", "item": "vampire_soldier_elite_spawn_egg", "glyph": "soldier", "health": 30},
+        {"id": "vampire.archer", "subtype": "archer", "name": "Vampire Szygany Guard", "skin": "vampire.archer", "item": "vampire_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 20},
+        {"id": "vampire.archer.elite", "subtype": "archer.elite", "name": "Vampire Szygany Watcher", "skin": "vampire.archer.elite", "item": "vampire_archer_elite_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 30},
+        {"id": "vampire.cavalry", "subtype": "cavalry", "name": "Vampire Death Dealer", "skin": "vampire.cavalry", "item": "vampire_cavalry_spawn_egg", "glyph": "soldier", "mainhand": "minecraft:diamond_sword", "health": 60},
+        {"id": "vampire.mounted_archer", "subtype": "mounted_archer", "name": "Vampire Szygany Blood Hunter", "skin": "vampire.mounted_archer", "item": "vampire_mounted_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 30},
+        {"id": "vampire.leader", "subtype": "leader", "name": "Vampire Nosferatu", "skin": "vampire.leader", "item": "vampire_leader_spawn_egg", "glyph": "commander", "scale": 1.111, "health": 80},
+        {"id": "vampire.leader.elite", "subtype": "leader.elite", "name": "Vampire Drakul", "skin": "vampire.leader.elite", "item": "vampire_leader_elite_spawn_egg", "glyph": "commander", "mainhand": "minecraft:diamond_sword", "scale": 1.222, "health": 120},
+        {"id": "vampire.siege_engineer", "subtype": "siege_engineer", "name": "Vampire Szygany Warcrafter", "skin": "vampire.siege_engineer", "item": "vampire_siege_engineer_spawn_egg", "glyph": "siege_engineer", "health": 30},
+        {"id": "vampire.priest", "subtype": "priest", "name": "Vampire Blood Priest", "skin": "vampire.priest", "item": "vampire_priest_spawn_egg", "glyph": "priest", "mainhand": "minecraft:skull", "health": 40},
+        {"id": "vampire.spellcaster", "subtype": "spellcaster", "name": "Vampire Spellcaster", "skin": "vampire.spellcaster", "item": "vampire_spellcaster_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:skull", "health": 30},
+        {"id": "vampire.spellcaster.1", "subtype": "spellcaster.1", "name": "Vampire Strigoi", "skin": "vampire.spellcaster.1", "item": "vampire_spellcaster_1_spawn_egg", "glyph": "spellcaster", "health": 20},
+        {"id": "vampire.spellcaster.2", "subtype": "spellcaster.2", "name": "Vampire Mesmerist", "skin": "vampire.spellcaster.2", "item": "vampire_spellcaster_2_spawn_egg", "glyph": "spellcaster", "health": 30},
+        {"id": "vampire.spellcaster.3", "subtype": "spellcaster.3", "name": "Vampire Blood Mage", "skin": "vampire.spellcaster.3", "item": "vampire_spellcaster_3_spawn_egg", "glyph": "spellcaster", "health": 60},
+        {"id": "vampire.spellcaster.4", "subtype": "spellcaster.4", "name": "Vampire Ancient", "skin": "vampire.spellcaster.4", "item": "vampire_spellcaster_4_spawn_egg", "glyph": "spellcaster", "health": 80},
+        {"id": "vampire.trader", "subtype": "trader", "name": "Vampire Blood Bargainer", "skin": "vampire.trader", "item": "vampire_trader_spawn_egg", "glyph": "trader", "mainhand": "minecraft:bone", "health": 50},
+        {"id": "vampire.civilian.female", "subtype": "civilian.female", "name": "Vampire Blood Slave", "skin": "vampire.civilian.female", "item": "vampire_civilian_female_spawn_egg", "glyph": "civilian_female", "health": 10},
+        {"id": "vampire.civilian.male", "subtype": "civilian.male", "name": "Vampire Thrall", "skin": "vampire.civilian.male", "item": "vampire_civilian_male_spawn_egg", "glyph": "civilian_male", "health": 10}
+      ]
+    },
+    {
+      "id": "demon",
+      "name": "Demon",
+      "entries": [
+        {"id": "demon.soldier", "subtype": "soldier", "name": "Demon", "skin": "demon.soldier", "item": "demon_soldier_spawn_egg", "glyph": "soldier", "mainhand": "spartanweaponry:golden_spear", "mainFallback": "minecraft:golden_sword", "health": 35},
+        {"id": "demon.soldier.elite", "subtype": "soldier.elite", "name": "Demon of the Pit", "skin": "demon.soldier.elite", "item": "demon_soldier_elite_spawn_egg", "glyph": "soldier", "mainhand": "spartanweaponry:golden_halberd", "mainFallback": "minecraft:golden_sword", "scale": 1.167, "health": 60},
+        {"id": "demon.archer", "subtype": "archer", "name": "Demon Goatkin", "skin": "demon.archer", "item": "demon_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 20},
+        {"id": "demon.archer.elite", "subtype": "archer.elite", "name": "Demon Guardian", "skin": "demon.archer.elite", "item": "demon_archer_elite_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 30},
+        {"id": "demon.cavalry", "subtype": "cavalry", "name": "Demon Hell Knight", "skin": "demon.cavalry", "item": "demon_cavalry_spawn_egg", "glyph": "soldier", "mainhand": "minecraft:golden_sword", "health": 55},
+        {"id": "demon.mounted_archer", "subtype": "mounted_archer", "name": "Demon Hell Rider", "skin": "demon.mounted_archer", "item": "demon_mounted_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 45},
+        {"id": "demon.leader", "subtype": "leader", "name": "Demon Warlord", "skin": "demon.leader", "item": "demon_leader_spawn_egg", "glyph": "commander", "mainhand": "minecraft:diamond_sword", "scale": 1.25, "health": 75},
+        {"id": "demon.leader.elite", "subtype": "leader.elite", "name": "Demon Archfiend", "skin": "demon.leader.elite", "item": "demon_leader_elite_spawn_egg", "glyph": "commander", "mainhand": "minecraft:diamond_sword", "scale": 1.444, "health": 150},
+        {"id": "demon.siege_engineer", "subtype": "siege_engineer", "name": "Demoness", "skin": "demon.siege_engineer", "item": "demon_siege_engineer_spawn_egg", "glyph": "siege_engineer", "health": 50},
+        {"id": "demon.priest", "subtype": "priest", "name": "Demon Hell Priest", "skin": "demon.priest", "item": "demon_priest_spawn_egg", "glyph": "priest", "mainhand": "minecraft:enchanted_book", "health": 50},
+        {"id": "demon.spellcaster", "subtype": "spellcaster", "name": "Diabolus", "skin": "demon.spellcaster", "item": "demon_spellcaster_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:skull", "health": 20},
+        {"id": "demon.spellcaster.1", "subtype": "spellcaster.1", "name": "Baphomet", "skin": "demon.spellcaster.1", "item": "demon_spellcaster_1_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:book", "health": 30},
+        {"id": "demon.spellcaster.2", "subtype": "spellcaster.2", "name": "Mephistopheles", "skin": "demon.spellcaster.2", "item": "demon_spellcaster_2_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 30},
+        {"id": "demon.spellcaster.3", "subtype": "spellcaster.3", "name": "Archfiend", "skin": "demon.spellcaster.3", "item": "demon_spellcaster_3_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 40},
+        {"id": "demon.spellcaster.4", "subtype": "spellcaster.4", "name": "Demon Prince", "skin": "demon.spellcaster.4", "item": "demon_spellcaster_4_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:skull", "health": 60},
+        {"id": "demon.bard", "subtype": "bard", "name": "Demon Jester", "skin": "demon.bard", "item": "demon_bard_spawn_egg", "glyph": "bard", "mainhand": "minecraft:stick", "health": 50},
+        {"id": "demon.trader", "subtype": "trader", "name": "Demon Soul Thief", "skin": "demon.trader", "item": "demon_trader_spawn_egg", "glyph": "trader", "mainhand": "minecraft:book", "health": 50},
+        {"id": "demon.civilian.female", "subtype": "civilian.female", "name": "Demon Succubus", "skin": "demon.civilian.female", "item": "demon_civilian_female_spawn_egg", "glyph": "civilian_female", "health": 10},
+        {"id": "demon.civilian.male", "subtype": "civilian.male", "name": "Demon Damned Soul", "skin": "demon.civilian.male", "item": "demon_civilian_male_spawn_egg", "glyph": "civilian_male", "health": 10}
+      ]
+    },
+    {
+      "id": "undead",
+      "name": "Undead",
+      "entries": [
+        {"id": "undead.soldier", "subtype": "soldier", "name": "Undead Zombie", "skin": "undead.soldier", "item": "undead_soldier_spawn_egg", "glyph": "soldier", "mainhand": "minecraft:iron_sword", "health": 20},
+        {"id": "undead.soldier.elite", "subtype": "soldier.elite", "name": "Undead Spectre", "skin": "undead.soldier.elite", "item": "undead_soldier_elite_spawn_egg", "glyph": "soldier", "mainhand": "spartanweaponry:iron_scythe", "mainFallback": "minecraft:iron_sword", "health": 30},
+        {"id": "undead.archer", "subtype": "archer", "name": "Undead Skeleton", "skin": "undead.archer", "item": "undead_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 20},
+        {"id": "undead.archer.elite", "subtype": "archer.elite", "name": "Undead Lich", "skin": "undead.archer.elite", "item": "undead_archer_elite_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 30},
+        {"id": "undead.cavalry", "subtype": "cavalry", "name": "Undead Wraith Rider", "skin": "undead.cavalry", "item": "undead_cavalry_spawn_egg", "glyph": "soldier", "mainhand": "minecraft:iron_sword", "health": 40},
+        {"id": "undead.mounted_archer", "subtype": "mounted_archer", "name": "Undead Ghost Rider", "skin": "undead.mounted_archer", "item": "undead_mounted_archer_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "health": 30},
+        {"id": "undead.leader", "subtype": "leader", "name": "Undead Death Knight", "skin": "undead.leader", "item": "undead_leader_spawn_egg", "glyph": "commander", "mainhand": "minecraft:diamond_sword", "health": 50},
+        {"id": "undead.leader.elite", "subtype": "leader.elite", "name": "Undead Liche Lord", "skin": "undead.leader.elite", "item": "undead_leader_elite_spawn_egg", "glyph": "commander", "mainhand": "spartanweaponry:iron_halberd", "mainFallback": "minecraft:iron_hoe", "health": 60},
+        {"id": "undead.siege_engineer", "subtype": "siege_engineer", "name": "Undead Death Sender", "skin": "undead.siege_engineer", "item": "undead_siege_engineer_spawn_egg", "glyph": "siege_engineer", "health": 30},
+        {"id": "undead.priest", "subtype": "priest", "name": "Undead Liche", "skin": "undead.priest", "item": "undead_priest_spawn_egg", "glyph": "priest", "mainhand": "minecraft:skull", "health": 40},
+        {"id": "undead.spellcaster", "subtype": "spellcaster", "name": "Undead Skull Lord", "skin": "undead.spellcaster", "item": "undead_spellcaster_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:skull", "health": 20},
+        {"id": "undead.spellcaster.1", "subtype": "spellcaster.1", "name": "Undead Summoner", "skin": "undead.spellcaster.1", "item": "undead_spellcaster_1_spawn_egg", "glyph": "spellcaster", "health": 30},
+        {"id": "undead.spellcaster.2", "subtype": "spellcaster.2", "name": "Undead Necromancer", "skin": "undead.spellcaster.2", "item": "undead_spellcaster_2_spawn_egg", "glyph": "spellcaster", "health": 40},
+        {"id": "undead.spellcaster.3", "subtype": "spellcaster.3", "name": "Undead Liche", "skin": "undead.spellcaster.3", "item": "undead_spellcaster_3_spawn_egg", "glyph": "spellcaster", "health": 50},
+        {"id": "undead.spellcaster.4", "subtype": "spellcaster.4", "name": "Liche Master", "skin": "undead.spellcaster.4", "item": "undead_spellcaster_4_spawn_egg", "glyph": "spellcaster", "health": 60},
+        {"id": "undead.bard", "subtype": "bard", "name": "Banshee", "skin": "undead.bard", "item": "undead_bard_spawn_egg", "glyph": "bard", "mainhand": "minecraft:stick", "health": 50},
+        {"id": "undead.trader", "subtype": "trader", "name": "Undead Death Bargainer", "skin": "undead.trader", "item": "undead_trader_spawn_egg", "glyph": "trader", "mainhand": "minecraft:bone", "health": 50}
+      ]
+    },
+    {
+      "id": "mindflayer",
+      "name": "Mindflayer",
+      "entries": [
+        {"id": "mindflayer.soldier", "subtype": "soldier", "name": "Cavern Lurker", "skin": "mindflayer.soldier", "item": "mindflayer_soldier_spawn_egg", "glyph": "soldier", "mainhand": "minecraft:stone_axe", "scale": 0.611, "health": 10},
+        {"id": "mindflayer.soldier.elite", "subtype": "soldier.elite", "name": "Wererat", "skin": "mindflayer.soldier.elite", "item": "mindflayer_soldier_elite_spawn_egg", "glyph": "soldier", "mainhand": "minecraft:iron_sword", "scale": 0.889, "health": 30},
+        {"id": "mindflayer.leader", "subtype": "leader", "name": "Cavern Growler", "skin": "mindflayer.leader", "item": "mindflayer_leader_spawn_egg", "glyph": "commander", "scale": 1.167, "health": 50},
+        {"id": "mindflayer.leader.elite", "subtype": "leader.elite", "name": "Cavern Troll", "skin": "mindflayer.leader.elite", "item": "mindflayer_leader_elite_spawn_egg", "glyph": "commander", "scale": 3.222, "health": 70},
+        {"id": "mindflayer.spellcaster", "subtype": "spellcaster", "name": "Mindflayer Magi", "skin": "mindflayer.spellcaster", "item": "mindflayer_spellcaster_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "scale": 1.139, "health": 30},
+        {"id": "mindflayer.spellcaster.1", "subtype": "spellcaster.1", "name": "Mindflayer Magi", "skin": "mindflayer.spellcaster.1", "item": "mindflayer_spellcaster_1_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:book", "scale": 1.139, "health": 30},
+        {"id": "mindflayer.spellcaster.2", "subtype": "spellcaster.2", "name": "Mindflayer Water Magi", "skin": "mindflayer.spellcaster.2", "item": "mindflayer_spellcaster_2_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "scale": 1.139, "health": 35},
+        {"id": "mindflayer.spellcaster.3", "subtype": "spellcaster.3", "name": "Mindflayer Fire Magi", "skin": "mindflayer.spellcaster.3", "item": "mindflayer_spellcaster_3_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "scale": 1.139, "health": 40},
+        {"id": "mindflayer.spellcaster.4", "subtype": "spellcaster.4", "name": "Mindflayer Archi Magi", "skin": "mindflayer.spellcaster.4", "item": "mindflayer_spellcaster_4_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "scale": 1.139, "health": 50}
+      ]
+    }
+  ]
+}

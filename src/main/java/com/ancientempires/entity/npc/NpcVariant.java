@@ -88,12 +88,21 @@ public enum NpcVariant
     {
         npc.assignSkin(this.skinId);
         npc.setBodyScale(this.bodyScale);
-        ItemStack main = this.kit.mainHand();
+        equipIfEmpty(npc, this.kit);
+    }
+
+    /**
+     * Fills an empty hand from a kit. A hand that already holds an item is left alone.
+     * Faction eggs use this without changing the body scale.
+     */
+    public static void equipIfEmpty(NpcEntity npc, Kit kit)
+    {
+        ItemStack main = kit.mainHand();
         if (!main.isEmpty() && npc.getMainHandItem().isEmpty())
         {
             npc.setItemSlot(EquipmentSlot.MAINHAND, main);
         }
-        ItemStack off = this.kit.offHand();
+        ItemStack off = kit.offHand();
         if (!off.isEmpty() && npc.getOffhandItem().isEmpty())
         {
             npc.setItemSlot(EquipmentSlot.OFFHAND, off);
@@ -104,7 +113,7 @@ public enum NpcVariant
      * Spartan Weaponry marks longswords, halberds, and greatswords as two-handed,
      * so those kits leave the off hand empty. The spear is one-handed.
      */
-    private enum Kit
+    public enum Kit
     {
         NONE,
         SPEAR,

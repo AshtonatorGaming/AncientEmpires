@@ -106,7 +106,11 @@ public class NpcScreen extends AbstractContainerScreen<NpcMenu> implements IMuiS
     @SubscribeEvent
     public static void registerScreens(FMLClientSetupEvent event)
     {
-        event.enqueueWork(() -> MenuScreens.register(ModMenus.NPC_INVENTORY.get(), NpcScreen::new));
+        event.enqueueWork(() ->
+        {
+            MenuScreens.register(ModMenus.NPC_INVENTORY.get(), NpcScreen::new);
+            NpcSkinHooks.setOpener(NpcSkinSelector::open);
+        });
     }
 
     /**

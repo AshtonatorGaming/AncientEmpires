@@ -23,6 +23,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -31,7 +32,6 @@ import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.util.Mth;
@@ -52,8 +52,9 @@ import java.util.UUID;
 /**
  * The base soldier. The main hand is a vanilla equipment slot, so weapon
  * attributes still apply. Extra slots live in {@link NpcInventory}. Jobs and
- * upkeep stay off this class. The owner is the player who placed the spawn egg,
- * or the first player to open an unowned NPC.
+ * upkeep stay off this class.
+ * An owned NPC has an owner uuid, a home, and the follow flag. A faction NPC
+ * has a faction id and no owner. Opening a faction NPC does not claim it.
  */
 @Mod.EventBusSubscriber(modid = AncientEmpires.MOD_ID)
 public class NpcEntity extends PathfinderMob
@@ -61,6 +62,7 @@ public class NpcEntity extends PathfinderMob
     private static final String OWNER_KEY = "Owner";
     private static final ThreadLocal<UUID> SPAWN_OWNER = new ThreadLocal<>();
     private static final ThreadLocal<NpcVariant> SPAWN_VARIANT = new ThreadLocal<>();
+    private static final ThreadLocal<String> SPAWN_ROSTER = new ThreadLocal<>();
     private static final EntityDataAccessor<Optional<UUID>> DATA_OWNER = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.OPTIONAL_UUID);
     private static final EntityDataAccessor<Boolean> DATA_ATTACK_WINDOW = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<String> DATA_ATTACK_ANIMATION = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.STRING);
@@ -74,6 +76,8 @@ public class NpcEntity extends PathfinderMob
     private static final EntityDataAccessor<Optional<BlockPos>> DATA_HOME = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.OPTIONAL_BLOCK_POS);
     private static final EntityDataAccessor<String> DATA_HOME_DIM = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<String> DATA_SKIN = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.STRING);
+    /** Empty for an owned or unclaimed NPC. A faction NPC stores an id such as {@code empire}. */
+    private static final EntityDataAccessor<String> DATA_FACTION = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.STRING);
     /** Off-hand beat of an empty-hand fist combo. Cleared with the presentation, not the attack window. */
     private static final EntityDataAccessor<Boolean> DATA_ATTACK_OFFHAND = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.BOOLEAN);
     /** 1 is a normal player body. Dwarf and giant eggs store a different scale. */
@@ -88,6 +92,8 @@ public class NpcEntity extends PathfinderMob
     private static final String HOME_KEY = "Home";
     private static final String HOME_DIM_KEY = "HomeDim";
     private static final String SKIN_KEY = "Skin";
+    private static final String FACTION_KEY = "Faction";
+    private static final int FACTION_LIMIT = 32;
     private static final String BODY_SCALE_KEY = "BodyScale";
     private static final String CUSTOM_NAME_KEY = "CustomName";
     /** Packed eggs only. The spawn merge cannot delete the placer's Owner key. */
@@ -145,6 +151,7 @@ public class NpcEntity extends PathfinderMob
         this.entityData.define(DATA_HOME, Optional.empty());
         this.entityData.define(DATA_HOME_DIM, "");
         this.entityData.define(DATA_SKIN, "");
+        this.entityData.define(DATA_FACTION, "");
         this.entityData.define(DATA_ATTACK_OFFHAND, false);
         this.entityData.define(DATA_BODY_SCALE, 1.0F);
     }
@@ -177,8 +184,51 @@ public class NpcEntity extends PathfinderMob
         this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
 
-        this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
+        this.targetSelector.addGoal(1, new NpcHurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Monster.class, true));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, NpcEntity.class, 10, true, false, this::acceptsTarget));
+    }
+
+    /**
+     * Automatic scans only. A same-owner pair is never a target. An owned NPC hunts
+     * faction NPCs. A faction NPC hunts the hostile list, not players and not owned NPCs.
+     * A hit still uses the hurt-by goal, which only rejects a same-owner attacker.
+     */
+    private boolean acceptsTarget(LivingEntity living)
+    {
+        if (!(living instanceof NpcEntity target) || target == this || !target.isAlive())
+        {
+            return false;
+        }
+        if (sameOwner(this, target))
+        {
+            return false;
+        }
+        if (this.isFactionNpc())
+        {
+            return target.isFactionNpc() && NpcFactions.hostile(this.getFaction(), target.getFaction());
+        }
+        if (!this.isOwnedNpc())
+        {
+            return false;
+        }
+        return target.isFactionNpc();
+    }
+
+    @Override
+    public boolean canAttack(LivingEntity target)
+    {
+        if (target instanceof NpcEntity other && sameOwner(this, other))
+        {
+            return false;
+        }
+        return super.canAttack(target);
+    }
+
+    private static boolean sameOwner(NpcEntity left, NpcEntity right)
+    {
+        UUID owner = left.getOwner();
+        return owner != null && owner.equals(right.getOwner());
     }
 
     @Override
@@ -240,18 +290,30 @@ public class NpcEntity extends PathfinderMob
         {
             return;
         }
-        if (npc.getOwner() == null)
+        String rosterId = SPAWN_ROSTER.get();
+        if (rosterId != null)
         {
-            UUID pending = SPAWN_OWNER.get();
-            if (pending != null)
+            NpcRoster.Entry entry = NpcRoster.byId(rosterId);
+            if (entry != null)
             {
-                npc.setOwner(pending);
+                entry.apply(npc);
             }
         }
-        NpcVariant variant = SPAWN_VARIANT.get();
-        if (variant != null)
+        else
         {
-            variant.apply(npc);
+            if (npc.getOwner() == null)
+            {
+                UUID pending = SPAWN_OWNER.get();
+                if (pending != null)
+                {
+                    npc.setOwner(pending);
+                }
+            }
+            NpcVariant variant = SPAWN_VARIANT.get();
+            if (variant != null)
+            {
+                variant.apply(npc);
+            }
         }
         // A fresh spawn stands on its home. A saved home in the egg replaces this.
         // AeNoHome clears it again, because the egg merge cannot delete this key.
@@ -275,6 +337,19 @@ public class NpcEntity extends PathfinderMob
         SPAWN_VARIANT.remove();
     }
 
+    /**
+     * Held across a faction egg's spawn, including a dispenser. The placer is not claimed.
+     */
+    public static void beginSpawnRoster(String rosterId)
+    {
+        SPAWN_ROSTER.set(rosterId);
+    }
+
+    public static void endSpawnRoster()
+    {
+        SPAWN_ROSTER.remove();
+    }
+
     public NpcInventory getInventory()
     {
         return this.inventory;
@@ -289,6 +364,45 @@ public class NpcEntity extends PathfinderMob
     public void setOwner(@Nullable UUID owner)
     {
         this.entityData.set(DATA_OWNER, Optional.ofNullable(owner));
+    }
+
+    public String getFaction()
+    {
+        return this.entityData.get(DATA_FACTION);
+    }
+
+    /**
+     * A non-empty faction clears the owner and the follow flag. Faction NPCs are not owned.
+     */
+    public void assignFaction(String faction)
+    {
+        String id = sanitizeFaction(faction);
+        this.entityData.set(DATA_FACTION, id);
+        if (!id.isEmpty())
+        {
+            this.setOwner(null);
+            this.setFollowing(false);
+        }
+    }
+
+    public boolean isFactionNpc()
+    {
+        return !this.getFaction().isEmpty();
+    }
+
+    public boolean isOwnedNpc()
+    {
+        return this.getOwner() != null && !this.isFactionNpc();
+    }
+
+    private static String sanitizeFaction(String faction)
+    {
+        String trimmed = faction == null ? "" : faction.trim();
+        if (trimmed.length() > FACTION_LIMIT)
+        {
+            return trimmed.substring(0, FACTION_LIMIT);
+        }
+        return trimmed;
     }
 
     public boolean canOpenInventory(Player player)
@@ -440,8 +554,8 @@ public class NpcEntity extends PathfinderMob
     }
 
     /**
-     * A bundled variant id such as {@code viking.soldier}, or a resource location
-     * a skin pack can render. Invalid text is ignored.
+     * A catalog id such as {@code viking.soldier}, or a resource location a skin
+     * pack can render. Invalid text is ignored.
      */
     @Nullable
     public static ResourceLocation parseSkinId(String skin)
@@ -449,6 +563,11 @@ public class NpcEntity extends PathfinderMob
         if (skin == null || skin.isEmpty())
         {
             return null;
+        }
+        ResourceLocation mapped = NpcSkins.texture(skin);
+        if (mapped != null)
+        {
+            return mapped;
         }
         NpcVariant variant = NpcVariant.bySkinId(skin);
         if (variant != null)
@@ -565,7 +684,7 @@ public class NpcEntity extends PathfinderMob
     }
 
     /**
-     * Gear, backpack slots, skin, home, owner, name, flags, and body scale.
+     * Gear, backpack slots, skin, faction, home, owner, name, flags, and body scale.
      * Position, motion, and the old UUID stay off this tag.
      */
     private void writePackedState(CompoundTag tag, @Nullable Component customName, boolean unnamed)
@@ -584,6 +703,7 @@ public class NpcEntity extends PathfinderMob
 
         this.inventory.save(tag);
         tag.putString(SKIN_KEY, this.getSkinId());
+        tag.putString(FACTION_KEY, this.getFaction());
         tag.putBoolean(FOLLOWING_KEY, this.isFollowing());
         tag.putBoolean(CREATIVE_KEY, this.isCreative());
         tag.putBoolean(HOLDING_KEY, this.isHoldingPosition());
@@ -701,7 +821,7 @@ public class NpcEntity extends PathfinderMob
         {
             trimmed = trimmed.substring(0, 128);
         }
-        if (!trimmed.isEmpty() && parseSkinId(trimmed) == null)
+        if (!trimmed.isEmpty() && NpcSkins.byId(trimmed) == null && parseSkinId(trimmed) == null)
         {
             return;
         }
@@ -974,7 +1094,7 @@ public class NpcEntity extends PathfinderMob
         }
         if (!this.level().isClientSide && player instanceof ServerPlayer serverPlayer)
         {
-            if (this.getOwner() == null)
+            if (this.getOwner() == null && this.getFaction().isEmpty())
             {
                 this.setOwner(player.getUUID());
             }
@@ -1024,6 +1144,7 @@ public class NpcEntity extends PathfinderMob
         {
             tag.putString(SKIN_KEY, this.getSkinId());
         }
+        tag.putString(FACTION_KEY, this.getFaction());
         tag.putFloat(BODY_SCALE_KEY, this.getBodyScale());
     }
 
@@ -1067,6 +1188,10 @@ public class NpcEntity extends PathfinderMob
         {
             this.setCustomName(null);
             this.setCustomNameVisible(false);
+        }
+        if (tag.contains(FACTION_KEY))
+        {
+            this.assignFaction(tag.getString(FACTION_KEY));
         }
     }
 

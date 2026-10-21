@@ -1,6 +1,7 @@
 package com.ancientempires.registry;
 
 import com.ancientempires.AncientEmpires;
+import com.ancientempires.entity.npc.NpcRoster;
 import com.ancientempires.entity.npc.NpcVariant;
 import com.ancientempires.item.NpcSpawnEggItem;
 import net.minecraft.world.item.Item;
@@ -9,6 +10,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public final class ModItems
@@ -25,17 +27,31 @@ public final class ModItems
     public static final RegistryObject<Item> CIVILIAN_SPAWN_EGG = egg("civilian_spawn_egg", 0x6A5A48, 0xD8C8A8, NpcVariant.CIVILIAN);
     public static final RegistryObject<Item> LEADER_SPAWN_EGG = egg("leader_spawn_egg", 0x1E2A4A, 0xE0C060, NpcVariant.LEADER);
 
-    public static final List<RegistryObject<Item>> SPAWN_EGGS = List.of(
-            NPC_SPAWN_EGG,
-            VIKING_SOLDIER_SPAWN_EGG,
-            EMPIRE_SOLDIER_SPAWN_EGG,
-            BRIGAND_SPAWN_EGG,
-            ARCHER_SPAWN_EGG,
-            DWARF_SOLDIER_SPAWN_EGG,
-            GIANT_SPAWN_EGG,
-            CIVILIAN_SPAWN_EGG,
-            LEADER_SPAWN_EGG
-    );
+    public static final List<RegistryObject<Item>> ROSTER_EGGS;
+    public static final List<RegistryObject<Item>> SPAWN_EGGS;
+
+    static
+    {
+        List<RegistryObject<Item>> roster = new ArrayList<>();
+        for (NpcRoster.Entry entry : NpcRoster.entries())
+        {
+            String rosterId = entry.id();
+            roster.add(ITEMS.register(entry.itemId(), () -> new NpcSpawnEggItem(ModEntities.NPC, 0xFFFFFF, 0xFFFFFF, new Item.Properties(), null, rosterId)));
+        }
+        ROSTER_EGGS = List.copyOf(roster);
+        List<RegistryObject<Item>> all = new ArrayList<>();
+        all.add(NPC_SPAWN_EGG);
+        all.add(VIKING_SOLDIER_SPAWN_EGG);
+        all.add(EMPIRE_SOLDIER_SPAWN_EGG);
+        all.add(BRIGAND_SPAWN_EGG);
+        all.add(ARCHER_SPAWN_EGG);
+        all.add(DWARF_SOLDIER_SPAWN_EGG);
+        all.add(GIANT_SPAWN_EGG);
+        all.add(CIVILIAN_SPAWN_EGG);
+        all.add(LEADER_SPAWN_EGG);
+        all.addAll(ROSTER_EGGS);
+        SPAWN_EGGS = List.copyOf(all);
+    }
 
     private ModItems()
     {
@@ -43,6 +59,6 @@ public final class ModItems
 
     private static RegistryObject<Item> egg(String name, int background, int highlight, @Nullable NpcVariant variant)
     {
-        return ITEMS.register(name, () -> new NpcSpawnEggItem(ModEntities.NPC, background, highlight, new Item.Properties(), variant));
+        return ITEMS.register(name, () -> new NpcSpawnEggItem(ModEntities.NPC, background, highlight, new Item.Properties(), variant, null));
     }
 }

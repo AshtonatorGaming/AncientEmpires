@@ -9,7 +9,7 @@ import net.minecraftforge.network.NetworkEvent;
 import java.util.function.Supplier;
 
 /**
- * Stores a texture id for a later skin pack. The default skin button does not send this.
+ * Applies a catalog skin id. The inventory skin selector sends this.
  */
 public class NpcSkinPacket
 {
