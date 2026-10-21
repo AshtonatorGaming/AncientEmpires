@@ -14,8 +14,12 @@ import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
+import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.client.event.RegisterClientReloadListenersEvent;
 import net.minecraftforge.client.event.RenderNameTagEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -52,6 +56,7 @@ public class NpcRenderer extends HumanoidMobRenderer<NpcEntity, NpcModel>
             this.heldItemsCollapsed = true;
             this.keepSingleHeldItemLayer();
         }
+        NpcSkinLayers.apply(this.getModel(), entity, this.getTextureLocation(entity));
         float previousShadow = this.shadowRadius;
         this.shadowRadius = 0.5F * entity.getBodyScale();
         try
@@ -129,6 +134,25 @@ public class NpcRenderer extends HumanoidMobRenderer<NpcEntity, NpcModel>
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event)
     {
         event.registerEntityRenderer(ModEntities.NPC.get(), NpcRenderer::new);
+    }
+
+    @SubscribeEvent
+    public static void reloadSkinLayers(RegisterClientReloadListenersEvent event)
+    {
+        event.registerReloadListener(new SimplePreparableReloadListener<Void>()
+        {
+            @Override
+            protected Void prepare(ResourceManager resourceManager, ProfilerFiller profiler)
+            {
+                return null;
+            }
+
+            @Override
+            protected void apply(Void prepared, ResourceManager resourceManager, ProfilerFiller profiler)
+            {
+                NpcSkinLayers.clear();
+            }
+        });
     }
 
     /**
