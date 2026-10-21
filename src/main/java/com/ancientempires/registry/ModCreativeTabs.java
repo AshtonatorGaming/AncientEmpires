@@ -16,7 +16,7 @@ public final class ModCreativeTabs
     public static final RegistryObject<CreativeModeTab> MAIN = TABS.register("main",
             () -> CreativeModeTab.builder()
                     .title(Component.translatable("itemGroup.ancientempires"))
-                    .icon(() -> new ItemStack(ModItems.NPC_SPAWN_EGG.get()))
+                    .icon(() -> new ItemStack(ModItems.OWNED_EGGS.get(0).get()))
                     .displayItems((parameters, output) ->
                     {
                         for (RegistryObject<Item> egg : ModItems.SPAWN_EGGS)

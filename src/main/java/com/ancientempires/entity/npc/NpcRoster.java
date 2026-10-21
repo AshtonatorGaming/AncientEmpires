@@ -27,8 +27,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Placeable faction NPCs loaded from {@code roster.json}. One entry is an old
- * Ancient Warfare faction and subtype: name, skin, hands, and any scale or health.
+ * Placeable NPCs loaded from {@code roster.json}. Faction entries keep the old
+ * Ancient Warfare name, skin, hands, scale, and health, and they do not claim
+ * a player. Owned entries are the job placeholders and do claim the placer.
  */
 public final class NpcRoster
 {
@@ -37,9 +38,54 @@ public final class NpcRoster
 
     private static final List<Entry> ENTRIES;
     private static final Map<String, Entry> BY_ID;
+    private static final Map<String, Integer> FACTION_COLORS = new HashMap<>();
 
     static
     {
+        putColor("empire", 0x800080);
+        putColor("norska", 0x9999FF);
+        putColor("sarkonid", 0xB20000);
+        putColor("xoltec", 0xFFA500);
+        putColor("witchbane", 0xFFFFFF);
+        putColor("nogg", 0x00CD00);
+        putColor("buffloka", 0x008000);
+        putColor("reiksgard", 0x22CD22);
+        putColor("zimba", 0xFFFF00);
+        putColor("kong", 0x004000);
+        putColor("orc", 0x404040);
+        putColor("brigand", 0x964B00);
+        putColor("pirate", 0xCC7722);
+        putColor("evil", 0x000000);
+        putColor("good", 0x66B266);
+        putColor("undead", 0xB2B2B2);
+        putColor("demon", 0xFF2400);
+        putColor("coven", 0x000000);
+        putColor("elf", 0x66B266);
+        putColor("barbarian", 0x802B00);
+        putColor("dwarf", 0x77B266);
+        putColor("shakayana", 0x88B266);
+        putColor("smingol", 0xFFD700);
+        putColor("lizardman", 0x576500);
+        putColor("mindflayer", 0x777500);
+        putColor("zamurai", 0x376500);
+        putColor("rakshasa", 0xD7BF00);
+        putColor("klown", 0xFFC0CB);
+        putColor("ishtari", 0xFED000);
+        putColor("icelord", 0x3C9F9C);
+        putColor("guild", 0x007CC9);
+        putColor("wizardly", 0xAA3FD8);
+        putColor("amazon", 0xD34848);
+        putColor("minossian", 0x456689);
+        putColor("sealsker", 0x6666FF);
+        putColor("vyncan", 0x6666FF);
+        putColor("hobbit", 0x6666FF);
+        putColor("monster", 0xFFC0CB);
+        putColor("beast", 0xFFC0CB);
+        putColor("ent", 0x6666FF);
+        putColor("gnome", 0x6666FF);
+        putColor("gremlin", 0xFFC0CB);
+        putColor("vampire", 0x320000);
+        putColor("giant", 0xFFC0CB);
         List<Entry> loaded = load();
         Map<String, Entry> byId = new HashMap<>();
         for (Entry entry : loaded)
@@ -48,6 +94,11 @@ public final class NpcRoster
         }
         ENTRIES = List.copyOf(loaded);
         BY_ID = Map.copyOf(byId);
+    }
+
+    private static void putColor(String factionId, int rgb)
+    {
+        FACTION_COLORS.put(factionId, 0xFF000000 | (rgb & 0xFFFFFF));
     }
 
     private NpcRoster()
@@ -81,30 +132,27 @@ public final class NpcRoster
         {
             JsonObject root = JsonParser.parseReader(reader).getAsJsonObject();
             List<Entry> entries = new ArrayList<>();
-            for (JsonElement factionElement : root.getAsJsonArray("factions"))
+            if (root.has("owned"))
             {
-                JsonObject faction = factionElement.getAsJsonObject();
-                String factionId = text(faction, "id");
-                if (!faction.has("entries"))
+                for (JsonElement element : root.getAsJsonArray("owned"))
                 {
-                    continue;
+                    entries.add(readEntry(element.getAsJsonObject(), "", true));
                 }
-                for (JsonElement entryElement : faction.getAsJsonArray("entries"))
+            }
+            if (root.has("factions"))
+            {
+                for (JsonElement factionElement : root.getAsJsonArray("factions"))
                 {
-                    JsonObject object = entryElement.getAsJsonObject();
-                    entries.add(new Entry(
-                            text(object, "id"),
-                            factionId,
-                            text(object, "subtype"),
-                            text(object, "name"),
-                            text(object, "skin"),
-                            text(object, "item"),
-                            text(object, "mainhand"),
-                            text(object, "mainFallback"),
-                            text(object, "offhand"),
-                            text(object, "offFallback"),
-                            decimal(object, "scale"),
-                            health(object)));
+                    JsonObject faction = factionElement.getAsJsonObject();
+                    String factionId = text(faction, "id");
+                    if (!faction.has("entries"))
+                    {
+                        continue;
+                    }
+                    for (JsonElement entryElement : faction.getAsJsonArray("entries"))
+                    {
+                        entries.add(readEntry(entryElement.getAsJsonObject(), factionId, false));
+                    }
                 }
             }
             return entries;
@@ -114,6 +162,36 @@ public final class NpcRoster
             AncientEmpires.LOGGER.error("Could not read the NPC roster", exception);
             return List.of();
         }
+    }
+
+    private static Entry readEntry(JsonObject object, String factionId, boolean owned)
+    {
+        int color = owned ? 0xFFFFFFFF : factionColor(factionId);
+        return new Entry(
+                text(object, "id"),
+                factionId,
+                text(object, "subtype"),
+                text(object, "name"),
+                text(object, "skin"),
+                text(object, "item"),
+                text(object, "mainhand"),
+                text(object, "mainFallback"),
+                text(object, "offhand"),
+                text(object, "offFallback"),
+                decimal(object, "scale"),
+                health(object),
+                owned,
+                color);
+    }
+
+    private static int factionColor(String factionId)
+    {
+        Integer color = FACTION_COLORS.get(factionId);
+        if (color == null)
+        {
+            return 0xFFFFFFFF;
+        }
+        return color;
     }
 
     private static String text(JsonObject object, String key)
@@ -144,7 +222,8 @@ public final class NpcRoster
     }
 
     /**
-     * One old faction subtype. Spawning it does not claim the player who placed the egg.
+     * One roster row. A faction row does not claim the player who placed the egg.
+     * An owned row is a job placeholder and does claim that player.
      */
     public static final class Entry
     {
@@ -160,8 +239,10 @@ public final class NpcRoster
         private final String offFallback;
         private final float scale;
         private final double health;
+        private final boolean owned;
+        private final int color;
 
-        private Entry(String id, String faction, String subtype, String name, String skin, String itemId, String mainhand, String mainFallback, String offhand, String offFallback, float scale, double health)
+        private Entry(String id, String faction, String subtype, String name, String skin, String itemId, String mainhand, String mainFallback, String offhand, String offFallback, float scale, double health, boolean owned, int color)
         {
             this.id = id;
             this.faction = faction;
@@ -175,6 +256,8 @@ public final class NpcRoster
             this.offFallback = offFallback;
             this.scale = scale;
             this.health = health;
+            this.owned = owned;
+            this.color = color;
         }
 
         public String id()
@@ -197,12 +280,29 @@ public final class NpcRoster
             return this.subtype;
         }
 
+        public boolean owned()
+        {
+            return this.owned;
+        }
+
         /**
-         * Faction, skin, display name, empty-hand gear, and any stored scale or health.
+         * Opaque RGB for the scroll overlay. Owned eggs stay white.
+         */
+        public int color()
+        {
+            return this.color;
+        }
+
+        /**
+         * Skin, display name, empty-hand gear, and any stored scale or health.
+         * Faction rows also set the faction, which clears the owner.
          */
         public void apply(NpcEntity npc)
         {
-            npc.assignFaction(this.faction);
+            if (!this.owned)
+            {
+                npc.assignFaction(this.faction);
+            }
             npc.assignSkin(this.skin);
             if (!this.name.isEmpty())
             {

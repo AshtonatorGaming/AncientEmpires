@@ -3,7 +3,6 @@ package com.ancientempires.item;
 import com.ancientempires.AncientEmpires;
 import com.ancientempires.entity.npc.NpcEntity;
 import com.ancientempires.entity.npc.NpcRoster;
-import com.ancientempires.entity.npc.NpcVariant;
 import net.minecraft.core.BlockSource;
 import net.minecraft.core.Direction;
 import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
@@ -27,27 +26,29 @@ import java.util.UUID;
 import java.util.function.Supplier;
 
 /**
- * Spawn egg that records the player as owner while an owned NPC is created.
- * A variant egg also records its skin and loadout for the same spawn.
- * A roster egg records a faction entry and does not claim the placer.
+ * Spawn egg for one roster row. An owned job egg records the placer.
+ * A faction egg records that row and does not claim the placer.
  * The claim is read from the spawn event before the tracking packet.
  */
 public class NpcSpawnEggItem extends ForgeSpawnEggItem
 {
     @Nullable
-    private final NpcVariant variant;
-    @Nullable
     private final String rosterId;
 
-    public NpcSpawnEggItem(Supplier<? extends EntityType<? extends Mob>> type, int backgroundColor, int highlightColor, Item.Properties properties, @Nullable NpcVariant variant, @Nullable String rosterId)
+    public NpcSpawnEggItem(Supplier<? extends EntityType<? extends Mob>> type, int backgroundColor, int highlightColor, Item.Properties properties, @Nullable String rosterId)
     {
         super(type, backgroundColor, highlightColor, properties);
-        this.variant = variant;
         this.rosterId = rosterId;
-        if (variant != null || rosterId != null)
+        if (rosterId != null)
         {
             DispenserBlock.registerBehavior(this, new DispenseNpc(this));
         }
+    }
+
+    @Nullable
+    public String rosterId()
+    {
+        return this.rosterId;
     }
 
     @Override
@@ -71,7 +72,7 @@ public class NpcSpawnEggItem extends ForgeSpawnEggItem
         UUID ownerId = player == null ? null : player.getUUID();
         boolean server = !context.getLevel().isClientSide;
         boolean rosterSpawn = this.rosterId != null;
-        boolean claim = server && !rosterSpawn && ownerId != null;
+        boolean claim = server && ownerId != null && this.claimsOwner();
         if (server && rosterSpawn)
         {
             NpcEntity.beginSpawnRoster(this.rosterId);
@@ -79,10 +80,6 @@ public class NpcSpawnEggItem extends ForgeSpawnEggItem
         if (claim)
         {
             NpcEntity.beginSpawnClaim(ownerId);
-        }
-        if (server && !rosterSpawn && this.variant != null)
-        {
-            NpcEntity.beginSpawnVariant(this.variant);
         }
         try
         {
@@ -98,15 +95,24 @@ public class NpcSpawnEggItem extends ForgeSpawnEggItem
             {
                 NpcEntity.endSpawnClaim();
             }
-            if (server && !rosterSpawn && this.variant != null)
-            {
-                NpcEntity.endSpawnVariant();
-            }
         }
     }
 
     /**
-     * Replaces the vanilla egg dispense so a dispensed variant or faction still receives its kit.
+     * Faction rows never claim. Owned job rows claim the player who places them.
+     */
+    private boolean claimsOwner()
+    {
+        if (this.rosterId == null)
+        {
+            return false;
+        }
+        NpcRoster.Entry entry = NpcRoster.byId(this.rosterId);
+        return entry != null && entry.owned();
+    }
+
+    /**
+     * Replaces the vanilla egg dispense so a dispensed NPC still receives its kit.
      * A dispenser has no player, so the spawn is not claimed.
      */
     private static final class DispenseNpc extends DefaultDispenseItemBehavior
@@ -131,10 +137,6 @@ public class NpcSpawnEggItem extends ForgeSpawnEggItem
             {
                 NpcEntity.beginSpawnRoster(this.egg.rosterId);
             }
-            else if (this.egg.variant != null)
-            {
-                NpcEntity.beginSpawnVariant(this.egg.variant);
-            }
             try
             {
                 EntityType<?> type = this.egg.getType(stack.getTag());
@@ -148,7 +150,6 @@ public class NpcSpawnEggItem extends ForgeSpawnEggItem
             finally
             {
                 NpcEntity.endSpawnRoster();
-                NpcEntity.endSpawnVariant();
             }
             stack.shrink(1);
             level.gameEvent(GameEvent.ENTITY_PLACE, source.getPos(), GameEvent.Context.of(source.getBlockState()));

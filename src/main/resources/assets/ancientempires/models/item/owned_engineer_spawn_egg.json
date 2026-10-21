@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "ancientempires:item/npc/spawner_base",
+    "layer1": "ancientempires:item/npc/spawner_overlay_bottom",
+    "layer2": "ancientempires:item/npc/spawner_overlay_top",
+    "layer3": "ancientempires:item/npc/spawner_engineer"
+  }
+}

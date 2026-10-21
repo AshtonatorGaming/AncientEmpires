@@ -61,7 +61,6 @@ public class NpcEntity extends PathfinderMob
 {
     private static final String OWNER_KEY = "Owner";
     private static final ThreadLocal<UUID> SPAWN_OWNER = new ThreadLocal<>();
-    private static final ThreadLocal<NpcVariant> SPAWN_VARIANT = new ThreadLocal<>();
     private static final ThreadLocal<String> SPAWN_ROSTER = new ThreadLocal<>();
     private static final EntityDataAccessor<Optional<UUID>> DATA_OWNER = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.OPTIONAL_UUID);
     private static final EntityDataAccessor<Boolean> DATA_ATTACK_WINDOW = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.BOOLEAN);
@@ -297,22 +296,14 @@ public class NpcEntity extends PathfinderMob
             if (entry != null)
             {
                 entry.apply(npc);
-            }
-        }
-        else
-        {
-            if (npc.getOwner() == null)
-            {
-                UUID pending = SPAWN_OWNER.get();
-                if (pending != null)
+                if (entry.owned() && npc.getOwner() == null)
                 {
-                    npc.setOwner(pending);
+                    UUID pending = SPAWN_OWNER.get();
+                    if (pending != null)
+                    {
+                        npc.setOwner(pending);
+                    }
                 }
-            }
-            NpcVariant variant = SPAWN_VARIANT.get();
-            if (variant != null)
-            {
-                variant.apply(npc);
             }
         }
         // A fresh spawn stands on its home. A saved home in the egg replaces this.
@@ -325,20 +316,8 @@ public class NpcEntity extends PathfinderMob
     }
 
     /**
-     * Held across a variant egg's spawn, including a dispenser. Empty for the plain egg.
-     */
-    public static void beginSpawnVariant(NpcVariant variant)
-    {
-        SPAWN_VARIANT.set(variant);
-    }
-
-    public static void endSpawnVariant()
-    {
-        SPAWN_VARIANT.remove();
-    }
-
-    /**
-     * Held across a faction egg's spawn, including a dispenser. The placer is not claimed.
+     * Held across a roster egg's spawn, including a dispenser.
+     * Faction rows do not claim the placer. Owned rows read {@link #SPAWN_OWNER}.
      */
     public static void beginSpawnRoster(String rosterId)
     {
@@ -643,7 +622,7 @@ public class NpcEntity extends PathfinderMob
     }
 
     /**
-     * Turns this NPC into one plain spawn egg and removes the entity without
+     * Turns this NPC into the worker egg and removes the entity without
      * dropping its gear or backpack. The egg's EntityTag is applied after the
      * spawn claim, so absent owner and absent name are explicit flags.
      */
@@ -654,6 +633,10 @@ public class NpcEntity extends PathfinderMob
             return false;
         }
         ItemStack packed = this.createPackedItem();
+        if (packed.isEmpty())
+        {
+            return false;
+        }
         if (!player.getInventory().add(packed))
         {
             player.drop(packed, false);
@@ -666,7 +649,11 @@ public class NpcEntity extends PathfinderMob
 
     private ItemStack createPackedItem()
     {
-        ItemStack stack = new ItemStack(ModItems.NPC_SPAWN_EGG.get());
+        if (ModItems.OWNED_EGGS.isEmpty())
+        {
+            return ItemStack.EMPTY;
+        }
+        ItemStack stack = new ItemStack(ModItems.OWNED_EGGS.get(0).get());
         CompoundTag entityTag = new CompoundTag();
         Component customName = this.getCustomName();
         boolean unnamed = customName == null || customName.getString().isBlank();

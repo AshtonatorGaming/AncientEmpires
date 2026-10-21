@@ -1,4 +1,20 @@
 {
+  "owned": [
+    {"id": "owned.worker", "subtype": "worker", "name": "Worker", "skin": "worker", "item": "owned_worker_spawn_egg"},
+    {"id": "owned.combat", "subtype": "combat", "name": "Combat", "skin": "combat", "item": "owned_combat_spawn_egg", "mainhand": "minecraft:iron_sword", "offhand": "minecraft:shield"},
+    {"id": "owned.woodcutter", "subtype": "woodcutter", "name": "Woodcutter", "skin": "worker.lumberjack", "item": "owned_woodcutter_spawn_egg", "mainhand": "minecraft:iron_axe"},
+    {"id": "owned.miner", "subtype": "miner", "name": "Miner", "skin": "worker.miner", "item": "owned_miner_spawn_egg", "mainhand": "minecraft:iron_pickaxe"},
+    {"id": "owned.farmer", "subtype": "farmer", "name": "Farmer", "skin": "worker.farmer", "item": "owned_farmer_spawn_egg", "mainhand": "minecraft:iron_hoe"},
+    {"id": "owned.craftsman", "subtype": "craftsman", "name": "Craftsman", "skin": "worker.craftsman", "item": "owned_craftsman_spawn_egg"},
+    {"id": "owned.researcher", "subtype": "researcher", "name": "Researcher", "skin": "worker.researcher", "item": "owned_researcher_spawn_egg", "mainhand": "minecraft:book"},
+    {"id": "owned.courier", "subtype": "courier", "name": "Courier", "skin": "courier", "item": "owned_courier_spawn_egg"},
+    {"id": "owned.trader", "subtype": "trader", "name": "Trader", "skin": "trader", "item": "owned_trader_spawn_egg", "mainhand": "minecraft:emerald"},
+    {"id": "owned.priest", "subtype": "priest", "name": "Priest", "skin": "priest", "item": "owned_priest_spawn_egg", "mainhand": "minecraft:book"},
+    {"id": "owned.bard", "subtype": "bard", "name": "Bard", "skin": "bard", "item": "owned_bard_spawn_egg", "mainhand": "minecraft:stick"},
+    {"id": "owned.siege_engineer", "subtype": "siege_engineer", "name": "Siege Engineer", "skin": "siege_engineer", "item": "owned_siege_engineer_spawn_egg"},
+    {"id": "owned.medic", "subtype": "medic", "name": "Medic", "skin": "combat.medic", "item": "owned_medic_spawn_egg", "mainhand": "minecraft:golden_apple"},
+    {"id": "owned.engineer", "subtype": "engineer", "name": "Engineer", "skin": "combat.engineer", "item": "owned_engineer_spawn_egg"}
+  ],
   "factions": [
     {
       "id": "empire",

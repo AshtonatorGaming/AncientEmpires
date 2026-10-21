@@ -14,6 +14,7 @@ import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -139,18 +140,42 @@ public final class NpcSkins
             {
                 return loaded;
             }
+            LinkedHashMap<String, ClassBuild> owned = new LinkedHashMap<>();
             for (JsonElement factionElement : root.getAsJsonArray("factions"))
             {
                 JsonObject factionObject = factionElement.getAsJsonObject();
                 String factionId = text(factionObject, "id");
-                List<NpcClass> classes = new ArrayList<>();
+                LinkedHashMap<String, ClassBuild> classes = new LinkedHashMap<>();
                 if (factionObject.has("classes"))
                 {
                     for (JsonElement classElement : factionObject.getAsJsonArray("classes"))
                     {
                         JsonObject classObject = classElement.getAsJsonObject();
                         String classId = text(classObject, "id");
-                        List<Entry> skins = new ArrayList<>();
+                        String className = text(classObject, "name");
+                        boolean ownedJob = "misc".equals(factionId) && isOwnedJob(classId);
+                        String storedFaction = ownedJob ? "owned" : factionId;
+                        String storedClass = classId;
+                        String storedName = className;
+                        if (!ownedJob && isSpellcaster(classId))
+                        {
+                            storedClass = "spellcaster";
+                            storedName = "Spellcaster";
+                        }
+                        if (ownedJob)
+                        {
+                            String renamed = ownedClassName(classId);
+                            if (!renamed.isEmpty())
+                            {
+                                storedName = renamed;
+                            }
+                        }
+                        String bucketName = storedName;
+                        ClassBuild build = (ownedJob ? owned : classes).computeIfAbsent(storedClass, id -> new ClassBuild(id, bucketName));
+                        if ("spellcaster".equals(storedClass))
+                        {
+                            build.name = "Spellcaster";
+                        }
                         if (classObject.has("skins"))
                         {
                             for (JsonElement skinElement : classObject.getAsJsonArray("skins"))
@@ -168,20 +193,24 @@ public final class NpcSkins
                                 {
                                     texture = ResourceLocation.parse(AncientEmpires.MOD_ID + ":textures/entity/npc/" + file);
                                 }
-                                Entry entry = new Entry(id, typeId, text(skinObject, "name"), factionId, classId, texture);
-                                skins.add(entry);
+                                Entry entry = new Entry(id, typeId, text(skinObject, "name"), storedFaction, storedClass, texture);
+                                build.skins.add(entry);
                                 loaded.byId.put(id, entry);
                                 loaded.byType.putIfAbsent(typeId, entry);
                             }
                         }
-                        if (skins.size() > loaded.maxPool)
-                        {
-                            loaded.maxPool = skins.size();
-                        }
-                        classes.add(new NpcClass(classId, text(classObject, "name"), skins));
                     }
                 }
-                loaded.factions.add(new Faction(factionId, text(factionObject, "name"), classes));
+                String factionName = text(factionObject, "name");
+                if ("misc".equals(factionId))
+                {
+                    factionName = "Uncategorized";
+                }
+                loaded.factions.add(new Faction(factionId, factionName, finishClasses(classes, loaded)));
+            }
+            if (!owned.isEmpty())
+            {
+                loaded.factions.add(0, new Faction("owned", "Owned", finishOwned(owned, loaded)));
             }
         }
         catch (IOException | RuntimeException exception)
@@ -189,6 +218,159 @@ public final class NpcSkins
             AncientEmpires.LOGGER.error("Could not read the NPC skin catalog", exception);
         }
         return loaded;
+    }
+
+    private static boolean isSpellcaster(String classId)
+    {
+        return "spellcaster".equals(classId) || classId.startsWith("spellcaster.");
+    }
+
+    private static boolean isOwnedJob(String classId)
+    {
+        return "bard".equals(classId)
+                || "combat".equals(classId)
+                || classId.startsWith("combat.")
+                || "courier".equals(classId)
+                || "priest".equals(classId)
+                || "siege_engineer".equals(classId)
+                || "trader".equals(classId)
+                || "worker".equals(classId)
+                || classId.startsWith("worker.");
+    }
+
+    private static String ownedClassName(String classId)
+    {
+        if ("worker".equals(classId))
+        {
+            return "Worker";
+        }
+        if ("combat".equals(classId))
+        {
+            return "Combat";
+        }
+        if ("worker.lumberjack".equals(classId))
+        {
+            return "Woodcutter";
+        }
+        if ("worker.miner".equals(classId))
+        {
+            return "Miner";
+        }
+        if ("worker.farmer".equals(classId))
+        {
+            return "Farmer";
+        }
+        if ("worker.craftsman".equals(classId))
+        {
+            return "Craftsman";
+        }
+        if ("worker.researcher".equals(classId))
+        {
+            return "Researcher";
+        }
+        if ("combat.medic".equals(classId))
+        {
+            return "Medic";
+        }
+        if ("combat.engineer".equals(classId))
+        {
+            return "Engineer";
+        }
+        if ("combat.archer".equals(classId))
+        {
+            return "Archer";
+        }
+        if ("combat.commander".equals(classId))
+        {
+            return "Commander";
+        }
+        if ("combat.soldier".equals(classId))
+        {
+            return "Soldier";
+        }
+        if ("siege_engineer".equals(classId))
+        {
+            return "Siege Engineer";
+        }
+        return "";
+    }
+
+    private static List<NpcClass> finishClasses(LinkedHashMap<String, ClassBuild> classes, Loaded loaded)
+    {
+        List<NpcClass> finished = new ArrayList<>();
+        for (ClassBuild build : classes.values())
+        {
+            if (build.skins.size() > loaded.maxPool)
+            {
+                loaded.maxPool = build.skins.size();
+            }
+            finished.add(build.toClass());
+        }
+        return finished;
+    }
+
+    private static List<NpcClass> finishOwned(LinkedHashMap<String, ClassBuild> owned, Loaded loaded)
+    {
+        String[] order = {
+                "worker",
+                "combat",
+                "worker.lumberjack",
+                "worker.miner",
+                "worker.farmer",
+                "worker.craftsman",
+                "worker.researcher",
+                "courier",
+                "trader",
+                "priest",
+                "bard",
+                "siege_engineer",
+                "combat.medic",
+                "combat.engineer",
+                "combat.archer",
+                "combat.commander",
+                "combat.soldier"
+        };
+        List<NpcClass> finished = new ArrayList<>();
+        for (String classId : order)
+        {
+            ClassBuild build = owned.remove(classId);
+            if (build == null)
+            {
+                continue;
+            }
+            if (build.skins.size() > loaded.maxPool)
+            {
+                loaded.maxPool = build.skins.size();
+            }
+            finished.add(build.toClass());
+        }
+        for (ClassBuild build : owned.values())
+        {
+            if (build.skins.size() > loaded.maxPool)
+            {
+                loaded.maxPool = build.skins.size();
+            }
+            finished.add(build.toClass());
+        }
+        return finished;
+    }
+
+    private static final class ClassBuild
+    {
+        private final String id;
+        private String name;
+        private final List<Entry> skins = new ArrayList<>();
+
+        private ClassBuild(String id, String name)
+        {
+            this.id = id;
+            this.name = name;
+        }
+
+        private NpcClass toClass()
+        {
+            return new NpcClass(this.id, this.name, this.skins);
+        }
     }
 
     private static String text(JsonObject object, String key)
