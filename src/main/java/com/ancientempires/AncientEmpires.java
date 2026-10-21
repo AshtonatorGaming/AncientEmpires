@@ -30,7 +30,7 @@ import org.slf4j.Logger;
  * entity.npc — the NPC, its inventory, and its owner
  * inventory — the NPC container menu
  * network — name and skin packets for the NPC screen
- * combat — attack profiles, the melee goal, and the optional Better Combat reader
+ * combat — attack profiles, the melee goal, the bow goal, and the optional Better Combat reader
  * client — the NPC renderer and Better Combat poses
  */
 @Mod(AncientEmpires.MOD_ID)
@@ -71,7 +71,10 @@ public class AncientEmpires
     {
         if (event.getTabKey() == CreativeModeTabs.SPAWN_EGGS)
         {
-            event.accept(ModItems.NPC_SPAWN_EGG.get());
+            for (var egg : ModItems.SPAWN_EGGS)
+            {
+                event.accept(egg.get());
+            }
         }
     }
 }

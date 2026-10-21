@@ -31,6 +31,7 @@ public class NpcMenu extends AbstractContainerMenu
     public static final int BUTTON_CLEAR_HOME = 2;
     public static final int BUTTON_REPACK = 3;
     public static final int BUTTON_CREATIVE = 4;
+    public static final int BUTTON_HOLD = 5;
 
     @Nullable
     private final NpcEntity npc;

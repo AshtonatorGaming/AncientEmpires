@@ -101,36 +101,69 @@ public final class NpcInventoryPanel
     private static void addCommands(ModularPanel<?> panel, NpcMenu menu, NpcEntity npc)
     {
         boolean creative = showCreative();
-        int origin = NpcLayout.buttonRowX(creative ? 5 : 4);
-        ButtonWidget<?>[] row = new ButtonWidget<?>[5];
-        row[0] = command(origin, 0, GuiTextures.MOVE_RIGHT, "gui.ancientempires.npc.follow", NpcMenu.BUTTON_FOLLOW, menu, active(npc, NpcEntity::isFollowing));
-        row[1] = command(origin, 1, GuiTextures.BOOKMARK, "gui.ancientempires.npc.set_home", NpcMenu.BUTTON_SET_HOME, menu, active(npc, entity -> entity.getHome() != null));
-        row[2] = command(origin, 2, GuiTextures.CROSS, "gui.ancientempires.npc.clear_home", NpcMenu.BUTTON_CLEAR_HOME, menu, null);
-        row[3] = command(origin, 3, GuiTextures.REFRESH, "gui.ancientempires.npc.repack", NpcMenu.BUTTON_REPACK, menu, null);
-        row[4] = command(origin, 4, GuiTextures.FAVORITE, "gui.ancientempires.npc.creative", NpcMenu.BUTTON_CREATIVE, menu, active(npc, NpcEntity::isCreative));
-        row[4].setEnabled(creative);
-        row[4].onUpdateListener(widget -> layoutCommands(row, widget), true);
+        boolean hold = showHold(npc);
+        ButtonWidget<?>[] row = new ButtonWidget<?>[6];
+        row[0] = command(0, 0, GuiTextures.MOVE_RIGHT, "gui.ancientempires.npc.follow", NpcMenu.BUTTON_FOLLOW, menu, active(npc, NpcEntity::isFollowing));
+        row[1] = command(0, 1, GuiTextures.BOOKMARK, "gui.ancientempires.npc.set_home", NpcMenu.BUTTON_SET_HOME, menu, active(npc, entity -> entity.getHome() != null));
+        row[2] = command(0, 2, GuiTextures.CROSS, "gui.ancientempires.npc.clear_home", NpcMenu.BUTTON_CLEAR_HOME, menu, null);
+        row[3] = command(0, 3, GuiTextures.REFRESH, "gui.ancientempires.npc.repack", NpcMenu.BUTTON_REPACK, menu, null);
+        row[4] = command(0, 4, GuiTextures.LOCKED, "gui.ancientempires.npc.hold", NpcMenu.BUTTON_HOLD, menu, active(npc, NpcEntity::isHoldingPosition));
+        row[5] = command(0, 5, GuiTextures.FAVORITE, "gui.ancientempires.npc.creative", NpcMenu.BUTTON_CREATIVE, menu, active(npc, NpcEntity::isCreative));
+        row[4].setEnabled(hold);
+        row[5].setEnabled(creative);
+        placeCommands(row);
+        // Repack has no on-state color, so this poll can reflow hold and creative.
+        row[3].onUpdateListener(widget -> layoutCommands(row, npc), true);
         for (ButtonWidget<?> button : row)
         {
             panel.child(button);
         }
     }
 
-    private static void layoutCommands(ButtonWidget<?>[] row, ButtonWidget<?> creative)
+    /**
+     * Hold is the archer sentry, so it is shown only while a bow is in the main hand.
+     * Creative stays the other button that can leave the row. Both reflow when they change.
+     */
+    private static void layoutCommands(ButtonWidget<?>[] row, NpcEntity npc)
     {
-        boolean show = showCreative();
-        if (creative.isEnabled() == show)
+        boolean hold = showHold(npc);
+        boolean creative = showCreative();
+        if (row[4].isEnabled() == hold && row[5].isEnabled() == creative)
         {
             return;
         }
-        creative.setEnabled(show);
-        int shown = show ? row.length : row.length - 1;
-        int origin = NpcLayout.buttonRowX(shown);
-        for (int index = 0; index < shown; index++)
+        row[4].setEnabled(hold);
+        row[5].setEnabled(creative);
+        placeCommands(row);
+    }
+
+    private static void placeCommands(ButtonWidget<?>[] row)
+    {
+        int shown = 0;
+        for (ButtonWidget<?> button : row)
         {
-            row[index].pos(origin + index * (BUTTON_SIZE + BUTTON_GAP), BUTTON_Y);
-            row[index].scheduleResize();
+            if (button.isEnabled())
+            {
+                shown++;
+            }
         }
+        int origin = NpcLayout.buttonRowX(Math.max(shown, 1));
+        int slot = 0;
+        for (ButtonWidget<?> button : row)
+        {
+            if (!button.isEnabled())
+            {
+                continue;
+            }
+            button.pos(origin + slot * (BUTTON_SIZE + BUTTON_GAP), BUTTON_Y);
+            button.scheduleResize();
+            slot++;
+        }
+    }
+
+    private static boolean showHold(NpcEntity npc)
+    {
+        return npc != null && npc.isHoldingBow();
     }
 
     private static boolean showCreative()

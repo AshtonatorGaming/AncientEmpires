@@ -1,13 +1,15 @@
 package com.ancientempires.entity.npc;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 
 import java.util.EnumSet;
 
 /**
- * Walks back to the saved home when follow is off and the NPC is not fighting.
- * Stays active once there so the stroll goal does not wander off the spot.
+ * After a fight, a melee NPC walks back to its home. A bow stays on the archer
+ * role and does not use this goal. Stays active once there so the stroll does
+ * not wander off the spot.
  */
 public class NpcReturnHomeGoal extends Goal
 {
@@ -73,7 +75,12 @@ public class NpcReturnHomeGoal extends Goal
 
     private boolean eligible()
     {
-        if (this.npc.isFollowing() || this.npc.getTarget() != null || this.npc.getHome() == null)
+        if (this.npc.isFollowing() || this.npc.isHoldingBow() || this.npc.getHome() == null)
+        {
+            return false;
+        }
+        LivingEntity target = this.npc.getTarget();
+        if (target != null && target.isAlive())
         {
             return false;
         }

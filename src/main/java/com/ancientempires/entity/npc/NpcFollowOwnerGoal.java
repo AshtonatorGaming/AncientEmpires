@@ -29,13 +29,13 @@ public class NpcFollowOwnerGoal extends Goal
     public boolean canUse()
     {
         this.owner = this.findOwner();
-        return this.npc.isFollowing() && this.owner != null;
+        return this.npc.isFollowing() && !this.npc.isArcherHolding() && this.owner != null;
     }
 
     @Override
     public boolean canContinueToUse()
     {
-        return this.npc.isFollowing() && this.owner != null && this.owner.isAlive() && !this.owner.isSpectator();
+        return this.npc.isFollowing() && !this.npc.isArcherHolding() && this.owner != null && this.owner.isAlive() && !this.owner.isSpectator();
     }
 
     @Override

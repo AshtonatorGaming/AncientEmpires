@@ -221,6 +221,26 @@ public final class NpcCombatAnimations
     }
 
     /**
+     * A bow draw is already on the model. Clear the combat pose so EMF does not
+     * put a punch or a weapon hold back over those arms.
+     */
+    public static void yieldBowDraw(NpcEntity npc, PlayerModel<NpcEntity> model, float limbSwingAmount)
+    {
+        if (!emfReady())
+        {
+            return;
+        }
+        try
+        {
+            NpcEmfCompat.afterPose(npc, model, false, false, limbSwingAmount);
+        }
+        catch (Throwable exception)
+        {
+            failEmf(exception);
+        }
+    }
+
+    /**
      * The mob animator is playing the attack clip that was started for this swing.
      * The model's static raised arm would replace that clip on the same frame.
      */

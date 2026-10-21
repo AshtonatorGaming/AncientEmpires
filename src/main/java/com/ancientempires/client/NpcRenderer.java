@@ -52,7 +52,30 @@ public class NpcRenderer extends HumanoidMobRenderer<NpcEntity, NpcModel>
             this.heldItemsCollapsed = true;
             this.keepSingleHeldItemLayer();
         }
-        super.render(entity, entityYaw, partialTick, pose, buffer, packedLight);
+        float previousShadow = this.shadowRadius;
+        this.shadowRadius = 0.5F * entity.getBodyScale();
+        try
+        {
+            super.render(entity, entityYaw, partialTick, pose, buffer, packedLight);
+        }
+        finally
+        {
+            this.shadowRadius = previousShadow;
+        }
+    }
+
+    /**
+     * The hitbox uses the same factor, so a dwarf and a giant match their boxes.
+     * The inventory preview then fits that box in the frame.
+     */
+    @Override
+    protected void scale(NpcEntity entity, PoseStack pose, float partialTick)
+    {
+        float bodyScale = entity.getBodyScale();
+        if (bodyScale != 1.0F)
+        {
+            pose.scale(bodyScale, bodyScale, bodyScale);
+        }
     }
 
     private void keepSingleHeldItemLayer()

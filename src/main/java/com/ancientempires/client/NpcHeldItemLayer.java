@@ -40,14 +40,21 @@ public class NpcHeldItemLayer extends ItemInHandLayer<NpcEntity, NpcModel>
             super.renderArmWithItem(entity, stack, context, arm, pose, buffer, light);
             return;
         }
+        boolean drawingBow = npc.isDrawingBow();
         pose.pushPose();
         ((ArmedModel) this.getParentModel()).translateToHand(arm, pose);
-        NpcCombatAnimations.bendHeldArm(npc, arm, pose);
+        if (!drawingBow)
+        {
+            NpcCombatAnimations.bendHeldArm(npc, arm, pose);
+        }
         pose.mulPose(Axis.XP.rotationDegrees(-90.0F));
         pose.mulPose(Axis.YP.rotationDegrees(180.0F));
         boolean left = arm == HumanoidArm.LEFT;
         pose.translate((left ? -1.0F : 1.0F) / 16.0F, 0.125F, -0.625F);
-        NpcCombatAnimations.placeHeldItem(npc, arm, pose);
+        if (!drawingBow)
+        {
+            NpcCombatAnimations.placeHeldItem(npc, arm, pose);
+        }
         this.items.renderItem(npc, stack, context, left, pose, buffer, light);
         pose.popPose();
     }

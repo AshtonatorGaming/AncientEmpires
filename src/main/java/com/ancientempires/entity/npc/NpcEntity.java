@@ -2,11 +2,14 @@ package com.ancientempires.entity.npc;
 
 import com.ancientempires.AncientEmpires;
 import com.ancientempires.combat.AttackSwing;
+import com.ancientempires.combat.NpcBowAttackGoal;
 import com.ancientempires.combat.NpcMeleeAttackGoal;
 import com.ancientempires.config.AncientEmpiresConfig;
 import com.ancientempires.inventory.NpcMenu;
+import com.ancientempires.registry.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -31,7 +34,10 @@ import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BowItem;
+import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.living.MobSpawnEvent;
@@ -54,6 +60,7 @@ public class NpcEntity extends PathfinderMob
 {
     private static final String OWNER_KEY = "Owner";
     private static final ThreadLocal<UUID> SPAWN_OWNER = new ThreadLocal<>();
+    private static final ThreadLocal<NpcVariant> SPAWN_VARIANT = new ThreadLocal<>();
     private static final EntityDataAccessor<Optional<UUID>> DATA_OWNER = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.OPTIONAL_UUID);
     private static final EntityDataAccessor<Boolean> DATA_ATTACK_WINDOW = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<String> DATA_ATTACK_ANIMATION = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.STRING);
@@ -63,18 +70,39 @@ public class NpcEntity extends PathfinderMob
     private static final EntityDataAccessor<Integer> DATA_PRESENTATION_SERIAL = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> DATA_FOLLOWING = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> DATA_CREATIVE = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> DATA_HOLDING = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Optional<BlockPos>> DATA_HOME = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.OPTIONAL_BLOCK_POS);
     private static final EntityDataAccessor<String> DATA_HOME_DIM = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<String> DATA_SKIN = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.STRING);
     /** Off-hand beat of an empty-hand fist combo. Cleared with the presentation, not the attack window. */
     private static final EntityDataAccessor<Boolean> DATA_ATTACK_OFFHAND = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.BOOLEAN);
+    /** 1 is a normal player body. Dwarf and giant eggs store a different scale. */
+    private static final EntityDataAccessor<Float> DATA_BODY_SCALE = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.FLOAT);
     private static final String FOLLOWING_KEY = "Following";
     private static final String CREATIVE_KEY = "Creative";
+    private static final String HOLDING_KEY = "HoldPosition";
+    private static final String HOLD_KEY = "HoldPos";
+    private static final String HOLD_DIM_KEY = "HoldDim";
+    /** How far a sentry may be from the spot captured when hold was turned on. */
+    public static final double HOLD_LEASH = 4.0D;
     private static final String HOME_KEY = "Home";
     private static final String HOME_DIM_KEY = "HomeDim";
     private static final String SKIN_KEY = "Skin";
+    private static final String BODY_SCALE_KEY = "BodyScale";
+    private static final String CUSTOM_NAME_KEY = "CustomName";
+    /** Packed eggs only. The spawn merge cannot delete the placer's Owner key. */
+    private static final String NO_OWNER_KEY = "AeNoOwner";
+    /** Packed eggs only. Hover text for an unnamed NPC must not stick as the entity name. */
+    private static final String UNNAMED_KEY = "AeUnnamed";
+    /** Packed eggs only. The spawn merge cannot delete the home set at placement. */
+    private static final String NO_HOME_KEY = "AeNoHome";
 
     private final NpcInventory inventory = new NpcInventory(this);
+
+    /** Server post for {@link #HOLDING_KEY}. The client only needs the boolean. */
+    @Nullable
+    private BlockPos holdAnchor;
+    private String holdDimension = "";
 
     private int comboIndex;
     private int ticksSinceSwing;
@@ -113,10 +141,12 @@ public class NpcEntity extends PathfinderMob
         this.entityData.define(DATA_PRESENTATION_SERIAL, 0);
         this.entityData.define(DATA_FOLLOWING, false);
         this.entityData.define(DATA_CREATIVE, false);
+        this.entityData.define(DATA_HOLDING, false);
         this.entityData.define(DATA_HOME, Optional.empty());
         this.entityData.define(DATA_HOME_DIM, "");
         this.entityData.define(DATA_SKIN, "");
         this.entityData.define(DATA_ATTACK_OFFHAND, false);
+        this.entityData.define(DATA_BODY_SCALE, 1.0F);
     }
 
     public static AttributeSupplier.Builder createAttributes()
@@ -137,7 +167,10 @@ public class NpcEntity extends PathfinderMob
     protected void registerGoals()
     {
         this.goalSelector.addGoal(0, new FloatGoal(this));
+        // A bow keeps this goal for the whole fight. Melee does not run while it does.
+        this.goalSelector.addGoal(1, new NpcBowAttackGoal(this));
         this.goalSelector.addGoal(2, new NpcMeleeAttackGoal(this));
+        this.goalSelector.addGoal(3, new NpcHoldPositionGoal(this, 0.9D));
         this.goalSelector.addGoal(4, new NpcFollowOwnerGoal(this, 1.0D, 3.0F));
         this.goalSelector.addGoal(5, new NpcReturnHomeGoal(this, 0.9D, 2.0F));
         this.goalSelector.addGoal(6, new WaterAvoidingRandomStrollGoal(this, 0.8D));
@@ -151,7 +184,39 @@ public class NpcEntity extends PathfinderMob
     @Override
     protected float getStandingEyeHeight(Pose pose, EntityDimensions dimensions)
     {
-        return 1.62F;
+        return dimensions.height * (1.62F / 1.8F);
+    }
+
+    @Override
+    public EntityDimensions getDimensions(Pose pose)
+    {
+        EntityDimensions base = super.getDimensions(pose);
+        float scale = this.getBodyScale();
+        if (scale == 1.0F)
+        {
+            return base;
+        }
+        return base.scale(scale);
+    }
+
+    @Override
+    public void onSyncedDataUpdated(EntityDataAccessor<?> key)
+    {
+        super.onSyncedDataUpdated(key);
+        if (DATA_BODY_SCALE.equals(key))
+        {
+            this.refreshDimensions();
+        }
+    }
+
+    public float getBodyScale()
+    {
+        return this.entityData.get(DATA_BODY_SCALE);
+    }
+
+    public void setBodyScale(float scale)
+    {
+        this.entityData.set(DATA_BODY_SCALE, Mth.clamp(scale, 0.25F, 4.0F));
     }
 
     /**
@@ -171,15 +236,43 @@ public class NpcEntity extends PathfinderMob
     @SubscribeEvent
     public static void onFinalizeSpawn(MobSpawnEvent.FinalizeSpawn event)
     {
-        if (!(event.getEntity() instanceof NpcEntity npc) || npc.getOwner() != null)
+        if (!(event.getEntity() instanceof NpcEntity npc))
         {
             return;
         }
-        UUID pending = SPAWN_OWNER.get();
-        if (pending != null)
+        if (npc.getOwner() == null)
         {
-            npc.setOwner(pending);
+            UUID pending = SPAWN_OWNER.get();
+            if (pending != null)
+            {
+                npc.setOwner(pending);
+            }
         }
+        NpcVariant variant = SPAWN_VARIANT.get();
+        if (variant != null)
+        {
+            variant.apply(npc);
+        }
+        // A fresh spawn stands on its home. A saved home in the egg replaces this.
+        // AeNoHome clears it again, because the egg merge cannot delete this key.
+        if (npc.getHome() == null)
+        {
+            npc.entityData.set(DATA_HOME, Optional.of(npc.blockPosition()));
+            npc.entityData.set(DATA_HOME_DIM, npc.level().dimension().location().toString());
+        }
+    }
+
+    /**
+     * Held across a variant egg's spawn, including a dispenser. Empty for the plain egg.
+     */
+    public static void beginSpawnVariant(NpcVariant variant)
+    {
+        SPAWN_VARIANT.set(variant);
+    }
+
+    public static void endSpawnVariant()
+    {
+        SPAWN_VARIANT.remove();
     }
 
     public NpcInventory getInventory()
@@ -233,6 +326,103 @@ public class NpcEntity extends PathfinderMob
         this.applyDropChances();
     }
 
+    public boolean isHoldingPosition()
+    {
+        return this.entityData.get(DATA_HOLDING);
+    }
+
+    /**
+     * Hold is the archer sentry. A sword or an empty hand ignores the flag.
+     */
+    public boolean isArcherHolding()
+    {
+        return this.isHoldingBow() && this.isHoldingPosition();
+    }
+
+    public void setHoldingPosition(boolean holding)
+    {
+        this.entityData.set(DATA_HOLDING, holding);
+    }
+
+    @Nullable
+    public BlockPos getHoldAnchor()
+    {
+        return this.holdAnchor;
+    }
+
+    public void captureHoldAnchor()
+    {
+        this.holdAnchor = this.blockPosition();
+        this.holdDimension = this.level().dimension().location().toString();
+    }
+
+    public void clearHoldAnchor()
+    {
+        this.holdAnchor = null;
+        this.holdDimension = "";
+    }
+
+    /**
+     * A bow in the main hand, including a Spartan longbow. A crossbow is not a bow.
+     */
+    public boolean isHoldingBow()
+    {
+        ItemStack hand = this.getMainHandItem();
+        if (hand.isEmpty() || hand.getItem() instanceof CrossbowItem)
+        {
+            return false;
+        }
+        return hand.getItem() instanceof BowItem;
+    }
+
+    /**
+     * Server draw, synced through the vanilla using-item flags. The renderer
+     * uses this to pose the arms.
+     */
+    public boolean isDrawingBow()
+    {
+        return this.isUsingItem()
+                && this.getUsedItemHand() == InteractionHand.MAIN_HAND
+                && this.isHoldingBow();
+    }
+
+    public boolean isOutsideHold()
+    {
+        if (!this.isHoldingPosition())
+        {
+            return false;
+        }
+        this.ensureHoldAnchor();
+        BlockPos anchor = this.holdAnchor;
+        if (anchor == null)
+        {
+            return false;
+        }
+        double x = anchor.getX() + 0.5D;
+        double z = anchor.getZ() + 0.5D;
+        return this.distanceToSqr(x, anchor.getY(), z) > HOLD_LEASH * HOLD_LEASH;
+    }
+
+    public void moveTowardHold(double speed)
+    {
+        this.ensureHoldAnchor();
+        BlockPos anchor = this.holdAnchor;
+        if (anchor == null)
+        {
+            return;
+        }
+        this.getNavigation().moveTo(anchor.getX() + 0.5D, anchor.getY(), anchor.getZ() + 0.5D, speed);
+    }
+
+    private void ensureHoldAnchor()
+    {
+        String here = this.level().dimension().location().toString();
+        if (this.holdAnchor == null || this.holdDimension.isEmpty() || !this.holdDimension.equals(here))
+        {
+            this.captureHoldAnchor();
+        }
+    }
+
     @Nullable
     public BlockPos getHome()
     {
@@ -250,7 +440,8 @@ public class NpcEntity extends PathfinderMob
     }
 
     /**
-     * Empty string, or a resource location a skin pack can render. Invalid text is ignored.
+     * A bundled variant id such as {@code viking.soldier}, or a resource location
+     * a skin pack can render. Invalid text is ignored.
      */
     @Nullable
     public static ResourceLocation parseSkinId(String skin)
@@ -258,6 +449,11 @@ public class NpcEntity extends PathfinderMob
         if (skin == null || skin.isEmpty())
         {
             return null;
+        }
+        NpcVariant variant = NpcVariant.bySkinId(skin);
+        if (variant != null)
+        {
+            return variant.texture();
         }
         try
         {
@@ -267,6 +463,19 @@ public class NpcEntity extends PathfinderMob
         {
             return null;
         }
+    }
+
+    /**
+     * Stores a skin id without the inventory permission check. Spawn eggs use this.
+     */
+    public void assignSkin(String skin)
+    {
+        String trimmed = skin == null ? "" : skin.trim();
+        if (trimmed.length() > 128)
+        {
+            trimmed = trimmed.substring(0, 128);
+        }
+        this.entityData.set(DATA_SKIN, trimmed);
     }
 
     /**
@@ -299,8 +508,11 @@ public class NpcEntity extends PathfinderMob
         }
         if (id == NpcMenu.BUTTON_REPACK)
         {
-            this.inventory.repack();
-            player.displayClientMessage(Component.translatable("message.ancientempires.npc.repacked"), true);
+            return this.packIntoItem(player);
+        }
+        if (id == NpcMenu.BUTTON_HOLD)
+        {
+            this.toggleHold(player);
             return true;
         }
         if (id == NpcMenu.BUTTON_CREATIVE)
@@ -309,6 +521,141 @@ public class NpcEntity extends PathfinderMob
             return true;
         }
         return false;
+    }
+
+    /**
+     * Turns this NPC into one plain spawn egg and removes the entity without
+     * dropping its gear or backpack. The egg's EntityTag is applied after the
+     * spawn claim, so absent owner and absent name are explicit flags.
+     */
+    private boolean packIntoItem(Player player)
+    {
+        if (this.level().isClientSide || !this.isAlive())
+        {
+            return false;
+        }
+        ItemStack packed = this.createPackedItem();
+        if (!player.getInventory().add(packed))
+        {
+            player.drop(packed, false);
+        }
+        player.displayClientMessage(Component.translatable("message.ancientempires.npc.repacked"), true);
+        player.closeContainer();
+        this.discard();
+        return true;
+    }
+
+    private ItemStack createPackedItem()
+    {
+        ItemStack stack = new ItemStack(ModItems.NPC_SPAWN_EGG.get());
+        CompoundTag entityTag = new CompoundTag();
+        Component customName = this.getCustomName();
+        boolean unnamed = customName == null || customName.getString().isBlank();
+        this.writePackedState(entityTag, customName, unnamed);
+        stack.getOrCreateTag().put("EntityTag", entityTag);
+        if (unnamed)
+        {
+            stack.setHoverName(Component.translatable("item.ancientempires.unnamed_npc"));
+        }
+        else
+        {
+            stack.setHoverName(customName);
+        }
+        return stack;
+    }
+
+    /**
+     * Gear, backpack slots, skin, home, owner, name, flags, and body scale.
+     * Position, motion, and the old UUID stay off this tag.
+     */
+    private void writePackedState(CompoundTag tag, @Nullable Component customName, boolean unnamed)
+    {
+        ListTag hands = new ListTag();
+        hands.add(this.saveEquipment(EquipmentSlot.MAINHAND));
+        hands.add(this.saveEquipment(EquipmentSlot.OFFHAND));
+        tag.put("HandItems", hands);
+
+        ListTag armor = new ListTag();
+        armor.add(this.saveEquipment(EquipmentSlot.FEET));
+        armor.add(this.saveEquipment(EquipmentSlot.LEGS));
+        armor.add(this.saveEquipment(EquipmentSlot.CHEST));
+        armor.add(this.saveEquipment(EquipmentSlot.HEAD));
+        tag.put("ArmorItems", armor);
+
+        this.inventory.save(tag);
+        tag.putString(SKIN_KEY, this.getSkinId());
+        tag.putBoolean(FOLLOWING_KEY, this.isFollowing());
+        tag.putBoolean(CREATIVE_KEY, this.isCreative());
+        tag.putBoolean(HOLDING_KEY, this.isHoldingPosition());
+        this.writeHoldAnchor(tag);
+        tag.putFloat(BODY_SCALE_KEY, this.getBodyScale());
+        BlockPos home = this.getHome();
+        if (home != null)
+        {
+            tag.putLong(HOME_KEY, home.asLong());
+            tag.putString(HOME_DIM_KEY, this.getHomeDimension());
+        }
+        else
+        {
+            tag.putBoolean(NO_HOME_KEY, true);
+        }
+        UUID owner = this.getOwner();
+        if (owner == null)
+        {
+            tag.putBoolean(NO_OWNER_KEY, true);
+        }
+        else
+        {
+            tag.putUUID(OWNER_KEY, owner);
+        }
+        if (unnamed)
+        {
+            tag.putBoolean(UNNAMED_KEY, true);
+        }
+        else if (customName != null)
+        {
+            tag.putString(CUSTOM_NAME_KEY, Component.Serializer.toJson(customName));
+        }
+    }
+
+    private void writeHoldAnchor(CompoundTag tag)
+    {
+        BlockPos anchor = this.holdAnchor;
+        if (!this.isHoldingPosition() || anchor == null)
+        {
+            return;
+        }
+        tag.putLong(HOLD_KEY, anchor.asLong());
+        tag.putString(HOLD_DIM_KEY, this.holdDimension);
+    }
+
+    private void readHoldAnchor(CompoundTag tag)
+    {
+        this.setHoldingPosition(tag.getBoolean(HOLDING_KEY));
+        if (!this.isHoldingPosition())
+        {
+            this.clearHoldAnchor();
+            return;
+        }
+        if (tag.contains(HOLD_KEY))
+        {
+            this.holdAnchor = BlockPos.of(tag.getLong(HOLD_KEY));
+            this.holdDimension = tag.getString(HOLD_DIM_KEY);
+        }
+        else
+        {
+            this.captureHoldAnchor();
+        }
+    }
+
+    private CompoundTag saveEquipment(EquipmentSlot slot)
+    {
+        ItemStack stack = this.getItemBySlot(slot);
+        if (stack.isEmpty())
+        {
+            return new CompoundTag();
+        }
+        return stack.copy().save(new CompoundTag());
     }
 
     public void applyCustomName(Player player, String name)
@@ -373,6 +720,27 @@ public class NpcEntity extends PathfinderMob
         player.displayClientMessage(Component.translatable(following
                 ? "message.ancientempires.npc.follow_on"
                 : "message.ancientempires.npc.follow_off"), true);
+    }
+
+    private void toggleHold(Player player)
+    {
+        if (!this.isHoldingBow())
+        {
+            return;
+        }
+        boolean holding = !this.isHoldingPosition();
+        this.setHoldingPosition(holding);
+        if (holding)
+        {
+            this.captureHoldAnchor();
+        }
+        else
+        {
+            this.clearHoldAnchor();
+        }
+        player.displayClientMessage(Component.translatable(holding
+                ? "message.ancientempires.npc.hold_on"
+                : "message.ancientempires.npc.hold_off"), true);
     }
 
     /**
@@ -644,6 +1012,8 @@ public class NpcEntity extends PathfinderMob
         }
         tag.putBoolean(FOLLOWING_KEY, this.isFollowing());
         tag.putBoolean(CREATIVE_KEY, this.isCreative());
+        tag.putBoolean(HOLDING_KEY, this.isHoldingPosition());
+        this.writeHoldAnchor(tag);
         BlockPos home = this.getHome();
         if (home != null)
         {
@@ -654,6 +1024,7 @@ public class NpcEntity extends PathfinderMob
         {
             tag.putString(SKIN_KEY, this.getSkinId());
         }
+        tag.putFloat(BODY_SCALE_KEY, this.getBodyScale());
     }
 
     @Override
@@ -661,10 +1032,23 @@ public class NpcEntity extends PathfinderMob
     {
         super.readAdditionalSaveData(tag);
         this.inventory.load(tag);
-        this.setOwner(tag.hasUUID(OWNER_KEY) ? tag.getUUID(OWNER_KEY) : null);
+        if (tag.getBoolean(NO_OWNER_KEY))
+        {
+            this.setOwner(null);
+        }
+        else
+        {
+            this.setOwner(tag.hasUUID(OWNER_KEY) ? tag.getUUID(OWNER_KEY) : null);
+        }
         this.setFollowing(tag.getBoolean(FOLLOWING_KEY));
         this.setCreative(tag.getBoolean(CREATIVE_KEY));
-        if (tag.contains(HOME_KEY))
+        this.readHoldAnchor(tag);
+        if (tag.getBoolean(NO_HOME_KEY))
+        {
+            this.entityData.set(DATA_HOME, Optional.empty());
+            this.entityData.set(DATA_HOME_DIM, "");
+        }
+        else if (tag.contains(HOME_KEY))
         {
             this.entityData.set(DATA_HOME, Optional.of(BlockPos.of(tag.getLong(HOME_KEY))));
             this.entityData.set(DATA_HOME_DIM, tag.getString(HOME_DIM_KEY));
@@ -675,6 +1059,15 @@ public class NpcEntity extends PathfinderMob
             this.entityData.set(DATA_HOME_DIM, "");
         }
         this.entityData.set(DATA_SKIN, tag.getString(SKIN_KEY));
+        if (tag.contains(BODY_SCALE_KEY))
+        {
+            this.setBodyScale(tag.getFloat(BODY_SCALE_KEY));
+        }
+        if (tag.getBoolean(UNNAMED_KEY))
+        {
+            this.setCustomName(null);
+            this.setCustomNameVisible(false);
+        }
     }
 
     @Override

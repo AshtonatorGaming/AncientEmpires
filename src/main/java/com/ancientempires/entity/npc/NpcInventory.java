@@ -1,6 +1,7 @@
 package com.ancientempires.entity.npc;
 
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
@@ -15,8 +16,9 @@ import java.util.List;
 /**
  * Hands, armor, and a 3x3 backpack. Slots 0 through 5 are vanilla equipment,
  * so attributes, combat, and the renderer keep reading them. The backpack is
- * storage only. Older saves stored eight backpack stacks under {@code Inventory};
- * those still land in the first eight slots of the nine-slot container.
+ * storage only. Each occupied backpack slot is saved with its index, the same
+ * way a chest saves items. Older saves have no Slot key; those stacks were
+ * already compacted and load in list order.
  */
 public class NpcInventory implements Container
 {
@@ -41,60 +43,64 @@ public class NpcInventory implements Container
 
     public void save(CompoundTag tag)
     {
-        tag.put(ITEMS_KEY, this.backpack.createTag());
+        ListTag list = new ListTag();
+        for (int slot = 0; slot < this.backpack.getContainerSize(); slot++)
+        {
+            ItemStack stack = this.backpack.getItem(slot);
+            if (stack.isEmpty())
+            {
+                continue;
+            }
+            CompoundTag entry = new CompoundTag();
+            entry.putByte("Slot", (byte) slot);
+            stack.save(entry);
+            list.add(entry);
+        }
+        tag.put(ITEMS_KEY, list);
     }
 
     public void load(CompoundTag tag)
     {
         this.backpack.clearContent();
-        if (tag.contains(ITEMS_KEY, Tag.TAG_LIST))
+        if (!tag.contains(ITEMS_KEY, Tag.TAG_LIST))
         {
-            this.backpack.fromTag(tag.getList(ITEMS_KEY, Tag.TAG_COMPOUND));
+            return;
         }
-    }
-
-    /**
-     * Merges identical backpack stacks and slides the result to the front.
-     * Hands and armor stay where they are.
-     */
-    public void repack()
-    {
-        List<ItemStack> merged = new ArrayList<>();
-        for (int slot = 0; slot < this.backpack.getContainerSize(); slot++)
+        ListTag list = tag.getList(ITEMS_KEY, Tag.TAG_COMPOUND);
+        boolean indexed = false;
+        for (int index = 0; index < list.size(); index++)
         {
-            ItemStack stack = this.backpack.getItem(slot).copy();
+            if (list.getCompound(index).contains("Slot", Tag.TAG_BYTE))
+            {
+                indexed = true;
+                break;
+            }
+        }
+        for (int index = 0; index < list.size(); index++)
+        {
+            CompoundTag entry = list.getCompound(index);
+            ItemStack stack = ItemStack.of(entry);
             if (stack.isEmpty())
             {
                 continue;
             }
-            for (ItemStack existing : merged)
+            int slot;
+            if (indexed)
             {
-                if (existing.getCount() >= existing.getMaxStackSize())
+                if (!entry.contains("Slot", Tag.TAG_BYTE))
                 {
                     continue;
                 }
-                if (!ItemStack.isSameItemSameTags(existing, stack))
-                {
-                    continue;
-                }
-                int room = existing.getMaxStackSize() - existing.getCount();
-                int move = Math.min(room, stack.getCount());
-                existing.grow(move);
-                stack.shrink(move);
-                if (stack.isEmpty())
-                {
-                    break;
-                }
+                slot = entry.getByte("Slot") & 255;
             }
-            if (!stack.isEmpty())
+            else
             {
-                merged.add(stack);
+                slot = index;
             }
-        }
-        this.backpack.clearContent();
-        for (int slot = 0; slot < merged.size(); slot++)
-        {
-            this.backpack.setItem(slot, merged.get(slot));
+            if (slot >= 0 && slot < this.backpack.getContainerSize())
+            {
+                this.backpack.setItem(slot, stack);
+            }
         }
     }
 

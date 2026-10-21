@@ -61,7 +61,8 @@ public class NpcMeleeAttackGoal extends Goal
     public boolean canUse()
     {
         LivingEntity target = this.npc.getTarget();
-        return target != null && target.isAlive();
+        // A bow stays on the archer goal. This goal must not punch with it.
+        return target != null && target.isAlive() && !this.npc.isHoldingBow();
     }
 
     @Override

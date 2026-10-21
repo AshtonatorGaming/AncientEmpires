@@ -1,6 +1,15 @@
 {
   "entity.ancientempires.npc": "NPC",
   "item.ancientempires.npc_spawn_egg": "NPC Spawn Egg",
+  "item.ancientempires.viking_soldier_spawn_egg": "Norska Soldier Spawn Egg",
+  "item.ancientempires.empire_soldier_spawn_egg": "Empire Soldier Spawn Egg",
+  "item.ancientempires.brigand_spawn_egg": "Brigand Spawn Egg",
+  "item.ancientempires.archer_spawn_egg": "Archer Spawn Egg",
+  "item.ancientempires.dwarf_soldier_spawn_egg": "Dwarf Soldier Spawn Egg",
+  "item.ancientempires.giant_spawn_egg": "Giant Spawn Egg",
+  "item.ancientempires.civilian_spawn_egg": "Civilian Spawn Egg",
+  "item.ancientempires.leader_spawn_egg": "Empire Leader Spawn Egg",
+  "item.ancientempires.unnamed_npc": "Unnamed NPC",
   "itemGroup.ancientempires": "Ancient Empires",
   "gui.ancientempires.npc.name": "Name",
   "gui.ancientempires.npc.follow": "Toggle Follow",
@@ -8,6 +17,7 @@
   "gui.ancientempires.npc.clear_home": "Clear Home",
   "gui.ancientempires.npc.repack": "Repack",
   "gui.ancientempires.npc.creative": "Creative",
+  "gui.ancientempires.npc.hold": "Hold Position",
   "gui.ancientempires.npc.skin": "Skin",
   "gui.ancientempires.npc.backpack": "Backpack",
   "gui.ancientempires.npc.inventory": "Inventory",
@@ -18,8 +28,10 @@
   "message.ancientempires.npc.follow_no_owner": "This NPC has no one to follow",
   "message.ancientempires.npc.home_set": "Home set",
   "message.ancientempires.npc.home_cleared": "Home cleared",
-  "message.ancientempires.npc.repacked": "Backpack packed",
+  "message.ancientempires.npc.repacked": "NPC packed",
   "message.ancientempires.npc.creative_on": "Creative gear on",
   "message.ancientempires.npc.creative_off": "Creative gear off",
-  "message.ancientempires.npc.creative_denied": "Creative mode is required"
+  "message.ancientempires.npc.creative_denied": "Creative mode is required",
+  "message.ancientempires.npc.hold_on": "Holding position",
+  "message.ancientempires.npc.hold_off": "Stopped holding position"
 }
