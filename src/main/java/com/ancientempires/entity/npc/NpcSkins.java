@@ -14,9 +14,12 @@ import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Skin catalog shared by the selector and the renderer. A type id such as
@@ -96,7 +99,8 @@ public final class NpcSkins
     }
 
     /**
-     * A pinned id, or a type id. A type id resolves to the first skin in that pool.
+     * A pinned id, a removed duplicate such as {@code id~2}, or a type id.
+     * A type id resolves to the first skin in that pool.
      */
     @Nullable
     public static Entry byId(String skinId)
@@ -109,6 +113,27 @@ public final class NpcSkins
         if (entry != null)
         {
             return entry;
+        }
+        int tilde = skinId.lastIndexOf('~');
+        if (tilde > 0 && tilde + 1 < skinId.length())
+        {
+            boolean digits = true;
+            for (int index = tilde + 1; index < skinId.length(); index++)
+            {
+                if (!Character.isDigit(skinId.charAt(index)))
+                {
+                    digits = false;
+                    break;
+                }
+            }
+            if (digits)
+            {
+                entry = BY_ID.get(skinId.substring(0, tilde));
+                if (entry != null)
+                {
+                    return entry;
+                }
+            }
         }
         return BY_TYPE.get(skinId);
     }
@@ -154,10 +179,16 @@ public final class NpcSkins
                         String classId = text(classObject, "id");
                         String className = text(classObject, "name");
                         boolean ownedJob = "misc".equals(factionId) && isOwnedJob(classId);
+                        boolean customPool = "misc".equals(factionId) && !ownedJob;
                         String storedFaction = ownedJob ? "owned" : factionId;
                         String storedClass = classId;
                         String storedName = className;
-                        if (!ownedJob && isSpellcaster(classId))
+                        if (customPool)
+                        {
+                            storedClass = "custom";
+                            storedName = "Custom";
+                        }
+                        else if (!ownedJob && isSpellcaster(classId))
                         {
                             storedClass = "spellcaster";
                             storedName = "Spellcaster";
@@ -176,6 +207,10 @@ public final class NpcSkins
                         {
                             build.name = "Spellcaster";
                         }
+                        if (customPool)
+                        {
+                            build.name = "Custom";
+                        }
                         if (classObject.has("skins"))
                         {
                             for (JsonElement skinElement : classObject.getAsJsonArray("skins"))
@@ -188,29 +223,38 @@ public final class NpcSkins
                                     typeId = id;
                                 }
                                 String file = text(skinObject, "file");
-                                ResourceLocation texture = null;
-                                if (!file.isEmpty())
+                                ResourceLocation texture = skinTexture(file);
+                                String name = text(skinObject, "name");
+                                if (customPool)
                                 {
-                                    texture = ResourceLocation.parse(AncientEmpires.MOD_ID + ":textures/entity/npc/" + file);
+                                    name = customSkinName(id, file, name);
                                 }
-                                Entry entry = new Entry(id, typeId, text(skinObject, "name"), storedFaction, storedClass, texture);
-                                build.skins.add(entry);
+                                Entry entry = new Entry(id, typeId, name, storedFaction, storedClass, texture);
                                 loaded.byId.put(id, entry);
                                 loaded.byType.putIfAbsent(typeId, entry);
+                                if (build.listFile(file))
+                                {
+                                    build.skins.add(entry);
+                                }
                             }
                         }
                     }
                 }
                 String factionName = text(factionObject, "name");
+                List<NpcClass> finished = finishClasses(classes, loaded);
                 if ("misc".equals(factionId))
                 {
-                    factionName = "Uncategorized";
+                    if (finished.isEmpty())
+                    {
+                        continue;
+                    }
+                    factionName = "Custom";
                 }
-                loaded.factions.add(new Faction(factionId, factionName, finishClasses(classes, loaded)));
+                loaded.factions.add(new Faction(factionId, factionName, finished));
             }
             if (!owned.isEmpty())
             {
-                loaded.factions.add(0, new Faction("owned", "Owned", finishOwned(owned, loaded)));
+                loaded.factions.add(0, new Faction("owned", "Player Default", finishOwned(owned, loaded)));
             }
         }
         catch (IOException | RuntimeException exception)
@@ -218,6 +262,138 @@ public final class NpcSkins
             AncientEmpires.LOGGER.error("Could not read the NPC skin catalog", exception);
         }
         return loaded;
+    }
+
+    /**
+     * Texture paths must be lowercase. A bad name used to abort the rest of the
+     * catalog, which dropped the Custom tab.
+     */
+    @Nullable
+    private static ResourceLocation skinTexture(String file)
+    {
+        if (file == null || file.isEmpty())
+        {
+            return null;
+        }
+        String path = "textures/entity/npc/" + legalPath(file);
+        if (!ResourceLocation.isValidPath(path))
+        {
+            AncientEmpires.LOGGER.warn("Skipping NPC skin texture {}", file);
+            return null;
+        }
+        return ResourceLocation.parse(AncientEmpires.MOD_ID + ":" + path);
+    }
+
+    /**
+     * Custom rows were numbered "Extra Custom N". The readable name is the
+     * original file stem, with the pack prefix removed.
+     */
+    private static String customSkinName(String id, String file, String fallback)
+    {
+        String stem = id;
+        int hash = id.lastIndexOf('#');
+        if (hash >= 0 && hash + 1 < id.length())
+        {
+            stem = id.substring(hash + 1);
+        }
+        else if (file != null && !file.isEmpty())
+        {
+            stem = file;
+            if (stem.toLowerCase(Locale.ROOT).endsWith(".png"))
+            {
+                stem = stem.substring(0, stem.length() - 4);
+            }
+        }
+        if (stem.toLowerCase(Locale.ROOT).startsWith("custom_"))
+        {
+            stem = stem.substring("custom_".length());
+        }
+        String pretty = prettyStem(stem);
+        if (pretty.isEmpty())
+        {
+            return fallback;
+        }
+        return pretty;
+    }
+
+    private static String prettyStem(String stem)
+    {
+        String spaced = stem.replaceAll("([a-z0-9])([A-Z])", "$1 $2");
+        spaced = spaced.replaceAll("([A-Z]+)([A-Z][a-z])", "$1 $2");
+        spaced = spaced.replace('_', ' ').replace('.', ' ');
+        spaced = spaced.replaceAll("([A-Za-z])(\\d)", "$1 $2");
+        spaced = spaced.replaceAll("(\\d)([A-Za-z])", "$1 $2");
+        StringBuilder builder = new StringBuilder(spaced.length());
+        int index = 0;
+        while (index < spaced.length())
+        {
+            while (index < spaced.length() && spaced.charAt(index) == ' ')
+            {
+                index++;
+            }
+            if (index >= spaced.length())
+            {
+                break;
+            }
+            int end = index;
+            while (end < spaced.length() && spaced.charAt(end) != ' ')
+            {
+                end++;
+            }
+            if (builder.length() > 0)
+            {
+                builder.append(' ');
+            }
+            builder.append(prettyWord(spaced.substring(index, end)));
+            index = end;
+        }
+        return builder.toString();
+    }
+
+    private static String prettyWord(String word)
+    {
+        int letters = 0;
+        boolean allCaps = true;
+        for (int index = 0; index < word.length(); index++)
+        {
+            char character = word.charAt(index);
+            if (Character.isLetter(character))
+            {
+                letters++;
+                if (!Character.isUpperCase(character))
+                {
+                    allCaps = false;
+                }
+            }
+        }
+        if (letters >= 2 && allCaps)
+        {
+            return word;
+        }
+        if (word.length() <= 1)
+        {
+            return word.toUpperCase(Locale.ROOT);
+        }
+        return Character.toUpperCase(word.charAt(0)) + word.substring(1).toLowerCase(Locale.ROOT);
+    }
+
+    private static String legalPath(String file)
+    {
+        String lower = file.toLowerCase(Locale.ROOT);
+        StringBuilder builder = new StringBuilder(lower.length());
+        for (int index = 0; index < lower.length(); index++)
+        {
+            char character = lower.charAt(index);
+            if (ResourceLocation.validPathChar(character))
+            {
+                builder.append(character);
+            }
+            else
+            {
+                builder.append('_');
+            }
+        }
+        return builder.toString();
     }
 
     private static boolean isSpellcaster(String classId)
@@ -300,7 +476,7 @@ public final class NpcSkins
         List<NpcClass> finished = new ArrayList<>();
         for (ClassBuild build : classes.values())
         {
-            if (build.skins.size() > loaded.maxPool)
+            if (!"custom".equals(build.id) && build.skins.size() > loaded.maxPool)
             {
                 loaded.maxPool = build.skins.size();
             }
@@ -360,11 +536,29 @@ public final class NpcSkins
         private final String id;
         private String name;
         private final List<Entry> skins = new ArrayList<>();
+        private final Set<String> files = new HashSet<>();
 
         private ClassBuild(String id, String name)
         {
             this.id = id;
             this.name = name;
+        }
+
+        /**
+         * @return whether this texture should appear in the list
+         */
+        private boolean listFile(String file)
+        {
+            if (file == null || file.isEmpty())
+            {
+                return true;
+            }
+            String key = legalPath(file);
+            if (key.isEmpty())
+            {
+                return true;
+            }
+            return this.files.add(key);
         }
 
         private NpcClass toClass()
@@ -403,6 +597,14 @@ public final class NpcSkins
         public String name()
         {
             return this.name;
+        }
+
+        /**
+         * The custom tab is one skin list. Real factions keep their classes.
+         */
+        public boolean flat()
+        {
+            return "misc".equals(this.id);
         }
 
         public List<NpcClass> classes()

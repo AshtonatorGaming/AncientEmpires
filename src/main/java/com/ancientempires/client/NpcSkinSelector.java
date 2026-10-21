@@ -36,7 +36,8 @@ import java.util.function.Supplier;
 
 /**
  * Skin button page. Faction pages, then that faction's classes, then the skins
- * for the selected class. Apply stores the skin id the world model already reads.
+ * for the selected class. The custom tab is one list. Apply stores the skin id
+ * the world model already reads.
  */
 @OnlyIn(Dist.CLIENT)
 public final class NpcSkinSelector
@@ -58,6 +59,7 @@ public final class NpcSkinSelector
     private static final int LIST_W = PREVIEW_X - MARGIN - 4;
     private static final int LIST_H = PANEL_H - BODY_Y - MARGIN;
     private static final int ROW_H = 14;
+    private static final int WINDOW = (LIST_H / ROW_H) + 2;
     private static final int FACTION_SLOTS = 4;
     private static final int CLASS_SLOTS = 3;
     private static final int CHIP_LEFT = MARGIN + ARROW + 2;
@@ -205,8 +207,8 @@ public final class NpcSkinSelector
                 .textAlign(Alignment.CenterLeft);
         empty.setEnabled(false);
         list.child(empty);
-        int pool = Math.max(1, NpcSkins.maxPool());
-        for (int index = 0; index < pool; index++)
+        list.setRebind(() -> bindWindow(state));
+        for (int index = 0; index < WINDOW; index++)
         {
             SkinSlot slot = new SkinSlot();
             ButtonWidget<?> button = new ButtonWidget<>()
@@ -261,12 +263,13 @@ public final class NpcSkinSelector
                 .value(new StringValue.Dynamic(() -> state.query, value -> queryChanged(state, value)))
                 .onUpdateListener(widget ->
                 {
-                    if (!state.dirty)
+                    if (state.dirty)
                     {
+                        state.dirty = false;
+                        layout(state);
                         return;
                     }
-                    state.dirty = false;
-                    layout(state);
+                    bindWindow(state);
                 }, true);
         panel.child(search);
         layout(state);
@@ -452,8 +455,11 @@ public final class NpcSkinSelector
     private static String classPageLabel(State state)
     {
         NpcSkins.Faction faction = NpcSkins.faction(state.factionId);
-        int count = faction == null ? 0 : faction.classes().size();
-        return pageLabel(state.classPage, count, CLASS_SLOTS);
+        if (faction == null || faction.flat())
+        {
+            return "";
+        }
+        return pageLabel(state.classPage, faction.classes().size(), CLASS_SLOTS);
     }
 
     private static int pageCount(int count, int slots)
@@ -481,9 +487,10 @@ public final class NpcSkinSelector
         setArrow(state.factionNext, state.factionPage + 1 < factionPages);
 
         NpcSkins.Faction faction = NpcSkins.faction(state.factionId);
+        boolean flat = faction != null && faction.flat();
         List<String> classIds = new ArrayList<>();
         List<String> classNames = new ArrayList<>();
-        if (faction != null)
+        if (faction != null && !flat)
         {
             int classPages = pageCount(faction.classes().size(), CLASS_SLOTS);
             if (state.classPage >= classPages)
@@ -496,6 +503,10 @@ public final class NpcSkinSelector
                 classNames.add(npcClass.name());
             }
         }
+        else if (flat && !faction.classes().isEmpty() && faction.npcClass(state.classId) == null)
+        {
+            state.classId = faction.classes().get(0).id();
+        }
         bindChips(state.classChips, classIds, classNames, state.classPage, state.classId, CLASS_CHIP_W, CLASS_Y);
         int classPages = pageCount(classIds.size(), CLASS_SLOTS);
         setArrow(state.classPrev, state.classPage > 0);
@@ -503,46 +514,87 @@ public final class NpcSkinSelector
 
         String needle = state.query.toLowerCase(Locale.ROOT).trim();
         NpcSkins.NpcClass npcClass = NpcSkins.npcClass(state.factionId, state.classId);
-        List<NpcSkins.Entry> shown = new ArrayList<>();
+        state.shown.clear();
         if (npcClass != null)
         {
             for (NpcSkins.Entry entry : npcClass.skins())
             {
                 if (matches(entry, needle))
                 {
-                    shown.add(entry);
+                    state.shown.add(entry);
                 }
             }
         }
-        for (int index = 0; index < state.slots.size(); index++)
-        {
-            SkinSlot slot = state.slots.get(index);
-            if (index >= shown.size())
-            {
-                slot.entry = null;
-                slot.label = "";
-                slot.button.setEnabled(false);
-                continue;
-            }
-            NpcSkins.Entry entry = shown.get(index);
-            slot.entry = entry;
-            slot.label = entry.name();
-            slot.button.setEnabled(true);
-            int color = entry.id().equals(state.selected) ? BUTTON_ON : BUTTON;
-            slot.button.background(new Rectangle().color(color)).size(LIST_W - 10, ROW_H);
-        }
-        boolean none = shown.isEmpty();
-        state.empty.setEnabled(none);
+        state.list.setContentHeight(state.shown.isEmpty() ? 0 : state.shown.size() * ROW_H);
         String listKey = state.factionId + "\n" + state.classId + "\n" + needle;
         if (!listKey.equals(state.listKey))
         {
             state.listKey = listKey;
-            if (state.list.getScrollData() != null)
+            if (state.list.getScrollData() != null && state.list.getScrollArea() != null)
             {
                 state.list.getScrollData().scrollTo(state.list.getScrollArea(), 0);
             }
         }
+        state.windowStart = -1;
+        bindWindow(state);
         state.list.scheduleResize();
+    }
+
+    /**
+     * The list keeps a window of rows and a content height for every match,
+     * so the custom catalog can scroll without a button per skin.
+     */
+    private static void bindWindow(State state)
+    {
+        if (state.list == null)
+        {
+            return;
+        }
+        int scroll = 0;
+        if (state.list.getScrollArea() != null)
+        {
+            scroll = Math.max(0, state.list.getScrollY());
+        }
+        int count = state.shown.size();
+        int first = count == 0 || ROW_H <= 0 ? 0 : scroll / ROW_H;
+        if (count > 0 && first >= count)
+        {
+            first = count - 1;
+        }
+        if (first == state.windowStart)
+        {
+            return;
+        }
+        state.windowStart = first;
+        boolean none = count == 0;
+        state.empty.setEnabled(none);
+        if (none)
+        {
+            state.empty.pos(0, 0).size(LIST_W - 16, ROW_H);
+        }
+        else
+        {
+            state.empty.pos(0, 0).size(0, 0);
+        }
+        for (int index = 0; index < state.slots.size(); index++)
+        {
+            SkinSlot slot = state.slots.get(index);
+            int row = first + index;
+            if (none || row >= count)
+            {
+                slot.entry = null;
+                slot.label = "";
+                slot.button.setEnabled(false);
+                slot.button.pos(0, 0).size(0, 0);
+                continue;
+            }
+            NpcSkins.Entry entry = state.shown.get(row);
+            slot.entry = entry;
+            slot.label = entry.name();
+            slot.button.setEnabled(true);
+            int color = entry.id().equals(state.selected) ? BUTTON_ON : BUTTON;
+            slot.button.background(new Rectangle().color(color)).pos(0, row * ROW_H).size(LIST_W - 10, ROW_H);
+        }
     }
 
     private static void bindChips(List<Chip> chips, List<String> ids, List<String> labels, int page, String selected, int chipW, int y)
@@ -575,11 +627,45 @@ public final class NpcSkinSelector
         {
             return true;
         }
-        if (entry.id().toLowerCase(Locale.ROOT).contains(needle))
+        String name = entry.name().toLowerCase(Locale.ROOT);
+        String id = entry.id().toLowerCase(Locale.ROOT);
+        if (isNumber(needle))
         {
-            return true;
+            return hasNumber(name, needle) || hasNumber(id, needle);
         }
-        return entry.name().toLowerCase(Locale.ROOT).contains(needle);
+        return name.contains(needle) || id.contains(needle);
+    }
+
+    private static boolean isNumber(String needle)
+    {
+        for (int index = 0; index < needle.length(); index++)
+        {
+            if (!Character.isDigit(needle.charAt(index)))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static boolean hasNumber(String text, String needle)
+    {
+        int limit = needle.length();
+        for (int index = 0; index <= text.length() - limit; index++)
+        {
+            if (!text.startsWith(needle, index))
+            {
+                continue;
+            }
+            boolean before = index > 0 && Character.isDigit(text.charAt(index - 1));
+            int after = index + limit;
+            boolean afterDigit = after < text.length() && Character.isDigit(text.charAt(after));
+            if (!before && !afterDigit)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static final class State
@@ -592,7 +678,9 @@ public final class NpcSkinSelector
         private String listKey = "";
         private String selected = "";
         private boolean dirty = true;
+        private int windowStart = -1;
         private final NpcEntity preview;
+        private final List<NpcSkins.Entry> shown = new ArrayList<>();
         private final List<Chip> factionChips = new ArrayList<>();
         private final List<Chip> classChips = new ArrayList<>();
         private final List<SkinSlot> slots = new ArrayList<>();
@@ -618,6 +706,57 @@ public final class NpcSkinSelector
 
     private static final class SkinList extends ListWidget<IWidget, SkinList>
     {
+        private int contentHeight;
+        private Runnable rebind;
+        private boolean applying;
+
+        private void setContentHeight(int contentHeight)
+        {
+            this.contentHeight = contentHeight;
+        }
+
+        private void setRebind(Runnable rebind)
+        {
+            this.rebind = rebind;
+        }
+
+        @Override
+        public void onUpdate()
+        {
+            super.onUpdate();
+            if (this.applying || this.rebind == null)
+            {
+                return;
+            }
+            this.applying = true;
+            this.rebind.run();
+            this.applying = false;
+        }
+
+        @Override
+        public boolean layoutWidgets()
+        {
+            if (this.applying)
+            {
+                return false;
+            }
+            this.applying = true;
+            boolean changed = super.layoutWidgets();
+            if (this.getScrollData() != null)
+            {
+                this.getScrollData().setScrollSize(this.contentHeight);
+                if (this.getScrollArea() != null)
+                {
+                    this.getScrollData().clamp(this.getScrollArea());
+                }
+            }
+            if (this.rebind != null)
+            {
+                this.rebind.run();
+            }
+            this.applying = false;
+            return changed;
+        }
     }
 
     private static final class SkinSlot
