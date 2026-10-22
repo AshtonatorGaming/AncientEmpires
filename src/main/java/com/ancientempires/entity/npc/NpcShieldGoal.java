@@ -6,6 +6,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -24,9 +25,16 @@ import org.jetbrains.annotations.Nullable;
  */
 public final class NpcShieldGoal extends Goal
 {
+    /** Goals are checked on alternate ticks, so a multiple of 2 keeps this to every 4. */
+    private static final int AIM_WATCH_INTERVAL = 4;
+    /** About 15 degrees: a player whose view is this close to the NPC is aiming at it. */
+    private static final double PLAYER_AIM_DOT = 0.965D;
+
     private final NpcEntity npc;
     @Nullable
     private LivingEntity threat;
+    @Nullable
+    private LivingEntity candidate;
     private int reactionLeft;
     private int holdLeft;
 
@@ -49,21 +57,34 @@ public final class NpcShieldGoal extends Goal
             return false;
         }
         LivingEntity target = this.npc.getTarget();
-        return target != null && target.isAlive() && this.threatening(target);
+        if (target != null && target.isAlive() && this.threatening(target))
+        {
+            this.candidate = target;
+            return true;
+        }
+        // Beyond Ancient Warfare: an archer the NPC is not fighting can still be seen
+        // drawing on it. Looked for every few ticks, staggered, not every tick.
+        if ((this.npc.tickCount + this.npc.getId()) % AIM_WATCH_INTERVAL != 0)
+        {
+            return false;
+        }
+        this.candidate = this.findAimer();
+        return this.candidate != null;
     }
 
     @Override
     public boolean canContinueToUse()
     {
         LivingEntity threat = this.threat;
-        return this.ready() && threat != null && threat.isAlive() && threat == this.npc.getTarget() && this.holdLeft > 0;
+        return this.ready() && threat != null && threat.isAlive() && this.holdLeft > 0;
     }
 
     @Override
     public void start()
     {
-        this.threat = this.npc.getTarget();
-        int reaction = Math.max(0, AncientEmpiresConfig.shieldReactionTicks);
+        this.threat = this.candidate;
+        this.candidate = null;
+        int reaction = Math.max(0, this.npc.getShieldReactionTicks());
         this.reactionLeft = reaction == 0 ? 0 : this.npc.getRandom().nextInt(reaction + 1);
         this.holdLeft = AncientEmpiresConfig.shieldHoldTicks;
     }
@@ -135,6 +156,52 @@ public final class NpcShieldGoal extends Goal
         }
         double range = AncientEmpiresConfig.shieldBlockRange;
         return swinging(attacker) && this.npc.distanceToSqr(attacker) < range * range;
+    }
+
+    /**
+     * The nearest player or mob within {@code aimWatchRange} drawing a bow or
+     * crossbow at this NPC: a mob whose target it is, or a player looking
+     * straight at it (never its own owner).
+     */
+    @Nullable
+    private LivingEntity findAimer()
+    {
+        double range = AncientEmpiresConfig.shieldAimWatchRange;
+        if (range <= 0.0D)
+        {
+            return null;
+        }
+        LivingEntity nearest = null;
+        double best = Double.MAX_VALUE;
+        for (LivingEntity other : this.npc.level().getEntitiesOfClass(LivingEntity.class, this.npc.getBoundingBox().inflate(range),
+                living -> living != this.npc && living.isAlive() && aiming(living)))
+        {
+            if (!this.aimsAtMe(other))
+            {
+                continue;
+            }
+            double distance = this.npc.distanceToSqr(other);
+            if (distance < best)
+            {
+                best = distance;
+                nearest = other;
+            }
+        }
+        return nearest;
+    }
+
+    private boolean aimsAtMe(LivingEntity aimer)
+    {
+        if (aimer instanceof Mob mob)
+        {
+            return mob.getTarget() == this.npc;
+        }
+        if (!(aimer instanceof Player player) || player.isSpectator() || player.getUUID().equals(this.npc.getOwner()))
+        {
+            return false;
+        }
+        Vec3 toMe = this.npc.getBoundingBox().getCenter().subtract(player.getEyePosition()).normalize();
+        return player.getViewVector(1.0F).dot(toMe) > PLAYER_AIM_DOT;
     }
 
     private static boolean swinging(LivingEntity attacker)

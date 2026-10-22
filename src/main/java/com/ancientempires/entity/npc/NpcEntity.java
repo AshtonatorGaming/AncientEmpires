@@ -112,6 +112,7 @@ public class NpcEntity extends PathfinderMob
     /** The roster row the NPC was spawned from. Repack returns it to that scroll. */
     private static final String ROSTER_KEY = "AeRoster";
     private static final String FEINT_KEY = "AeFeintChance";
+    private static final String SKILL_KEY = "AeSkill";
 
     private final NpcInventory inventory = new NpcInventory(this);
     private final NpcSidearm sidearm = new NpcSidearm(this);
@@ -130,7 +131,12 @@ public class NpcEntity extends PathfinderMob
     private int bashReadyTick;
     /** Tick until which the shield stays down after a bash. */
     private int shieldDownUntil;
-    private float feintChance;
+    /** Own feint chance; below zero means the skill tier decides. */
+    private float feintChance = -1.0F;
+    /** Cached skill tier from the roster rank; below zero until first asked. */
+    private int skillTier = -1;
+    /** Saved per-NPC skill tier ({@code AeSkill}); below zero when unset. */
+    private int skillOverride = -1;
 
     /** Server post for {@link #HOLDING_KEY}. The client only needs the boolean. */
     @Nullable
@@ -440,6 +446,7 @@ public class NpcEntity extends PathfinderMob
             {
                 entry.apply(npc);
                 npc.rosterId = entry.id();
+                npc.skillTier = -1;
                 if (entry.owned() && npc.getOwner() == null)
                 {
                     UUID pending = SPAWN_OWNER.get();
@@ -546,7 +553,7 @@ public class NpcEntity extends PathfinderMob
             return;
         }
         // A blocked hit is the moment to shove back, as a player would with Spartan's bash key.
-        if (NpcShieldBash.canBash(this) && this.getRandom().nextDouble() < AncientEmpiresConfig.shieldBashChance)
+        if (NpcShieldBash.canBash(this) && this.getRandom().nextDouble() < this.getBashChance())
         {
             this.pendingBash = attacker;
         }
@@ -573,17 +580,71 @@ public class NpcEntity extends PathfinderMob
     }
 
     /**
-     * Chance, 0 to 1, that a swing at a guarded target is a feint. Zero for
-     * ordinary NPCs; specialized roles set it. Saved as {@code AeFeintChance}.
+     * Chance, 0 to 1, that a swing at a guarded target is a feint. Comes from
+     * the skill tier unless this NPC has its own value ({@code AeFeintChance}).
      */
     public float getFeintChance()
     {
-        return this.feintChance;
+        if (this.feintChance >= 0.0F)
+        {
+            return this.feintChance;
+        }
+        return (float) tierValue(AncientEmpiresConfig.feintChanceByTier, this.getSkillTier());
     }
 
     public void setFeintChance(float chance)
     {
         this.feintChance = Mth.clamp(chance, 0.0F, 1.0F);
+    }
+
+    /** Chance, 0 to 1, that a blocked hit is answered with a shield bash. */
+    public double getBashChance()
+    {
+        return tierValue(AncientEmpiresConfig.bashChanceByTier, this.getSkillTier());
+    }
+
+    /** Most ticks before the shield comes up against a threat. Skilled NPCs react faster. */
+    public int getShieldReactionTicks()
+    {
+        return (int) Math.round(tierValue(AncientEmpiresConfig.shieldReactionByTier, this.getSkillTier()));
+    }
+
+    /**
+     * Combat skill, 0 to 3, from the roster rank: ordinary 0, elite 1, leader 2,
+     * elite leader 3. {@code AeSkill} overrides it for a single NPC, so later
+     * roles and promotions can set it. Cached; rank only changes on load or spawn.
+     */
+    public int getSkillTier()
+    {
+        if (this.skillOverride >= 0)
+        {
+            return this.skillOverride;
+        }
+        if (this.skillTier < 0)
+        {
+            NpcRoster.Entry entry = this.rosterEntry();
+            this.skillTier = entry == null ? 0 : tierOf(entry.subtype());
+        }
+        return this.skillTier;
+    }
+
+    private static int tierOf(String subtype)
+    {
+        boolean elite = subtype.endsWith(".elite");
+        if (subtype.startsWith("leader"))
+        {
+            return elite ? 3 : 2;
+        }
+        return elite ? 1 : 0;
+    }
+
+    private static double tierValue(java.util.List<? extends Number> values, int tier)
+    {
+        if (values.isEmpty())
+        {
+            return 0.0D;
+        }
+        return values.get(Mth.clamp(tier, 0, values.size() - 1)).doubleValue();
     }
 
     /**
@@ -1025,7 +1086,11 @@ public class NpcEntity extends PathfinderMob
         this.inventory.save(tag);
         this.sidearm.save(tag);
         this.writeRoster(tag);
-        if (this.feintChance > 0.0F)
+        if (this.skillOverride >= 0)
+        {
+            tag.putInt(SKILL_KEY, this.skillOverride);
+        }
+        if (this.feintChance >= 0.0F)
         {
             tag.putFloat(FEINT_KEY, this.feintChance);
         }
@@ -1499,7 +1564,11 @@ public class NpcEntity extends PathfinderMob
         this.inventory.save(tag);
         this.sidearm.save(tag);
         this.writeRoster(tag);
-        if (this.feintChance > 0.0F)
+        if (this.skillOverride >= 0)
+        {
+            tag.putInt(SKILL_KEY, this.skillOverride);
+        }
+        if (this.feintChance >= 0.0F)
         {
             tag.putFloat(FEINT_KEY, this.feintChance);
         }
@@ -1541,6 +1610,11 @@ public class NpcEntity extends PathfinderMob
         {
             this.setFeintChance(tag.getFloat(FEINT_KEY));
         }
+        if (tag.contains(SKILL_KEY))
+        {
+            this.skillOverride = Mth.clamp(tag.getInt(SKILL_KEY), 0, 3);
+        }
+        this.skillTier = -1;
         if (tag.getBoolean(NO_OWNER_KEY))
         {
             this.setOwner(null);

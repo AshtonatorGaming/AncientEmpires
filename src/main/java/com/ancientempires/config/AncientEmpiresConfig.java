@@ -7,6 +7,8 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 
+import java.util.List;
+
 /**
  * Combat timing and reach. Every value the attack goal reads lives here so a pack
  * can tune soldiers without another mod.
@@ -77,11 +79,13 @@ public final class AncientEmpiresConfig
 
     private static final ForgeConfigSpec.BooleanValue SHIELD_BLOCKING;
     private static final ForgeConfigSpec.DoubleValue SHIELD_BLOCK_RANGE;
-    private static final ForgeConfigSpec.IntValue SHIELD_REACTION_TICKS;
     private static final ForgeConfigSpec.IntValue SHIELD_HOLD_TICKS;
+    private static final ForgeConfigSpec.DoubleValue SHIELD_AIM_WATCH_RANGE;
     private static final ForgeConfigSpec.IntValue SHIELD_DISABLE_TICKS;
     private static final ForgeConfigSpec.EnumValue<NpcShieldBash.Mode> SHIELD_BASH_MODE;
-    private static final ForgeConfigSpec.DoubleValue SHIELD_BASH_CHANCE;
+    private static final ForgeConfigSpec.ConfigValue<List<? extends Double>> SKILL_FEINT_CHANCE;
+    private static final ForgeConfigSpec.ConfigValue<List<? extends Double>> SKILL_BASH_CHANCE;
+    private static final ForgeConfigSpec.ConfigValue<List<? extends Integer>> SKILL_SHIELD_REACTION;
     private static final ForgeConfigSpec.DoubleValue SHIELD_BASH_RANGE;
     private static final ForgeConfigSpec.IntValue SHIELD_BASH_COOLDOWN;
     private static final ForgeConfigSpec.IntValue TOWER_BASH_COOLDOWN;
@@ -298,9 +302,9 @@ public final class AncientEmpiresConfig
         SHIELD_BLOCK_RANGE = builder
                 .comment("A swinging attacker must be within this many blocks to be blocked. Bow and crossbow aim is blocked at any range.")
                 .defineInRange("blockRange", 4.0D, 1.0D, 16.0D);
-        SHIELD_REACTION_TICKS = builder
-                .comment("Most ticks before the shield comes up; each block waits a random amount up to this.")
-                .defineInRange("reactionTicks", 6, 0, 40);
+        SHIELD_AIM_WATCH_RANGE = builder
+                .comment("NPCs also raise the shield against anyone within this many blocks drawing a bow or crossbow at them, not only their own target. A player counts when looking straight at the NPC; never its owner. 0 turns this off.")
+                .defineInRange("aimWatchRange", 24.0D, 0.0D, 64.0D);
         SHIELD_HOLD_TICKS = builder
                 .comment("Ticks the shield stays up after the threat stops swinging or aiming.")
                 .defineInRange("holdTicks", 40, 1, 200);
@@ -310,9 +314,6 @@ public final class AncientEmpiresConfig
         SHIELD_BASH_MODE = builder
                 .comment("Which shields NPCs can bash with after blocking a hit, mirroring Spartan Shields' bash. SPARTAN: shields in spartanshields:shields_with_bash (nothing without that mod). ALL: any shield. OFF: no bashing.")
                 .defineEnum("bashMode", NpcShieldBash.Mode.SPARTAN);
-        SHIELD_BASH_CHANCE = builder
-                .comment("Chance, 0 to 1, that a blocked hit is answered with a bash.")
-                .defineInRange("bashChance", 0.5D, 0.0D, 1.0D);
         SHIELD_BASH_RANGE = builder
                 .comment("Reach of a bash, in blocks, plus half the target's width.")
                 .defineInRange("bashRange", 3.0D, 0.5D, 8.0D);
@@ -325,6 +326,18 @@ public final class AncientEmpiresConfig
         SHIELD_BASH_RECOVERY = builder
                 .comment("Ticks the shield stays down after a bash.")
                 .defineInRange("bashRecoveryTicks", 10, 0, 100);
+        builder.pop();
+
+        builder.comment("Combat skill by roster rank, four values each: ordinary, elite, leader, elite leader. An NPC's AeSkill tag (0 to 3) overrides its rank.").push("skill");
+        SKILL_FEINT_CHANCE = builder
+                .comment("Chance, 0 to 1, that a swing at a guarded target is a feint. An NPC's own AeFeintChance overrides this.")
+                .defineList("feintChance", List.of(0.0D, 0.1D, 0.2D, 0.3D), AncientEmpiresConfig::isChance);
+        SKILL_BASH_CHANCE = builder
+                .comment("Chance, 0 to 1, that a blocked hit is answered with a shield bash (see shield.bashMode).")
+                .defineList("bashChance", List.of(0.3D, 0.45D, 0.6D, 0.75D), AncientEmpiresConfig::isChance);
+        SKILL_SHIELD_REACTION = builder
+                .comment("Most ticks before the shield comes up against a threat; each block waits a random amount up to this.")
+                .defineList("shieldReactionTicks", List.of(8, 6, 4, 2), value -> value instanceof Integer ticks && ticks >= 0 && ticks <= 40);
         builder.pop();
 
         builder.push("allies");
@@ -433,11 +446,14 @@ public final class AncientEmpiresConfig
 
     public static boolean shieldBlocking = true;
     public static double shieldBlockRange = 4.0D;
-    public static int shieldReactionTicks = 6;
     public static int shieldHoldTicks = 40;
+    public static double shieldAimWatchRange = 24.0D;
     public static int shieldDisableTicks = 100;
     public static NpcShieldBash.Mode shieldBashMode = NpcShieldBash.Mode.SPARTAN;
-    public static double shieldBashChance = 0.5D;
+    /** Per skill tier: ordinary, elite, leader, elite leader. */
+    public static List<? extends Double> feintChanceByTier = List.of(0.0D, 0.1D, 0.2D, 0.3D);
+    public static List<? extends Double> bashChanceByTier = List.of(0.3D, 0.45D, 0.6D, 0.75D);
+    public static List<? extends Integer> shieldReactionByTier = List.of(8, 6, 4, 2);
     public static double shieldBashRange = 3.0D;
     public static int shieldBashCooldownTicks = 30;
     public static int towerBashCooldownTicks = 50;
@@ -461,6 +477,11 @@ public final class AncientEmpiresConfig
 
     private AncientEmpiresConfig()
     {
+    }
+
+    private static boolean isChance(Object value)
+    {
+        return value instanceof Number number && number.doubleValue() >= 0.0D && number.doubleValue() <= 1.0D;
     }
 
     @SubscribeEvent
@@ -536,11 +557,13 @@ public final class AncientEmpiresConfig
 
         shieldBlocking = SHIELD_BLOCKING.get();
         shieldBlockRange = SHIELD_BLOCK_RANGE.get();
-        shieldReactionTicks = SHIELD_REACTION_TICKS.get();
         shieldHoldTicks = SHIELD_HOLD_TICKS.get();
+        shieldAimWatchRange = SHIELD_AIM_WATCH_RANGE.get();
         shieldDisableTicks = SHIELD_DISABLE_TICKS.get();
         shieldBashMode = SHIELD_BASH_MODE.get();
-        shieldBashChance = SHIELD_BASH_CHANCE.get();
+        feintChanceByTier = SKILL_FEINT_CHANCE.get();
+        bashChanceByTier = SKILL_BASH_CHANCE.get();
+        shieldReactionByTier = SKILL_SHIELD_REACTION.get();
         shieldBashRange = SHIELD_BASH_RANGE.get();
         shieldBashCooldownTicks = SHIELD_BASH_COOLDOWN.get();
         towerBashCooldownTicks = TOWER_BASH_COOLDOWN.get();
