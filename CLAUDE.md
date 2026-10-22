@@ -131,7 +131,10 @@ its own unless noted). Before adding behavior, check what AW did first.
   (beyond AW) anyone within `shield.aimWatchRange` aiming at the NPC. Shields are found by
   Forge's `SHIELD_BLOCK` action (`WeaponClassifier.isShield`), so Spartan Shields work.
   Blocked hits wear the shield; axes and Spartan's Shield Breach (`canDisableShield`)
-  disable it. The shield drops while the NPC commits to its own swing.
+  disable it. Guard stance (`shield.guardInRange`): the shield stays up while an enemy is
+  in `blockRange`, since vanilla shields only block after 5 ticks raised (blocking only on
+  the swing played like a parry). It drops for the last `dropTicks` of the NPC's own
+  wind-up and comes straight back.
 - Bash: `NpcShieldBash` mirrors Spartan Shields' player bash as a counter after a blocked
   hit. `shield.bashMode`: SPARTAN (its `shields_with_bash` tag), ALL, OFF.
 - Feint: Better Combat style, break off halfway against a guarded target, never twice in

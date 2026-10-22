@@ -728,12 +728,18 @@ public class NpcEntity extends PathfinderMob
 
     /**
      * The NPC is committed to its own swing, so the shield stays down, as a
-     * player cannot block and attack at once. The internal path uses the attack
-     * window; the Better Mob Combat path sets the flag.
+     * player cannot block and attack at once. On the internal path that is only
+     * the last {@code shield.dropTicks} of the wind-up, so a guard drops for the
+     * strike and comes straight back; the Better Mob Combat path sets the flag.
      */
     public boolean isSwingCommitted()
     {
-        return this.swingCommitted || this.attackWindowOpen;
+        if (this.swingCommitted)
+        {
+            return true;
+        }
+        int drop = AncientEmpiresConfig.shieldDropTicks;
+        return this.attackWindowOpen && (drop < 0 || this.attackWindupRemaining <= drop);
     }
 
     public void setSwingCommitted(boolean committed)

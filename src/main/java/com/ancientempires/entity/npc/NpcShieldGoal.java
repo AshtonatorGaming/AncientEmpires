@@ -155,7 +155,8 @@ public final class NpcShieldGoal extends Goal
             return true;
         }
         double range = AncientEmpiresConfig.shieldBlockRange;
-        return swinging(attacker) && this.npc.distanceToSqr(attacker) < range * range;
+        // Guard stance: an enemy in reach is a threat whether or not it is mid-swing.
+        return (AncientEmpiresConfig.shieldGuardInRange || swinging(attacker)) && this.npc.distanceToSqr(attacker) < range * range;
     }
 
     /**

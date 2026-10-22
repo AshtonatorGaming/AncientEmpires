@@ -80,6 +80,8 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.BooleanValue SHIELD_BLOCKING;
     private static final ForgeConfigSpec.DoubleValue SHIELD_BLOCK_RANGE;
     private static final ForgeConfigSpec.IntValue SHIELD_HOLD_TICKS;
+    private static final ForgeConfigSpec.BooleanValue SHIELD_GUARD_IN_RANGE;
+    private static final ForgeConfigSpec.IntValue SHIELD_DROP_TICKS;
     private static final ForgeConfigSpec.DoubleValue SHIELD_AIM_WATCH_RANGE;
     private static final ForgeConfigSpec.IntValue SHIELD_DISABLE_TICKS;
     private static final ForgeConfigSpec.EnumValue<NpcShieldBash.Mode> SHIELD_BASH_MODE;
@@ -353,6 +355,12 @@ public final class AncientEmpiresConfig
         SHIELD_HOLD_TICKS = builder
                 .comment("Ticks the shield stays up after the threat stops swinging or aiming.")
                 .defineInRange("holdTicks", 40, 1, 200);
+        SHIELD_GUARD_IN_RANGE = builder
+                .comment("Guard stance: keep the shield up the whole time an enemy is within blockRange, not only while it swings. Vanilla shields only block after 5 ticks raised, so blocking only on the swing is close to a parry.")
+                .define("guardInRange", true);
+        SHIELD_DROP_TICKS = builder
+                .comment("The shield comes down only this many ticks before the NPC's own hit lands, then goes straight back up. The whole wind-up if negative.")
+                .defineInRange("dropTicks", 5, -1, 40);
         SHIELD_DISABLE_TICKS = builder
                 .comment("Ticks an axe hit keeps an NPC's shield down, as it does a player's.")
                 .defineInRange("axeDisableTicks", 100, 0, 400);
@@ -639,6 +647,8 @@ public final class AncientEmpiresConfig
     public static boolean shieldBlocking = true;
     public static double shieldBlockRange = 4.0D;
     public static int shieldHoldTicks = 40;
+    public static boolean shieldGuardInRange = true;
+    public static int shieldDropTicks = 5;
     public static double shieldAimWatchRange = 24.0D;
     public static int shieldDisableTicks = 100;
     public static NpcShieldBash.Mode shieldBashMode = NpcShieldBash.Mode.SPARTAN;
@@ -795,6 +805,8 @@ public final class AncientEmpiresConfig
         shieldBlocking = SHIELD_BLOCKING.get();
         shieldBlockRange = SHIELD_BLOCK_RANGE.get();
         shieldHoldTicks = SHIELD_HOLD_TICKS.get();
+        shieldGuardInRange = SHIELD_GUARD_IN_RANGE.get();
+        shieldDropTicks = SHIELD_DROP_TICKS.get();
         shieldAimWatchRange = SHIELD_AIM_WATCH_RANGE.get();
         shieldDisableTicks = SHIELD_DISABLE_TICKS.get();
         shieldBashMode = SHIELD_BASH_MODE.get();
