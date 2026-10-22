@@ -91,6 +91,12 @@ public final class NpcShieldGoal extends Goal
         {
             this.holdLeft--;
         }
+        LivingEntity bashTarget = this.npc.takePendingBash();
+        if (bashTarget != null)
+        {
+            NpcShieldBash.bash(this.npc, bashTarget);
+            return;
+        }
         if (this.npc.isSwingCommitted())
         {
             this.npc.lowerShield();

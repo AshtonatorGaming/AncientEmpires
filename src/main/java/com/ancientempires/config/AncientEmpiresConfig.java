@@ -1,6 +1,7 @@
 package com.ancientempires.config;
 
 import com.ancientempires.AncientEmpires;
+import com.ancientempires.entity.npc.NpcShieldBash;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -79,6 +80,14 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.IntValue SHIELD_REACTION_TICKS;
     private static final ForgeConfigSpec.IntValue SHIELD_HOLD_TICKS;
     private static final ForgeConfigSpec.IntValue SHIELD_DISABLE_TICKS;
+    private static final ForgeConfigSpec.EnumValue<NpcShieldBash.Mode> SHIELD_BASH_MODE;
+    private static final ForgeConfigSpec.DoubleValue SHIELD_BASH_CHANCE;
+    private static final ForgeConfigSpec.DoubleValue SHIELD_BASH_RANGE;
+    private static final ForgeConfigSpec.IntValue SHIELD_BASH_COOLDOWN;
+    private static final ForgeConfigSpec.IntValue TOWER_BASH_COOLDOWN;
+    private static final ForgeConfigSpec.IntValue SHIELD_BASH_RECOVERY;
+    private static final ForgeConfigSpec.BooleanValue FEINTS;
+    private static final ForgeConfigSpec.IntValue FEINT_RECOVERY;
 
     private static final ForgeConfigSpec.BooleanValue OWNER_DEFENSE;
     private static final ForgeConfigSpec.DoubleValue OWNER_DEFENSE_RANGE;
@@ -210,6 +219,12 @@ public final class AncientEmpiresConfig
         ENGAGE_RANGE_FACTOR = builder
                 .comment("A swing starts only inside this fraction of the weapon's reach, so a target stepping back during the wind-up is still hit. The hit checks the full reach. 1.0 swings from the edge.")
                 .defineInRange("engageRangeFactor", 0.85D, 0.5D, 1.0D);
+        FEINTS = builder
+                .comment("NPCs with a feint chance (set by specialized roles, zero otherwise) sometimes break off a swing halfway against a guarded target, like Better Combat's feint.")
+                .define("feints", true);
+        FEINT_RECOVERY = builder
+                .comment("Ticks after a feint before the next swing can start.")
+                .defineInRange("feintRecoveryTicks", 6, 0, 100);
         DUAL_WIELD = builder
                 .comment("Two one-handed Better Combat weapons alternate main-hand and off-hand swings, as Better Combat does for players. Off-hand swings use that weapon's damage, speed, reach, and attacks.")
                 .define("dualWield", true);
@@ -292,6 +307,24 @@ public final class AncientEmpiresConfig
         SHIELD_DISABLE_TICKS = builder
                 .comment("Ticks an axe hit keeps an NPC's shield down, as it does a player's.")
                 .defineInRange("axeDisableTicks", 100, 0, 400);
+        SHIELD_BASH_MODE = builder
+                .comment("Which shields NPCs can bash with after blocking a hit, mirroring Spartan Shields' bash. SPARTAN: shields in spartanshields:shields_with_bash (nothing without that mod). ALL: any shield. OFF: no bashing.")
+                .defineEnum("bashMode", NpcShieldBash.Mode.SPARTAN);
+        SHIELD_BASH_CHANCE = builder
+                .comment("Chance, 0 to 1, that a blocked hit is answered with a bash.")
+                .defineInRange("bashChance", 0.5D, 0.0D, 1.0D);
+        SHIELD_BASH_RANGE = builder
+                .comment("Reach of a bash, in blocks, plus half the target's width.")
+                .defineInRange("bashRange", 3.0D, 0.5D, 8.0D);
+        SHIELD_BASH_COOLDOWN = builder
+                .comment("Ticks between bashes. Spartan Shields' default for a player.")
+                .defineInRange("bashCooldownTicks", 30, 1, 1000);
+        TOWER_BASH_COOLDOWN = builder
+                .comment("Ticks between bashes with a tower shield. Spartan Shields' default for a player.")
+                .defineInRange("towerBashCooldownTicks", 50, 1, 1000);
+        SHIELD_BASH_RECOVERY = builder
+                .comment("Ticks the shield stays down after a bash.")
+                .defineInRange("bashRecoveryTicks", 10, 0, 100);
         builder.pop();
 
         builder.push("allies");
@@ -403,6 +436,14 @@ public final class AncientEmpiresConfig
     public static int shieldReactionTicks = 6;
     public static int shieldHoldTicks = 40;
     public static int shieldDisableTicks = 100;
+    public static NpcShieldBash.Mode shieldBashMode = NpcShieldBash.Mode.SPARTAN;
+    public static double shieldBashChance = 0.5D;
+    public static double shieldBashRange = 3.0D;
+    public static int shieldBashCooldownTicks = 30;
+    public static int towerBashCooldownTicks = 50;
+    public static int shieldBashRecoveryTicks = 10;
+    public static boolean feints = true;
+    public static int feintRecoveryTicks = 6;
 
     public static boolean ownerDefense = true;
     public static double ownerDefenseRange = 32.0D;
@@ -498,6 +539,14 @@ public final class AncientEmpiresConfig
         shieldReactionTicks = SHIELD_REACTION_TICKS.get();
         shieldHoldTicks = SHIELD_HOLD_TICKS.get();
         shieldDisableTicks = SHIELD_DISABLE_TICKS.get();
+        shieldBashMode = SHIELD_BASH_MODE.get();
+        shieldBashChance = SHIELD_BASH_CHANCE.get();
+        shieldBashRange = SHIELD_BASH_RANGE.get();
+        shieldBashCooldownTicks = SHIELD_BASH_COOLDOWN.get();
+        towerBashCooldownTicks = TOWER_BASH_COOLDOWN.get();
+        shieldBashRecoveryTicks = SHIELD_BASH_RECOVERY.get();
+        feints = FEINTS.get();
+        feintRecoveryTicks = FEINT_RECOVERY.get();
 
         ownerDefense = OWNER_DEFENSE.get();
         ownerDefenseRange = OWNER_DEFENSE_RANGE.get();

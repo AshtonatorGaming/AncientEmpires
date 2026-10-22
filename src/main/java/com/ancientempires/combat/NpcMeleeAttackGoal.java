@@ -13,10 +13,13 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraftforge.registries.ForgeRegistries;
+
+import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 
@@ -49,6 +52,10 @@ public class NpcMeleeAttackGoal extends Goal
     private int facedOnTick = -1;
     private boolean forcedSwing;
     private boolean fistClip;
+    /** This wind-up breaks off halfway. */
+    private boolean feintPlanned;
+    /** The last wind-up was a feint, so the next one is real. */
+    private boolean feintedLast;
     private AttackSwing active;
 
     private AttackSwing preview;
@@ -103,6 +110,7 @@ public class NpcMeleeAttackGoal extends Goal
     {
         this.npc.getNavigation().stop();
         this.npc.setSwingCommitted(false);
+        this.feintPlanned = false;
         if (this.mobCombatSwing)
         {
             AttackSwing swing = this.active;
@@ -227,11 +235,17 @@ public class NpcMeleeAttackGoal extends Goal
 
         this.windupLeft--;
         this.npc.tickAttackWindow();
+        if (this.feintPlanned && this.windupLeft <= swing.windupTicks() / 2)
+        {
+            this.feint();
+            return;
+        }
         if (this.windupLeft > 0)
         {
             return;
         }
 
+        this.feintedLast = false;
         boolean inRange = this.within(target, swing.range()) || !AncientEmpiresConfig.cancelIfOutOfRange;
         if (inRange && this.hasLineOfSight(target) && this.hitFacing(target, swing))
         {
@@ -247,6 +261,43 @@ public class NpcMeleeAttackGoal extends Goal
         // The punch clip is timed to the whole cooldown, so recovery leaves it playing.
         this.fistClip = false;
         this.preview = null;
+    }
+
+    /**
+     * Better Combat's feint: a player cancels the swing mid-upswing and pays a
+     * full cooldown for it. NPCs feint only against a guarded target (a raised
+     * shield, a shield in hand, or a player who can react), never twice in a
+     * row, and only as often as their own feint chance, which is zero unless a
+     * role sets it. The internal path only; Better Mob Combat owns its swings.
+     */
+    private boolean planFeint(@Nullable LivingEntity target)
+    {
+        float chance = this.npc.getFeintChance();
+        if (!AncientEmpiresConfig.feints || chance <= 0.0F || this.feintedLast || target == null)
+        {
+            return false;
+        }
+        boolean guarded = target.isBlocking()
+                || target instanceof Player
+                || target instanceof NpcEntity other && other.hasShieldInOffhand();
+        return guarded && this.npc.getRandom().nextFloat() < chance;
+    }
+
+    /**
+     * Breaks off the wind-up halfway: no hit, the clip stops, the combo does not
+     * advance, and a short recovery follows before the real swing.
+     */
+    private void feint()
+    {
+        this.feintPlanned = false;
+        this.feintedLast = true;
+        this.stopFistClip();
+        this.npc.cancelAttackPresentation();
+        this.recoveryLeft = AncientEmpiresConfig.feintRecoveryTicks;
+        this.phase = Phase.APPROACH;
+        this.active = null;
+        this.stoppedForWindup = false;
+        this.windupLeft = 0;
     }
 
     private void beginWindup(AttackSwing swing)
@@ -282,6 +333,7 @@ public class NpcMeleeAttackGoal extends Goal
         this.windupLeft = swing.windupTicks();
         this.stoppedForWindup = false;
         this.pathCooldown = 0;
+        this.feintPlanned = this.planFeint(this.npc.getTarget());
         this.npc.openAttackWindow(swing);
         this.fistClip = false;
         if (this.usesFistClip(swing))

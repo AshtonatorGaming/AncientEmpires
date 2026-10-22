@@ -111,6 +111,7 @@ public class NpcEntity extends PathfinderMob
     private static final String NO_HOME_KEY = "AeNoHome";
     /** The roster row the NPC was spawned from. Repack returns it to that scroll. */
     private static final String ROSTER_KEY = "AeRoster";
+    private static final String FEINT_KEY = "AeFeintChance";
 
     private final NpcInventory inventory = new NpcInventory(this);
     private final NpcSidearm sidearm = new NpcSidearm(this);
@@ -123,6 +124,13 @@ public class NpcEntity extends PathfinderMob
     private int shieldDisabledUntil;
     /** Set by the melee goal while it commits to a Better Mob Combat swing. */
     private boolean swingCommitted;
+    /** Attacker to shield-bash after a blocked hit. Server only. */
+    @Nullable
+    private LivingEntity pendingBash;
+    private int bashReadyTick;
+    /** Tick until which the shield stays down after a bash. */
+    private int shieldDownUntil;
+    private float feintChance;
 
     /** Server post for {@link #HOLDING_KEY}. The client only needs the boolean. */
     @Nullable
@@ -493,7 +501,7 @@ public class NpcEntity extends PathfinderMob
 
     public void raiseShield()
     {
-        if (!this.isUsingItem() && this.hasShieldInOffhand() && !this.isShieldDisabled())
+        if (!this.isUsingItem() && this.hasShieldInOffhand() && !this.isShieldDisabled() && this.tickCount >= this.shieldDownUntil)
         {
             this.startUsingItem(InteractionHand.OFF_HAND);
         }
@@ -535,7 +543,47 @@ public class NpcEntity extends PathfinderMob
             this.shieldDisabledUntil = this.tickCount + AncientEmpiresConfig.shieldDisableTicks;
             this.lowerShield();
             this.playSound(SoundEvents.SHIELD_BREAK, 0.8F, 0.8F + this.level().random.nextFloat() * 0.4F);
+            return;
         }
+        // A blocked hit is the moment to shove back, as a player would with Spartan's bash key.
+        if (NpcShieldBash.canBash(this) && this.getRandom().nextDouble() < AncientEmpiresConfig.shieldBashChance)
+        {
+            this.pendingBash = attacker;
+        }
+    }
+
+    /** The attacker to counter-bash, once; the shield goal calls this each tick. */
+    @Nullable
+    LivingEntity takePendingBash()
+    {
+        LivingEntity attacker = this.pendingBash;
+        this.pendingBash = null;
+        return attacker;
+    }
+
+    boolean isBashReady()
+    {
+        return this.tickCount >= this.bashReadyTick;
+    }
+
+    void startBashCooldown(int ticks)
+    {
+        this.bashReadyTick = this.tickCount + ticks;
+        this.shieldDownUntil = this.tickCount + AncientEmpiresConfig.shieldBashRecoveryTicks;
+    }
+
+    /**
+     * Chance, 0 to 1, that a swing at a guarded target is a feint. Zero for
+     * ordinary NPCs; specialized roles set it. Saved as {@code AeFeintChance}.
+     */
+    public float getFeintChance()
+    {
+        return this.feintChance;
+    }
+
+    public void setFeintChance(float chance)
+    {
+        this.feintChance = Mth.clamp(chance, 0.0F, 1.0F);
     }
 
     /**
@@ -977,6 +1025,10 @@ public class NpcEntity extends PathfinderMob
         this.inventory.save(tag);
         this.sidearm.save(tag);
         this.writeRoster(tag);
+        if (this.feintChance > 0.0F)
+        {
+            tag.putFloat(FEINT_KEY, this.feintChance);
+        }
         tag.putString(SKIN_KEY, this.getSkinId());
         tag.putString(FACTION_KEY, this.getFaction());
         tag.putBoolean(FOLLOWING_KEY, this.isFollowing());
@@ -1447,6 +1499,10 @@ public class NpcEntity extends PathfinderMob
         this.inventory.save(tag);
         this.sidearm.save(tag);
         this.writeRoster(tag);
+        if (this.feintChance > 0.0F)
+        {
+            tag.putFloat(FEINT_KEY, this.feintChance);
+        }
         UUID owner = this.getOwner();
         if (owner != null)
         {
@@ -1480,6 +1536,10 @@ public class NpcEntity extends PathfinderMob
         if (tag.contains(ROSTER_KEY))
         {
             this.rosterId = tag.getString(ROSTER_KEY);
+        }
+        if (tag.contains(FEINT_KEY))
+        {
+            this.setFeintChance(tag.getFloat(FEINT_KEY));
         }
         if (tag.getBoolean(NO_OWNER_KEY))
         {
