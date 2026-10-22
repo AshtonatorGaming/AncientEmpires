@@ -156,6 +156,7 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.IntValue UPKEEP_BUNDLE_RATIONS;
     private static final ForgeConfigSpec.BooleanValue UPKEEP_REQUIRE_HALL;
     private static final ForgeConfigSpec.IntValue UPKEEP_FALLEN_RECORDS;
+    private static final ForgeConfigSpec.EnumValue<KeepOnDeath> UPKEEP_KEEP_ON_DEATH;
 
     private static final ForgeConfigSpec.BooleanValue TARGET_LEGACY_SCAN;
     private static final ForgeConfigSpec.IntValue TARGET_SCAN_INTERVAL;
@@ -373,8 +374,8 @@ public final class AncientEmpiresConfig
                 .comment("Guard stance: keep the shield up the whole time an enemy is within blockRange, not only while it swings. Vanilla shields only block after 5 ticks raised, so blocking only on the swing is close to a parry.")
                 .define("guardInRange", true);
         SHIELD_DROP_TICKS = builder
-                .comment("The shield comes down only this many ticks before the NPC's own hit lands, then goes straight back up. The whole wind-up if negative.")
-                .defineInRange("dropTicks", 5, -1, 40);
+                .comment("-1 (default): the shield comes down for the whole of the NPC's own wind-up, as a player lowers it to swing, and goes back up after. A number: it stays up until this many ticks before the hit, so the NPC swings behind its shield.")
+                .defineInRange("dropTicks", -1, -1, 40);
         SHIELD_DISABLE_TICKS = builder
                 .comment("Ticks an axe hit keeps an NPC's shield down, as it does a player's.")
                 .defineInRange("axeDisableTicks", 100, 0, 400);
@@ -606,6 +607,9 @@ public final class AncientEmpiresConfig
         UPKEEP_FALLEN_RECORDS = builder
                 .comment("Fallen NPCs a hall remembers for revival; the oldest go first.")
                 .defineInRange("fallenRecords", 16, 1, 128);
+        UPKEEP_KEEP_ON_DEATH = builder
+                .comment("Like Ancient Warfare Tweaked's keep-equipment option: when a Town Hall records an owned NPC's death, what it keeps for revival instead of dropping. NONE, EQUIPMENT (armor and hands), BACKPACK, or ALL. Deaths no hall records drop everything as usual.")
+                .defineEnum("keepOnDeath", KeepOnDeath.NONE);
         builder.pop();
 
         builder.push("targeting");
@@ -707,7 +711,7 @@ public final class AncientEmpiresConfig
     public static double shieldBlockRange = 4.0D;
     public static int shieldHoldTicks = 40;
     public static boolean shieldGuardInRange = true;
-    public static int shieldDropTicks = 5;
+    public static int shieldDropTicks = -1;
     public static double shieldAimWatchRange = 24.0D;
     public static int shieldDisableTicks = 100;
     public static NpcShieldBash.Mode shieldBashMode = NpcShieldBash.Mode.SPARTAN;
@@ -783,6 +787,13 @@ public final class AncientEmpiresConfig
     public static int upkeepBundleRations = 8;
     public static boolean upkeepRequireHall = false;
     public static int upkeepFallenRecords = 16;
+    public static KeepOnDeath upkeepKeepOnDeath = KeepOnDeath.NONE;
+
+    /** What an NPC whose death a Town Hall records keeps for revival instead of dropping. */
+    public enum KeepOnDeath
+    {
+        NONE, EQUIPMENT, BACKPACK, ALL
+    }
 
     public static boolean targetLegacyScan = false;
     public static int targetScanInterval = 10;
@@ -954,6 +965,7 @@ public final class AncientEmpiresConfig
         upkeepBundleRations = UPKEEP_BUNDLE_RATIONS.get();
         upkeepRequireHall = UPKEEP_REQUIRE_HALL.get();
         upkeepFallenRecords = UPKEEP_FALLEN_RECORDS.get();
+        upkeepKeepOnDeath = UPKEEP_KEEP_ON_DEATH.get();
 
         targetLegacyScan = TARGET_LEGACY_SCAN.get();
         targetScanInterval = TARGET_SCAN_INTERVAL.get();

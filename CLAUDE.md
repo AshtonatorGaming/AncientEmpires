@@ -133,8 +133,9 @@ its own unless noted). Before adding behavior, check what AW did first.
   Blocked hits wear the shield; axes and Spartan's Shield Breach (`canDisableShield`)
   disable it. Guard stance (`shield.guardInRange`): the shield stays up while an enemy is
   in `blockRange`, since vanilla shields only block after 5 ticks raised (blocking only on
-  the swing played like a parry). It drops for the last `dropTicks` of the NPC's own
-  wind-up and comes straight back.
+  the swing played like a parry). As a player does, it comes down for the NPC's own
+  wind-up and back up after (`dropTicks` -1); a number keeps it up until that many ticks
+  before the hit instead.
 - Bash: `NpcShieldBash` mirrors Spartan Shields' player bash as a counter after a blocked
   hit. `shield.bashMode`: SPARTAN (its `shields_with_bash` tag), ALL, OFF.
 - Feint: Better Combat style, break off halfway against a guarded target, never twice in
@@ -203,8 +204,10 @@ its own unless noted). Before adding behavior, check what AW did first.
   food bundle is `bundleRations` rations, other food its hunger value), tracked as a
   running pantry. Unfed NPCs go hungry (`AeHungry`); hungry workers do not work. NPCs no
   hall reaches are left alone unless `requireHall`. An owned NPC dying within range of
-  its owner's hall is recorded there as its packed scroll after its death drops (no
-  gear), up to `fallenRecords`, for priest revival later. Sneak-click shows status.
+  its owner's hall is recorded there at once (on the death, not the daily check) as its
+  packed scroll, up to `fallenRecords`, for priest revival later. `keepOnDeath` (AW
+  Tweaked's option: NONE, EQUIPMENT, BACKPACK, ALL) keeps that gear in the record instead of
+  dropping it; unrecorded deaths drop everything. Sneak-click shows status.
 - Getting settlers in survival: the Settler scroll recipe (2 gold, AW's food bundle, a bed),
   and the Settlers' Post (`block/SettlersPostBlock`, `NpcImmigration`), Dwarf Fortress
   style immigration kept apart from the future Town Hall (upkeep, priest revival within

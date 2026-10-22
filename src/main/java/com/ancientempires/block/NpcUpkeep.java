@@ -154,6 +154,13 @@ public final class NpcUpkeep extends SavedData
         return best;
     }
 
+    /** Whether a death here would be recorded: the NPC is owned and its owner has a hall in range. */
+    public static boolean recordsDeathOf(ServerLevel level, NpcEntity npc)
+    {
+        UUID owner = npc.getOwner();
+        return owner != null && hallFor(level, npc.blockPosition(), owner) != null;
+    }
+
     /** Records a fallen owned NPC at its owner's nearest hall, if one is in range. */
     public static void recordFallen(ServerLevel level, NpcEntity npc, ItemStack packed)
     {

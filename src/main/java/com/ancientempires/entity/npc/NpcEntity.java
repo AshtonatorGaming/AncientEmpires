@@ -177,6 +177,9 @@ public class NpcEntity extends PathfinderMob
     private BlockPos worksite;
     /** Saved as {@code AeHungry}. */
     private boolean hungry;
+    /** Set for a death a Town Hall records, from {@code upkeep.keepOnDeath}: those items stay for the record. */
+    private boolean keepEquipmentOnDeath;
+    private boolean keepBackpackOnDeath;
 
     /** Server post for {@link #HOLDING_KEY}. The client only needs the boolean. */
     @Nullable
@@ -2089,13 +2092,26 @@ public class NpcEntity extends PathfinderMob
     public void die(DamageSource source)
     {
         boolean alive = !this.isRemoved() && !this.dead;
+        boolean recorded = alive && this.isOwnedNpc() && !this.isCreative() && this.level() instanceof ServerLevel server
+                && NpcUpkeep.recordsDeathOf(server, this);
+        if (recorded)
+        {
+            // AW Tweaked's keep-equipment option: what is kept goes into the hall's record, not on the ground.
+            AncientEmpiresConfig.KeepOnDeath keep = AncientEmpiresConfig.upkeepKeepOnDeath;
+            this.keepEquipmentOnDeath = keep == AncientEmpiresConfig.KeepOnDeath.EQUIPMENT || keep == AncientEmpiresConfig.KeepOnDeath.ALL;
+            this.keepBackpackOnDeath = keep == AncientEmpiresConfig.KeepOnDeath.BACKPACK || keep == AncientEmpiresConfig.KeepOnDeath.ALL;
+            if (this.keepEquipmentOnDeath || this.keepBackpackOnDeath)
+            {
+                this.sidearm.restore();
+            }
+        }
         super.die(source);
         if (alive)
         {
             this.recordKill(source);
-            if (this.isOwnedNpc() && !this.isCreative() && this.level() instanceof ServerLevel level)
+            if (recorded && this.level() instanceof ServerLevel level)
             {
-                // After the death drops, so the record is the NPC without its gear, for a priest to raise.
+                // After the death drops: the record holds only what the setting kept, for a priest to raise.
                 NpcUpkeep.recordFallen(level, this, this.createPackedItem());
             }
         }
@@ -2104,8 +2120,11 @@ public class NpcEntity extends PathfinderMob
     @Override
     protected void dropCustomDeathLoot(DamageSource source, int looting, boolean hitByPlayer)
     {
-        super.dropCustomDeathLoot(source, looting, hitByPlayer);
-        if (this.isCreative())
+        if (!this.keepEquipmentOnDeath)
+        {
+            super.dropCustomDeathLoot(source, looting, hitByPlayer);
+        }
+        if (this.isCreative() || this.keepBackpackOnDeath)
         {
             return;
         }
