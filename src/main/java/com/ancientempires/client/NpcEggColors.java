@@ -1,32 +1,33 @@
 package com.ancientempires.client;
 
 import com.ancientempires.AncientEmpires;
-import com.ancientempires.entity.npc.NpcRoster;
 import com.ancientempires.item.NpcSpawnEggItem;
 import com.ancientempires.registry.ModItems;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.RegistryObject;
 
 /**
- * Tints the scroll the way Ancient Warfare did. Layer 1 is the faction color.
- * Layer 2 is the wax on a known faction. Owned eggs stay white.
+ * Tints the scroll the way Ancient Warfare did. The colors live in
+ * {@link NpcSpawnEggItem#getColor}, which Forge's own spawn egg handler also
+ * reads, so the result does not depend on which handler registers last.
+ * Registered at the lowest priority so ours is the last word on this bus.
  */
 @Mod.EventBusSubscriber(modid = AncientEmpires.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public final class NpcEggColors
 {
     private static final int WHITE = 0xFFFFFFFF;
-    private static final int FACTION_TOP = 0xFFEF5757;
 
     private NpcEggColors()
     {
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void register(RegisterColorHandlersEvent.Item event)
     {
         Item[] items = new Item[ModItems.SPAWN_EGGS.size()];
@@ -44,19 +45,6 @@ public final class NpcEggColors
         {
             return WHITE;
         }
-        NpcRoster.Entry entry = NpcRoster.byId(egg.rosterId());
-        if (entry == null || entry.owned())
-        {
-            return WHITE;
-        }
-        if (tint == 1)
-        {
-            return entry.color();
-        }
-        if (tint == 2)
-        {
-            return FACTION_TOP;
-        }
-        return WHITE;
+        return egg.getColor(tint);
     }
 }

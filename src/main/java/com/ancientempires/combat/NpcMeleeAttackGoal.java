@@ -2,7 +2,9 @@ package com.ancientempires.combat;
 
 import com.ancientempires.config.AncientEmpiresConfig;
 import com.ancientempires.entity.npc.NpcEntity;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -11,6 +13,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -425,6 +428,34 @@ public class NpcMeleeAttackGoal extends Goal
         }
         this.npc.setLastHurtMob(target);
         this.npc.doEnchantDamageEffects(this.npc, target);
+        if (!this.mobCombatSwing)
+        {
+            this.sweepEffect(swing);
+        }
+    }
+
+    /**
+     * The sweep sound and crescent a player's sword slash makes. Better Mob
+     * Combat plays these on its own swings, so this only runs on the internal
+     * path. A sweeping attack is one wider than the forward cone used for stabs
+     * and punches. Swords only, the same rule Better Combat uses by default.
+     */
+    private void sweepEffect(AttackSwing swing)
+    {
+        if (!AncientEmpiresConfig.sweepEffects || swing.unarmed()
+                || swing.angleDegrees() <= AncientEmpiresConfig.forwardAngle
+                || !(this.npc.getMainHandItem().getItem() instanceof SwordItem)
+                || !(this.npc.level() instanceof ServerLevel level))
+        {
+            return;
+        }
+        double yaw = this.npc.getYRot() * ((float) Math.PI / 180.0F);
+        double dx = -Math.sin(yaw);
+        double dz = Math.cos(yaw);
+        level.playSound(null, this.npc.getX(), this.npc.getY(), this.npc.getZ(),
+                SoundEvents.PLAYER_ATTACK_SWEEP, this.npc.getSoundSource(), 1.0F, 1.0F);
+        level.sendParticles(ParticleTypes.SWEEP_ATTACK, this.npc.getX() + dx, this.npc.getY(0.5D), this.npc.getZ() + dz,
+                0, dx, 0.0D, dz, 0.0D);
     }
 
     /**

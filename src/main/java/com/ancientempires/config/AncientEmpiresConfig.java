@@ -50,6 +50,7 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.BooleanValue REQUIRE_LINE_OF_SIGHT;
     private static final ForgeConfigSpec.BooleanValue BYPASS_HURT_COOLDOWN;
     private static final ForgeConfigSpec.DoubleValue COMBO_RESET_RATE;
+    private static final ForgeConfigSpec.BooleanValue SWEEP_EFFECTS;
 
     private static final ForgeConfigSpec.BooleanValue SIDEARM_ENABLED;
     private static final ForgeConfigSpec.DoubleValue SIDEARM_CORNERED_RANGE;
@@ -176,6 +177,9 @@ public final class AncientEmpiresConfig
         COMBO_RESET_RATE = builder
                 .comment("Combo step resets after this many weapon-cooldowns without a swing.")
                 .defineInRange("comboResetRate", 3.0D, 0.5D, 20.0D);
+        SWEEP_EFFECTS = builder
+                .comment("A landed sword slash wider than forwardAngle plays the player sweep sound and crescent. Better Mob Combat swings use that mod's own effect instead.")
+                .define("sweepEffects", true);
 
         builder.pop();
 
@@ -262,6 +266,7 @@ public final class AncientEmpiresConfig
     public static boolean requireLineOfSight = true;
     public static boolean bypassHurtCooldown = true;
     public static double comboResetRate = 3.0D;
+    public static boolean sweepEffects = true;
 
     public static boolean sidearmEnabled = true;
     public static double sidearmCorneredRange = 3.0D;
@@ -329,6 +334,7 @@ public final class AncientEmpiresConfig
         requireLineOfSight = REQUIRE_LINE_OF_SIGHT.get();
         bypassHurtCooldown = BYPASS_HURT_COOLDOWN.get();
         comboResetRate = COMBO_RESET_RATE.get();
+        sweepEffects = SWEEP_EFFECTS.get();
 
         sidearmEnabled = SIDEARM_ENABLED.get();
         sidearmCorneredRange = SIDEARM_CORNERED_RANGE.get();

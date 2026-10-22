@@ -32,6 +32,9 @@ import java.util.function.Supplier;
  */
 public class NpcSpawnEggItem extends ForgeSpawnEggItem
 {
+    private static final int WHITE = 0xFFFFFFFF;
+    private static final int FACTION_TOP = 0xFFEF5757;
+
     @Nullable
     private final String rosterId;
 
@@ -49,6 +52,31 @@ public class NpcSpawnEggItem extends ForgeSpawnEggItem
     public String rosterId()
     {
         return this.rosterId;
+    }
+
+    /**
+     * The scroll tint. Forge registers its own color handler for every Forge
+     * spawn egg, and it reads this method, so this is the one source of the
+     * colors. Whichever handler registers last, the scroll stays tinted.
+     * Layer 1 is the faction color, layer 2 the wax. Owned eggs stay white.
+     */
+    @Override
+    public int getColor(int tint)
+    {
+        NpcRoster.Entry entry = this.rosterId == null ? null : NpcRoster.byId(this.rosterId);
+        if (entry == null || entry.owned())
+        {
+            return WHITE;
+        }
+        if (tint == 1)
+        {
+            return entry.color();
+        }
+        if (tint == 2)
+        {
+            return FACTION_TOP;
+        }
+        return WHITE;
     }
 
     @Override
