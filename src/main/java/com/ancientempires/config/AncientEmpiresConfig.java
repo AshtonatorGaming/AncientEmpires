@@ -154,7 +154,10 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.DoubleValue UPKEEP_RANGE;
     private static final ForgeConfigSpec.IntValue UPKEEP_RATION;
     private static final ForgeConfigSpec.IntValue UPKEEP_BUNDLE_RATIONS;
-    private static final ForgeConfigSpec.BooleanValue UPKEEP_REQUIRE_HALL;
+    private static final ForgeConfigSpec.IntValue UPKEEP_MEAL_INTERVAL;
+    private static final ForgeConfigSpec.IntValue UPKEEP_CARRY_RATIONS;
+    private static final ForgeConfigSpec.EnumValue<Delivery> UPKEEP_DELIVERY;
+    private static final ForgeConfigSpec.BooleanValue BURNING_PANIC;
     private static final ForgeConfigSpec.IntValue UPKEEP_FALLEN_RECORDS;
     private static final ForgeConfigSpec.EnumValue<KeepOnDeath> UPKEEP_KEEP_ON_DEATH;
 
@@ -588,12 +591,12 @@ public final class AncientEmpiresConfig
                 .defineInRange("quarryMaxDepth", 32, 1, 256);
         builder.pop();
 
-        builder.comment("Town Hall upkeep, as in Ancient Warfare. Checked once per in-game day, at the day change.").push("upkeep");
+        builder.comment("Food and the Town Hall, as in Ancient Warfare. NPCs feed themselves; nothing here runs on a timer.").push("upkeep");
         UPKEEP_ENABLED = builder
-                .comment("Whether town halls feed NPCs at all. Off: nobody goes hungry.")
+                .comment("Whether owned NPCs need food. Each eats a ration a day from its backpack, and fetches more from its owner's Town Hall. Off: nobody goes hungry.")
                 .define("enabled", true);
         UPKEEP_RANGE = builder
-                .comment("A hall feeds its owner's NPCs, and records their deaths, within this many blocks. Ancient Warfare used about 100.")
+                .comment("NPCs fetch food from, and have their deaths recorded at, their owner's hall within this many blocks. Ancient Warfare used about 100.")
                 .defineInRange("range", 100.0D, 8.0D, 256.0D);
         UPKEEP_RATION = builder
                 .comment("Nutrition one NPC eats a day. Food counts by its hunger value (bread is 5).")
@@ -601,9 +604,18 @@ public final class AncientEmpiresConfig
         UPKEEP_BUNDLE_RATIONS = builder
                 .comment("Daily rations in one food bundle.")
                 .defineInRange("bundleRations", 8, 1, 64);
-        UPKEEP_REQUIRE_HALL = builder
-                .comment("If on, owned NPCs no hall reaches go hungry too. Off: only NPCs near a hall depend on it.")
-                .define("requireHall", false);
+        UPKEEP_MEAL_INTERVAL = builder
+                .comment("Ticks between an NPC's meals. 24000 is one Minecraft day. A new NPC's first meal is one interval after it appears.")
+                .defineInRange("mealInterval", 24000, 1200, 240000);
+        UPKEEP_CARRY_RATIONS = builder
+                .comment("Rations an NPC takes from its hall when its backpack has no food, so it can eat on the road (campaigns) for a while.")
+                .defineInRange("carryRations", 3, 1, 32);
+        UPKEEP_DELIVERY = builder
+                .comment("WALK: an NPC out of food walks to its hall to take some. TELEPORT: the food appears in its backpack, from the hall's store.")
+                .defineEnum("delivery", Delivery.WALK);
+        BURNING_PANIC = builder
+                .comment("An NPC on fire and not fighting runs for water nearby, as vanilla mobs panic. Civilians always do.")
+                .define("burningPanic", true);
         UPKEEP_FALLEN_RECORDS = builder
                 .comment("Fallen NPCs a hall remembers for revival; the oldest go first.")
                 .defineInRange("fallenRecords", 16, 1, 128);
@@ -785,7 +797,16 @@ public final class AncientEmpiresConfig
     public static double upkeepRange = 100.0D;
     public static int upkeepRation = 6;
     public static int upkeepBundleRations = 8;
-    public static boolean upkeepRequireHall = false;
+    public static int upkeepMealInterval = 24000;
+    public static int upkeepCarryRations = 3;
+    public static Delivery upkeepDelivery = Delivery.WALK;
+    public static boolean burningPanic = true;
+
+    /** How an NPC out of food gets more from its Town Hall: walking there, or delivered to its backpack. */
+    public enum Delivery
+    {
+        WALK, TELEPORT
+    }
     public static int upkeepFallenRecords = 16;
     public static KeepOnDeath upkeepKeepOnDeath = KeepOnDeath.NONE;
 
@@ -963,7 +984,10 @@ public final class AncientEmpiresConfig
         upkeepRange = UPKEEP_RANGE.get();
         upkeepRation = UPKEEP_RATION.get();
         upkeepBundleRations = UPKEEP_BUNDLE_RATIONS.get();
-        upkeepRequireHall = UPKEEP_REQUIRE_HALL.get();
+        upkeepMealInterval = UPKEEP_MEAL_INTERVAL.get();
+        upkeepCarryRations = UPKEEP_CARRY_RATIONS.get();
+        upkeepDelivery = UPKEEP_DELIVERY.get();
+        burningPanic = BURNING_PANIC.get();
         upkeepFallenRecords = UPKEEP_FALLEN_RECORDS.get();
         upkeepKeepOnDeath = UPKEEP_KEEP_ON_DEATH.get();
 

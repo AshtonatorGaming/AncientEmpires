@@ -131,6 +131,8 @@ public class NpcEntity extends PathfinderMob
     private static final String REVENGE_KEY = "AeRevenge";
     private static final String WORKSITE_KEY = "AeWorksite";
     private static final String HUNGRY_KEY = "AeHungry";
+    private static final String NEXT_MEAL_KEY = "AeNextMeal";
+    private static final String MEAL_CREDIT_KEY = "AeMealCredit";
 
     private final NpcInventory inventory = new NpcInventory(this);
     private final NpcSidearm sidearm = new NpcSidearm(this);
@@ -180,6 +182,10 @@ public class NpcEntity extends PathfinderMob
     /** Set for a death a Town Hall records, from {@code upkeep.keepOnDeath}: those items stay for the record. */
     private boolean keepEquipmentOnDeath;
     private boolean keepBackpackOnDeath;
+    /** Game time the next meal is due; unset until the NPC first ticks. Saved as {@code AeNextMeal}. */
+    private long nextMeal = -1L;
+    /** Rations eaten ahead (a food bundle covers several days). Saved as {@code AeMealCredit}. */
+    private double mealCredit;
 
     /** Server post for {@link #HOLDING_KEY}. The client only needs the boolean. */
     @Nullable
@@ -325,8 +331,10 @@ public class NpcEntity extends PathfinderMob
         this.goalSelector.addGoal(1, new NpcShieldGoal(this));
         // Civilians run instead of fighting; it holds the move flag above the combat goals.
         this.goalSelector.addGoal(1, new NpcFleeGoal(this));
+        this.goalSelector.addGoal(1, new NpcBurningGoal(this));
         this.goalSelector.addGoal(2, new NpcMeleeAttackGoal(this));
         this.goalSelector.addGoal(3, new NpcHoldPositionGoal(this, 0.9D));
+        this.goalSelector.addGoal(3, new NpcUpkeepGoal(this));
         this.goalSelector.addGoal(4, new NpcFollowOwnerGoal(this, 1.0D, 3.0F));
         this.goalSelector.addGoal(4, new NpcFarmerGoal(this));
         this.goalSelector.addGoal(4, new NpcWoodcutterGoal(this));
@@ -681,6 +689,47 @@ public class NpcEntity extends PathfinderMob
     public void setHungry(boolean hungry)
     {
         this.hungry = hungry;
+    }
+
+    /** An owned NPC whose meal is due ({@code upkeep.mealInterval}). Faction NPCs live off their faction. */
+    public boolean isMealDue()
+    {
+        if (!AncientEmpiresConfig.upkeepEnabled || !this.isOwnedNpc() || this.isCreative())
+        {
+            return false;
+        }
+        long now = this.level().getGameTime();
+        if (this.nextMeal < 0L)
+        {
+            // A new NPC arrives fed.
+            this.nextMeal = now + AncientEmpiresConfig.upkeepMealInterval;
+        }
+        return now >= this.nextMeal;
+    }
+
+    /** Takes a meal from rations already eaten ahead. Returns false if there are none. */
+    public boolean mealFromCredit()
+    {
+        if (this.mealCredit < 1.0D)
+        {
+            return false;
+        }
+        this.mealCredit -= 1.0D;
+        this.nextMeal = this.level().getGameTime() + AncientEmpiresConfig.upkeepMealInterval;
+        this.hungry = false;
+        return true;
+    }
+
+    /** Vanilla eating ends here; what was eaten counts toward the NPC's rations. */
+    @Override
+    public ItemStack eat(Level level, ItemStack food)
+    {
+        if (!level.isClientSide)
+        {
+            this.mealCredit += com.ancientempires.block.TownHallBlockEntity.rations(food);
+            this.mealFromCredit();
+        }
+        return super.eat(level, food);
     }
 
     public void assignHome(BlockPos home)
@@ -2112,7 +2161,7 @@ public class NpcEntity extends PathfinderMob
             if (recorded && this.level() instanceof ServerLevel level)
             {
                 // After the death drops: the record holds only what the setting kept, for a priest to raise.
-                NpcUpkeep.recordFallen(level, this, this.createPackedItem());
+                NpcUpkeep.recordFallen(level, this, this.createPackedItem(), source.getLocalizedDeathMessage(this));
             }
         }
     }
@@ -2148,6 +2197,14 @@ public class NpcEntity extends PathfinderMob
         if (this.hungry)
         {
             tag.putBoolean(HUNGRY_KEY, true);
+        }
+        if (this.nextMeal >= 0L)
+        {
+            tag.putLong(NEXT_MEAL_KEY, this.nextMeal);
+        }
+        if (this.mealCredit > 0.0D)
+        {
+            tag.putDouble(MEAL_CREDIT_KEY, this.mealCredit);
         }
         if (!this.revenge.isEmpty())
         {
@@ -2211,6 +2268,8 @@ public class NpcEntity extends PathfinderMob
         this.mount.load(tag);
         this.worksite = tag.contains(WORKSITE_KEY) ? BlockPos.of(tag.getLong(WORKSITE_KEY)) : null;
         this.hungry = tag.getBoolean(HUNGRY_KEY);
+        this.nextMeal = tag.contains(NEXT_MEAL_KEY) ? tag.getLong(NEXT_MEAL_KEY) : -1L;
+        this.mealCredit = tag.getDouble(MEAL_CREDIT_KEY);
         this.revenge.clear();
         for (net.minecraft.nbt.Tag element : tag.getList(REVENGE_KEY, net.minecraft.nbt.Tag.TAG_COMPOUND))
         {

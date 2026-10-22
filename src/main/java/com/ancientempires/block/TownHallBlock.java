@@ -19,6 +19,7 @@ import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,7 +27,7 @@ import java.util.List;
 
 /**
  * The Town Hall. Right-click opens its food store (food bundles or any food;
- * hoppers work too). Sneak-right-click empty-handed shows how many of the
+ * hoppers work too); its owner's NPCs nearby come here for rations. Sneak-right-click empty-handed shows how many of the
  * owner's NPCs it reaches, how many went hungry, its food, and the fallen it
  * has recorded. Owner or admin only.
  */
@@ -83,15 +84,45 @@ public final class TownHallBlock extends BaseEntityBlock
         }
         if (player.isShiftKeyDown() && player.getMainHandItem().isEmpty())
         {
-            List<Integer> status = NpcUpkeep.status(server, pos, hall);
-            int rations = hall.pantry() / Math.max(1, AncientEmpiresConfig.upkeepRation);
-            player.displayClientMessage(Component.translatable("message.ancientempires.hall.status",
-                    status.get(0), status.get(1), rations, status.get(2)), false);
+            this.showStatus(server, pos, hall, player);
             return InteractionResult.CONSUME;
         }
         player.openMenu(new SimpleMenuProvider((id, inventory, opener) ->
                 new ChestMenu(MenuType.GENERIC_9x2, id, inventory, hall.store(), 2), state.getBlock().getName()));
         return InteractionResult.CONSUME;
+    }
+
+    /**
+     * The owner's NPCs in reach and how many are hungry, the food in store, and
+     * the fallen it has recorded, newest first: how each died, where, and how long ago.
+     */
+    private void showStatus(ServerLevel level, BlockPos pos, TownHallBlockEntity hall, Player player)
+    {
+        int total = 0;
+        int hungry = 0;
+        if (hall.owner() != null)
+        {
+            for (NpcEntity npc : level.getEntitiesOfClass(NpcEntity.class, new AABB(pos).inflate(AncientEmpiresConfig.upkeepRange),
+                    npc -> hall.owner().equals(npc.getOwner())))
+            {
+                total++;
+                if (npc.isHungry())
+                {
+                    hungry++;
+                }
+            }
+        }
+        List<TownHallBlockEntity.Fallen> fallen = hall.fallen();
+        player.displayClientMessage(Component.translatable("message.ancientempires.hall.status",
+                total, hungry, (int) Math.floor(hall.storedRations()), fallen.size()), false);
+        int shown = 0;
+        for (int index = fallen.size() - 1; index >= 0 && shown < 8; index--, shown++)
+        {
+            TownHallBlockEntity.Fallen entry = fallen.get(index);
+            long days = Math.max(0L, (level.getGameTime() - entry.time()) / 24000L);
+            player.displayClientMessage(Component.translatable("message.ancientempires.hall.fallen", entry.message(),
+                    entry.pos().getX(), entry.pos().getY(), entry.pos().getZ(), days), false);
+        }
     }
 
     @Override

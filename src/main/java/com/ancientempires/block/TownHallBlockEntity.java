@@ -7,27 +7,32 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Ancient Warfare's town hall: its owner's NPCs nearby eat from its store once
- * a day ({@link NpcUpkeep}), and owned NPCs that die nearby are recorded here,
- * packed as their scroll without the gear they dropped, for a priest to raise
- * later. Food is kept as a running stock of nutrition: a food bundle is worth
- * {@code upkeep.bundleRations} rations, other food its own nutrition.
+ * Ancient Warfare's town hall: the food store its owner's NPCs nearby come to
+ * for their rations, and the record of owned NPCs that died nearby, kept as
+ * their packed scroll (with whatever {@code upkeep.keepOnDeath} kept) plus how
+ * and where they died, for a priest to raise later.
  */
 public final class TownHallBlockEntity extends WorksiteBlockEntity
 {
-    private int pantry;
-    private final List<ItemStack> fallen = new ArrayList<>();
+    /** One death: the NPC as a scroll, the death message, where, and the game time. */
+    public record Fallen(ItemStack scroll, Component message, BlockPos pos, long time)
+    {
+    }
+
+    private final List<Fallen> fallen = new ArrayList<>();
 
     public TownHallBlockEntity(BlockPos pos, BlockState state)
     {
@@ -72,56 +77,71 @@ public final class TownHallBlockEntity extends WorksiteBlockEntity
         }
     }
 
-    /**
-     * Takes one day's ration for one NPC from the stock, opening food from the
-     * store as needed. Returns false when there is not enough food.
-     */
-    boolean feedOne()
-    {
-        int ration = Math.max(1, AncientEmpiresConfig.upkeepRation);
-        SimpleContainer store = this.store();
-        for (int slot = 0; slot < store.getContainerSize() && this.pantry < ration; slot++)
-        {
-            ItemStack stack = store.getItem(slot);
-            while (!stack.isEmpty() && this.pantry < ration)
-            {
-                int value = nutrition(stack);
-                if (value <= 0)
-                {
-                    break;
-                }
-                this.pantry += value;
-                stack.shrink(1);
-            }
-            store.setItem(slot, stack);
-        }
-        if (this.pantry < ration)
-        {
-            return false;
-        }
-        this.pantry -= ration;
-        this.setChanged();
-        return true;
-    }
-
-    private static int nutrition(ItemStack stack)
+    /** Rations one piece of food is worth: a food bundle {@code upkeep.bundleRations}, other food its nutrition over a ration. */
+    public static double rations(ItemStack stack)
     {
         if (stack.is(ModItems.FOOD_BUNDLE.get()))
         {
-            return AncientEmpiresConfig.upkeepBundleRations * Math.max(1, AncientEmpiresConfig.upkeepRation);
+            return AncientEmpiresConfig.upkeepBundleRations;
         }
         FoodProperties food = stack.getFoodProperties(null);
-        return food == null ? 0 : food.getNutrition();
+        return food == null ? 0.0D : (double) food.getNutrition() / Math.max(1, AncientEmpiresConfig.upkeepRation);
+    }
+
+    /**
+     * Takes food worth up to {@code wanted} rations from the store, whole items,
+     * for an NPC to carry. Returns what was taken.
+     */
+    public List<ItemStack> takeFood(double wanted)
+    {
+        List<ItemStack> taken = new ArrayList<>();
+        SimpleContainer store = this.store();
+        double got = 0.0D;
+        for (int slot = 0; slot < store.getContainerSize() && got < wanted; slot++)
+        {
+            ItemStack stack = store.getItem(slot);
+            double each = rations(stack);
+            if (each <= 0.0D)
+            {
+                continue;
+            }
+            int count = 0;
+            while (count < stack.getCount() && got < wanted)
+            {
+                count++;
+                got += each;
+            }
+            taken.add(stack.split(count));
+            store.setItem(slot, stack);
+        }
+        if (!taken.isEmpty())
+        {
+            this.setChanged();
+        }
+        return taken;
+    }
+
+    /** Food in the store, in rations. */
+    public double storedRations()
+    {
+        double total = 0.0D;
+        SimpleContainer store = this.store();
+        for (int slot = 0; slot < store.getContainerSize(); slot++)
+        {
+            ItemStack stack = store.getItem(slot);
+            total += rations(stack) * stack.getCount();
+        }
+        return total;
     }
 
     /** Records a fallen NPC, oldest first out past {@code upkeep.fallenRecords}. */
-    void recordFallen(ItemStack packed)
+    void recordFallen(ItemStack scroll, Component message, BlockPos pos, long time)
     {
-        if (packed.isEmpty())
+        if (scroll.isEmpty())
         {
             return;
         }
-        this.fallen.add(packed.copy());
+        this.fallen.add(new Fallen(scroll.copy(), message, pos.immutable(), time));
         while (this.fallen.size() > Math.max(1, AncientEmpiresConfig.upkeepFallenRecords))
         {
             this.fallen.remove(0);
@@ -129,25 +149,24 @@ public final class TownHallBlockEntity extends WorksiteBlockEntity
         this.setChanged();
     }
 
-    public List<ItemStack> fallen()
+    public List<Fallen> fallen()
     {
         return List.copyOf(this.fallen);
-    }
-
-    public int pantry()
-    {
-        return this.pantry;
     }
 
     @Override
     protected void saveAdditional(CompoundTag tag)
     {
         super.saveAdditional(tag);
-        tag.putInt("Pantry", this.pantry);
         ListTag list = new ListTag();
-        for (ItemStack stack : this.fallen)
+        for (Fallen entry : this.fallen)
         {
-            list.add(stack.save(new CompoundTag()));
+            CompoundTag record = new CompoundTag();
+            record.put("Scroll", entry.scroll().save(new CompoundTag()));
+            record.putString("Message", Component.Serializer.toJson(entry.message()));
+            record.putLong("Pos", entry.pos().asLong());
+            record.putLong("Time", entry.time());
+            list.add(record);
         }
         tag.put("Fallen", list);
     }
@@ -156,15 +175,31 @@ public final class TownHallBlockEntity extends WorksiteBlockEntity
     public void load(CompoundTag tag)
     {
         super.load(tag);
-        this.pantry = tag.getInt("Pantry");
         this.fallen.clear();
         for (Tag element : tag.getList("Fallen", Tag.TAG_COMPOUND))
         {
-            ItemStack stack = ItemStack.of((CompoundTag) element);
-            if (!stack.isEmpty())
+            CompoundTag record = (CompoundTag) element;
+            ItemStack scroll = ItemStack.of(record.getCompound("Scroll"));
+            if (scroll.isEmpty())
             {
-                this.fallen.add(stack);
+                continue;
             }
+            Component message = parse(record.getString("Message"));
+            this.fallen.add(new Fallen(scroll, message == null ? scroll.getHoverName() : message,
+                    BlockPos.of(record.getLong("Pos")), record.getLong("Time")));
+        }
+    }
+
+    @Nullable
+    private static Component parse(String json)
+    {
+        try
+        {
+            return json.isEmpty() ? null : Component.Serializer.fromJson(json);
+        }
+        catch (RuntimeException exception)
+        {
+            return null;
         }
     }
 }

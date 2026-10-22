@@ -232,6 +232,32 @@ public class NpcInventory implements Container
         return this.backpack.removeItemNoUpdate(backpackSlot);
     }
 
+    /** Adds to the backpack, filling matching stacks first. Returns what did not fit. */
+    public ItemStack addToBackpack(ItemStack stack)
+    {
+        ItemStack rest = stack.copy();
+        for (int pass = 0; pass < 2 && !rest.isEmpty(); pass++)
+        {
+            for (int slot = BACKPACK_START; slot < SLOT_COUNT && !rest.isEmpty(); slot++)
+            {
+                ItemStack held = this.getItem(slot);
+                if (pass == 0 && !held.isEmpty() && ItemStack.isSameItemSameTags(held, rest) && held.getCount() < held.getMaxStackSize())
+                {
+                    int move = Math.min(rest.getCount(), held.getMaxStackSize() - held.getCount());
+                    held.grow(move);
+                    rest.shrink(move);
+                    this.setItem(slot, held);
+                }
+                else if (pass == 1 && held.isEmpty())
+                {
+                    this.setItem(slot, rest.copy());
+                    rest = ItemStack.EMPTY;
+                }
+            }
+        }
+        return rest;
+    }
+
     public int getBackpackVersion()
     {
         return this.backpackVersion;

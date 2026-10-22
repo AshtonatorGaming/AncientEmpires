@@ -4,6 +4,7 @@ import com.ancientempires.entity.npc.NpcEntity;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.item.UseAnim;
@@ -15,6 +16,11 @@ import net.minecraft.world.item.UseAnim;
  */
 public class NpcModel extends PlayerModel<NpcEntity>
 {
+    /** Not Enough Animations: players eat with the food at their mouth in third person. */
+    private static final boolean NEA = net.minecraftforge.fml.ModList.get().isLoaded("notenoughanimations");
+    /** Its EMF add-on: burning and freezing reactions. */
+    private static final boolean NEA_EMF = net.minecraftforge.fml.ModList.get().isLoaded("emf_compat_not_enough_animations");
+
     public NpcModel(ModelPart root)
     {
         super(root, false);
@@ -55,6 +61,10 @@ public class NpcModel extends PlayerModel<NpcEntity>
             return;
         }
         boolean posed = NpcCombatAnimations.apply(entity, this, ageInTicks - entity.tickCount);
+        if (!posed && !entity.isAttackWindowOpen())
+        {
+            posed = this.reactionPose(entity, ageInTicks);
+        }
         if (!posed && entity.isAttackWindowOpen() && !NpcCombatAnimations.attackClipOwnsArms(entity))
         {
             ModelPart arm = entity.getMainArm() == HumanoidArm.LEFT ? this.leftArm : this.rightArm;
@@ -67,6 +77,60 @@ public class NpcModel extends PlayerModel<NpcEntity>
             this.copyWear();
         }
         NpcCombatAnimations.yieldToEmf(entity, this, limbSwingAmount);
+    }
+
+    /**
+     * Flavor poses borrowed from animation mods, shown only when such a mod is
+     * installed (soft dependencies; without them NPCs look as vanilla mobs do):
+     * eating and drinking with Not Enough Animations (food raised to the mouth),
+     * and with its EMF add-on the burning flail and the freezing shiver.
+     */
+    private boolean reactionPose(NpcEntity entity, float ageInTicks)
+    {
+        if (NEA && entity.isUsingItem())
+        {
+            UseAnim anim = entity.getUseItem().getUseAnimation();
+            if (anim == UseAnim.EAT || anim == UseAnim.DRINK)
+            {
+                boolean leftArm = (entity.getUsedItemHand() == InteractionHand.MAIN_HAND) == (entity.getMainArm() == HumanoidArm.LEFT);
+                ModelPart arm = leftArm ? this.leftArm : this.rightArm;
+                // Hand at the mouth, with a small chewing bob.
+                arm.xRot = -1.45F + Mth.sin(ageInTicks * 1.6F) * 0.08F;
+                arm.yRot = leftArm ? 0.45F : -0.45F;
+                arm.zRot = 0.0F;
+                this.head.xRot = Math.max(this.head.xRot, 0.1F);
+                return true;
+            }
+        }
+        if (!NEA_EMF)
+        {
+            return false;
+        }
+        if (entity.isOnFire() && !entity.isInWaterOrRain())
+        {
+            // Flailing, arms up and beating, out of step.
+            this.rightArm.xRot = -2.6F + Mth.sin(ageInTicks * 0.9F) * 0.6F;
+            this.leftArm.xRot = -2.6F + Mth.cos(ageInTicks * 0.9F) * 0.6F;
+            this.rightArm.zRot = 0.25F + Mth.cos(ageInTicks * 0.7F) * 0.2F;
+            this.leftArm.zRot = -0.25F - Mth.sin(ageInTicks * 0.7F) * 0.2F;
+            this.rightArm.yRot = 0.0F;
+            this.leftArm.yRot = 0.0F;
+            this.head.zRot = Mth.sin(ageInTicks * 0.5F) * 0.15F;
+            return true;
+        }
+        if (entity.getTicksFrozen() > 0)
+        {
+            // Arms hugged to the chest, shivering.
+            float shiver = Mth.sin(ageInTicks * 3.0F) * 0.04F;
+            this.rightArm.xRot = -0.9F + shiver;
+            this.leftArm.xRot = -0.9F - shiver;
+            this.rightArm.yRot = -0.6F;
+            this.leftArm.yRot = 0.6F;
+            this.rightArm.zRot = 0.0F;
+            this.leftArm.zRot = 0.0F;
+            return true;
+        }
+        return false;
     }
 
     /**

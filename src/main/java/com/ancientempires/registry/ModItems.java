@@ -16,8 +16,9 @@ public final class ModItems
 {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, AncientEmpires.MOD_ID);
 
-    /** Ancient Warfare's food bundle: a crafting component for new settlers, later NPC upkeep. */
-    public static final RegistryObject<Item> FOOD_BUNDLE = ITEMS.register("food_bundle", () -> new Item(new Item.Properties()));
+    /** Ancient Warfare's food bundle: settler crafting, and a hearty meal (several NPC rations) a player can eat too. */
+    public static final RegistryObject<Item> FOOD_BUNDLE = ITEMS.register("food_bundle", () -> new Item(new Item.Properties()
+            .food(new net.minecraft.world.food.FoodProperties.Builder().nutrition(10).saturationMod(0.8F).build())));
     public static final RegistryObject<Item> SETTLERS_POST = ITEMS.register("settlers_post",
             () -> new net.minecraft.world.item.BlockItem(ModBlocks.SETTLERS_POST.get(), new Item.Properties()));
     public static final RegistryObject<Item> CROP_FARM = ITEMS.register("crop_farm",
