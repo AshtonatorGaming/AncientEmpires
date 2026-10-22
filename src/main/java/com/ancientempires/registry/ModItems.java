@@ -33,6 +33,8 @@ public final class ModItems
             () -> new net.minecraft.world.item.BlockItem(ModBlocks.ANIMAL_PEN.get(), new Item.Properties()));
     public static final RegistryObject<Item> HUNTING_LODGE = ITEMS.register("hunting_lodge",
             () -> new net.minecraft.world.item.BlockItem(ModBlocks.HUNTING_LODGE.get(), new Item.Properties()));
+    public static final RegistryObject<Item> FISHING_DOCK = ITEMS.register("fishing_dock",
+            () -> new net.minecraft.world.item.BlockItem(ModBlocks.FISHING_DOCK.get(), new Item.Properties()));
     public static final RegistryObject<Item> TOWN_HALL = ITEMS.register("town_hall",
             () -> new net.minecraft.world.item.BlockItem(ModBlocks.TOWN_HALL.get(), new Item.Properties()));
 

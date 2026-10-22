@@ -159,6 +159,9 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.IntValue HUNT_GAME_CAP;
     private static final ForgeConfigSpec.IntValue HUNT_SPAWN_INTERVAL;
     private static final ForgeConfigSpec.DoubleValue HUNT_SHOOT_RANGE;
+    private static final ForgeConfigSpec.IntValue FISH_DEFAULT_RADIUS;
+    private static final ForgeConfigSpec.IntValue FISH_MAX_RADIUS;
+    private static final ForgeConfigSpec.BooleanValue FISH_RECAST;
     private static final ForgeConfigSpec.BooleanValue UPKEEP_ENABLED;
     private static final ForgeConfigSpec.DoubleValue UPKEEP_RANGE;
     private static final ForgeConfigSpec.IntValue UPKEEP_RATION;
@@ -638,6 +641,15 @@ public final class AncientEmpiresConfig
         HUNT_SHOOT_RANGE = builder
                 .comment("How far, in blocks, a hunter shoots from, with a clear line.")
                 .defineInRange("huntShootRange", 16.0D, 4.0D, 48.0D);
+        FISH_DEFAULT_RADIUS = builder
+                .comment("A new fishing dock's water, in blocks from the dock. Fishers hold a fishing rod.")
+                .defineInRange("fishDefaultRadius", 4, 1, 16);
+        FISH_MAX_RADIUS = builder
+                .comment("Largest fishing dock area, in blocks from the dock.")
+                .defineInRange("fishMaxRadius", 8, 1, 16);
+        FISH_RECAST = builder
+                .comment("A fisher casts again into the same water after a catch, until its backpack is full. Off: it picks new water each time.")
+                .define("fishRecast", true);
         builder.pop();
 
         builder.comment("Food and the Town Hall, as in Ancient Warfare. NPCs feed themselves; nothing here runs on a timer.").push("upkeep");
@@ -899,6 +911,9 @@ public final class AncientEmpiresConfig
     public static int huntGameCap = 6;
     public static int huntSpawnInterval = 2400;
     public static double huntShootRange = 16.0D;
+    public static int fishDefaultRadius = 4;
+    public static int fishMaxRadius = 8;
+    public static boolean fishRecast = true;
     public static boolean upkeepEnabled = true;
     public static double upkeepRange = 100.0D;
     public static int upkeepRation = 6;
@@ -1108,6 +1123,9 @@ public final class AncientEmpiresConfig
         huntGameCap = HUNT_GAME_CAP.get();
         huntSpawnInterval = HUNT_SPAWN_INTERVAL.get();
         huntShootRange = HUNT_SHOOT_RANGE.get();
+        fishDefaultRadius = FISH_DEFAULT_RADIUS.get();
+        fishMaxRadius = FISH_MAX_RADIUS.get();
+        fishRecast = FISH_RECAST.get();
         upkeepEnabled = UPKEEP_ENABLED.get();
         upkeepRange = UPKEEP_RANGE.get();
         upkeepRation = UPKEEP_RATION.get();

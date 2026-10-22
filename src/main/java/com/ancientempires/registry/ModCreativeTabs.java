@@ -28,6 +28,7 @@ public final class ModCreativeTabs
                         output.accept(ModItems.QUARRY.get());
                         output.accept(ModItems.ANIMAL_PEN.get());
                         output.accept(ModItems.HUNTING_LODGE.get());
+                        output.accept(ModItems.FISHING_DOCK.get());
                         for (RegistryObject<Item> egg : ModItems.SPAWN_EGGS)
                         {
                             output.accept(egg.get());

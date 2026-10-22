@@ -3,6 +3,7 @@ package com.ancientempires.registry;
 import com.ancientempires.AncientEmpires;
 import com.ancientempires.block.AnimalPenBlockEntity;
 import com.ancientempires.block.CropFarmBlockEntity;
+import com.ancientempires.block.FishingDockBlockEntity;
 import com.ancientempires.block.HuntingLodgeBlockEntity;
 import com.ancientempires.block.QuarryBlockEntity;
 import com.ancientempires.block.SettlersPostBlockEntity;
@@ -44,6 +45,10 @@ public final class ModBlockEntities
     @SuppressWarnings("DataFlowIssue")
     public static final RegistryObject<BlockEntityType<HuntingLodgeBlockEntity>> HUNTING_LODGE = BLOCK_ENTITIES.register("hunting_lodge",
             () -> BlockEntityType.Builder.of(HuntingLodgeBlockEntity::new, ModBlocks.HUNTING_LODGE.get()).build(null));
+
+    @SuppressWarnings("DataFlowIssue")
+    public static final RegistryObject<BlockEntityType<FishingDockBlockEntity>> FISHING_DOCK = BLOCK_ENTITIES.register("fishing_dock",
+            () -> BlockEntityType.Builder.of(FishingDockBlockEntity::new, ModBlocks.FISHING_DOCK.get()).build(null));
 
     private ModBlockEntities()
     {

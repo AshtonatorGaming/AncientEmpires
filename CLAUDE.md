@@ -34,7 +34,7 @@ instead of reflecting per call), Skirmisher thresholds (about 4.5 to 28 blocks).
 
 - `entity/npc/NpcEntity` - the NPC. Goals: 0 Float, `OpenDoorGoal`, `NpcNightDoorsGoal`;
   1 `NpcBowAttackGoal`, `NpcShieldGoal` (no flags), `NpcFleeGoal` (civilians only);
-  2 `NpcMeleeAttackGoal`; 3 hold position; 4 follow, `NpcFarmerGoal`, `NpcWoodcutterGoal`, `NpcMinerGoal`, `NpcRancherGoal`, `NpcHunterGoal`, also sleep and priest; 5 `NpcReturnHomeGoal`; 6+ idle.
+  2 `NpcMeleeAttackGoal`; 3 hold position; 4 follow, `NpcFarmerGoal`, `NpcWoodcutterGoal`, `NpcMinerGoal`, `NpcRancherGoal`, `NpcHunterGoal`, `NpcFisherGoal`, also sleep and priest; 5 `NpcReturnHomeGoal`; 6+ idle.
   Targets: 1 and 2 `NpcOwnerDefenseGoal` (DEFEND, ASSIST), 3 `NpcHurtByTargetGoal` (with
   ally alert), 4 `NpcTargetGoal`: one staggered scan over a shared per-cell candidate list
   (`NpcTargetCache`), faction filter first, sight checks nearest first.
@@ -94,7 +94,7 @@ full-body attack animation (body channel, waist bend, stance kept under attacks)
 bc_particle trails on native swings; NPC-on-NPC hits under Better Mob Combat; repack into
 the NPC's own roster scroll; the Ancient Warfare baseline below (owner defense, ally
 alerts, admin escort, doors, day/night home, shields, bash, feints, skill tiers,
-civilians); target memory; cavalry; faction relations and player standing; the Settler recipe (2 gold, a food bundle, a bed; `data/ancientempires/recipes`) and AW's food bundle; Settlers' Post immigration; hands-on farmer, woodcutter, and miner (Crop Farm, Tree Farm, Quarry); self-fed upkeep and the Town Hall's fallen records; burning panic and mod-gated reaction poses; medics, priests, and sleeping in beds; ranchers (Animal Pen) and hunters (Hunting Lodge); paths, settlers, equipment roles, emergency levy, and proficiency.
+civilians); target memory; cavalry; faction relations and player standing; the Settler recipe (2 gold, a food bundle, a bed; `data/ancientempires/recipes`) and AW's food bundle; Settlers' Post immigration; hands-on farmer, woodcutter, and miner (Crop Farm, Tree Farm, Quarry); self-fed upkeep and the Town Hall's fallen records; burning panic and mod-gated reaction poses; medics, priests, and sleeping in beds; ranchers (Animal Pen), hunters (Hunting Lodge), and fishers (Fishing Dock); the standings screen with AW banners; paths, settlers, equipment roles, emergency levy, and proficiency.
 
 ## Not done yet
 
@@ -107,7 +107,7 @@ civilians); target memory; cavalry; faction relations and player standing; the S
 3. Spawner block that stores a full NPC NBT snapshot.
 4. Relations follow-ups: trading (AW's only way to raise standing), the nemesis bonus
    (killing one faction raises standing with its rival), teams sharing their worst
-   standing, and a standings screen. Then worksites, town hall, orders, the structure
+   standing. Then worksites, town hall, orders, the structure
    template port, and Tier 2+ roles.
 
 ## Ancient Warfare baseline
@@ -231,6 +231,13 @@ its own unless noted). Before adding behavior, check what AW did first.
   `huntGameCap` one creature from the biome's CREATURE spawn list (modded animals
   included) wanders in at the edge, where vanilla's spawn rules allow. That interval is
   the hunter's yield.
+- Fisher: a Worker-path NPC with a fishing rod at its owner's Fishing Dock (open water in
+  the square, three below the dock to its level). It walks to a bank spot
+  (`FishingDockBlockEntity.shoreFor`), casts (vanilla's `FishingHook` only works for
+  players, so the water stirs where the line went in), waits vanilla's 5 to 30 seconds
+  (less with Lure), and rolls vanilla's fishing loot table (luck from the rod, modded
+  entries included), recasting until its backpack fills (`work.fishRecast`). The worker
+  base's give-up timer only counts while walking, so long actions are not cut off.
 - Medic (`NpcMedicGoal`, priority 1): a soldier with bandages (`BandageItem`, 2 paper and
   string make 4) in its off hand. It goes to the most hurt ally in `medic.range` (same
   faction or owner, its owner, itself) under `healBelow`, even mid-fight, binds the wound

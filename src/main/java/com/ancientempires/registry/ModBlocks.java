@@ -3,6 +3,7 @@ package com.ancientempires.registry;
 import com.ancientempires.AncientEmpires;
 import com.ancientempires.block.AnimalPenBlock;
 import com.ancientempires.block.CropFarmBlock;
+import com.ancientempires.block.FishingDockBlock;
 import com.ancientempires.block.HuntingLodgeBlock;
 import com.ancientempires.block.QuarryBlock;
 import com.ancientempires.block.SettlersPostBlock;
@@ -59,6 +60,12 @@ public final class ModBlocks
 
     public static final RegistryObject<Block> HUNTING_LODGE = BLOCKS.register("hunting_lodge",
             () -> new HuntingLodgeBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOD)
+                    .strength(2.5F)
+                    .sound(SoundType.WOOD)));
+
+    public static final RegistryObject<Block> FISHING_DOCK = BLOCKS.register("fishing_dock",
+            () -> new FishingDockBlock(BlockBehaviour.Properties.of()
                     .mapColor(MapColor.WOOD)
                     .strength(2.5F)
                     .sound(SoundType.WOOD)));

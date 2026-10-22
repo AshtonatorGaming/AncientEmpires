@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PRP",
+    " C "
+  ],
+  "key": {
+    "P": {"tag": "minecraft:planks"},
+    "R": {"item": "minecraft:fishing_rod"},
+    "C": {"tag": "forge:chests/wooden"}
+  },
+  "result": {"item": "ancientempires:fishing_dock"}
+}

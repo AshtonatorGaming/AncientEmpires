@@ -207,15 +207,15 @@ public abstract class NpcWorkGoal<T extends WorksiteBlockEntity> extends Goal
         {
             this.npc.getLookControl().setLookAt(at.getX() + 0.5D, at.getY() + 0.5D, at.getZ() + 0.5D);
         }
-        if (++this.jobTicks > GIVE_UP_TICKS)
-        {
-            // Cannot reach it. Leave the tile for the next scan and do something else.
-            this.clearTarget();
-            this.next();
-            return;
-        }
         if (!this.inReach(this.kind, at, animal))
         {
+            if (++this.jobTicks > GIVE_UP_TICKS)
+            {
+                // Cannot reach it. Leave the tile for the next scan and do something else.
+                this.clearTarget();
+                this.next();
+                return;
+            }
             if (this.actionTicks > 0)
             {
                 // Out of reach mid-action (the animal moved): start over when close again.
@@ -258,6 +258,10 @@ public abstract class NpcWorkGoal<T extends WorksiteBlockEntity> extends Goal
             this.npc.swing(InteractionHand.MAIN_HAND);
         }
         this.actionTicks++;
+        if (this.kind >= 0)
+        {
+            this.onActionTick(this.kind, at, this.actionTicks);
+        }
         if (this.crack != null)
         {
             this.npc.level().destroyBlockProgress(this.npc.getId(), this.crack, Math.min(9, this.actionTicks * 10 / this.actionLength));
@@ -344,6 +348,11 @@ public abstract class NpcWorkGoal<T extends WorksiteBlockEntity> extends Goal
 
     /** The action was cut short or the job dropped (a hunter lowers the bow). */
     protected void onActionCancelled(int kind)
+    {
+    }
+
+    /** Each tick of an action, after its start (a fisher's bobbing water). */
+    protected void onActionTick(int kind, BlockPos target, int tick)
     {
     }
 

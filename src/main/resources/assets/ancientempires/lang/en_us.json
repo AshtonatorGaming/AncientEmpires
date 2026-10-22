@@ -96,6 +96,8 @@
   "block.ancientempires.quarry": "Quarry",
   "block.ancientempires.animal_pen": "Animal Pen",
   "block.ancientempires.hunting_lodge": "Hunting Lodge",
+  "block.ancientempires.fishing_dock": "Fishing Dock",
+  "block.ancientempires.kitchen": "Kitchen",
   "block.ancientempires.town_hall": "Town Hall",
   "message.ancientempires.hall.status": "Town Hall: %s of your NPCs in reach, %s hungry. Food in store: %s rations. Fallen recorded: %s",
   "message.ancientempires.hall.fallen": " - %s, at %s, %s, %s, %s days ago",
