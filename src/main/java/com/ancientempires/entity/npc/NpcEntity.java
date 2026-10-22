@@ -85,8 +85,8 @@ public class NpcEntity extends PathfinderMob
     private static final EntityDataAccessor<String> DATA_SKIN = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.STRING);
     /** Empty for an owned or unclaimed NPC. A faction NPC stores an id such as {@code empire}. */
     private static final EntityDataAccessor<String> DATA_FACTION = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.STRING);
-    /** Calling id, for the client's civilian checks and the inventory screen. */
-    private static final EntityDataAccessor<String> DATA_CALLING = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.STRING);
+    /** Path id, for the client's civilian checks and the inventory screen. */
+    private static final EntityDataAccessor<String> DATA_PATH = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.STRING);
     /** The trade the roster rank names, a fallback for the role label. */
     private static final EntityDataAccessor<String> DATA_TRADE = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<Boolean> DATA_LEVIED = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.BOOLEAN);
@@ -118,9 +118,9 @@ public class NpcEntity extends PathfinderMob
     private static final String ROSTER_KEY = "AeRoster";
     private static final String FEINT_KEY = "AeFeintChance";
     private static final String SKILL_KEY = "AeSkill";
-    private static final String CALLING_KEY = "AeCalling";
-    /** What an earlier build saved the calling as. Read only. */
-    private static final String LEGACY_ROLE_KEY = "AeRole";
+    private static final String PATH_KEY = "AePath";
+    /** What earlier builds saved the path as. Read only. */
+    private static final String[] LEGACY_PATH_KEYS = {"AeCalling", "AeRole"};
     private static final String LEVY_KEY = "AeLevy";
 
     private final NpcInventory inventory = new NpcInventory(this);
@@ -151,9 +151,9 @@ public class NpcEntity extends PathfinderMob
     private String rosterSubtype;
     /** Tick until which a cornered civilian fights instead of running. */
     private int standGroundUntil;
-    /** The calling this NPC was given; null means the roster rank decides. */
+    /** The path this NPC was given; null means the roster rank decides. */
     @Nullable
-    private NpcCalling chosenCalling;
+    private NpcPath chosenPath;
     private int proficiencyVersion = Integer.MIN_VALUE;
     private float meleeProficiency = 1.0F;
     /** Server only: a would-be target a civilian flees instead. */
@@ -215,7 +215,7 @@ public class NpcEntity extends PathfinderMob
         this.entityData.define(DATA_HOME_DIM, "");
         this.entityData.define(DATA_SKIN, "");
         this.entityData.define(DATA_FACTION, "");
-        this.entityData.define(DATA_CALLING, "");
+        this.entityData.define(DATA_PATH, "");
         this.entityData.define(DATA_TRADE, "");
         this.entityData.define(DATA_LEVIED, false);
         this.entityData.define(DATA_ATTACK_OFFHAND, false);
@@ -678,55 +678,55 @@ public class NpcEntity extends PathfinderMob
     {
         this.skillTier = -1;
         this.rosterSubtype = null;
-        this.syncCalling();
+        this.syncPath();
     }
 
     /**
      * Ancient Warfare's civilians, workers, and traders did not fight; they fled.
-     * Here that is the calling: settlers and workers run. A weapon in hand does
+     * Here that is the path: settlers and workers run. A weapon in hand does
      * not change it: an armed farmer still runs, and only fights when cornered.
      */
     public boolean isCivilian()
     {
-        return AncientEmpiresConfig.civiliansFlee && !this.getCalling().combat();
+        return AncientEmpiresConfig.civiliansFlee && !this.getNpcPath().combat();
     }
 
     /**
-     * The NPC's calling: the one it was given ({@code AeCalling}), otherwise the
+     * The NPC's path: the one it was given ({@code AePath}), otherwise the
      * one its roster rank implies. The client reads the synced copy.
      */
-    public NpcCalling getCalling()
+    public NpcPath getNpcPath()
     {
         if (this.level().isClientSide)
         {
-            NpcCalling synced = NpcCalling.byId(this.entityData.get(DATA_CALLING));
-            return synced != null ? synced : NpcCalling.SOLDIER;
+            NpcPath synced = NpcPath.byId(this.entityData.get(DATA_PATH));
+            return synced != null ? synced : NpcPath.SOLDIER;
         }
-        if (this.chosenCalling != null)
+        if (this.chosenPath != null)
         {
-            return this.chosenCalling;
+            return this.chosenPath;
         }
-        return NpcCalling.fromRank(this.getRosterSubtype());
+        return NpcPath.fromRank(this.getRosterSubtype());
     }
 
-    /** The role label: what the main hand says, then the rank's trade, then the calling. */
+    /** The role label: what the main hand says, then the rank's trade, then the path. */
     public String getRoleId()
     {
-        return this.getCalling().roleId(this.getMainHandItem(), this.entityData.get(DATA_TRADE));
+        return this.getNpcPath().roleId(this.getMainHandItem(), this.entityData.get(DATA_TRADE));
     }
 
     /**
-     * Gives the NPC a calling, kept through saves and repacking. Players reach
-     * this only through {@link #chooseCalling}; a new calling ends any levy.
+     * Gives the NPC a path, kept through saves and repacking. Players reach
+     * this only through {@link #choosePath}; a new path ends any levy.
      */
-    public void setCalling(NpcCalling calling)
+    public void setNpcPath(NpcPath path)
     {
-        this.chosenCalling = calling;
+        this.chosenPath = path;
         this.standGroundUntil = 0;
         this.entityData.set(DATA_LEVIED, false);
         this.proficiencyVersion = Integer.MIN_VALUE;
         this.handsVersion++;
-        this.syncCalling();
+        this.syncPath();
         if (this.avoidsFights())
         {
             this.setTarget(null);
@@ -734,40 +734,40 @@ public class NpcEntity extends PathfinderMob
     }
 
     /**
-     * Who may pick a calling: an admin, for any NPC and any calling; or the
+     * Who may pick a path: an admin, for any NPC and any path; or the
      * owner of a settler, once. Worker and soldier are final for players.
      * The screen asks this too.
      */
-    public boolean mayChooseCalling(Player player)
+    public boolean mayChoosePath(Player player)
     {
         if (mayToggleCreative(player))
         {
             return true;
         }
-        return this.isOwnedNpc() && player.getUUID().equals(this.getOwner()) && this.getCalling() == NpcCalling.SETTLER;
+        return this.isOwnedNpc() && player.getUUID().equals(this.getOwner()) && this.getNpcPath() == NpcPath.SETTLER;
     }
 
-    private void chooseCalling(Player player, NpcCalling calling)
+    private void choosePath(Player player, NpcPath path)
     {
-        if (!this.mayChooseCalling(player) || calling == this.getCalling())
+        if (!this.mayChoosePath(player) || path == this.getNpcPath())
         {
             return;
         }
-        if (calling == NpcCalling.SETTLER && !mayToggleCreative(player))
+        if (path == NpcPath.SETTLER && !mayToggleCreative(player))
         {
             return;
         }
-        this.setCalling(calling);
-        player.displayClientMessage(Component.translatable("message.ancientempires.npc.calling",
-                Component.translatable(NpcCalling.translationKey(calling.id()))), true);
+        this.setNpcPath(path);
+        player.displayClientMessage(Component.translatable("message.ancientempires.npc.path",
+                Component.translatable(NpcPath.translationKey(path.id()))), true);
     }
 
-    private void syncCalling()
+    private void syncPath()
     {
         if (!this.level().isClientSide)
         {
-            this.entityData.set(DATA_CALLING, this.getCalling().id());
-            this.entityData.set(DATA_TRADE, NpcCalling.rankTrade(this.getRosterSubtype()));
+            this.entityData.set(DATA_PATH, this.getNpcPath().id());
+            this.entityData.set(DATA_TRADE, NpcPath.rankTrade(this.getRosterSubtype()));
         }
     }
 
@@ -1271,10 +1271,10 @@ public class NpcEntity extends PathfinderMob
             this.toggleLevy(player);
             return true;
         }
-        if (id == NpcMenu.BUTTON_CALLING_WORKER || id == NpcMenu.BUTTON_CALLING_SOLDIER || id == NpcMenu.BUTTON_CALLING_SETTLER)
+        if (id == NpcMenu.BUTTON_PATH_WORKER || id == NpcMenu.BUTTON_PATH_SOLDIER || id == NpcMenu.BUTTON_PATH_SETTLER)
         {
-            this.chooseCalling(player, id == NpcMenu.BUTTON_CALLING_WORKER ? NpcCalling.WORKER
-                    : id == NpcMenu.BUTTON_CALLING_SOLDIER ? NpcCalling.SOLDIER : NpcCalling.SETTLER);
+            this.choosePath(player, id == NpcMenu.BUTTON_PATH_WORKER ? NpcPath.WORKER
+                    : id == NpcMenu.BUTTON_PATH_SOLDIER ? NpcPath.SOLDIER : NpcPath.SETTLER);
             return true;
         }
         if (id == NpcMenu.BUTTON_CREATIVE)
@@ -1405,8 +1405,8 @@ public class NpcEntity extends PathfinderMob
         {
             tag.putInt(SKILL_KEY, this.skillOverride);
         }
-        // Always written: the scroll may be the generic one, whose row would imply another calling.
-        tag.putString(CALLING_KEY, this.getCalling().id());
+        // Always written: the scroll may be the generic one, whose row would imply another path.
+        tag.putString(PATH_KEY, this.getNpcPath().id());
         tag.putBoolean(LEVY_KEY, this.isLevied());
         if (this.feintChance >= 0.0F)
         {
@@ -1901,9 +1901,9 @@ public class NpcEntity extends PathfinderMob
         {
             tag.putInt(SKILL_KEY, this.skillOverride);
         }
-        if (this.chosenCalling != null)
+        if (this.chosenPath != null)
         {
-            tag.putString(CALLING_KEY, this.chosenCalling.id());
+            tag.putString(PATH_KEY, this.chosenPath.id());
         }
         if (this.isLevied())
         {
@@ -1955,13 +1955,20 @@ public class NpcEntity extends PathfinderMob
         {
             this.skillOverride = Mth.clamp(tag.getInt(SKILL_KEY), 0, 3);
         }
-        if (tag.contains(CALLING_KEY))
+        if (tag.contains(PATH_KEY))
         {
-            this.chosenCalling = NpcCalling.byId(tag.getString(CALLING_KEY));
+            this.chosenPath = NpcPath.byId(tag.getString(PATH_KEY));
         }
-        else if (tag.contains(LEGACY_ROLE_KEY))
+        else
         {
-            this.chosenCalling = NpcCalling.byId(tag.getString(LEGACY_ROLE_KEY));
+            for (String legacy : LEGACY_PATH_KEYS)
+            {
+                if (tag.contains(legacy))
+                {
+                    this.chosenPath = NpcPath.byId(tag.getString(legacy));
+                    break;
+                }
+            }
         }
         this.entityData.set(DATA_LEVIED, tag.getBoolean(LEVY_KEY));
         this.forgetRosterCaches();

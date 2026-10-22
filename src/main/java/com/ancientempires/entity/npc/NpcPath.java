@@ -19,11 +19,11 @@ import java.util.Set;
  * {@link #SOLDIER}. That choice is final (admins aside). Faction NPCs take theirs
  * from the roster rank and never change it in play.
  * <p>
- * The calling decides whether the NPC fights or runs. What it does within the
- * calling, its role, comes from its equipment (a bow makes an archer, a hoe a
+ * The path decides whether the NPC fights or runs. What it does within the
+ * path, its role, comes from its equipment (a bow makes an archer, a hoe a
  * farmer), as in Albion Online; see {@link #roleId}.
  */
-public enum NpcCalling
+public enum NpcPath
 {
     SETTLER(false),
     WORKER(false),
@@ -41,7 +41,7 @@ public enum NpcCalling
     private final boolean combat;
     private final String id;
 
-    NpcCalling(boolean combat)
+    NpcPath(boolean combat)
     {
         this.combat = combat;
         this.id = this.name().toLowerCase(Locale.ROOT);
@@ -58,22 +58,22 @@ public enum NpcCalling
     }
 
     /**
-     * Reads a saved calling. Also takes ids earlier builds saved: the role ids
+     * Reads a saved path. Also takes ids earlier builds saved: the role ids
      * under {@code AeRole} (medic, farmer, ...) and the old names commoner and
      * civilian, and maps them to their path.
      */
     @Nullable
-    public static NpcCalling byId(@Nullable String id)
+    public static NpcPath byId(@Nullable String id)
     {
         if (id == null || id.isEmpty())
         {
             return null;
         }
-        for (NpcCalling calling : values())
+        for (NpcPath path : values())
         {
-            if (calling.id.equals(id))
+            if (path.id.equals(id))
             {
-                return calling;
+                return path;
             }
         }
         if (id.equals("commoner"))
@@ -92,12 +92,12 @@ public enum NpcCalling
     }
 
     /**
-     * The calling a roster rank implies. The part before the first dot names it
+     * The path a roster rank implies. The part before the first dot names it
      * ({@code civilian.female}, {@code soldier.elite}). The {@code commoner} rank
      * (the generic scroll) is a settler; townsfolk ({@code civilian}) and worker
      * trades are workers; anything else is a soldier, so unknown ranks keep fighting.
      */
-    public static NpcCalling fromRank(String rank)
+    public static NpcPath fromRank(String rank)
     {
         String head = head(rank);
         if (head.equals("commoner") || head.equals("settler"))
@@ -125,7 +125,7 @@ public enum NpcCalling
 
     /**
      * The role shown for an NPC on this path: what its main hand says first, then
-     * the trade its rank names, then the calling itself. A settler is always a
+     * the trade its rank names, then the path itself. A settler is always a
      * settler, and an armed worker is still a worker.
      */
     public String roleId(ItemStack mainHand, String trade)

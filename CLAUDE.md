@@ -89,7 +89,7 @@ full-body attack animation (body channel, waist bend, stance kept under attacks)
 bc_particle trails on native swings; NPC-on-NPC hits under Better Mob Combat; repack into
 the NPC's own roster scroll; the Ancient Warfare baseline below (owner defense, ally
 alerts, admin escort, doors, day/night home, shields, bash, feints, skill tiers,
-civilians); callings, settlers, equipment roles, emergency levy, and proficiency.
+civilians); paths, settlers, equipment roles, emergency levy, and proficiency.
 
 ## Not done yet
 
@@ -132,7 +132,7 @@ its own unless noted). Before adding behavior, check what AW did first.
   a row. Internal attack path only.
 - Skill tiers from roster rank (0 ordinary, 1 elite, 2 leader, 3 elite leader) pick bash
   chance, feint chance, and shield reaction from the `skill` lists.
-- Callings (`NpcCalling`, saved as `AeCalling`; old `AeRole` ids still load): the locked
+- Paths (`NpcPath`, saved as `AePath`; old `AeCalling` and `AeRole` saves still load): the locked
   path. SETTLER (flavor, undecided), WORKER (trades, traders, priests, bards, faction
   townsfolk; runs), SOLDIER (fights). Old saves' `commoner` and `civilian` map to the
   first two. Faction NPCs take theirs from the roster rank and never change it in play.
@@ -140,15 +140,15 @@ its own unless noted). Before adding behavior, check what AW did first.
   `owned.commoner` so existing scrolls work; also the generic scroll). Its owner may
   choose worker or soldier once: the gold role label in the inventory opens a chooser
   with item icons (pickaxe worker, campfire settler in the middle, sword soldier) and a
-  hover description per calling; picking the current calling just closes it. That
-  is final for players; only admins (creative) can set any calling, settler included.
+  hover description per path; picking the current path just closes it. That
+  is final for players; only admins (creative) can set any path, settler included.
   Owned preset scrolls (archer, farmer, ...) are admin conveniences and come
-  with their calling, as AW's crafted NPCs did. Repack always writes the calling.
+  with their path, as AW's crafted NPCs did. Repack always writes the path.
   Later: retirement and conscription items between the two paths, recruiting faction NPCs.
 - Role (`getRoleId`, shown in the inventory, no behavior of its own): what the equipment
-  makes the NPC within its calling, as in Albion Online. Bow archer, crossbow crossbowman,
+  makes the NPC within its path, as in Albion Online. Bow archer, crossbow crossbowman,
   thrown weapon skirmisher; hoe farmer, pickaxe miner, axe woodcutter, rod fisher. Without
-  such an item, the trade the rank names (medic, trader, ...), then the calling.
+  such an item, the trade the rank names (medic, trader, ...), then the path.
 - Access: only admins can open a faction NPC's inventory or command it. Owned NPCs answer
   to their owner and admins.
 - Civilians (`avoidsFights`): never hold a target (`setTarget` turns it into a fear
@@ -165,8 +165,8 @@ its own unless noted). Before adding behavior, check what AW did first.
   health.
 - Proficiency (from the AncientTactics trial): melee by an archer (bow or crossbow in hand
   or backpack, so sidearm swaps count) times 0.5, by a skirmisher times 0.75. Cached on
-  hands, backpack, calling, and levy changes.
-- NPC NBT keys: `AeRoster` (roster row), `AeCalling`, `AeLevy`, `AeSkill` (tier override),
+  hands, backpack, path, and levy changes.
+- NPC NBT keys: `AeRoster` (roster row), `AePath`, `AeLevy`, `AeSkill` (tier override),
   `AeFeintChance`, `AeSidearmBowSlot`. All carried through repack.
 
 ## Performance rules and audit findings

@@ -394,7 +394,7 @@ public final class AncientEmpiresConfig
                 .comment("A cornered civilian stops fighting once its threat backs off this far, in blocks. It never chases.")
                 .defineInRange("standBreakRange", 6.0D, 1.0D, 32.0D);
         CIVILIAN_PLAYER_THREAT_HEALTH = builder
-                .comment("Civilians ignore a player who hits them (no running, no fighting back, no calling for help) until their health drops below this fraction.")
+                .comment("Civilians ignore a player who hits them (no running, no fighting back, no path for help) until their health drops below this fraction.")
                 .defineInRange("playerThreatHealth", 0.5D, 0.0D, 1.0D);
         builder.pop();
 

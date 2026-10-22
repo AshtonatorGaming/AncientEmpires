@@ -17,7 +17,7 @@ import brachy.modularui.widget.Widget;
 import brachy.modularui.widgets.ButtonWidget;
 import brachy.modularui.widgets.TextWidget;
 import brachy.modularui.widgets.textfield.TextFieldWidget;
-import com.ancientempires.entity.npc.NpcCalling;
+import com.ancientempires.entity.npc.NpcPath;
 import com.ancientempires.entity.npc.NpcEntity;
 import com.ancientempires.entity.npc.NpcInventory;
 import com.ancientempires.inventory.NpcLayout;
@@ -80,7 +80,7 @@ public final class NpcInventoryPanel
     private static final int SLOT_FILL = 0xFF2C241C;
     private static final int SLOT_HOVER = 0xFF3A2E24;
     private static final int GOLD = 0xFFC6A56A;
-    /** Wrap width for the calling descriptions, so the tooltip stays compact. */
+    /** Wrap width for the path descriptions, so the tooltip stays compact. */
     private static final int TOOLTIP_W = 150;
 
     private NpcInventoryPanel()
@@ -276,35 +276,35 @@ public final class NpcInventoryPanel
 
     /**
      * The NPC's role name, beside the skin button: what its equipment makes it
-     * within its calling. It is read-only, except that a settler's owner (or an
-     * admin, for any NPC) can click it to choose a calling. Gold text marks that.
+     * within its path. It is read-only, except that a settler's owner (or an
+     * admin, for any NPC) can click it to choose a path. Gold text marks that.
      */
     private static ButtonWidget<?> roleButton(NpcMenu menu, NpcEntity npc)
     {
         Player player = Minecraft.getInstance().player;
-        boolean choosable = player != null && npc.mayChooseCalling(player);
+        boolean choosable = player != null && npc.mayChoosePath(player);
         return new ButtonWidget<>()
                 .pos(2, PREVIEW_H - 14)
                 .size(PREVIEW_W - 18, 12)
                 .background(new Rectangle().color(BUTTON))
                 .hoverBackground(new Rectangle().color(choosable ? BUTTON_HOVER : BUTTON))
-                .overlay(new CenteredText(() -> Component.translatable(NpcCalling.translationKey(npc.getRoleId())),
+                .overlay(new CenteredText(() -> Component.translatable(NpcPath.translationKey(npc.getRoleId())),
                         () -> mayChoose(npc) ? GOLD : NAME_INK))
-                .onMousePressed((context, pressed) -> openCallings(menu, npc, pressed))
-                .addTooltipLine(Component.translatable(choosable ? "gui.ancientempires.npc.calling" : "gui.ancientempires.npc.role").getString());
+                .onMousePressed((context, pressed) -> openPaths(menu, npc, pressed))
+                .addTooltipLine(Component.translatable(choosable ? "gui.ancientempires.npc.path" : "gui.ancientempires.npc.role").getString());
     }
 
     private static boolean mayChoose(NpcEntity npc)
     {
         Player player = Minecraft.getInstance().player;
-        return player != null && npc.mayChooseCalling(player);
+        return player != null && npc.mayChoosePath(player);
     }
 
     /**
-     * The calling chooser. Worker and soldier are final for players, so the
+     * The path chooser. Worker and soldier are final for players, so the
      * panel says so before the click; admins also get settler, to undo.
      */
-    private static boolean openCallings(NpcMenu menu, NpcEntity npc, int pressed)
+    private static boolean openPaths(NpcMenu menu, NpcEntity npc, int pressed)
     {
         Minecraft minecraft = Minecraft.getInstance();
         if (pressed != 0 || !mayChoose(npc) || !(minecraft.screen instanceof NpcScreen npcScreen))
@@ -312,49 +312,49 @@ public final class NpcInventoryPanel
             return false;
         }
         ModularPanel<?> parent = npcScreen.screen().getMainPanel();
-        IPanelHandler.simple(parent, (ignored, player) -> callingPanel(menu, npc), true).openPanel();
+        IPanelHandler.simple(parent, (ignored, player) -> pathPanel(menu, npc), true).openPanel();
         return true;
     }
 
-    private static ModularPanel<?> callingPanel(NpcMenu menu, NpcEntity npc)
+    private static ModularPanel<?> pathPanel(NpcMenu menu, NpcEntity npc)
     {
         Player player = Minecraft.getInstance().player;
         boolean admin = player != null && NpcEntity.mayToggleCreative(player);
         int width = 176;
         int height = 92;
-        ModularPanel<?> panel = ModularPanel.defaultPanel("npc_calling", width, height)
+        ModularPanel<?> panel = ModularPanel.defaultPanel("npc_path", width, height)
                 .background(new SlotBevel(PARCHMENT, false, false))
                 .hoverBackground(new SlotBevel(PARCHMENT, false, false))
                 .disablePanelsBelow(true)
                 .closeOnOutOfBoundsClick(true);
-        panel.child(new TextWidget<>(Component.translatable("gui.ancientempires.calling.title"))
+        panel.child(new TextWidget<>(Component.translatable("gui.ancientempires.path.title"))
                 .pos(6, 5)
                 .size(width - 12, 10)
                 .color(NAME_INK)
                 .shadow(Boolean.TRUE)
                 .textAlign(Alignment.Center));
-        panel.child(new TextWidget<>(Component.translatable(admin ? "gui.ancientempires.calling.admin" : "gui.ancientempires.calling.final"))
+        panel.child(new TextWidget<>(Component.translatable(admin ? "gui.ancientempires.path.admin" : "gui.ancientempires.path.final"))
                 .pos(6, 19)
                 .size(width - 12, 36)
                 .maxWidth(width - 12)
                 .color(NAME_INK)
                 .textAlign(Alignment.TopCenter));
         // Settler sits between the two paths it can split into. For a player it is
-        // the current calling, so picking it just keeps the NPC as it is.
-        java.util.List<NpcCalling> choices = java.util.List.of(NpcCalling.WORKER, NpcCalling.SETTLER, NpcCalling.SOLDIER);
+        // the current path, so picking it just keeps the NPC as it is.
+        java.util.List<NpcPath> choices = java.util.List.of(NpcPath.WORKER, NpcPath.SETTLER, NpcPath.SOLDIER);
         int gap = 4;
         int buttonW = (width - 12 - gap * (choices.size() - 1)) / choices.size();
         for (int index = 0; index < choices.size(); index++)
         {
-            NpcCalling calling = choices.get(index);
+            NpcPath path = choices.get(index);
             ButtonWidget<?> button = new ButtonWidget<>()
                     .pos(6 + index * (buttonW + gap), height - 40)
                     .size(buttonW, 34)
                     .background(new Rectangle().color(BUTTON))
                     .hoverBackground(new Rectangle().color(BUTTON_HOVER))
-                    .overlay(new CallingChoice(calling, () -> npc.getCalling() == calling ? GOLD : NAME_INK))
-                    .onMousePressed((context, pressed) -> pickCalling(panel, menu, npc, calling, pressed));
-            addWrappedTooltip(button, Component.translatable("gui.ancientempires.calling." + calling.id() + ".desc"));
+                    .overlay(new PathChoice(path, () -> npc.getNpcPath() == path ? GOLD : NAME_INK))
+                    .onMousePressed((context, pressed) -> pickPath(panel, menu, npc, path, pressed));
+            addWrappedTooltip(button, Component.translatable("gui.ancientempires.path." + path.id() + ".desc"));
             panel.child(button);
         }
         return panel;
@@ -370,10 +370,10 @@ public final class NpcInventoryPanel
         }
     }
 
-    /** What each calling looks like at a glance in the chooser. */
-    private static ItemStack callingIcon(NpcCalling calling)
+    /** What each path looks like at a glance in the chooser. */
+    private static ItemStack pathIcon(NpcPath path)
     {
-        return switch (calling)
+        return switch (path)
         {
             case SETTLER -> new ItemStack(Items.CAMPFIRE);
             case WORKER -> new ItemStack(Items.IRON_PICKAXE);
@@ -381,16 +381,16 @@ public final class NpcInventoryPanel
         };
     }
 
-    /** A chooser button face: the calling's item icon over its name. */
-    private static final class CallingChoice implements IDrawable
+    /** A chooser button face: the path's item icon over its name. */
+    private static final class PathChoice implements IDrawable
     {
         private final ItemStack icon;
         private final CenteredText label;
 
-        private CallingChoice(NpcCalling calling, IntSupplier color)
+        private PathChoice(NpcPath path, IntSupplier color)
         {
-            this.icon = callingIcon(calling);
-            this.label = new CenteredText(() -> Component.translatable(NpcCalling.translationKey(calling.id())), color);
+            this.icon = pathIcon(path);
+            this.label = new CenteredText(() -> Component.translatable(NpcPath.translationKey(path.id())), color);
         }
 
         @Override
@@ -401,22 +401,22 @@ public final class NpcInventoryPanel
         }
     }
 
-    private static boolean pickCalling(ModularPanel<?> panel, NpcMenu menu, NpcEntity npc, NpcCalling calling, int pressed)
+    private static boolean pickPath(ModularPanel<?> panel, NpcMenu menu, NpcEntity npc, NpcPath path, int pressed)
     {
         if (pressed != 0)
         {
             return false;
         }
-        if (calling == npc.getCalling())
+        if (path == npc.getNpcPath())
         {
             panel.closeIfOpen();
             return true;
         }
-        int buttonId = switch (calling)
+        int buttonId = switch (path)
         {
-            case SETTLER -> NpcMenu.BUTTON_CALLING_SETTLER;
-            case WORKER -> NpcMenu.BUTTON_CALLING_WORKER;
-            case SOLDIER -> NpcMenu.BUTTON_CALLING_SOLDIER;
+            case SETTLER -> NpcMenu.BUTTON_PATH_SETTLER;
+            case WORKER -> NpcMenu.BUTTON_PATH_WORKER;
+            case SOLDIER -> NpcMenu.BUTTON_PATH_SOLDIER;
         };
         sendButton(menu, buttonId, 0);
         panel.closeIfOpen();
