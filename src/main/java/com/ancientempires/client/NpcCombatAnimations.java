@@ -206,11 +206,12 @@ public final class NpcCombatAnimations
             else
             {
                 attack = poses == Status.READY && NpcBetterCombatDriver.attackActive(npc);
-                hold = poses == Status.READY && NpcBetterCombatDriver.holdActive(npc);
                 if (!attack && npc.isAttackWindowOpen())
                 {
                     attack = true;
                 }
+                // The stance stays on under an attack now. EMF still gets one arm pose at a time.
+                hold = !attack && poses == Status.READY && NpcBetterCombatDriver.holdActive(npc);
             }
             NpcEmfCompat.afterPose(npc, model, attack, hold, limbSwingAmount);
         }

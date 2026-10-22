@@ -238,14 +238,23 @@ final class NpcBetterCombatDriver
             this.lockLegs(copy);
             copy.torso.fullyEnablePart(true);
             copy.head.pitch.setEnabled(false);
-            float length = Math.max(1.0F, npc.getAttackPresentationLength());
             float upswing = Mth.clamp(npc.getAttackPresentationUpswing(), 0.0F, 0.99F);
-            float speed = animation.endTick / length;
             float multiplier = BetterCombatBridge.upswingMultiplier(0.5F);
             if (multiplier < 0.05F)
             {
                 multiplier = 0.5F;
             }
+            // Better Combat's curve lands the hit at length * upswing * multiplier. The
+            // server's real wind-up can be longer (npcWindupScale), so the curve runs over
+            // the length that puts its hit on that tick: the whole clip slows evenly
+            // instead of bending around a different hit frame.
+            float cooldown = Math.max(1.0F, npc.getAttackPresentationLength());
+            int windup = npc.getAttackPresentationWindup();
+            float hitRate = upswing * Mth.clamp(multiplier, 0.2F, 1.0F);
+            float length = windup > 0 && hitRate > 0.01F
+                    ? Mth.clamp(windup / hitRate, cooldown * 0.5F, cooldown * 4.0F)
+                    : cooldown;
+            float speed = animation.endTick / length;
             float blend = Math.max(multiplier - 0.5F, 0.0F) / 0.5F;
             float downwind = (float) (speed * Mth.lerp(blend, 1.0F - upswing, upswing / (1.0F - upswing)));
             this.attack.speed.set(speed / multiplier, List.of(
@@ -261,7 +270,7 @@ final class NpcBetterCombatDriver
             // The server lands the hit at the same fraction of the swing.
             this.trailId = id;
             this.trailOffhand = npc.isAttackOffhand();
-            this.trailDelay = Math.round(length * upswing * Mth.clamp(multiplier, 0.2F, 1.0F));
+            this.trailDelay = Math.round(length * hitRate);
             return true;
         }
 
@@ -280,10 +289,16 @@ final class NpcBetterCombatDriver
             NpcTrailParticles.spawn(npc, this.trailId, this.trailOffhand);
         }
 
+        /**
+         * The weapon stance stays on during attacks, as Better Combat does for a
+         * player: the attack layer sits above it and the stance shows again as the
+         * clip fades, with no gap. It is dropped only for actions that pose the
+         * arms themselves (using an item, swimming).
+         */
         private void updatePose(NpcEntity npc)
         {
             boolean left = npc.getMainArm() == HumanoidArm.LEFT;
-            if (this.attackOwnsArms(npc))
+            if (npc.isUsingItem() || npc.isSwimming())
             {
                 this.poseMisses = 0;
                 this.itemPose.setPose(null, left);
@@ -323,16 +338,6 @@ final class NpcBetterCombatDriver
             // holds two-handers, halberds, and greatswords; the item channel only shifts the weapon.
             this.itemPose.setPose(pose, left);
             this.bodyPose.setPose(pose, left);
-        }
-
-        private boolean attackOwnsArms(NpcEntity npc)
-        {
-            Object animation = this.attack.base.getAnimation();
-            if (animation instanceof IAnimation playing && playing.isActive())
-            {
-                return true;
-            }
-            return npc.isAttackWindowOpen();
         }
 
         private boolean apply(PlayerModel<NpcEntity> model, float partialTick)

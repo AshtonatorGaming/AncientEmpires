@@ -296,8 +296,10 @@ public class NpcMeleeAttackGoal extends Goal
                 this.npc.swing(InteractionHand.MAIN_HAND);
             }
         }
-        else
+        else if (swing.animationId() == null || !BetterCombatBridge.isModLoaded())
         {
+            // A Better Combat clip owns the arms. The vanilla swing would shove them on
+            // every axis the clip leaves free, which Better Combat cancels for players too.
             this.npc.swing(InteractionHand.MAIN_HAND);
         }
         this.playSwingSound(swing);

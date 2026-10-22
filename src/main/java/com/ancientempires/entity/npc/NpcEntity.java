@@ -69,6 +69,7 @@ public class NpcEntity extends PathfinderMob
     private static final EntityDataAccessor<String> DATA_PRESENTATION_ID = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<Integer> DATA_PRESENTATION_LENGTH = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Float> DATA_PRESENTATION_UPSWING = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Integer> DATA_PRESENTATION_WINDUP = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> DATA_PRESENTATION_SERIAL = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> DATA_FOLLOWING = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> DATA_CREATIVE = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.BOOLEAN);
@@ -152,6 +153,7 @@ public class NpcEntity extends PathfinderMob
         this.entityData.define(DATA_PRESENTATION_ID, "");
         this.entityData.define(DATA_PRESENTATION_LENGTH, 0);
         this.entityData.define(DATA_PRESENTATION_UPSWING, 0.0F);
+        this.entityData.define(DATA_PRESENTATION_WINDUP, 0);
         this.entityData.define(DATA_PRESENTATION_SERIAL, 0);
         this.entityData.define(DATA_FOLLOWING, false);
         this.entityData.define(DATA_CREATIVE, false);
@@ -969,6 +971,7 @@ public class NpcEntity extends PathfinderMob
         this.entityData.set(DATA_PRESENTATION_ID, id);
         this.entityData.set(DATA_PRESENTATION_LENGTH, Math.max(1, swing.cooldownTicks()));
         this.entityData.set(DATA_PRESENTATION_UPSWING, swing.animationUpswing());
+        this.entityData.set(DATA_PRESENTATION_WINDUP, swing.windupTicks());
         this.entityData.set(DATA_ATTACK_OFFHAND, swing.offHand());
         this.entityData.set(DATA_PRESENTATION_SERIAL, this.entityData.get(DATA_PRESENTATION_SERIAL) + 1);
     }
@@ -1010,6 +1013,7 @@ public class NpcEntity extends PathfinderMob
         this.entityData.set(DATA_PRESENTATION_ID, "");
         this.entityData.set(DATA_PRESENTATION_LENGTH, 0);
         this.entityData.set(DATA_PRESENTATION_UPSWING, 0.0F);
+        this.entityData.set(DATA_PRESENTATION_WINDUP, 0);
         this.entityData.set(DATA_ATTACK_OFFHAND, false);
         this.entityData.set(DATA_PRESENTATION_SERIAL, this.entityData.get(DATA_PRESENTATION_SERIAL) + 1);
     }
@@ -1061,6 +1065,15 @@ public class NpcEntity extends PathfinderMob
     public float getAttackPresentationUpswing()
     {
         return this.entityData.get(DATA_PRESENTATION_UPSWING);
+    }
+
+    /**
+     * Server wind-up ticks of the current swing. The client times the clip so
+     * its hit frame lands on this tick, even when NPC wind-ups are scaled.
+     */
+    public int getAttackPresentationWindup()
+    {
+        return this.entityData.get(DATA_PRESENTATION_WINDUP);
     }
 
     public int getAttackPresentationSerial()

@@ -45,9 +45,9 @@ public final class AttackProfiles
     /**
      * NPCs wind up slower than a player with the same weapon, so a swing can be
      * read and answered. The wind-up grows by {@code npcWindupScale} and the
-     * recovery stays the same, so the whole swing is longer too. The animation's
-     * upswing fraction is recomputed so the clip still lands on the hit tick,
-     * using the same formula the animation driver uses.
+     * recovery stays the same, so the whole swing is longer too. The upswing
+     * stays Better Combat's own; the client gets the real wind-up ticks with the
+     * presentation and slows the whole clip evenly to land on them.
      */
     private static AttackSwing slowWindup(AttackSwing swing)
     {
@@ -57,13 +57,6 @@ public final class AttackProfiles
             return swing;
         }
         int windup = Math.max(1, (int) Math.round(swing.windupTicks() * scale));
-        int cooldown = windup + swing.recoveryTicks();
-        float upswing = swing.animationUpswing();
-        if (swing.animationId() != null)
-        {
-            float multiplier = Mth.clamp(BetterCombatBridge.upswingMultiplier(0.5F), 0.2F, 1.0F);
-            upswing = Mth.clamp(windup / (cooldown * multiplier), 0.0F, 0.99F);
-        }
         return new AttackSwing(
                 swing.range(),
                 windup,
@@ -71,7 +64,7 @@ public final class AttackProfiles
                 swing.damageMultiplier(),
                 swing.angleDegrees(),
                 swing.animationId(),
-                upswing,
+                swing.animationUpswing(),
                 swing.swingSoundId(),
                 swing.swingVolume(),
                 swing.swingPitch(),
