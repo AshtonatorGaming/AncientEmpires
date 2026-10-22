@@ -133,6 +133,7 @@ public class NpcEntity extends PathfinderMob
     private static final String HUNGRY_KEY = "AeHungry";
     private static final String NEXT_MEAL_KEY = "AeNextMeal";
     private static final String MEAL_CREDIT_KEY = "AeMealCredit";
+    private static final String BED_KEY = "AeBed";
 
     private final NpcInventory inventory = new NpcInventory(this);
     private final NpcSidearm sidearm = new NpcSidearm(this);
@@ -177,6 +178,9 @@ public class NpcEntity extends PathfinderMob
     /** Saved as {@code AeWorksite}. */
     @Nullable
     private BlockPos worksite;
+    /** Saved as {@code AeBed}. */
+    @Nullable
+    private BlockPos bed;
     /** Saved as {@code AeHungry}. */
     private boolean hungry;
     /** Set for a death a Town Hall records, from {@code upkeep.keepOnDeath}: those items stay for the record. */
@@ -337,6 +341,7 @@ public class NpcEntity extends PathfinderMob
         this.goalSelector.addGoal(3, new NpcHoldPositionGoal(this, 0.9D));
         this.goalSelector.addGoal(3, new NpcUpkeepGoal(this));
         this.goalSelector.addGoal(4, new NpcFollowOwnerGoal(this, 1.0D, 3.0F));
+        this.goalSelector.addGoal(4, new NpcSleepGoal(this));
         this.goalSelector.addGoal(4, new NpcPriestGoal(this));
         this.goalSelector.addGoal(4, new NpcFarmerGoal(this));
         this.goalSelector.addGoal(4, new NpcWoodcutterGoal(this));
@@ -680,6 +685,32 @@ public class NpcEntity extends PathfinderMob
     public void setWorksite(@Nullable BlockPos worksite)
     {
         this.worksite = worksite == null ? null : worksite.immutable();
+    }
+
+    /** The bed this NPC has claimed in vanilla's bed index, or null. */
+    @Nullable
+    public BlockPos getBed()
+    {
+        return this.bed;
+    }
+
+    void setBed(@Nullable BlockPos bed)
+    {
+        this.bed = bed == null ? null : bed.immutable();
+    }
+
+    /** Gives the claimed bed back to the bed index (death, repack, or the bed is gone). */
+    void releaseBed()
+    {
+        if (this.bed != null && this.level() instanceof ServerLevel level)
+        {
+            if (this.isSleeping())
+            {
+                this.stopSleeping();
+            }
+            level.getPoiManager().release(this.bed);
+        }
+        this.bed = null;
     }
 
     /** Missed its last upkeep: a hungry worker does not work. Set by the Town Hall. */
@@ -1563,6 +1594,7 @@ public class NpcEntity extends PathfinderMob
         // The egg carries the bow as the primary weapon, the same as a reload.
         this.sidearm.restore();
         this.mount.beforeRepack();
+        this.releaseBed();
         ItemStack packed = this.createPackedItem();
         if (packed.isEmpty())
         {
@@ -2164,6 +2196,10 @@ public class NpcEntity extends PathfinderMob
         super.die(source);
         if (alive)
         {
+            this.releaseBed();
+        }
+        if (alive)
+        {
             this.recordKill(source);
             if (recorded && this.level() instanceof ServerLevel level)
             {
@@ -2212,6 +2248,10 @@ public class NpcEntity extends PathfinderMob
         if (this.mealCredit > 0.0D)
         {
             tag.putDouble(MEAL_CREDIT_KEY, this.mealCredit);
+        }
+        if (this.bed != null)
+        {
+            tag.putLong(BED_KEY, this.bed.asLong());
         }
         if (!this.revenge.isEmpty())
         {
@@ -2277,6 +2317,7 @@ public class NpcEntity extends PathfinderMob
         this.hungry = tag.getBoolean(HUNGRY_KEY);
         this.nextMeal = tag.contains(NEXT_MEAL_KEY) ? tag.getLong(NEXT_MEAL_KEY) : -1L;
         this.mealCredit = tag.getDouble(MEAL_CREDIT_KEY);
+        this.bed = tag.contains(BED_KEY) ? BlockPos.of(tag.getLong(BED_KEY)) : null;
         this.revenge.clear();
         for (net.minecraft.nbt.Tag element : tag.getList(REVENGE_KEY, net.minecraft.nbt.Tag.TAG_COMPOUND))
         {

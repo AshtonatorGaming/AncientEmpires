@@ -168,6 +168,9 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.BooleanValue PRIEST_COST_ENABLED;
     private static final ForgeConfigSpec.ConfigValue<String> PRIEST_COST_ITEM;
     private static final ForgeConfigSpec.IntValue PRIEST_COST_COUNT;
+    private static final ForgeConfigSpec.BooleanValue SLEEP_ENABLED;
+    private static final ForgeConfigSpec.BooleanValue SLEEP_SOLDIERS;
+    private static final ForgeConfigSpec.IntValue SLEEP_BED_RANGE;
     private static final ForgeConfigSpec.IntValue UPKEEP_FALLEN_RECORDS;
     private static final ForgeConfigSpec.EnumValue<KeepOnDeath> UPKEEP_KEEP_ON_DEATH;
 
@@ -670,6 +673,18 @@ public final class AncientEmpiresConfig
                 .defineInRange("costCount", 2, 1, 64);
         builder.pop();
 
+        builder.comment("Sleeping in beds at night, as villagers do.").push("sleep");
+        SLEEP_ENABLED = builder
+                .comment("Owned workers and settlers claim a free bed near home and sleep in it at night.")
+                .define("enabled", true);
+        SLEEP_SOLDIERS = builder
+                .comment("Soldiers sleep too. Off by default: they stay on watch (room for day and night patrols later).")
+                .define("soldiers", false);
+        SLEEP_BED_RANGE = builder
+                .comment("How far from its home, in blocks, an NPC looks for a free bed to claim.")
+                .defineInRange("bedRange", 32, 4, 96);
+        builder.pop();
+
         builder.push("targeting");
         TARGET_LEGACY_SCAN = builder
                 .comment("Use the two vanilla nearest-target goals instead of the shared scan. For comparison and as a fallback. Applies to NPCs loaded after the change.")
@@ -857,6 +872,9 @@ public final class AncientEmpiresConfig
     public static boolean priestCostEnabled = true;
     public static String priestCostItem = "minecraft:gold_ingot";
     public static int priestCostCount = 2;
+    public static boolean sleepEnabled = true;
+    public static boolean sleepSoldiers = false;
+    public static int sleepBedRange = 32;
 
     /** How an NPC out of food gets more from its Town Hall: walking there, or delivered to its backpack. */
     public enum Delivery
@@ -1054,6 +1072,9 @@ public final class AncientEmpiresConfig
         priestCostEnabled = PRIEST_COST_ENABLED.get();
         priestCostItem = PRIEST_COST_ITEM.get();
         priestCostCount = PRIEST_COST_COUNT.get();
+        sleepEnabled = SLEEP_ENABLED.get();
+        sleepSoldiers = SLEEP_SOLDIERS.get();
+        sleepBedRange = SLEEP_BED_RANGE.get();
         upkeepFallenRecords = UPKEEP_FALLEN_RECORDS.get();
         upkeepKeepOnDeath = UPKEEP_KEEP_ON_DEATH.get();
 

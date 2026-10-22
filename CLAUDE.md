@@ -99,8 +99,8 @@ civilians); target memory; cavalry; faction relations and player standing; the S
 ## Not done yet
 
 1. Ancient Warfare baseline still missing: lance charges and other mounted tactics,
-   sleeping in beds at night, vampire factions avoiding sunlight, and the
-   behavior behind the roles (medic healing, priest, bard singing, trader, courier, worker
+   vampire factions avoiding sunlight, day and night patrols, and the
+   behavior behind the remaining roles (bard singing, trader, courier, worker
    jobs beyond the farmer, woodcutter, and miner, commander, patrol; priest revival from the Town Hall records). Roles are labels from
    equipment until that behavior exists.
 2. Threat scoring, cliff-safe retreat (`FleeNavigation`), skirmishers.
@@ -225,6 +225,12 @@ its own unless noted). Before adding behavior, check what AW did first.
   beside the hall (`NpcSpawnEggItem.spawnFrom`, the scroll's data and kept gear, owner
   re-claimed), paying `costCount` of `costItem` (2 gold) from the hall's store when
   `costEnabled`.
+- Sleep (`NpcSleepGoal`, priority 4): owned workers and settlers (soldiers only with
+  `sleep.soldiers`; they stay on watch for future patrols) claim a free bed within
+  `sleep.bedRange` of home through vanilla's bed index (`PoiManager.take`, the villager
+  claim, so no two share a bed; saved as `AeBed`), walk there at night, lie down, and get
+  up at dawn. Hurt wakes them (vanilla); threats, fights, and orders come first. The
+  claim is released when the bed is gone, or on death or repack.
 - Reactions: `NpcBurningGoal` (`upkeep.burningPanic`): burning and not fighting (or any
   civilian) runs for water within 8 blocks. Poses are soft dependencies: with Not Enough
   Animations, eating raises the food to the mouth; with its EMF add-on, burning flails and
@@ -270,7 +276,7 @@ its own unless noted). Before adding behavior, check what AW did first.
   or backpack, so sidearm swaps count) times 0.5, by a skirmisher times 0.75. Cached on
   hands, backpack, path, and levy changes.
 - NPC NBT keys: `AeRoster` (roster row), `AePath`, `AeLevy`, `AeSkill` (tier override),
-  `AeFeintChance`, `AeSidearmBowSlot`, `AeMountLost`, `AeRevenge`, `AeWorksite`, `AeHungry`, `AeNextMeal`, `AeMealCredit` (`AeMountUuid` is not packed). All carried through repack.
+  `AeFeintChance`, `AeSidearmBowSlot`, `AeMountLost`, `AeRevenge`, `AeWorksite`, `AeHungry`, `AeNextMeal`, `AeMealCredit`, `AeBed` (`AeMountUuid` is not packed). All carried through repack.
 
 ## Performance rules and audit findings
 
