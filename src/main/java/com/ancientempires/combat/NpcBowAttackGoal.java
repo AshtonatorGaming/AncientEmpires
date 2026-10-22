@@ -485,7 +485,7 @@ public class NpcBowAttackGoal extends Goal
      * Extra upward aim so the arrow arrives at the torso. The step matches
      * vanilla arrow motion: move, drag by 0.99, then drop 0.05.
      */
-    private static double gravityLift(double dx, double targetDy, double dz, float speed)
+    public static double gravityLift(double dx, double targetDy, double dz, float speed)
     {
         double horizontal = Math.sqrt(dx * dx + dz * dz);
         if (horizontal < 1.0E-3D || speed < 0.1F)

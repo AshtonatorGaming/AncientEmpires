@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "LBL",
+    " C "
+  ],
+  "key": {
+    "L": {"item": "minecraft:leather"},
+    "B": {"item": "minecraft:bow"},
+    "C": {"tag": "forge:chests/wooden"}
+  },
+  "result": {"item": "ancientempires:hunting_lodge"}
+}

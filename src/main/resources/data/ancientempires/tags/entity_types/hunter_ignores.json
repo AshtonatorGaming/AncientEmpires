@@ -1,0 +1,22 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:polar_bear",
+    "minecraft:wolf",
+    "minecraft:llama",
+    "minecraft:trader_llama",
+    "minecraft:bee",
+    "minecraft:panda",
+    "minecraft:horse",
+    "minecraft:donkey",
+    "minecraft:mule",
+    "minecraft:camel",
+    "minecraft:cat",
+    "minecraft:ocelot",
+    "minecraft:parrot",
+    "minecraft:axolotl",
+    "minecraft:frog",
+    "minecraft:turtle",
+    "minecraft:sniffer"
+  ]
+}

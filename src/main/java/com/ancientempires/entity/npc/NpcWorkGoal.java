@@ -186,6 +186,7 @@ public abstract class NpcWorkGoal<T extends WorksiteBlockEntity> extends Goal
         {
             if (!animal.isAlive())
             {
+                this.onCreatureGone(this.kind, animal);
                 this.clearTarget();
                 this.next();
                 return;
@@ -343,6 +344,11 @@ public abstract class NpcWorkGoal<T extends WorksiteBlockEntity> extends Goal
 
     /** The action was cut short or the job dropped (a hunter lowers the bow). */
     protected void onActionCancelled(int kind)
+    {
+    }
+
+    /** The creature a job was on died or vanished (a hunter goes to pick up what it dropped). */
+    protected void onCreatureGone(int kind, Entity creature)
     {
     }
 

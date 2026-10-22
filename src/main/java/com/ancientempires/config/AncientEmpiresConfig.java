@@ -153,6 +153,12 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.IntValue RANCH_DEFAULT_RADIUS;
     private static final ForgeConfigSpec.IntValue RANCH_MAX_RADIUS;
     private static final ForgeConfigSpec.IntValue RANCH_HERD_SIZE;
+    private static final ForgeConfigSpec.IntValue HUNT_DEFAULT_RADIUS;
+    private static final ForgeConfigSpec.IntValue HUNT_MAX_RADIUS;
+    private static final ForgeConfigSpec.IntValue HUNT_KEEP_PER_KIND;
+    private static final ForgeConfigSpec.IntValue HUNT_GAME_CAP;
+    private static final ForgeConfigSpec.IntValue HUNT_SPAWN_INTERVAL;
+    private static final ForgeConfigSpec.DoubleValue HUNT_SHOOT_RANGE;
     private static final ForgeConfigSpec.BooleanValue UPKEEP_ENABLED;
     private static final ForgeConfigSpec.DoubleValue UPKEEP_RANGE;
     private static final ForgeConfigSpec.IntValue UPKEEP_RATION;
@@ -614,6 +620,24 @@ public final class AncientEmpiresConfig
         RANCH_HERD_SIZE = builder
                 .comment("Adults of each kind a pen keeps: ranchers breed up to it and cull past it.")
                 .defineInRange("ranchHerdSize", 8, 2, 64);
+        HUNT_DEFAULT_RADIUS = builder
+                .comment("A new hunting lodge's ground, in blocks from the lodge. Hunters hold a bow.")
+                .defineInRange("huntDefaultRadius", 24, 4, 64);
+        HUNT_MAX_RADIUS = builder
+                .comment("Largest hunting ground, in blocks from the lodge.")
+                .defineInRange("huntMaxRadius", 40, 4, 64);
+        HUNT_KEEP_PER_KIND = builder
+                .comment("Animals of each kind hunters leave in the ground, so it recovers.")
+                .defineInRange("huntKeepPerKind", 2, 0, 16);
+        HUNT_GAME_CAP = builder
+                .comment("Game wanders in (from the biome's creature list, modded animals too) only while the ground holds fewer than this.")
+                .defineInRange("huntGameCap", 6, 0, 64);
+        HUNT_SPAWN_INTERVAL = builder
+                .comment("Ticks between creatures wandering into a worked hunting ground. This sets a hunter's yield.")
+                .defineInRange("huntSpawnInterval", 2400, 200, 72000);
+        HUNT_SHOOT_RANGE = builder
+                .comment("How far, in blocks, a hunter shoots from, with a clear line.")
+                .defineInRange("huntShootRange", 16.0D, 4.0D, 48.0D);
         builder.pop();
 
         builder.comment("Food and the Town Hall, as in Ancient Warfare. NPCs feed themselves; nothing here runs on a timer.").push("upkeep");
@@ -869,6 +893,12 @@ public final class AncientEmpiresConfig
     public static int ranchDefaultRadius = 5;
     public static int ranchMaxRadius = 10;
     public static int ranchHerdSize = 8;
+    public static int huntDefaultRadius = 24;
+    public static int huntMaxRadius = 40;
+    public static int huntKeepPerKind = 2;
+    public static int huntGameCap = 6;
+    public static int huntSpawnInterval = 2400;
+    public static double huntShootRange = 16.0D;
     public static boolean upkeepEnabled = true;
     public static double upkeepRange = 100.0D;
     public static int upkeepRation = 6;
@@ -1072,6 +1102,12 @@ public final class AncientEmpiresConfig
         ranchDefaultRadius = RANCH_DEFAULT_RADIUS.get();
         ranchMaxRadius = RANCH_MAX_RADIUS.get();
         ranchHerdSize = RANCH_HERD_SIZE.get();
+        huntDefaultRadius = HUNT_DEFAULT_RADIUS.get();
+        huntMaxRadius = HUNT_MAX_RADIUS.get();
+        huntKeepPerKind = HUNT_KEEP_PER_KIND.get();
+        huntGameCap = HUNT_GAME_CAP.get();
+        huntSpawnInterval = HUNT_SPAWN_INTERVAL.get();
+        huntShootRange = HUNT_SHOOT_RANGE.get();
         upkeepEnabled = UPKEEP_ENABLED.get();
         upkeepRange = UPKEEP_RANGE.get();
         upkeepRation = UPKEEP_RATION.get();
