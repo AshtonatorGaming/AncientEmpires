@@ -51,6 +51,12 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.BooleanValue BYPASS_HURT_COOLDOWN;
     private static final ForgeConfigSpec.DoubleValue COMBO_RESET_RATE;
 
+    private static final ForgeConfigSpec.BooleanValue SIDEARM_ENABLED;
+    private static final ForgeConfigSpec.DoubleValue SIDEARM_CORNERED_RANGE;
+    private static final ForgeConfigSpec.DoubleValue SIDEARM_RELEASE_RANGE;
+    private static final ForgeConfigSpec.IntValue SIDEARM_RELEASE_TICKS;
+    private static final ForgeConfigSpec.IntValue SIDEARM_SWAP_COOLDOWN;
+
     static
     {
         ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
@@ -163,6 +169,25 @@ public final class AncientEmpiresConfig
                 .defineInRange("comboResetRate", 3.0D, 0.5D, 20.0D);
 
         builder.pop();
+
+        builder.push("sidearm");
+        SIDEARM_ENABLED = builder
+                .comment("An archer whose target gets this close swaps its bow for the best melee weapon in its backpack. Archers on hold position never swap.")
+                .define("enabled", true);
+        SIDEARM_CORNERED_RANGE = builder
+                .comment("Distance, in blocks, at which an archer swaps to its sidearm.")
+                .defineInRange("corneredRange", 3.0D, 0.5D, 16.0D);
+        SIDEARM_RELEASE_RANGE = builder
+                .comment("Distance, in blocks, the target must stay beyond before the bow comes back.")
+                .defineInRange("releaseRange", 6.0D, 1.0D, 32.0D);
+        SIDEARM_RELEASE_TICKS = builder
+                .comment("Ticks the target must stay beyond releaseRange before the bow comes back.")
+                .defineInRange("releaseTicks", 20, 0, 400);
+        SIDEARM_SWAP_COOLDOWN = builder
+                .comment("Ticks after any swap before the next one, so the NPC does not flip between weapons. A dead or lost target still brings the bow back at once.")
+                .defineInRange("swapCooldownTicks", 40, 0, 400);
+        builder.pop();
+
         SPEC = builder.build();
     }
 
@@ -201,6 +226,12 @@ public final class AncientEmpiresConfig
     public static boolean requireLineOfSight = true;
     public static boolean bypassHurtCooldown = true;
     public static double comboResetRate = 3.0D;
+
+    public static boolean sidearmEnabled = true;
+    public static double sidearmCorneredRange = 3.0D;
+    public static double sidearmReleaseRange = 6.0D;
+    public static int sidearmReleaseTicks = 20;
+    public static int sidearmSwapCooldown = 40;
 
     private AncientEmpiresConfig()
     {
@@ -253,5 +284,11 @@ public final class AncientEmpiresConfig
         requireLineOfSight = REQUIRE_LINE_OF_SIGHT.get();
         bypassHurtCooldown = BYPASS_HURT_COOLDOWN.get();
         comboResetRate = COMBO_RESET_RATE.get();
+
+        sidearmEnabled = SIDEARM_ENABLED.get();
+        sidearmCorneredRange = SIDEARM_CORNERED_RANGE.get();
+        sidearmReleaseRange = SIDEARM_RELEASE_RANGE.get();
+        sidearmReleaseTicks = SIDEARM_RELEASE_TICKS.get();
+        sidearmSwapCooldown = SIDEARM_SWAP_COOLDOWN.get();
     }
 }

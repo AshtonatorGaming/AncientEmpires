@@ -28,8 +28,9 @@ import java.util.Optional;
  * Archer role for a bow in the main hand. The goal stays up for the whole
  * fight so melee never starts. In range with line of sight, it keeps drawing
  * and firing, including when the target is close. It does not path into melee
- * to acquire a shot. A later sidearm swap would read the backpack. This goal
- * does not switch weapons. Crossbows are not bows.
+ * to acquire a shot. A target inside the sidearm range trades the bow for a
+ * backpack melee weapon through {@link com.ancientempires.entity.npc.NpcSidearm};
+ * this goal then ends. Crossbows are not bows.
  */
 public class NpcBowAttackGoal extends Goal
 {
@@ -135,6 +136,14 @@ public class NpcBowAttackGoal extends Goal
             return;
         }
         this.returning = false;
+        int sidearm = this.npc.getSidearm().corneredSlot(target);
+        if (sidearm >= 0)
+        {
+            // The bow leaves the main hand, so this goal ends and melee takes the fight.
+            this.stopDraw();
+            this.npc.getSidearm().draw(sidearm);
+            return;
+        }
         if (this.canShoot(target))
         {
             this.closing = false;

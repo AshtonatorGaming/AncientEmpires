@@ -104,6 +104,7 @@ public class NpcEntity extends PathfinderMob
     private static final String NO_HOME_KEY = "AeNoHome";
 
     private final NpcInventory inventory = new NpcInventory(this);
+    private final NpcSidearm sidearm = new NpcSidearm(this);
 
     /** Server post for {@link #HOLDING_KEY}. The client only needs the boolean. */
     @Nullable
@@ -359,6 +360,11 @@ public class NpcEntity extends PathfinderMob
     public NpcInventory getInventory()
     {
         return this.inventory;
+    }
+
+    public NpcSidearm getSidearm()
+    {
+        return this.sidearm;
     }
 
     @Nullable
@@ -659,6 +665,8 @@ public class NpcEntity extends PathfinderMob
         {
             return false;
         }
+        // The egg carries the bow as the primary weapon, the same as a reload.
+        this.sidearm.restore();
         ItemStack packed = this.createPackedItem();
         if (packed.isEmpty())
         {
@@ -716,6 +724,7 @@ public class NpcEntity extends PathfinderMob
         tag.put("ArmorItems", armor);
 
         this.inventory.save(tag);
+        this.sidearm.save(tag);
         tag.putString(SKIN_KEY, this.getSkinId());
         tag.putString(FACTION_KEY, this.getFaction());
         tag.putBoolean(FOLLOWING_KEY, this.isFollowing());
@@ -1054,6 +1063,7 @@ public class NpcEntity extends PathfinderMob
     protected void customServerAiStep()
     {
         super.customServerAiStep();
+        this.sidearm.tick();
         this.ticksSinceSwing++;
         if (this.comboIndex != 0 && this.lastSwingCooldown > 0
                 && this.ticksSinceSwing > this.lastSwingCooldown * AncientEmpiresConfig.comboResetRate)
@@ -1165,6 +1175,7 @@ public class NpcEntity extends PathfinderMob
     {
         super.addAdditionalSaveData(tag);
         this.inventory.save(tag);
+        this.sidearm.save(tag);
         UUID owner = this.getOwner();
         if (owner != null)
         {
@@ -1193,6 +1204,8 @@ public class NpcEntity extends PathfinderMob
     {
         super.readAdditionalSaveData(tag);
         this.inventory.load(tag);
+        // After the hands (super) and the backpack, so a saved swap can be undone.
+        this.sidearm.load(tag);
         if (tag.getBoolean(NO_OWNER_KEY))
         {
             this.setOwner(null);

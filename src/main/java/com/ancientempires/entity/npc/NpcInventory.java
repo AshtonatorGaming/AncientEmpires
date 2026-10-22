@@ -35,6 +35,11 @@ public class NpcInventory implements Container
 
     private final NpcEntity npc;
     private final SimpleContainer backpack = new SimpleContainer(BACKPACK_SLOTS);
+    /**
+     * Bumped on every write through this container, including menu clicks that
+     * change a stack in place. Not saved. Sidearm lookups rescan only when it moves.
+     */
+    private int backpackVersion;
 
     public NpcInventory(NpcEntity npc)
     {
@@ -61,6 +66,7 @@ public class NpcInventory implements Container
 
     public void load(CompoundTag tag)
     {
+        this.backpackVersion++;
         this.backpack.clearContent();
         if (!tag.contains(ITEMS_KEY, Tag.TAG_LIST))
         {
@@ -106,6 +112,7 @@ public class NpcInventory implements Container
 
     public List<ItemStack> removeBackpack()
     {
+        this.backpackVersion++;
         List<ItemStack> dropped = new ArrayList<>();
         for (int slot = 0; slot < this.backpack.getContainerSize(); slot++)
         {
@@ -221,7 +228,30 @@ public class NpcInventory implements Container
         {
             return ItemStack.EMPTY;
         }
+        this.backpackVersion++;
         return this.backpack.removeItemNoUpdate(backpackSlot);
+    }
+
+    public int getBackpackVersion()
+    {
+        return this.backpackVersion;
+    }
+
+    /**
+     * Puts the main-hand stack in a backpack slot and that slot's stack in the
+     * main hand. Slot to slot: nothing merges, splits, or moves elsewhere.
+     */
+    public void swapMainHandWithBackpack(int backpackSlot)
+    {
+        if (backpackSlot < 0 || backpackSlot >= BACKPACK_SLOTS)
+        {
+            return;
+        }
+        int slot = BACKPACK_START + backpackSlot;
+        ItemStack hand = this.getItem(MAIN_HAND_SLOT).copy();
+        ItemStack stored = this.getItem(slot).copy();
+        this.setItem(MAIN_HAND_SLOT, stored);
+        this.setItem(slot, hand);
     }
 
     @Override
@@ -265,6 +295,7 @@ public class NpcInventory implements Container
     @Override
     public void setChanged()
     {
+        this.backpackVersion++;
     }
 
     @Override
@@ -280,6 +311,7 @@ public class NpcInventory implements Container
         {
             this.setItem(slot, ItemStack.EMPTY);
         }
+        this.backpackVersion++;
         this.backpack.clearContent();
     }
 }
