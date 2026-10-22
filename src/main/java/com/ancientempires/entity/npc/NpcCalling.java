@@ -14,8 +14,8 @@ import java.util.Set;
 
 /**
  * The path an NPC is on, chosen once. Ancient Warfare made you craft a worker or
- * a combat NPC; here an owned NPC starts as a {@link #COMMONER}, a plain person
- * kept for flavor, and its owner may later make it a {@link #CIVILIAN} or a
+ * a combat NPC; here an owned NPC starts as a {@link #SETTLER}, a plain person
+ * kept for flavor, and its owner may later make it a {@link #WORKER} or a
  * {@link #SOLDIER}. That choice is final (admins aside). Faction NPCs take theirs
  * from the roster rank and never change it in play.
  * <p>
@@ -25,15 +25,15 @@ import java.util.Set;
  */
 public enum NpcCalling
 {
-    COMMONER(false),
-    CIVILIAN(false),
+    SETTLER(false),
+    WORKER(false),
     SOLDIER(true);
 
     /**
      * Rank heads that name a trade. They label an NPC whose equipment says nothing
-     * more specific; civilian trades also put the rank on the civilian path.
+     * more specific; worker trades also put the rank on the worker path.
      */
-    private static final Set<String> CIVILIAN_TRADES = Set.of("worker", "farmer", "miner", "woodcutter", "craftsman",
+    private static final Set<String> WORKER_TRADES = Set.of("worker", "farmer", "miner", "woodcutter", "craftsman",
             "researcher", "courier", "trader", "priest", "bard");
     private static final Set<String> SOLDIER_TRADES = Set.of("medic", "engineer", "siege_engineer", "spellcaster",
             "cavalry", "mounted_archer");
@@ -58,8 +58,9 @@ public enum NpcCalling
     }
 
     /**
-     * Reads a saved calling. Also takes the role ids an earlier build saved under
-     * {@code AeRole} (soldier, medic, farmer, ...) and maps them to their path.
+     * Reads a saved calling. Also takes ids earlier builds saved: the role ids
+     * under {@code AeRole} (medic, farmer, ...) and the old names commoner and
+     * civilian, and maps them to their path.
      */
     @Nullable
     public static NpcCalling byId(@Nullable String id)
@@ -75,9 +76,13 @@ public enum NpcCalling
                 return calling;
             }
         }
-        if (CIVILIAN_TRADES.contains(id))
+        if (id.equals("commoner"))
         {
-            return CIVILIAN;
+            return SETTLER;
+        }
+        if (id.equals("civilian") || WORKER_TRADES.contains(id))
+        {
+            return WORKER;
         }
         if (SOLDIER_TRADES.contains(id))
         {
@@ -88,39 +93,44 @@ public enum NpcCalling
 
     /**
      * The calling a roster rank implies. The part before the first dot names it
-     * ({@code civilian.female}, {@code soldier.elite}); a rank that is not a
-     * commoner or a civilian trade is a soldier, so unknown ranks keep fighting.
+     * ({@code civilian.female}, {@code soldier.elite}). The {@code commoner} rank
+     * (the generic scroll) is a settler; townsfolk ({@code civilian}) and worker
+     * trades are workers; anything else is a soldier, so unknown ranks keep fighting.
      */
     public static NpcCalling fromRank(String rank)
     {
         String head = head(rank);
-        if (head.equals("commoner"))
+        if (head.equals("commoner") || head.equals("settler"))
         {
-            return COMMONER;
+            return SETTLER;
         }
-        if (head.equals("civilian") || CIVILIAN_TRADES.contains(head))
+        if (head.equals("civilian") || WORKER_TRADES.contains(head))
         {
-            return CIVILIAN;
+            return WORKER;
         }
         return SOLDIER;
     }
 
-    /** The trade a roster rank names, or empty. Only a fallback label; it has no behavior yet. */
+    /**
+     * The trade a roster rank names, or empty. Only a fallback label; it has no
+     * behavior yet. Faction townsfolk read as civilians, not workers.
+     */
     public static String rankTrade(String rank)
     {
         String head = head(rank);
-        boolean trade = (CIVILIAN_TRADES.contains(head) && !head.equals("worker")) || SOLDIER_TRADES.contains(head);
+        boolean trade = head.equals("civilian") || (WORKER_TRADES.contains(head) && !head.equals("worker"))
+                || SOLDIER_TRADES.contains(head);
         return trade ? head : "";
     }
 
     /**
      * The role shown for an NPC on this path: what its main hand says first, then
-     * the trade its rank names, then the calling itself. A commoner is always a
-     * commoner, and an armed civilian is still a civilian.
+     * the trade its rank names, then the calling itself. A settler is always a
+     * settler, and an armed worker is still a worker.
      */
     public String roleId(ItemStack mainHand, String trade)
     {
-        if (this == COMMONER)
+        if (this == SETTLER)
         {
             return this.id;
         }

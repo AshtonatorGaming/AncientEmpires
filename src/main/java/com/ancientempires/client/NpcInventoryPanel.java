@@ -27,6 +27,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -272,7 +274,7 @@ public final class NpcInventoryPanel
 
     /**
      * The NPC's role name, beside the skin button: what its equipment makes it
-     * within its calling. It is read-only, except that a commoner's owner (or an
+     * within its calling. It is read-only, except that a settler's owner (or an
      * admin, for any NPC) can click it to choose a calling. Gold text marks that.
      */
     private static ButtonWidget<?> roleButton(NpcMenu menu, NpcEntity npc)
@@ -297,8 +299,8 @@ public final class NpcInventoryPanel
     }
 
     /**
-     * The calling chooser. Civilian and soldier are final for players, so the
-     * panel says so before the click; admins also get commoner, to undo.
+     * The calling chooser. Worker and soldier are final for players, so the
+     * panel says so before the click; admins also get settler, to undo.
      */
     private static boolean openCallings(NpcMenu menu, NpcEntity npc, int pressed)
     {
@@ -316,8 +318,8 @@ public final class NpcInventoryPanel
     {
         Player player = Minecraft.getInstance().player;
         boolean admin = player != null && NpcEntity.mayToggleCreative(player);
-        int width = 168;
-        int height = 84;
+        int width = 176;
+        int height = 92;
         ModularPanel<?> panel = ModularPanel.defaultPanel("npc_calling", width, height)
                 .background(new SlotBevel(PARCHMENT, false, false))
                 .hoverBackground(new SlotBevel(PARCHMENT, false, false))
@@ -336,23 +338,54 @@ public final class NpcInventoryPanel
                 .color(NAME_INK)
                 .textAlign(Alignment.TopCenter));
         java.util.List<NpcCalling> choices = admin
-                ? java.util.List.of(NpcCalling.COMMONER, NpcCalling.CIVILIAN, NpcCalling.SOLDIER)
-                : java.util.List.of(NpcCalling.CIVILIAN, NpcCalling.SOLDIER);
+                ? java.util.List.of(NpcCalling.SETTLER, NpcCalling.WORKER, NpcCalling.SOLDIER)
+                : java.util.List.of(NpcCalling.WORKER, NpcCalling.SOLDIER);
         int gap = 4;
         int buttonW = (width - 12 - gap * (choices.size() - 1)) / choices.size();
         for (int index = 0; index < choices.size(); index++)
         {
             NpcCalling calling = choices.get(index);
             panel.child(new ButtonWidget<>()
-                    .pos(6 + index * (buttonW + gap), height - 22)
-                    .size(buttonW, 16)
+                    .pos(6 + index * (buttonW + gap), height - 40)
+                    .size(buttonW, 34)
                     .background(new Rectangle().color(BUTTON))
                     .hoverBackground(new Rectangle().color(BUTTON_HOVER))
-                    .overlay(new CenteredText(() -> Component.translatable(NpcCalling.translationKey(calling.id())),
-                            () -> npc.getCalling() == calling ? GOLD : NAME_INK))
-                    .onMousePressed((context, pressed) -> pickCalling(panel, menu, calling, pressed)));
+                    .overlay(new CallingChoice(calling, () -> npc.getCalling() == calling ? GOLD : NAME_INK))
+                    .onMousePressed((context, pressed) -> pickCalling(panel, menu, calling, pressed))
+                    .addTooltipLine(Component.translatable("gui.ancientempires.calling." + calling.id() + ".desc").getString()));
         }
         return panel;
+    }
+
+    /** What each calling looks like at a glance in the chooser. */
+    private static ItemStack callingIcon(NpcCalling calling)
+    {
+        return switch (calling)
+        {
+            case SETTLER -> new ItemStack(Items.CAMPFIRE);
+            case WORKER -> new ItemStack(Items.IRON_PICKAXE);
+            case SOLDIER -> new ItemStack(Items.IRON_SWORD);
+        };
+    }
+
+    /** A chooser button face: the calling's item icon over its name. */
+    private static final class CallingChoice implements IDrawable
+    {
+        private final ItemStack icon;
+        private final CenteredText label;
+
+        private CallingChoice(NpcCalling calling, IntSupplier color)
+        {
+            this.icon = callingIcon(calling);
+            this.label = new CenteredText(() -> Component.translatable(NpcCalling.translationKey(calling.id())), color);
+        }
+
+        @Override
+        public void draw(GuiContext context, int x, int y, int width, int height, WidgetTheme widgetTheme)
+        {
+            context.getGraphics().renderItem(this.icon, x + (width - 16) / 2, y + 4);
+            this.label.draw(context, x, y + height - 12, width, 10, widgetTheme);
+        }
     }
 
     private static boolean pickCalling(ModularPanel<?> panel, NpcMenu menu, NpcCalling calling, int pressed)
@@ -363,8 +396,8 @@ public final class NpcInventoryPanel
         }
         int buttonId = switch (calling)
         {
-            case COMMONER -> NpcMenu.BUTTON_CALLING_COMMONER;
-            case CIVILIAN -> NpcMenu.BUTTON_CALLING_CIVILIAN;
+            case SETTLER -> NpcMenu.BUTTON_CALLING_SETTLER;
+            case WORKER -> NpcMenu.BUTTON_CALLING_WORKER;
             case SOLDIER -> NpcMenu.BUTTON_CALLING_SOLDIER;
         };
         sendButton(menu, buttonId, 0);

@@ -32,11 +32,11 @@ public class NpcMenu extends AbstractContainerMenu
     public static final int BUTTON_REPACK = 3;
     public static final int BUTTON_CREATIVE = 4;
     public static final int BUTTON_HOLD = 5;
-    public static final int BUTTON_CALLING_CIVILIAN = 6;
+    public static final int BUTTON_CALLING_WORKER = 6;
     public static final int BUTTON_CALLING_SOLDIER = 7;
     public static final int BUTTON_LEVY = 8;
-    /** Admins only: back to commoner. */
-    public static final int BUTTON_CALLING_COMMONER = 9;
+    /** Admins only: back to settler. */
+    public static final int BUTTON_CALLING_SETTLER = 9;
 
     @Nullable
     private final NpcEntity npc;

@@ -683,7 +683,7 @@ public class NpcEntity extends PathfinderMob
 
     /**
      * Ancient Warfare's civilians, workers, and traders did not fight; they fled.
-     * Here that is the calling: commoners and civilians run. A weapon in hand does
+     * Here that is the calling: settlers and workers run. A weapon in hand does
      * not change it: an armed farmer still runs, and only fights when cornered.
      */
     public boolean isCivilian()
@@ -735,7 +735,7 @@ public class NpcEntity extends PathfinderMob
 
     /**
      * Who may pick a calling: an admin, for any NPC and any calling; or the
-     * owner of a commoner, once. Civilian and soldier are final for players.
+     * owner of a settler, once. Worker and soldier are final for players.
      * The screen asks this too.
      */
     public boolean mayChooseCalling(Player player)
@@ -744,7 +744,7 @@ public class NpcEntity extends PathfinderMob
         {
             return true;
         }
-        return this.isOwnedNpc() && player.getUUID().equals(this.getOwner()) && this.getCalling() == NpcCalling.COMMONER;
+        return this.isOwnedNpc() && player.getUUID().equals(this.getOwner()) && this.getCalling() == NpcCalling.SETTLER;
     }
 
     private void chooseCalling(Player player, NpcCalling calling)
@@ -753,7 +753,7 @@ public class NpcEntity extends PathfinderMob
         {
             return;
         }
-        if (calling == NpcCalling.COMMONER && !mayToggleCreative(player))
+        if (calling == NpcCalling.SETTLER && !mayToggleCreative(player))
         {
             return;
         }
@@ -1248,10 +1248,10 @@ public class NpcEntity extends PathfinderMob
             this.toggleLevy(player);
             return true;
         }
-        if (id == NpcMenu.BUTTON_CALLING_CIVILIAN || id == NpcMenu.BUTTON_CALLING_SOLDIER || id == NpcMenu.BUTTON_CALLING_COMMONER)
+        if (id == NpcMenu.BUTTON_CALLING_WORKER || id == NpcMenu.BUTTON_CALLING_SOLDIER || id == NpcMenu.BUTTON_CALLING_SETTLER)
         {
-            this.chooseCalling(player, id == NpcMenu.BUTTON_CALLING_CIVILIAN ? NpcCalling.CIVILIAN
-                    : id == NpcMenu.BUTTON_CALLING_SOLDIER ? NpcCalling.SOLDIER : NpcCalling.COMMONER);
+            this.chooseCalling(player, id == NpcMenu.BUTTON_CALLING_WORKER ? NpcCalling.WORKER
+                    : id == NpcMenu.BUTTON_CALLING_SOLDIER ? NpcCalling.SOLDIER : NpcCalling.SETTLER);
             return true;
         }
         if (id == NpcMenu.BUTTON_CREATIVE)

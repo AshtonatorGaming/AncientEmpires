@@ -359,7 +359,7 @@ public final class AncientEmpiresConfig
 
         builder.comment("Ancient Warfare's civilians, workers, and traders fled instead of fighting.").push("civilians");
         CIVILIANS_FLEE = builder
-                .comment("Commoners and civilians (workers, traders, priests, bards) flee threats and fights only when cornered or levied. Off: every NPC fights.")
+                .comment("Settlers and workers (including traders, priests, bards, townsfolk) flee threats and fights only when cornered or levied. Off: every NPC fights.")
                 .define("enabled", true);
         CIVILIAN_FLEE_RANGE = builder
                 .comment("A civilian notices a visible threat this many blocks away, and runs home only if the danger is farther than this from home.")

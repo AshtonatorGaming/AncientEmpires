@@ -89,7 +89,7 @@ full-body attack animation (body channel, waist bend, stance kept under attacks)
 bc_particle trails on native swings; NPC-on-NPC hits under Better Mob Combat; repack into
 the NPC's own roster scroll; the Ancient Warfare baseline below (owner defense, ally
 alerts, admin escort, doors, day/night home, shields, bash, feints, skill tiers,
-civilians); callings, owned commoners, equipment roles, emergency levy, and proficiency.
+civilians); callings, settlers, equipment roles, emergency levy, and proficiency.
 
 ## Not done yet
 
@@ -133,12 +133,15 @@ its own unless noted). Before adding behavior, check what AW did first.
 - Skill tiers from roster rank (0 ordinary, 1 elite, 2 leader, 3 elite leader) pick bash
   chance, feint chance, and shield reaction from the `skill` lists.
 - Callings (`NpcCalling`, saved as `AeCalling`; old `AeRole` ids still load): the locked
-  path. COMMONER (flavor, undecided), CIVILIAN (workers, traders, priests, bards; runs),
-  SOLDIER (fights). Faction NPCs take theirs from the roster rank and never change it in
-  play. A player's NPC starts as a commoner (`owned.commoner`, also the generic scroll);
-  its owner may choose civilian or soldier once, from the role label in the inventory.
-  That is final for players; only admins (creative) can set any calling, commoner
-  included. Owned preset scrolls (archer, farmer, ...) are admin conveniences and come
+  path. SETTLER (flavor, undecided), WORKER (trades, traders, priests, bards, faction
+  townsfolk; runs), SOLDIER (fights). Old saves' `commoner` and `civilian` map to the
+  first two. Faction NPCs take theirs from the roster rank and never change it in play.
+  A player's NPC starts as a settler (the Settler scroll; roster id and item stay
+  `owned.commoner` so existing scrolls work; also the generic scroll). Its owner may
+  choose worker or soldier once: the gold role label in the inventory opens a chooser
+  with item icons (campfire, pickaxe, sword) and a hover description per calling. That
+  is final for players; only admins (creative) can set any calling, settler included.
+  Owned preset scrolls (archer, farmer, ...) are admin conveniences and come
   with their calling, as AW's crafted NPCs did. Repack always writes the calling.
   Later: retirement and conscription items between the two paths, recruiting faction NPCs.
 - Role (`getRoleId`, shown in the inventory, no behavior of its own): what the equipment
