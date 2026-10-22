@@ -94,6 +94,27 @@ public final class NpcCombatAnimations
         }
     }
 
+    /**
+     * Whole-body lean and twist from the fallback stack, applied to the render
+     * matrix before the model draws. Mob Player Animator handles this itself
+     * when it owns the model.
+     */
+    public static void applyBodyTransform(NpcEntity npc, PoseStack pose, float partialTick)
+    {
+        if (mobAnimatorOwnsModel() || !posesReady())
+        {
+            return;
+        }
+        try
+        {
+            NpcBetterCombatDriver.applyBodyTransform(npc, pose, partialTick);
+        }
+        catch (Throwable exception)
+        {
+            failPoses(exception);
+        }
+    }
+
     public static void bendHeldArm(NpcEntity npc, HumanoidArm arm, PoseStack pose)
     {
         if (mobAnimatorOwnsModel())

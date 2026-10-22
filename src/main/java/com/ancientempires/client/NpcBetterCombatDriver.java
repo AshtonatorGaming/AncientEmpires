@@ -89,6 +89,45 @@ final class NpcBetterCombatDriver
         return session != null && (session.bodyPose.base.isActive() || session.itemPose.base.isActive());
     }
 
+    /**
+     * The clip's {@code body} channel: the whole-body lean, twist, and shift
+     * that Better Combat swings carry. Player Animation Lib applies it to the
+     * render matrix in its player renderer hook, which never runs for NPCs.
+     * Same math, with the pivot and offset scaled to the NPC's body size.
+     */
+    static void applyBodyTransform(NpcEntity npc, PoseStack pose, float partialTick)
+    {
+        Session session = SESSIONS.get(npc);
+        if (session == null)
+        {
+            return;
+        }
+        AnimationApplier applier = session.applier;
+        applier.setTickDelta(Mth.clamp(partialTick, 0.0F, 1.0F));
+        if (!applier.isActive())
+        {
+            return;
+        }
+        float scale = npc.getBodyScale();
+        Vec3f position = applier.get3DTransform("body", TransformType.POSITION, Vec3f.ZERO);
+        Vec3f rotation = applier.get3DTransform("body", TransformType.ROTATION, Vec3f.ZERO);
+        float x = position.getX().floatValue();
+        float y = position.getY().floatValue();
+        float z = position.getZ().floatValue();
+        float rx = rotation.getX().floatValue();
+        float ry = rotation.getY().floatValue();
+        float rz = rotation.getZ().floatValue();
+        if (x == 0.0F && y == 0.0F && z == 0.0F && rx == 0.0F && ry == 0.0F && rz == 0.0F)
+        {
+            return;
+        }
+        pose.translate(x * scale, (y + 0.7F) * scale, z * scale);
+        pose.mulPose(com.mojang.math.Axis.ZP.rotation(rz));
+        pose.mulPose(com.mojang.math.Axis.YP.rotation(ry));
+        pose.mulPose(com.mojang.math.Axis.XP.rotation(rx));
+        pose.translate(0.0F, -0.7F * scale, 0.0F);
+    }
+
     static void bendHeldArm(NpcEntity npc, HumanoidArm arm, PoseStack pose)
     {
         Session session = SESSIONS.get(npc);

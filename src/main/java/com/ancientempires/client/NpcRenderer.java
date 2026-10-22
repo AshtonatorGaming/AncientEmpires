@@ -70,6 +70,17 @@ public class NpcRenderer extends HumanoidMobRenderer<NpcEntity, NpcModel>
     }
 
     /**
+     * Adds the attack clip's whole-body motion after the vanilla body yaw, where
+     * Player Animation Lib applies it for a player.
+     */
+    @Override
+    protected void setupRotations(NpcEntity entity, PoseStack pose, float ageInTicks, float rotationYaw, float partialTick)
+    {
+        super.setupRotations(entity, pose, ageInTicks, rotationYaw, partialTick);
+        NpcCombatAnimations.applyBodyTransform(entity, pose, partialTick);
+    }
+
+    /**
      * The hitbox uses the same factor, so a dwarf and a giant match their boxes.
      * The inventory preview then fits that box in the frame.
      */
