@@ -214,13 +214,14 @@ public class NpcEntity extends PathfinderMob
             // Ancient Warfare's NpcAIDoor: open the doors on the path, close them once past.
             // No flags, so it runs beside whatever goal is moving the NPC.
             this.goalSelector.addGoal(0, new OpenDoorGoal(this, AncientEmpiresConfig.closeDoors));
+            this.goalSelector.addGoal(0, new NpcNightDoorsGoal(this));
         }
         // A bow keeps this goal for the whole fight. Melee does not run while it does.
         this.goalSelector.addGoal(1, new NpcBowAttackGoal(this));
         this.goalSelector.addGoal(2, new NpcMeleeAttackGoal(this));
         this.goalSelector.addGoal(3, new NpcHoldPositionGoal(this, 0.9D));
         this.goalSelector.addGoal(4, new NpcFollowOwnerGoal(this, 1.0D, 3.0F));
-        this.goalSelector.addGoal(5, new NpcReturnHomeGoal(this, 0.9D, 2.0F));
+        this.goalSelector.addGoal(5, new NpcReturnHomeGoal(this, 0.9D));
         this.goalSelector.addGoal(6, new WaterAvoidingRandomStrollGoal(this, 0.8D));
         this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
@@ -347,6 +348,26 @@ public class NpcEntity extends PathfinderMob
         {
             this.skinTextureResolved = false;
         }
+        else if (DATA_HOME.equals(key))
+        {
+            this.updateHomeRestriction();
+        }
+    }
+
+    /**
+     * Ancient Warfare kept a home as a vanilla restriction, so idle wandering
+     * stays near it. Every way the home changes (spawn, buttons, load) passes
+     * through the synced value, so this follows it.
+     */
+    private void updateHomeRestriction()
+    {
+        BlockPos home = this.getHome();
+        if (home == null)
+        {
+            this.clearRestriction();
+            return;
+        }
+        this.restrictTo(home, AncientEmpiresConfig.homeWanderRadius);
     }
 
     /**

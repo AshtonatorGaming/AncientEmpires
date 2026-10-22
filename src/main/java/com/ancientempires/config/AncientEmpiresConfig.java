@@ -63,6 +63,16 @@ public final class AncientEmpiresConfig
 
     private static final ForgeConfigSpec.BooleanValue OPEN_DOORS;
     private static final ForgeConfigSpec.BooleanValue CLOSE_DOORS;
+    private static final ForgeConfigSpec.BooleanValue NIGHT_DOOR_RESTRICTION;
+
+    private static final ForgeConfigSpec.IntValue HOME_WANDER_RADIUS;
+    private static final ForgeConfigSpec.DoubleValue HOME_DAY_RANGE;
+    private static final ForgeConfigSpec.DoubleValue OWNED_DAY_LEASH;
+    private static final ForgeConfigSpec.DoubleValue FACTION_DAY_LEASH;
+    private static final ForgeConfigSpec.DoubleValue HOME_NIGHT_RANGE;
+    private static final ForgeConfigSpec.DoubleValue HOME_NIGHT_LEASH;
+    private static final ForgeConfigSpec.BooleanValue HOME_RAIN_SHELTER;
+    private static final ForgeConfigSpec.DoubleValue FACTION_ARCHER_POST;
 
     private static final ForgeConfigSpec.BooleanValue OWNER_DEFENSE;
     private static final ForgeConfigSpec.DoubleValue OWNER_DEFENSE_RANGE;
@@ -228,6 +238,36 @@ public final class AncientEmpiresConfig
         CLOSE_DOORS = builder
                 .comment("NPCs close a door behind them once they are through, as Ancient Warfare soldiers did.")
                 .define("closeDoors", true);
+        NIGHT_DOOR_RESTRICTION = builder
+                .comment("At night NPCs do not open doors, as in Ancient Warfare, so they stay in or out until morning. NPCs that are following someone or fighting still use doors.")
+                .define("nightDoorRestriction", true);
+        builder.pop();
+
+        builder.push("home");
+        HOME_WANDER_RADIUS = builder
+                .comment("Idle wandering stays within this many blocks of home. Ancient Warfare's default home area.")
+                .defineInRange("wanderRadius", 5, 1, 64);
+        HOME_DAY_RANGE = builder
+                .comment("By day, an NPC farther than this from home, with nothing to fight, walks back.")
+                .defineInRange("dayRange", 50.0D, 2.0D, 256.0D);
+        OWNED_DAY_LEASH = builder
+                .comment("By day, an owned NPC walking home stops once it is this close.")
+                .defineInRange("ownedDayLeash", 20.0D, 1.0D, 256.0D);
+        FACTION_DAY_LEASH = builder
+                .comment("By day, a faction NPC walking home stops once it is this close.")
+                .defineInRange("factionDayLeash", 30.0D, 1.0D, 256.0D);
+        HOME_NIGHT_RANGE = builder
+                .comment("Faction NPCs keep night hours: at night, one farther than this from home walks back. Owned soldiers do not, as in Ancient Warfare.")
+                .defineInRange("nightRange", 5.0D, 1.0D, 256.0D);
+        HOME_NIGHT_LEASH = builder
+                .comment("At night, or when sheltering from rain, an NPC walking home stops once it is this close.")
+                .defineInRange("nightLeash", 5.0D, 1.0D, 256.0D);
+        HOME_RAIN_SHELTER = builder
+                .comment("An NPC caught in the rain goes home and stays there until the rain stops.")
+                .define("rainShelter", true);
+        FACTION_ARCHER_POST = builder
+                .comment("Out of combat, a faction archer holds a post within this many blocks of home. 0 turns it off.")
+                .defineInRange("factionArcherPost", 3.0D, 0.0D, 32.0D);
         builder.pop();
 
         builder.push("allies");
@@ -323,6 +363,16 @@ public final class AncientEmpiresConfig
 
     public static boolean openDoors = true;
     public static boolean closeDoors = true;
+    public static boolean nightDoorRestriction = true;
+
+    public static int homeWanderRadius = 5;
+    public static double homeDayRange = 50.0D;
+    public static double ownedDayLeash = 20.0D;
+    public static double factionDayLeash = 30.0D;
+    public static double homeNightRange = 5.0D;
+    public static double homeNightLeash = 5.0D;
+    public static boolean homeRainShelter = true;
+    public static double factionArcherPost = 3.0D;
 
     public static boolean ownerDefense = true;
     public static double ownerDefenseRange = 32.0D;
@@ -402,6 +452,16 @@ public final class AncientEmpiresConfig
 
         openDoors = OPEN_DOORS.get();
         closeDoors = CLOSE_DOORS.get();
+        nightDoorRestriction = NIGHT_DOOR_RESTRICTION.get();
+
+        homeWanderRadius = HOME_WANDER_RADIUS.get();
+        homeDayRange = HOME_DAY_RANGE.get();
+        ownedDayLeash = OWNED_DAY_LEASH.get();
+        factionDayLeash = FACTION_DAY_LEASH.get();
+        homeNightRange = HOME_NIGHT_RANGE.get();
+        homeNightLeash = HOME_NIGHT_LEASH.get();
+        homeRainShelter = HOME_RAIN_SHELTER.get();
+        factionArcherPost = FACTION_ARCHER_POST.get();
 
         ownerDefense = OWNER_DEFENSE.get();
         ownerDefenseRange = OWNER_DEFENSE_RANGE.get();
