@@ -10,7 +10,6 @@ import strm.emfcompat.core.PoseSnapshot;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -29,6 +28,7 @@ final class NpcEmfCompat
     private static Method leftArmOverride;
     private static Field attachmentPose;
     private static boolean placeProbeFailed;
+    private static Boolean betterCombatCompat;
 
     private NpcEmfCompat()
     {
@@ -39,10 +39,22 @@ final class NpcEmfCompat
         PoseManager.setSourcePriority(POSE, -10);
     }
 
+    /** The mod list does not change after load, so this is read once instead of per NPC per frame. */
+    private static boolean betterCombatCompat()
+    {
+        Boolean loaded = betterCombatCompat;
+        if (loaded == null)
+        {
+            loaded = ModList.get().isLoaded("emf_compat_better_combat");
+            betterCombatCompat = loaded;
+        }
+        return loaded;
+    }
+
     static void afterPose(NpcEntity npc, PlayerModel<?> model, boolean attackActive, boolean holdActive, float limbSwingAmount)
     {
         UUID uuid = npc.getUUID();
-        boolean compat = ModList.get().isLoaded("emf_compat_better_combat");
+        boolean compat = betterCombatCompat();
         if (compat && !NpcEmfBetterCombat.enabled())
         {
             PoseManager.clearPoses(uuid, ATTACK);
@@ -65,12 +77,13 @@ final class NpcEmfCompat
             {
                 NpcEmfBetterCombat.mark(uuid);
             }
+            // EMF Compat keeps these snapshots by reference, so they are new each frame.
             Map<String, PoseSnapshot> legs = null;
             if (attackLegs && limbSwingAmount < 0.15F)
             {
-                legs = new HashMap<>();
-                legs.put("left_leg", new PoseSnapshot(model.leftLeg, true));
-                legs.put("right_leg", new PoseSnapshot(model.rightLeg, true));
+                legs = Map.of(
+                        "left_leg", new PoseSnapshot(model.leftLeg, true),
+                        "right_leg", new PoseSnapshot(model.rightLeg, true));
             }
             PoseManager.savePoses(uuid, ATTACK, arm(model.leftArm), arm(model.rightArm), legs, body(model, bodyFollow));
             return;

@@ -50,14 +50,28 @@ final class NpcSkinLayers
     {
         Skin skin = skin(texture);
         Bridge layers = bridge();
-        View view = layers == null ? null : layers.view(entity, skin.classic);
-        Meshes meshes = view == null ? null : meshes(texture, layers, view.fastRender);
-        wear(layers, model.hat, skin.hat && (view == null || !view.hideHat), hatMesh(view, meshes), layers == null ? null : layers.headOffset);
-        wear(layers, model.jacket, skin.jacket, partMesh(view, view != null && view.enableJacket, meshes == null ? null : meshes.jacket), layers == null ? null : layers.bodyOffset);
-        wear(layers, model.leftSleeve, skin.leftSleeve, partMesh(view, view != null && view.enableLeftSleeve, meshes == null ? null : meshes.leftSleeve), layers == null ? null : layers.leftArmOffset);
-        wear(layers, model.rightSleeve, skin.rightSleeve, partMesh(view, view != null && view.enableRightSleeve, meshes == null ? null : meshes.rightSleeve), layers == null ? null : layers.rightArmOffset);
-        wear(layers, model.leftPants, skin.leftPants, partMesh(view, view != null && view.enableLeftPants, meshes == null ? null : meshes.leftPants), layers == null ? null : layers.leftLegOffset);
-        wear(layers, model.rightPants, skin.rightPants, partMesh(view, view != null && view.enableRightPants, meshes == null ? null : meshes.rightPants), layers == null ? null : layers.rightLegOffset);
+        if (layers == null)
+        {
+            model.hat.visible = skin.hat;
+            model.jacket.visible = skin.jacket;
+            model.leftSleeve.visible = skin.leftSleeve;
+            model.rightSleeve.visible = skin.rightSleeve;
+            model.leftPants.visible = skin.leftPants;
+            model.rightPants.visible = skin.rightPants;
+            return;
+        }
+        // Null when this NPC keeps the vanilla overlay: far away, not a 64x64 skin, or no config.
+        Settings settings = skin.classic ? layers.settings(entity) : null;
+        Meshes meshes = settings == null ? null : meshes(texture, layers, settings.fastRender);
+        boolean skull = settings != null && settings.hidesHead(entity);
+        boolean hideHat = settings != null && !settings.compatibility && settings.enableHat && skull;
+        Object hat = settings == null || !settings.enableHat || skull || meshes == null ? null : meshes.hat;
+        layers.wear(0, model.hat, skin.hat && !hideHat, hat, layers.headOffset);
+        layers.wear(1, model.jacket, skin.jacket, part(settings != null && settings.enableJacket, meshes, meshes == null ? null : meshes.jacket), layers.bodyOffset);
+        layers.wear(2, model.leftSleeve, skin.leftSleeve, part(settings != null && settings.enableLeftSleeve, meshes, meshes == null ? null : meshes.leftSleeve), layers.leftArmOffset);
+        layers.wear(3, model.rightSleeve, skin.rightSleeve, part(settings != null && settings.enableRightSleeve, meshes, meshes == null ? null : meshes.rightSleeve), layers.rightArmOffset);
+        layers.wear(4, model.leftPants, skin.leftPants, part(settings != null && settings.enableLeftPants, meshes, meshes == null ? null : meshes.leftPants), layers.leftLegOffset);
+        layers.wear(5, model.rightPants, skin.rightPants, part(settings != null && settings.enableRightPants, meshes, meshes == null ? null : meshes.rightPants), layers.rightLegOffset);
     }
 
     static void clear()
@@ -66,32 +80,9 @@ final class NpcSkinLayers
         MESHES.clear();
     }
 
-    private static Object hatMesh(View view, Meshes meshes)
+    private static Object part(boolean enabled, Meshes meshes, Object mesh)
     {
-        if (view == null || !view.enableHat || view.skipHatMesh || meshes == null)
-        {
-            return null;
-        }
-        return meshes.hat;
-    }
-
-    private static Object partMesh(View view, boolean enabled, Object mesh)
-    {
-        if (view == null || !enabled)
-        {
-            return null;
-        }
-        return mesh;
-    }
-
-    private static void wear(Bridge layers, ModelPart part, boolean show, Object mesh, Object offset)
-    {
-        part.visible = show;
-        if (layers == null)
-        {
-            return;
-        }
-        layers.inject(part, show ? mesh : null, show && mesh != null ? offset : null);
+        return enabled && meshes != null ? mesh : null;
     }
 
     private static Skin skin(ResourceLocation texture)
@@ -278,10 +269,10 @@ final class NpcSkinLayers
     }
 
     /**
-     * The settings that decide whether this draw uses a thick mesh. Far NPCs
-     * and a missing config keep the vanilla overlay.
+     * 3D Skin Layers' config, read once per client tick instead of once per NPC
+     * per frame. A change in that mod's settings shows up on the next tick.
      */
-    private static final class View
+    private static final class Settings
     {
         private final boolean enableHat;
         private final boolean enableJacket;
@@ -290,10 +281,12 @@ final class NpcSkinLayers
         private final boolean enableLeftPants;
         private final boolean enableRightPants;
         private final boolean fastRender;
-        private final boolean hideHat;
-        private final boolean skipHatMesh;
+        private final boolean compatibility;
+        private final double distanceSqr;
+        /** Helmets that hide the head layer. Null when that mod has no such list. */
+        private final Set<?> hiddenHeads;
 
-        private View(boolean enableHat, boolean enableJacket, boolean enableLeftSleeve, boolean enableRightSleeve, boolean enableLeftPants, boolean enableRightPants, boolean fastRender, boolean hideHat, boolean skipHatMesh)
+        private Settings(boolean enableHat, boolean enableJacket, boolean enableLeftSleeve, boolean enableRightSleeve, boolean enableLeftPants, boolean enableRightPants, boolean fastRender, boolean compatibility, double distanceSqr, Set<?> hiddenHeads)
         {
             this.enableHat = enableHat;
             this.enableJacket = enableJacket;
@@ -302,8 +295,19 @@ final class NpcSkinLayers
             this.enableLeftPants = enableLeftPants;
             this.enableRightPants = enableRightPants;
             this.fastRender = fastRender;
-            this.hideHat = hideHat;
-            this.skipHatMesh = skipHatMesh;
+            this.compatibility = compatibility;
+            this.distanceSqr = distanceSqr;
+            this.hiddenHeads = hiddenHeads;
+        }
+
+        private boolean hidesHead(NpcEntity entity)
+        {
+            if (this.hiddenHeads == null || this.hiddenHeads.isEmpty())
+            {
+                return false;
+            }
+            Item worn = entity.getItemBySlot(EquipmentSlot.HEAD).getItem();
+            return this.hiddenHeads.contains(worn);
         }
     }
 
@@ -336,6 +340,12 @@ final class NpcSkinLayers
         private Field enableRightPants;
         private boolean injectBroken;
         private boolean configBroken;
+        private Settings settings;
+        private long settingsTick = Long.MIN_VALUE;
+        /** What each of the six overlay parts last received, indexed as in {@link NpcSkinLayers#apply}. */
+        private final ModelPart[] lastParts = new ModelPart[6];
+        private final Object[] lastMeshes = new Object[6];
+        private final Object[] lastOffsets = new Object[6];
 
         private Bridge(Object helper, Method create3DMesh, Method setInjectedMesh, Object emptyMesh, Object headOffset, Object bodyOffset, Object leftArmOffset, Object rightArmOffset, Object leftLegOffset, Object rightLegOffset, Field configField, Field hideHeadLayers)
         {
@@ -384,14 +394,18 @@ final class NpcSkinLayers
                     configField, hidden);
         }
 
-        private View view(NpcEntity entity, boolean classic)
+        /**
+         * This tick's settings when the NPC is inside that mod's mesh distance,
+         * otherwise null so the vanilla overlay draws.
+         */
+        private Settings settings(NpcEntity entity)
         {
-            if (this.configBroken || !classic)
+            if (this.configBroken)
             {
                 return null;
             }
             Minecraft minecraft = Minecraft.getInstance();
-            if (minecraft.player == null)
+            if (minecraft.player == null || minecraft.level == null)
             {
                 return null;
             }
@@ -400,6 +414,22 @@ final class NpcSkinLayers
             {
                 return null;
             }
+            long tick = minecraft.level.getGameTime();
+            if (tick != this.settingsTick)
+            {
+                this.settingsTick = tick;
+                this.settings = this.readSettings();
+            }
+            Settings settings = this.settings;
+            if (settings == null || entity.distanceToSqr(camera.getPosition()) > settings.distanceSqr)
+            {
+                return null;
+            }
+            return settings;
+        }
+
+        private Settings readSettings()
+        {
             try
             {
                 Object config = this.configField.get(null);
@@ -409,24 +439,18 @@ final class NpcSkinLayers
                 }
                 this.bind(config);
                 int distance = this.renderDistanceLod == null ? DEFAULT_DISTANCE : this.renderDistanceLod.getInt(config);
-                double limit = (double) distance * (double) distance;
-                if (entity.distanceToSqr(camera.getPosition()) > limit)
-                {
-                    return null;
-                }
-                boolean compatibility = flag(this.compatibilityMode, config, false);
-                boolean hatOn = flag(this.enableHat, config, true);
-                boolean skull = hidesHead(entity);
-                return new View(
-                        hatOn,
+                Object hidden = this.hideHeadLayers == null ? null : this.hideHeadLayers.get(null);
+                return new Settings(
+                        flag(this.enableHat, config, true),
                         flag(this.enableJacket, config, true),
                         flag(this.enableLeftSleeve, config, true),
                         flag(this.enableRightSleeve, config, true),
                         flag(this.enableLeftPants, config, true),
                         flag(this.enableRightPants, config, true),
                         flag(this.fastRender, config, true),
-                        !compatibility && hatOn && skull,
-                        skull);
+                        flag(this.compatibilityMode, config, false),
+                        (double) distance * (double) distance,
+                        hidden instanceof Set<?> set ? set : null);
             }
             catch (IllegalAccessException | RuntimeException exception)
             {
@@ -434,6 +458,27 @@ final class NpcSkinLayers
                 AncientEmpires.LOGGER.warn("3D Skin Layers is loaded, but NPC outer layers stayed on the vanilla skin.", exception);
                 return null;
             }
+        }
+
+        /**
+         * Shows or hides one overlay part and attaches its mesh. The model is
+         * shared by every NPC, so the attach is skipped when the part already
+         * holds the same mesh and offset from the previous draw. A rebuilt model
+         * after a resource reload has new parts, which resets the record.
+         */
+        private void wear(int slot, ModelPart part, boolean show, Object mesh, Object offset)
+        {
+            part.visible = show;
+            Object injected = show ? mesh : null;
+            Object injectedOffset = show && mesh != null ? offset : null;
+            if (this.lastParts[slot] == part && this.lastMeshes[slot] == injected && this.lastOffsets[slot] == injectedOffset)
+            {
+                return;
+            }
+            this.inject(part, injected, injectedOffset);
+            this.lastParts[slot] = part;
+            this.lastMeshes[slot] = injected;
+            this.lastOffsets[slot] = injectedOffset;
         }
 
         private void bind(Object config) throws IllegalAccessException
@@ -473,28 +518,6 @@ final class NpcSkinLayers
                 return fallback;
             }
             return field.getBoolean(config);
-        }
-
-        private boolean hidesHead(NpcEntity entity)
-        {
-            if (this.hideHeadLayers == null)
-            {
-                return false;
-            }
-            try
-            {
-                Object value = this.hideHeadLayers.get(null);
-                if (!(value instanceof Set<?> items))
-                {
-                    return false;
-                }
-                Item worn = entity.getItemBySlot(EquipmentSlot.HEAD).getItem();
-                return items.contains(worn);
-            }
-            catch (IllegalAccessException exception)
-            {
-                return false;
-            }
         }
 
         private Object mesh(NativeImage image, int width, int height, int depth, int textureU, int textureV, boolean topPivot, float rotationOffset)
