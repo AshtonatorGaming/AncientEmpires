@@ -39,6 +39,11 @@ instead of reflecting per call), Skirmisher thresholds (about 4.5 to 28 blocks).
   ally alert), 4 `NpcTargetGoal`: one staggered scan over a shared per-cell candidate list
   (`NpcTargetCache`), faction filter first, sight checks nearest first.
   `targeting.legacyScan` restores the two vanilla goals.
+- `NpcTargetMemory` (one sight check per tick while a target is held) decides when an
+  unseen target is dropped, instead of vanilla's 3 seconds. Out of sight, melee and
+  archers go to the last sighting (archers unless holding), search there for
+  `targeting.memoryTicks`, and give up after `pursuitTicks` without a sighting. Gaining a
+  target counts as a sighting, so an ally's alert sends helpers to where the fight was.
 - Bow vs melee are two separate goals split by `isHoldingBow()`. The melee goal only runs
   when it is false. A bow in the main hand keeps the archer goal for the whole fight.
   Crossbows are not bows here.
@@ -89,7 +94,7 @@ full-body attack animation (body channel, waist bend, stance kept under attacks)
 bc_particle trails on native swings; NPC-on-NPC hits under Better Mob Combat; repack into
 the NPC's own roster scroll; the Ancient Warfare baseline below (owner defense, ally
 alerts, admin escort, doors, day/night home, shields, bash, feints, skill tiers,
-civilians); paths, settlers, equipment roles, emergency levy, and proficiency.
+civilians); target memory; paths, settlers, equipment roles, emergency levy, and proficiency.
 
 ## Not done yet
 
@@ -98,10 +103,9 @@ civilians); paths, settlers, equipment roles, emergency levy, and proficiency.
    behavior behind the roles (medic healing, priest, bard singing, trader, courier, worker
    jobs and worksites, commander, patrol, upkeep and food). Roles are labels from
    equipment until that behavior exists.
-2. Target memory (remember the last target a few seconds after line of sight breaks).
-3. Threat scoring, cliff-safe retreat (`FleeNavigation`), skirmishers.
-4. Spawner block that stores a full NPC NBT snapshot.
-5. Faction relations and revenge lists, worksites, town hall, orders, the structure
+2. Threat scoring, cliff-safe retreat (`FleeNavigation`), skirmishers.
+3. Spawner block that stores a full NPC NBT snapshot.
+4. Faction relations and revenge lists, worksites, town hall, orders, the structure
    template port, and Tier 2+ roles.
 
 ## Ancient Warfare baseline

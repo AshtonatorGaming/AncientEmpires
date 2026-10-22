@@ -158,8 +158,27 @@ public class NpcBowAttackGoal extends Goal
             this.approach(target);
             return;
         }
+        if (!this.npc.isHoldingPosition() && !this.npc.getTargetMemory().targetVisible())
+        {
+            // Lost sight: walk to where the target was last seen to find a shot again.
+            this.seek();
+            return;
+        }
         this.look(target);
         this.idle();
+    }
+
+    private void seek()
+    {
+        this.closing = true;
+        if (this.repath > 0)
+        {
+            this.repath--;
+            return;
+        }
+        this.repath = 10;
+        Vec3 spot = this.npc.getTargetMemory().lastSeen();
+        this.npc.getNavigation().moveTo(spot.x, spot.y, spot.z, APPROACH_SPEED);
     }
 
     /**

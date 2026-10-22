@@ -125,6 +125,8 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.IntValue TARGET_CACHE_TICKS;
     private static final ForgeConfigSpec.IntValue TARGET_MAX_SIGHT_CHECKS;
     private static final ForgeConfigSpec.BooleanValue TARGET_DEBUG_STATS;
+    private static final ForgeConfigSpec.IntValue TARGET_MEMORY;
+    private static final ForgeConfigSpec.IntValue TARGET_PURSUIT;
 
     static
     {
@@ -456,6 +458,12 @@ public final class AncientEmpiresConfig
         TARGET_DEBUG_STATS = builder
                 .comment("Log target-scan counts per second to the server log every 10 seconds.")
                 .define("debugStats", false);
+        TARGET_MEMORY = builder
+                .comment("Ticks an NPC searches where it last saw its target before giving up. The clock starts once it reaches that spot.")
+                .defineInRange("memoryTicks", 100, 0, 1200);
+        TARGET_PURSUIT = builder
+                .comment("Most ticks an NPC chases a target it cannot see, counted from the last sighting, travel included.")
+                .defineInRange("pursuitTicks", 600, 20, 6000);
         builder.pop();
 
         SPEC = builder.build();
@@ -569,6 +577,8 @@ public final class AncientEmpiresConfig
     public static int targetCacheTicks = 5;
     public static int targetMaxSightChecks = 8;
     public static boolean targetDebugStats = false;
+    public static int targetMemoryTicks = 100;
+    public static int targetPursuitTicks = 600;
 
     private AncientEmpiresConfig()
     {
@@ -698,5 +708,7 @@ public final class AncientEmpiresConfig
         targetCacheTicks = TARGET_CACHE_TICKS.get();
         targetMaxSightChecks = TARGET_MAX_SIGHT_CHECKS.get();
         targetDebugStats = TARGET_DEBUG_STATS.get();
+        targetMemoryTicks = TARGET_MEMORY.get();
+        targetPursuitTicks = TARGET_PURSUIT.get();
     }
 }

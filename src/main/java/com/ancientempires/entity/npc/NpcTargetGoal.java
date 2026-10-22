@@ -74,6 +74,8 @@ public final class NpcTargetGoal extends TargetGoal
         this.found = null;
         this.nextRetarget = this.npc.tickCount + AncientEmpiresConfig.targetRetargetInterval;
         super.start();
+        // NpcTargetMemory decides when an unseen target is given up, not vanilla's 3 seconds.
+        this.unseenMemoryTicks = AncientEmpiresConfig.targetPursuitTicks;
     }
 
     @Override

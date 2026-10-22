@@ -2,6 +2,7 @@ package com.ancientempires.combat;
 
 import com.ancientempires.config.AncientEmpiresConfig;
 import com.ancientempires.entity.npc.NpcEntity;
+import com.ancientempires.entity.npc.NpcTargetMemory;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -17,6 +18,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import org.jetbrains.annotations.Nullable;
@@ -665,6 +667,14 @@ public class NpcMeleeAttackGoal extends Goal
             return;
         }
         this.pathCooldown = AncientEmpiresConfig.pathRecalcTicks;
+        NpcTargetMemory memory = this.npc.getTargetMemory();
+        if (!memory.targetVisible())
+        {
+            // Out of sight: go where it was last seen, not where it really is.
+            Vec3 spot = memory.lastSeen();
+            this.npc.getNavigation().moveTo(spot.x, spot.y, spot.z, speed);
+            return;
+        }
         this.npc.getNavigation().moveTo(target, speed);
     }
 

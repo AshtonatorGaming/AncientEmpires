@@ -53,6 +53,14 @@ public final class NpcHurtByTargetGoal extends HurtByTargetGoal
     }
 
     @Override
+    public void start()
+    {
+        super.start();
+        // NpcTargetMemory decides when an unseen attacker is given up, not vanilla's 3 seconds.
+        this.unseenMemoryTicks = AncientEmpiresConfig.targetPursuitTicks;
+    }
+
+    @Override
     protected void alertOthers()
     {
         LivingEntity attacker = this.mob.getLastHurtByMob();

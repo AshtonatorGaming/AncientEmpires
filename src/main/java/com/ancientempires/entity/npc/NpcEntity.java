@@ -125,6 +125,7 @@ public class NpcEntity extends PathfinderMob
 
     private final NpcInventory inventory = new NpcInventory(this);
     private final NpcSidearm sidearm = new NpcSidearm(this);
+    private final NpcTargetMemory targetMemory = new NpcTargetMemory(this);
     /** Roster row id, or empty for an NPC from the generic scroll or one spawned before rows were saved. */
     private String rosterId = "";
     /** Creative player escorting a faction NPC in follow mode. Server only, not saved. */
@@ -515,6 +516,11 @@ public class NpcEntity extends PathfinderMob
     public NpcSidearm getSidearm()
     {
         return this.sidearm;
+    }
+
+    public NpcTargetMemory getTargetMemory()
+    {
+        return this.targetMemory;
     }
 
     public boolean hasShieldInOffhand()
@@ -1781,6 +1787,7 @@ public class NpcEntity extends PathfinderMob
             this.standGroundUntil = 0;
             this.setTarget(null);
         }
+        this.targetMemory.tick();
         this.sidearm.tick();
         this.ticksSinceSwing++;
         if (this.comboIndex != 0 && this.lastSwingCooldown > 0
