@@ -1,7 +1,10 @@
 package com.ancientempires.combat;
 
 import com.ancientempires.AncientEmpires;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fml.ModList;
 import org.jetbrains.annotations.Nullable;
@@ -12,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Reads Better Combat weapon attributes through reflection so this mod still
@@ -24,6 +28,8 @@ public final class BetterCombatBridge
 {
     public static final String MOD_ID = "bettercombat";
     private static final String FIST_ID = "bettercombat:fist";
+    /** Better Combat's per-stack attribute override, a JSON string tag. */
+    private static final String STACK_ATTRIBUTES_KEY = "weapon_attributes";
 
     private enum Status
     {
@@ -66,6 +72,13 @@ public final class BetterCombatBridge
     @Nullable
     private static Method soundRandomness;
 
+    /** Per-item snapshots, valid while {@link #cacheStamp} is Better Combat's current data. */
+    private static final Map<Item, Optional<WeaponSnapshot>> ITEM_CACHE = new ConcurrentHashMap<>();
+    @Nullable
+    private static volatile Optional<WeaponSnapshot> fistCache;
+    @Nullable
+    private static Object cacheStamp;
+
     private static boolean serverConfigRead;
     private static float cachedUpswingMultiplier = 0.5F;
     private static int cachedAttackInterval = 2;
@@ -89,21 +102,38 @@ public final class BetterCombatBridge
         {
             return Optional.empty();
         }
+        // A stack can carry its own attributes as NBT. Those skip the per-item
+        // cache; Better Combat already caches the parsed value on the stack.
+        boolean cacheable = !hasStackAttributes(stack) && cacheValid();
+        Item item = stack.getItem();
+        if (cacheable)
+        {
+            Optional<WeaponSnapshot> cached = ITEM_CACHE.get(item);
+            if (cached != null)
+            {
+                return cached;
+            }
+        }
         try
         {
             Object attributes = attributesForStack.invoke(null, stack);
-            return snapshot(attributes);
+            Optional<WeaponSnapshot> read = snapshot(attributes);
+            if (cacheable)
+            {
+                ITEM_CACHE.put(item, read);
+            }
+            return read;
         }
-        catch (ReflectiveOperationException exception)
+        catch (ReflectiveOperationException | RuntimeException exception)
         {
-            AncientEmpires.LOGGER.debug("Could not read Better Combat attributes for {}.", stack.getItem(), exception);
+            AncientEmpires.LOGGER.debug("Could not read Better Combat attributes for {}.", item, exception);
             return Optional.empty();
         }
     }
 
     /**
      * The bundled fist profile. Callers use this for an empty hand and do not
-     * equip an item.
+     * equip an item. Read once per Better Combat data load.
      */
     public static Optional<WeaponSnapshot> lookupFist()
     {
@@ -111,16 +141,63 @@ public final class BetterCombatBridge
         {
             return Optional.empty();
         }
+        boolean cacheable = cacheValid();
+        Optional<WeaponSnapshot> cached = fistCache;
+        if (cacheable && cached != null)
+        {
+            return cached;
+        }
         try
         {
             Object attributes = fistAttributes();
-            return snapshot(attributes);
+            Optional<WeaponSnapshot> read = snapshot(attributes);
+            if (cacheable)
+            {
+                fistCache = read;
+            }
+            return read;
         }
-        catch (ReflectiveOperationException exception)
+        catch (ReflectiveOperationException | RuntimeException exception)
         {
             AncientEmpires.LOGGER.debug("Better Combat fist profile could not be read.", exception);
             return Optional.empty();
         }
+    }
+
+    private static boolean hasStackAttributes(ItemStack stack)
+    {
+        CompoundTag tag = stack.getTag();
+        return tag != null && tag.contains(STACK_ATTRIBUTES_KEY, Tag.TAG_STRING);
+    }
+
+    /**
+     * True when cached snapshots match Better Combat's current data. That mod
+     * replaces its {@code containers} map on every server data load, including
+     * {@code /reload} and a new world, so a different map clears the caches.
+     * Without that field nothing is cached and every lookup reads through.
+     */
+    private static synchronized boolean cacheValid()
+    {
+        if (containersField == null)
+        {
+            return false;
+        }
+        Object current;
+        try
+        {
+            current = containersField.get(null);
+        }
+        catch (IllegalAccessException | RuntimeException exception)
+        {
+            return false;
+        }
+        if (current != cacheStamp)
+        {
+            ITEM_CACHE.clear();
+            fistCache = null;
+            cacheStamp = current;
+        }
+        return current != null;
     }
 
     /**
@@ -272,6 +349,13 @@ public final class BetterCombatBridge
         if (!(raw instanceof Map<?, ?> containers))
         {
             return null;
+        }
+        // The map is keyed by ResourceLocation in current versions. The walk
+        // below is only for a version that keys it some other way.
+        Object direct = containers.get(ResourceLocation.tryParse(FIST_ID));
+        if (direct != null)
+        {
+            return direct.getClass().getMethod("attributes").invoke(direct);
         }
         for (Map.Entry<?, ?> entry : containers.entrySet())
         {

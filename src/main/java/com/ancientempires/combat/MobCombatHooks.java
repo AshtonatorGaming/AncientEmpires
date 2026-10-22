@@ -10,6 +10,9 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
 
 import java.lang.reflect.Field;
+import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
 
 /**
@@ -19,6 +22,8 @@ import java.util.function.BiConsumer;
  */
 final class MobCombatHooks
 {
+    private static final Map<String, Optional<Field>> FIELDS = new ConcurrentHashMap<>();
+
     private MobCombatHooks()
     {
     }
@@ -104,7 +109,16 @@ final class MobCombatHooks
         }
     }
 
+    /**
+     * The mixin fields live on {@code Mob}, so the walk from the NPC class
+     * missed twice per field before. Found once per name; only NPCs call this.
+     */
     private static Field find(Class<?> type, String name)
+    {
+        return FIELDS.computeIfAbsent(name, key -> Optional.ofNullable(walk(type, key))).orElse(null);
+    }
+
+    private static Field walk(Class<?> type, String name)
     {
         while (type != null)
         {
