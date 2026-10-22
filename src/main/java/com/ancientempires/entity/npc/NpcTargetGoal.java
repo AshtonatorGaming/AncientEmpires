@@ -49,6 +49,10 @@ public final class NpcTargetGoal extends TargetGoal
     @Override
     public boolean canUse()
     {
+        if (this.keepsHandedTarget())
+        {
+            return false;
+        }
         if (this.npc.tickCount < this.nextScan)
         {
             return false;
@@ -103,6 +107,27 @@ public final class NpcTargetGoal extends TargetGoal
             this.mob.setTarget(better);
             this.targetMob = better;
         }
+    }
+
+    /**
+     * A target set from outside the target goals (an ally's alert) is kept while
+     * it is alive, attackable, and inside follow range. Nothing else watches it,
+     * so a lost one is cleared here and the scan takes over.
+     */
+    private boolean keepsHandedTarget()
+    {
+        LivingEntity current = this.mob.getTarget();
+        if (current == null)
+        {
+            return false;
+        }
+        double range = this.getFollowDistance();
+        if (current.isAlive() && this.npc.canAttack(current) && this.npc.distanceToSqr(current) <= range * range)
+        {
+            return true;
+        }
+        this.mob.setTarget(null);
+        return false;
     }
 
     /**

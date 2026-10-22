@@ -111,6 +111,9 @@ public class NpcEntity extends PathfinderMob
     private final NpcSidearm sidearm = new NpcSidearm(this);
     /** Roster row id, or empty for an NPC from the generic scroll or one spawned before rows were saved. */
     private String rosterId = "";
+    /** Creative player escorting a faction NPC in follow mode. Server only, not saved. */
+    @Nullable
+    private UUID followLeader;
 
     /** Server post for {@link #HOLDING_KEY}. The client only needs the boolean. */
     @Nullable
@@ -199,19 +202,39 @@ public class NpcEntity extends PathfinderMob
         this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
 
-        this.targetSelector.addGoal(1, new NpcHurtByTargetGoal(this));
+        // Ancient Warfare's order: the owner's fight first, then the NPC's own, then scanning.
+        this.targetSelector.addGoal(1, new NpcOwnerDefenseGoal(this, NpcOwnerDefenseGoal.Mode.DEFEND));
+        this.targetSelector.addGoal(2, new NpcOwnerDefenseGoal(this, NpcOwnerDefenseGoal.Mode.ASSIST));
+        this.targetSelector.addGoal(3, new NpcHurtByTargetGoal(this));
         if (AncientEmpiresConfig.targetLegacyScan)
         {
             // The selectors only count candidates for the debug stats; the filter is unchanged.
-            this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Monster.class, 10, true, false,
+            this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Monster.class, 10, true, false,
                     living -> NpcTargetCache.countLegacyCandidate()));
-            this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, NpcEntity.class, 10, true, false,
+            this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, NpcEntity.class, 10, true, false,
                     living -> this.acceptsTarget(living) && NpcTargetCache.countLegacyCandidate()));
         }
         else
         {
-            this.targetSelector.addGoal(2, new NpcTargetGoal(this));
+            this.targetSelector.addGoal(4, new NpcTargetGoal(this));
         }
+    }
+
+    /**
+     * Same side: the same faction for faction NPCs, the same owner for owned ones.
+     * Allies answer each other's alerts.
+     */
+    boolean isAlly(NpcEntity other)
+    {
+        if (other == this)
+        {
+            return false;
+        }
+        if (this.isFactionNpc())
+        {
+            return this.getFaction().equals(other.getFaction());
+        }
+        return sameOwner(this, other);
     }
 
     /**
@@ -253,6 +276,12 @@ public class NpcEntity extends PathfinderMob
     public boolean canAttack(LivingEntity target)
     {
         if (target instanceof NpcEntity other && sameOwner(this, other))
+        {
+            return false;
+        }
+        // A stray hit from the owner, or an ally's alert, never turns an NPC on its owner.
+        UUID owner = this.getOwner();
+        if (owner != null && target instanceof Player player && owner.equals(player.getUUID()))
         {
             return false;
         }
@@ -461,6 +490,20 @@ public class NpcEntity extends PathfinderMob
     public boolean isFollowing()
     {
         return this.entityData.get(DATA_FOLLOWING);
+    }
+
+    /**
+     * Who follow mode walks toward: the owner, or the creative player escorting
+     * a faction NPC. Null when there is neither.
+     */
+    @Nullable
+    public UUID getFollowLeader()
+    {
+        if (this.isFactionNpc())
+        {
+            return this.followLeader;
+        }
+        return this.getOwner();
     }
 
     public void setFollowing(boolean following)
@@ -923,14 +966,21 @@ public class NpcEntity extends PathfinderMob
         this.entityData.set(DATA_SKIN, trimmed);
     }
 
+    /**
+     * An owned NPC follows its owner. A faction NPC has no owner, so a creative
+     * player (an admin escort, as in Ancient Warfare) becomes the one it follows.
+     * That leader is not saved; a reload ends the escort.
+     */
     private void toggleFollow(Player player)
     {
-        if (this.getOwner() == null)
+        boolean escort = this.isFactionNpc() && mayToggleCreative(player);
+        if (this.getOwner() == null && !escort)
         {
             player.displayClientMessage(Component.translatable("message.ancientempires.npc.follow_no_owner"), true);
             return;
         }
         boolean following = !this.isFollowing();
+        this.followLeader = following && escort ? player.getUUID() : null;
         this.setFollowing(following);
         player.displayClientMessage(Component.translatable(following
                 ? "message.ancientempires.npc.follow_on"

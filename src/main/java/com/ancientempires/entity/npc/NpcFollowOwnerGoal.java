@@ -80,7 +80,7 @@ public class NpcFollowOwnerGoal extends Goal
 
     private Player findOwner()
     {
-        UUID ownerId = this.npc.getOwner();
+        UUID ownerId = this.npc.getFollowLeader();
         if (ownerId == null)
         {
             return null;

@@ -61,6 +61,11 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.IntValue SIDEARM_RELEASE_TICKS;
     private static final ForgeConfigSpec.IntValue SIDEARM_SWAP_COOLDOWN;
 
+    private static final ForgeConfigSpec.BooleanValue OWNER_DEFENSE;
+    private static final ForgeConfigSpec.DoubleValue OWNER_DEFENSE_RANGE;
+    private static final ForgeConfigSpec.DoubleValue ALLY_ALERT_RANGE;
+    private static final ForgeConfigSpec.DoubleValue ALLY_ALERT_HEIGHT;
+
     private static final ForgeConfigSpec.BooleanValue TARGET_LEGACY_SCAN;
     private static final ForgeConfigSpec.IntValue TARGET_SCAN_INTERVAL;
     private static final ForgeConfigSpec.IntValue TARGET_RETARGET_INTERVAL;
@@ -213,6 +218,21 @@ public final class AncientEmpiresConfig
                 .defineInRange("swapCooldownTicks", 40, 0, 400);
         builder.pop();
 
+        builder.push("allies");
+        OWNER_DEFENSE = builder
+                .comment("Owned NPCs attack whoever hurts their owner, and whatever their owner attacks, as in Ancient Warfare.")
+                .define("ownerDefense", true);
+        OWNER_DEFENSE_RANGE = builder
+                .comment("How close, in blocks, an owned NPC must be to its owner to join the owner's fight.")
+                .defineInRange("ownerDefenseRange", 32.0D, 4.0D, 128.0D);
+        ALLY_ALERT_RANGE = builder
+                .comment("When an NPC is hurt, allies within this many blocks (same faction, or same owner) that have no target attack the attacker. 0 turns it off.")
+                .defineInRange("alertRange", 16.0D, 0.0D, 64.0D);
+        ALLY_ALERT_HEIGHT = builder
+                .comment("Vertical reach of that alert, in blocks, above and below the hurt NPC.")
+                .defineInRange("alertHeight", 8.0D, 0.0D, 32.0D);
+        builder.pop();
+
         builder.push("targeting");
         TARGET_LEGACY_SCAN = builder
                 .comment("Use the two vanilla nearest-target goals instead of the shared scan. For comparison and as a fallback. Applies to NPCs loaded after the change.")
@@ -289,6 +309,11 @@ public final class AncientEmpiresConfig
     public static int sidearmReleaseTicks = 20;
     public static int sidearmSwapCooldown = 40;
 
+    public static boolean ownerDefense = true;
+    public static double ownerDefenseRange = 32.0D;
+    public static double allyAlertRange = 16.0D;
+    public static double allyAlertHeight = 8.0D;
+
     public static boolean targetLegacyScan = false;
     public static int targetScanInterval = 10;
     public static int targetRetargetInterval = 40;
@@ -359,6 +384,11 @@ public final class AncientEmpiresConfig
         sidearmReleaseRange = SIDEARM_RELEASE_RANGE.get();
         sidearmReleaseTicks = SIDEARM_RELEASE_TICKS.get();
         sidearmSwapCooldown = SIDEARM_SWAP_COOLDOWN.get();
+
+        ownerDefense = OWNER_DEFENSE.get();
+        ownerDefenseRange = OWNER_DEFENSE_RANGE.get();
+        allyAlertRange = ALLY_ALERT_RANGE.get();
+        allyAlertHeight = ALLY_ALERT_HEIGHT.get();
 
         targetLegacyScan = TARGET_LEGACY_SCAN.get();
         targetScanInterval = TARGET_SCAN_INTERVAL.get();
