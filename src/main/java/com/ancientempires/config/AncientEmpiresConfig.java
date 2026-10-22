@@ -164,6 +164,10 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.IntValue MEDIC_BIND_TICKS;
     private static final ForgeConfigSpec.IntValue MEDIC_COOLDOWN_TICKS;
     private static final ForgeConfigSpec.DoubleValue MEDIC_MELEE;
+    private static final ForgeConfigSpec.IntValue PRIEST_REVIVE_TICKS;
+    private static final ForgeConfigSpec.BooleanValue PRIEST_COST_ENABLED;
+    private static final ForgeConfigSpec.ConfigValue<String> PRIEST_COST_ITEM;
+    private static final ForgeConfigSpec.IntValue PRIEST_COST_COUNT;
     private static final ForgeConfigSpec.IntValue UPKEEP_FALLEN_RECORDS;
     private static final ForgeConfigSpec.EnumValue<KeepOnDeath> UPKEEP_KEEP_ON_DEATH;
 
@@ -651,6 +655,21 @@ public final class AncientEmpiresConfig
                 .defineInRange("meleeProficiency", 0.75D, 0.0D, 2.0D);
         builder.pop();
 
+        builder.comment("Priests: workers holding a book raise the fallen recorded at their owner's Town Hall.").push("priest");
+        PRIEST_REVIVE_TICKS = builder
+                .comment("Ticks a priest prays at the hall before one of the fallen rises.")
+                .defineInRange("reviveTicks", 100, 20, 2400);
+        PRIEST_COST_ENABLED = builder
+                .comment("Whether raising the fallen costs anything. The cost is taken from the hall's store.")
+                .define("costEnabled", true);
+        PRIEST_COST_ITEM = builder
+                .comment("Item id of the cost.")
+                .define("costItem", "minecraft:gold_ingot");
+        PRIEST_COST_COUNT = builder
+                .comment("How many of the cost item one raising takes.")
+                .defineInRange("costCount", 2, 1, 64);
+        builder.pop();
+
         builder.push("targeting");
         TARGET_LEGACY_SCAN = builder
                 .comment("Use the two vanilla nearest-target goals instead of the shared scan. For comparison and as a fallback. Applies to NPCs loaded after the change.")
@@ -834,6 +853,10 @@ public final class AncientEmpiresConfig
     public static int medicBindTicks = 20;
     public static int medicCooldownTicks = 40;
     public static double medicMeleeProficiency = 0.75D;
+    public static int priestReviveTicks = 100;
+    public static boolean priestCostEnabled = true;
+    public static String priestCostItem = "minecraft:gold_ingot";
+    public static int priestCostCount = 2;
 
     /** How an NPC out of food gets more from its Town Hall: walking there, or delivered to its backpack. */
     public enum Delivery
@@ -1027,6 +1050,10 @@ public final class AncientEmpiresConfig
         medicBindTicks = MEDIC_BIND_TICKS.get();
         medicCooldownTicks = MEDIC_COOLDOWN_TICKS.get();
         medicMeleeProficiency = MEDIC_MELEE.get();
+        priestReviveTicks = PRIEST_REVIVE_TICKS.get();
+        priestCostEnabled = PRIEST_COST_ENABLED.get();
+        priestCostItem = PRIEST_COST_ITEM.get();
+        priestCostCount = PRIEST_COST_COUNT.get();
         upkeepFallenRecords = UPKEEP_FALLEN_RECORDS.get();
         upkeepKeepOnDeath = UPKEEP_KEEP_ON_DEATH.get();
 

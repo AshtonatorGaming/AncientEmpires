@@ -219,6 +219,12 @@ its own unless noted). Before adding behavior, check what AW did first.
   backpack. Its cost: no shield, and `medic.meleeProficiency` (0.75). The role label reads
   the off hand. Players can bind their own wounds with one. Roster items take a count
   (`ancientempires:bandage*16`).
+- Priest (`NpcPriestGoal`, priority 4): a Worker-path NPC holding any book (the role label
+  says Priest). When its owner's Town Hall in reach has fallen recorded, it walks there,
+  prays `priest.reviveTicks` (swings, enchant particles), and the one fallen longest rises
+  beside the hall (`NpcSpawnEggItem.spawnFrom`, the scroll's data and kept gear, owner
+  re-claimed), paying `costCount` of `costItem` (2 gold) from the hall's store when
+  `costEnabled`.
 - Reactions: `NpcBurningGoal` (`upkeep.burningPanic`): burning and not fighting (or any
   civilian) runs for water within 8 blocks. Poses are soft dependencies: with Not Enough
   Animations, eating raises the food to the mouth; with its EMF add-on, burning flails and

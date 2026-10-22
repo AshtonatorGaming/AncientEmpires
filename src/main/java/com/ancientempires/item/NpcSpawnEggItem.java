@@ -3,6 +3,7 @@ package com.ancientempires.item;
 import com.ancientempires.AncientEmpires;
 import com.ancientempires.entity.npc.NpcEntity;
 import com.ancientempires.entity.npc.NpcRoster;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockSource;
 import net.minecraft.core.Direction;
 import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
@@ -129,6 +130,45 @@ public class NpcSpawnEggItem extends ForgeSpawnEggItem
     /**
      * Faction rows never claim. Owned job rows claim the player who places them.
      */
+    /**
+     * Brings an NPC out of its scroll with no player placing it: a priest
+     * raising the fallen. The scroll's saved data (name, look, path, gear) is
+     * applied as when placed, and the owner given here claims it.
+     */
+    @Nullable
+    public static NpcEntity spawnFrom(ServerLevel level, ItemStack scroll, BlockPos pos, @Nullable UUID owner)
+    {
+        if (!(scroll.getItem() instanceof NpcSpawnEggItem egg))
+        {
+            return null;
+        }
+        if (egg.rosterId != null)
+        {
+            NpcEntity.beginSpawnRoster(egg.rosterId);
+        }
+        if (owner != null)
+        {
+            NpcEntity.beginSpawnClaim(owner);
+        }
+        try
+        {
+            if (egg.getType(scroll.getTag()).spawn(level, scroll, null, pos, MobSpawnType.MOB_SUMMONED, true, false) instanceof NpcEntity npc)
+            {
+                if (owner != null && npc.getOwner() == null && !npc.isFactionNpc())
+                {
+                    npc.setOwner(owner);
+                }
+                return npc;
+            }
+            return null;
+        }
+        finally
+        {
+            NpcEntity.endSpawnRoster();
+            NpcEntity.endSpawnClaim();
+        }
+    }
+
     private boolean claimsOwner()
     {
         if (this.rosterId == null)

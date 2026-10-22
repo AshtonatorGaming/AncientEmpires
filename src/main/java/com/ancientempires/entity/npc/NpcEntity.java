@@ -337,6 +337,7 @@ public class NpcEntity extends PathfinderMob
         this.goalSelector.addGoal(3, new NpcHoldPositionGoal(this, 0.9D));
         this.goalSelector.addGoal(3, new NpcUpkeepGoal(this));
         this.goalSelector.addGoal(4, new NpcFollowOwnerGoal(this, 1.0D, 3.0F));
+        this.goalSelector.addGoal(4, new NpcPriestGoal(this));
         this.goalSelector.addGoal(4, new NpcFarmerGoal(this));
         this.goalSelector.addGoal(4, new NpcWoodcutterGoal(this));
         this.goalSelector.addGoal(4, new NpcMinerGoal(this));

@@ -154,6 +154,53 @@ public final class TownHallBlockEntity extends WorksiteBlockEntity
         return List.copyOf(this.fallen);
     }
 
+    /** Removes and returns the longest-fallen record, for a priest to raise. */
+    @Nullable
+    public Fallen takeOldestFallen()
+    {
+        if (this.fallen.isEmpty())
+        {
+            return null;
+        }
+        Fallen first = this.fallen.remove(0);
+        this.setChanged();
+        return first;
+    }
+
+    /** Whether the store holds {@code count} of the item. */
+    public boolean has(net.minecraft.world.item.Item item, int count)
+    {
+        int found = 0;
+        SimpleContainer store = this.store();
+        for (int slot = 0; slot < store.getContainerSize() && found < count; slot++)
+        {
+            ItemStack stack = store.getItem(slot);
+            if (stack.is(item))
+            {
+                found += stack.getCount();
+            }
+        }
+        return found >= count;
+    }
+
+    /** Takes {@code count} of the item from the store; call {@link #has} first. */
+    public void take(net.minecraft.world.item.Item item, int count)
+    {
+        SimpleContainer store = this.store();
+        for (int slot = 0; slot < store.getContainerSize() && count > 0; slot++)
+        {
+            ItemStack stack = store.getItem(slot);
+            if (stack.is(item))
+            {
+                int used = Math.min(count, stack.getCount());
+                stack.shrink(used);
+                count -= used;
+                store.setItem(slot, stack);
+            }
+        }
+        this.setChanged();
+    }
+
     @Override
     protected void saveAdditional(CompoundTag tag)
     {
