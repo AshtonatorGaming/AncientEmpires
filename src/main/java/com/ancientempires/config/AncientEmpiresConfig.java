@@ -102,6 +102,9 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.DoubleValue CIVILIAN_FLEE_SPEED;
     private static final ForgeConfigSpec.IntValue CIVILIAN_STAY_AWAY;
     private static final ForgeConfigSpec.IntValue CIVILIAN_SOLDIER_CALM;
+    private static final ForgeConfigSpec.DoubleValue CIVILIAN_CORNER_RANGE;
+    private static final ForgeConfigSpec.IntValue CIVILIAN_CORNER_TICKS;
+    private static final ForgeConfigSpec.IntValue CIVILIAN_STAND_GROUND;
 
     private static final ForgeConfigSpec.BooleanValue OWNER_DEFENSE;
     private static final ForgeConfigSpec.DoubleValue OWNER_DEFENSE_RANGE;
@@ -355,7 +358,7 @@ public final class AncientEmpiresConfig
                 .comment("Civilians flee threats and never fight. Off: every NPC fights.")
                 .define("enabled", true);
         CIVILIAN_SUBTYPES = builder
-                .comment("Roster ranks that are civilians, as long as they hold no weapon. Arm one and it fights.")
+                .comment("Roster ranks that are civilians. They run even when armed and fight only when cornered.")
                 .defineListAllowEmpty("subtypes", List.of("civilian.male", "civilian.female", "worker", "farmer", "miner", "woodcutter",
                         "courier", "trader", "researcher", "craftsman", "engineer", "bard"), value -> value instanceof String);
         CIVILIAN_FLEE_RANGE = builder
@@ -376,6 +379,15 @@ public final class AncientEmpiresConfig
         CIVILIAN_SOLDIER_CALM = builder
                 .comment("Ticks taken off that for each allied soldier nearby, as Ancient Warfare's fear level did. Also the shortest stay.")
                 .defineInRange("soldierCalmTicks", 10, 0, 200);
+        CIVILIAN_CORNER_RANGE = builder
+                .comment("A threat this close, in blocks, with no way left to run, corners a civilian.")
+                .defineInRange("cornerRange", 2.5D, 0.5D, 8.0D);
+        CIVILIAN_CORNER_TICKS = builder
+                .comment("Ticks spent cornered before a civilian stands its ground and fights with whatever it holds.")
+                .defineInRange("cornerTicks", 20, 0, 200);
+        CIVILIAN_STAND_GROUND = builder
+                .comment("Ticks a cornered civilian fights before trying to run again.")
+                .defineInRange("standGroundTicks", 100, 1, 1200);
         builder.pop();
 
         builder.push("allies");
@@ -508,6 +520,9 @@ public final class AncientEmpiresConfig
     public static double civilianFleeSpeed = 1.2D;
     public static int civilianStayAwayTicks = 50;
     public static int civilianSoldierCalmTicks = 10;
+    public static double civilianCornerRange = 2.5D;
+    public static int civilianCornerTicks = 20;
+    public static int civilianStandGroundTicks = 100;
 
     public static boolean ownerDefense = true;
     public static double ownerDefenseRange = 32.0D;
@@ -627,6 +642,9 @@ public final class AncientEmpiresConfig
         civilianFleeSpeed = CIVILIAN_FLEE_SPEED.get();
         civilianStayAwayTicks = CIVILIAN_STAY_AWAY.get();
         civilianSoldierCalmTicks = CIVILIAN_SOLDIER_CALM.get();
+        civilianCornerRange = CIVILIAN_CORNER_RANGE.get();
+        civilianCornerTicks = CIVILIAN_CORNER_TICKS.get();
+        civilianStandGroundTicks = CIVILIAN_STAND_GROUND.get();
 
         ownerDefense = OWNER_DEFENSE.get();
         ownerDefenseRange = OWNER_DEFENSE_RANGE.get();

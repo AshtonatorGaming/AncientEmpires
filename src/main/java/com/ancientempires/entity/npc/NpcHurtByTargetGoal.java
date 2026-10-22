@@ -33,7 +33,7 @@ public final class NpcHurtByTargetGoal extends HurtByTargetGoal
             return false;
         }
         LivingEntity attacker = this.mob.getLastHurtByMob();
-        if (this.npc.isCivilian())
+        if (this.npc.avoidsFights())
         {
             // A civilian does not fight back, but its allies hear about it once per hit.
             int timestamp = this.mob.getLastHurtByMobTimestamp();

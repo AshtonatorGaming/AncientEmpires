@@ -14,7 +14,7 @@ import java.util.EnumSet;
 
 /**
  * Ancient Warfare's NpcAIFleeHostiles and NpcAIFactionPanic for civilians
- * ({@link NpcEntity#isCivilian()}). Every few ticks a civilian looks for a
+ * ({@link NpcEntity#avoidsFights()}). Every few ticks a civilian looks for a
  * visible threat within {@code civilians.fleeRange}: a hostile mob, an NPC that
  * would target it, or whatever it was about to fight (an attacker, an ally's
  * alert). It runs home if the danger is not at home, otherwise
@@ -31,6 +31,8 @@ public final class NpcFleeGoal extends Goal
     private LivingEntity threat;
     private int stayAway;
     private int repath;
+    /** Ticks spent cornered with nowhere to run. */
+    private int cornered;
 
     public NpcFleeGoal(NpcEntity npc)
     {
@@ -41,7 +43,7 @@ public final class NpcFleeGoal extends Goal
     @Override
     public boolean canUse()
     {
-        if (!this.npc.isCivilian())
+        if (!this.npc.avoidsFights())
         {
             this.npc.takeFearSource();
             return false;
@@ -64,7 +66,7 @@ public final class NpcFleeGoal extends Goal
     @Override
     public boolean canContinueToUse()
     {
-        return this.npc.isCivilian() && (this.stayAway > 0 || !this.npc.getNavigation().isDone());
+        return this.npc.avoidsFights() && (this.stayAway > 0 || !this.npc.getNavigation().isDone());
     }
 
     @Override
@@ -72,6 +74,7 @@ public final class NpcFleeGoal extends Goal
     {
         this.stayAway = this.calmTicks();
         this.repath = 0;
+        this.cornered = 0;
         this.runFrom(this.threat);
     }
 
@@ -89,6 +92,10 @@ public final class NpcFleeGoal extends Goal
         if (this.stayAway > 0)
         {
             this.stayAway--;
+        }
+        if (this.checkCornered())
+        {
+            return;
         }
         if (--this.repath > 0)
         {
@@ -122,11 +129,67 @@ public final class NpcFleeGoal extends Goal
             return;
         }
         int distance = Math.max(2, (int) AncientEmpiresConfig.civilianFleeDistance);
-        Vec3 away = DefaultRandomPos.getPosAway(this.npc, distance, 7, danger.position());
+        Vec3 away = this.spotAwayFrom(danger, distance);
         if (away != null)
         {
             this.npc.getNavigation().moveTo(away.x, away.y, away.z, speed);
         }
+    }
+
+    /**
+     * A spot about {@code distance} blocks away from the danger. Vanilla's helper
+     * keeps a mob with a home restriction inside its home area once it is near
+     * home, which leaves a civilian at home no spot to run to, so the
+     * restriction is lifted for this one search.
+     */
+    @Nullable
+    private Vec3 spotAwayFrom(LivingEntity danger, int distance)
+    {
+        if (!this.npc.hasRestriction())
+        {
+            return DefaultRandomPos.getPosAway(this.npc, distance, 7, danger.position());
+        }
+        BlockPos center = this.npc.getRestrictCenter();
+        int radius = (int) this.npc.getRestrictRadius();
+        this.npc.clearRestriction();
+        try
+        {
+            return DefaultRandomPos.getPosAway(this.npc, distance, 7, danger.position());
+        }
+        finally
+        {
+            this.npc.restrictTo(center, radius);
+        }
+    }
+
+    /**
+     * Cornered: the threat is on top of the civilian and it is not getting away
+     * (no path, or the path has run out). After {@code cornerTicks} of that it
+     * stands its ground and fights for a while.
+     */
+    private boolean checkCornered()
+    {
+        LivingEntity danger = this.threat;
+        double reach = AncientEmpiresConfig.civilianCornerRange;
+        if (danger == null || !danger.isAlive() || this.npc.distanceToSqr(danger) > reach * reach)
+        {
+            this.cornered = 0;
+            return false;
+        }
+        if (!this.npc.getNavigation().isDone())
+        {
+            this.cornered = Math.max(0, this.cornered - 1);
+            return false;
+        }
+        // tick() runs every other tick, so each step counts two.
+        this.cornered += 2;
+        if (this.cornered < AncientEmpiresConfig.civilianCornerTicks)
+        {
+            this.runFrom(danger);
+            return false;
+        }
+        this.npc.standGround(danger);
+        return true;
     }
 
     /** Home is a refuge unless the danger is already near it, or in another dimension. */

@@ -49,7 +49,7 @@ public final class NpcTargetGoal extends TargetGoal
     @Override
     public boolean canUse()
     {
-        if (this.npc.isCivilian())
+        if (this.npc.avoidsFights())
         {
             return false;
         }

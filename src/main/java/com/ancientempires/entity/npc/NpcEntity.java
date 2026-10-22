@@ -43,7 +43,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.CrossbowItem;
-import net.minecraft.world.item.DiggerItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -141,9 +140,8 @@ public class NpcEntity extends PathfinderMob
     /** Cached roster rank; null until first asked. */
     @Nullable
     private String rosterSubtype;
-    /** Hands version the civilian check last ran for. */
-    private int civilianHands = Integer.MIN_VALUE;
-    private boolean civilian;
+    /** Tick until which a cornered civilian fights instead of running. */
+    private int standGroundUntil;
     /** Server only: a would-be target a civilian flees instead. */
     @Nullable
     private LivingEntity fearSource;
@@ -655,53 +653,46 @@ public class NpcEntity extends PathfinderMob
     {
         this.skillTier = -1;
         this.rosterSubtype = null;
-        this.civilianHands = Integer.MIN_VALUE;
     }
 
     /**
      * Ancient Warfare's civilians, workers, and traders did not fight; they fled.
-     * Here that is data and equipment, not a class: a rank listed in
-     * {@code civilians.subtypes} with no weapon in hand. Arm one and it fights.
-     * Rechecked only when the hands change.
+     * Here that is data, not a class: a roster rank listed in
+     * {@code civilians.subtypes}. A weapon in hand does not change it: an armed
+     * farmer still runs, and only fights when cornered.
      */
     public boolean isCivilian()
     {
-        if (!AncientEmpiresConfig.civiliansFlee)
-        {
-            return false;
-        }
-        if (this.civilianHands != this.handsVersion)
-        {
-            this.civilianHands = this.handsVersion;
-            this.civilian = AncientEmpiresConfig.civilianSubtypes.contains(this.getRosterSubtype()) && !this.isArmed();
-        }
-        return this.civilian;
+        return AncientEmpiresConfig.civiliansFlee && AncientEmpiresConfig.civilianSubtypes.contains(this.getRosterSubtype());
     }
 
     /**
-     * A weapon, not a work tool: a worker's pickaxe, hoe, shovel, or felling axe
-     * has attack damage but does not make it a fighter, as in Ancient Warfare.
+     * A civilian that is not standing its ground: it holds no target and runs.
+     * Everything that would start a fight checks this.
      */
-    private boolean isArmed()
+    public boolean avoidsFights()
     {
-        ItemStack hand = this.getMainHandItem();
-        if (hand.getItem() instanceof DiggerItem)
-        {
-            return false;
-        }
-        return WeaponClassifier.kind(hand) == WeaponClassifier.Kind.BOW
-                || WeaponClassifier.kind(hand) == WeaponClassifier.Kind.OTHER_RANGED
-                || WeaponClassifier.meleeDamage(hand) > 0.0D;
+        return this.isCivilian() && this.tickCount >= this.standGroundUntil;
     }
 
     /**
-     * Civilians never hold a target: any goal or alert that would give them one
-     * marks it as something to flee instead.
+     * Cornered with nowhere to run: fight the threat for a while with whatever
+     * is in hand, then try running again.
+     */
+    void standGround(LivingEntity threat)
+    {
+        this.standGroundUntil = this.tickCount + AncientEmpiresConfig.civilianStandGroundTicks;
+        super.setTarget(threat);
+    }
+
+    /**
+     * A civilian avoiding fights never holds a target: any goal or alert that
+     * would give it one marks it as something to flee instead.
      */
     @Override
     public void setTarget(@Nullable LivingEntity target)
     {
-        if (target != null && !this.level().isClientSide && this.isCivilian())
+        if (target != null && !this.level().isClientSide && this.avoidsFights())
         {
             this.fearSource = target;
             target = null;
@@ -1540,6 +1531,11 @@ public class NpcEntity extends PathfinderMob
     protected void customServerAiStep()
     {
         super.customServerAiStep();
+        if (this.getTarget() != null && this.avoidsFights())
+        {
+            // A cornered civilian's stand is over; it runs again rather than keep fighting.
+            this.setTarget(null);
+        }
         this.sidearm.tick();
         this.ticksSinceSwing++;
         if (this.comboIndex != 0 && this.lastSwingCooldown > 0
