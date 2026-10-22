@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SAS",
+    " C "
+  ],
+  "key": {
+    "S": {"tag": "minecraft:saplings"},
+    "A": {"tag": "minecraft:axes"},
+    "C": {"tag": "forge:chests/wooden"}
+  },
+  "result": {"item": "ancientempires:tree_farm"}
+}

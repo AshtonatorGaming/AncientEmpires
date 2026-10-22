@@ -142,6 +142,11 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.IntValue FARM_SEED_RESERVE;
     private static final ForgeConfigSpec.IntValue FARM_SEARCH_RANGE;
     private static final ForgeConfigSpec.DoubleValue FARM_WALK_SPEED;
+    private static final ForgeConfigSpec.IntValue TREE_DEFAULT_RADIUS;
+    private static final ForgeConfigSpec.IntValue TREE_MAX_RADIUS;
+    private static final ForgeConfigSpec.IntValue TREE_SPACING;
+    private static final ForgeConfigSpec.IntValue TREE_REACH;
+    private static final ForgeConfigSpec.IntValue TREE_MAX_LOGS;
 
     private static final ForgeConfigSpec.BooleanValue TARGET_LEGACY_SCAN;
     private static final ForgeConfigSpec.IntValue TARGET_SCAN_INTERVAL;
@@ -547,6 +552,21 @@ public final class AncientEmpiresConfig
         FARM_WALK_SPEED = builder
                 .comment("Walking speed while working, as a multiple of the NPC's speed.")
                 .defineInRange("walkSpeed", 0.8D, 0.3D, 1.5D);
+        TREE_DEFAULT_RADIUS = builder
+                .comment("A new tree farm's area, in blocks from the block to its edge (6 is 13 by 13). Woodcutters hold an axe.")
+                .defineInRange("treeDefaultRadius", 6, 1, 16);
+        TREE_MAX_RADIUS = builder
+                .comment("Largest tree farm area, in blocks from the block.")
+                .defineInRange("treeMaxRadius", 10, 1, 16);
+        TREE_SPACING = builder
+                .comment("Saplings are planted on a grid this many blocks apart, so grown trees have room.")
+                .defineInRange("treeSpacing", 3, 1, 8);
+        TREE_REACH = builder
+                .comment("How far sideways from its base a tree's logs and branches can reach and still count as that tree.")
+                .defineInRange("treeReach", 4, 1, 12);
+        TREE_MAX_LOGS = builder
+                .comment("Most logs one tree can have; bigger structures are not felled past this.")
+                .defineInRange("treeMaxLogs", 128, 8, 1024);
         builder.pop();
 
         builder.push("targeting");
@@ -710,6 +730,11 @@ public final class AncientEmpiresConfig
     public static int farmSeedReserve = 16;
     public static int farmSearchRange = 32;
     public static double farmWalkSpeed = 0.8D;
+    public static int treeDefaultRadius = 6;
+    public static int treeMaxRadius = 10;
+    public static int treeSpacing = 3;
+    public static int treeReach = 4;
+    public static int treeMaxLogs = 128;
 
     public static boolean targetLegacyScan = false;
     public static int targetScanInterval = 10;
@@ -867,6 +892,11 @@ public final class AncientEmpiresConfig
         farmSeedReserve = FARM_SEED_RESERVE.get();
         farmSearchRange = FARM_SEARCH_RANGE.get();
         farmWalkSpeed = FARM_WALK_SPEED.get();
+        treeDefaultRadius = TREE_DEFAULT_RADIUS.get();
+        treeMaxRadius = TREE_MAX_RADIUS.get();
+        treeSpacing = TREE_SPACING.get();
+        treeReach = TREE_REACH.get();
+        treeMaxLogs = TREE_MAX_LOGS.get();
 
         targetLegacyScan = TARGET_LEGACY_SCAN.get();
         targetScanInterval = TARGET_SCAN_INTERVAL.get();

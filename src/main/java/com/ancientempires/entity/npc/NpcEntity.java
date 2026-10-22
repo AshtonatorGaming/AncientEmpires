@@ -173,6 +173,8 @@ public class NpcEntity extends PathfinderMob
     /** Saved as {@code AeWorksite}. */
     @Nullable
     private BlockPos worksite;
+    /** Saved as {@code AeHungry}. */
+    private boolean hungry;
 
     /** Server post for {@link #HOLDING_KEY}. The client only needs the boolean. */
     @Nullable
@@ -322,6 +324,7 @@ public class NpcEntity extends PathfinderMob
         this.goalSelector.addGoal(3, new NpcHoldPositionGoal(this, 0.9D));
         this.goalSelector.addGoal(4, new NpcFollowOwnerGoal(this, 1.0D, 3.0F));
         this.goalSelector.addGoal(4, new NpcFarmerGoal(this));
+        this.goalSelector.addGoal(4, new NpcWoodcutterGoal(this));
         this.goalSelector.addGoal(5, new NpcReturnHomeGoal(this, 0.9D));
         this.goalSelector.addGoal(6, new WaterAvoidingRandomStrollGoal(this, 0.8D));
         this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 8.0F));
@@ -661,6 +664,17 @@ public class NpcEntity extends PathfinderMob
     public void setWorksite(@Nullable BlockPos worksite)
     {
         this.worksite = worksite == null ? null : worksite.immutable();
+    }
+
+    /** Missed its last upkeep: a hungry worker does not work. Set by the Town Hall. */
+    public boolean isHungry()
+    {
+        return this.hungry;
+    }
+
+    public void setHungry(boolean hungry)
+    {
+        this.hungry = hungry;
     }
 
     public void assignHome(BlockPos home)

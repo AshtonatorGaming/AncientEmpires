@@ -90,6 +90,7 @@
   "item.ancientempires.food_bundle": "Food Bundle",
   "block.ancientempires.settlers_post": "Settlers' Post",
   "block.ancientempires.crop_farm": "Crop Farm",
+  "block.ancientempires.tree_farm": "Tree Farm",
   "message.ancientempires.farm.area": "Farm area: %s by %s",
   "message.ancientempires.farm.not_owner": "This farm belongs to someone else",
   "message.ancientempires.post.food_added": "Stored %s food bundles (%s in the post)",
