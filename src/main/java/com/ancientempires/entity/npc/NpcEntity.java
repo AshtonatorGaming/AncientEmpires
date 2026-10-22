@@ -29,6 +29,9 @@ import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.OpenDoorGoal;
+import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
@@ -174,6 +177,20 @@ public class NpcEntity extends PathfinderMob
         this.entityData.define(DATA_BODY_SCALE, 1.0F);
     }
 
+    /**
+     * Paths may run through doors a hand can open, and through open doors.
+     * Any door built on {@code DoorBlock} counts, modded ones included; iron
+     * doors stay closed. Read once when the NPC is created.
+     */
+    @Override
+    protected PathNavigation createNavigation(Level level)
+    {
+        GroundPathNavigation navigation = new GroundPathNavigation(this, level);
+        navigation.setCanOpenDoors(AncientEmpiresConfig.openDoors);
+        navigation.setCanPassDoors(true);
+        return navigation;
+    }
+
     public static AttributeSupplier.Builder createAttributes()
     {
         // Player-like attack damage and attack speed so held weapons apply their
@@ -192,6 +209,12 @@ public class NpcEntity extends PathfinderMob
     protected void registerGoals()
     {
         this.goalSelector.addGoal(0, new FloatGoal(this));
+        if (AncientEmpiresConfig.openDoors)
+        {
+            // Ancient Warfare's NpcAIDoor: open the doors on the path, close them once past.
+            // No flags, so it runs beside whatever goal is moving the NPC.
+            this.goalSelector.addGoal(0, new OpenDoorGoal(this, AncientEmpiresConfig.closeDoors));
+        }
         // A bow keeps this goal for the whole fight. Melee does not run while it does.
         this.goalSelector.addGoal(1, new NpcBowAttackGoal(this));
         this.goalSelector.addGoal(2, new NpcMeleeAttackGoal(this));
