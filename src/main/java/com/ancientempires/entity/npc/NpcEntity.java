@@ -1,6 +1,7 @@
 package com.ancientempires.entity.npc;
 
 import com.ancientempires.AncientEmpires;
+import com.ancientempires.block.NpcUpkeep;
 import com.ancientempires.combat.AttackSwing;
 import com.ancientempires.combat.NpcBowAttackGoal;
 import com.ancientempires.combat.NpcMeleeAttackGoal;
@@ -129,6 +130,7 @@ public class NpcEntity extends PathfinderMob
     private static final String LEVY_KEY = "AeLevy";
     private static final String REVENGE_KEY = "AeRevenge";
     private static final String WORKSITE_KEY = "AeWorksite";
+    private static final String HUNGRY_KEY = "AeHungry";
 
     private final NpcInventory inventory = new NpcInventory(this);
     private final NpcSidearm sidearm = new NpcSidearm(this);
@@ -2091,6 +2093,11 @@ public class NpcEntity extends PathfinderMob
         if (alive)
         {
             this.recordKill(source);
+            if (this.isOwnedNpc() && !this.isCreative() && this.level() instanceof ServerLevel level)
+            {
+                // After the death drops, so the record is the NPC without its gear, for a priest to raise.
+                NpcUpkeep.recordFallen(level, this, this.createPackedItem());
+            }
         }
     }
 
@@ -2118,6 +2125,10 @@ public class NpcEntity extends PathfinderMob
         if (this.worksite != null)
         {
             tag.putLong(WORKSITE_KEY, this.worksite.asLong());
+        }
+        if (this.hungry)
+        {
+            tag.putBoolean(HUNGRY_KEY, true);
         }
         if (!this.revenge.isEmpty())
         {
@@ -2180,6 +2191,7 @@ public class NpcEntity extends PathfinderMob
         this.sidearm.load(tag);
         this.mount.load(tag);
         this.worksite = tag.contains(WORKSITE_KEY) ? BlockPos.of(tag.getLong(WORKSITE_KEY)) : null;
+        this.hungry = tag.getBoolean(HUNGRY_KEY);
         this.revenge.clear();
         for (net.minecraft.nbt.Tag element : tag.getList(REVENGE_KEY, net.minecraft.nbt.Tag.TAG_COMPOUND))
         {

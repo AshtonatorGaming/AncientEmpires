@@ -26,6 +26,8 @@ public final class ModItems
             () -> new net.minecraft.world.item.BlockItem(ModBlocks.TREE_FARM.get(), new Item.Properties()));
     public static final RegistryObject<Item> QUARRY = ITEMS.register("quarry",
             () -> new net.minecraft.world.item.BlockItem(ModBlocks.QUARRY.get(), new Item.Properties()));
+    public static final RegistryObject<Item> TOWN_HALL = ITEMS.register("town_hall",
+            () -> new net.minecraft.world.item.BlockItem(ModBlocks.TOWN_HALL.get(), new Item.Properties()));
 
     public static final List<RegistryObject<Item>> OWNED_EGGS;
     public static final List<RegistryObject<Item>> ROSTER_EGGS;

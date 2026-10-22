@@ -92,6 +92,8 @@
   "block.ancientempires.crop_farm": "Crop Farm",
   "block.ancientempires.tree_farm": "Tree Farm",
   "block.ancientempires.quarry": "Quarry",
+  "block.ancientempires.town_hall": "Town Hall",
+  "message.ancientempires.hall.status": "Town Hall: %s of your NPCs in reach, %s hungry. Food for %s more rations. Fallen recorded: %s",
   "message.ancientempires.farm.locked": "The quarry has started digging; its size is fixed",
   "message.ancientempires.farm.area": "Farm area: %s by %s",
   "message.ancientempires.farm.not_owner": "This farm belongs to someone else",

@@ -4,6 +4,7 @@ import com.ancientempires.AncientEmpires;
 import com.ancientempires.block.CropFarmBlock;
 import com.ancientempires.block.QuarryBlock;
 import com.ancientempires.block.SettlersPostBlock;
+import com.ancientempires.block.TownHallBlock;
 import com.ancientempires.block.TreeFarmBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
@@ -41,6 +42,12 @@ public final class ModBlocks
                     .mapColor(MapColor.STONE)
                     .strength(3.0F)
                     .sound(SoundType.STONE)));
+
+    public static final RegistryObject<Block> TOWN_HALL = BLOCKS.register("town_hall",
+            () -> new TownHallBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOD)
+                    .strength(3.0F)
+                    .sound(SoundType.WOOD)));
 
     private ModBlocks()
     {

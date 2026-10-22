@@ -150,6 +150,12 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.IntValue QUARRY_DEFAULT_RADIUS;
     private static final ForgeConfigSpec.IntValue QUARRY_MAX_RADIUS;
     private static final ForgeConfigSpec.IntValue QUARRY_MAX_DEPTH;
+    private static final ForgeConfigSpec.BooleanValue UPKEEP_ENABLED;
+    private static final ForgeConfigSpec.DoubleValue UPKEEP_RANGE;
+    private static final ForgeConfigSpec.IntValue UPKEEP_RATION;
+    private static final ForgeConfigSpec.IntValue UPKEEP_BUNDLE_RATIONS;
+    private static final ForgeConfigSpec.BooleanValue UPKEEP_REQUIRE_HALL;
+    private static final ForgeConfigSpec.IntValue UPKEEP_FALLEN_RECORDS;
 
     private static final ForgeConfigSpec.BooleanValue TARGET_LEGACY_SCAN;
     private static final ForgeConfigSpec.IntValue TARGET_SCAN_INTERVAL;
@@ -581,6 +587,27 @@ public final class AncientEmpiresConfig
                 .defineInRange("quarryMaxDepth", 32, 1, 256);
         builder.pop();
 
+        builder.comment("Town Hall upkeep, as in Ancient Warfare. Checked once per in-game day, at the day change.").push("upkeep");
+        UPKEEP_ENABLED = builder
+                .comment("Whether town halls feed NPCs at all. Off: nobody goes hungry.")
+                .define("enabled", true);
+        UPKEEP_RANGE = builder
+                .comment("A hall feeds its owner's NPCs, and records their deaths, within this many blocks. Ancient Warfare used about 100.")
+                .defineInRange("range", 100.0D, 8.0D, 256.0D);
+        UPKEEP_RATION = builder
+                .comment("Nutrition one NPC eats a day. Food counts by its hunger value (bread is 5).")
+                .defineInRange("ration", 6, 1, 40);
+        UPKEEP_BUNDLE_RATIONS = builder
+                .comment("Daily rations in one food bundle.")
+                .defineInRange("bundleRations", 8, 1, 64);
+        UPKEEP_REQUIRE_HALL = builder
+                .comment("If on, owned NPCs no hall reaches go hungry too. Off: only NPCs near a hall depend on it.")
+                .define("requireHall", false);
+        UPKEEP_FALLEN_RECORDS = builder
+                .comment("Fallen NPCs a hall remembers for revival; the oldest go first.")
+                .defineInRange("fallenRecords", 16, 1, 128);
+        builder.pop();
+
         builder.push("targeting");
         TARGET_LEGACY_SCAN = builder
                 .comment("Use the two vanilla nearest-target goals instead of the shared scan. For comparison and as a fallback. Applies to NPCs loaded after the change.")
@@ -750,6 +777,12 @@ public final class AncientEmpiresConfig
     public static int quarryDefaultRadius = 3;
     public static int quarryMaxRadius = 6;
     public static int quarryMaxDepth = 32;
+    public static boolean upkeepEnabled = true;
+    public static double upkeepRange = 100.0D;
+    public static int upkeepRation = 6;
+    public static int upkeepBundleRations = 8;
+    public static boolean upkeepRequireHall = false;
+    public static int upkeepFallenRecords = 16;
 
     public static boolean targetLegacyScan = false;
     public static int targetScanInterval = 10;
@@ -915,6 +948,12 @@ public final class AncientEmpiresConfig
         quarryDefaultRadius = QUARRY_DEFAULT_RADIUS.get();
         quarryMaxRadius = QUARRY_MAX_RADIUS.get();
         quarryMaxDepth = QUARRY_MAX_DEPTH.get();
+        upkeepEnabled = UPKEEP_ENABLED.get();
+        upkeepRange = UPKEEP_RANGE.get();
+        upkeepRation = UPKEEP_RATION.get();
+        upkeepBundleRations = UPKEEP_BUNDLE_RATIONS.get();
+        upkeepRequireHall = UPKEEP_REQUIRE_HALL.get();
+        upkeepFallenRecords = UPKEEP_FALLEN_RECORDS.get();
 
         targetLegacyScan = TARGET_LEGACY_SCAN.get();
         targetScanInterval = TARGET_SCAN_INTERVAL.get();

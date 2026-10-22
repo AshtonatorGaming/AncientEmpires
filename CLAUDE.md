@@ -94,14 +94,14 @@ full-body attack animation (body channel, waist bend, stance kept under attacks)
 bc_particle trails on native swings; NPC-on-NPC hits under Better Mob Combat; repack into
 the NPC's own roster scroll; the Ancient Warfare baseline below (owner defense, ally
 alerts, admin escort, doors, day/night home, shields, bash, feints, skill tiers,
-civilians); target memory; cavalry; faction relations and player standing; the Settler recipe (2 gold, a food bundle, a bed; `data/ancientempires/recipes`) and AW's food bundle; Settlers' Post immigration; hands-on farmer, woodcutter, and miner (Crop Farm, Tree Farm, Quarry); paths, settlers, equipment roles, emergency levy, and proficiency.
+civilians); target memory; cavalry; faction relations and player standing; the Settler recipe (2 gold, a food bundle, a bed; `data/ancientempires/recipes`) and AW's food bundle; Settlers' Post immigration; hands-on farmer, woodcutter, and miner (Crop Farm, Tree Farm, Quarry); Town Hall upkeep and fallen records; paths, settlers, equipment roles, emergency levy, and proficiency.
 
 ## Not done yet
 
 1. Ancient Warfare baseline still missing: lance charges and other mounted tactics,
    sleeping in beds at night, vampire factions avoiding sunlight, and the
    behavior behind the roles (medic healing, priest, bard singing, trader, courier, worker
-   jobs beyond the farmer, woodcutter, and miner, commander, patrol, upkeep and food). Roles are labels from
+   jobs beyond the farmer, woodcutter, and miner, commander, patrol; priest revival from the Town Hall records). Roles are labels from
    equipment until that behavior exists.
 2. Threat scoring, cliff-safe retreat (`FleeNavigation`), skirmishers.
 3. Spawner block that stores a full NPC NBT snapshot.
@@ -197,6 +197,14 @@ its own unless noted). Before adding behavior, check what AW did first.
   beside the block), so miners walk down and climb back to unload. Left standing: blocks
   touching lava or water, block entities, unbreakable blocks, and blocks the pickaxe
   cannot harvest (`skip`). The size locks once digging starts (`canResize`).
+- Town Hall (`TownHallBlock`, `NpcUpkeep`, AW's upkeep and revival anchor): nothing ticks
+  per hall; once per in-game day per dimension each hall in a loaded chunk feeds its
+  owner's NPCs within `upkeep.range` (100) from its store, `ration` nutrition each (a
+  food bundle is `bundleRations` rations, other food its hunger value), tracked as a
+  running pantry. Unfed NPCs go hungry (`AeHungry`); hungry workers do not work. NPCs no
+  hall reaches are left alone unless `requireHall`. An owned NPC dying within range of
+  its owner's hall is recorded there as its packed scroll after its death drops (no
+  gear), up to `fallenRecords`, for priest revival later. Sneak-click shows status.
 - Getting settlers in survival: the Settler scroll recipe (2 gold, AW's food bundle, a bed),
   and the Settlers' Post (`block/SettlersPostBlock`, `NpcImmigration`), Dwarf Fortress
   style immigration kept apart from the future Town Hall (upkeep, priest revival within
@@ -238,7 +246,7 @@ its own unless noted). Before adding behavior, check what AW did first.
   or backpack, so sidearm swaps count) times 0.5, by a skirmisher times 0.75. Cached on
   hands, backpack, path, and levy changes.
 - NPC NBT keys: `AeRoster` (roster row), `AePath`, `AeLevy`, `AeSkill` (tier override),
-  `AeFeintChance`, `AeSidearmBowSlot`, `AeMountLost`, `AeRevenge`, `AeWorksite` (`AeMountUuid` is not packed). All carried through repack.
+  `AeFeintChance`, `AeSidearmBowSlot`, `AeMountLost`, `AeRevenge`, `AeWorksite`, `AeHungry` (`AeMountUuid` is not packed). All carried through repack.
 
 ## Performance rules and audit findings
 
