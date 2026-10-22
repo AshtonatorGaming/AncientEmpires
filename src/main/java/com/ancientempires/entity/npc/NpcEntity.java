@@ -43,6 +43,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.CrossbowItem;
+import net.minecraft.world.item.DiggerItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -137,6 +138,15 @@ public class NpcEntity extends PathfinderMob
     private int skillTier = -1;
     /** Saved per-NPC skill tier ({@code AeSkill}); below zero when unset. */
     private int skillOverride = -1;
+    /** Cached roster rank; null until first asked. */
+    @Nullable
+    private String rosterSubtype;
+    /** Hands version the civilian check last ran for. */
+    private int civilianHands = Integer.MIN_VALUE;
+    private boolean civilian;
+    /** Server only: a would-be target a civilian flees instead. */
+    @Nullable
+    private LivingEntity fearSource;
 
     /** Server post for {@link #HOLDING_KEY}. The client only needs the boolean. */
     @Nullable
@@ -240,6 +250,8 @@ public class NpcEntity extends PathfinderMob
         this.goalSelector.addGoal(1, new NpcBowAttackGoal(this));
         // No flags: blocks beside the melee goal, lowered while the NPC swings.
         this.goalSelector.addGoal(1, new NpcShieldGoal(this));
+        // Civilians run instead of fighting; it holds the move flag above the combat goals.
+        this.goalSelector.addGoal(1, new NpcFleeGoal(this));
         this.goalSelector.addGoal(2, new NpcMeleeAttackGoal(this));
         this.goalSelector.addGoal(3, new NpcHoldPositionGoal(this, 0.9D));
         this.goalSelector.addGoal(4, new NpcFollowOwnerGoal(this, 1.0D, 3.0F));
@@ -446,7 +458,7 @@ public class NpcEntity extends PathfinderMob
             {
                 entry.apply(npc);
                 npc.rosterId = entry.id();
-                npc.skillTier = -1;
+                npc.forgetRosterCaches();
                 if (entry.owned() && npc.getOwner() == null)
                 {
                     UUID pending = SPAWN_OWNER.get();
@@ -622,10 +634,88 @@ public class NpcEntity extends PathfinderMob
         }
         if (this.skillTier < 0)
         {
-            NpcRoster.Entry entry = this.rosterEntry();
-            this.skillTier = entry == null ? 0 : tierOf(entry.subtype());
+            this.skillTier = tierOf(this.getRosterSubtype());
         }
         return this.skillTier;
+    }
+
+    /** The roster rank, such as {@code soldier.elite} or {@code civilian.female}; empty when unknown. Cached. */
+    String getRosterSubtype()
+    {
+        if (this.rosterSubtype == null)
+        {
+            NpcRoster.Entry entry = this.rosterEntry();
+            this.rosterSubtype = entry == null ? "" : entry.subtype();
+        }
+        return this.rosterSubtype;
+    }
+
+    /** Spawn and load can change the roster row, so the values read from it are worked out again. */
+    private void forgetRosterCaches()
+    {
+        this.skillTier = -1;
+        this.rosterSubtype = null;
+        this.civilianHands = Integer.MIN_VALUE;
+    }
+
+    /**
+     * Ancient Warfare's civilians, workers, and traders did not fight; they fled.
+     * Here that is data and equipment, not a class: a rank listed in
+     * {@code civilians.subtypes} with no weapon in hand. Arm one and it fights.
+     * Rechecked only when the hands change.
+     */
+    public boolean isCivilian()
+    {
+        if (!AncientEmpiresConfig.civiliansFlee)
+        {
+            return false;
+        }
+        if (this.civilianHands != this.handsVersion)
+        {
+            this.civilianHands = this.handsVersion;
+            this.civilian = AncientEmpiresConfig.civilianSubtypes.contains(this.getRosterSubtype()) && !this.isArmed();
+        }
+        return this.civilian;
+    }
+
+    /**
+     * A weapon, not a work tool: a worker's pickaxe, hoe, shovel, or felling axe
+     * has attack damage but does not make it a fighter, as in Ancient Warfare.
+     */
+    private boolean isArmed()
+    {
+        ItemStack hand = this.getMainHandItem();
+        if (hand.getItem() instanceof DiggerItem)
+        {
+            return false;
+        }
+        return WeaponClassifier.kind(hand) == WeaponClassifier.Kind.BOW
+                || WeaponClassifier.kind(hand) == WeaponClassifier.Kind.OTHER_RANGED
+                || WeaponClassifier.meleeDamage(hand) > 0.0D;
+    }
+
+    /**
+     * Civilians never hold a target: any goal or alert that would give them one
+     * marks it as something to flee instead.
+     */
+    @Override
+    public void setTarget(@Nullable LivingEntity target)
+    {
+        if (target != null && !this.level().isClientSide && this.isCivilian())
+        {
+            this.fearSource = target;
+            target = null;
+        }
+        super.setTarget(target);
+    }
+
+    /** Something a civilian was about to fight, so it flees it instead. Read once. */
+    @Nullable
+    LivingEntity takeFearSource()
+    {
+        LivingEntity source = this.fearSource;
+        this.fearSource = null;
+        return source;
     }
 
     private static int tierOf(String subtype)
@@ -1614,7 +1704,7 @@ public class NpcEntity extends PathfinderMob
         {
             this.skillOverride = Mth.clamp(tag.getInt(SKILL_KEY), 0, 3);
         }
-        this.skillTier = -1;
+        this.forgetRosterCaches();
         if (tag.getBoolean(NO_OWNER_KEY))
         {
             this.setOwner(null);

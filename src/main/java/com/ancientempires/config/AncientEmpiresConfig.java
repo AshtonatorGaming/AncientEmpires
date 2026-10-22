@@ -8,6 +8,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Combat timing and reach. Every value the attack goal reads lives here so a pack
@@ -92,6 +93,15 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.IntValue SHIELD_BASH_RECOVERY;
     private static final ForgeConfigSpec.BooleanValue FEINTS;
     private static final ForgeConfigSpec.IntValue FEINT_RECOVERY;
+
+    private static final ForgeConfigSpec.BooleanValue CIVILIANS_FLEE;
+    private static final ForgeConfigSpec.ConfigValue<List<? extends String>> CIVILIAN_SUBTYPES;
+    private static final ForgeConfigSpec.DoubleValue CIVILIAN_FLEE_RANGE;
+    private static final ForgeConfigSpec.DoubleValue CIVILIAN_FLEE_HEIGHT;
+    private static final ForgeConfigSpec.DoubleValue CIVILIAN_FLEE_DISTANCE;
+    private static final ForgeConfigSpec.DoubleValue CIVILIAN_FLEE_SPEED;
+    private static final ForgeConfigSpec.IntValue CIVILIAN_STAY_AWAY;
+    private static final ForgeConfigSpec.IntValue CIVILIAN_SOLDIER_CALM;
 
     private static final ForgeConfigSpec.BooleanValue OWNER_DEFENSE;
     private static final ForgeConfigSpec.DoubleValue OWNER_DEFENSE_RANGE;
@@ -340,6 +350,34 @@ public final class AncientEmpiresConfig
                 .defineList("shieldReactionTicks", List.of(8, 6, 4, 2), value -> value instanceof Integer ticks && ticks >= 0 && ticks <= 40);
         builder.pop();
 
+        builder.comment("Ancient Warfare's civilians, workers, and traders fled instead of fighting.").push("civilians");
+        CIVILIANS_FLEE = builder
+                .comment("Civilians flee threats and never fight. Off: every NPC fights.")
+                .define("enabled", true);
+        CIVILIAN_SUBTYPES = builder
+                .comment("Roster ranks that are civilians, as long as they hold no weapon. Arm one and it fights.")
+                .defineListAllowEmpty("subtypes", List.of("civilian.male", "civilian.female", "worker", "farmer", "miner", "woodcutter",
+                        "courier", "trader", "researcher", "craftsman", "engineer", "bard"), value -> value instanceof String);
+        CIVILIAN_FLEE_RANGE = builder
+                .comment("A civilian notices a visible threat this many blocks away, and runs home only if the danger is farther than this from home.")
+                .defineInRange("fleeRange", 16.0D, 2.0D, 64.0D);
+        CIVILIAN_FLEE_HEIGHT = builder
+                .comment("Vertical reach of that look-around, in blocks.")
+                .defineInRange("fleeHeight", 3.0D, 1.0D, 16.0D);
+        CIVILIAN_FLEE_DISTANCE = builder
+                .comment("How far, in blocks, a civilian runs from a threat when home is no refuge.")
+                .defineInRange("fleeDistance", 16.0D, 2.0D, 64.0D);
+        CIVILIAN_FLEE_SPEED = builder
+                .comment("Speed multiplier while fleeing.")
+                .defineInRange("fleeSpeed", 1.2D, 0.5D, 3.0D);
+        CIVILIAN_STAY_AWAY = builder
+                .comment("Ticks a civilian keeps away after losing sight of the threat.")
+                .defineInRange("stayAwayTicks", 50, 0, 1200);
+        CIVILIAN_SOLDIER_CALM = builder
+                .comment("Ticks taken off that for each allied soldier nearby, as Ancient Warfare's fear level did. Also the shortest stay.")
+                .defineInRange("soldierCalmTicks", 10, 0, 200);
+        builder.pop();
+
         builder.push("allies");
         OWNER_DEFENSE = builder
                 .comment("Owned NPCs attack whoever hurts their owner, and whatever their owner attacks, as in Ancient Warfare.")
@@ -461,6 +499,16 @@ public final class AncientEmpiresConfig
     public static boolean feints = true;
     public static int feintRecoveryTicks = 6;
 
+    public static boolean civiliansFlee = true;
+    public static Set<String> civilianSubtypes = Set.of("civilian.male", "civilian.female", "worker", "farmer", "miner", "woodcutter",
+            "courier", "trader", "researcher", "craftsman", "engineer", "bard");
+    public static double civilianFleeRange = 16.0D;
+    public static double civilianFleeHeight = 3.0D;
+    public static double civilianFleeDistance = 16.0D;
+    public static double civilianFleeSpeed = 1.2D;
+    public static int civilianStayAwayTicks = 50;
+    public static int civilianSoldierCalmTicks = 10;
+
     public static boolean ownerDefense = true;
     public static double ownerDefenseRange = 32.0D;
     public static double allyAlertRange = 16.0D;
@@ -570,6 +618,15 @@ public final class AncientEmpiresConfig
         shieldBashRecoveryTicks = SHIELD_BASH_RECOVERY.get();
         feints = FEINTS.get();
         feintRecoveryTicks = FEINT_RECOVERY.get();
+
+        civiliansFlee = CIVILIANS_FLEE.get();
+        civilianSubtypes = Set.copyOf(CIVILIAN_SUBTYPES.get());
+        civilianFleeRange = CIVILIAN_FLEE_RANGE.get();
+        civilianFleeHeight = CIVILIAN_FLEE_HEIGHT.get();
+        civilianFleeDistance = CIVILIAN_FLEE_DISTANCE.get();
+        civilianFleeSpeed = CIVILIAN_FLEE_SPEED.get();
+        civilianStayAwayTicks = CIVILIAN_STAY_AWAY.get();
+        civilianSoldierCalmTicks = CIVILIAN_SOLDIER_CALM.get();
 
         ownerDefense = OWNER_DEFENSE.get();
         ownerDefenseRange = OWNER_DEFENSE_RANGE.get();

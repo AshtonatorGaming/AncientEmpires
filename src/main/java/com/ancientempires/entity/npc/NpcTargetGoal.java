@@ -49,6 +49,10 @@ public final class NpcTargetGoal extends TargetGoal
     @Override
     public boolean canUse()
     {
+        if (this.npc.isCivilian())
+        {
+            return false;
+        }
         if (this.keepsHandedTarget())
         {
             return false;

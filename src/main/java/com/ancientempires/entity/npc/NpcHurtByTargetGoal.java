@@ -15,6 +15,8 @@ import net.minecraft.world.phys.AABB;
 public final class NpcHurtByTargetGoal extends HurtByTargetGoal
 {
     private final NpcEntity npc;
+    /** Hurt timestamp a civilian last called for help on. */
+    private int calledForHelpAt;
 
     public NpcHurtByTargetGoal(NpcEntity npc)
     {
@@ -31,6 +33,17 @@ public final class NpcHurtByTargetGoal extends HurtByTargetGoal
             return false;
         }
         LivingEntity attacker = this.mob.getLastHurtByMob();
+        if (this.npc.isCivilian())
+        {
+            // A civilian does not fight back, but its allies hear about it once per hit.
+            int timestamp = this.mob.getLastHurtByMobTimestamp();
+            if (timestamp != this.calledForHelpAt)
+            {
+                this.calledForHelpAt = timestamp;
+                this.alertOthers();
+            }
+            return false;
+        }
         return attacker == null || this.mob.canAttack(attacker);
     }
 
