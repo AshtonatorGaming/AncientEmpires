@@ -1,5 +1,6 @@
 {
   "owned": [
+    {"id": "owned.commoner", "subtype": "commoner", "name": "Commoner", "skin": "worker", "item": "owned_commoner_spawn_egg"},
     {"id": "owned.worker", "subtype": "worker", "name": "Worker", "skin": "worker", "item": "owned_worker_spawn_egg"},
     {"id": "owned.combat", "subtype": "combat", "name": "Combat", "skin": "combat", "item": "owned_combat_spawn_egg", "mainhand": "minecraft:iron_sword", "offhand": "minecraft:shield"},
     {"id": "owned.woodcutter", "subtype": "woodcutter", "name": "Woodcutter", "skin": "worker.lumberjack", "item": "owned_woodcutter_spawn_egg", "mainhand": "minecraft:iron_axe"},

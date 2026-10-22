@@ -1213,10 +1213,8 @@ public class NpcEntity extends PathfinderMob
         {
             tag.putInt(SKILL_KEY, this.skillOverride);
         }
-        if (this.chosenRole != null)
-        {
-            tag.putString(ROLE_KEY, this.chosenRole.id());
-        }
+        // Always written: the scroll may be the generic one, whose row would imply another role.
+        tag.putString(ROLE_KEY, this.getRole().id());
         if (this.feintChance >= 0.0F)
         {
             tag.putFloat(FEINT_KEY, this.feintChance);
