@@ -199,6 +199,14 @@ public enum NpcPath
         {
             return "priest";
         }
+        if (stack.getItem() instanceof net.minecraft.world.item.ShearsItem)
+        {
+            return "rancher";
+        }
+        if (stack.getItem() instanceof net.minecraft.world.item.BowItem)
+        {
+            return "hunter";
+        }
         return null;
     }
 

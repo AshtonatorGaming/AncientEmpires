@@ -150,6 +150,9 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.IntValue QUARRY_DEFAULT_RADIUS;
     private static final ForgeConfigSpec.IntValue QUARRY_MAX_RADIUS;
     private static final ForgeConfigSpec.IntValue QUARRY_MAX_DEPTH;
+    private static final ForgeConfigSpec.IntValue RANCH_DEFAULT_RADIUS;
+    private static final ForgeConfigSpec.IntValue RANCH_MAX_RADIUS;
+    private static final ForgeConfigSpec.IntValue RANCH_HERD_SIZE;
     private static final ForgeConfigSpec.BooleanValue UPKEEP_ENABLED;
     private static final ForgeConfigSpec.DoubleValue UPKEEP_RANGE;
     private static final ForgeConfigSpec.IntValue UPKEEP_RATION;
@@ -602,6 +605,15 @@ public final class AncientEmpiresConfig
         QUARRY_MAX_DEPTH = builder
                 .comment("Layers a quarry digs below its block before it is done.")
                 .defineInRange("quarryMaxDepth", 32, 1, 256);
+        RANCH_DEFAULT_RADIUS = builder
+                .comment("A new animal pen's area, in blocks from the block (5 is 11 by 11). Ranchers hold shears.")
+                .defineInRange("ranchDefaultRadius", 5, 1, 16);
+        RANCH_MAX_RADIUS = builder
+                .comment("Largest animal pen area, in blocks from the block.")
+                .defineInRange("ranchMaxRadius", 10, 1, 16);
+        RANCH_HERD_SIZE = builder
+                .comment("Adults of each kind a pen keeps: ranchers breed up to it and cull past it.")
+                .defineInRange("ranchHerdSize", 8, 2, 64);
         builder.pop();
 
         builder.comment("Food and the Town Hall, as in Ancient Warfare. NPCs feed themselves; nothing here runs on a timer.").push("upkeep");
@@ -854,6 +866,9 @@ public final class AncientEmpiresConfig
     public static int quarryDefaultRadius = 3;
     public static int quarryMaxRadius = 6;
     public static int quarryMaxDepth = 32;
+    public static int ranchDefaultRadius = 5;
+    public static int ranchMaxRadius = 10;
+    public static int ranchHerdSize = 8;
     public static boolean upkeepEnabled = true;
     public static double upkeepRange = 100.0D;
     public static int upkeepRation = 6;
@@ -1054,6 +1069,9 @@ public final class AncientEmpiresConfig
         quarryDefaultRadius = QUARRY_DEFAULT_RADIUS.get();
         quarryMaxRadius = QUARRY_MAX_RADIUS.get();
         quarryMaxDepth = QUARRY_MAX_DEPTH.get();
+        ranchDefaultRadius = RANCH_DEFAULT_RADIUS.get();
+        ranchMaxRadius = RANCH_MAX_RADIUS.get();
+        ranchHerdSize = RANCH_HERD_SIZE.get();
         upkeepEnabled = UPKEEP_ENABLED.get();
         upkeepRange = UPKEEP_RANGE.get();
         upkeepRation = UPKEEP_RATION.get();

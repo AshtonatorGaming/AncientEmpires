@@ -62,6 +62,7 @@ public abstract class WorksiteBlockEntity extends BlockEntity
     private long scannedAt = Long.MIN_VALUE;
     /** Tile to the id of the worker on it, and the game time the claim lapses. */
     private final Map<BlockPos, long[]> claims = new HashMap<>();
+    private final Map<UUID, long[]> entityClaims = new HashMap<>();
 
     protected WorksiteBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -140,6 +141,7 @@ public abstract class WorksiteBlockEntity extends BlockEntity
         this.scannedAt = level.getGameTime();
         this.scan(level);
         this.claims.entrySet().removeIf(entry -> entry.getValue()[1] <= level.getGameTime());
+        this.entityClaims.entrySet().removeIf(entry -> entry.getValue()[1] <= level.getGameTime());
     }
 
     /** Forces the next request to rescan, after a change the lists would miss. */
@@ -181,6 +183,43 @@ public abstract class WorksiteBlockEntity extends BlockEntity
     {
         this.claims.remove(tile);
         this.forget(tile);
+    }
+
+    /**
+     * The nearest creature in the list no other worker is after, claimed for
+     * this worker, or null. Animals move, so creature jobs are claimed by the
+     * creature, not a tile.
+     */
+    @Nullable
+    protected final <E extends net.minecraft.world.entity.Entity> E claimNearestEntity(List<E> creatures, int workerId, BlockPos from)
+    {
+        long now = this.level == null ? 0L : this.level.getGameTime();
+        E best = null;
+        double bestDistance = Double.MAX_VALUE;
+        for (E creature : creatures)
+        {
+            long[] claim = this.entityClaims.get(creature.getUUID());
+            if (!creature.isAlive() || (claim != null && claim[0] != workerId && claim[1] > now))
+            {
+                continue;
+            }
+            double distance = creature.blockPosition().distSqr(from);
+            if (distance < bestDistance)
+            {
+                bestDistance = distance;
+                best = creature;
+            }
+        }
+        if (best != null)
+        {
+            this.entityClaims.put(best.getUUID(), new long[] {workerId, now + AncientEmpiresConfig.farmClaimTicks});
+        }
+        return best;
+    }
+
+    public void releaseEntity(UUID creature)
+    {
+        this.entityClaims.remove(creature);
     }
 
     @Override

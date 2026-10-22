@@ -34,7 +34,7 @@ instead of reflecting per call), Skirmisher thresholds (about 4.5 to 28 blocks).
 
 - `entity/npc/NpcEntity` - the NPC. Goals: 0 Float, `OpenDoorGoal`, `NpcNightDoorsGoal`;
   1 `NpcBowAttackGoal`, `NpcShieldGoal` (no flags), `NpcFleeGoal` (civilians only);
-  2 `NpcMeleeAttackGoal`; 3 hold position; 4 follow, `NpcFarmerGoal`, `NpcWoodcutterGoal`, `NpcMinerGoal`; 5 `NpcReturnHomeGoal`; 6+ idle.
+  2 `NpcMeleeAttackGoal`; 3 hold position; 4 follow, `NpcFarmerGoal`, `NpcWoodcutterGoal`, `NpcMinerGoal`, `NpcRancherGoal`, also sleep and priest; 5 `NpcReturnHomeGoal`; 6+ idle.
   Targets: 1 and 2 `NpcOwnerDefenseGoal` (DEFEND, ASSIST), 3 `NpcHurtByTargetGoal` (with
   ally alert), 4 `NpcTargetGoal`: one staggered scan over a shared per-cell candidate list
   (`NpcTargetCache`), faction filter first, sight checks nearest first.
@@ -212,6 +212,14 @@ its own unless noted). Before adding behavior, check what AW did first.
   `fallenRecords`, for priest revival later. `keepOnDeath` (AW Tweaked's option: NONE,
   EQUIPMENT, BACKPACK, ALL) keeps that gear in the record instead of dropping it.
   Sneak-click lists NPCs in reach, hungry ones, food in store, and the latest fallen.
+- Rancher: a Worker-path NPC with shears at its owner's Animal Pen (square, two below
+  to three above the block). It walks up to each animal and culls adults past
+  `work.ranchHerdSize` of a kind with one clean stroke (no beating them down), shears
+  (any `IForgeShearable`), feeds ready pairs to breed below the herd size from feed it
+  carries (`ancientempires:ranch_feed` tag, fetched from the pen's store), picks up eggs,
+  feathers, and wool, and carries it back. Named, leashed, and tamed animals are left
+  alone. `NpcWorkGoal` supports creature targets (`assignEntity`, claimed per creature by
+  `claimNearestEntity`) and `collectAt` for pickups.
 - Medic (`NpcMedicGoal`, priority 1): a soldier with bandages (`BandageItem`, 2 paper and
   string make 4) in its off hand. It goes to the most hurt ally in `medic.range` (same
   faction or owner, its owner, itself) under `healBelow`, even mid-fight, binds the wound

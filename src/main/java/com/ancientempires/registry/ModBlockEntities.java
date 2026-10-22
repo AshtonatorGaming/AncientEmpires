@@ -1,6 +1,7 @@
 package com.ancientempires.registry;
 
 import com.ancientempires.AncientEmpires;
+import com.ancientempires.block.AnimalPenBlockEntity;
 import com.ancientempires.block.CropFarmBlockEntity;
 import com.ancientempires.block.QuarryBlockEntity;
 import com.ancientempires.block.SettlersPostBlockEntity;
@@ -34,6 +35,10 @@ public final class ModBlockEntities
     @SuppressWarnings("DataFlowIssue")
     public static final RegistryObject<BlockEntityType<TownHallBlockEntity>> TOWN_HALL = BLOCK_ENTITIES.register("town_hall",
             () -> BlockEntityType.Builder.of(TownHallBlockEntity::new, ModBlocks.TOWN_HALL.get()).build(null));
+
+    @SuppressWarnings("DataFlowIssue")
+    public static final RegistryObject<BlockEntityType<AnimalPenBlockEntity>> ANIMAL_PEN = BLOCK_ENTITIES.register("animal_pen",
+            () -> BlockEntityType.Builder.of(AnimalPenBlockEntity::new, ModBlocks.ANIMAL_PEN.get()).build(null));
 
     private ModBlockEntities()
     {

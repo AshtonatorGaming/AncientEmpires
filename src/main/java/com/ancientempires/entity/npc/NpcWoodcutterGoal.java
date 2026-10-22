@@ -6,14 +6,12 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
-import net.minecraft.world.phys.AABB;
 
 import java.util.List;
 
@@ -118,7 +116,7 @@ public final class NpcWoodcutterGoal extends NpcWorkGoal<TreeFarmBlockEntity>
             case FELL -> this.chop(level, target);
             case COLLECT ->
             {
-                this.collect(level, target);
+                this.collectAt(level, target, PICKUP_RANGE);
                 yield false;
             }
             case PLANT ->
@@ -151,34 +149,6 @@ public final class NpcWoodcutterGoal extends NpcWorkGoal<TreeFarmBlockEntity>
             }
         }
         return !log.equals(base) && this.isTool(this.npc.getMainHandItem());
-    }
-
-    /** Picks up the goods lying at a spot, as far as the backpack holds them. */
-    private void collect(ServerLevel level, BlockPos spot)
-    {
-        AABB reach = new AABB(spot).inflate(PICKUP_RANGE);
-        for (ItemEntity item : level.getEntitiesOfClass(ItemEntity.class, reach, item -> item.isAlive() && !item.hasPickUpDelay()))
-        {
-            ItemStack stack = item.getItem();
-            if (!isGoods(stack))
-            {
-                continue;
-            }
-            int before = stack.getCount();
-            ItemStack rest = this.pocket(stack);
-            if (rest.getCount() < before)
-            {
-                this.npc.take(item, before - rest.getCount());
-                if (rest.isEmpty())
-                {
-                    item.discard();
-                }
-                else
-                {
-                    item.setItem(rest);
-                }
-            }
-        }
     }
 
     /** Sets a carried sapling on a grid tile. */

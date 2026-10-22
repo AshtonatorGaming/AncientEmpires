@@ -8,6 +8,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -43,6 +44,9 @@ public abstract class NpcWorkGoal<T extends WorksiteBlockEntity> extends Goal
     private int kind;
     @Nullable
     private BlockPos target;
+    /** The creature a job is on, followed as it moves; null for block jobs. */
+    @Nullable
+    private Entity entityTarget;
     private int jobTicks;
     private int actionTicks;
     private int actionLength;
@@ -177,12 +181,31 @@ public abstract class NpcWorkGoal<T extends WorksiteBlockEntity> extends Goal
     @Override
     public void tick()
     {
+        Entity animal = this.entityTarget;
+        if (animal != null)
+        {
+            if (!animal.isAlive())
+            {
+                this.clearTarget();
+                this.next();
+                return;
+            }
+            // A moving target: follow where it is now.
+            this.target = animal.blockPosition();
+        }
         BlockPos at = this.target;
         if (at == null || this.site == null)
         {
             return;
         }
-        this.npc.getLookControl().setLookAt(at.getX() + 0.5D, at.getY() + 0.5D, at.getZ() + 0.5D);
+        if (animal != null)
+        {
+            this.npc.getLookControl().setLookAt(animal, 30.0F, 30.0F);
+        }
+        else
+        {
+            this.npc.getLookControl().setLookAt(at.getX() + 0.5D, at.getY() + 0.5D, at.getZ() + 0.5D);
+        }
         if (++this.jobTicks > GIVE_UP_TICKS)
         {
             // Cannot reach it. Leave the tile for the next scan and do something else.
@@ -190,14 +213,26 @@ public abstract class NpcWorkGoal<T extends WorksiteBlockEntity> extends Goal
             this.next();
             return;
         }
-        double reach = this.kind < 0 ? 2.4D * 2.4D : this.reachSqr(this.kind);
-        if (this.npc.distanceToSqr(at.getX() + 0.5D, at.getY() + 0.5D, at.getZ() + 0.5D) > reach)
+        if (!this.inReach(this.kind, at, animal))
         {
+            if (this.actionTicks > 0)
+            {
+                // Out of reach mid-action (the animal moved): start over when close again.
+                this.actionTicks = 0;
+                this.onActionCancelled(this.kind);
+            }
             if (--this.repath <= 0)
             {
-                this.repath = 20;
-                BlockPos walk = this.kind < 0 ? at : this.walkTarget(this.kind, at);
-                this.npc.getNavigation().moveTo(walk.getX() + 0.5D, walk.getY(), walk.getZ() + 0.5D, AncientEmpiresConfig.farmWalkSpeed);
+                this.repath = animal != null ? 10 : 20;
+                if (animal != null)
+                {
+                    this.npc.getNavigation().moveTo(animal, AncientEmpiresConfig.farmWalkSpeed);
+                }
+                else
+                {
+                    BlockPos walk = this.kind < 0 ? at : this.walkTarget(this.kind, at);
+                    this.npc.getNavigation().moveTo(walk.getX() + 0.5D, walk.getY(), walk.getZ() + 0.5D, AncientEmpiresConfig.farmWalkSpeed);
+                }
             }
             return;
         }
@@ -207,12 +242,16 @@ public abstract class NpcWorkGoal<T extends WorksiteBlockEntity> extends Goal
         {
             this.actionLength = this.kind < 0 ? AncientEmpiresConfig.farmActionTicks : Math.max(1, this.actionTicks(this.kind, at));
             this.crack = digging ? this.digPos(this.kind, at) : null;
+            if (this.kind >= 0)
+            {
+                this.onActionStart(this.kind);
+            }
         }
         if (this.crack != null)
         {
             this.npc.getLookControl().setLookAt(this.crack.getX() + 0.5D, this.crack.getY() + 0.5D, this.crack.getZ() + 0.5D);
         }
-        if (this.actionTicks % 8 == 0)
+        if (this.actionTicks % 8 == 0 && (this.kind < 0 || this.swings(this.kind)))
         {
             // Swing at the start, and again through a long dig, as a player would.
             this.npc.swing(InteractionHand.MAIN_HAND);
@@ -257,7 +296,83 @@ public abstract class NpcWorkGoal<T extends WorksiteBlockEntity> extends Goal
     {
         this.kind = kind;
         this.target = target;
+        this.entityTarget = null;
         return true;
+    }
+
+    /** A job on a moving creature: the worker follows it, and the action lands on it. */
+    protected final boolean assignEntity(int kind, Entity creature)
+    {
+        this.kind = kind;
+        this.target = creature.blockPosition();
+        this.entityTarget = creature;
+        return true;
+    }
+
+    /** The creature the current job is on, or null. */
+    @Nullable
+    protected final Entity entityTarget()
+    {
+        return this.entityTarget;
+    }
+
+    /** Whether the worker can act from where it stands. Distance by default; a hunter also needs a clear shot. */
+    protected boolean inReach(int kind, BlockPos target, @Nullable Entity creature)
+    {
+        if (kind < 0)
+        {
+            return this.npc.distanceToSqr(target.getX() + 0.5D, target.getY() + 0.5D, target.getZ() + 0.5D) <= 2.4D * 2.4D;
+        }
+        if (creature != null)
+        {
+            return this.npc.distanceToSqr(creature) <= this.reachSqr(kind);
+        }
+        return this.npc.distanceToSqr(target.getX() + 0.5D, target.getY() + 0.5D, target.getZ() + 0.5D) <= this.reachSqr(kind);
+    }
+
+    /** Whether the job swings the main hand; a bow is drawn instead. */
+    protected boolean swings(int kind)
+    {
+        return true;
+    }
+
+    /** The action begins (a hunter draws). */
+    protected void onActionStart(int kind)
+    {
+    }
+
+    /** The action was cut short or the job dropped (a hunter lowers the bow). */
+    protected void onActionCancelled(int kind)
+    {
+    }
+
+    /** Picks up the goods lying around a spot, as far as the backpack holds them, with the pickup animation. */
+    protected final void collectAt(ServerLevel level, BlockPos spot, double range)
+    {
+        net.minecraft.world.phys.AABB reach = new net.minecraft.world.phys.AABB(spot).inflate(range);
+        for (net.minecraft.world.entity.item.ItemEntity item : level.getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class, reach,
+                item -> item.isAlive() && !item.hasPickUpDelay()))
+        {
+            ItemStack stack = item.getItem();
+            if (!isGoods(stack))
+            {
+                continue;
+            }
+            int before = stack.getCount();
+            ItemStack rest = this.pocket(stack);
+            if (rest.getCount() < before)
+            {
+                this.npc.take(item, before - rest.getCount());
+                if (rest.isEmpty())
+                {
+                    item.discard();
+                }
+                else
+                {
+                    item.setItem(rest);
+                }
+            }
+        }
     }
 
     /** The trip back to the worksite to unload, when the backpack is full or there is nothing else to do. */
@@ -281,12 +396,24 @@ public abstract class NpcWorkGoal<T extends WorksiteBlockEntity> extends Goal
 
     private void clearTarget()
     {
-        if (this.target != null && this.site != null && this.kind >= 0)
+        if (this.site != null && this.kind >= 0)
         {
-            this.site.release(this.target);
+            if (this.entityTarget != null)
+            {
+                this.site.releaseEntity(this.entityTarget.getUUID());
+            }
+            else if (this.target != null)
+            {
+                this.site.release(this.target);
+            }
+        }
+        if (this.kind >= 0 && this.target != null)
+        {
+            this.onActionCancelled(this.kind);
         }
         this.clearCrack();
         this.target = null;
+        this.entityTarget = null;
     }
 
     private void clearCrack()

@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "FSF",
+    " C "
+  ],
+  "key": {
+    "F": {"tag": "minecraft:wooden_fences"},
+    "S": {"item": "minecraft:shears"},
+    "C": {"tag": "forge:chests/wooden"}
+  },
+  "result": {"item": "ancientempires:animal_pen"}
+}
