@@ -40,6 +40,7 @@ import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.living.MobSpawnEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -111,6 +112,8 @@ public class NpcEntity extends PathfinderMob
 
     private int comboIndex;
     private int ticksSinceSwing;
+    /** Bumped on any hand change. Not saved; a fresh load starts every cache cold. */
+    private int handsVersion;
     private int lastSwingCooldown;
 
     private boolean attackWindowOpen;
@@ -120,6 +123,11 @@ public class NpcEntity extends PathfinderMob
 
     /** Client render flag. The inventory preview sets this so the nametag is skipped for that draw. */
     private boolean nameplateSuppressed;
+
+    /** Cache for {@link #getSkinTexture()}. Cleared when {@link #DATA_SKIN} changes. */
+    @Nullable
+    private ResourceLocation skinTexture;
+    private boolean skinTextureResolved;
 
     public NpcEntity(EntityType<? extends NpcEntity> type, Level level)
     {
@@ -256,6 +264,25 @@ public class NpcEntity extends PathfinderMob
         {
             this.refreshDimensions();
         }
+        else if (DATA_SKIN.equals(key))
+        {
+            this.skinTextureResolved = false;
+        }
+    }
+
+    /**
+     * {@link #parseSkinId} for the current skin, resolved once per skin change.
+     * The renderer asks for this more than once per frame. Null means the default skin.
+     */
+    @Nullable
+    public ResourceLocation getSkinTexture()
+    {
+        if (!this.skinTextureResolved)
+        {
+            this.skinTexture = parseSkinId(this.getSkinId());
+            this.skinTextureResolved = true;
+        }
+        return this.skinTexture;
     }
 
     public float getBodyScale()
@@ -1053,11 +1080,37 @@ public class NpcEntity extends PathfinderMob
     public void onEquipItem(EquipmentSlot slot, ItemStack previous, ItemStack current)
     {
         super.onEquipItem(slot, previous, current);
+        if (slot.getType() == EquipmentSlot.Type.HAND)
+        {
+            this.handsVersion++;
+        }
         if (slot == EquipmentSlot.MAINHAND && !ItemStack.isSameItemSameTags(previous, current))
         {
             this.comboIndex = 0;
             this.ticksSinceSwing = 0;
         }
+    }
+
+    /**
+     * Server tick check for changes made in place, such as a weapon that broke
+     * or lost durability. {@link #onEquipItem} covers a slot that was replaced.
+     */
+    @SubscribeEvent
+    public static void onEquipmentChange(LivingEquipmentChangeEvent event)
+    {
+        if (event.getEntity() instanceof NpcEntity npc && event.getSlot().getType() == EquipmentSlot.Type.HAND)
+        {
+            npc.handsVersion++;
+        }
+    }
+
+    /**
+     * Changes whenever either hand changes. Goals compare it with the value
+     * they last saw instead of comparing stacks every tick.
+     */
+    public int getHandsVersion()
+    {
+        return this.handsVersion;
     }
 
     /**

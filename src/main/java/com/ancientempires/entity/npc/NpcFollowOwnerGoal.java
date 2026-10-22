@@ -4,6 +4,7 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.player.Player;
 
 import java.util.EnumSet;
+import java.util.UUID;
 
 /**
  * Walks toward the owner while follow is on. Stays active when already close
@@ -28,8 +29,14 @@ public class NpcFollowOwnerGoal extends Goal
     @Override
     public boolean canUse()
     {
+        // Synced flags first. Most NPCs are not following, so the player lookup is skipped.
+        if (!this.npc.isFollowing() || this.npc.isArcherHolding())
+        {
+            this.owner = null;
+            return false;
+        }
         this.owner = this.findOwner();
-        return this.npc.isFollowing() && !this.npc.isArcherHolding() && this.owner != null;
+        return this.owner != null;
     }
 
     @Override
@@ -73,11 +80,12 @@ public class NpcFollowOwnerGoal extends Goal
 
     private Player findOwner()
     {
-        if (this.npc.getOwner() == null)
+        UUID ownerId = this.npc.getOwner();
+        if (ownerId == null)
         {
             return null;
         }
-        Player player = this.npc.level().getPlayerByUUID(this.npc.getOwner());
+        Player player = this.npc.level().getPlayerByUUID(ownerId);
         if (player == null || player.isSpectator())
         {
             return null;

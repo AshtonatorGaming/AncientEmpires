@@ -11,7 +11,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -48,8 +47,7 @@ public class NpcMeleeAttackGoal extends Goal
 
     private AttackSwing preview;
     private int previewCombo = -1;
-    private ItemStack previewStack = ItemStack.EMPTY;
-    private ItemStack previewOffhand = ItemStack.EMPTY;
+    private int previewHands;
 
     public NpcMeleeAttackGoal(NpcEntity npc)
     {
@@ -92,7 +90,6 @@ public class NpcMeleeAttackGoal extends Goal
         this.fistClip = false;
         this.facedOnTick = -1;
         this.preview = null;
-        this.previewOffhand = ItemStack.EMPTY;
     }
 
     @Override
@@ -129,7 +126,6 @@ public class NpcMeleeAttackGoal extends Goal
         this.forcedSwing = false;
         this.fistClip = false;
         this.preview = null;
-        this.previewOffhand = ItemStack.EMPTY;
     }
 
     @Override
@@ -401,19 +397,18 @@ public class NpcMeleeAttackGoal extends Goal
         this.npc.doEnchantDamageEffects(this.npc, target);
     }
 
+    /**
+     * The next swing, resolved again only when the combo step or either hand
+     * changes. The hands are tracked by {@link NpcEntity#getHandsVersion()}.
+     */
     private AttackSwing preview()
     {
-        ItemStack hand = this.npc.getMainHandItem();
-        ItemStack offhand = this.npc.getOffhandItem();
         int combo = this.npc.getComboIndex();
-        if (this.preview == null
-                || combo != this.previewCombo
-                || !ItemStack.isSameItemSameTags(this.previewStack, hand)
-                || !ItemStack.isSameItemSameTags(this.previewOffhand, offhand))
+        int hands = this.npc.getHandsVersion();
+        if (this.preview == null || combo != this.previewCombo || hands != this.previewHands)
         {
             this.previewCombo = combo;
-            this.previewStack = hand.copy();
-            this.previewOffhand = offhand.copy();
+            this.previewHands = hands;
             this.preview = AttackProfiles.resolve(this.npc);
         }
         return this.preview;

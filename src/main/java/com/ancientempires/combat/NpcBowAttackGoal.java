@@ -17,8 +17,12 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.EnumSet;
+import java.util.Optional;
 
 /**
  * Archer role for a bow in the main hand. The goal stays up for the whole
@@ -38,6 +42,14 @@ public class NpcBowAttackGoal extends Goal
     private static final double ARROW_GRAVITY = 0.05D;
     private static final double APPROACH_SPEED = 1.0D;
     private static final double WANDER_SPEED = 0.6D;
+    private static final ClassValue<Optional<Field>> DRAW_TIME_FIELDS = new ClassValue<>()
+    {
+        @Override
+        protected Optional<Field> computeValue(Class<?> type)
+        {
+            return findDrawTime(type);
+        }
+    };
 
     private final NpcEntity npc;
 
@@ -388,31 +400,56 @@ public class NpcBowAttackGoal extends Goal
         return BowItem.MAX_DRAW_DURATION;
     }
 
+    @Nullable
     private static Float readDrawTime(Item item)
     {
-        Class<?> type = item.getClass();
+        Field field = DRAW_TIME_FIELDS.get(item.getClass()).orElse(null);
+        if (field == null)
+        {
+            return null;
+        }
+        try
+        {
+            return field.getFloat(item);
+        }
+        catch (IllegalAccessException exception)
+        {
+            return null;
+        }
+    }
+
+    /**
+     * The {@code drawTime} float on the item class or a parent, found once per
+     * class. A vanilla bow has none, so the uncached walk threw twice per shot.
+     */
+    private static Optional<Field> findDrawTime(Class<?> start)
+    {
+        Class<?> type = start;
         while (type != null && type != Item.class)
         {
-            try
+            for (Field field : type.getDeclaredFields())
             {
-                Field field = type.getDeclaredField("drawTime");
-                if (field.getType() != float.class)
+                if (!"drawTime".equals(field.getName()))
                 {
-                    return null;
+                    continue;
                 }
-                field.setAccessible(true);
-                return field.getFloat(item);
+                if (field.getType() != float.class || Modifier.isStatic(field.getModifiers()))
+                {
+                    return Optional.empty();
+                }
+                try
+                {
+                    field.setAccessible(true);
+                    return Optional.of(field);
+                }
+                catch (RuntimeException exception)
+                {
+                    return Optional.empty();
+                }
             }
-            catch (NoSuchFieldException exception)
-            {
-                type = type.getSuperclass();
-            }
-            catch (Exception exception)
-            {
-                return null;
-            }
+            type = type.getSuperclass();
         }
-        return null;
+        return Optional.empty();
     }
 
     /**
