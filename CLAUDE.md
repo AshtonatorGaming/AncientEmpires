@@ -155,7 +155,11 @@ its own unless noted). Before adding behavior, check what AW did first.
   source), flee home or away even when armed, stay away less per nearby soldier, alert
   allies when hurt, and fight only when cornered (`civilians.cornerRange`, `cornerTicks`,
   `standGroundTicks`). The flee spot search lifts the home restriction, which otherwise
-  leaves no spot near home.
+  leaves no spot near home. This covers settlers, workers, and faction townsfolk alike.
+  A stand (`isStandingGround`) fights only what cornered it: no target scans, no owner
+  defense, and it ends once the threat backs off past `standBreakRange`. Players are
+  never scanned for; a player who hits a civilian is ignored (no fleeing, fighting back,
+  or calls for help) until its health is under `playerThreatHealth` (`civilianFears`).
 - Levy (`AeLevy`): an owner can call a civilian up to fight until dismissed. Debuffs in the
   `proficiency` section: damage 0.7, slower wind-ups, no bash or feint, breaks below 30%
   health.

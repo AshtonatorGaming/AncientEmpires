@@ -20,7 +20,9 @@ import java.util.EnumSet;
  * alert). It runs home if the danger is not at home, otherwise
  * {@code fleeDistance} blocks away from the threat, then stays away for
  * {@code stayAwayTicks}, less {@code soldierCalmTicks} for each allied soldier
- * close by. A threat still in sight sends it running again.
+ * close by. A threat still in sight sends it running again. Players are never
+ * scanned for; one that hits a civilian counts only once it is really hurting
+ * it ({@link NpcEntity#civilianFears}).
  */
 public final class NpcFleeGoal extends Goal
 {
@@ -49,7 +51,7 @@ public final class NpcFleeGoal extends Goal
             return false;
         }
         LivingEntity fear = this.npc.takeFearSource();
-        if (fear != null && fear.isAlive() && this.npc.distanceToSqr(fear) <= this.rangeSqr())
+        if (fear != null && fear.isAlive() && this.npc.civilianFears(fear) && this.npc.distanceToSqr(fear) <= this.rangeSqr())
         {
             this.threat = fear;
             return true;
@@ -215,7 +217,7 @@ public final class NpcFleeGoal extends Goal
         LivingEntity nearest = null;
         double best = Double.MAX_VALUE;
         LivingEntity attacker = this.npc.getLastHurtByMob();
-        if (attacker != null && attacker.isAlive() && this.npc.distanceToSqr(attacker) <= range * range)
+        if (attacker != null && attacker.isAlive() && this.npc.civilianFears(attacker) && this.npc.distanceToSqr(attacker) <= range * range)
         {
             nearest = attacker;
             best = this.npc.distanceToSqr(attacker);

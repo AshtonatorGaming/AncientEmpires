@@ -876,6 +876,29 @@ public class NpcEntity extends PathfinderMob
     }
 
     /**
+     * A cornered civilian fighting its way out. It fights only what cornered it:
+     * no scanning for targets, no defending the owner, no chasing.
+     */
+    public boolean isStandingGround()
+    {
+        return this.isCivilian() && this.tickCount < this.standGroundUntil;
+    }
+
+    /**
+     * Whether a civilian treats this attacker as a threat. A player only counts
+     * once the civilian is really being hurt ({@code civilians.playerThreatHealth});
+     * a slap from a passing player does not start a panic or a fight.
+     */
+    public boolean civilianFears(LivingEntity other)
+    {
+        if (!(other instanceof Player))
+        {
+            return true;
+        }
+        return this.getHealth() < this.getMaxHealth() * AncientEmpiresConfig.civilianPlayerThreatHealth;
+    }
+
+    /**
      * A civilian avoiding fights never holds a target: any goal or alert that
      * would give it one marks it as something to flee instead.
      */
@@ -1745,9 +1768,17 @@ public class NpcEntity extends PathfinderMob
     protected void customServerAiStep()
     {
         super.customServerAiStep();
-        if (this.getTarget() != null && this.avoidsFights())
+        LivingEntity target = this.getTarget();
+        if (target != null && this.avoidsFights())
         {
             // A cornered civilian's stand is over; it runs again rather than keep fighting.
+            this.setTarget(null);
+        }
+        else if (target != null && this.isStandingGround() && !this.isLevied()
+                && this.distanceToSqr(target) > AncientEmpiresConfig.civilianStandBreakRange * AncientEmpiresConfig.civilianStandBreakRange)
+        {
+            // The threat backed off. A civilian does not give chase; it goes back to running.
+            this.standGroundUntil = 0;
             this.setTarget(null);
         }
         this.sidearm.tick();

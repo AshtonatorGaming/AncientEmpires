@@ -44,7 +44,8 @@ public final class NpcOwnerDefenseGoal extends TargetGoal
     @Override
     public boolean canUse()
     {
-        if (!AncientEmpiresConfig.ownerDefense || !this.npc.isOwnedNpc() || this.npc.avoidsFights())
+        if (!AncientEmpiresConfig.ownerDefense || !this.npc.isOwnedNpc() || this.npc.avoidsFights()
+                || (this.npc.isStandingGround() && !this.npc.isLevied()))
         {
             return false;
         }

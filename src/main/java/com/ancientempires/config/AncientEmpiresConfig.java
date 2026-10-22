@@ -103,6 +103,8 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.DoubleValue CIVILIAN_CORNER_RANGE;
     private static final ForgeConfigSpec.IntValue CIVILIAN_CORNER_TICKS;
     private static final ForgeConfigSpec.IntValue CIVILIAN_STAND_GROUND;
+    private static final ForgeConfigSpec.DoubleValue CIVILIAN_STAND_BREAK_RANGE;
+    private static final ForgeConfigSpec.DoubleValue CIVILIAN_PLAYER_THREAT_HEALTH;
 
     private static final ForgeConfigSpec.DoubleValue ARCHER_MELEE;
     private static final ForgeConfigSpec.DoubleValue SKIRMISHER_MELEE;
@@ -388,6 +390,12 @@ public final class AncientEmpiresConfig
         CIVILIAN_STAND_GROUND = builder
                 .comment("Ticks a cornered civilian fights before trying to run again.")
                 .defineInRange("standGroundTicks", 100, 1, 1200);
+        CIVILIAN_STAND_BREAK_RANGE = builder
+                .comment("A cornered civilian stops fighting once its threat backs off this far, in blocks. It never chases.")
+                .defineInRange("standBreakRange", 6.0D, 1.0D, 32.0D);
+        CIVILIAN_PLAYER_THREAT_HEALTH = builder
+                .comment("Civilians ignore a player who hits them (no running, no fighting back, no calling for help) until their health drops below this fraction.")
+                .defineInRange("playerThreatHealth", 0.5D, 0.0D, 1.0D);
         builder.pop();
 
         builder.comment("How well an NPC fights outside its trade, from the AncientTactics trial, and the emergency levy.").push("proficiency");
@@ -539,6 +547,8 @@ public final class AncientEmpiresConfig
     public static double civilianCornerRange = 2.5D;
     public static int civilianCornerTicks = 20;
     public static int civilianStandGroundTicks = 100;
+    public static double civilianStandBreakRange = 6.0D;
+    public static double civilianPlayerThreatHealth = 0.5D;
 
     public static double archerMeleeProficiency = 0.5D;
     public static double skirmisherMeleeProficiency = 0.75D;
@@ -666,6 +676,8 @@ public final class AncientEmpiresConfig
         civilianCornerRange = CIVILIAN_CORNER_RANGE.get();
         civilianCornerTicks = CIVILIAN_CORNER_TICKS.get();
         civilianStandGroundTicks = CIVILIAN_STAND_GROUND.get();
+        civilianStandBreakRange = CIVILIAN_STAND_BREAK_RANGE.get();
+        civilianPlayerThreatHealth = CIVILIAN_PLAYER_THREAT_HEALTH.get();
 
         archerMeleeProficiency = ARCHER_MELEE.get();
         skirmisherMeleeProficiency = SKIRMISHER_MELEE.get();

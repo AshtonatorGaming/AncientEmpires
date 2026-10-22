@@ -49,7 +49,7 @@ public final class NpcTargetGoal extends TargetGoal
     @Override
     public boolean canUse()
     {
-        if (this.npc.avoidsFights())
+        if (this.npc.avoidsFights() || (this.npc.isStandingGround() && !this.npc.isLevied()))
         {
             return false;
         }

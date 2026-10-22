@@ -33,6 +33,11 @@ public final class NpcHurtByTargetGoal extends HurtByTargetGoal
             return false;
         }
         LivingEntity attacker = this.mob.getLastHurtByMob();
+        if (this.npc.isCivilian() && !this.npc.isLevied() && attacker != null && !this.npc.civilianFears(attacker))
+        {
+            // A player who is not really hurting a civilian is not worth a fight or a cry for help.
+            return false;
+        }
         if (this.npc.avoidsFights())
         {
             // A civilian does not fight back, but its allies hear about it once per hit.
