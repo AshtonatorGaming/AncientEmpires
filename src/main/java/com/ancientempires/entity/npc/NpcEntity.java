@@ -85,8 +85,10 @@ public class NpcEntity extends PathfinderMob
     private static final EntityDataAccessor<String> DATA_SKIN = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.STRING);
     /** Empty for an owned or unclaimed NPC. A faction NPC stores an id such as {@code empire}. */
     private static final EntityDataAccessor<String> DATA_FACTION = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.STRING);
-    /** Resolved role id, for the inventory screen. */
-    private static final EntityDataAccessor<String> DATA_ROLE = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.STRING);
+    /** Calling id, for the client's civilian checks and the inventory screen. */
+    private static final EntityDataAccessor<String> DATA_CALLING = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.STRING);
+    /** The trade the roster rank names, a fallback for the role label. */
+    private static final EntityDataAccessor<String> DATA_TRADE = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<Boolean> DATA_LEVIED = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.BOOLEAN);
     /** Off-hand beat of an empty-hand fist combo. Cleared with the presentation, not the attack window. */
     private static final EntityDataAccessor<Boolean> DATA_ATTACK_OFFHAND = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.BOOLEAN);
@@ -116,7 +118,9 @@ public class NpcEntity extends PathfinderMob
     private static final String ROSTER_KEY = "AeRoster";
     private static final String FEINT_KEY = "AeFeintChance";
     private static final String SKILL_KEY = "AeSkill";
-    private static final String ROLE_KEY = "AeRole";
+    private static final String CALLING_KEY = "AeCalling";
+    /** What an earlier build saved the calling as. Read only. */
+    private static final String LEGACY_ROLE_KEY = "AeRole";
     private static final String LEVY_KEY = "AeLevy";
 
     private final NpcInventory inventory = new NpcInventory(this);
@@ -147,9 +151,9 @@ public class NpcEntity extends PathfinderMob
     private String rosterSubtype;
     /** Tick until which a cornered civilian fights instead of running. */
     private int standGroundUntil;
-    /** A role chosen for this NPC; null means the roster rank decides. */
+    /** The calling this NPC was given; null means the roster rank decides. */
     @Nullable
-    private NpcRole chosenRole;
+    private NpcCalling chosenCalling;
     private int proficiencyVersion = Integer.MIN_VALUE;
     private float meleeProficiency = 1.0F;
     /** Server only: a would-be target a civilian flees instead. */
@@ -211,7 +215,8 @@ public class NpcEntity extends PathfinderMob
         this.entityData.define(DATA_HOME_DIM, "");
         this.entityData.define(DATA_SKIN, "");
         this.entityData.define(DATA_FACTION, "");
-        this.entityData.define(DATA_ROLE, "");
+        this.entityData.define(DATA_CALLING, "");
+        this.entityData.define(DATA_TRADE, "");
         this.entityData.define(DATA_LEVIED, false);
         this.entityData.define(DATA_ATTACK_OFFHAND, false);
         this.entityData.define(DATA_BODY_SCALE, 1.0F);
@@ -673,77 +678,96 @@ public class NpcEntity extends PathfinderMob
     {
         this.skillTier = -1;
         this.rosterSubtype = null;
-        this.syncRole();
+        this.syncCalling();
     }
 
     /**
      * Ancient Warfare's civilians, workers, and traders did not fight; they fled.
-     * Here that is data, not a class: a roster rank listed in
-     * {@code civilians.subtypes}. A weapon in hand does not change it: an armed
-     * farmer still runs, and only fights when cornered.
+     * Here that is the calling: commoners and civilians run. A weapon in hand does
+     * not change it: an armed farmer still runs, and only fights when cornered.
      */
     public boolean isCivilian()
     {
-        return AncientEmpiresConfig.civiliansFlee && !this.getRole().combat();
+        return AncientEmpiresConfig.civiliansFlee && !this.getCalling().combat();
     }
 
     /**
-     * The NPC's role: its own ({@code AeRole}) if one was chosen, otherwise the
+     * The NPC's calling: the one it was given ({@code AeCalling}), otherwise the
      * one its roster rank implies. The client reads the synced copy.
      */
-    public NpcRole getRole()
+    public NpcCalling getCalling()
     {
         if (this.level().isClientSide)
         {
-            NpcRole synced = NpcRole.byId(this.entityData.get(DATA_ROLE));
-            return synced != null ? synced : NpcRole.SOLDIER;
+            NpcCalling synced = NpcCalling.byId(this.entityData.get(DATA_CALLING));
+            return synced != null ? synced : NpcCalling.SOLDIER;
         }
-        if (this.chosenRole != null)
+        if (this.chosenCalling != null)
         {
-            return this.chosenRole;
+            return this.chosenCalling;
         }
-        return NpcRole.fromRank(this.getRosterSubtype());
+        return NpcCalling.fromRank(this.getRosterSubtype());
     }
 
-    /** Gives the NPC its own role, kept through saves and repacking. */
-    public void setRole(NpcRole role)
+    /** The role label: what the main hand says, then the rank's trade, then the calling. */
+    public String getRoleId()
     {
-        this.chosenRole = role;
-        this.standGroundUntil = 0;
-        this.proficiencyVersion = Integer.MIN_VALUE;
-        this.handsVersion++;
-        this.syncRole();
+        return this.getCalling().roleId(this.getMainHandItem(), this.entityData.get(DATA_TRADE));
     }
 
     /**
-     * Who may change the role: the owner of an owned NPC, or a creative player
-     * for any NPC (faction NPCs are creative-editable). The screen uses this too.
+     * Gives the NPC a calling, kept through saves and repacking. Players reach
+     * this only through {@link #chooseCalling}; a new calling ends any levy.
      */
-    public boolean mayChangeRole(Player player)
+    public void setCalling(NpcCalling calling)
     {
-        return mayToggleCreative(player) || (this.isOwnedNpc() && player.getUUID().equals(this.getOwner()));
+        this.chosenCalling = calling;
+        this.standGroundUntil = 0;
+        this.entityData.set(DATA_LEVIED, false);
+        this.proficiencyVersion = Integer.MIN_VALUE;
+        this.handsVersion++;
+        this.syncCalling();
+        if (this.avoidsFights())
+        {
+            this.setTarget(null);
+        }
     }
 
-    /** Steps through {@link NpcRole#OWNED_CHOICES} from the current role. */
-    private void cycleRole(Player player, int step)
+    /**
+     * Who may pick a calling: an admin, for any NPC and any calling; or the
+     * owner of a commoner, once. Civilian and soldier are final for players.
+     * The screen asks this too.
+     */
+    public boolean mayChooseCalling(Player player)
     {
-        if (!this.mayChangeRole(player))
+        if (mayToggleCreative(player))
+        {
+            return true;
+        }
+        return this.isOwnedNpc() && player.getUUID().equals(this.getOwner()) && this.getCalling() == NpcCalling.COMMONER;
+    }
+
+    private void chooseCalling(Player player, NpcCalling calling)
+    {
+        if (!this.mayChooseCalling(player) || calling == this.getCalling())
         {
             return;
         }
-        java.util.List<NpcRole> choices = NpcRole.OWNED_CHOICES;
-        int index = choices.indexOf(this.getRole());
-        int next = index < 0 ? 0 : Math.floorMod(index + step, choices.size());
-        NpcRole role = choices.get(next);
-        this.setRole(role);
-        player.displayClientMessage(Component.translatable("message.ancientempires.npc.role", Component.translatable(role.translationKey())), true);
+        if (calling == NpcCalling.COMMONER && !mayToggleCreative(player))
+        {
+            return;
+        }
+        this.setCalling(calling);
+        player.displayClientMessage(Component.translatable("message.ancientempires.npc.calling",
+                Component.translatable(NpcCalling.translationKey(calling.id()))), true);
     }
 
-    private void syncRole()
+    private void syncCalling()
     {
         if (!this.level().isClientSide)
         {
-            this.entityData.set(DATA_ROLE, this.getRole().id());
+            this.entityData.set(DATA_CALLING, this.getCalling().id());
+            this.entityData.set(DATA_TRADE, NpcCalling.rankTrade(this.getRosterSubtype()));
         }
     }
 
@@ -784,7 +808,7 @@ public class NpcEntity extends PathfinderMob
 
     private void toggleLevy(Player player)
     {
-        if (!this.mayChangeRole(player) || !this.isCivilian())
+        if (!this.isCivilian())
         {
             return;
         }
@@ -1224,9 +1248,10 @@ public class NpcEntity extends PathfinderMob
             this.toggleLevy(player);
             return true;
         }
-        if (id == NpcMenu.BUTTON_ROLE_NEXT || id == NpcMenu.BUTTON_ROLE_PREV)
+        if (id == NpcMenu.BUTTON_CALLING_CIVILIAN || id == NpcMenu.BUTTON_CALLING_SOLDIER || id == NpcMenu.BUTTON_CALLING_COMMONER)
         {
-            this.cycleRole(player, id == NpcMenu.BUTTON_ROLE_NEXT ? 1 : -1);
+            this.chooseCalling(player, id == NpcMenu.BUTTON_CALLING_CIVILIAN ? NpcCalling.CIVILIAN
+                    : id == NpcMenu.BUTTON_CALLING_SOLDIER ? NpcCalling.SOLDIER : NpcCalling.COMMONER);
             return true;
         }
         if (id == NpcMenu.BUTTON_CREATIVE)
@@ -1357,8 +1382,8 @@ public class NpcEntity extends PathfinderMob
         {
             tag.putInt(SKILL_KEY, this.skillOverride);
         }
-        // Always written: the scroll may be the generic one, whose row would imply another role.
-        tag.putString(ROLE_KEY, this.getRole().id());
+        // Always written: the scroll may be the generic one, whose row would imply another calling.
+        tag.putString(CALLING_KEY, this.getCalling().id());
         tag.putBoolean(LEVY_KEY, this.isLevied());
         if (this.feintChance >= 0.0F)
         {
@@ -1845,9 +1870,9 @@ public class NpcEntity extends PathfinderMob
         {
             tag.putInt(SKILL_KEY, this.skillOverride);
         }
-        if (this.chosenRole != null)
+        if (this.chosenCalling != null)
         {
-            tag.putString(ROLE_KEY, this.chosenRole.id());
+            tag.putString(CALLING_KEY, this.chosenCalling.id());
         }
         if (this.isLevied())
         {
@@ -1899,9 +1924,13 @@ public class NpcEntity extends PathfinderMob
         {
             this.skillOverride = Mth.clamp(tag.getInt(SKILL_KEY), 0, 3);
         }
-        if (tag.contains(ROLE_KEY))
+        if (tag.contains(CALLING_KEY))
         {
-            this.chosenRole = NpcRole.byId(tag.getString(ROLE_KEY));
+            this.chosenCalling = NpcCalling.byId(tag.getString(CALLING_KEY));
+        }
+        else if (tag.contains(LEGACY_ROLE_KEY))
+        {
+            this.chosenCalling = NpcCalling.byId(tag.getString(LEGACY_ROLE_KEY));
         }
         this.entityData.set(DATA_LEVIED, tag.getBoolean(LEVY_KEY));
         this.forgetRosterCaches();

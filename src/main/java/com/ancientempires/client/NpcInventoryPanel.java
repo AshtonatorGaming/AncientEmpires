@@ -1,5 +1,6 @@
 package com.ancientempires.client;
 
+import brachy.modularui.api.IPanelHandler;
 import brachy.modularui.api.drawable.IDrawable;
 import brachy.modularui.drawable.GuiDraw;
 import brachy.modularui.drawable.GuiTextures;
@@ -16,6 +17,7 @@ import brachy.modularui.widget.Widget;
 import brachy.modularui.widgets.ButtonWidget;
 import brachy.modularui.widgets.TextWidget;
 import brachy.modularui.widgets.textfield.TextFieldWidget;
+import com.ancientempires.entity.npc.NpcCalling;
 import com.ancientempires.entity.npc.NpcEntity;
 import com.ancientempires.entity.npc.NpcInventory;
 import com.ancientempires.inventory.NpcLayout;
@@ -29,7 +31,9 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.function.BooleanSupplier;
+import java.util.function.IntSupplier;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 /**
  * Parchment panel for the NPC inventory. Frames are nine-slices and filled
@@ -170,11 +174,10 @@ public final class NpcInventoryPanel
         return npc != null && npc.isHoldingBow();
     }
 
-    /** Levy is for civilians, and for whoever may change the NPC's role. */
+    /** Levy is for civilians. Whoever has the screen open may command it. */
     private static boolean showLevy(NpcEntity npc)
     {
-        Player player = Minecraft.getInstance().player;
-        return npc != null && player != null && npc.isCivilian() && npc.mayChangeRole(player);
+        return npc != null && npc.isCivilian();
     }
 
     private static boolean showCreative()
@@ -268,52 +271,124 @@ public final class NpcInventoryPanel
     }
 
     /**
-     * The NPC's role, beside the skin button. Left click steps forward through
-     * the roles, right click back. Only the owner, or a creative player, sees it.
+     * The NPC's role name, beside the skin button: what its equipment makes it
+     * within its calling. It is read-only, except that a commoner's owner (or an
+     * admin, for any NPC) can click it to choose a calling. Gold text marks that.
      */
     private static ButtonWidget<?> roleButton(NpcMenu menu, NpcEntity npc)
     {
-        ButtonWidget<?> button = new ButtonWidget<>()
+        Player player = Minecraft.getInstance().player;
+        boolean choosable = player != null && npc.mayChooseCalling(player);
+        return new ButtonWidget<>()
                 .pos(2, PREVIEW_H - 14)
                 .size(PREVIEW_W - 18, 12)
                 .background(new Rectangle().color(BUTTON))
-                .hoverBackground(new Rectangle().color(BUTTON_HOVER))
-                .overlay(new RoleLabel(npc))
-                .onMousePressed((context, pressed) -> cycleRole(menu, pressed))
-                .addTooltipLine(Component.translatable("gui.ancientempires.npc.role").getString());
+                .hoverBackground(new Rectangle().color(choosable ? BUTTON_HOVER : BUTTON))
+                .overlay(new CenteredText(() -> Component.translatable(NpcCalling.translationKey(npc.getRoleId())),
+                        () -> mayChoose(npc) ? GOLD : NAME_INK))
+                .onMousePressed((context, pressed) -> openCallings(menu, npc, pressed))
+                .addTooltipLine(Component.translatable(choosable ? "gui.ancientempires.npc.calling" : "gui.ancientempires.npc.role").getString());
+    }
+
+    private static boolean mayChoose(NpcEntity npc)
+    {
         Player player = Minecraft.getInstance().player;
-        button.setEnabled(player != null && npc.mayChangeRole(player));
-        return button;
+        return player != null && npc.mayChooseCalling(player);
     }
 
-    private static boolean cycleRole(NpcMenu menu, int pressed)
+    /**
+     * The calling chooser. Civilian and soldier are final for players, so the
+     * panel says so before the click; admins also get commoner, to undo.
+     */
+    private static boolean openCallings(NpcMenu menu, NpcEntity npc, int pressed)
     {
-        if (pressed == 0)
+        Minecraft minecraft = Minecraft.getInstance();
+        if (pressed != 0 || !mayChoose(npc) || !(minecraft.screen instanceof NpcScreen npcScreen))
         {
-            return sendButton(menu, NpcMenu.BUTTON_ROLE_NEXT, 0);
+            return false;
         }
-        if (pressed == 1)
-        {
-            return sendButton(menu, NpcMenu.BUTTON_ROLE_PREV, 0);
-        }
-        return false;
+        ModularPanel<?> parent = npcScreen.screen().getMainPanel();
+        IPanelHandler.simple(parent, (ignored, player) -> callingPanel(menu, npc), true).openPanel();
+        return true;
     }
 
-    /** The role name, read from the synced role each frame, trimmed to the button. */
-    private static final class RoleLabel implements IDrawable
+    private static ModularPanel<?> callingPanel(NpcMenu menu, NpcEntity npc)
     {
-        private final NpcEntity npc;
-
-        private RoleLabel(NpcEntity npc)
+        Player player = Minecraft.getInstance().player;
+        boolean admin = player != null && NpcEntity.mayToggleCreative(player);
+        int width = 168;
+        int height = 84;
+        ModularPanel<?> panel = ModularPanel.defaultPanel("npc_calling", width, height)
+                .background(new SlotBevel(PARCHMENT, false, false))
+                .hoverBackground(new SlotBevel(PARCHMENT, false, false))
+                .disablePanelsBelow(true)
+                .closeOnOutOfBoundsClick(true);
+        panel.child(new TextWidget<>(Component.translatable("gui.ancientempires.calling.title"))
+                .pos(6, 5)
+                .size(width - 12, 10)
+                .color(NAME_INK)
+                .shadow(Boolean.TRUE)
+                .textAlign(Alignment.Center));
+        panel.child(new TextWidget<>(Component.translatable(admin ? "gui.ancientempires.calling.admin" : "gui.ancientempires.calling.final"))
+                .pos(6, 19)
+                .size(width - 12, 36)
+                .maxWidth(width - 12)
+                .color(NAME_INK)
+                .textAlign(Alignment.TopCenter));
+        java.util.List<NpcCalling> choices = admin
+                ? java.util.List.of(NpcCalling.COMMONER, NpcCalling.CIVILIAN, NpcCalling.SOLDIER)
+                : java.util.List.of(NpcCalling.CIVILIAN, NpcCalling.SOLDIER);
+        int gap = 4;
+        int buttonW = (width - 12 - gap * (choices.size() - 1)) / choices.size();
+        for (int index = 0; index < choices.size(); index++)
         {
-            this.npc = npc;
+            NpcCalling calling = choices.get(index);
+            panel.child(new ButtonWidget<>()
+                    .pos(6 + index * (buttonW + gap), height - 22)
+                    .size(buttonW, 16)
+                    .background(new Rectangle().color(BUTTON))
+                    .hoverBackground(new Rectangle().color(BUTTON_HOVER))
+                    .overlay(new CenteredText(() -> Component.translatable(NpcCalling.translationKey(calling.id())),
+                            () -> npc.getCalling() == calling ? GOLD : NAME_INK))
+                    .onMousePressed((context, pressed) -> pickCalling(panel, menu, calling, pressed)));
+        }
+        return panel;
+    }
+
+    private static boolean pickCalling(ModularPanel<?> panel, NpcMenu menu, NpcCalling calling, int pressed)
+    {
+        if (pressed != 0)
+        {
+            return false;
+        }
+        int buttonId = switch (calling)
+        {
+            case COMMONER -> NpcMenu.BUTTON_CALLING_COMMONER;
+            case CIVILIAN -> NpcMenu.BUTTON_CALLING_CIVILIAN;
+            case SOLDIER -> NpcMenu.BUTTON_CALLING_SOLDIER;
+        };
+        sendButton(menu, buttonId, 0);
+        panel.closeIfOpen();
+        return true;
+    }
+
+    /** One line of text centered in its widget, trimmed to fit, read each frame. */
+    private static final class CenteredText implements IDrawable
+    {
+        private final Supplier<Component> text;
+        private final IntSupplier color;
+
+        private CenteredText(Supplier<Component> text, IntSupplier color)
+        {
+            this.text = text;
+            this.color = color;
         }
 
         @Override
         public void draw(GuiContext context, int x, int y, int width, int height, WidgetTheme widgetTheme)
         {
             net.minecraft.client.gui.Font font = Minecraft.getInstance().font;
-            String line = Component.translatable(this.npc.getRole().translationKey()).getString();
+            String line = this.text.get().getString();
             int max = Math.max(1, width - 4);
             if (font.width(line) > max)
             {
@@ -321,7 +396,7 @@ public final class NpcInventoryPanel
             }
             int textX = x + (width - font.width(line)) / 2;
             int textY = y + (height - 8) / 2;
-            context.getGraphics().drawString(font, line, textX, textY, NAME_INK, false);
+            context.getGraphics().drawString(font, line, textX, textY, this.color.getAsInt(), false);
         }
     }
 

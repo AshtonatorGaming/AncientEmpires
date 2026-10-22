@@ -89,15 +89,15 @@ full-body attack animation (body channel, waist bend, stance kept under attacks)
 bc_particle trails on native swings; NPC-on-NPC hits under Better Mob Combat; repack into
 the NPC's own roster scroll; the Ancient Warfare baseline below (owner defense, ally
 alerts, admin escort, doors, day/night home, shields, bash, feints, skill tiers,
-civilians); roles, owned commoners, emergency levy, and proficiency.
+civilians); callings, owned commoners, equipment roles, emergency levy, and proficiency.
 
 ## Not done yet
 
 1. Ancient Warfare baseline still missing: riding horses (roster has cavalry and mounted
    archers), sleeping in beds at night, vampire factions avoiding sunlight, and the
    behavior behind the roles (medic healing, priest, bard singing, trader, courier, worker
-   jobs and worksites, commander, patrol, upkeep and food). Roles exist as data; worker
-   jobs are civilians with a name until worksites exist.
+   jobs and worksites, commander, patrol, upkeep and food). Roles are labels from
+   equipment until that behavior exists.
 2. Target memory (remember the last target a few seconds after line of sight breaks).
 3. Threat scoring, cliff-safe retreat (`FleeNavigation`), skirmishers.
 4. Spawner block that stores a full NPC NBT snapshot.
@@ -132,12 +132,21 @@ its own unless noted). Before adding behavior, check what AW did first.
   a row. Internal attack path only.
 - Skill tiers from roster rank (0 ordinary, 1 elite, 2 leader, 3 elite leader) pick bash
   chance, feint chance, and shield reaction from the `skill` lists.
-- Roles (`NpcRole`, saved as `AeRole`): what an NPC does, separate from its roster rank
-  (skins, skill tier). Derived from the rank unless chosen; owners pick one with the role
-  button in the inventory (left click next, right click back). Every non-combat role is a
-  civilian: commoner, the worker jobs, trader, priest, bard. Soldier, medic, engineer, and
-  siege engineer fight. `owned.commoner` is the player baseline and the generic scroll;
-  repack always writes the role.
+- Callings (`NpcCalling`, saved as `AeCalling`; old `AeRole` ids still load): the locked
+  path. COMMONER (flavor, undecided), CIVILIAN (workers, traders, priests, bards; runs),
+  SOLDIER (fights). Faction NPCs take theirs from the roster rank and never change it in
+  play. A player's NPC starts as a commoner (`owned.commoner`, also the generic scroll);
+  its owner may choose civilian or soldier once, from the role label in the inventory.
+  That is final for players; only admins (creative) can set any calling, commoner
+  included. Owned preset scrolls (archer, farmer, ...) are admin conveniences and come
+  with their calling, as AW's crafted NPCs did. Repack always writes the calling.
+  Later: retirement and conscription items between the two paths, recruiting faction NPCs.
+- Role (`getRoleId`, shown in the inventory, no behavior of its own): what the equipment
+  makes the NPC within its calling, as in Albion Online. Bow archer, crossbow crossbowman,
+  thrown weapon skirmisher; hoe farmer, pickaxe miner, axe woodcutter, rod fisher. Without
+  such an item, the trade the rank names (medic, trader, ...), then the calling.
+- Access: only admins can open a faction NPC's inventory or command it. Owned NPCs answer
+  to their owner and admins.
 - Civilians (`avoidsFights`): never hold a target (`setTarget` turns it into a fear
   source), flee home or away even when armed, stay away less per nearby soldier, alert
   allies when hurt, and fight only when cornered (`civilians.cornerRange`, `cornerTicks`,
@@ -148,8 +157,8 @@ its own unless noted). Before adding behavior, check what AW did first.
   health.
 - Proficiency (from the AncientTactics trial): melee by an archer (bow or crossbow in hand
   or backpack, so sidearm swaps count) times 0.5, by a skirmisher times 0.75. Cached on
-  hands, backpack, role, and levy changes.
-- NPC NBT keys: `AeRoster` (roster row), `AeRole`, `AeLevy`, `AeSkill` (tier override),
+  hands, backpack, calling, and levy changes.
+- NPC NBT keys: `AeRoster` (roster row), `AeCalling`, `AeLevy`, `AeSkill` (tier override),
   `AeFeintChance`, `AeSidearmBowSlot`. All carried through repack.
 
 ## Performance rules and audit findings
