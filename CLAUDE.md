@@ -34,7 +34,9 @@ instead of reflecting per call), Skirmisher thresholds (about 4.5 to 28 blocks).
 
 - `entity/npc/NpcEntity` - the NPC. Goal priorities: 0 Float, 1 `NpcBowAttackGoal`,
   2 `NpcMeleeAttackGoal`, 3 hold position, 4 follow owner, 5 return home, 6+ idle.
-  Targets: hurt-by, nearest `Monster`, nearest `NpcEntity` (filtered by `acceptsTarget`).
+  Targets: hurt-by (priority 1), then `NpcTargetGoal` (priority 2): one staggered scan over
+  a shared per-cell candidate list (`NpcTargetCache`), faction filter first, sight checks
+  nearest first. `targeting.legacyScan` restores the two vanilla goals.
 - Bow vs melee are two separate goals split by `isHoldingBow()`. The melee goal only runs
   when it is false. A bow in the main hand keeps the archer goal for the whole fight.
   Crossbows are not bows here.
@@ -61,10 +63,9 @@ section, `AeSidearmBowSlot` NBT marker undone on load and before repack).
 
 ## Not done yet
 
-1. Shared target scan (next; design proposed, not built). See the audit verdicts below.
-2. Target memory (remember the last target a few seconds after line of sight breaks).
-3. Spawner block that stores a full NPC NBT snapshot.
-4. Faction relations and revenge lists, upkeep, worker AI, worksites, town hall, orders,
+1. Target memory (remember the last target a few seconds after line of sight breaks).
+2. Spawner block that stores a full NPC NBT snapshot.
+3. Faction relations and revenge lists, upkeep, worker AI, worksites, town hall, orders,
    the structure template port, and Tier 2+ roles.
 
 ## Sidearm fallback plan
@@ -127,7 +128,8 @@ target-scan design.
 - Server 1, target scans: confirmed, but the cause is narrower. Vanilla
   `TargetingConditions.test` already runs the `acceptsTarget` selector before the raycast.
   The cost is that every candidate passing it gets a line-of-sight raycast, not only the
-  nearest, and the `Monster` goal has no selector at all. Not changed yet.
+  nearest, and the `Monster` goal has no selector at all. Replaced by `NpcTargetGoal`; set
+  `targeting.debugStats` to log scans, box queries, and sight checks per second.
 - Server 2, Better Combat lookups: confirmed. Per swing, not per tick. The fist preset walked
   the whole containers map every swing. Fixed: per-item cache stamped on BC's containers map.
 - Server 3, bow draw time: confirmed, about 5.5 us per shot (two exceptions). Fixed.

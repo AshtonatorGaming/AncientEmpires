@@ -57,6 +57,15 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.IntValue SIDEARM_RELEASE_TICKS;
     private static final ForgeConfigSpec.IntValue SIDEARM_SWAP_COOLDOWN;
 
+    private static final ForgeConfigSpec.BooleanValue TARGET_LEGACY_SCAN;
+    private static final ForgeConfigSpec.IntValue TARGET_SCAN_INTERVAL;
+    private static final ForgeConfigSpec.IntValue TARGET_RETARGET_INTERVAL;
+    private static final ForgeConfigSpec.DoubleValue TARGET_SWITCH_MARGIN;
+    private static final ForgeConfigSpec.DoubleValue TARGET_SCAN_RANGE;
+    private static final ForgeConfigSpec.IntValue TARGET_CACHE_TICKS;
+    private static final ForgeConfigSpec.IntValue TARGET_MAX_SIGHT_CHECKS;
+    private static final ForgeConfigSpec.BooleanValue TARGET_DEBUG_STATS;
+
     static
     {
         ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
@@ -188,6 +197,33 @@ public final class AncientEmpiresConfig
                 .defineInRange("swapCooldownTicks", 40, 0, 400);
         builder.pop();
 
+        builder.push("targeting");
+        TARGET_LEGACY_SCAN = builder
+                .comment("Use the two vanilla nearest-target goals instead of the shared scan. For comparison and as a fallback. Applies to NPCs loaded after the change.")
+                .define("legacyScan", false);
+        TARGET_SCAN_INTERVAL = builder
+                .comment("Ticks between target scans for an NPC with no target. Each NPC is offset by its entity id so scans spread across ticks.")
+                .defineInRange("scanInterval", 10, 1, 200);
+        TARGET_RETARGET_INTERVAL = builder
+                .comment("Ticks between rescans while an NPC already has a scanned target. 0 keeps the current target until it is lost.")
+                .defineInRange("retargetInterval", 40, 0, 400);
+        TARGET_SWITCH_MARGIN = builder
+                .comment("A rescan only switches when the new target is at least this many blocks closer than the current one.")
+                .defineInRange("switchMargin", 3.0D, 0.0D, 32.0D);
+        TARGET_SCAN_RANGE = builder
+                .comment("Search radius, in blocks. The NPC's follow range still caps it.")
+                .defineInRange("scanRange", 32.0D, 4.0D, 64.0D);
+        TARGET_CACHE_TICKS = builder
+                .comment("Ticks a shared candidate list stays valid for every NPC in the same 16x8x16 cell. 0 queries per NPC.")
+                .defineInRange("cacheTicks", 5, 0, 40);
+        TARGET_MAX_SIGHT_CHECKS = builder
+                .comment("Line-of-sight checks per scan, nearest candidate first. The scan stops at the first visible one.")
+                .defineInRange("maxSightChecks", 8, 1, 64);
+        TARGET_DEBUG_STATS = builder
+                .comment("Log target-scan counts per second to the server log every 10 seconds.")
+                .define("debugStats", false);
+        builder.pop();
+
         SPEC = builder.build();
     }
 
@@ -232,6 +268,15 @@ public final class AncientEmpiresConfig
     public static double sidearmReleaseRange = 6.0D;
     public static int sidearmReleaseTicks = 20;
     public static int sidearmSwapCooldown = 40;
+
+    public static boolean targetLegacyScan = false;
+    public static int targetScanInterval = 10;
+    public static int targetRetargetInterval = 40;
+    public static double targetSwitchMargin = 3.0D;
+    public static double targetScanRange = 32.0D;
+    public static int targetCacheTicks = 5;
+    public static int targetMaxSightChecks = 8;
+    public static boolean targetDebugStats = false;
 
     private AncientEmpiresConfig()
     {
@@ -290,5 +335,14 @@ public final class AncientEmpiresConfig
         sidearmReleaseRange = SIDEARM_RELEASE_RANGE.get();
         sidearmReleaseTicks = SIDEARM_RELEASE_TICKS.get();
         sidearmSwapCooldown = SIDEARM_SWAP_COOLDOWN.get();
+
+        targetLegacyScan = TARGET_LEGACY_SCAN.get();
+        targetScanInterval = TARGET_SCAN_INTERVAL.get();
+        targetRetargetInterval = TARGET_RETARGET_INTERVAL.get();
+        targetSwitchMargin = TARGET_SWITCH_MARGIN.get();
+        targetScanRange = TARGET_SCAN_RANGE.get();
+        targetCacheTicks = TARGET_CACHE_TICKS.get();
+        targetMaxSightChecks = TARGET_MAX_SIGHT_CHECKS.get();
+        targetDebugStats = TARGET_DEBUG_STATS.get();
     }
 }

@@ -193,8 +193,27 @@ public class NpcEntity extends PathfinderMob
         this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
 
         this.targetSelector.addGoal(1, new NpcHurtByTargetGoal(this));
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Monster.class, true));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, NpcEntity.class, 10, true, false, this::acceptsTarget));
+        if (AncientEmpiresConfig.targetLegacyScan)
+        {
+            // The selectors only count candidates for the debug stats; the filter is unchanged.
+            this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Monster.class, 10, true, false,
+                    living -> NpcTargetCache.countLegacyCandidate()));
+            this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, NpcEntity.class, 10, true, false,
+                    living -> this.acceptsTarget(living) && NpcTargetCache.countLegacyCandidate()));
+        }
+        else
+        {
+            this.targetSelector.addGoal(2, new NpcTargetGoal(this));
+        }
+    }
+
+    /**
+     * What the automatic scan may pick: any monster, or an NPC that
+     * {@link #acceptsTarget} allows. Vanilla's combat checks run after this.
+     */
+    boolean isScanTarget(LivingEntity living)
+    {
+        return living instanceof Monster || this.acceptsTarget(living);
     }
 
     /**
