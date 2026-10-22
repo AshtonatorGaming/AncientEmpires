@@ -128,6 +128,7 @@ public class NpcEntity extends PathfinderMob
     private static final String[] LEGACY_PATH_KEYS = {"AeCalling", "AeRole"};
     private static final String LEVY_KEY = "AeLevy";
     private static final String REVENGE_KEY = "AeRevenge";
+    private static final String WORKSITE_KEY = "AeWorksite";
 
     private final NpcInventory inventory = new NpcInventory(this);
     private final NpcSidearm sidearm = new NpcSidearm(this);
@@ -169,6 +170,9 @@ public class NpcEntity extends PathfinderMob
     private LivingEntity fearSource;
     /** Players this NPC holds a faction-mate's death against, with the game time it ends. Saved as {@code AeRevenge}. */
     private final java.util.Map<UUID, Long> revenge = new java.util.HashMap<>();
+    /** Saved as {@code AeWorksite}. */
+    @Nullable
+    private BlockPos worksite;
 
     /** Server post for {@link #HOLDING_KEY}. The client only needs the boolean. */
     @Nullable
@@ -317,6 +321,7 @@ public class NpcEntity extends PathfinderMob
         this.goalSelector.addGoal(2, new NpcMeleeAttackGoal(this));
         this.goalSelector.addGoal(3, new NpcHoldPositionGoal(this, 0.9D));
         this.goalSelector.addGoal(4, new NpcFollowOwnerGoal(this, 1.0D, 3.0F));
+        this.goalSelector.addGoal(4, new NpcFarmerGoal(this));
         this.goalSelector.addGoal(5, new NpcReturnHomeGoal(this, 0.9D));
         this.goalSelector.addGoal(6, new WaterAvoidingRandomStrollGoal(this, 0.8D));
         this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 8.0F));
@@ -646,6 +651,18 @@ public class NpcEntity extends PathfinderMob
      * Faction rows do not claim the placer. Owned rows read {@link #SPAWN_OWNER}.
      */
     /** Sets the NPC's home in its current dimension. Immigration uses this for newcomers. */
+    /** The worksite this NPC last worked at, such as its crop farm; checked again before each shift. */
+    @Nullable
+    public BlockPos getWorksite()
+    {
+        return this.worksite;
+    }
+
+    public void setWorksite(@Nullable BlockPos worksite)
+    {
+        this.worksite = worksite == null ? null : worksite.immutable();
+    }
+
     public void assignHome(BlockPos home)
     {
         this.entityData.set(DATA_HOME, Optional.of(home.immutable()));
@@ -2077,6 +2094,10 @@ public class NpcEntity extends PathfinderMob
         this.inventory.save(tag);
         this.sidearm.save(tag);
         this.mount.save(tag);
+        if (this.worksite != null)
+        {
+            tag.putLong(WORKSITE_KEY, this.worksite.asLong());
+        }
         if (!this.revenge.isEmpty())
         {
             net.minecraft.nbt.ListTag grudges = new net.minecraft.nbt.ListTag();
@@ -2137,6 +2158,7 @@ public class NpcEntity extends PathfinderMob
         // After the hands (super) and the backpack, so a saved swap can be undone.
         this.sidearm.load(tag);
         this.mount.load(tag);
+        this.worksite = tag.contains(WORKSITE_KEY) ? BlockPos.of(tag.getLong(WORKSITE_KEY)) : null;
         this.revenge.clear();
         for (net.minecraft.nbt.Tag element : tag.getList(REVENGE_KEY, net.minecraft.nbt.Tag.TAG_COMPOUND))
         {

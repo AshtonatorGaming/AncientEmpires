@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "WHW",
+    " C "
+  ],
+  "key": {
+    "W": {"item": "minecraft:wheat"},
+    "H": {"tag": "minecraft:hoes"},
+    "C": {"tag": "forge:chests/wooden"}
+  },
+  "result": {"item": "ancientempires:crop_farm"}
+}

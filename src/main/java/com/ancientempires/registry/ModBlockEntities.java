@@ -1,6 +1,7 @@
 package com.ancientempires.registry;
 
 import com.ancientempires.AncientEmpires;
+import com.ancientempires.block.CropFarmBlockEntity;
 import com.ancientempires.block.SettlersPostBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.registries.DeferredRegister;
@@ -14,6 +15,10 @@ public final class ModBlockEntities
     @SuppressWarnings("DataFlowIssue")
     public static final RegistryObject<BlockEntityType<SettlersPostBlockEntity>> SETTLERS_POST = BLOCK_ENTITIES.register("settlers_post",
             () -> BlockEntityType.Builder.of(SettlersPostBlockEntity::new, ModBlocks.SETTLERS_POST.get()).build(null));
+
+    @SuppressWarnings("DataFlowIssue")
+    public static final RegistryObject<BlockEntityType<CropFarmBlockEntity>> CROP_FARM = BLOCK_ENTITIES.register("crop_farm",
+            () -> BlockEntityType.Builder.of(CropFarmBlockEntity::new, ModBlocks.CROP_FARM.get()).build(null));
 
     private ModBlockEntities()
     {

@@ -34,7 +34,7 @@ instead of reflecting per call), Skirmisher thresholds (about 4.5 to 28 blocks).
 
 - `entity/npc/NpcEntity` - the NPC. Goals: 0 Float, `OpenDoorGoal`, `NpcNightDoorsGoal`;
   1 `NpcBowAttackGoal`, `NpcShieldGoal` (no flags), `NpcFleeGoal` (civilians only);
-  2 `NpcMeleeAttackGoal`; 3 hold position; 4 follow; 5 `NpcReturnHomeGoal`; 6+ idle.
+  2 `NpcMeleeAttackGoal`; 3 hold position; 4 follow, `NpcFarmerGoal`; 5 `NpcReturnHomeGoal`; 6+ idle.
   Targets: 1 and 2 `NpcOwnerDefenseGoal` (DEFEND, ASSIST), 3 `NpcHurtByTargetGoal` (with
   ally alert), 4 `NpcTargetGoal`: one staggered scan over a shared per-cell candidate list
   (`NpcTargetCache`), faction filter first, sight checks nearest first.
@@ -94,14 +94,14 @@ full-body attack animation (body channel, waist bend, stance kept under attacks)
 bc_particle trails on native swings; NPC-on-NPC hits under Better Mob Combat; repack into
 the NPC's own roster scroll; the Ancient Warfare baseline below (owner defense, ally
 alerts, admin escort, doors, day/night home, shields, bash, feints, skill tiers,
-civilians); target memory; cavalry; faction relations and player standing; the Settler recipe (2 gold, a food bundle, a bed; `data/ancientempires/recipes`) and AW's food bundle; Settlers' Post immigration; paths, settlers, equipment roles, emergency levy, and proficiency.
+civilians); target memory; cavalry; faction relations and player standing; the Settler recipe (2 gold, a food bundle, a bed; `data/ancientempires/recipes`) and AW's food bundle; Settlers' Post immigration; the hands-on farmer and Crop Farm; paths, settlers, equipment roles, emergency levy, and proficiency.
 
 ## Not done yet
 
 1. Ancient Warfare baseline still missing: lance charges and other mounted tactics,
    sleeping in beds at night, vampire factions avoiding sunlight, and the
    behavior behind the roles (medic healing, priest, bard singing, trader, courier, worker
-   jobs and worksites, commander, patrol, upkeep and food). Roles are labels from
+   jobs beyond the farmer: woodcutter and miner next, commander, patrol, upkeep and food). Roles are labels from
    equipment until that behavior exists.
 2. Threat scoring, cliff-safe retreat (`FleeNavigation`), skirmishers.
 3. Spawner block that stores a full NPC NBT snapshot.
@@ -166,6 +166,19 @@ its own unless noted). Before adding behavior, check what AW did first.
   defense, and it ends once the threat backs off past `standBreakRange`. Players are
   never scanned for; a player who hits a civilian is ignored (no fleeing, fighting back,
   or calls for help) until its health is under `playerThreatHealth` (`civilianFears`).
+- Workers by hand (beyond AW, whose worksites did the work while the NPC stood by; AW3's
+  NPCs work the same way). A Worker-path NPC holding a hoe farms its owner's nearest Crop
+  Farm (`CropFarmBlock`, within `work.searchRange` of its home, remembered as
+  `AeWorksite`) by day in dry weather: it walks to one tile at a time, swings, and after
+  `actionTicks` harvests a ripe crop (or pumpkin, melon) into its backpack, plants a seed
+  it carries, or tills grass and dirt. A full backpack, or no work while carrying a
+  harvest, means a walk back to the farm block to unload (keeping `seedReserve` seeds);
+  out of seeds, it fetches some there. Gear (damageable or unstackable items) is never
+  unloaded. The farm caches harvest, plant, and till lists rebuilt at most every
+  `scanTicks` and only while a farmer asks, and claims tiles so farmers do not collide.
+  Area: a square around the block (sneak-click empty-handed to resize, with an outline),
+  ground from two below to level with the block. Every later worker should follow this
+  carry-it-back pattern.
 - Getting settlers in survival: the Settler scroll recipe (2 gold, AW's food bundle, a bed),
   and the Settlers' Post (`block/SettlersPostBlock`, `NpcImmigration`), Dwarf Fortress
   style immigration kept apart from the future Town Hall (upkeep, priest revival within
@@ -207,7 +220,7 @@ its own unless noted). Before adding behavior, check what AW did first.
   or backpack, so sidearm swaps count) times 0.5, by a skirmisher times 0.75. Cached on
   hands, backpack, path, and levy changes.
 - NPC NBT keys: `AeRoster` (roster row), `AePath`, `AeLevy`, `AeSkill` (tier override),
-  `AeFeintChance`, `AeSidearmBowSlot`, `AeMountLost`, `AeRevenge` (`AeMountUuid` is not packed). All carried through repack.
+  `AeFeintChance`, `AeSidearmBowSlot`, `AeMountLost`, `AeRevenge`, `AeWorksite` (`AeMountUuid` is not packed). All carried through repack.
 
 ## Performance rules and audit findings
 

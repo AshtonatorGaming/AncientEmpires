@@ -1,6 +1,7 @@
 package com.ancientempires.registry;
 
 import com.ancientempires.AncientEmpires;
+import com.ancientempires.block.CropFarmBlock;
 import com.ancientempires.block.SettlersPostBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
@@ -20,6 +21,12 @@ public final class ModBlocks
                     .strength(2.0F)
                     .sound(SoundType.WOOD)
                     .noOcclusion()));
+
+    public static final RegistryObject<Block> CROP_FARM = BLOCKS.register("crop_farm",
+            () -> new CropFarmBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOD)
+                    .strength(2.5F)
+                    .sound(SoundType.WOOD)));
 
     private ModBlocks()
     {
