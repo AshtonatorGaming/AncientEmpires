@@ -62,6 +62,7 @@ final class NpcBetterCombatDriver
         Session session = session(npc);
         session.sync(npc);
         session.stack.tick();
+        session.tickTrail(npc);
     }
 
     static boolean apply(NpcEntity npc, PlayerModel<NpcEntity> model, float partialTick)
@@ -167,6 +168,10 @@ final class NpcBetterCombatDriver
         private int playedSerial = -1;
         private int misses;
         private int poseMisses;
+        /** Ticks until the current swing's hit frame, when its trail spawns. -1 when none is pending. */
+        private int trailDelay = -1;
+        private String trailId;
+        private boolean trailOffhand;
 
         private Session()
         {
@@ -197,6 +202,8 @@ final class NpcBetterCombatDriver
             String id = npc.getAttackPresentationId();
             if (!AncientEmpiresConfig.betterCombatEnabled || id.isEmpty())
             {
+                // A cancelled swing never reaches its hit frame, so it leaves no trail.
+                this.trailDelay = -1;
                 this.attack.base.replaceAnimationWithFade(AbstractFadeModifier.standardFadeIn(4, Ease.INOUTSINE), null);
                 this.playedSerial = serial;
                 this.misses = 0;
@@ -251,7 +258,26 @@ final class NpcBetterCombatDriver
             KeyframeAnimationPlayer player = new CustomAnimationPlayer(copy.build(), 0);
             int fadeTicks = Math.max(0, copy.beginTick);
             this.attack.base.replaceAnimationWithFade(AbstractFadeModifier.standardFadeIn(fadeTicks, Ease.INOUTSINE), player);
+            // The server lands the hit at the same fraction of the swing.
+            this.trailId = id;
+            this.trailOffhand = npc.isAttackOffhand();
+            this.trailDelay = Math.round(length * upswing * Mth.clamp(multiplier, 0.2F, 1.0F));
             return true;
+        }
+
+        private void tickTrail(NpcEntity npc)
+        {
+            if (this.trailDelay < 0)
+            {
+                return;
+            }
+            if (this.trailDelay > 0)
+            {
+                this.trailDelay--;
+                return;
+            }
+            this.trailDelay = -1;
+            NpcTrailParticles.spawn(npc, this.trailId, this.trailOffhand);
         }
 
         private void updatePose(NpcEntity npc)

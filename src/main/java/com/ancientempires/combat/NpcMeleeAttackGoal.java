@@ -13,6 +13,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -394,12 +395,17 @@ public class NpcMeleeAttackGoal extends Goal
 
     private void applyHit(LivingEntity target, AttackSwing swing, boolean scaleDamage)
     {
-        float damage = (float) this.npc.getAttributeValue(Attributes.ATTACK_DAMAGE);
+        // A dual-wield off-hand swing hits with the off-hand weapon's damage and enchantments.
+        boolean offHand = swing.offHandWeapon();
+        float damage = offHand
+                ? AttackProfiles.withOffHandModifiers(this.npc, () -> (float) this.npc.getAttributeValue(Attributes.ATTACK_DAMAGE))
+                : (float) this.npc.getAttributeValue(Attributes.ATTACK_DAMAGE);
         if (scaleDamage)
         {
             damage *= swing.damageMultiplier();
         }
-        damage += EnchantmentHelper.getDamageBonus(this.npc.getMainHandItem(), target.getMobType());
+        ItemStack weapon = offHand ? this.npc.getOffhandItem() : this.npc.getMainHandItem();
+        damage += EnchantmentHelper.getDamageBonus(weapon, target.getMobType());
         if (damage < 0.0F)
         {
             damage = 0.0F;
@@ -444,7 +450,7 @@ public class NpcMeleeAttackGoal extends Goal
     {
         if (!AncientEmpiresConfig.sweepEffects || swing.unarmed()
                 || swing.angleDegrees() <= AncientEmpiresConfig.forwardAngle
-                || !(this.npc.getMainHandItem().getItem() instanceof SwordItem)
+                || !((swing.offHandWeapon() ? this.npc.getOffhandItem() : this.npc.getMainHandItem()).getItem() instanceof SwordItem)
                 || !(this.npc.level() instanceof ServerLevel level))
         {
             return;

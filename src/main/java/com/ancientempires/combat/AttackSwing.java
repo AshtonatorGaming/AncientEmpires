@@ -73,4 +73,13 @@ public record AttackSwing(
     {
         return this.windupTicks + this.recoveryTicks;
     }
+
+    /**
+     * The off-hand swing of a dual-wield pair. An empty-hand off-hand punch is
+     * {@code offHand} too, but it has no weapon to read.
+     */
+    public boolean offHandWeapon()
+    {
+        return this.offHand && !this.unarmed;
+    }
 }

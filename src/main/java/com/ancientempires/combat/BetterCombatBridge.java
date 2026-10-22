@@ -57,6 +57,8 @@ public final class BetterCombatBridge
     @Nullable
     private static Method twoHanded;
     @Nullable
+    private static Method category;
+    @Nullable
     private static Method conditions;
     @Nullable
     private static Method hitbox;
@@ -275,6 +277,7 @@ public final class BetterCombatBridge
         animation = attackType.getMethod("animation");
         pose = findOptional(attributesType, "pose");
         twoHanded = findOptional(attributesType, "isTwoHanded");
+        category = findOptional(attributesType, "category");
         conditions = findOptional(attackType, "conditions");
         hitbox = findOptional(attackType, "hitbox");
         swingSound = findOptional(attackType, "swingSound");
@@ -412,7 +415,7 @@ public final class BetterCombatBridge
         {
             return Optional.empty();
         }
-        return Optional.of(new WeaponSnapshot(range, List.copyOf(parsed), readPose(attributes), readTwoHanded(attributes)));
+        return Optional.of(new WeaponSnapshot(range, List.copyOf(parsed), readPose(attributes), readTwoHanded(attributes), readCategory(attributes)));
     }
 
     @Nullable
@@ -428,6 +431,18 @@ public final class BetterCombatBridge
             return text;
         }
         return null;
+    }
+
+    /** Weapon category such as {@code fist} or {@code axe}. Dual-wield steps can require a matching pair. */
+    @Nullable
+    private static String readCategory(Object attributes) throws ReflectiveOperationException
+    {
+        if (category == null)
+        {
+            return null;
+        }
+        Object value = category.invoke(attributes);
+        return value instanceof String text && !text.isEmpty() ? text : null;
     }
 
     private static boolean readTwoHanded(Object attributes) throws ReflectiveOperationException
@@ -567,7 +582,7 @@ public final class BetterCombatBridge
         }
     }
 
-    public record WeaponSnapshot(double range, List<AttackSnapshot> attacks, @Nullable String pose, boolean twoHanded)
+    public record WeaponSnapshot(double range, List<AttackSnapshot> attacks, @Nullable String pose, boolean twoHanded, @Nullable String category)
     {
     }
 

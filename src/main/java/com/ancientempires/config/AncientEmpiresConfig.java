@@ -51,6 +51,7 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.BooleanValue BYPASS_HURT_COOLDOWN;
     private static final ForgeConfigSpec.DoubleValue COMBO_RESET_RATE;
     private static final ForgeConfigSpec.BooleanValue SWEEP_EFFECTS;
+    private static final ForgeConfigSpec.BooleanValue DUAL_WIELD;
 
     private static final ForgeConfigSpec.BooleanValue SIDEARM_ENABLED;
     private static final ForgeConfigSpec.DoubleValue SIDEARM_CORNERED_RANGE;
@@ -177,9 +178,12 @@ public final class AncientEmpiresConfig
         COMBO_RESET_RATE = builder
                 .comment("Combo step resets after this many weapon-cooldowns without a swing.")
                 .defineInRange("comboResetRate", 3.0D, 0.5D, 20.0D);
+        DUAL_WIELD = builder
+                .comment("Two one-handed Better Combat weapons alternate main-hand and off-hand swings, as Better Combat does for players. Off-hand swings use that weapon's damage, speed, reach, and attacks.")
+                .define("dualWield", true);
         SWEEP_EFFECTS = builder
-                .comment("A landed sword slash wider than forwardAngle plays the player sweep sound and crescent. Better Mob Combat swings use that mod's own effect instead.")
-                .define("sweepEffects", true);
+                .comment("A landed sword slash wider than forwardAngle plays the vanilla sweep sound and crescent. Off by default; Better Combat Particle trails cover NPC swings when that mod is installed.")
+                .define("sweepEffects", false);
 
         builder.pop();
 
@@ -266,7 +270,8 @@ public final class AncientEmpiresConfig
     public static boolean requireLineOfSight = true;
     public static boolean bypassHurtCooldown = true;
     public static double comboResetRate = 3.0D;
-    public static boolean sweepEffects = true;
+    public static boolean sweepEffects = false;
+    public static boolean dualWield = true;
 
     public static boolean sidearmEnabled = true;
     public static double sidearmCorneredRange = 3.0D;
@@ -335,6 +340,7 @@ public final class AncientEmpiresConfig
         bypassHurtCooldown = BYPASS_HURT_COOLDOWN.get();
         comboResetRate = COMBO_RESET_RATE.get();
         sweepEffects = SWEEP_EFFECTS.get();
+        dualWield = DUAL_WIELD.get();
 
         sidearmEnabled = SIDEARM_ENABLED.get();
         sidearmCorneredRange = SIDEARM_CORNERED_RANGE.get();

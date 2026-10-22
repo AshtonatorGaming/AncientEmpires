@@ -2,15 +2,21 @@ package com.ancientempires.combat;
 
 import com.ancientempires.config.AncientEmpiresConfig;
 import com.ancientempires.entity.npc.NpcEntity;
+import com.google.common.collect.Multimap;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.Nullable;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeMap;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShieldItem;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * Picks the swing the NPC is about to commit to.
@@ -47,7 +53,7 @@ public final class AttackProfiles
             var weapon = BetterCombatBridge.lookup(stack);
             if (weapon.isPresent())
             {
-                AttackSwing swing = fromBetterCombat(npc, weapon.get(), false);
+                AttackSwing swing = fromBetterCombat(npc, weapon.get(), dualWieldPartner(npc, weapon.get()), false);
                 if (swing != null)
                 {
                     return swing;
@@ -55,6 +61,51 @@ public final class AttackProfiles
             }
         }
         return vanilla(npc);
+    }
+
+    /**
+     * The off-hand weapon when the NPC dual-wields, the way Better Combat
+     * decides it for a player: both hands hold weapons with attributes and
+     * neither is two-handed. A shield is not a weapon here.
+     */
+    @Nullable
+    private static BetterCombatBridge.WeaponSnapshot dualWieldPartner(NpcEntity npc, BetterCombatBridge.WeaponSnapshot main)
+    {
+        ItemStack offhand = npc.getOffhandItem();
+        if (!AncientEmpiresConfig.dualWield || main.twoHanded() || offhand.isEmpty() || offhand.getItem() instanceof ShieldItem)
+        {
+            return null;
+        }
+        var off = BetterCombatBridge.lookup(offhand);
+        if (off.isEmpty() || off.get().twoHanded())
+        {
+            return null;
+        }
+        return off.get();
+    }
+
+    /**
+     * Runs {@code read} with the off-hand weapon's main-hand modifiers in place
+     * of the main hand's, then puts them back. Better Combat does the same for
+     * a player's off-hand swing, so damage and speed come from that weapon.
+     * Equipment modifiers are transient, so this never reaches a save.
+     */
+    public static <T> T withOffHandModifiers(LivingEntity npc, Supplier<T> read)
+    {
+        Multimap<Attribute, AttributeModifier> main = npc.getMainHandItem().getAttributeModifiers(EquipmentSlot.MAINHAND);
+        Multimap<Attribute, AttributeModifier> off = npc.getOffhandItem().getAttributeModifiers(EquipmentSlot.MAINHAND);
+        AttributeMap attributes = npc.getAttributes();
+        attributes.removeAttributeModifiers(main);
+        attributes.addTransientAttributeModifiers(off);
+        try
+        {
+            return read.get();
+        }
+        finally
+        {
+            attributes.removeAttributeModifiers(off);
+            attributes.addTransientAttributeModifiers(main);
+        }
     }
 
     /**
@@ -68,7 +119,7 @@ public final class AttackProfiles
             var fist = BetterCombatBridge.lookupFist();
             if (fist.isPresent())
             {
-                AttackSwing swing = fromBetterCombat(npc, fist.get(), true);
+                AttackSwing swing = fromBetterCombat(npc, fist.get(), null, true);
                 if (swing != null)
                 {
                     return swing;
@@ -122,13 +173,23 @@ public final class AttackProfiles
         );
     }
 
+    /**
+     * Empty hands and a dual-wield pair alternate hands: even combo steps are
+     * the main hand, odd steps the off hand, and each hand counts its own
+     * attack sequence. {@code offWeapon} is set only for a dual-wield pair.
+     */
     @Nullable
-    private static AttackSwing fromBetterCombat(NpcEntity npc, BetterCombatBridge.WeaponSnapshot weapon, boolean unarmed)
+    private static AttackSwing fromBetterCombat(NpcEntity npc, BetterCombatBridge.WeaponSnapshot mainWeapon, @Nullable BetterCombatBridge.WeaponSnapshot offWeapon, boolean unarmed)
     {
         int combo = npc.getComboIndex();
-        boolean offHand = unarmed && Math.floorMod(combo, 2) == 1;
-        int step = unarmed ? Math.floorDiv(combo, 2) : combo;
-        List<BetterCombatBridge.AttackSnapshot> usable = usableAttacks(npc, weapon, unarmed, offHand);
+        boolean dual = offWeapon != null;
+        boolean alternating = unarmed || dual;
+        boolean offHand = alternating && Math.floorMod(combo, 2) == 1;
+        int step = alternating ? Math.floorDiv(combo, 2) : combo;
+        BetterCombatBridge.WeaponSnapshot weapon = dual && offHand ? offWeapon : mainWeapon;
+        boolean sameItem = dual && npc.getMainHandItem().getItem() == npc.getOffhandItem().getItem();
+        boolean sameCategory = dual && mainWeapon.category() != null && mainWeapon.category().equals(offWeapon.category());
+        List<BetterCombatBridge.AttackSnapshot> usable = usableAttacks(npc, weapon, alternating, offHand, unarmed || sameItem, unarmed || sameItem || sameCategory);
         if (usable.isEmpty())
         {
             return null;
@@ -142,7 +203,19 @@ public final class AttackProfiles
         }
 
         int minimum = Math.max(1, BetterCombatBridge.attackIntervalCap(AncientEmpiresConfig.minAttackInterval));
-        float speed = unarmed ? ONE_HANDED_WEAPON_SPEED : attackSpeed(npc);
+        float speed;
+        if (unarmed)
+        {
+            speed = ONE_HANDED_WEAPON_SPEED;
+        }
+        else if (dual && offHand)
+        {
+            speed = withOffHandModifiers(npc, () -> attackSpeed(npc));
+        }
+        else
+        {
+            speed = attackSpeed(npc);
+        }
         int cooldown = cooldownTicks(speed, minimum);
         float upswingMultiplier = AncientEmpiresConfig.readUpswingFromMod
                 ? BetterCombatBridge.upswingMultiplier((float) AncientEmpiresConfig.upswingMultiplier)
@@ -170,11 +243,11 @@ public final class AttackProfiles
                 attack.swingPitchRandomness(),
                 unarmed,
                 offHand,
-                unarmed ? "bettercombat_fist" : "bettercombat"
+                unarmed ? "bettercombat_fist" : dual ? "bettercombat_dual" : "bettercombat"
         );
     }
 
-    private static List<BetterCombatBridge.AttackSnapshot> usableAttacks(NpcEntity npc, BetterCombatBridge.WeaponSnapshot weapon, boolean dualFist, boolean offHand)
+    private static List<BetterCombatBridge.AttackSnapshot> usableAttacks(NpcEntity npc, BetterCombatBridge.WeaponSnapshot weapon, boolean dual, boolean offHand, boolean sameItem, boolean sameCategory)
     {
         boolean mounted = npc.isPassenger();
         boolean shield = npc.getOffhandItem().getItem() instanceof ShieldItem;
@@ -182,7 +255,7 @@ public final class AttackProfiles
         List<BetterCombatBridge.AttackSnapshot> usable = new ArrayList<>();
         for (BetterCombatBridge.AttackSnapshot attack : weapon.attacks())
         {
-            if (accepts(attack.conditions(), mounted, shield, offhandEmpty, dualFist, offHand))
+            if (accepts(attack.conditions(), mounted, shield, offhandEmpty, dual, offHand, sameItem, sameCategory))
             {
                 usable.add(attack);
             }
@@ -191,38 +264,48 @@ public final class AttackProfiles
     }
 
     /**
-     * Weapon swings skip dual-wield and off-hand steps. Empty-hand fists are the
-     * exception: both hands carry the fist preset, so those conditions match and
-     * the combo alternates hands.
+     * Dual-wield and off-hand steps need both hands armed alike: a dual-wield
+     * pair, or empty hands, which both carry the fist preset. A single weapon
+     * skips them. Same-item and same-category steps also check the pair.
      */
-    private static boolean accepts(List<String> conditions, boolean mounted, boolean shield, boolean offhandEmpty, boolean dualFist, boolean offHand)
+    private static boolean accepts(List<String> conditions, boolean mounted, boolean shield, boolean offhandEmpty, boolean dual, boolean offHand, boolean sameItem, boolean sameCategory)
     {
         for (String condition : conditions)
         {
             switch (condition)
             {
                 case "OFF_HAND_ONLY":
-                    if (!dualFist || !offHand)
+                    if (!dual || !offHand)
                     {
                         return false;
                     }
                     break;
                 case "MAIN_HAND_ONLY":
-                    if (dualFist && offHand)
+                    if (dual && offHand)
                     {
                         return false;
                     }
                     break;
                 case "DUAL_WIELDING_ANY":
+                    if (!dual)
+                    {
+                        return false;
+                    }
+                    break;
                 case "DUAL_WIELDING_SAME":
+                    if (!dual || !sameItem)
+                    {
+                        return false;
+                    }
+                    break;
                 case "DUAL_WIELDING_SAME_CATEGORY":
-                    if (!dualFist)
+                    if (!dual || !sameCategory)
                     {
                         return false;
                     }
                     break;
                 case "NOT_DUAL_WIELDING":
-                    if (dualFist)
+                    if (dual)
                     {
                         return false;
                     }
@@ -246,7 +329,7 @@ public final class AttackProfiles
                     }
                     break;
                 case "NO_OFFHAND_ITEM":
-                    if (dualFist || !offhandEmpty)
+                    if (dual || !offhandEmpty)
                     {
                         return false;
                     }
