@@ -4,6 +4,7 @@ import com.ancientempires.AncientEmpires;
 import com.ancientempires.combat.AttackSwing;
 import com.ancientempires.combat.NpcBowAttackGoal;
 import com.ancientempires.combat.NpcMeleeAttackGoal;
+import com.ancientempires.combat.WeaponClassifier;
 import com.ancientempires.config.AncientEmpiresConfig;
 import com.ancientempires.inventory.NpcMenu;
 import com.ancientempires.registry.ModItems;
@@ -16,6 +17,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.SimpleMenuProvider;
@@ -117,6 +119,10 @@ public class NpcEntity extends PathfinderMob
     /** Creative player escorting a faction NPC in follow mode. Server only, not saved. */
     @Nullable
     private UUID followLeader;
+    /** Server tick until which an axe hit keeps the shield down. */
+    private int shieldDisabledUntil;
+    /** Set by the melee goal while it commits to a Better Mob Combat swing. */
+    private boolean swingCommitted;
 
     /** Server post for {@link #HOLDING_KEY}. The client only needs the boolean. */
     @Nullable
@@ -218,6 +224,8 @@ public class NpcEntity extends PathfinderMob
         }
         // A bow keeps this goal for the whole fight. Melee does not run while it does.
         this.goalSelector.addGoal(1, new NpcBowAttackGoal(this));
+        // No flags: blocks beside the melee goal, lowered while the NPC swings.
+        this.goalSelector.addGoal(1, new NpcShieldGoal(this));
         this.goalSelector.addGoal(2, new NpcMeleeAttackGoal(this));
         this.goalSelector.addGoal(3, new NpcHoldPositionGoal(this, 0.9D));
         this.goalSelector.addGoal(4, new NpcFollowOwnerGoal(this, 1.0D, 3.0F));
@@ -465,6 +473,91 @@ public class NpcEntity extends PathfinderMob
     public NpcSidearm getSidearm()
     {
         return this.sidearm;
+    }
+
+    public boolean hasShieldInOffhand()
+    {
+        return WeaponClassifier.isShield(this.getOffhandItem());
+    }
+
+    /** True while an axe hit keeps the shield down. */
+    public boolean isShieldDisabled()
+    {
+        return this.tickCount < this.shieldDisabledUntil;
+    }
+
+    public boolean isRaisingShield()
+    {
+        return this.isUsingItem() && this.getUsedItemHand() == InteractionHand.OFF_HAND && WeaponClassifier.isShield(this.getUseItem());
+    }
+
+    public void raiseShield()
+    {
+        if (!this.isUsingItem() && this.hasShieldInOffhand() && !this.isShieldDisabled())
+        {
+            this.startUsingItem(InteractionHand.OFF_HAND);
+        }
+    }
+
+    public void lowerShield()
+    {
+        if (this.isRaisingShield())
+        {
+            this.stopUsingItem();
+        }
+    }
+
+    /**
+     * The NPC is committed to its own swing, so the shield stays down, as a
+     * player cannot block and attack at once. The internal path uses the attack
+     * window; the Better Mob Combat path sets the flag.
+     */
+    public boolean isSwingCommitted()
+    {
+        return this.swingCommitted || this.attackWindowOpen;
+    }
+
+    public void setSwingCommitted(boolean committed)
+    {
+        this.swingCommitted = committed;
+    }
+
+    /**
+     * Vanilla calls this for every blocked melee hit. An axe disables the shield
+     * the way it does a player's.
+     */
+    @Override
+    protected void blockUsingShield(LivingEntity attacker)
+    {
+        super.blockUsingShield(attacker);
+        if (attacker.getMainHandItem().canDisableShield(this.getUseItem(), this, attacker))
+        {
+            this.shieldDisabledUntil = this.tickCount + AncientEmpiresConfig.shieldDisableTicks;
+            this.lowerShield();
+            this.playSound(SoundEvents.SHIELD_BREAK, 0.8F, 0.8F + this.level().random.nextFloat() * 0.4F);
+        }
+    }
+
+    /**
+     * A blocked hit wears the shield, as it does a player's: three damage or
+     * more costs one point plus the damage. Creative NPCs keep their gear.
+     */
+    @Override
+    protected void hurtCurrentlyUsedShield(float amount)
+    {
+        ItemStack shield = this.getUseItem();
+        if (this.isCreative() || amount < 3.0F || !WeaponClassifier.isShield(shield))
+        {
+            return;
+        }
+        InteractionHand hand = this.getUsedItemHand();
+        shield.hurtAndBreak(1 + Mth.floor(amount), this, npc -> npc.broadcastBreakEvent(hand));
+        if (shield.isEmpty())
+        {
+            this.setItemSlot(hand == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND, ItemStack.EMPTY);
+            this.stopUsingItem();
+            this.playSound(SoundEvents.SHIELD_BREAK, 0.8F, 0.8F + this.level().random.nextFloat() * 0.4F);
+        }
     }
 
     @Nullable

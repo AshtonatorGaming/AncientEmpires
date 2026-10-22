@@ -12,7 +12,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ShieldItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -110,7 +109,7 @@ public final class AttackProfiles
     private static BetterCombatBridge.WeaponSnapshot dualWieldPartner(NpcEntity npc, BetterCombatBridge.WeaponSnapshot main)
     {
         ItemStack offhand = npc.getOffhandItem();
-        if (!AncientEmpiresConfig.dualWield || main.twoHanded() || offhand.isEmpty() || offhand.getItem() instanceof ShieldItem)
+        if (!AncientEmpiresConfig.dualWield || main.twoHanded() || offhand.isEmpty() || WeaponClassifier.isShield(offhand))
         {
             return null;
         }
@@ -288,7 +287,7 @@ public final class AttackProfiles
     private static List<BetterCombatBridge.AttackSnapshot> usableAttacks(NpcEntity npc, BetterCombatBridge.WeaponSnapshot weapon, boolean dual, boolean offHand, boolean sameItem, boolean sameCategory)
     {
         boolean mounted = npc.isPassenger();
-        boolean shield = npc.getOffhandItem().getItem() instanceof ShieldItem;
+        boolean shield = WeaponClassifier.isShield(npc.getOffhandItem());
         boolean offhandEmpty = npc.getOffhandItem().isEmpty();
         List<BetterCombatBridge.AttackSnapshot> usable = new ArrayList<>();
         for (BetterCombatBridge.AttackSnapshot attack : weapon.attacks())

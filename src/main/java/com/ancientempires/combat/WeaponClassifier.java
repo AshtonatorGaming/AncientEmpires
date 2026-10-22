@@ -10,6 +10,7 @@ import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShieldItem;
 import net.minecraft.world.item.TridentItem;
+import net.minecraftforge.common.ToolActions;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -65,12 +66,22 @@ public final class WeaponClassifier
     }
 
     /**
+     * A shield by Forge's tool action, which modded shields (Spartan Shields and
+     * others) declare even when they do not extend the vanilla shield. Vanilla
+     * blocking checks the same action, so this matches what can actually block.
+     */
+    public static boolean isShield(ItemStack stack)
+    {
+        return !stack.isEmpty() && (kind(stack) == Kind.SHIELD || stack.canPerformAction(ToolActions.SHIELD_BLOCK));
+    }
+
+    /**
      * A sidearm: main-hand attack damage, and not a bow, crossbow, throwing
      * weapon, trident, or shield. Zero means not a melee weapon.
      */
     public static double meleeDamage(ItemStack stack)
     {
-        if (stack.isEmpty() || kind(stack) != Kind.PLAIN)
+        if (stack.isEmpty() || kind(stack) != Kind.PLAIN || isShield(stack))
         {
             return 0.0D;
         }

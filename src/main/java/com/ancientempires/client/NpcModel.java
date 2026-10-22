@@ -4,7 +4,9 @@ import com.ancientempires.entity.npc.NpcEntity;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.item.UseAnim;
 
 /**
  * Player model. Better Mob Combat's stack is applied inside the vanilla setup
@@ -21,10 +23,26 @@ public class NpcModel extends PlayerModel<NpcEntity>
     @Override
     public void setupAnim(NpcEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch)
     {
+        // One model draws every NPC, so the arm poses are set fresh for each.
+        this.rightArmPose = HumanoidModel.ArmPose.EMPTY;
+        this.leftArmPose = HumanoidModel.ArmPose.EMPTY;
         boolean drawingBow = entity.isDrawingBow();
         if (drawingBow)
         {
             this.armBow(entity);
+        }
+        else if (entity.isUsingItem() && entity.getUseItem().getUseAnimation() == UseAnim.BLOCK)
+        {
+            // The vanilla raised-shield pose on whichever arm holds the shield.
+            boolean leftArm = (entity.getUsedItemHand() == InteractionHand.MAIN_HAND) == (entity.getMainArm() == HumanoidArm.LEFT);
+            if (leftArm)
+            {
+                this.leftArmPose = HumanoidModel.ArmPose.BLOCK;
+            }
+            else
+            {
+                this.rightArmPose = HumanoidModel.ArmPose.BLOCK;
+            }
         }
         super.setupAnim(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
         if (drawingBow)

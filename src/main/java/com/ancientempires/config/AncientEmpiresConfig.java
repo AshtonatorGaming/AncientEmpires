@@ -74,6 +74,12 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.BooleanValue HOME_RAIN_SHELTER;
     private static final ForgeConfigSpec.DoubleValue FACTION_ARCHER_POST;
 
+    private static final ForgeConfigSpec.BooleanValue SHIELD_BLOCKING;
+    private static final ForgeConfigSpec.DoubleValue SHIELD_BLOCK_RANGE;
+    private static final ForgeConfigSpec.IntValue SHIELD_REACTION_TICKS;
+    private static final ForgeConfigSpec.IntValue SHIELD_HOLD_TICKS;
+    private static final ForgeConfigSpec.IntValue SHIELD_DISABLE_TICKS;
+
     private static final ForgeConfigSpec.BooleanValue OWNER_DEFENSE;
     private static final ForgeConfigSpec.DoubleValue OWNER_DEFENSE_RANGE;
     private static final ForgeConfigSpec.DoubleValue ALLY_ALERT_RANGE;
@@ -270,6 +276,24 @@ public final class AncientEmpiresConfig
                 .defineInRange("factionArcherPost", 3.0D, 0.0D, 32.0D);
         builder.pop();
 
+        builder.push("shield");
+        SHIELD_BLOCKING = builder
+                .comment("NPCs raise an off-hand shield (vanilla or modded, anything that can shield-block) against a target that is swinging at them or aiming a bow at them, as in Ancient Warfare.")
+                .define("enabled", true);
+        SHIELD_BLOCK_RANGE = builder
+                .comment("A swinging attacker must be within this many blocks to be blocked. Bow and crossbow aim is blocked at any range.")
+                .defineInRange("blockRange", 4.0D, 1.0D, 16.0D);
+        SHIELD_REACTION_TICKS = builder
+                .comment("Most ticks before the shield comes up; each block waits a random amount up to this.")
+                .defineInRange("reactionTicks", 6, 0, 40);
+        SHIELD_HOLD_TICKS = builder
+                .comment("Ticks the shield stays up after the threat stops swinging or aiming.")
+                .defineInRange("holdTicks", 40, 1, 200);
+        SHIELD_DISABLE_TICKS = builder
+                .comment("Ticks an axe hit keeps an NPC's shield down, as it does a player's.")
+                .defineInRange("axeDisableTicks", 100, 0, 400);
+        builder.pop();
+
         builder.push("allies");
         OWNER_DEFENSE = builder
                 .comment("Owned NPCs attack whoever hurts their owner, and whatever their owner attacks, as in Ancient Warfare.")
@@ -374,6 +398,12 @@ public final class AncientEmpiresConfig
     public static boolean homeRainShelter = true;
     public static double factionArcherPost = 3.0D;
 
+    public static boolean shieldBlocking = true;
+    public static double shieldBlockRange = 4.0D;
+    public static int shieldReactionTicks = 6;
+    public static int shieldHoldTicks = 40;
+    public static int shieldDisableTicks = 100;
+
     public static boolean ownerDefense = true;
     public static double ownerDefenseRange = 32.0D;
     public static double allyAlertRange = 16.0D;
@@ -462,6 +492,12 @@ public final class AncientEmpiresConfig
         homeNightLeash = HOME_NIGHT_LEASH.get();
         homeRainShelter = HOME_RAIN_SHELTER.get();
         factionArcherPost = FACTION_ARCHER_POST.get();
+
+        shieldBlocking = SHIELD_BLOCKING.get();
+        shieldBlockRange = SHIELD_BLOCK_RANGE.get();
+        shieldReactionTicks = SHIELD_REACTION_TICKS.get();
+        shieldHoldTicks = SHIELD_HOLD_TICKS.get();
+        shieldDisableTicks = SHIELD_DISABLE_TICKS.get();
 
         ownerDefense = OWNER_DEFENSE.get();
         ownerDefenseRange = OWNER_DEFENSE_RANGE.get();

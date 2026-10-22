@@ -102,6 +102,7 @@ public class NpcMeleeAttackGoal extends Goal
     public void stop()
     {
         this.npc.getNavigation().stop();
+        this.npc.setSwingCommitted(false);
         if (this.mobCombatSwing)
         {
             AttackSwing swing = this.active;
@@ -250,6 +251,8 @@ public class NpcMeleeAttackGoal extends Goal
 
     private void beginWindup(AttackSwing swing)
     {
+        // A player cannot block and swing at once; neither can an NPC.
+        this.npc.lowerShield();
         if (MobCombatBridge.owns(this.npc))
         {
             this.mobCombatCancelled = false;
@@ -263,6 +266,7 @@ public class NpcMeleeAttackGoal extends Goal
             this.active = swing;
             this.phase = Phase.WINDUP;
             this.mobCombatSwing = true;
+            this.npc.setSwingCommitted(true);
             this.swingHands = this.npc.getHandsVersion();
             this.windupLeft = 0;
             this.stoppedForWindup = false;
@@ -338,6 +342,7 @@ public class NpcMeleeAttackGoal extends Goal
      */
     private void finishMobCombatSwing(AttackSwing swing)
     {
+        this.npc.setSwingCommitted(false);
         if (!this.mobCombatHitDone && !this.mobCombatCancelled && this.npc.getHandsVersion() == this.swingHands)
         {
             LivingEntity target = this.npc.getTarget();
