@@ -42,12 +42,34 @@ instead of reflecting per call), Skirmisher thresholds (about 4.5 to 28 blocks).
   Crossbows are not bows here.
 - `combat/AttackProfiles` resolves the next swing (Better Combat attributes if present,
   vanilla cooldown otherwise, fist preset for empty hands). `AttackSwing` is the result.
+  Two one-handed BC weapons dual-wield: combo steps alternate hands, and an off-hand swing
+  swaps that weapon's main-hand modifiers in (`withOffHandModifiers`), as BC does for
+  players. Every swing then goes through `slowWindup` (`combat.npcWindupScale`).
+- `NpcMeleeAttackGoal` starts a swing inside `engageRangeFactor` of reach and checks the
+  full reach at the hit. Facing allows for the target's angular width; touching bodies
+  always count as facing.
 - `combat/BetterCombatBridge`, `MobCombatBridge`, `MobCombatHooks` are reflection bridges.
+  BC weapon snapshots are cached per item, stamped on BC's `containers` map identity.
+- Better Mob Combat (optional) owns timing and hit finding when installed. Its default
+  `mobs_check_for_same_entity_type` drops NPC-on-NPC targets (all NPCs are one entity
+  type), so `finishMobCombatSwing` lands the goal's own hit when its callback never fired.
+  Without it, the internal wind-up and `NpcBetterCombatDriver` handle everything.
 - `NpcSkins` + `assets/ancientempires/npc/skins.json` - skin catalog (45 factions plus a
   large `misc` group). `NpcRoster` maps old AW NPC types to equipment/skins.
   `NpcSkinSelector` is the three-level selector screen (faction, class, skin).
 - Client: `NpcRenderer`, `NpcSkinLayers` (outer layers, optional 3D Skin Layers),
   `NpcBetterCombatDriver` (per-NPC animation session), ModularUI inventory screen.
+- Player Animation Lib only animates real players. For NPCs the driver does by hand what
+  its player hooks do: part rotations and bends (`updatePart`), the `body` channel on the
+  render matrix (`NpcRenderer.setupRotations`), the waist bend (filling the model's
+  `IMutableModel` emote supplier, which that library clears for non-players every
+  `setupAnim`), and tilting the held-item layer by the body bend. The weapon stance stays
+  on under attacks, as BC does. The server syncs the real wind-up ticks
+  (`getAttackPresentationWindup`) so the clip and trails land on the hit.
+- `NpcTrailParticles` triggers Better Combat Particle (`bc_particle`) trails locally at the
+  hit frame (that mod only listens to BMC's mob event). `NpcEggColors` and
+  `NpcSpawnEggItem.getColor` give faction scroll tints; Forge's own spawn egg handler
+  reads `getColor`, so both agree.
 - Libs in `libs/` are jars wired through `fg.deobf` in `build.gradle`. Soft deps are
   `compileOnly`; ModularUI is `implementation`.
 
@@ -59,7 +81,10 @@ unarmed dual-fist combo via the Better Combat fist preset; inventory persistence
 import; three-level skin selector with search; Player Default and Custom/Misc tabs; archers
 keep shooting at close range and never punch with a bow; home set/clear and return-home;
 outer skin layers; sidearm fallback (`NpcSidearm`, `WeaponClassifier`, `sidearm` config
-section, `AeSidearmBowSlot` NBT marker undone on load and before repack).
+section, `AeSidearmBowSlot` NBT marker undone on load and before repack); shared target
+scan; Better Combat snapshot cache; dual wielding; engage range and NPC wind-up scale;
+full-body attack animation (body channel, waist bend, stance kept under attacks);
+bc_particle trails on native swings; NPC-on-NPC hits under Better Mob Combat.
 
 ## Not done yet
 
@@ -139,9 +164,10 @@ target-scan design.
 - Server 6, sound id parse and string animation id: confirmed, once per swing. Not changed.
 - Client skin parse: mostly overstated. Catalog skins were already a HashMap hit with a
   prebuilt `ResourceLocation`; only raw ids parsed. Cached on the entity anyway. The real
-  per-frame cost is in `NpcSkinLayers` when 3D Skin Layers is loaded: about ten reflective
-  config reads, a `View` allocation, and six reflective `setInjectedMesh` calls per NPC.
-  Not changed yet.
+  per-frame cost was in `NpcSkinLayers` with 3D Skin Layers loaded. Fixed: config read
+  once per tick, mesh injects skipped when unchanged. Measured on JDK 17: a reflective
+  call is 4-7 ns and a field-held MethodHandle about 3.5 ns, so call counts mattered, not
+  the call style. MethodHandles were not adopted.
 - Client `NpcBetterCombatDriver.updatePose`: overstated. It calls `WeaponRegistry` directly,
   which is two map gets for a stack without NBT. Not changed.
 - Not audited before, now checked: `NpcEmfCompat.afterPose` allocates two to four
@@ -149,7 +175,21 @@ target-scan design.
   `ModList` each call. `NpcHeldItemLayer` asks `NpcEmfCompat.placesArm` per arm per frame,
   three reflective calls each. `MobCombatBridge.owns` runs Better Mob Combat's weapon check
   every melee tick when that mod is loaded. `MobCombatHooks.cancel` walked fields with
-  exceptions (fixed). UI screens are dirty-flag driven and fine.
+  exceptions (fixed). UI screens are dirty-flag driven and fine. `NpcEmfCompat` now caches
+  the mod check; its pose snapshots stay per frame because EMF Compat keeps them by
+  reference. `placesArm` (about 15-20 ns per arm) was left as is.
+- Still open: server 6 (per-swing sound id parse, string animation id sync) and the
+  first-render PNG decode hitch for new skins.
+
+## Testing
+
+- The user tests in a separate game instance (see their notes); check its `logs/latest.log`
+  to see which combat and animation path is live (Better Mob Combat, the fallback driver,
+  EMF, bc_particle) before guessing.
+- Never replace the mod jar while that game is running. A jar swapped mid-session made a
+  not-yet-loaded class fail with `NoClassDefFoundError`, which looked like a mod bug.
+- Forge's early loading window failing ("Timed out trying to setup the Game Window") is a
+  graphics driver problem; it happens before any mod jar is read.
 
 ## Building
 
