@@ -80,6 +80,8 @@ public final class NpcInventoryPanel
     private static final int SLOT_FILL = 0xFF2C241C;
     private static final int SLOT_HOVER = 0xFF3A2E24;
     private static final int GOLD = 0xFFC6A56A;
+    /** Wrap width for the calling descriptions, so the tooltip stays compact. */
+    private static final int TOOLTIP_W = 150;
 
     private NpcInventoryPanel()
     {
@@ -337,24 +339,35 @@ public final class NpcInventoryPanel
                 .maxWidth(width - 12)
                 .color(NAME_INK)
                 .textAlign(Alignment.TopCenter));
-        java.util.List<NpcCalling> choices = admin
-                ? java.util.List.of(NpcCalling.SETTLER, NpcCalling.WORKER, NpcCalling.SOLDIER)
-                : java.util.List.of(NpcCalling.WORKER, NpcCalling.SOLDIER);
+        // Settler sits between the two paths it can split into. For a player it is
+        // the current calling, so picking it just keeps the NPC as it is.
+        java.util.List<NpcCalling> choices = java.util.List.of(NpcCalling.WORKER, NpcCalling.SETTLER, NpcCalling.SOLDIER);
         int gap = 4;
         int buttonW = (width - 12 - gap * (choices.size() - 1)) / choices.size();
         for (int index = 0; index < choices.size(); index++)
         {
             NpcCalling calling = choices.get(index);
-            panel.child(new ButtonWidget<>()
+            ButtonWidget<?> button = new ButtonWidget<>()
                     .pos(6 + index * (buttonW + gap), height - 40)
                     .size(buttonW, 34)
                     .background(new Rectangle().color(BUTTON))
                     .hoverBackground(new Rectangle().color(BUTTON_HOVER))
                     .overlay(new CallingChoice(calling, () -> npc.getCalling() == calling ? GOLD : NAME_INK))
-                    .onMousePressed((context, pressed) -> pickCalling(panel, menu, calling, pressed))
-                    .addTooltipLine(Component.translatable("gui.ancientempires.calling." + calling.id() + ".desc").getString()));
+                    .onMousePressed((context, pressed) -> pickCalling(panel, menu, npc, calling, pressed));
+            addWrappedTooltip(button, Component.translatable("gui.ancientempires.calling." + calling.id() + ".desc"));
+            panel.child(button);
         }
         return panel;
+    }
+
+    /** Tooltip text wrapped to a compact width, one tooltip line per wrapped line. */
+    private static void addWrappedTooltip(ButtonWidget<?> button, Component text)
+    {
+        net.minecraft.client.gui.Font font = Minecraft.getInstance().font;
+        for (net.minecraft.network.chat.FormattedText line : font.getSplitter().splitLines(text, TOOLTIP_W, net.minecraft.network.chat.Style.EMPTY))
+        {
+            button.addTooltipLine(line.getString());
+        }
     }
 
     /** What each calling looks like at a glance in the chooser. */
@@ -388,11 +401,16 @@ public final class NpcInventoryPanel
         }
     }
 
-    private static boolean pickCalling(ModularPanel<?> panel, NpcMenu menu, NpcCalling calling, int pressed)
+    private static boolean pickCalling(ModularPanel<?> panel, NpcMenu menu, NpcEntity npc, NpcCalling calling, int pressed)
     {
         if (pressed != 0)
         {
             return false;
+        }
+        if (calling == npc.getCalling())
+        {
+            panel.closeIfOpen();
+            return true;
         }
         int buttonId = switch (calling)
         {

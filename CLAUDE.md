@@ -139,7 +139,8 @@ its own unless noted). Before adding behavior, check what AW did first.
   A player's NPC starts as a settler (the Settler scroll; roster id and item stay
   `owned.commoner` so existing scrolls work; also the generic scroll). Its owner may
   choose worker or soldier once: the gold role label in the inventory opens a chooser
-  with item icons (campfire, pickaxe, sword) and a hover description per calling. That
+  with item icons (pickaxe worker, campfire settler in the middle, sword soldier) and a
+  hover description per calling; picking the current calling just closes it. That
   is final for players; only admins (creative) can set any calling, settler included.
   Owned preset scrolls (archer, farmer, ...) are admin conveniences and come
   with their calling, as AW's crafted NPCs did. Repack always writes the calling.
