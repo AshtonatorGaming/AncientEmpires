@@ -966,15 +966,25 @@ public class NpcEntity extends PathfinderMob
         return trimmed;
     }
 
+    /**
+     * Who may open the inventory and use its commands: an admin (see
+     * {@link #mayToggleCreative}) for any NPC, otherwise the owner. Faction NPCs
+     * answer to admins only; recruiting them is a later system. An unowned,
+     * factionless NPC is claimed by the first player who opens it.
+     */
     public boolean canOpenInventory(Player player)
     {
         if (player.isSpectator())
         {
             return false;
         }
-        if (player.getAbilities().instabuild)
+        if (mayToggleCreative(player))
         {
             return true;
+        }
+        if (this.isFactionNpc())
+        {
+            return false;
         }
         UUID owner = this.getOwner();
         return owner == null || owner.equals(player.getUUID());
@@ -1790,7 +1800,9 @@ public class NpcEntity extends PathfinderMob
         {
             if (!this.level().isClientSide)
             {
-                player.displayClientMessage(Component.translatable("message.ancientempires.npc.not_owner"), true);
+                player.displayClientMessage(Component.translatable(this.isFactionNpc()
+                        ? "message.ancientempires.npc.faction_locked"
+                        : "message.ancientempires.npc.not_owner"), true);
             }
             return InteractionResult.CONSUME;
         }
