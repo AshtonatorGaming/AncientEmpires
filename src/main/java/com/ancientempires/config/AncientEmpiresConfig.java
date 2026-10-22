@@ -104,6 +104,12 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.IntValue CIVILIAN_CORNER_TICKS;
     private static final ForgeConfigSpec.IntValue CIVILIAN_STAND_GROUND;
 
+    private static final ForgeConfigSpec.DoubleValue ARCHER_MELEE;
+    private static final ForgeConfigSpec.DoubleValue SKIRMISHER_MELEE;
+    private static final ForgeConfigSpec.DoubleValue LEVY_DAMAGE;
+    private static final ForgeConfigSpec.DoubleValue LEVY_WINDUP;
+    private static final ForgeConfigSpec.DoubleValue LEVY_BREAK;
+
     private static final ForgeConfigSpec.BooleanValue OWNER_DEFENSE;
     private static final ForgeConfigSpec.DoubleValue OWNER_DEFENSE_RANGE;
     private static final ForgeConfigSpec.DoubleValue ALLY_ALERT_RANGE;
@@ -384,6 +390,24 @@ public final class AncientEmpiresConfig
                 .defineInRange("standGroundTicks", 100, 1, 1200);
         builder.pop();
 
+        builder.comment("How well an NPC fights outside its trade, from the AncientTactics trial, and the emergency levy.").push("proficiency");
+        ARCHER_MELEE = builder
+                .comment("Melee damage multiplier for an archer: a bow or crossbow in hand or backpack, so a sidearm swap counts. AncientTactics used 0.5.")
+                .defineInRange("archerMelee", 0.5D, 0.0D, 2.0D);
+        SKIRMISHER_MELEE = builder
+                .comment("Melee damage multiplier for a skirmisher: a throwing weapon or trident in hand or backpack. AncientTactics used 0.75.")
+                .defineInRange("skirmisherMelee", 0.75D, 0.0D, 2.0D);
+        LEVY_DAMAGE = builder
+                .comment("Damage multiplier, melee and arrows, for a levied civilian. Stacks with the two above.")
+                .defineInRange("levyDamage", 0.7D, 0.0D, 2.0D);
+        LEVY_WINDUP = builder
+                .comment("Extra wind-up multiplier for a levied civilian, on top of combat.npcWindupScale.")
+                .defineInRange("levyWindupScale", 1.3D, 0.5D, 3.0D);
+        LEVY_BREAK = builder
+                .comment("Below this fraction of its health a levy breaks and runs like any civilian. Levies never bash or feint.")
+                .defineInRange("levyBreakHealth", 0.3D, 0.0D, 1.0D);
+        builder.pop();
+
         builder.push("allies");
         OWNER_DEFENSE = builder
                 .comment("Owned NPCs attack whoever hurts their owner, and whatever their owner attacks, as in Ancient Warfare.")
@@ -516,6 +540,12 @@ public final class AncientEmpiresConfig
     public static int civilianCornerTicks = 20;
     public static int civilianStandGroundTicks = 100;
 
+    public static double archerMeleeProficiency = 0.5D;
+    public static double skirmisherMeleeProficiency = 0.75D;
+    public static double levyDamage = 0.7D;
+    public static double levyWindupScale = 1.3D;
+    public static double levyBreakHealth = 0.3D;
+
     public static boolean ownerDefense = true;
     public static double ownerDefenseRange = 32.0D;
     public static double allyAlertRange = 16.0D;
@@ -636,6 +666,12 @@ public final class AncientEmpiresConfig
         civilianCornerRange = CIVILIAN_CORNER_RANGE.get();
         civilianCornerTicks = CIVILIAN_CORNER_TICKS.get();
         civilianStandGroundTicks = CIVILIAN_STAND_GROUND.get();
+
+        archerMeleeProficiency = ARCHER_MELEE.get();
+        skirmisherMeleeProficiency = SKIRMISHER_MELEE.get();
+        levyDamage = LEVY_DAMAGE.get();
+        levyWindupScale = LEVY_WINDUP.get();
+        levyBreakHealth = LEVY_BREAK.get();
 
         ownerDefense = OWNER_DEFENSE.get();
         ownerDefenseRange = OWNER_DEFENSE_RANGE.get();

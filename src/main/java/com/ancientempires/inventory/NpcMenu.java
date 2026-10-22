@@ -34,6 +34,7 @@ public class NpcMenu extends AbstractContainerMenu
     public static final int BUTTON_HOLD = 5;
     public static final int BUTTON_ROLE_NEXT = 6;
     public static final int BUTTON_ROLE_PREV = 7;
+    public static final int BUTTON_LEVY = 8;
 
     @Nullable
     private final NpcEntity npc;

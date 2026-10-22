@@ -87,6 +87,7 @@ public class NpcEntity extends PathfinderMob
     private static final EntityDataAccessor<String> DATA_FACTION = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.STRING);
     /** Resolved role id, for the inventory screen. */
     private static final EntityDataAccessor<String> DATA_ROLE = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.STRING);
+    private static final EntityDataAccessor<Boolean> DATA_LEVIED = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.BOOLEAN);
     /** Off-hand beat of an empty-hand fist combo. Cleared with the presentation, not the attack window. */
     private static final EntityDataAccessor<Boolean> DATA_ATTACK_OFFHAND = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.BOOLEAN);
     /** 1 is a normal player body. Dwarf and giant eggs store a different scale. */
@@ -116,6 +117,7 @@ public class NpcEntity extends PathfinderMob
     private static final String FEINT_KEY = "AeFeintChance";
     private static final String SKILL_KEY = "AeSkill";
     private static final String ROLE_KEY = "AeRole";
+    private static final String LEVY_KEY = "AeLevy";
 
     private final NpcInventory inventory = new NpcInventory(this);
     private final NpcSidearm sidearm = new NpcSidearm(this);
@@ -148,6 +150,8 @@ public class NpcEntity extends PathfinderMob
     /** A role chosen for this NPC; null means the roster rank decides. */
     @Nullable
     private NpcRole chosenRole;
+    private int proficiencyVersion = Integer.MIN_VALUE;
+    private float meleeProficiency = 1.0F;
     /** Server only: a would-be target a civilian flees instead. */
     @Nullable
     private LivingEntity fearSource;
@@ -208,6 +212,7 @@ public class NpcEntity extends PathfinderMob
         this.entityData.define(DATA_SKIN, "");
         this.entityData.define(DATA_FACTION, "");
         this.entityData.define(DATA_ROLE, "");
+        this.entityData.define(DATA_LEVIED, false);
         this.entityData.define(DATA_ATTACK_OFFHAND, false);
         this.entityData.define(DATA_BODY_SCALE, 1.0F);
     }
@@ -602,6 +607,10 @@ public class NpcEntity extends PathfinderMob
      */
     public float getFeintChance()
     {
+        if (this.isLevied())
+        {
+            return 0.0F;
+        }
         if (this.feintChance >= 0.0F)
         {
             return this.feintChance;
@@ -617,6 +626,10 @@ public class NpcEntity extends PathfinderMob
     /** Chance, 0 to 1, that a blocked hit is answered with a shield bash. */
     public double getBashChance()
     {
+        if (this.isLevied())
+        {
+            return 0.0D;
+        }
         return tierValue(AncientEmpiresConfig.bashChanceByTier, this.getSkillTier());
     }
 
@@ -697,6 +710,8 @@ public class NpcEntity extends PathfinderMob
     {
         this.chosenRole = role;
         this.standGroundUntil = 0;
+        this.proficiencyVersion = Integer.MIN_VALUE;
+        this.handsVersion++;
         this.syncRole();
     }
 
@@ -738,7 +753,92 @@ public class NpcEntity extends PathfinderMob
      */
     public boolean avoidsFights()
     {
-        return this.isCivilian() && this.tickCount >= this.standGroundUntil;
+        if (!this.isCivilian() || this.tickCount < this.standGroundUntil)
+        {
+            return false;
+        }
+        // A levy fights until it is badly hurt, then breaks and runs like any civilian.
+        return !this.isLevied() || this.getHealth() < this.getMaxHealth() * AncientEmpiresConfig.levyBreakHealth;
+    }
+
+    /** A civilian called up to fight in an emergency. Saved as {@code AeLevy}. A soldier is never a levy. */
+    public boolean isLevied()
+    {
+        return this.entityData.get(DATA_LEVIED) && this.isCivilian();
+    }
+
+    /**
+     * Raises or dismisses a levy. Only civilians can be levied; a soldier is
+     * always a fighter. The swing profile is worked out again for the debuffs.
+     */
+    public void setLevied(boolean levied)
+    {
+        this.entityData.set(DATA_LEVIED, levied && this.isCivilian());
+        this.handsVersion++;
+        this.proficiencyVersion = Integer.MIN_VALUE;
+        if (!this.isLevied() && this.avoidsFights())
+        {
+            this.setTarget(null);
+        }
+    }
+
+    private void toggleLevy(Player player)
+    {
+        if (!this.mayChangeRole(player) || !this.isCivilian())
+        {
+            return;
+        }
+        boolean levied = !this.isLevied();
+        this.setLevied(levied);
+        player.displayClientMessage(Component.translatable(levied
+                ? "message.ancientempires.npc.levy_on"
+                : "message.ancientempires.npc.levy_off"), true);
+    }
+
+    /**
+     * Ancient Warfare's soldiers were trained; ours fight best with what their
+     * role is for. A multiplier on melee damage, from the AncientTactics trial:
+     * an archer (a bow or crossbow in hand or backpack) hits at
+     * {@code proficiency.archerMelee}, a skirmisher (a throwing weapon or
+     * trident) at {@code skirmisherMelee}, and a levy at {@code levyDamage} on
+     * top. Recomputed only when the hands or backpack change.
+     */
+    public float getMeleeProficiency()
+    {
+        int version = this.handsVersion * 31 + this.inventory.getBackpackVersion();
+        if (version != this.proficiencyVersion)
+        {
+            this.proficiencyVersion = version;
+            this.meleeProficiency = (float) (this.unitMeleeMultiplier() * this.getLevyDamage());
+        }
+        return this.meleeProficiency;
+    }
+
+    /** Damage multiplier for arrows and other shots: only a levy is worse at it. */
+    public float getRangedProficiency()
+    {
+        return (float) this.getLevyDamage();
+    }
+
+    private double getLevyDamage()
+    {
+        return this.isLevied() ? AncientEmpiresConfig.levyDamage : 1.0D;
+    }
+
+    private double unitMeleeMultiplier()
+    {
+        boolean skirmisher = false;
+        for (int slot = 0; slot < NpcInventory.SLOT_COUNT; slot++)
+        {
+            ItemStack stack = this.inventory.getItem(slot);
+            WeaponClassifier.Kind kind = WeaponClassifier.kind(stack);
+            if (kind == WeaponClassifier.Kind.BOW || stack.getItem() instanceof CrossbowItem)
+            {
+                return AncientEmpiresConfig.archerMeleeProficiency;
+            }
+            skirmisher |= kind == WeaponClassifier.Kind.OTHER_RANGED;
+        }
+        return skirmisher ? AncientEmpiresConfig.skirmisherMeleeProficiency : 1.0D;
     }
 
     /**
@@ -1109,6 +1209,11 @@ public class NpcEntity extends PathfinderMob
             this.toggleHold(player);
             return true;
         }
+        if (id == NpcMenu.BUTTON_LEVY)
+        {
+            this.toggleLevy(player);
+            return true;
+        }
         if (id == NpcMenu.BUTTON_ROLE_NEXT || id == NpcMenu.BUTTON_ROLE_PREV)
         {
             this.cycleRole(player, id == NpcMenu.BUTTON_ROLE_NEXT ? 1 : -1);
@@ -1244,6 +1349,7 @@ public class NpcEntity extends PathfinderMob
         }
         // Always written: the scroll may be the generic one, whose row would imply another role.
         tag.putString(ROLE_KEY, this.getRole().id());
+        tag.putBoolean(LEVY_KEY, this.isLevied());
         if (this.feintChance >= 0.0F)
         {
             tag.putFloat(FEINT_KEY, this.feintChance);
@@ -1731,6 +1837,10 @@ public class NpcEntity extends PathfinderMob
         {
             tag.putString(ROLE_KEY, this.chosenRole.id());
         }
+        if (this.isLevied())
+        {
+            tag.putBoolean(LEVY_KEY, true);
+        }
         if (this.feintChance >= 0.0F)
         {
             tag.putFloat(FEINT_KEY, this.feintChance);
@@ -1781,6 +1891,7 @@ public class NpcEntity extends PathfinderMob
         {
             this.chosenRole = NpcRole.byId(tag.getString(ROLE_KEY));
         }
+        this.entityData.set(DATA_LEVIED, tag.getBoolean(LEVY_KEY));
         this.forgetRosterCaches();
         if (tag.getBoolean(NO_OWNER_KEY))
         {

@@ -465,6 +465,8 @@ public class NpcMeleeAttackGoal extends Goal
         }
         ItemStack weapon = offHand ? this.npc.getOffhandItem() : this.npc.getMainHandItem();
         damage += EnchantmentHelper.getDamageBonus(weapon, target.getMobType());
+        // Role proficiency: archers and skirmishers in melee, and levies, hit softer.
+        damage *= this.npc.getMeleeProficiency();
         if (damage < 0.0F)
         {
             damage = 0.0F;

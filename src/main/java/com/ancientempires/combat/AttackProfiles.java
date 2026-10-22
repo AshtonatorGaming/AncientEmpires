@@ -38,7 +38,7 @@ public final class AttackProfiles
 
     public static AttackSwing resolve(NpcEntity npc)
     {
-        return slowWindup(resolveBase(npc));
+        return slowWindup(resolveBase(npc), npc);
     }
 
     /**
@@ -48,9 +48,10 @@ public final class AttackProfiles
      * stays Better Combat's own; the client gets the real wind-up ticks with the
      * presentation and slows the whole clip evenly to land on them.
      */
-    private static AttackSwing slowWindup(AttackSwing swing)
+    private static AttackSwing slowWindup(AttackSwing swing, NpcEntity npc)
     {
-        double scale = AncientEmpiresConfig.npcWindupScale;
+        // A levy is untrained: its wind-ups are slower again than a soldier's.
+        double scale = AncientEmpiresConfig.npcWindupScale * (npc.isLevied() ? AncientEmpiresConfig.levyWindupScale : 1.0D);
         if (Math.abs(scale - 1.0D) < 1.0E-3D)
         {
             return swing;

@@ -349,6 +349,7 @@ public class NpcBowAttackGoal extends Goal
             return;
         }
         this.applyBowEnchantments(arrow, bow);
+        arrow.setBaseDamage(arrow.getBaseDamage() * this.npc.getRangedProficiency());
         if (power >= 1.0F)
         {
             arrow.setCritArrow(true);

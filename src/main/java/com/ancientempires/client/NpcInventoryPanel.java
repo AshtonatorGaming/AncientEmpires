@@ -102,15 +102,17 @@ public final class NpcInventoryPanel
     {
         boolean creative = showCreative();
         boolean hold = showHold(npc);
-        ButtonWidget<?>[] row = new ButtonWidget<?>[6];
+        ButtonWidget<?>[] row = new ButtonWidget<?>[7];
         row[0] = command(0, 0, GuiTextures.MOVE_RIGHT, "gui.ancientempires.npc.follow", NpcMenu.BUTTON_FOLLOW, menu, active(npc, NpcEntity::isFollowing));
         row[1] = command(0, 1, GuiTextures.BOOKMARK, "gui.ancientempires.npc.set_home", NpcMenu.BUTTON_SET_HOME, menu, active(npc, entity -> entity.getHome() != null));
         row[2] = command(0, 2, GuiTextures.CROSS, "gui.ancientempires.npc.clear_home", NpcMenu.BUTTON_CLEAR_HOME, menu, null);
         row[3] = command(0, 3, GuiTextures.REFRESH, "gui.ancientempires.npc.repack", NpcMenu.BUTTON_REPACK, menu, null);
         row[4] = command(0, 4, GuiTextures.LOCKED, "gui.ancientempires.npc.hold", NpcMenu.BUTTON_HOLD, menu, active(npc, NpcEntity::isHoldingPosition));
         row[5] = command(0, 5, GuiTextures.FAVORITE, "gui.ancientempires.npc.creative", NpcMenu.BUTTON_CREATIVE, menu, active(npc, NpcEntity::isCreative));
+        row[6] = command(0, 6, GuiTextures.EXCLAMATION, "gui.ancientempires.npc.levy", NpcMenu.BUTTON_LEVY, menu, active(npc, NpcEntity::isLevied));
         row[4].setEnabled(hold);
         row[5].setEnabled(creative);
+        row[6].setEnabled(showLevy(npc));
         placeCommands(row);
         // Repack has no on-state color, so this poll can reflow hold and creative.
         row[3].onUpdateListener(widget -> layoutCommands(row, npc), true);
@@ -128,12 +130,14 @@ public final class NpcInventoryPanel
     {
         boolean hold = showHold(npc);
         boolean creative = showCreative();
-        if (row[4].isEnabled() == hold && row[5].isEnabled() == creative)
+        boolean levy = showLevy(npc);
+        if (row[4].isEnabled() == hold && row[5].isEnabled() == creative && row[6].isEnabled() == levy)
         {
             return;
         }
         row[4].setEnabled(hold);
         row[5].setEnabled(creative);
+        row[6].setEnabled(levy);
         placeCommands(row);
     }
 
@@ -164,6 +168,13 @@ public final class NpcInventoryPanel
     private static boolean showHold(NpcEntity npc)
     {
         return npc != null && npc.isHoldingBow();
+    }
+
+    /** Levy is for civilians, and for whoever may change the NPC's role. */
+    private static boolean showLevy(NpcEntity npc)
+    {
+        Player player = Minecraft.getInstance().player;
+        return npc != null && player != null && npc.isCivilian() && npc.mayChangeRole(player);
     }
 
     private static boolean showCreative()
