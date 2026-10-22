@@ -50,7 +50,12 @@ public final class AeCommands
     {
         dispatcher.register(Commands.literal(AncientEmpires.MOD_ID)
                 .then(Commands.literal("standing")
-                        .executes(context -> show(context, context.getSource().getPlayerOrException()))
+                        .executes(context ->
+                        {
+                            // A player gets the banner screen; the chat list stays for viewing others.
+                            com.ancientempires.network.ModNetwork.sendStandings(context.getSource().getPlayerOrException());
+                            return 1;
+                        })
                         .then(Commands.argument("player", EntityArgument.player())
                                 .requires(source -> source.hasPermission(2))
                                 .executes(context -> show(context, EntityArgument.getPlayer(context, "player")))

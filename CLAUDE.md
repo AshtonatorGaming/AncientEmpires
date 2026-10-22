@@ -274,7 +274,9 @@ its own unless noted). Before adding behavior, check what AW did first.
   player's owned NPCs. Killing a faction NPC, or having owned NPCs kill it, applies the
   faction's `kill` change and gives its faction-mates within `relations.revengeRange` a
   grudge (`AeRevenge`) for `revengeTicks`. Owned NPCs attack only faction NPCs hostile to
-  their owner. Civilians flee hostile players on sight. `/ancientempires standing`
+  their owner. Civilians flee hostile players on sight. The standings screen (J, or
+  `/ancientempires standing`; `StandingsScreen`, AW's faction banners in
+  `textures/gui/banner`) shows every faction's banner and your standing; the command
   shows your standings; admins can view, `set`, `add`, or `reset` anyone's.
 - Cavalry (`NpcMount`): a faction row with a `mount` (cavalry and mounted archers default to
   `minecraft:horse`; AW's odd ones are on their rows: Norska polar bear, gnome chicken,

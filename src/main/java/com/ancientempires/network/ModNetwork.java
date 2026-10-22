@@ -35,6 +35,33 @@ public final class ModNetwork
                 .decoder(NpcSkinPacket::decode)
                 .consumerMainThread(NpcSkinPacket::handle)
                 .add();
+        CHANNEL.messageBuilder(StandingsRequestPacket.class, nextId++, NetworkDirection.PLAY_TO_SERVER)
+                .encoder(StandingsRequestPacket::encode)
+                .decoder(StandingsRequestPacket::decode)
+                .consumerMainThread(StandingsRequestPacket::handle)
+                .add();
+        CHANNEL.messageBuilder(StandingsPacket.class, nextId++, NetworkDirection.PLAY_TO_CLIENT)
+                .encoder(StandingsPacket::encode)
+                .decoder(StandingsPacket::decode)
+                .consumerMainThread(StandingsPacket::handle)
+                .add();
+    }
+
+    public static void requestStandings()
+    {
+        CHANNEL.sendToServer(new StandingsRequestPacket());
+    }
+
+    /** Sends a player their standing with every faction, which opens the standings screen. */
+    public static void sendStandings(net.minecraft.server.level.ServerPlayer player)
+    {
+        com.ancientempires.entity.npc.NpcStandings standings = com.ancientempires.entity.npc.NpcStandings.get(player.server);
+        java.util.List<StandingsPacket.Entry> entries = new java.util.ArrayList<>();
+        for (String faction : com.ancientempires.entity.npc.NpcFactions.ids())
+        {
+            entries.add(new StandingsPacket.Entry(faction, standings.get(player.getUUID(), faction)));
+        }
+        CHANNEL.send(net.minecraftforge.network.PacketDistributor.PLAYER.with(() -> player), new StandingsPacket(entries));
     }
 
     public static void sendName(int entityId, String name)
