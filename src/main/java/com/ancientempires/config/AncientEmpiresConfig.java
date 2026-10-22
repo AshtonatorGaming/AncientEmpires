@@ -120,6 +120,11 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.DoubleValue CAVALRY_REACH_BONUS;
     private static final ForgeConfigSpec.DoubleValue CAVALRY_REMOUNT_RANGE;
     private static final ForgeConfigSpec.DoubleValue CAVALRY_MOUNT_RANGE;
+    private static final ForgeConfigSpec.BooleanValue RELATIONS_ENABLED;
+    private static final ForgeConfigSpec.DoubleValue RELATIONS_REVENGE_RANGE;
+    private static final ForgeConfigSpec.IntValue RELATIONS_REVENGE_TICKS;
+    private static final ForgeConfigSpec.IntValue RELATIONS_STANDING_LIMIT;
+    private static final ForgeConfigSpec.BooleanValue RELATIONS_COUNT_CREATIVE;
 
     private static final ForgeConfigSpec.BooleanValue TARGET_LEGACY_SCAN;
     private static final ForgeConfigSpec.IntValue TARGET_SCAN_INTERVAL;
@@ -452,6 +457,24 @@ public final class AncientEmpiresConfig
                 .defineInRange("mountRange", 6.0D, 1.0D, 32.0D);
         builder.pop();
 
+        builder.comment("Faction relations and player standing, from Ancient Warfare 2 Tweaked. The table is assets/ancientempires/npc/factions.json.").push("relations");
+        RELATIONS_ENABLED = builder
+                .comment("Factions fight the factions they list, and players (and their NPCs) whose standing with them is below zero. Off: faction NPCs ignore players and owned NPCs fight every faction.")
+                .define("enabled", true);
+        RELATIONS_REVENGE_RANGE = builder
+                .comment("When a player (or their NPC) kills a faction NPC, its faction-mates within this many blocks turn on that player. Ancient Warfare used 50.")
+                .defineInRange("revengeRange", 50.0D, 0.0D, 128.0D);
+        RELATIONS_REVENGE_TICKS = builder
+                .comment("How long that grudge lasts, in ticks. Ancient Warfare used 6000 (5 minutes).")
+                .defineInRange("revengeTicks", 6000, 0, 72000);
+        RELATIONS_STANDING_LIMIT = builder
+                .comment("Standings stay between minus and plus this value.")
+                .defineInRange("standingLimit", 1000, 1, 100000);
+        RELATIONS_COUNT_CREATIVE = builder
+                .comment("Whether kills by players in creative mode change standing and start grudges.")
+                .define("countCreativeKills", false);
+        builder.pop();
+
         builder.push("targeting");
         TARGET_LEGACY_SCAN = builder
                 .comment("Use the two vanilla nearest-target goals instead of the shared scan. For comparison and as a fallback. Applies to NPCs loaded after the change.")
@@ -591,6 +614,11 @@ public final class AncientEmpiresConfig
     public static double cavalryReachBonus = 1.0D;
     public static double cavalryRemountRange = 16.0D;
     public static double cavalryMountRange = 6.0D;
+    public static boolean relationsEnabled = true;
+    public static double relationsRevengeRange = 50.0D;
+    public static int relationsRevengeTicks = 6000;
+    public static int relationsStandingLimit = 1000;
+    public static boolean relationsCountCreative = false;
 
     public static boolean targetLegacyScan = false;
     public static int targetScanInterval = 10;
@@ -726,6 +754,11 @@ public final class AncientEmpiresConfig
         cavalryReachBonus = CAVALRY_REACH_BONUS.get();
         cavalryRemountRange = CAVALRY_REMOUNT_RANGE.get();
         cavalryMountRange = CAVALRY_MOUNT_RANGE.get();
+        relationsEnabled = RELATIONS_ENABLED.get();
+        relationsRevengeRange = RELATIONS_REVENGE_RANGE.get();
+        relationsRevengeTicks = RELATIONS_REVENGE_TICKS.get();
+        relationsStandingLimit = RELATIONS_STANDING_LIMIT.get();
+        relationsCountCreative = RELATIONS_COUNT_CREATIVE.get();
 
         targetLegacyScan = TARGET_LEGACY_SCAN.get();
         targetScanInterval = TARGET_SCAN_INTERVAL.get();

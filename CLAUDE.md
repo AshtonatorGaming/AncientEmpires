@@ -94,7 +94,7 @@ full-body attack animation (body channel, waist bend, stance kept under attacks)
 bc_particle trails on native swings; NPC-on-NPC hits under Better Mob Combat; repack into
 the NPC's own roster scroll; the Ancient Warfare baseline below (owner defense, ally
 alerts, admin escort, doors, day/night home, shields, bash, feints, skill tiers,
-civilians); target memory; cavalry; paths, settlers, equipment roles, emergency levy, and proficiency.
+civilians); target memory; cavalry; faction relations and player standing; paths, settlers, equipment roles, emergency levy, and proficiency.
 
 ## Not done yet
 
@@ -105,7 +105,9 @@ civilians); target memory; cavalry; paths, settlers, equipment roles, emergency 
    equipment until that behavior exists.
 2. Threat scoring, cliff-safe retreat (`FleeNavigation`), skirmishers.
 3. Spawner block that stores a full NPC NBT snapshot.
-4. Faction relations and revenge lists, worksites, town hall, orders, the structure
+4. Relations follow-ups: trading (AW's only way to raise standing), the nemesis bonus
+   (killing one faction raises standing with its rival), teams sharing their worst
+   standing, and a standings screen. Then worksites, town hall, orders, the structure
    template port, and Tier 2+ roles.
 
 ## Ancient Warfare baseline
@@ -164,6 +166,18 @@ its own unless noted). Before adding behavior, check what AW did first.
   defense, and it ends once the threat backs off past `standBreakRange`. Players are
   never scanned for; a player who hits a civilian is ignored (no fleeing, fighting back,
   or calls for help) until its health is under `playerThreatHealth` (`civilianFears`).
+- Relations (`NpcFactions`, `assets/ancientempires/npc/factions.json`, ported from AW 2
+  Tweaked 1.6.1 with each faction's list resolved over the shared defaults): each of the
+  44 factions lists who it attacks (one-directional: Norska attack Sealsker, not the
+  reverse), a new player's standing, the kill and trade changes, and what mobs it hunts
+  (good factions any `Enemy`; evil ones AW's "friendly" list: villagers, golems).
+  `NpcStandings` (overworld saved data) holds each player's standing per faction; below
+  zero the faction attacks that player on sight (not creative or spectator) and the
+  player's owned NPCs. Killing a faction NPC, or having owned NPCs kill it, applies the
+  faction's `kill` change and gives its faction-mates within `relations.revengeRange` a
+  grudge (`AeRevenge`) for `revengeTicks`. Owned NPCs attack only faction NPCs hostile to
+  their owner. Civilians flee hostile players on sight. `/ancientempires standing`
+  shows your standings; admins can view, `set`, `add`, or `reset` anyone's.
 - Cavalry (`NpcMount`): a faction row with a `mount` (cavalry and mounted archers default to
   `minecraft:horse`; AW's odd ones are on their rows: Norska polar bear, gnome chicken,
   gremlin spider, Xoltec llama, undead/coven/icelord skeleton horse, Klown zombie horse and
@@ -183,7 +197,7 @@ its own unless noted). Before adding behavior, check what AW did first.
   or backpack, so sidearm swaps count) times 0.5, by a skirmisher times 0.75. Cached on
   hands, backpack, path, and levy changes.
 - NPC NBT keys: `AeRoster` (roster row), `AePath`, `AeLevy`, `AeSkill` (tier override),
-  `AeFeintChance`, `AeSidearmBowSlot`, `AeMountLost` (`AeMountUuid` is not packed). All carried through repack.
+  `AeFeintChance`, `AeSidearmBowSlot`, `AeMountLost`, `AeRevenge` (`AeMountUuid` is not packed). All carried through repack.
 
 ## Performance rules and audit findings
 

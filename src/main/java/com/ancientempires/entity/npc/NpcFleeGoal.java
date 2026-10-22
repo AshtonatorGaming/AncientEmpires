@@ -6,6 +6,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.util.DefaultRandomPos;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
@@ -20,9 +21,10 @@ import java.util.EnumSet;
  * alert). It runs home if the danger is not at home, otherwise
  * {@code fleeDistance} blocks away from the threat, then stays away for
  * {@code stayAwayTicks}, less {@code soldierCalmTicks} for each allied soldier
- * close by. A threat still in sight sends it running again. Players are never
- * scanned for; one that hits a civilian counts only once it is really hurting
- * it ({@link NpcEntity#civilianFears}).
+ * close by. A threat still in sight sends it running again. A player is a
+ * threat on sight only when the faction is hostile to them (standing or a
+ * grudge); otherwise one that hits a civilian counts only once it is really
+ * hurting it ({@link NpcEntity#civilianFears}).
  */
 public final class NpcFleeGoal extends Goal
 {
@@ -240,9 +242,15 @@ public final class NpcFleeGoal extends Goal
         {
             return false;
         }
+        if (other instanceof Player player)
+        {
+            // A player the faction is at odds with (standing below zero, or a fresh grudge).
+            return this.npc.isHostileTo(player);
+        }
         if (other instanceof Monster)
         {
-            return true;
+            // Evil factions live alongside monsters; everyone else runs from them.
+            return !this.npc.isFactionNpc() || !AncientEmpiresConfig.relationsEnabled || NpcFactions.hunts(this.npc.getFaction(), other);
         }
         return other instanceof NpcEntity npc && !npc.isCivilian() && npc.isScanTarget(this.npc);
     }

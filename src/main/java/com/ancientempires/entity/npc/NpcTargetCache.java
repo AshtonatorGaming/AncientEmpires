@@ -6,7 +6,8 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.event.TickEvent;
@@ -19,7 +20,7 @@ import java.util.WeakHashMap;
 
 /**
  * Short-lived candidate lists shared by every NPC standing in the same cell.
- * A list holds each {@link Monster} and {@link NpcEntity} near the cell. It is
+ * A list holds each {@link Enemy}, {@link NpcEntity}, player, and townsfolk mob near the cell. It is
  * not filtered by faction or owner: that test is per NPC and cheap, so one
  * query serves every side in the cell. Entries can be a few ticks stale, so
  * readers skip dead or removed entities and measure distance live.
@@ -89,8 +90,11 @@ public final class NpcTargetCache
 
     private static List<LivingEntity> query(Level level, AABB box)
     {
+        // Anything some NPC might hunt: monsters, NPCs, players (by standing), and the
+        // townsfolk evil factions go after. Each NPC filters the shared list itself.
         return level.getEntitiesOfClass(LivingEntity.class, box,
-                living -> living instanceof Monster || living instanceof NpcEntity);
+                living -> living instanceof Enemy || living instanceof NpcEntity || living instanceof Player
+                        || NpcFactions.isTownsfolk(living));
     }
 
     static void countScan()
