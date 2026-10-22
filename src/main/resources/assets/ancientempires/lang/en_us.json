@@ -87,6 +87,7 @@
   "message.ancientempires.npc.levy_off": "Levy dismissed",
   "gui.ancientempires.npc.levy": "Emergency Levy",
   "gui.ancientempires.npc.mount": "Mount the nearest saddled horse you tamed, or dismount",
+  "item.ancientempires.food_bundle": "Food Bundle",
   "message.ancientempires.standing.hostile": "%s now count you as an enemy",
   "commands.ancientempires.standing.header": "Faction standing for %s:",
   "commands.ancientempires.standing.friendly": "At peace: %s",

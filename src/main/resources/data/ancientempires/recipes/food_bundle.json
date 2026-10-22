@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "AP",
+    "BF",
+    "WC"
+  ],
+  "key": {
+    "A": {"item": "minecraft:apple"},
+    "P": {"item": "minecraft:cooked_porkchop"},
+    "B": {"item": "minecraft:bread"},
+    "F": {"item": "minecraft:cooked_beef"},
+    "W": {"type": "forge:partial_nbt", "item": "minecraft:potion", "nbt": {"Potion": "minecraft:water"}},
+    "C": {"item": "minecraft:cooked_chicken"}
+  },
+  "result": {"item": "ancientempires:food_bundle"}
+}

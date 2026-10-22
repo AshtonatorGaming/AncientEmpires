@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "GF",
+    "GB"
+  ],
+  "key": {
+    "G": {"tag": "forge:ingots/gold"},
+    "F": {"item": "ancientempires:food_bundle"},
+    "B": {"tag": "minecraft:beds"}
+  },
+  "result": {"item": "ancientempires:owned_commoner_spawn_egg"}
+}

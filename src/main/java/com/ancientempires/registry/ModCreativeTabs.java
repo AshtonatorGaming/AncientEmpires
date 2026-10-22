@@ -19,6 +19,7 @@ public final class ModCreativeTabs
                     .icon(() -> new ItemStack(ModItems.OWNED_EGGS.get(0).get()))
                     .displayItems((parameters, output) ->
                     {
+                        output.accept(ModItems.FOOD_BUNDLE.get());
                         for (RegistryObject<Item> egg : ModItems.SPAWN_EGGS)
                         {
                             output.accept(egg.get());

@@ -94,7 +94,7 @@ full-body attack animation (body channel, waist bend, stance kept under attacks)
 bc_particle trails on native swings; NPC-on-NPC hits under Better Mob Combat; repack into
 the NPC's own roster scroll; the Ancient Warfare baseline below (owner defense, ally
 alerts, admin escort, doors, day/night home, shields, bash, feints, skill tiers,
-civilians); target memory; cavalry; faction relations and player standing; paths, settlers, equipment roles, emergency levy, and proficiency.
+civilians); target memory; cavalry; faction relations and player standing; the Settler recipe (2 gold, a food bundle, a bed; `data/ancientempires/recipes`) and AW's food bundle; paths, settlers, equipment roles, emergency levy, and proficiency.
 
 ## Not done yet
 
