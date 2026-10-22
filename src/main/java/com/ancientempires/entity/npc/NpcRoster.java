@@ -120,6 +120,30 @@ public final class NpcRoster
         return BY_ID.get(id);
     }
 
+    /**
+     * Best guess at the faction row an NPC came from, for NPCs spawned before the
+     * row id was saved. A skin such as {@code norska.leader.elite#norska_blood_jarl_1}
+     * belongs to the row whose skin is {@code norska.leader.elite}.
+     */
+    @Nullable
+    public static Entry guess(String faction, String skinId)
+    {
+        if (faction == null || faction.isEmpty() || skinId == null || skinId.isEmpty())
+        {
+            return null;
+        }
+        int hash = skinId.indexOf('#');
+        String type = hash > 0 ? skinId.substring(0, hash) : skinId;
+        for (Entry entry : ENTRIES)
+        {
+            if (!entry.owned() && entry.faction().equals(faction) && entry.skin().equals(type))
+            {
+                return entry;
+            }
+        }
+        return null;
+    }
+
     private static List<Entry> load()
     {
         InputStream stream = NpcRoster.class.getResourceAsStream(RESOURCE);
@@ -278,6 +302,17 @@ public final class NpcRoster
         public String subtype()
         {
             return this.subtype;
+        }
+
+        public String faction()
+        {
+            return this.faction;
+        }
+
+        /** The skin id this row assigns, usually a catalog type such as {@code norska.leader}. */
+        public String skin()
+        {
+            return this.skin;
         }
 
         public boolean owned()

@@ -7,6 +7,7 @@ import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,5 +47,26 @@ public final class ModItems
 
     private ModItems()
     {
+    }
+
+    /**
+     * The spawn egg for a roster row, or null. Repack uses this so an NPC goes
+     * back into the scroll it came from. A short walk; repack is a rare click.
+     */
+    @Nullable
+    public static Item eggFor(String rosterId)
+    {
+        if (rosterId == null || rosterId.isEmpty())
+        {
+            return null;
+        }
+        for (RegistryObject<Item> egg : SPAWN_EGGS)
+        {
+            if (egg.get() instanceof NpcSpawnEggItem item && rosterId.equals(item.rosterId()))
+            {
+                return item;
+            }
+        }
+        return null;
     }
 }

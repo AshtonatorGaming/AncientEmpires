@@ -38,6 +38,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.CrossbowItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
@@ -103,9 +104,13 @@ public class NpcEntity extends PathfinderMob
     private static final String UNNAMED_KEY = "AeUnnamed";
     /** Packed eggs only. The spawn merge cannot delete the home set at placement. */
     private static final String NO_HOME_KEY = "AeNoHome";
+    /** The roster row the NPC was spawned from. Repack returns it to that scroll. */
+    private static final String ROSTER_KEY = "AeRoster";
 
     private final NpcInventory inventory = new NpcInventory(this);
     private final NpcSidearm sidearm = new NpcSidearm(this);
+    /** Roster row id, or empty for an NPC from the generic scroll or one spawned before rows were saved. */
+    private String rosterId = "";
 
     /** Server post for {@link #HOLDING_KEY}. The client only needs the boolean. */
     @Nullable
@@ -345,6 +350,7 @@ public class NpcEntity extends PathfinderMob
             if (entry != null)
             {
                 entry.apply(npc);
+                npc.rosterId = entry.id();
                 if (entry.owned() && npc.getOwner() == null)
                 {
                     UUID pending = SPAWN_OWNER.get();
@@ -703,13 +709,25 @@ public class NpcEntity extends PathfinderMob
         return true;
     }
 
+    /**
+     * The scroll this NPC came from, so a faction soldier keeps its faction
+     * colors and class icon. The egg's spawn re-applies its roster row first,
+     * then the packed state overwrites gear, skin, faction, owner, and name.
+     * An NPC with no known row uses the generic owned scroll.
+     */
     private ItemStack createPackedItem()
     {
-        if (ModItems.OWNED_EGGS.isEmpty())
+        NpcRoster.Entry entry = this.rosterEntry();
+        Item egg = entry == null ? null : ModItems.eggFor(entry.id());
+        if (egg == null)
         {
-            return ItemStack.EMPTY;
+            if (ModItems.OWNED_EGGS.isEmpty())
+            {
+                return ItemStack.EMPTY;
+            }
+            egg = ModItems.OWNED_EGGS.get(0).get();
         }
-        ItemStack stack = new ItemStack(ModItems.OWNED_EGGS.get(0).get());
+        ItemStack stack = new ItemStack(egg);
         CompoundTag entityTag = new CompoundTag();
         Component customName = this.getCustomName();
         boolean unnamed = customName == null || customName.getString().isBlank();
@@ -717,13 +735,45 @@ public class NpcEntity extends PathfinderMob
         stack.getOrCreateTag().put("EntityTag", entityTag);
         if (unnamed)
         {
-            stack.setHoverName(Component.translatable("item.ancientempires.unnamed_npc"));
+            // A known row's scroll already names the NPC's class; only the generic one needs a label.
+            if (entry == null)
+            {
+                stack.setHoverName(Component.translatable("item.ancientempires.unnamed_npc"));
+            }
         }
-        else
+        else if (entry == null || !customName.getString().equals(entry.name()))
         {
+            // A renamed NPC shows its own name. One still named after its row keeps the scroll's.
             stack.setHoverName(customName);
         }
         return stack;
+    }
+
+    /**
+     * Saves the known or guessed row, so an older NPC learns its row on its next save.
+     */
+    private void writeRoster(CompoundTag tag)
+    {
+        NpcRoster.Entry entry = this.rosterEntry();
+        if (entry != null)
+        {
+            tag.putString(ROSTER_KEY, entry.id());
+        }
+    }
+
+    /**
+     * The saved roster row, or a guess from faction and skin for an NPC spawned
+     * before the row was saved. Owned NPCs without a row have no guess.
+     */
+    @Nullable
+    private NpcRoster.Entry rosterEntry()
+    {
+        NpcRoster.Entry saved = NpcRoster.byId(this.rosterId);
+        if (saved != null)
+        {
+            return saved;
+        }
+        return NpcRoster.guess(this.getFaction(), this.getSkinId());
     }
 
     /**
@@ -746,6 +796,7 @@ public class NpcEntity extends PathfinderMob
 
         this.inventory.save(tag);
         this.sidearm.save(tag);
+        this.writeRoster(tag);
         tag.putString(SKIN_KEY, this.getSkinId());
         tag.putString(FACTION_KEY, this.getFaction());
         tag.putBoolean(FOLLOWING_KEY, this.isFollowing());
@@ -1208,6 +1259,7 @@ public class NpcEntity extends PathfinderMob
         super.addAdditionalSaveData(tag);
         this.inventory.save(tag);
         this.sidearm.save(tag);
+        this.writeRoster(tag);
         UUID owner = this.getOwner();
         if (owner != null)
         {
@@ -1238,6 +1290,10 @@ public class NpcEntity extends PathfinderMob
         this.inventory.load(tag);
         // After the hands (super) and the backpack, so a saved swap can be undone.
         this.sidearm.load(tag);
+        if (tag.contains(ROSTER_KEY))
+        {
+            this.rosterId = tag.getString(ROSTER_KEY);
+        }
         if (tag.getBoolean(NO_OWNER_KEY))
         {
             this.setOwner(null);
