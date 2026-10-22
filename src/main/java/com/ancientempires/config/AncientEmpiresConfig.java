@@ -125,6 +125,13 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.IntValue RELATIONS_REVENGE_TICKS;
     private static final ForgeConfigSpec.IntValue RELATIONS_STANDING_LIMIT;
     private static final ForgeConfigSpec.BooleanValue RELATIONS_COUNT_CREATIVE;
+    private static final ForgeConfigSpec.BooleanValue IMMIGRATION_ENABLED;
+    private static final ForgeConfigSpec.DoubleValue IMMIGRATION_CHANCE;
+    private static final ForgeConfigSpec.IntValue IMMIGRATION_MAX_GROUP;
+    private static final ForgeConfigSpec.IntValue IMMIGRATION_BED_RADIUS;
+    private static final ForgeConfigSpec.DoubleValue IMMIGRATION_SPAWN_DISTANCE;
+    private static final ForgeConfigSpec.IntValue IMMIGRATION_FOOD_PER_SETTLER;
+    private static final ForgeConfigSpec.IntValue IMMIGRATION_FOOD_CAPACITY;
 
     private static final ForgeConfigSpec.BooleanValue TARGET_LEGACY_SCAN;
     private static final ForgeConfigSpec.IntValue TARGET_SCAN_INTERVAL;
@@ -475,6 +482,30 @@ public final class AncientEmpiresConfig
                 .define("countCreativeKills", false);
         builder.pop();
 
+        builder.comment("Settlers' Posts: Dwarf Fortress style immigration. Checked once per in-game day, at the day change.").push("immigration");
+        IMMIGRATION_ENABLED = builder
+                .comment("Whether open posts draw settlers at all.")
+                .define("enabled", true);
+        IMMIGRATION_CHANCE = builder
+                .comment("Chance each day that an open post with room and food gets a group.")
+                .defineInRange("chance", 0.5D, 0.0D, 1.0D);
+        IMMIGRATION_MAX_GROUP = builder
+                .comment("Largest group in one day. Free beds and food can make it smaller.")
+                .defineInRange("maxGroup", 3, 1, 16);
+        IMMIGRATION_BED_RADIUS = builder
+                .comment("Beds within this many blocks of the post count as room, less the owner's NPCs already there.")
+                .defineInRange("bedRadius", 32, 4, 96);
+        IMMIGRATION_SPAWN_DISTANCE = builder
+                .comment("How far out, in blocks, newcomers appear before walking in.")
+                .defineInRange("spawnDistance", 24.0D, 4.0D, 64.0D);
+        IMMIGRATION_FOOD_PER_SETTLER = builder
+                .comment("Food bundles each newcomer takes from the post's store. 0 makes beds the only limit.")
+                .defineInRange("foodPerSettler", 1, 0, 64);
+        IMMIGRATION_FOOD_CAPACITY = builder
+                .comment("Food bundles a post can store.")
+                .defineInRange("foodCapacity", 64, 1, 1024);
+        builder.pop();
+
         builder.push("targeting");
         TARGET_LEGACY_SCAN = builder
                 .comment("Use the two vanilla nearest-target goals instead of the shared scan. For comparison and as a fallback. Applies to NPCs loaded after the change.")
@@ -619,6 +650,13 @@ public final class AncientEmpiresConfig
     public static int relationsRevengeTicks = 6000;
     public static int relationsStandingLimit = 1000;
     public static boolean relationsCountCreative = false;
+    public static boolean immigrationEnabled = true;
+    public static double immigrationChance = 0.5D;
+    public static int immigrationMaxGroup = 3;
+    public static int immigrationBedRadius = 32;
+    public static double immigrationSpawnDistance = 24.0D;
+    public static int immigrationFoodPerSettler = 1;
+    public static int immigrationFoodCapacity = 64;
 
     public static boolean targetLegacyScan = false;
     public static int targetScanInterval = 10;
@@ -759,6 +797,13 @@ public final class AncientEmpiresConfig
         relationsRevengeTicks = RELATIONS_REVENGE_TICKS.get();
         relationsStandingLimit = RELATIONS_STANDING_LIMIT.get();
         relationsCountCreative = RELATIONS_COUNT_CREATIVE.get();
+        immigrationEnabled = IMMIGRATION_ENABLED.get();
+        immigrationChance = IMMIGRATION_CHANCE.get();
+        immigrationMaxGroup = IMMIGRATION_MAX_GROUP.get();
+        immigrationBedRadius = IMMIGRATION_BED_RADIUS.get();
+        immigrationSpawnDistance = IMMIGRATION_SPAWN_DISTANCE.get();
+        immigrationFoodPerSettler = IMMIGRATION_FOOD_PER_SETTLER.get();
+        immigrationFoodCapacity = IMMIGRATION_FOOD_CAPACITY.get();
 
         targetLegacyScan = TARGET_LEGACY_SCAN.get();
         targetScanInterval = TARGET_SCAN_INTERVAL.get();

@@ -94,7 +94,7 @@ full-body attack animation (body channel, waist bend, stance kept under attacks)
 bc_particle trails on native swings; NPC-on-NPC hits under Better Mob Combat; repack into
 the NPC's own roster scroll; the Ancient Warfare baseline below (owner defense, ally
 alerts, admin escort, doors, day/night home, shields, bash, feints, skill tiers,
-civilians); target memory; cavalry; faction relations and player standing; the Settler recipe (2 gold, a food bundle, a bed; `data/ancientempires/recipes`) and AW's food bundle; paths, settlers, equipment roles, emergency levy, and proficiency.
+civilians); target memory; cavalry; faction relations and player standing; the Settler recipe (2 gold, a food bundle, a bed; `data/ancientempires/recipes`) and AW's food bundle; Settlers' Post immigration; paths, settlers, equipment roles, emergency levy, and proficiency.
 
 ## Not done yet
 
@@ -166,6 +166,16 @@ its own unless noted). Before adding behavior, check what AW did first.
   defense, and it ends once the threat backs off past `standBreakRange`. Players are
   never scanned for; a player who hits a civilian is ignored (no fleeing, fighting back,
   or calls for help) until its health is under `playerThreatHealth` (`civilianFears`).
+- Getting settlers in survival: the Settler scroll recipe (2 gold, AW's food bundle, a bed),
+  and the Settlers' Post (`block/SettlersPostBlock`, `NpcImmigration`), Dwarf Fortress
+  style immigration kept apart from the future Town Hall (upkeep, priest revival within
+  ~100 blocks). Nothing ticks per post: once per in-game day per dimension, each open
+  post in a loaded chunk may (`immigration.chance`) draw 1 to `maxGroup` settlers for its
+  owner, capped by free beds (vanilla HOME points within `bedRadius`, the villager index,
+  less the owner's NPCs there) and stored food bundles (`foodPerSettler` each). They
+  appear `spawnDistance` out and walk in; home is the post. Right-click with food bundles
+  to stock it (hoppers work too), empty-handed to open or close it (owner or admin),
+  sneak for status.
 - Relations (`NpcFactions`, `assets/ancientempires/npc/factions.json`, ported from AW 2
   Tweaked 1.6.1 with each faction's list resolved over the shared defaults): each of the
   44 factions lists who it attacks (one-directional: Norska attack Sealsker, not the

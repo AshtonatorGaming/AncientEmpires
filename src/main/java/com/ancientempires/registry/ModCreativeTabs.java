@@ -20,6 +20,7 @@ public final class ModCreativeTabs
                     .displayItems((parameters, output) ->
                     {
                         output.accept(ModItems.FOOD_BUNDLE.get());
+                        output.accept(ModItems.SETTLERS_POST.get());
                         for (RegistryObject<Item> egg : ModItems.SPAWN_EGGS)
                         {
                             output.accept(egg.get());

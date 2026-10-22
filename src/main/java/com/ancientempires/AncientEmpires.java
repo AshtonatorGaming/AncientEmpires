@@ -4,6 +4,8 @@ import com.ancientempires.combat.BetterCombatBridge;
 import com.ancientempires.config.AncientEmpiresClientConfig;
 import com.ancientempires.config.AncientEmpiresConfig;
 import com.ancientempires.entity.npc.NpcEntity;
+import com.ancientempires.registry.ModBlockEntities;
+import com.ancientempires.registry.ModBlocks;
 import com.ancientempires.registry.ModCreativeTabs;
 import com.ancientempires.registry.ModEntities;
 import com.ancientempires.registry.ModItems;
@@ -44,6 +46,8 @@ public class AncientEmpires
         IEventBus modBus = context.getModEventBus();
 
         ModEntities.ENTITIES.register(modBus);
+        ModBlocks.BLOCKS.register(modBus);
+        ModBlockEntities.BLOCK_ENTITIES.register(modBus);
         ModItems.ITEMS.register(modBus);
         ModCreativeTabs.TABS.register(modBus);
         ModMenus.MENUS.register(modBus);

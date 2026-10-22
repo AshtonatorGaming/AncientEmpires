@@ -645,6 +645,13 @@ public class NpcEntity extends PathfinderMob
      * Held across a roster egg's spawn, including a dispenser.
      * Faction rows do not claim the placer. Owned rows read {@link #SPAWN_OWNER}.
      */
+    /** Sets the NPC's home in its current dimension. Immigration uses this for newcomers. */
+    public void assignHome(BlockPos home)
+    {
+        this.entityData.set(DATA_HOME, Optional.of(home.immutable()));
+        this.entityData.set(DATA_HOME_DIM, this.level().dimension().location().toString());
+    }
+
     public static void beginSpawnRoster(String rosterId)
     {
         SPAWN_ROSTER.set(rosterId);

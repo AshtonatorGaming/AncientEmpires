@@ -18,6 +18,8 @@ public final class ModItems
 
     /** Ancient Warfare's food bundle: a crafting component for new settlers, later NPC upkeep. */
     public static final RegistryObject<Item> FOOD_BUNDLE = ITEMS.register("food_bundle", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> SETTLERS_POST = ITEMS.register("settlers_post",
+            () -> new net.minecraft.world.item.BlockItem(ModBlocks.SETTLERS_POST.get(), new Item.Properties()));
 
     public static final List<RegistryObject<Item>> OWNED_EGGS;
     public static final List<RegistryObject<Item>> ROSTER_EGGS;
