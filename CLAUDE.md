@@ -34,7 +34,7 @@ instead of reflecting per call), Skirmisher thresholds (about 4.5 to 28 blocks).
 
 - `entity/npc/NpcEntity` - the NPC. Goals: 0 Float, `OpenDoorGoal`, `NpcNightDoorsGoal`;
   1 `NpcBowAttackGoal`, `NpcShieldGoal` (no flags), `NpcFleeGoal` (civilians only);
-  2 `NpcMeleeAttackGoal`; 3 hold position; 4 follow, `NpcFarmerGoal`, `NpcWoodcutterGoal`, `NpcMinerGoal`, `NpcRancherGoal`, `NpcHunterGoal`, `NpcFisherGoal`, also sleep and priest; 5 `NpcReturnHomeGoal`; 6+ idle.
+  2 `NpcMeleeAttackGoal`; 3 hold position; 4 follow, `NpcFarmerGoal`, `NpcWoodcutterGoal`, `NpcMinerGoal`, `NpcRancherGoal`, `NpcHunterGoal`, `NpcFisherGoal`, `NpcCookGoal`, also sleep and priest; 5 `NpcReturnHomeGoal`; 6+ idle.
   Targets: 1 and 2 `NpcOwnerDefenseGoal` (DEFEND, ASSIST), 3 `NpcHurtByTargetGoal` (with
   ally alert), 4 `NpcTargetGoal`: one staggered scan over a shared per-cell candidate list
   (`NpcTargetCache`), faction filter first, sight checks nearest first.
@@ -94,7 +94,7 @@ full-body attack animation (body channel, waist bend, stance kept under attacks)
 bc_particle trails on native swings; NPC-on-NPC hits under Better Mob Combat; repack into
 the NPC's own roster scroll; the Ancient Warfare baseline below (owner defense, ally
 alerts, admin escort, doors, day/night home, shields, bash, feints, skill tiers,
-civilians); target memory; cavalry; faction relations and player standing; the Settler recipe (2 gold, a food bundle, a bed; `data/ancientempires/recipes`) and AW's food bundle; Settlers' Post immigration; hands-on farmer, woodcutter, and miner (Crop Farm, Tree Farm, Quarry); self-fed upkeep and the Town Hall's fallen records; burning panic and mod-gated reaction poses; medics, priests, and sleeping in beds; ranchers (Animal Pen), hunters (Hunting Lodge), and fishers (Fishing Dock); the standings screen with AW banners; paths, settlers, equipment roles, emergency levy, and proficiency.
+civilians); target memory; cavalry; faction relations and player standing; the Settler recipe (2 gold, a food bundle, a bed; `data/ancientempires/recipes`) and AW's food bundle; Settlers' Post immigration; hands-on farmer, woodcutter, and miner (Crop Farm, Tree Farm, Quarry); self-fed upkeep and the Town Hall's fallen records; burning panic and mod-gated reaction poses; medics, priests, and sleeping in beds; ranchers (Animal Pen), hunters (Hunting Lodge), fishers (Fishing Dock), and cooks (Kitchen); the standings screen with AW banners; paths, settlers, equipment roles, emergency levy, and proficiency.
 
 ## Not done yet
 
@@ -238,6 +238,12 @@ its own unless noted). Before adding behavior, check what AW did first.
   (less with Lure), and rolls vanilla's fishing loot table (luck from the rod, modded
   entries included), recasting until its backpack fills (`work.fishRecast`). The worker
   base's give-up timer only counts while walking, so long actions are not cut off.
+- Cook: a Worker-path NPC with a bowl at its owner's Kitchen (one 18-slot store). It
+  stands there and smokes raw food by vanilla's smoker recipes (`work.cookTicks` each,
+  burning fuel from the store), and packs cooked food worth `cookBundleNutrition` (24)
+  hunger into a food bundle (the crafting recipe takes about 37 and a water bottle), up
+  to `cookBundleTarget` bundles. It carries nothing. Craftsmen (any recipe) are separate,
+  later.
 - Medic (`NpcMedicGoal`, priority 1): a soldier with bandages (`BandageItem`, 2 paper and
   string make 4) in its off hand. It goes to the most hurt ally in `medic.range` (same
   faction or owner, its owner, itself) under `healBelow`, even mid-fight, binds the wound

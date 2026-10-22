@@ -5,6 +5,7 @@ import com.ancientempires.block.AnimalPenBlockEntity;
 import com.ancientempires.block.CropFarmBlockEntity;
 import com.ancientempires.block.FishingDockBlockEntity;
 import com.ancientempires.block.HuntingLodgeBlockEntity;
+import com.ancientempires.block.KitchenBlockEntity;
 import com.ancientempires.block.QuarryBlockEntity;
 import com.ancientempires.block.SettlersPostBlockEntity;
 import com.ancientempires.block.TownHallBlockEntity;
@@ -49,6 +50,10 @@ public final class ModBlockEntities
     @SuppressWarnings("DataFlowIssue")
     public static final RegistryObject<BlockEntityType<FishingDockBlockEntity>> FISHING_DOCK = BLOCK_ENTITIES.register("fishing_dock",
             () -> BlockEntityType.Builder.of(FishingDockBlockEntity::new, ModBlocks.FISHING_DOCK.get()).build(null));
+
+    @SuppressWarnings("DataFlowIssue")
+    public static final RegistryObject<BlockEntityType<KitchenBlockEntity>> KITCHEN = BLOCK_ENTITIES.register("kitchen",
+            () -> BlockEntityType.Builder.of(KitchenBlockEntity::new, ModBlocks.KITCHEN.get()).build(null));
 
     private ModBlockEntities()
     {

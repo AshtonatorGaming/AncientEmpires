@@ -207,6 +207,10 @@ public enum NpcPath
         {
             return "hunter";
         }
+        if (stack.is(net.minecraft.world.item.Items.BOWL))
+        {
+            return "cook";
+        }
         return null;
     }
 

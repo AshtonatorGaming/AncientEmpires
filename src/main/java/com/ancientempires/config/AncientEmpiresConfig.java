@@ -162,6 +162,9 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.IntValue FISH_DEFAULT_RADIUS;
     private static final ForgeConfigSpec.IntValue FISH_MAX_RADIUS;
     private static final ForgeConfigSpec.BooleanValue FISH_RECAST;
+    private static final ForgeConfigSpec.IntValue COOK_TICKS;
+    private static final ForgeConfigSpec.IntValue COOK_BUNDLE_NUTRITION;
+    private static final ForgeConfigSpec.IntValue COOK_BUNDLE_TARGET;
     private static final ForgeConfigSpec.BooleanValue UPKEEP_ENABLED;
     private static final ForgeConfigSpec.DoubleValue UPKEEP_RANGE;
     private static final ForgeConfigSpec.IntValue UPKEEP_RATION;
@@ -650,6 +653,15 @@ public final class AncientEmpiresConfig
         FISH_RECAST = builder
                 .comment("A fisher casts again into the same water after a catch, until its backpack is full. Off: it picks new water each time.")
                 .define("fishRecast", true);
+        COOK_TICKS = builder
+                .comment("Ticks a cook takes to smoke one raw food, and the fuel it burns (a smoker takes 100). Cooks hold a bowl.")
+                .defineInRange("cookTicks", 100, 10, 1200);
+        COOK_BUNDLE_NUTRITION = builder
+                .comment("Hunger of cooked food a cook packs into one food bundle. The crafting recipe takes about 37 and a water bottle.")
+                .defineInRange("cookBundleNutrition", 24, 1, 200);
+        COOK_BUNDLE_TARGET = builder
+                .comment("A cook stops packing bundles once the kitchen holds this many.")
+                .defineInRange("cookBundleTarget", 16, 1, 1024);
         builder.pop();
 
         builder.comment("Food and the Town Hall, as in Ancient Warfare. NPCs feed themselves; nothing here runs on a timer.").push("upkeep");
@@ -914,6 +926,9 @@ public final class AncientEmpiresConfig
     public static int fishDefaultRadius = 4;
     public static int fishMaxRadius = 8;
     public static boolean fishRecast = true;
+    public static int cookTicks = 100;
+    public static int cookBundleNutrition = 24;
+    public static int cookBundleTarget = 16;
     public static boolean upkeepEnabled = true;
     public static double upkeepRange = 100.0D;
     public static int upkeepRation = 6;
@@ -1126,6 +1141,9 @@ public final class AncientEmpiresConfig
         fishDefaultRadius = FISH_DEFAULT_RADIUS.get();
         fishMaxRadius = FISH_MAX_RADIUS.get();
         fishRecast = FISH_RECAST.get();
+        cookTicks = COOK_TICKS.get();
+        cookBundleNutrition = COOK_BUNDLE_NUTRITION.get();
+        cookBundleTarget = COOK_BUNDLE_TARGET.get();
         upkeepEnabled = UPKEEP_ENABLED.get();
         upkeepRange = UPKEEP_RANGE.get();
         upkeepRation = UPKEEP_RATION.get();
