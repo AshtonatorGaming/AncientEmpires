@@ -85,6 +85,8 @@ public class NpcEntity extends PathfinderMob
     private static final EntityDataAccessor<String> DATA_SKIN = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.STRING);
     /** Empty for an owned or unclaimed NPC. A faction NPC stores an id such as {@code empire}. */
     private static final EntityDataAccessor<String> DATA_FACTION = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.STRING);
+    /** Resolved role id, for the inventory screen. */
+    private static final EntityDataAccessor<String> DATA_ROLE = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.STRING);
     /** Off-hand beat of an empty-hand fist combo. Cleared with the presentation, not the attack window. */
     private static final EntityDataAccessor<Boolean> DATA_ATTACK_OFFHAND = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.BOOLEAN);
     /** 1 is a normal player body. Dwarf and giant eggs store a different scale. */
@@ -113,6 +115,7 @@ public class NpcEntity extends PathfinderMob
     private static final String ROSTER_KEY = "AeRoster";
     private static final String FEINT_KEY = "AeFeintChance";
     private static final String SKILL_KEY = "AeSkill";
+    private static final String ROLE_KEY = "AeRole";
 
     private final NpcInventory inventory = new NpcInventory(this);
     private final NpcSidearm sidearm = new NpcSidearm(this);
@@ -142,6 +145,9 @@ public class NpcEntity extends PathfinderMob
     private String rosterSubtype;
     /** Tick until which a cornered civilian fights instead of running. */
     private int standGroundUntil;
+    /** A role chosen for this NPC; null means the roster rank decides. */
+    @Nullable
+    private NpcRole chosenRole;
     /** Server only: a would-be target a civilian flees instead. */
     @Nullable
     private LivingEntity fearSource;
@@ -201,6 +207,7 @@ public class NpcEntity extends PathfinderMob
         this.entityData.define(DATA_HOME_DIM, "");
         this.entityData.define(DATA_SKIN, "");
         this.entityData.define(DATA_FACTION, "");
+        this.entityData.define(DATA_ROLE, "");
         this.entityData.define(DATA_ATTACK_OFFHAND, false);
         this.entityData.define(DATA_BODY_SCALE, 1.0F);
     }
@@ -653,6 +660,7 @@ public class NpcEntity extends PathfinderMob
     {
         this.skillTier = -1;
         this.rosterSubtype = null;
+        this.syncRole();
     }
 
     /**
@@ -663,7 +671,41 @@ public class NpcEntity extends PathfinderMob
      */
     public boolean isCivilian()
     {
-        return AncientEmpiresConfig.civiliansFlee && AncientEmpiresConfig.civilianSubtypes.contains(this.getRosterSubtype());
+        return AncientEmpiresConfig.civiliansFlee && !this.getRole().combat();
+    }
+
+    /**
+     * The NPC's role: its own ({@code AeRole}) if one was chosen, otherwise the
+     * one its roster rank implies. The client reads the synced copy.
+     */
+    public NpcRole getRole()
+    {
+        if (this.level().isClientSide)
+        {
+            NpcRole synced = NpcRole.byId(this.entityData.get(DATA_ROLE));
+            return synced != null ? synced : NpcRole.SOLDIER;
+        }
+        if (this.chosenRole != null)
+        {
+            return this.chosenRole;
+        }
+        return NpcRole.fromRank(this.getRosterSubtype());
+    }
+
+    /** Gives the NPC its own role, kept through saves and repacking. */
+    public void setRole(NpcRole role)
+    {
+        this.chosenRole = role;
+        this.standGroundUntil = 0;
+        this.syncRole();
+    }
+
+    private void syncRole()
+    {
+        if (!this.level().isClientSide)
+        {
+            this.entityData.set(DATA_ROLE, this.getRole().id());
+        }
     }
 
     /**
@@ -1171,6 +1213,10 @@ public class NpcEntity extends PathfinderMob
         {
             tag.putInt(SKILL_KEY, this.skillOverride);
         }
+        if (this.chosenRole != null)
+        {
+            tag.putString(ROLE_KEY, this.chosenRole.id());
+        }
         if (this.feintChance >= 0.0F)
         {
             tag.putFloat(FEINT_KEY, this.feintChance);
@@ -1654,6 +1700,10 @@ public class NpcEntity extends PathfinderMob
         {
             tag.putInt(SKILL_KEY, this.skillOverride);
         }
+        if (this.chosenRole != null)
+        {
+            tag.putString(ROLE_KEY, this.chosenRole.id());
+        }
         if (this.feintChance >= 0.0F)
         {
             tag.putFloat(FEINT_KEY, this.feintChance);
@@ -1699,6 +1749,10 @@ public class NpcEntity extends PathfinderMob
         if (tag.contains(SKILL_KEY))
         {
             this.skillOverride = Mth.clamp(tag.getInt(SKILL_KEY), 0, 3);
+        }
+        if (tag.contains(ROLE_KEY))
+        {
+            this.chosenRole = NpcRole.byId(tag.getString(ROLE_KEY));
         }
         this.forgetRosterCaches();
         if (tag.getBoolean(NO_OWNER_KEY))

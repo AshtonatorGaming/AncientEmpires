@@ -8,7 +8,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * Combat timing and reach. Every value the attack goal reads lives here so a pack
@@ -95,7 +94,6 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.IntValue FEINT_RECOVERY;
 
     private static final ForgeConfigSpec.BooleanValue CIVILIANS_FLEE;
-    private static final ForgeConfigSpec.ConfigValue<List<? extends String>> CIVILIAN_SUBTYPES;
     private static final ForgeConfigSpec.DoubleValue CIVILIAN_FLEE_RANGE;
     private static final ForgeConfigSpec.DoubleValue CIVILIAN_FLEE_HEIGHT;
     private static final ForgeConfigSpec.DoubleValue CIVILIAN_FLEE_DISTANCE;
@@ -355,12 +353,8 @@ public final class AncientEmpiresConfig
 
         builder.comment("Ancient Warfare's civilians, workers, and traders fled instead of fighting.").push("civilians");
         CIVILIANS_FLEE = builder
-                .comment("Civilians flee threats and never fight. Off: every NPC fights.")
+                .comment("Every non-combat role (commoners, workers, traders, priests, bards) flees threats and fights only when cornered or levied. Off: every NPC fights.")
                 .define("enabled", true);
-        CIVILIAN_SUBTYPES = builder
-                .comment("Roster ranks that are civilians. They run even when armed and fight only when cornered.")
-                .defineListAllowEmpty("subtypes", List.of("civilian.male", "civilian.female", "worker", "farmer", "miner", "woodcutter",
-                        "courier", "trader", "researcher", "craftsman", "engineer", "bard"), value -> value instanceof String);
         CIVILIAN_FLEE_RANGE = builder
                 .comment("A civilian notices a visible threat this many blocks away, and runs home only if the danger is farther than this from home.")
                 .defineInRange("fleeRange", 16.0D, 2.0D, 64.0D);
@@ -512,8 +506,6 @@ public final class AncientEmpiresConfig
     public static int feintRecoveryTicks = 6;
 
     public static boolean civiliansFlee = true;
-    public static Set<String> civilianSubtypes = Set.of("civilian.male", "civilian.female", "worker", "farmer", "miner", "woodcutter",
-            "courier", "trader", "researcher", "craftsman", "engineer", "bard");
     public static double civilianFleeRange = 16.0D;
     public static double civilianFleeHeight = 3.0D;
     public static double civilianFleeDistance = 16.0D;
@@ -635,7 +627,6 @@ public final class AncientEmpiresConfig
         feintRecoveryTicks = FEINT_RECOVERY.get();
 
         civiliansFlee = CIVILIANS_FLEE.get();
-        civilianSubtypes = Set.copyOf(CIVILIAN_SUBTYPES.get());
         civilianFleeRange = CIVILIAN_FLEE_RANGE.get();
         civilianFleeHeight = CIVILIAN_FLEE_HEIGHT.get();
         civilianFleeDistance = CIVILIAN_FLEE_DISTANCE.get();
