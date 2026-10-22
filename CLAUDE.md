@@ -94,14 +94,14 @@ full-body attack animation (body channel, waist bend, stance kept under attacks)
 bc_particle trails on native swings; NPC-on-NPC hits under Better Mob Combat; repack into
 the NPC's own roster scroll; the Ancient Warfare baseline below (owner defense, ally
 alerts, admin escort, doors, day/night home, shields, bash, feints, skill tiers,
-civilians); target memory; cavalry; faction relations and player standing; the Settler recipe (2 gold, a food bundle, a bed; `data/ancientempires/recipes`) and AW's food bundle; Settlers' Post immigration; hands-on farmer, woodcutter, and miner (Crop Farm, Tree Farm, Quarry); self-fed upkeep and the Town Hall's fallen records; burning panic and mod-gated reaction poses; paths, settlers, equipment roles, emergency levy, and proficiency.
+civilians); target memory; cavalry; faction relations and player standing; the Settler recipe (2 gold, a food bundle, a bed; `data/ancientempires/recipes`) and AW's food bundle; Settlers' Post immigration; hands-on farmer, woodcutter, and miner (Crop Farm, Tree Farm, Quarry); self-fed upkeep and the Town Hall's fallen records; burning panic and mod-gated reaction poses; medics, priests, and sleeping in beds; paths, settlers, equipment roles, emergency levy, and proficiency.
 
 ## Not done yet
 
 1. Ancient Warfare baseline still missing: lance charges and other mounted tactics,
    vampire factions avoiding sunlight, day and night patrols, and the
    behavior behind the remaining roles (bard singing, trader, courier, worker
-   jobs beyond the farmer, woodcutter, and miner, commander, patrol; priest revival from the Town Hall records). Roles are labels from
+   jobs beyond the farmer, woodcutter, and miner, commander, patrol). Roles are labels from
    equipment until that behavior exists.
 2. Threat scoring, cliff-safe retreat (`FleeNavigation`), skirmishers.
 3. Spawner block that stores a full NPC NBT snapshot.
