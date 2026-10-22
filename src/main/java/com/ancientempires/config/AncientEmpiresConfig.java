@@ -147,6 +147,9 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.IntValue TREE_SPACING;
     private static final ForgeConfigSpec.IntValue TREE_REACH;
     private static final ForgeConfigSpec.IntValue TREE_MAX_LOGS;
+    private static final ForgeConfigSpec.IntValue QUARRY_DEFAULT_RADIUS;
+    private static final ForgeConfigSpec.IntValue QUARRY_MAX_RADIUS;
+    private static final ForgeConfigSpec.IntValue QUARRY_MAX_DEPTH;
 
     private static final ForgeConfigSpec.BooleanValue TARGET_LEGACY_SCAN;
     private static final ForgeConfigSpec.IntValue TARGET_SCAN_INTERVAL;
@@ -567,6 +570,15 @@ public final class AncientEmpiresConfig
         TREE_MAX_LOGS = builder
                 .comment("Most logs one tree can have; bigger structures are not felled past this.")
                 .defineInRange("treeMaxLogs", 128, 8, 1024);
+        QUARRY_DEFAULT_RADIUS = builder
+                .comment("A new quarry's pit, in blocks from its middle to its edge (3 is 7 by 7). The pit lies in front of the quarry block. Miners hold a pickaxe.")
+                .defineInRange("quarryDefaultRadius", 3, 1, 8);
+        QUARRY_MAX_RADIUS = builder
+                .comment("Largest quarry pit, in blocks from its middle.")
+                .defineInRange("quarryMaxRadius", 6, 1, 8);
+        QUARRY_MAX_DEPTH = builder
+                .comment("Layers a quarry digs below its block before it is done.")
+                .defineInRange("quarryMaxDepth", 32, 1, 256);
         builder.pop();
 
         builder.push("targeting");
@@ -735,6 +747,9 @@ public final class AncientEmpiresConfig
     public static int treeSpacing = 3;
     public static int treeReach = 4;
     public static int treeMaxLogs = 128;
+    public static int quarryDefaultRadius = 3;
+    public static int quarryMaxRadius = 6;
+    public static int quarryMaxDepth = 32;
 
     public static boolean targetLegacyScan = false;
     public static int targetScanInterval = 10;
@@ -897,6 +912,9 @@ public final class AncientEmpiresConfig
         treeSpacing = TREE_SPACING.get();
         treeReach = TREE_REACH.get();
         treeMaxLogs = TREE_MAX_LOGS.get();
+        quarryDefaultRadius = QUARRY_DEFAULT_RADIUS.get();
+        quarryMaxRadius = QUARRY_MAX_RADIUS.get();
+        quarryMaxDepth = QUARRY_MAX_DEPTH.get();
 
         targetLegacyScan = TARGET_LEGACY_SCAN.get();
         targetScanInterval = TARGET_SCAN_INTERVAL.get();

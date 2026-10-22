@@ -2,6 +2,7 @@ package com.ancientempires.registry;
 
 import com.ancientempires.AncientEmpires;
 import com.ancientempires.block.CropFarmBlock;
+import com.ancientempires.block.QuarryBlock;
 import com.ancientempires.block.SettlersPostBlock;
 import com.ancientempires.block.TreeFarmBlock;
 import net.minecraft.world.level.block.Block;
@@ -34,6 +35,12 @@ public final class ModBlocks
                     .mapColor(MapColor.WOOD)
                     .strength(2.5F)
                     .sound(SoundType.WOOD)));
+
+    public static final RegistryObject<Block> QUARRY = BLOCKS.register("quarry",
+            () -> new QuarryBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.STONE)
+                    .strength(3.0F)
+                    .sound(SoundType.STONE)));
 
     private ModBlocks()
     {

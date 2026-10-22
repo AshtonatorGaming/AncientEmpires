@@ -2,6 +2,7 @@ package com.ancientempires.registry;
 
 import com.ancientempires.AncientEmpires;
 import com.ancientempires.block.CropFarmBlockEntity;
+import com.ancientempires.block.QuarryBlockEntity;
 import com.ancientempires.block.SettlersPostBlockEntity;
 import com.ancientempires.block.TreeFarmBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -24,6 +25,10 @@ public final class ModBlockEntities
     @SuppressWarnings("DataFlowIssue")
     public static final RegistryObject<BlockEntityType<TreeFarmBlockEntity>> TREE_FARM = BLOCK_ENTITIES.register("tree_farm",
             () -> BlockEntityType.Builder.of(TreeFarmBlockEntity::new, ModBlocks.TREE_FARM.get()).build(null));
+
+    @SuppressWarnings("DataFlowIssue")
+    public static final RegistryObject<BlockEntityType<QuarryBlockEntity>> QUARRY = BLOCK_ENTITIES.register("quarry",
+            () -> BlockEntityType.Builder.of(QuarryBlockEntity::new, ModBlocks.QUARRY.get()).build(null));
 
     private ModBlockEntities()
     {

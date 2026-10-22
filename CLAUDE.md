@@ -34,7 +34,7 @@ instead of reflecting per call), Skirmisher thresholds (about 4.5 to 28 blocks).
 
 - `entity/npc/NpcEntity` - the NPC. Goals: 0 Float, `OpenDoorGoal`, `NpcNightDoorsGoal`;
   1 `NpcBowAttackGoal`, `NpcShieldGoal` (no flags), `NpcFleeGoal` (civilians only);
-  2 `NpcMeleeAttackGoal`; 3 hold position; 4 follow, `NpcFarmerGoal`, `NpcWoodcutterGoal`; 5 `NpcReturnHomeGoal`; 6+ idle.
+  2 `NpcMeleeAttackGoal`; 3 hold position; 4 follow, `NpcFarmerGoal`, `NpcWoodcutterGoal`, `NpcMinerGoal`; 5 `NpcReturnHomeGoal`; 6+ idle.
   Targets: 1 and 2 `NpcOwnerDefenseGoal` (DEFEND, ASSIST), 3 `NpcHurtByTargetGoal` (with
   ally alert), 4 `NpcTargetGoal`: one staggered scan over a shared per-cell candidate list
   (`NpcTargetCache`), faction filter first, sight checks nearest first.
@@ -94,14 +94,14 @@ full-body attack animation (body channel, waist bend, stance kept under attacks)
 bc_particle trails on native swings; NPC-on-NPC hits under Better Mob Combat; repack into
 the NPC's own roster scroll; the Ancient Warfare baseline below (owner defense, ally
 alerts, admin escort, doors, day/night home, shields, bash, feints, skill tiers,
-civilians); target memory; cavalry; faction relations and player standing; the Settler recipe (2 gold, a food bundle, a bed; `data/ancientempires/recipes`) and AW's food bundle; Settlers' Post immigration; the hands-on farmer and woodcutter (Crop Farm, Tree Farm); paths, settlers, equipment roles, emergency levy, and proficiency.
+civilians); target memory; cavalry; faction relations and player standing; the Settler recipe (2 gold, a food bundle, a bed; `data/ancientempires/recipes`) and AW's food bundle; Settlers' Post immigration; hands-on farmer, woodcutter, and miner (Crop Farm, Tree Farm, Quarry); paths, settlers, equipment roles, emergency levy, and proficiency.
 
 ## Not done yet
 
 1. Ancient Warfare baseline still missing: lance charges and other mounted tactics,
    sleeping in beds at night, vampire factions avoiding sunlight, and the
    behavior behind the roles (medic healing, priest, bard singing, trader, courier, worker
-   jobs beyond the farmer and woodcutter: the miner next, commander, patrol, upkeep and food). Roles are labels from
+   jobs beyond the farmer, woodcutter, and miner, commander, patrol, upkeep and food). Roles are labels from
    equipment until that behavior exists.
 2. Threat scoring, cliff-safe retreat (`FleeNavigation`), skirmishers.
 3. Spawner block that stores a full NPC NBT snapshot.
@@ -190,6 +190,13 @@ its own unless noted). Before adding behavior, check what AW did first.
   (`TreeFarmBlockEntity.trunk`: connected logs within `work.treeReach` of the base, at
   most `treeMaxLogs`), picks up the saplings, apples, and sticks that fall as the leaves
   decay, replants saplings on a `treeSpacing` grid, and carries the rest back.
+- Miner: a Worker-path NPC with a pickaxe at its owner's Quarry. The pit is the square in
+  front of the block (placer's facing; `center()` is offset), dug one layer at a time
+  from just below the block down to `work.quarryMaxDepth`. Each layer keeps one rim
+  block as a spiral stair step (`stairStep`, one tile clockwise per layer from the tile
+  beside the block), so miners walk down and climb back to unload. Left standing: blocks
+  touching lava or water, block entities, unbreakable blocks, and blocks the pickaxe
+  cannot harvest (`skip`). The size locks once digging starts (`canResize`).
 - Getting settlers in survival: the Settler scroll recipe (2 gold, AW's food bundle, a bed),
   and the Settlers' Post (`block/SettlersPostBlock`, `NpcImmigration`), Dwarf Fortress
   style immigration kept apart from the future Town Hall (upkeep, priest revival within

@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": {"model": "ancientempires:block/quarry"},
+    "facing=east": {"model": "ancientempires:block/quarry", "y": 90},
+    "facing=south": {"model": "ancientempires:block/quarry", "y": 180},
+    "facing=west": {"model": "ancientempires:block/quarry", "y": 270}
+  }
+}

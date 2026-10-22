@@ -110,11 +110,24 @@ public abstract class WorksiteBlockEntity extends BlockEntity
         return this.radius;
     }
 
+    /** The middle of the square: the block itself, except where the area lies in front of it (a quarry). */
+    public BlockPos center()
+    {
+        return this.worldPosition;
+    }
+
+    /** Whether the area can change size now. A quarry cannot once digging starts. */
+    public boolean canResize()
+    {
+        return true;
+    }
+
     /** Whether a column is inside the square. */
     public boolean inSquare(BlockPos pos)
     {
         int r = this.radius();
-        return Math.abs(pos.getX() - this.worldPosition.getX()) <= r && Math.abs(pos.getZ() - this.worldPosition.getZ()) <= r;
+        BlockPos center = this.center();
+        return Math.abs(pos.getX() - center.getX()) <= r && Math.abs(pos.getZ() - center.getZ()) <= r;
     }
 
     protected final void refresh()

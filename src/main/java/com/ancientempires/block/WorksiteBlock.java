@@ -74,10 +74,16 @@ public abstract class WorksiteBlock extends BaseEntityBlock
         }
         if (player.isShiftKeyDown() && player.getMainHandItem().isEmpty())
         {
+            if (!farm.canResize())
+            {
+                player.displayClientMessage(Component.translatable("message.ancientempires.farm.locked"), true);
+                outline((ServerLevel) level, farm.center(), farm.radius());
+                return InteractionResult.CONSUME;
+            }
             int radius = farm.cycleRadius();
             int width = radius * 2 + 1;
             player.displayClientMessage(Component.translatable("message.ancientempires.farm.area", width, width), true);
-            outline((ServerLevel) level, pos, radius);
+            outline((ServerLevel) level, farm.center(), radius);
             return InteractionResult.CONSUME;
         }
         player.openMenu(new SimpleMenuProvider((id, inventory, opener) ->

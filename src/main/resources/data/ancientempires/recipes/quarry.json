@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SPS",
+    " C "
+  ],
+  "key": {
+    "S": {"tag": "forge:cobblestone"},
+    "P": {"tag": "minecraft:pickaxes"},
+    "C": {"tag": "forge:chests/wooden"}
+  },
+  "result": {"item": "ancientempires:quarry"}
+}

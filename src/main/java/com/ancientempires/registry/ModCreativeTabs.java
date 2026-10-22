@@ -23,6 +23,7 @@ public final class ModCreativeTabs
                         output.accept(ModItems.SETTLERS_POST.get());
                         output.accept(ModItems.CROP_FARM.get());
                         output.accept(ModItems.TREE_FARM.get());
+                        output.accept(ModItems.QUARRY.get());
                         for (RegistryObject<Item> egg : ModItems.SPAWN_EGGS)
                         {
                             output.accept(egg.get());
