@@ -94,12 +94,12 @@ full-body attack animation (body channel, waist bend, stance kept under attacks)
 bc_particle trails on native swings; NPC-on-NPC hits under Better Mob Combat; repack into
 the NPC's own roster scroll; the Ancient Warfare baseline below (owner defense, ally
 alerts, admin escort, doors, day/night home, shields, bash, feints, skill tiers,
-civilians); target memory; paths, settlers, equipment roles, emergency levy, and proficiency.
+civilians); target memory; cavalry; paths, settlers, equipment roles, emergency levy, and proficiency.
 
 ## Not done yet
 
-1. Ancient Warfare baseline still missing: riding horses (roster has cavalry and mounted
-   archers), sleeping in beds at night, vampire factions avoiding sunlight, and the
+1. Ancient Warfare baseline still missing: lance charges and other mounted tactics,
+   sleeping in beds at night, vampire factions avoiding sunlight, and the
    behavior behind the roles (medic healing, priest, bard singing, trader, courier, worker
    jobs and worksites, commander, patrol, upkeep and food). Roles are labels from
    equipment until that behavior exists.
@@ -164,6 +164,18 @@ its own unless noted). Before adding behavior, check what AW did first.
   defense, and it ends once the threat backs off past `standBreakRange`. Players are
   never scanned for; a player who hits a civilian is ignored (no fleeing, fighting back,
   or calls for help) until its health is under `playerThreatHealth` (`civilianFears`).
+- Cavalry (`NpcMount`): a faction row with a `mount` (cavalry and mounted archers default to
+  `minecraft:horse`; AW's odd ones are on their rows: Norska polar bear, gnome chicken,
+  gremlin spider, Xoltec llama, undead/coven/icelord skeleton horse, Klown zombie horse and
+  pig) spawns on it. A dead mount is not replaced (`AeMountLost`); a rider thrown from a
+  living one walks back to it when not fighting (`cavalry.remountRange`). While riding,
+  `NpcEntity.getNavigation` returns the mount's navigation, so every goal drives the mount
+  at its own size; the mount's own MOVE/JUMP/LOOK goals are held off each tick and it gets
+  `cavalry.mountSpeed` (AW 1.5). Melee reach gains `reachBonus` from the saddle. Ridden
+  monsters are not scan targets (the rider is), and rider and mount are allied. Repack
+  takes a spawned mount along (respawned on placing) and leaves any other mount standing.
+  The inventory Mount button seats an owned NPC on its owner's nearest saddled tamed
+  horse or dismounts it; admins can seat any NPC on any mob.
 - Levy (`AeLevy`): an owner can call a civilian up to fight until dismissed. Debuffs in the
   `proficiency` section: damage 0.7, slower wind-ups, no bash or feint, breaks below 30%
   health.
@@ -171,7 +183,7 @@ its own unless noted). Before adding behavior, check what AW did first.
   or backpack, so sidearm swaps count) times 0.5, by a skirmisher times 0.75. Cached on
   hands, backpack, path, and levy changes.
 - NPC NBT keys: `AeRoster` (roster row), `AePath`, `AeLevy`, `AeSkill` (tier override),
-  `AeFeintChance`, `AeSidearmBowSlot`. All carried through repack.
+  `AeFeintChance`, `AeSidearmBowSlot`, `AeMountLost` (`AeMountUuid` is not packed). All carried through repack.
 
 ## Performance rules and audit findings
 

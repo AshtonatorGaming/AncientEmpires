@@ -205,7 +205,8 @@ public final class NpcRoster
                 decimal(object, "scale"),
                 health(object),
                 owned,
-                color);
+                color,
+                mount(object));
     }
 
     private static int factionColor(String factionId)
@@ -234,6 +235,22 @@ public final class NpcRoster
             return 0.0F;
         }
         return object.get(key).getAsFloat();
+    }
+
+    /**
+     * The entity a row rides, by id. Ancient Warfare's cavalry and mounted archers
+     * rode a horse unless their faction said otherwise (a Norska polar bear, a
+     * gnome chicken); those rows name it. Other rows ride nothing.
+     */
+    private static String mount(JsonObject object)
+    {
+        String mount = text(object, "mount");
+        if (!mount.isEmpty())
+        {
+            return mount;
+        }
+        String subtype = text(object, "subtype");
+        return subtype.startsWith("cavalry") || subtype.startsWith("mounted_archer") ? "minecraft:horse" : "";
     }
 
     private static double health(JsonObject object)
@@ -265,8 +282,9 @@ public final class NpcRoster
         private final double health;
         private final boolean owned;
         private final int color;
+        private final String mount;
 
-        private Entry(String id, String faction, String subtype, String name, String skin, String itemId, String mainhand, String mainFallback, String offhand, String offFallback, float scale, double health, boolean owned, int color)
+        private Entry(String id, String faction, String subtype, String name, String skin, String itemId, String mainhand, String mainFallback, String offhand, String offFallback, float scale, double health, boolean owned, int color, String mount)
         {
             this.id = id;
             this.faction = faction;
@@ -282,6 +300,7 @@ public final class NpcRoster
             this.health = health;
             this.owned = owned;
             this.color = color;
+            this.mount = mount;
         }
 
         public String id()
@@ -318,6 +337,12 @@ public final class NpcRoster
         public boolean owned()
         {
             return this.owned;
+        }
+
+        /** Entity id of the mount this row spawns on, or empty. */
+        public String mount()
+        {
+            return this.mount;
         }
 
         /**

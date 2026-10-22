@@ -110,7 +110,7 @@ public final class NpcInventoryPanel
     {
         boolean creative = showCreative();
         boolean hold = showHold(npc);
-        ButtonWidget<?>[] row = new ButtonWidget<?>[7];
+        ButtonWidget<?>[] row = new ButtonWidget<?>[8];
         row[0] = command(0, 0, GuiTextures.MOVE_RIGHT, "gui.ancientempires.npc.follow", NpcMenu.BUTTON_FOLLOW, menu, active(npc, NpcEntity::isFollowing));
         row[1] = command(0, 1, GuiTextures.BOOKMARK, "gui.ancientempires.npc.set_home", NpcMenu.BUTTON_SET_HOME, menu, active(npc, entity -> entity.getHome() != null));
         row[2] = command(0, 2, GuiTextures.CROSS, "gui.ancientempires.npc.clear_home", NpcMenu.BUTTON_CLEAR_HOME, menu, null);
@@ -118,6 +118,7 @@ public final class NpcInventoryPanel
         row[4] = command(0, 4, GuiTextures.LOCKED, "gui.ancientempires.npc.hold", NpcMenu.BUTTON_HOLD, menu, active(npc, NpcEntity::isHoldingPosition));
         row[5] = command(0, 5, GuiTextures.FAVORITE, "gui.ancientempires.npc.creative", NpcMenu.BUTTON_CREATIVE, menu, active(npc, NpcEntity::isCreative));
         row[6] = command(0, 6, GuiTextures.EXCLAMATION, "gui.ancientempires.npc.levy", NpcMenu.BUTTON_LEVY, menu, active(npc, NpcEntity::isLevied));
+        row[7] = command(0, 7, GuiTextures.MOVE_UP, "gui.ancientempires.npc.mount", NpcMenu.BUTTON_MOUNT, menu, active(npc, NpcEntity::isPassenger));
         row[4].setEnabled(hold);
         row[5].setEnabled(creative);
         row[6].setEnabled(showLevy(npc));

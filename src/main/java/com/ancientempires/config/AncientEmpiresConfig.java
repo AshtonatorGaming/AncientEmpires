@@ -116,6 +116,10 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.DoubleValue OWNER_DEFENSE_RANGE;
     private static final ForgeConfigSpec.DoubleValue ALLY_ALERT_RANGE;
     private static final ForgeConfigSpec.DoubleValue ALLY_ALERT_HEIGHT;
+    private static final ForgeConfigSpec.DoubleValue CAVALRY_MOUNT_SPEED;
+    private static final ForgeConfigSpec.DoubleValue CAVALRY_REACH_BONUS;
+    private static final ForgeConfigSpec.DoubleValue CAVALRY_REMOUNT_RANGE;
+    private static final ForgeConfigSpec.DoubleValue CAVALRY_MOUNT_RANGE;
 
     private static final ForgeConfigSpec.BooleanValue TARGET_LEGACY_SCAN;
     private static final ForgeConfigSpec.IntValue TARGET_SCAN_INTERVAL;
@@ -433,6 +437,21 @@ public final class AncientEmpiresConfig
                 .defineInRange("alertHeight", 8.0D, 0.0D, 32.0D);
         builder.pop();
 
+        builder.comment("Riders: faction cavalry and mounted archers, and owned NPCs put on a mount.").push("cavalry");
+        CAVALRY_MOUNT_SPEED = builder
+                .comment("Movement speed multiplier on a mount while an NPC rides it. Ancient Warfare used 1.5.")
+                .defineInRange("mountSpeed", 1.5D, 0.5D, 4.0D);
+        CAVALRY_REACH_BONUS = builder
+                .comment("Extra melee reach, in blocks, from the saddle. A rider sits higher, so ground targets are farther away.")
+                .defineInRange("reachBonus", 1.0D, 0.0D, 4.0D);
+        CAVALRY_REMOUNT_RANGE = builder
+                .comment("A rider thrown from a living mount walks back to it within this many blocks. Farther, the mount is given up.")
+                .defineInRange("remountRange", 16.0D, 2.0D, 64.0D);
+        CAVALRY_MOUNT_RANGE = builder
+                .comment("How close, in blocks, a mount must be for the inventory Mount command.")
+                .defineInRange("mountRange", 6.0D, 1.0D, 32.0D);
+        builder.pop();
+
         builder.push("targeting");
         TARGET_LEGACY_SCAN = builder
                 .comment("Use the two vanilla nearest-target goals instead of the shared scan. For comparison and as a fallback. Applies to NPCs loaded after the change.")
@@ -568,6 +587,10 @@ public final class AncientEmpiresConfig
     public static double ownerDefenseRange = 32.0D;
     public static double allyAlertRange = 16.0D;
     public static double allyAlertHeight = 8.0D;
+    public static double cavalryMountSpeed = 1.5D;
+    public static double cavalryReachBonus = 1.0D;
+    public static double cavalryRemountRange = 16.0D;
+    public static double cavalryMountRange = 6.0D;
 
     public static boolean targetLegacyScan = false;
     public static int targetScanInterval = 10;
@@ -699,6 +722,10 @@ public final class AncientEmpiresConfig
         ownerDefenseRange = OWNER_DEFENSE_RANGE.get();
         allyAlertRange = ALLY_ALERT_RANGE.get();
         allyAlertHeight = ALLY_ALERT_HEIGHT.get();
+        cavalryMountSpeed = CAVALRY_MOUNT_SPEED.get();
+        cavalryReachBonus = CAVALRY_REACH_BONUS.get();
+        cavalryRemountRange = CAVALRY_REMOUNT_RANGE.get();
+        cavalryMountRange = CAVALRY_MOUNT_RANGE.get();
 
         targetLegacyScan = TARGET_LEGACY_SCAN.get();
         targetScanInterval = TARGET_SCAN_INTERVAL.get();

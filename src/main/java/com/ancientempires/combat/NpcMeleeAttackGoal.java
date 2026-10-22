@@ -563,6 +563,11 @@ public class NpcMeleeAttackGoal extends Goal
     private boolean within(LivingEntity target, double range)
     {
         double allowed = range + target.getBbWidth() * 0.5D;
+        if (this.npc.isPassenger())
+        {
+            // A rider sits higher, so a ground target is farther away than the swing really is.
+            allowed += AncientEmpiresConfig.cavalryReachBonus;
+        }
         return this.npc.distanceToSqr(target) <= allowed * allowed;
     }
 

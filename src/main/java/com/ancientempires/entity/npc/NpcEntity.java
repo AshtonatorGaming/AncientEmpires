@@ -22,10 +22,12 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -126,6 +128,7 @@ public class NpcEntity extends PathfinderMob
     private final NpcInventory inventory = new NpcInventory(this);
     private final NpcSidearm sidearm = new NpcSidearm(this);
     private final NpcTargetMemory targetMemory = new NpcTargetMemory(this);
+    private final NpcMount mount = new NpcMount(this);
     /** Roster row id, or empty for an NPC from the generic scroll or one spawned before rows were saved. */
     private String rosterId = "";
     /** Creative player escorting a faction NPC in follow mode. Server only, not saved. */
@@ -237,6 +240,43 @@ public class NpcEntity extends PathfinderMob
         return navigation;
     }
 
+    /**
+     * While this NPC steers a mount, every goal that moves it moves the mount:
+     * vanilla stops a mob-ridden mount's own movement but nothing drives it.
+     * The mount paths with its own size and speed.
+     */
+    @Override
+    public PathNavigation getNavigation()
+    {
+        if (this.getVehicle() instanceof Mob ridden && this.mount.steers(ridden))
+        {
+            return ridden.getNavigation();
+        }
+        return super.getNavigation();
+    }
+
+    @Override
+    public void stopRiding()
+    {
+        Entity vehicle = this.getVehicle();
+        super.stopRiding();
+        if (vehicle != null && !this.level().isClientSide)
+        {
+            this.mount.onDismount(vehicle);
+        }
+    }
+
+    /** A rider and its mount never count each other as enemies. */
+    @Override
+    public boolean isAlliedTo(Entity other)
+    {
+        if (other == this.getVehicle() || (other != null && other.getVehicle() == this))
+        {
+            return true;
+        }
+        return super.isAlliedTo(other);
+    }
+
     public static AttributeSupplier.Builder createAttributes()
     {
         // Player-like attack damage and attack speed so held weapons apply their
@@ -317,7 +357,8 @@ public class NpcEntity extends PathfinderMob
      */
     boolean isScanTarget(LivingEntity living)
     {
-        return living instanceof Monster || this.acceptsTarget(living);
+        // A monster ridden by an NPC (a gremlin's spider) is that NPC's mount; the rider is the target.
+        return (living instanceof Monster && !(living.getFirstPassenger() instanceof NpcEntity)) || this.acceptsTarget(living);
     }
 
     /**
@@ -1283,6 +1324,11 @@ public class NpcEntity extends PathfinderMob
                     : id == NpcMenu.BUTTON_PATH_SOLDIER ? NpcPath.SOLDIER : NpcPath.SETTLER);
             return true;
         }
+        if (id == NpcMenu.BUTTON_MOUNT)
+        {
+            this.mount.command(player);
+            return true;
+        }
         if (id == NpcMenu.BUTTON_CREATIVE)
         {
             this.toggleCreative(player);
@@ -1304,6 +1350,7 @@ public class NpcEntity extends PathfinderMob
         }
         // The egg carries the bow as the primary weapon, the same as a reload.
         this.sidearm.restore();
+        this.mount.beforeRepack();
         ItemStack packed = this.createPackedItem();
         if (packed.isEmpty())
         {
@@ -1376,7 +1423,7 @@ public class NpcEntity extends PathfinderMob
      * before the row was saved. Owned NPCs without a row have no guess.
      */
     @Nullable
-    private NpcRoster.Entry rosterEntry()
+    NpcRoster.Entry rosterEntry()
     {
         NpcRoster.Entry saved = NpcRoster.byId(this.rosterId);
         if (saved != null)
@@ -1406,6 +1453,7 @@ public class NpcEntity extends PathfinderMob
 
         this.inventory.save(tag);
         this.sidearm.save(tag);
+        this.mount.savePacked(tag);
         this.writeRoster(tag);
         if (this.skillOverride >= 0)
         {
@@ -1787,6 +1835,7 @@ public class NpcEntity extends PathfinderMob
             this.standGroundUntil = 0;
             this.setTarget(null);
         }
+        this.mount.tick();
         this.targetMemory.tick();
         this.sidearm.tick();
         this.ticksSinceSwing++;
@@ -1903,6 +1952,7 @@ public class NpcEntity extends PathfinderMob
         super.addAdditionalSaveData(tag);
         this.inventory.save(tag);
         this.sidearm.save(tag);
+        this.mount.save(tag);
         this.writeRoster(tag);
         if (this.skillOverride >= 0)
         {
@@ -1950,6 +2000,7 @@ public class NpcEntity extends PathfinderMob
         this.inventory.load(tag);
         // After the hands (super) and the backpack, so a saved swap can be undone.
         this.sidearm.load(tag);
+        this.mount.load(tag);
         if (tag.contains(ROSTER_KEY))
         {
             this.rosterId = tag.getString(ROSTER_KEY);

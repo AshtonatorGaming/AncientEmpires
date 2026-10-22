@@ -37,6 +37,7 @@ public class NpcMenu extends AbstractContainerMenu
     public static final int BUTTON_LEVY = 8;
     /** Admins only: back to settler. */
     public static final int BUTTON_PATH_SETTLER = 9;
+    public static final int BUTTON_MOUNT = 10;
 
     @Nullable
     private final NpcEntity npc;
