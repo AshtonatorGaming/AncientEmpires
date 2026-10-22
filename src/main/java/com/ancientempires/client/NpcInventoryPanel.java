@@ -249,7 +249,69 @@ public final class NpcInventoryPanel
                 .overlay(new Icon(GuiTextures.IMAGE).size(8).center().margin(2))
                 .onMousePressed((context, button) -> openSkin(menu, button))
                 .addTooltipLine(Component.translatable("gui.ancientempires.npc.skin").getString()));
+        if (npc != null)
+        {
+            frame.child(roleButton(menu, npc));
+        }
         return frame;
+    }
+
+    /**
+     * The NPC's role, beside the skin button. Left click steps forward through
+     * the roles, right click back. Only the owner, or a creative player, sees it.
+     */
+    private static ButtonWidget<?> roleButton(NpcMenu menu, NpcEntity npc)
+    {
+        ButtonWidget<?> button = new ButtonWidget<>()
+                .pos(2, PREVIEW_H - 14)
+                .size(PREVIEW_W - 18, 12)
+                .background(new Rectangle().color(BUTTON))
+                .hoverBackground(new Rectangle().color(BUTTON_HOVER))
+                .overlay(new RoleLabel(npc))
+                .onMousePressed((context, pressed) -> cycleRole(menu, pressed))
+                .addTooltipLine(Component.translatable("gui.ancientempires.npc.role").getString());
+        Player player = Minecraft.getInstance().player;
+        button.setEnabled(player != null && npc.mayChangeRole(player));
+        return button;
+    }
+
+    private static boolean cycleRole(NpcMenu menu, int pressed)
+    {
+        if (pressed == 0)
+        {
+            return sendButton(menu, NpcMenu.BUTTON_ROLE_NEXT, 0);
+        }
+        if (pressed == 1)
+        {
+            return sendButton(menu, NpcMenu.BUTTON_ROLE_PREV, 0);
+        }
+        return false;
+    }
+
+    /** The role name, read from the synced role each frame, trimmed to the button. */
+    private static final class RoleLabel implements IDrawable
+    {
+        private final NpcEntity npc;
+
+        private RoleLabel(NpcEntity npc)
+        {
+            this.npc = npc;
+        }
+
+        @Override
+        public void draw(GuiContext context, int x, int y, int width, int height, WidgetTheme widgetTheme)
+        {
+            net.minecraft.client.gui.Font font = Minecraft.getInstance().font;
+            String line = Component.translatable(this.npc.getRole().translationKey()).getString();
+            int max = Math.max(1, width - 4);
+            if (font.width(line) > max)
+            {
+                line = font.plainSubstrByWidth(line, max);
+            }
+            int textX = x + (width - font.width(line)) / 2;
+            int textY = y + (height - 8) / 2;
+            context.getGraphics().drawString(font, line, textX, textY, NAME_INK, false);
+        }
     }
 
     private static boolean openSkin(NpcMenu menu, int button)

@@ -700,6 +700,30 @@ public class NpcEntity extends PathfinderMob
         this.syncRole();
     }
 
+    /**
+     * Who may change the role: the owner of an owned NPC, or a creative player
+     * for any NPC (faction NPCs are creative-editable). The screen uses this too.
+     */
+    public boolean mayChangeRole(Player player)
+    {
+        return mayToggleCreative(player) || (this.isOwnedNpc() && player.getUUID().equals(this.getOwner()));
+    }
+
+    /** Steps through {@link NpcRole#OWNED_CHOICES} from the current role. */
+    private void cycleRole(Player player, int step)
+    {
+        if (!this.mayChangeRole(player))
+        {
+            return;
+        }
+        java.util.List<NpcRole> choices = NpcRole.OWNED_CHOICES;
+        int index = choices.indexOf(this.getRole());
+        int next = index < 0 ? 0 : Math.floorMod(index + step, choices.size());
+        NpcRole role = choices.get(next);
+        this.setRole(role);
+        player.displayClientMessage(Component.translatable("message.ancientempires.npc.role", Component.translatable(role.translationKey())), true);
+    }
+
     private void syncRole()
     {
         if (!this.level().isClientSide)
@@ -1083,6 +1107,11 @@ public class NpcEntity extends PathfinderMob
         if (id == NpcMenu.BUTTON_HOLD)
         {
             this.toggleHold(player);
+            return true;
+        }
+        if (id == NpcMenu.BUTTON_ROLE_NEXT || id == NpcMenu.BUTTON_ROLE_PREV)
+        {
+            this.cycleRole(player, id == NpcMenu.BUTTON_ROLE_NEXT ? 1 : -1);
             return true;
         }
         if (id == NpcMenu.BUTTON_CREATIVE)

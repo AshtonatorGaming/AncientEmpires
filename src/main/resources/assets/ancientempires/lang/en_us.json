@@ -80,5 +80,22 @@
   "message.ancientempires.npc.creative_off": "Creative gear off",
   "message.ancientempires.npc.creative_denied": "Creative mode is required",
   "message.ancientempires.npc.hold_on": "Holding position",
-  "message.ancientempires.npc.hold_off": "Stopped holding position"
+  "message.ancientempires.npc.hold_off": "Stopped holding position",
+  "message.ancientempires.npc.role": "Role: %s",
+  "gui.ancientempires.npc.role": "Role (left click: next, right click: back)",
+  "role.ancientempires.commoner": "Commoner",
+  "role.ancientempires.soldier": "Soldier",
+  "role.ancientempires.medic": "Medic",
+  "role.ancientempires.engineer": "Engineer",
+  "role.ancientempires.siege_engineer": "Siege Engineer",
+  "role.ancientempires.worker": "Worker",
+  "role.ancientempires.farmer": "Farmer",
+  "role.ancientempires.miner": "Miner",
+  "role.ancientempires.woodcutter": "Woodcutter",
+  "role.ancientempires.craftsman": "Craftsman",
+  "role.ancientempires.researcher": "Researcher",
+  "role.ancientempires.courier": "Courier",
+  "role.ancientempires.trader": "Trader",
+  "role.ancientempires.priest": "Priest",
+  "role.ancientempires.bard": "Bard"
 }
