@@ -42,6 +42,8 @@ public class NpcHeldItemLayer extends ItemInHandLayer<NpcEntity, NpcModel>
         }
         boolean drawingBow = npc.isDrawingBow();
         pose.pushPose();
+        // The arm is drawn folded with the upper body; the item has to fold with it.
+        NpcCombatAnimations.bendUpperBody(npc, pose);
         ((ArmedModel) this.getParentModel()).translateToHand(arm, pose);
         if (!drawingBow)
         {

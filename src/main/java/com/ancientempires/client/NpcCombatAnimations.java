@@ -115,6 +115,26 @@ public final class NpcCombatAnimations
         }
     }
 
+    /**
+     * Tilts an upper-body layer by the fallback stack's waist bend, so a held
+     * item stays in the hand while the torso folds.
+     */
+    public static void bendUpperBody(NpcEntity npc, PoseStack pose)
+    {
+        if (mobAnimatorOwnsModel() || !posesReady())
+        {
+            return;
+        }
+        try
+        {
+            NpcBetterCombatDriver.bendUpperBody(npc, pose);
+        }
+        catch (Throwable exception)
+        {
+            failPoses(exception);
+        }
+    }
+
     public static void bendHeldArm(NpcEntity npc, HumanoidArm arm, PoseStack pose)
     {
         if (mobAnimatorOwnsModel())

@@ -13,7 +13,10 @@ import dev.kosmx.playerAnim.api.layered.modifier.AdjustmentModifier;
 import dev.kosmx.playerAnim.core.data.KeyframeAnimation;
 import dev.kosmx.playerAnim.core.util.Ease;
 import dev.kosmx.playerAnim.core.util.Vec3f;
+import dev.kosmx.playerAnim.impl.Helper;
+import dev.kosmx.playerAnim.impl.IMutableModel;
 import dev.kosmx.playerAnim.impl.animation.AnimationApplier;
+import dev.kosmx.playerAnim.impl.animation.IBendHelper;
 import net.bettercombat.api.WeaponAttributes;
 import net.bettercombat.client.animation.AnimationRegistry;
 import net.bettercombat.client.animation.AttackAnimationSubStack;
@@ -126,6 +129,20 @@ final class NpcBetterCombatDriver
         pose.mulPose(com.mojang.math.Axis.YP.rotation(ry));
         pose.mulPose(com.mojang.math.Axis.XP.rotation(rx));
         pose.translate(0.0F, -0.7F * scale, 0.0F);
+    }
+
+    /**
+     * Upper-body layers (held items) follow the waist bend the model draws with.
+     * Player Animation Lib does this for a player's layers; ours draw themselves.
+     */
+    static void bendUpperBody(NpcEntity npc, PoseStack pose)
+    {
+        Session session = SESSIONS.get(npc);
+        if (session == null || !session.applier.isActive() || !Helper.isBendEnabled())
+        {
+            return;
+        }
+        IBendHelper.rotateMatrixStack(pose, session.applier.getBend("body"));
     }
 
     static void bendHeldArm(NpcEntity npc, HumanoidArm arm, PoseStack pose)
@@ -386,6 +403,11 @@ final class NpcBetterCombatDriver
             {
                 return false;
             }
+            // The waist bend folds the head, arms, jacket, sleeves, and armor over the
+            // hips inside the model's own render, but only while this supplier holds an
+            // active animation. Player Animation Lib fills it for players and clears it
+            // for every other entity in setupAnim, which has already run by now.
+            ((IMutableModel) (Object) model).getEmoteSupplier().set(this.applier);
             this.applier.updatePart("head", model.head);
             this.applier.updatePart("leftArm", model.leftArm);
             this.applier.updatePart("rightArm", model.rightArm);
