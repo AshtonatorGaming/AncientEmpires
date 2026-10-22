@@ -32,11 +32,13 @@ instead of reflecting per call), Skirmisher thresholds (about 4.5 to 28 blocks).
 
 ## Architecture (as read from the code)
 
-- `entity/npc/NpcEntity` - the NPC. Goal priorities: 0 Float, 1 `NpcBowAttackGoal`,
-  2 `NpcMeleeAttackGoal`, 3 hold position, 4 follow owner, 5 return home, 6+ idle.
-  Targets: hurt-by (priority 1), then `NpcTargetGoal` (priority 2): one staggered scan over
-  a shared per-cell candidate list (`NpcTargetCache`), faction filter first, sight checks
-  nearest first. `targeting.legacyScan` restores the two vanilla goals.
+- `entity/npc/NpcEntity` - the NPC. Goals: 0 Float, `OpenDoorGoal`, `NpcNightDoorsGoal`;
+  1 `NpcBowAttackGoal`, `NpcShieldGoal` (no flags), `NpcFleeGoal` (civilians only);
+  2 `NpcMeleeAttackGoal`; 3 hold position; 4 follow; 5 `NpcReturnHomeGoal`; 6+ idle.
+  Targets: 1 and 2 `NpcOwnerDefenseGoal` (DEFEND, ASSIST), 3 `NpcHurtByTargetGoal` (with
+  ally alert), 4 `NpcTargetGoal`: one staggered scan over a shared per-cell candidate list
+  (`NpcTargetCache`), faction filter first, sight checks nearest first.
+  `targeting.legacyScan` restores the two vanilla goals.
 - Bow vs melee are two separate goals split by `isHoldingBow()`. The melee goal only runs
   when it is false. A bow in the main hand keeps the archer goal for the whole fight.
   Crossbows are not bows here.
@@ -84,28 +86,56 @@ outer skin layers; sidearm fallback (`NpcSidearm`, `WeaponClassifier`, `sidearm`
 section, `AeSidearmBowSlot` NBT marker undone on load and before repack); shared target
 scan; Better Combat snapshot cache; dual wielding; engage range and NPC wind-up scale;
 full-body attack animation (body channel, waist bend, stance kept under attacks);
-bc_particle trails on native swings; NPC-on-NPC hits under Better Mob Combat.
+bc_particle trails on native swings; NPC-on-NPC hits under Better Mob Combat; repack into
+the NPC's own roster scroll; the Ancient Warfare baseline below (owner defense, ally
+alerts, admin escort, doors, day/night home, shields, bash, feints, skill tiers,
+civilians).
 
 ## Not done yet
 
-1. Target memory (remember the last target a few seconds after line of sight breaks).
-2. Spawner block that stores a full NPC NBT snapshot.
-3. Faction relations and revenge lists, upkeep, worker AI, worksites, town hall, orders,
-   the structure template port, and Tier 2+ roles.
+1. Ancient Warfare baseline still missing: riding horses (roster has cavalry and mounted
+   archers), sleeping in beds at night, vampire factions avoiding sunlight, and the role
+   goals (medic, priest, bard singing, trader, courier, worker jobs, commander, patrol,
+   upkeep and food).
+2. Target memory (remember the last target a few seconds after line of sight breaks).
+3. Threat scoring, cliff-safe retreat (`FleeNavigation`), skirmishers.
+4. Spawner block that stores a full NPC NBT snapshot.
+5. Faction relations and revenge lists, worksites, town hall, orders, the structure
+   template port, and Tier 2+ roles.
 
-## Sidearm fallback plan
+## Ancient Warfare baseline
 
-- Trigger inside `NpcBowAttackGoal.tick()`: target within a new, smaller `CORNERED_RANGE`
-  (about 3 blocks; `MELEE_RANGE` is 4.0) and the backpack holds a usable melee weapon
-  (has attack damage, not a bow, crossbow, throwing weapon, or shield).
-- Swap by exchanging the main-hand bow with that backpack slot through `NpcInventory`
-  (slot-to-slot, no merging). Once the bow leaves the main hand, `isHoldingBow()` is false
-  and `NpcMeleeAttackGoal` takes over with no changes to it.
-- Swap back when the target dies or stays beyond about 6 blocks for a short while, into the
-  same slot it came from. Use a cooldown (about 40 ticks) so it does not flip-flop.
-- Persist a small "primary is ranged" marker in NBT so a save mid-fight reloads with the
-  bow back as primary. Carry it through repack.
-- Bow holders only. Hold-position, owned/faction split, and unarmed behavior are unchanged.
+Ported from Ancient Warfare 1.6.1's goals, read from its bytecode in `libs/` (numbers are
+its own unless noted). Before adding behavior, check what AW did first.
+
+- Owner defense: owned NPCs attack whoever hurts their owner and whatever the owner hits,
+  once per new hit, within `allies.ownerDefenseRange`. An owned NPC never targets its owner.
+- Ally alert: a hurt NPC sets the attacker as target on allies (`isAlly`: same faction, or
+  same owner) in `allies.alertRange` that have none. Vanilla's alert hit enemies too, so it
+  is replaced. `NpcTargetGoal` keeps such a handed-over target while it is valid.
+- Admin escort: a creative player can make a faction NPC follow them (`getFollowLeader`).
+  The leader is not saved.
+- Doors: navigation opens hand-openable doors (`DoorBlock`, modded included); vanilla
+  `OpenDoorGoal` opens and closes them. At night doors stay shut unless following or fighting.
+- Home: a vanilla restriction (`home.wanderRadius`, 5) keeps wandering near home. By day,
+  past 50 blocks walk back to 20 (owned) or 30 (faction). Faction NPCs keep night hours
+  (back within 5). Rain sends NPCs home until it stops. Faction archers hold a 3-block post.
+- Shields: `NpcShieldGoal` blocks against the target swinging in range or aiming a bow, and
+  (beyond AW) anyone within `shield.aimWatchRange` aiming at the NPC. Shields are found by
+  Forge's `SHIELD_BLOCK` action (`WeaponClassifier.isShield`), so Spartan Shields work.
+  Blocked hits wear the shield; axes and Spartan's Shield Breach (`canDisableShield`)
+  disable it. The shield drops while the NPC commits to its own swing.
+- Bash: `NpcShieldBash` mirrors Spartan Shields' player bash as a counter after a blocked
+  hit. `shield.bashMode`: SPARTAN (its `shields_with_bash` tag), ALL, OFF.
+- Feint: Better Combat style, break off halfway against a guarded target, never twice in
+  a row. Internal attack path only.
+- Skill tiers from roster rank (0 ordinary, 1 elite, 2 leader, 3 elite leader) pick bash
+  chance, feint chance, and shield reaction from the `skill` lists.
+- Civilians: a rank in `civilians.subtypes` holding no weapon (work tools do not count).
+  They never hold a target (`setTarget` turns it into a fear source), flee home or away,
+  stay away less per nearby soldier, and still alert allies when hurt.
+- NPC NBT keys: `AeRoster` (roster row), `AeSkill` (tier override), `AeFeintChance`,
+  `AeSidearmBowSlot`. All carried through repack.
 
 ## Performance rules and audit findings
 
