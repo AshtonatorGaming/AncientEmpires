@@ -52,6 +52,8 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.DoubleValue COMBO_RESET_RATE;
     private static final ForgeConfigSpec.BooleanValue SWEEP_EFFECTS;
     private static final ForgeConfigSpec.BooleanValue DUAL_WIELD;
+    private static final ForgeConfigSpec.DoubleValue NPC_WINDUP_SCALE;
+    private static final ForgeConfigSpec.DoubleValue ENGAGE_RANGE_FACTOR;
 
     private static final ForgeConfigSpec.BooleanValue SIDEARM_ENABLED;
     private static final ForgeConfigSpec.DoubleValue SIDEARM_CORNERED_RANGE;
@@ -178,6 +180,12 @@ public final class AncientEmpiresConfig
         COMBO_RESET_RATE = builder
                 .comment("Combo step resets after this many weapon-cooldowns without a swing.")
                 .defineInRange("comboResetRate", 3.0D, 0.5D, 20.0D);
+        NPC_WINDUP_SCALE = builder
+                .comment("Multiplies every NPC wind-up, so NPCs swing a little slower than a player with the same weapon. Recovery is unchanged, so the whole swing gets longer. 1.0 matches players.")
+                .defineInRange("npcWindupScale", 1.25D, 0.5D, 3.0D);
+        ENGAGE_RANGE_FACTOR = builder
+                .comment("A swing starts only inside this fraction of the weapon's reach, so a target stepping back during the wind-up is still hit. The hit checks the full reach. 1.0 swings from the edge.")
+                .defineInRange("engageRangeFactor", 0.85D, 0.5D, 1.0D);
         DUAL_WIELD = builder
                 .comment("Two one-handed Better Combat weapons alternate main-hand and off-hand swings, as Better Combat does for players. Off-hand swings use that weapon's damage, speed, reach, and attacks.")
                 .define("dualWield", true);
@@ -272,6 +280,8 @@ public final class AncientEmpiresConfig
     public static double comboResetRate = 3.0D;
     public static boolean sweepEffects = false;
     public static boolean dualWield = true;
+    public static double npcWindupScale = 1.25D;
+    public static double engageRangeFactor = 0.85D;
 
     public static boolean sidearmEnabled = true;
     public static double sidearmCorneredRange = 3.0D;
@@ -341,6 +351,8 @@ public final class AncientEmpiresConfig
         comboResetRate = COMBO_RESET_RATE.get();
         sweepEffects = SWEEP_EFFECTS.get();
         dualWield = DUAL_WIELD.get();
+        npcWindupScale = NPC_WINDUP_SCALE.get();
+        engageRangeFactor = ENGAGE_RANGE_FACTOR.get();
 
         sidearmEnabled = SIDEARM_ENABLED.get();
         sidearmCorneredRange = SIDEARM_CORNERED_RANGE.get();

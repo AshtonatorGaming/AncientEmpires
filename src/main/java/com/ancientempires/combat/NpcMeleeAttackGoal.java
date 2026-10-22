@@ -158,7 +158,7 @@ public class NpcMeleeAttackGoal extends Goal
         }
 
         AttackSwing next = this.preview();
-        if (!this.within(target, next.range()) || !this.hasLineOfSight(target))
+        if (!this.canEngage(target, next) || !this.hasLineOfSight(target))
         {
             this.facingWait = 0;
             this.moveToward(target, AncientEmpiresConfig.approachSpeed);
@@ -479,6 +479,22 @@ public class NpcMeleeAttackGoal extends Goal
             this.preview = AttackProfiles.resolve(this.npc);
         }
         return this.preview;
+    }
+
+    /**
+     * A swing starts only inside {@code engageRangeFactor} of the weapon's
+     * reach, so a target that steps back during the wind-up is still inside
+     * the full reach at the hit. The hit itself checks the full reach. An NPC
+     * that cannot path any closer (blocked, or its path has ended) swings from
+     * the full reach instead of waiting there forever.
+     */
+    private boolean canEngage(LivingEntity target, AttackSwing swing)
+    {
+        if (this.within(target, swing.range() * AncientEmpiresConfig.engageRangeFactor))
+        {
+            return true;
+        }
+        return this.within(target, swing.range()) && this.npc.getNavigation().isDone() && this.pathCooldown > 0;
     }
 
     private boolean within(LivingEntity target, double range)
