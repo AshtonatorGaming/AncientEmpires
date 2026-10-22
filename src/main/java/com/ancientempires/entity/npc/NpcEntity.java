@@ -329,6 +329,7 @@ public class NpcEntity extends PathfinderMob
         this.goalSelector.addGoal(1, new NpcBowAttackGoal(this));
         // No flags: blocks beside the melee goal, lowered while the NPC swings.
         this.goalSelector.addGoal(1, new NpcShieldGoal(this));
+        this.goalSelector.addGoal(1, new NpcMedicGoal(this));
         // Civilians run instead of fighting; it holds the move flag above the combat goals.
         this.goalSelector.addGoal(1, new NpcFleeGoal(this));
         this.goalSelector.addGoal(1, new NpcBurningGoal(this));
@@ -964,7 +965,7 @@ public class NpcEntity extends PathfinderMob
     /** The role label: what the main hand says, then the rank's trade, then the path. */
     public String getRoleId()
     {
-        return this.getNpcPath().roleId(this.getMainHandItem(), this.entityData.get(DATA_TRADE));
+        return this.getNpcPath().roleId(this.getMainHandItem(), this.getOffhandItem(), this.entityData.get(DATA_TRADE));
     }
 
     /**
@@ -1103,6 +1104,11 @@ public class NpcEntity extends PathfinderMob
 
     private double unitMeleeMultiplier()
     {
+        if (NpcMedicGoal.isMedic(this))
+        {
+            // A medic trades its shield hand for bandages, and trains to heal, not to fight.
+            return AncientEmpiresConfig.medicMeleeProficiency;
+        }
         boolean skirmisher = false;
         for (int slot = 0; slot < NpcInventory.SLOT_COUNT; slot++)
         {

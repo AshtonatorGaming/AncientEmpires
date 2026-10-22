@@ -158,6 +158,12 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.IntValue UPKEEP_CARRY_RATIONS;
     private static final ForgeConfigSpec.EnumValue<Delivery> UPKEEP_DELIVERY;
     private static final ForgeConfigSpec.BooleanValue BURNING_PANIC;
+    private static final ForgeConfigSpec.DoubleValue MEDIC_BANDAGE_HEAL;
+    private static final ForgeConfigSpec.DoubleValue MEDIC_RANGE;
+    private static final ForgeConfigSpec.DoubleValue MEDIC_HEAL_BELOW;
+    private static final ForgeConfigSpec.IntValue MEDIC_BIND_TICKS;
+    private static final ForgeConfigSpec.IntValue MEDIC_COOLDOWN_TICKS;
+    private static final ForgeConfigSpec.DoubleValue MEDIC_MELEE;
     private static final ForgeConfigSpec.IntValue UPKEEP_FALLEN_RECORDS;
     private static final ForgeConfigSpec.EnumValue<KeepOnDeath> UPKEEP_KEEP_ON_DEATH;
 
@@ -624,6 +630,27 @@ public final class AncientEmpiresConfig
                 .defineEnum("keepOnDeath", KeepOnDeath.NONE);
         builder.pop();
 
+        builder.comment("Medics: soldiers with bandages in the off hand.").push("medic");
+        MEDIC_BANDAGE_HEAL = builder
+                .comment("Health one bandage restores, for a medic's patient or a player using one.")
+                .defineInRange("bandageHeal", 6.0D, 1.0D, 40.0D);
+        MEDIC_RANGE = builder
+                .comment("How far, in blocks, a medic looks for the wounded: allies, its owner, and itself.")
+                .defineInRange("range", 16.0D, 2.0D, 48.0D);
+        MEDIC_HEAL_BELOW = builder
+                .comment("A medic tends those below this fraction of their health, the worst first.")
+                .defineInRange("healBelow", 0.7D, 0.1D, 1.0D);
+        MEDIC_BIND_TICKS = builder
+                .comment("Ticks a medic spends binding a wound once beside the patient.")
+                .defineInRange("bindTicks", 20, 1, 200);
+        MEDIC_COOLDOWN_TICKS = builder
+                .comment("Ticks between bandages.")
+                .defineInRange("cooldownTicks", 40, 0, 1200);
+        MEDIC_MELEE = builder
+                .comment("Melee damage multiplier for a medic: its hands are for healing, so not every soldier should be one.")
+                .defineInRange("meleeProficiency", 0.75D, 0.0D, 2.0D);
+        builder.pop();
+
         builder.push("targeting");
         TARGET_LEGACY_SCAN = builder
                 .comment("Use the two vanilla nearest-target goals instead of the shared scan. For comparison and as a fallback. Applies to NPCs loaded after the change.")
@@ -801,6 +828,12 @@ public final class AncientEmpiresConfig
     public static int upkeepCarryRations = 3;
     public static Delivery upkeepDelivery = Delivery.WALK;
     public static boolean burningPanic = true;
+    public static double medicBandageHeal = 6.0D;
+    public static double medicRange = 16.0D;
+    public static double medicHealBelow = 0.7D;
+    public static int medicBindTicks = 20;
+    public static int medicCooldownTicks = 40;
+    public static double medicMeleeProficiency = 0.75D;
 
     /** How an NPC out of food gets more from its Town Hall: walking there, or delivered to its backpack. */
     public enum Delivery
@@ -988,6 +1021,12 @@ public final class AncientEmpiresConfig
         upkeepCarryRations = UPKEEP_CARRY_RATIONS.get();
         upkeepDelivery = UPKEEP_DELIVERY.get();
         burningPanic = BURNING_PANIC.get();
+        medicBandageHeal = MEDIC_BANDAGE_HEAL.get();
+        medicRange = MEDIC_RANGE.get();
+        medicHealBelow = MEDIC_HEAL_BELOW.get();
+        medicBindTicks = MEDIC_BIND_TICKS.get();
+        medicCooldownTicks = MEDIC_COOLDOWN_TICKS.get();
+        medicMeleeProficiency = MEDIC_MELEE.get();
         upkeepFallenRecords = UPKEEP_FALLEN_RECORDS.get();
         upkeepKeepOnDeath = UPKEEP_KEEP_ON_DEATH.get();
 

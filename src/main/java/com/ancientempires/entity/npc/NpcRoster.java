@@ -407,18 +407,40 @@ public final class NpcRoster
             }
         }
 
+        /** An item id, optionally with a count: {@code ancientempires:bandage*16}. */
         private static ItemStack stack(String preferred, String fallback)
         {
-            Item item = resolve(preferred);
-            if (item == null)
+            ItemStack stack = parseStack(preferred);
+            return stack.isEmpty() ? parseStack(fallback) : stack;
+        }
+
+        private static ItemStack parseStack(String spec)
+        {
+            if (spec == null || spec.isEmpty())
             {
-                item = resolve(fallback);
+                return ItemStack.EMPTY;
             }
+            int star = spec.indexOf('*');
+            Item item = resolve(star < 0 ? spec : spec.substring(0, star));
             if (item == null)
             {
                 return ItemStack.EMPTY;
             }
-            return new ItemStack(item);
+            int count = 1;
+            if (star >= 0)
+            {
+                try
+                {
+                    count = Math.max(1, Integer.parseInt(spec.substring(star + 1).trim()));
+                }
+                catch (NumberFormatException ignored)
+                {
+                    count = 1;
+                }
+            }
+            ItemStack stack = new ItemStack(item);
+            stack.setCount(Math.min(count, stack.getMaxStackSize()));
+            return stack;
         }
 
         @Nullable

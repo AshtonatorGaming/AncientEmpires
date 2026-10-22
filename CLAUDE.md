@@ -212,6 +212,13 @@ its own unless noted). Before adding behavior, check what AW did first.
   `fallenRecords`, for priest revival later. `keepOnDeath` (AW Tweaked's option: NONE,
   EQUIPMENT, BACKPACK, ALL) keeps that gear in the record instead of dropping it.
   Sneak-click lists NPCs in reach, hungry ones, food in store, and the latest fallen.
+- Medic (`NpcMedicGoal`, priority 1): a soldier with bandages (`BandageItem`, 2 paper and
+  string make 4) in its off hand. It goes to the most hurt ally in `medic.range` (same
+  faction or owner, its owner, itself) under `healBelow`, even mid-fight, binds the wound
+  (`bandageHeal`, hearts), and waits `cooldownTicks`; the off hand restocks from the
+  backpack. Its cost: no shield, and `medic.meleeProficiency` (0.75). The role label reads
+  the off hand. Players can bind their own wounds with one. Roster items take a count
+  (`ancientempires:bandage*16`).
 - Reactions: `NpcBurningGoal` (`upkeep.burningPanic`): burning and not fighting (or any
   civilian) runs for water within 8 blocks. Poses are soft dependencies: with Not Enough
   Animations, eating raises the food to the mouth; with its EMF add-on, burning flails and

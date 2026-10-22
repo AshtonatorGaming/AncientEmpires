@@ -128,11 +128,16 @@ public enum NpcPath
      * the trade its rank names, then the path itself. A settler is always a
      * settler, and an armed worker is still a worker.
      */
-    public String roleId(ItemStack mainHand, String trade)
+    public String roleId(ItemStack mainHand, ItemStack offHand, String trade)
     {
         if (this == SETTLER)
         {
             return this.id;
+        }
+        if (this.combat && offHand.getItem() instanceof com.ancientempires.item.BandageItem)
+        {
+            // Bandages in the off hand make a medic, whatever the main hand holds.
+            return "medic";
         }
         String tool = this.combat ? weaponRole(mainHand) : toolRole(mainHand);
         if (tool != null)
@@ -140,6 +145,15 @@ public enum NpcPath
             return tool;
         }
         return trade.isEmpty() ? this.id : trade;
+    }
+
+    /** A book of any kind: a worker holding one is a priest. */
+    public static boolean isScripture(ItemStack stack)
+    {
+        return stack.getItem() instanceof net.minecraft.world.item.BookItem
+                || stack.getItem() instanceof net.minecraft.world.item.WritableBookItem
+                || stack.getItem() instanceof net.minecraft.world.item.WrittenBookItem
+                || stack.getItem() instanceof net.minecraft.world.item.EnchantedBookItem;
     }
 
     public static String translationKey(String roleId)
@@ -180,6 +194,10 @@ public enum NpcPath
         if (stack.getItem() instanceof FishingRodItem)
         {
             return "fisher";
+        }
+        if (isScripture(stack))
+        {
+            return "priest";
         }
         return null;
     }

@@ -13,7 +13,7 @@
     {"id": "owned.priest", "subtype": "priest", "name": "Priest", "skin": "priest", "item": "owned_priest_spawn_egg", "mainhand": "minecraft:book"},
     {"id": "owned.bard", "subtype": "bard", "name": "Bard", "skin": "bard", "item": "owned_bard_spawn_egg", "mainhand": "minecraft:stick"},
     {"id": "owned.siege_engineer", "subtype": "siege_engineer", "name": "Siege Engineer", "skin": "siege_engineer", "item": "owned_siege_engineer_spawn_egg"},
-    {"id": "owned.medic", "subtype": "medic", "name": "Medic", "skin": "combat.medic", "item": "owned_medic_spawn_egg", "mainhand": "minecraft:golden_apple"},
+    {"id": "owned.medic", "subtype": "medic", "name": "Medic", "skin": "combat.medic", "item": "owned_medic_spawn_egg", "mainhand": "minecraft:iron_sword", "offhand": "ancientempires:bandage*16"},
     {"id": "owned.engineer", "subtype": "engineer", "name": "Engineer", "skin": "combat.engineer", "item": "owned_engineer_spawn_egg"}
   ],
   "factions": [
