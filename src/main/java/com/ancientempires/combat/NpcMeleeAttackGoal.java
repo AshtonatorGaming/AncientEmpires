@@ -39,6 +39,8 @@ public class NpcMeleeAttackGoal extends Goal
     private boolean mobCombatSwing;
     private boolean mobCombatHitDone;
     private boolean mobCombatCancelled;
+    /** Hands version when the Better Mob Combat swing started. */
+    private int swingHands;
     private int facingWait;
     private int facedOnTick = -1;
     private boolean forcedSwing;
@@ -257,6 +259,7 @@ public class NpcMeleeAttackGoal extends Goal
             this.active = swing;
             this.phase = Phase.WINDUP;
             this.mobCombatSwing = true;
+            this.swingHands = this.npc.getHandsVersion();
             this.windupLeft = 0;
             this.stoppedForWindup = false;
             this.pathCooldown = 0;
@@ -318,8 +321,26 @@ public class NpcMeleeAttackGoal extends Goal
         MobCombatBridge.stopAttackAnimation(this.npc, 4);
     }
 
+    /**
+     * Better Mob Combat runs its hit on the tick its upswing reaches zero, before
+     * this goal ticks, so by now the callback has either landed or will not
+     * come. Its target finder can leave our target out: with its default
+     * {@code mobs_check_for_same_entity_type}, every NPC skips every other NPC,
+     * because they share one entity type. The goal's own target is then hit
+     * here with the same checks, unless the hands changed mid-swing (that mod
+     * cancels the swing then, and the hit should not land).
+     */
     private void finishMobCombatSwing(AttackSwing swing)
     {
+        if (!this.mobCombatHitDone && !this.mobCombatCancelled && this.npc.getHandsVersion() == this.swingHands)
+        {
+            LivingEntity target = this.npc.getTarget();
+            if (target != null && target.isAlive())
+            {
+                // The combo multiplier is no longer on the attribute, so scale here.
+                this.tryLandHit(target, swing, true);
+            }
+        }
         this.npc.completeSwing(swing.cooldownTicks());
         this.recoveryLeft = Math.max(0, MobCombatBridge.attackCooldown(this.npc));
         this.phase = Phase.APPROACH;
@@ -350,12 +371,21 @@ public class NpcMeleeAttackGoal extends Goal
             return;
         }
         this.faceTarget(target);
+        this.tryLandHit(target, swing, false);
+    }
+
+    /**
+     * Range, sight, and facing, then the hit. Marks the Better Mob Combat swing
+     * as landed so neither path hits twice.
+     */
+    private void tryLandHit(LivingEntity target, AttackSwing swing, boolean scaleDamage)
+    {
         boolean inRange = this.within(target, swing.range()) || !AncientEmpiresConfig.cancelIfOutOfRange;
         if (!inRange || !this.hasLineOfSight(target) || !this.hitFacing(target, swing))
         {
             return;
         }
-        this.applyHit(target, swing, false);
+        this.applyHit(target, swing, scaleDamage);
         this.mobCombatHitDone = true;
     }
 
@@ -473,7 +503,26 @@ public class NpcMeleeAttackGoal extends Goal
         {
             return true;
         }
-        return this.yawError(target) <= this.yawLimit(swing);
+        return this.yawError(target) <= this.yawLimit(swing) + this.targetSpread(target);
+    }
+
+    /**
+     * Half the angle the target's body covers, in degrees. The yaw test aims at
+     * the target's center, but a swing that reaches any part of the body hits,
+     * and up close the body covers a wide angle. Two touching bodies always pass:
+     * pushing makes the center angle jump around at that distance.
+     */
+    private double targetSpread(LivingEntity target)
+    {
+        double dx = target.getX() - this.npc.getX();
+        double dz = target.getZ() - this.npc.getZ();
+        double horizontal = Math.sqrt(dx * dx + dz * dz);
+        double halfWidth = target.getBbWidth() * 0.5D;
+        if (horizontal <= halfWidth + this.npc.getBbWidth() * 0.5D)
+        {
+            return 180.0D;
+        }
+        return Math.toDegrees(Math.atan2(halfWidth, horizontal));
     }
 
     private double yawLimit(AttackSwing swing)
