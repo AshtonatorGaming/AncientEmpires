@@ -56,12 +56,12 @@ unarmed dual-fist combo via the Better Combat fist preset; inventory persistence
 (item keeps name, equipment, skin, home, owner, flags); faction/owned split with the mass AW
 import; three-level skin selector with search; Player Default and Custom/Misc tabs; archers
 keep shooting at close range and never punch with a bow; home set/clear and return-home;
-outer skin layers.
+outer skin layers; sidearm fallback (`NpcSidearm`, `WeaponClassifier`, `sidearm` config
+section, `AeSidearmBowSlot` NBT marker undone on load and before repack).
 
 ## Not done yet
 
-1. Sidearm fallback (next): an archer whose target is cornered swaps to a melee weapon from
-   the backpack. See the plan below.
+1. Shared target scan (next; design proposed, not built). See the audit verdicts below.
 2. Target memory (remember the last target a few seconds after line of sight breaks).
 3. Spawner block that stores a full NPC NBT snapshot.
 4. Faction relations and revenge lists, upkeep, worker AI, worksites, town hall, orders,
@@ -121,6 +121,33 @@ and the UI screens.
 Suggested order: (1) the cheap fixes (items 3-5 and the client skin churn); (2) sidearm
 fallback, equipment-change driven; (3) Better Combat snapshot caching; (4) shared
 target-scan design.
+
+### Verdicts after checking the code (perf-and-sidearm branch)
+
+- Server 1, target scans: confirmed, but the cause is narrower. Vanilla
+  `TargetingConditions.test` already runs the `acceptsTarget` selector before the raycast.
+  The cost is that every candidate passing it gets a line-of-sight raycast, not only the
+  nearest, and the `Monster` goal has no selector at all. Not changed yet.
+- Server 2, Better Combat lookups: confirmed. Per swing, not per tick. The fist preset walked
+  the whole containers map every swing. Fixed: per-item cache stamped on BC's containers map.
+- Server 3, bow draw time: confirmed, about 5.5 us per shot (two exceptions). Fixed.
+- Server 4, follow owner: confirmed, small. Fixed.
+- Server 5, stack comparisons: confirmed for the preview, fixed with `getHandsVersion()`.
+  Caching `isHoldingBow()` was dropped: it is two `instanceof` checks, as cheap as a flag.
+- Server 6, sound id parse and string animation id: confirmed, once per swing. Not changed.
+- Client skin parse: mostly overstated. Catalog skins were already a HashMap hit with a
+  prebuilt `ResourceLocation`; only raw ids parsed. Cached on the entity anyway. The real
+  per-frame cost is in `NpcSkinLayers` when 3D Skin Layers is loaded: about ten reflective
+  config reads, a `View` allocation, and six reflective `setInjectedMesh` calls per NPC.
+  Not changed yet.
+- Client `NpcBetterCombatDriver.updatePose`: overstated. It calls `WeaponRegistry` directly,
+  which is two map gets for a stack without NBT. Not changed.
+- Not audited before, now checked: `NpcEmfCompat.afterPose` allocates two to four
+  `PoseSnapshot`s, a `Vector3f`, and a `HashMap` per attacking NPC per frame, and checks
+  `ModList` each call. `NpcHeldItemLayer` asks `NpcEmfCompat.placesArm` per arm per frame,
+  three reflective calls each. `MobCombatBridge.owns` runs Better Mob Combat's weapon check
+  every melee tick when that mod is loaded. `MobCombatHooks.cancel` walked fields with
+  exceptions (fixed). UI screens are dirty-flag driven and fine.
 
 ## Building
 
