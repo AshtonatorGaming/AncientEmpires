@@ -97,8 +97,8 @@ public final class NpcShieldGoal extends Goal
     public void stop()
     {
         this.bashTarget = null;
-        this.npc.lowerShield();
-        this.npc.setBracing(false);
+        this.npc.getGuard().lower();
+        this.npc.getGuard().setBracing(false);
         this.threat = null;
     }
 
@@ -118,13 +118,13 @@ public final class NpcShieldGoal extends Goal
         {
             this.holdLeft--;
         }
-        LivingEntity pending = this.npc.takePendingBash();
+        LivingEntity pending = this.npc.getGuard().takePendingBash();
         if (pending != null && this.bashTarget == null)
         {
             // Brace first, shield still up, with a sound a player can learn to read.
             this.bashTarget = pending;
             this.bashLeft = AncientEmpiresConfig.shieldBashWindupTicks;
-            this.npc.setBracing(true);
+            this.npc.getGuard().setBracing(true);
             NpcShieldBash.brace(this.npc, pending);
         }
         if (this.bashTarget != null)
@@ -132,17 +132,17 @@ public final class NpcShieldGoal extends Goal
             this.npc.getLookControl().setLookAt(this.bashTarget, 30.0F, 30.0F);
             if (--this.bashLeft > 0)
             {
-                this.npc.raiseShield();
+                this.npc.getGuard().raise();
                 return;
             }
             NpcShieldBash.bash(this.npc, this.bashTarget);
             this.bashTarget = null;
-            this.npc.setBracing(false);
+            this.npc.getGuard().setBracing(false);
             return;
         }
         if (this.npc.isSwingCommitted())
         {
-            this.npc.lowerShield();
+            this.npc.getGuard().lower();
             return;
         }
         if (this.reactionLeft > 0)
@@ -156,7 +156,7 @@ public final class NpcShieldGoal extends Goal
             // Holding the raise for a perfect block, just before the hit.
             return;
         }
-        this.npc.raiseShield();
+        this.npc.getGuard().raise();
     }
 
     private boolean ready()

@@ -21,9 +21,10 @@ final class NpcParryPlanner
     /** Clears a plan once the swing it was for is over. */
     static void tick(NpcEntity npc)
     {
-        if (npc.parryAt != Integer.MIN_VALUE && !(npc.getTarget() instanceof NpcEntity attacker && attacker.isAttackWindowOpen()))
+        NpcGuard guard = npc.getGuard();
+        if (guard.planAt != Integer.MIN_VALUE && !(npc.getTarget() instanceof NpcEntity attacker && attacker.isAttackWindowOpen()))
         {
-            npc.parryAt = Integer.MIN_VALUE;
+            guard.planAt = Integer.MIN_VALUE;
         }
     }
 
@@ -35,20 +36,21 @@ final class NpcParryPlanner
         {
             return false;
         }
+        NpcGuard guard = npc.getGuard();
         int serial = attacker.getAttackWindowSerial();
-        if (npc.parryPlanFor != attacker.getId() || npc.parryPlanSerial != serial)
+        if (guard.planFor != attacker.getId() || guard.planSerial != serial)
         {
             // A new swing: decide once whether to try for the perfect block, and when.
-            npc.parryPlanFor = attacker.getId();
-            npc.parryPlanSerial = serial;
-            npc.parryAt = Integer.MIN_VALUE;
+            guard.planFor = attacker.getId();
+            guard.planSerial = serial;
+            guard.planAt = Integer.MIN_VALUE;
             if (npc.getRandom().nextDouble() < npc.getParryChance())
             {
                 int error = npc.getParryError();
                 int jitter = error <= 0 ? 0 : npc.getRandom().nextInt(error * 2 + 1) - error;
-                npc.parryAt = AncientEmpiresConfig.parryWindowTicks / 2 + jitter;
+                guard.planAt = AncientEmpiresConfig.parryWindowTicks / 2 + jitter;
             }
         }
-        return npc.parryAt != Integer.MIN_VALUE && attacker.getAttackWindupRemaining() > npc.parryAt;
+        return guard.planAt != Integer.MIN_VALUE && attacker.getAttackWindupRemaining() > guard.planAt;
     }
 }

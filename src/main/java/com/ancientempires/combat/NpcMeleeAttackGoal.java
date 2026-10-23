@@ -117,7 +117,7 @@ public class NpcMeleeAttackGoal extends Goal
     {
         this.npc.getNavigation().stop();
         this.npc.setSwingCommitted(false);
-        this.npc.clearStrike();
+        this.npc.getGuard().clearStrike();
         this.feintPlanned = false;
         if (this.mobCombatSwing)
         {
@@ -213,7 +213,7 @@ public class NpcMeleeAttackGoal extends Goal
             this.footwork(target, next);
             return;
         }
-        if (!this.npc.readyToStrike())
+        if (!this.npc.getGuard().readyToStrike())
         {
             // Behind the shield: it comes down only after a committed block, then a beat before the swing.
             this.footwork(target, next);
@@ -370,7 +370,7 @@ public class NpcMeleeAttackGoal extends Goal
     private void beginWindup(AttackSwing swing)
     {
         // A player cannot block and swing at once; neither can an NPC.
-        this.npc.lowerShield();
+        this.npc.getGuard().lower();
         if (MobCombatBridge.owns(this.npc))
         {
             this.mobCombatCancelled = false;

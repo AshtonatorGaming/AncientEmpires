@@ -157,41 +157,12 @@ public class NpcEntity extends PathfinderMob
     /** Creative player escorting a faction NPC in follow mode. Server only, not saved. */
     @Nullable
     private UUID followLeader;
-    /** Server tick until which an axe hit keeps the shield down. */
-    private int shieldDisabledUntil;
     /** Set by the melee goal while it commits to a Better Mob Combat swing. */
     private boolean swingCommitted;
-    /** Attacker to shield-bash after a blocked hit. Server only. */
-    @Nullable
-    private LivingEntity pendingBash;
-    private int bashReadyTick;
-    /** Tick until which the shield stays down after a bash. */
-    private int shieldDownUntil;
-    /** tickCount the shield last went up and came down, for the block commitment. */
-    private int shieldRaisedAt;
-    private int shieldLoweredAt = -1000;
-    /** The melee goal asked to strike: the shield stays down until the swing ends. */
-    private boolean wantsToStrike;
-    /** tickCount until which a riposte after a blocked hit may skip the minimum block. */
-    private int riposteUntil;
-    /** Bracing for a shield bash: no strike until it lands. */
-    private boolean bracing;
-    /** tickCount the current strike began readying, for who-goes-first between guards. */
-    private int strikeSince;
-    /** tickCount of the last blocked hit, so it does not also knock the NPC back. */
-    private int blockedAt = -1;
-    /** The shield's guard: blocked damage drains it, and at zero the guard breaks. */
-    private float guard = -1.0F;
-    /** tickCount before which no swing may start (the recovery after a bash). */
-    private int strikeReadyAt;
-    /** tickCount until which a parry keeps this NPC staggered. */
-    private int staggerUntil;
+    /** The shield: raising, blocking, guard, bash, stagger. */
+    private final NpcGuard guard = new NpcGuard(this);
     /** Counts attack windows (see getAttackWindowSerial). */
     private int attackWindowSerial;
-    /** Parry plan against one swing: the attacker's id and window serial, and the wind-up left at which to parry. */
-    int parryPlanFor = -1;
-    int parryPlanSerial = -1;
-    int parryAt = Integer.MIN_VALUE;
     /** Own feint chance; below zero means the skill tier decides. */
     private float feintChance = -1.0F;
     /** Cached skill tier from the roster rank; below zero until first asked. */
@@ -885,10 +856,16 @@ public class NpcEntity extends PathfinderMob
         return WeaponClassifier.isShield(this.getOffhandItem());
     }
 
-    /** True while an axe hit keeps the shield down. */
+    /** The shield and everything done with it. */
+    public NpcGuard getGuard()
+    {
+        return this.guard;
+    }
+
+    /** True while an axe hit or a broken guard keeps the shield down. */
     public boolean isShieldDisabled()
     {
-        return this.tickCount < this.shieldDisabledUntil;
+        return this.guard.isDisabled();
     }
 
     public boolean isRaisingShield()
@@ -896,86 +873,19 @@ public class NpcEntity extends PathfinderMob
         return this.isUsingItem() && this.getUsedItemHand() == InteractionHand.OFF_HAND && WeaponClassifier.isShield(this.getUseItem());
     }
 
-    public void raiseShield()
+    /** Staggered by a perfect block: the client reads the synced flag for the recoil pose. */
+    public boolean isStaggered()
     {
-        if (!this.isUsingItem() && this.hasShieldInOffhand() && !this.isShieldDisabled() && this.tickCount >= this.shieldDownUntil
-                && !this.wantsToStrike)
+        if (this.level().isClientSide)
         {
-            this.startUsingItem(InteractionHand.OFF_HAND);
-            this.shieldRaisedAt = this.tickCount;
+            return this.entityData.get(DATA_STAGGERED);
         }
+        return this.guard.isStaggered();
     }
 
-    public void lowerShield()
+    void setStaggeredFlag(boolean staggered)
     {
-        if (this.isRaisingShield())
-        {
-            this.stopUsingItem();
-            this.shieldLoweredAt = this.tickCount;
-        }
-    }
-
-    /**
-     * The melee goal wants to attack. A block is a commitment: the shield comes
-     * down only once it has been up {@code shield.minBlockTicks}, stays down
-     * until the swing is over, and a swing may begin only
-     * {@code shield.strikeDelayTicks} after it came down. True once the NPC may
-     * begin its swing.
-     */
-    public boolean readyToStrike()
-    {
-        if (this.bracing || this.tickCount < this.strikeReadyAt)
-        {
-            return false;
-        }
-        if (!this.hasShieldInOffhand() || this.isShieldDisabled())
-        {
-            if (!this.wantsToStrike)
-            {
-                this.strikeSince = this.tickCount;
-            }
-            this.wantsToStrike = true;
-            return this.tickCount - this.shieldLoweredAt >= AncientEmpiresConfig.shieldStrikeDelayTicks;
-        }
-        // Ancient Warfare kept blocking and attacking apart: strike only into an opening,
-        // never while an NPC target is winding up at this NPC, nor while it is already lowering
-        // its own shield to strike (whoever started first goes; the other blocks, then ripostes).
-        // A vanilla mob or player has no wind-up: its swing is the hit, so just after it is the opening.
-        LivingEntity target = this.getTarget();
-        if (target instanceof NpcEntity other && (other.isAttackWindowOpen() || other.strikesBefore(this)))
-        {
-            // Caught lowering it: cancel the strike, so the shield goes straight back up.
-            this.wantsToStrike = false;
-            return false;
-        }
-        if (this.isRaisingShield())
-        {
-            boolean riposte = this.tickCount < this.riposteUntil;
-            if (!riposte && this.tickCount - this.shieldRaisedAt < AncientEmpiresConfig.shieldMinBlockTicks)
-            {
-                return false;
-            }
-            // Not on the first allowed tick: a random beat later, so strikes are hard to time
-            // and two guards do not open together.
-            if (!riposte && this.getRandom().nextFloat() >= AncientEmpiresConfig.shieldStrikeChance)
-            {
-                return false;
-            }
-            this.lowerShield();
-        }
-        if (!this.wantsToStrike)
-        {
-            this.wantsToStrike = true;
-            this.strikeSince = this.tickCount;
-        }
-        return this.tickCount - this.shieldLoweredAt >= (this.tickCount < this.riposteUntil
-                ? AncientEmpiresConfig.shieldStrikeDelayTicks / 2 : AncientEmpiresConfig.shieldStrikeDelayTicks);
-    }
-
-    /** This NPC began readying a strike before {@code other} did (or {@code other} has not). */
-    private boolean strikesBefore(NpcEntity other)
-    {
-        return this.wantsToStrike && !this.attackWindowOpen && (!other.wantsToStrike || this.strikeSince < other.strikeSince);
+        this.entityData.set(DATA_STAGGERED, staggered);
     }
 
     /**
@@ -985,28 +895,11 @@ public class NpcEntity extends PathfinderMob
     @Override
     public void knockback(double strength, double x, double z)
     {
-        if (this.blockedAt == this.tickCount)
+        if (this.guard.blockedThisTick())
         {
             return;
         }
         super.knockback(strength, x, z);
-    }
-
-    /** Thrown off balance by a perfect block: no swing, and any wind-up is broken off. Shown as a recoil. */
-    public void stagger(int ticks)
-    {
-        this.staggerUntil = this.tickCount + ticks;
-        this.entityData.set(DATA_STAGGERED, true);
-        this.strikeReadyAt = Math.max(this.strikeReadyAt, this.staggerUntil);
-    }
-
-    public boolean isStaggered()
-    {
-        if (this.level().isClientSide)
-        {
-            return this.entityData.get(DATA_STAGGERED);
-        }
-        return this.tickCount < this.staggerUntil;
     }
 
     /** A hit taken on the raised shield outside vanilla's blocking (its first ticks): wear shield and guard. */
@@ -1015,58 +908,34 @@ public class NpcEntity extends PathfinderMob
         this.hurtCurrentlyUsedShield(amount);
     }
 
-    /** A perfect block landed: the attacker reels, so the NPC may strike straight back. */
-    public void onParried(LivingEntity attacker)
-    {
-        this.strikeReadyAt = 0;
-        this.riposteUntil = this.tickCount + AncientEmpiresConfig.shieldRiposteTicks;
-    }
-
     /** Counts attack windows, so a defender can tell one swing from the next. */
     public int getAttackWindowSerial()
     {
         return this.attackWindowSerial;
     }
 
-    /** Chance to try a parry, by skill tier. */
+    /** Chance to try a perfect block, by skill tier. */
     public double getParryChance()
     {
         return tierValue(AncientEmpiresConfig.parryChanceByTier, this.getSkillTier());
     }
 
-    /** Up to how many ticks a parry is mistimed, by skill tier. */
+    /** Up to how many ticks a perfect-block raise is mistimed, by skill tier. */
     public int getParryError()
     {
         return (int) Math.round(tierValue(AncientEmpiresConfig.parryErrorByTier, this.getSkillTier()));
     }
 
-    /** What is left of the shield's guard, out of {@code shield.guardPoints}. */
-    public float getGuard()
+    /** The skill tier's guard multiplier ({@code skill.guardByTier}). */
+    double getGuardScale()
     {
-        return this.guard < 0.0F ? this.guardMax() : this.guard;
-    }
-
-    /** Full guard: {@code shield.guardMax} times the skill tier's {@code skill.guardByTier}. */
-    public float guardMax()
-    {
-        return (float) (AncientEmpiresConfig.shieldGuardPoints * tierValue(AncientEmpiresConfig.guardByTier, this.getSkillTier()));
-    }
-
-    void setBracing(boolean bracing)
-    {
-        this.bracing = bracing;
-    }
-
-    /** The swing is over, or the melee goal gave up: the shield may go back up. */
-    public void clearStrike()
-    {
-        this.wantsToStrike = false;
+        return tierValue(AncientEmpiresConfig.guardByTier, this.getSkillTier());
     }
 
     /**
      * The NPC is committed to its own swing, so the shield stays down, as a
      * player cannot block and attack at once: for the whole wind-up. Before it,
-     * {@link #readyToStrike} lowers the shield and keeps it from going back up.
+     * {@link NpcGuard#readyToStrike} lowers the shield and keeps it from going back up.
      * The Better Mob Combat path sets the flag.
      */
     public boolean isSwingCommitted()
@@ -1079,57 +948,15 @@ public class NpcEntity extends PathfinderMob
         this.swingCommitted = committed;
     }
 
-    /**
-     * Vanilla calls this for every blocked melee hit. An axe disables the shield
-     * the way it does a player's.
-     */
+    /** Vanilla calls this for every blocked melee hit; the guard decides what follows. */
     @Override
     protected void blockUsingShield(LivingEntity attacker)
     {
         super.blockUsingShield(attacker);
-        if (this.isShieldDisabled())
-        {
-            // The guard broke on this hit: no riposte or bash from behind a shield that is down.
-            return;
-        }
-        if (attacker.getMainHandItem().canDisableShield(this.getUseItem(), this, attacker))
-        {
-            this.shieldDisabledUntil = this.tickCount + AncientEmpiresConfig.shieldDisableTicks;
-            this.lowerShield();
-            this.playSound(SoundEvents.SHIELD_BREAK, 0.8F, 0.8F + this.level().random.nextFloat() * 0.4F);
-            return;
-        }
-        // A blocked hit leaves the attacker open: a riposte may skip the minimum block.
-        this.riposteUntil = this.tickCount + AncientEmpiresConfig.shieldRiposteTicks;
-        // A blocked hit is the moment to shove back, as a player would with Spartan's bash key.
-        if (NpcShieldBash.canBash(this) && this.getRandom().nextDouble() < this.getBashChance())
-        {
-            this.pendingBash = attacker;
-        }
+        this.guard.onBlocked(attacker);
     }
 
-    /** The attacker to counter-bash, once; the shield goal calls this each tick. */
-    @Nullable
-    LivingEntity takePendingBash()
-    {
-        LivingEntity attacker = this.pendingBash;
-        this.pendingBash = null;
-        return attacker;
-    }
 
-    boolean isBashReady()
-    {
-        return this.tickCount >= this.bashReadyTick;
-    }
-
-    void startBashCooldown(int ticks)
-    {
-        this.bashReadyTick = this.tickCount + ticks;
-        this.shieldDownUntil = this.tickCount + AncientEmpiresConfig.shieldBashRecoveryTicks;
-        // The bash spends the riposte; no swing follows straight on.
-        this.strikeReadyAt = this.tickCount + AncientEmpiresConfig.shieldBashRecoveryTicks;
-        this.riposteUntil = 0;
-    }
 
     /**
      * Chance, 0 to 1, that a swing at a guarded target is a feint. Comes from
@@ -1517,16 +1344,7 @@ public class NpcEntity extends PathfinderMob
     @Override
     protected void hurtCurrentlyUsedShield(float amount)
     {
-        this.blockedAt = this.tickCount;
-        // Guard, as Chivalry's stamina: every blocked hit wears it, so a shield wall can be broken.
-        this.guard = this.getGuard() - Math.max(1.0F, amount);
-        if (this.guard <= 0.0F && WeaponClassifier.isShield(this.getUseItem()))
-        {
-            this.guard = 0.0F;
-            this.shieldDisabledUntil = this.tickCount + AncientEmpiresConfig.shieldGuardBreakTicks;
-            this.lowerShield();
-            this.playSound(SoundEvents.SHIELD_BREAK, 0.8F, 0.7F + this.level().random.nextFloat() * 0.2F);
-        }
+        this.guard.onShieldHit(amount);
         ItemStack shield = this.getUseItem();
         if (this.isCreative() || amount < 3.0F || !WeaponClassifier.isShield(shield))
         {
@@ -2211,7 +2029,7 @@ public class NpcEntity extends PathfinderMob
      */
     public void completeSwing(int cooldownTicks)
     {
-        this.wantsToStrike = false;
+        this.guard.clearStrike();
         this.comboIndex++;
         this.ticksSinceSwing = 0;
         this.lastSwingCooldown = Math.max(1, cooldownTicks);
@@ -2249,7 +2067,7 @@ public class NpcEntity extends PathfinderMob
 
     public void closeAttackWindow()
     {
-        this.wantsToStrike = false;
+        this.guard.clearStrike();
         this.attackWindowOpen = false;
         this.attackWindupRemaining = 0;
         this.attackAnimation = null;
@@ -2412,18 +2230,8 @@ public class NpcEntity extends PathfinderMob
         this.mount.tick();
         this.targetMemory.tick();
         this.sidearm.tick();
-        if (this.guard >= 0.0F && this.guard < this.guardMax())
-        {
-            // Recovers between blows, a quarter as fast while still holding the shield up.
-            float regen = (float) AncientEmpiresConfig.shieldGuardRegen;
-            this.guard = Math.min(this.guardMax(), this.guard + (this.isRaisingShield() ? regen * 0.25F : regen));
-        }
+        this.guard.tick();
         NpcParryPlanner.tick(this);
-        if (this.staggerUntil > 0 && this.tickCount >= this.staggerUntil)
-        {
-            this.staggerUntil = 0;
-            this.entityData.set(DATA_STAGGERED, false);
-        }
         if ((this.tickCount + this.getId()) % NpcNightLight.CHECK_TICKS == 0)
         {
             NpcNightLight.update(this);

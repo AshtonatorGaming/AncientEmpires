@@ -166,7 +166,7 @@ public final class Parry
         event.setCanceled(true);
         if (target instanceof NpcEntity npc)
         {
-            npc.onParried(attacker);
+            npc.getGuard().onPerfectBlock();
             // The shield snaps forward, turning the blow aside.
             npc.swing(npc.getUsedItemHand());
         }
@@ -204,7 +204,7 @@ public final class Parry
         attacker.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, ticks, 2, false, false, false));
         if (attacker instanceof NpcEntity npc)
         {
-            npc.stagger(ticks);
+            npc.getGuard().stagger(ticks);
         }
         else if (attacker instanceof Player player)
         {

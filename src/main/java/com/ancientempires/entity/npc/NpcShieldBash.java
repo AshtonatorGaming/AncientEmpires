@@ -54,7 +54,7 @@ public final class NpcShieldBash
     /** The NPC is blocking with a shield that may bash, and the bash is off cooldown. */
     static boolean canBash(NpcEntity npc)
     {
-        if (!npc.isRaisingShield() || !npc.isBashReady())
+        if (!npc.isRaisingShield() || !npc.getGuard().isBashReady())
         {
             return false;
         }
@@ -100,13 +100,13 @@ public final class NpcShieldBash
         double reach = AncientEmpiresConfig.shieldBashRange + target.getBbWidth() * 0.5D;
         boolean lands = target.isAlive() && npc.distanceToSqr(target) <= reach * reach && npc.hasLineOfSight(target);
         // The shove lands with the shield up; it comes down after, for the recovery.
-        npc.startBashCooldown(tower ? AncientEmpiresConfig.towerBashCooldownTicks : AncientEmpiresConfig.shieldBashCooldownTicks);
+        npc.getGuard().startBashCooldown(tower ? AncientEmpiresConfig.towerBashCooldownTicks : AncientEmpiresConfig.shieldBashCooldownTicks);
         if (!lands)
         {
-            npc.lowerShield();
+            npc.getGuard().lower();
             return;
         }
-        npc.lowerShield();
+        npc.getGuard().lower();
         float yaw = npc.getYRot() * Mth.DEG_TO_RAD;
         int knockback = shield.getEnchantmentLevel(Enchantments.KNOCKBACK);
         target.knockback(1.0D + knockback, Mth.sin(yaw), -Mth.cos(yaw));

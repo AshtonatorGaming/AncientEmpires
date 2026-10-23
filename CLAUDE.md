@@ -130,6 +130,10 @@ its own unless noted). Before adding behavior, check what AW did first.
 - Home: a vanilla restriction (`home.wanderRadius`, 5) keeps wandering near home. By day,
   past 50 blocks walk back to 20 (owned) or 30 (faction). Faction NPCs keep night hours
   (back within 5). Rain sends NPCs home until it stops. Faction archers hold a 3-block post.
+- `NpcGuard` (`npc.getGuard()`) owns all shield state and decisions: raise and lower, the strike
+  commitment and turn-taking (`readyToStrike`), riposte, guard points and breaks, axe disable,
+  brace and bash readiness, stagger, and the perfect-block plan. `NpcEntity` keeps only the
+  vanilla hooks (`blockUsingShield`, `hurtCurrentlyUsedShield`, `knockback`) that call into it.
 - Shields: `NpcShieldGoal` blocks against the target swinging in range or aiming a bow, and
   (beyond AW) anyone within `shield.aimWatchRange` aiming at the NPC. Shields are found by
   Forge's `SHIELD_BLOCK` action (`WeaponClassifier.isShield`), so Spartan Shields work.
