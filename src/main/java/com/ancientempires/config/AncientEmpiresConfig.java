@@ -84,6 +84,10 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.IntValue SHIELD_MIN_BLOCK_TICKS;
     private static final ForgeConfigSpec.IntValue SHIELD_STRIKE_DELAY_TICKS;
     private static final ForgeConfigSpec.IntValue SHIELD_RIPOSTE_TICKS;
+    private static final ForgeConfigSpec.DoubleValue SHIELD_STRIKE_CHANCE;
+    private static final ForgeConfigSpec.IntValue SHIELD_GUARD_POINTS;
+    private static final ForgeConfigSpec.DoubleValue SHIELD_GUARD_REGEN;
+    private static final ForgeConfigSpec.IntValue SHIELD_GUARD_BREAK_TICKS;
     private static final ForgeConfigSpec.DoubleValue SHIELD_ADVANCE_SPEED;
     private static final ForgeConfigSpec.IntValue SHIELD_BASH_WINDUP;
     private static final ForgeConfigSpec.DoubleValue SHIELD_AIM_WATCH_RANGE;
@@ -440,6 +444,18 @@ public final class AncientEmpiresConfig
         SHIELD_RIPOSTE_TICKS = builder
                 .comment("After blocking a hit, the NPC may strike back within this many ticks without waiting out minBlockTicks. It never lowers the shield while the target is mid-swing.")
                 .defineInRange("riposteTicks", 20, 0, 100);
+        SHIELD_STRIKE_CHANCE = builder
+                .comment("Once the minimum block is over, the chance each tick that a guarding NPC lowers its shield to strike. Below 1, strikes come at a random beat, so they are hard to time and two guards do not open together.")
+                .defineInRange("strikeChance", 0.15D, 0.01D, 1.0D);
+        SHIELD_GUARD_POINTS = builder
+                .comment("An NPC shield's guard, like stamina in Chivalry: each blocked hit drains it by the damage stopped (at least 1). At zero the guard breaks and the shield is knocked down for guardBreakTicks, so shield walls do not stalemate.")
+                .defineInRange("guardPoints", 20, 1, 200);
+        SHIELD_GUARD_REGEN = builder
+                .comment("Guard recovered per tick with the shield down (a quarter of this while it is up).")
+                .defineInRange("guardRegen", 0.2D, 0.0D, 10.0D);
+        SHIELD_GUARD_BREAK_TICKS = builder
+                .comment("Ticks a broken guard keeps the shield down.")
+                .defineInRange("guardBreakTicks", 40, 0, 400);
         SHIELD_ADVANCE_SPEED = builder
                 .comment("Path speed multiplier while advancing behind a raised shield (Ancient Warfare walked at half speed).")
                 .defineInRange("advanceSpeed", 0.7D, 0.1D, 2.0D);
@@ -964,6 +980,10 @@ public final class AncientEmpiresConfig
     public static int shieldMinBlockTicks = 12;
     public static int shieldStrikeDelayTicks = 6;
     public static int shieldRiposteTicks = 20;
+    public static double shieldStrikeChance = 0.15D;
+    public static int shieldGuardPoints = 20;
+    public static double shieldGuardRegen = 0.2D;
+    public static int shieldGuardBreakTicks = 40;
     public static double shieldAdvanceSpeed = 0.7D;
     public static int shieldBashWindupTicks = 6;
     public static double shieldAimWatchRange = 24.0D;
@@ -1212,6 +1232,10 @@ public final class AncientEmpiresConfig
         shieldMinBlockTicks = SHIELD_MIN_BLOCK_TICKS.get();
         shieldStrikeDelayTicks = SHIELD_STRIKE_DELAY_TICKS.get();
         shieldRiposteTicks = SHIELD_RIPOSTE_TICKS.get();
+        shieldStrikeChance = SHIELD_STRIKE_CHANCE.get();
+        shieldGuardPoints = SHIELD_GUARD_POINTS.get();
+        shieldGuardRegen = SHIELD_GUARD_REGEN.get();
+        shieldGuardBreakTicks = SHIELD_GUARD_BREAK_TICKS.get();
         shieldAdvanceSpeed = SHIELD_ADVANCE_SPEED.get();
         shieldBashWindupTicks = SHIELD_BASH_WINDUP.get();
         shieldAimWatchRange = SHIELD_AIM_WATCH_RANGE.get();

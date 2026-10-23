@@ -175,6 +175,10 @@ public class NpcEntity extends PathfinderMob
     private int riposteUntil;
     /** Bracing for a shield bash: no strike until it lands. */
     private boolean bracing;
+    /** tickCount the current strike began readying, for who-goes-first between guards. */
+    private int strikeSince;
+    /** The shield's guard: blocked damage drains it, and at zero the guard breaks. */
+    private float guard = AncientEmpiresConfig.shieldGuardPoints;
     /** tickCount before which no swing may start (the recovery after a bash). */
     private int strikeReadyAt;
     /** Own feint chance; below zero means the skill tier decides. */
@@ -914,19 +918,23 @@ public class NpcEntity extends PathfinderMob
         }
         if (!this.hasShieldInOffhand() || this.isShieldDisabled())
         {
+            if (!this.wantsToStrike)
+            {
+                this.strikeSince = this.tickCount;
+            }
             this.wantsToStrike = true;
             return this.tickCount - this.shieldLoweredAt >= AncientEmpiresConfig.shieldStrikeDelayTicks;
         }
         // Ancient Warfare kept blocking and attacking apart: strike only into an opening,
-        // never while the target is mid-swing at this NPC.
+        // never while the target is mid-swing at this NPC, nor while it is already lowering
+        // its own shield to strike (whoever started first goes; the other blocks, then ripostes).
         LivingEntity target = this.getTarget();
-        if (target != null && NpcShieldGoal.swinging(target))
+        if (target != null && (NpcShieldGoal.swinging(target) || target instanceof NpcEntity other && other.strikesBefore(this)))
         {
             // Caught lowering it: cancel the strike, so the shield goes straight back up.
             this.wantsToStrike = false;
             return false;
         }
-        this.wantsToStrike = true;
         if (this.isRaisingShield())
         {
             boolean riposte = this.tickCount < this.riposteUntil;
@@ -934,9 +942,32 @@ public class NpcEntity extends PathfinderMob
             {
                 return false;
             }
+            // Not on the first allowed tick: a random beat later, so strikes are hard to time
+            // and two guards do not open together.
+            if (!riposte && this.getRandom().nextFloat() >= AncientEmpiresConfig.shieldStrikeChance)
+            {
+                return false;
+            }
             this.lowerShield();
         }
+        if (!this.wantsToStrike)
+        {
+            this.wantsToStrike = true;
+            this.strikeSince = this.tickCount;
+        }
         return this.tickCount - this.shieldLoweredAt >= AncientEmpiresConfig.shieldStrikeDelayTicks;
+    }
+
+    /** This NPC began readying a strike before {@code other} did (or {@code other} has not). */
+    private boolean strikesBefore(NpcEntity other)
+    {
+        return this.wantsToStrike && !this.attackWindowOpen && (!other.wantsToStrike || this.strikeSince < other.strikeSince);
+    }
+
+    /** What is left of the shield's guard, out of {@code shield.guardPoints}. */
+    public float getGuard()
+    {
+        return this.guard;
     }
 
     void setBracing(boolean bracing)
@@ -974,6 +1005,11 @@ public class NpcEntity extends PathfinderMob
     protected void blockUsingShield(LivingEntity attacker)
     {
         super.blockUsingShield(attacker);
+        if (this.isShieldDisabled())
+        {
+            // The guard broke on this hit: no riposte or bash from behind a shield that is down.
+            return;
+        }
         if (attacker.getMainHandItem().canDisableShield(this.getUseItem(), this, attacker))
         {
             this.shieldDisabledUntil = this.tickCount + AncientEmpiresConfig.shieldDisableTicks;
@@ -1399,6 +1435,15 @@ public class NpcEntity extends PathfinderMob
     @Override
     protected void hurtCurrentlyUsedShield(float amount)
     {
+        // Guard, as Chivalry's stamina: every blocked hit wears it, so a shield wall can be broken.
+        this.guard -= Math.max(1.0F, amount);
+        if (this.guard <= 0.0F && WeaponClassifier.isShield(this.getUseItem()))
+        {
+            this.guard = 0.0F;
+            this.shieldDisabledUntil = this.tickCount + AncientEmpiresConfig.shieldGuardBreakTicks;
+            this.lowerShield();
+            this.playSound(SoundEvents.SHIELD_BREAK, 0.8F, 0.7F + this.level().random.nextFloat() * 0.2F);
+        }
         ItemStack shield = this.getUseItem();
         if (this.isCreative() || amount < 3.0F || !WeaponClassifier.isShield(shield))
         {
@@ -2278,6 +2323,12 @@ public class NpcEntity extends PathfinderMob
         this.mount.tick();
         this.targetMemory.tick();
         this.sidearm.tick();
+        if (this.guard < AncientEmpiresConfig.shieldGuardPoints)
+        {
+            // Recovers between blows, a quarter as fast while still holding the shield up.
+            float regen = (float) AncientEmpiresConfig.shieldGuardRegen;
+            this.guard = Math.min((float) AncientEmpiresConfig.shieldGuardPoints, this.guard + (this.isRaisingShield() ? regen * 0.25F : regen));
+        }
         if ((this.tickCount + this.getId()) % NpcNightLight.CHECK_TICKS == 0)
         {
             NpcNightLight.update(this);

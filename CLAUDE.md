@@ -143,6 +143,11 @@ its own unless noted). Before adding behavior, check what AW did first.
   overlap: the shield is never lowered while the target is mid-swing, and a strike being
   readied is cancelled if the target starts one. A blocked hit opens `riposteTicks` to strike
   without the minimum. Behind a raised shield the NPC advances at `advanceSpeed` (AW: half).
+  Between two guards, whoever starts readying a strike first goes (`strikesBefore`); the other
+  holds its guard, blocks, and ripostes. Past the minimum, a strike comes at a random beat
+  (`strikeChance` per tick). Guard (`guardPoints`, like Chivalry stamina): blocked damage
+  drains it, it recovers at `guardRegen`, and at zero the shield is knocked down for
+  `guardBreakTicks`, so shield walls do not stalemate and players can break a turtle.
   EMF is handed the shield and night-light arm poses so its own animation does not undo them.
 - Bash: `NpcShieldBash` mirrors Spartan Shields' player bash as a counter after a blocked
   hit. It is telegraphed: the NPC braces `bashWindupTicks` (6) behind the raised shield with
