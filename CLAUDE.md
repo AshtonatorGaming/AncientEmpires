@@ -148,6 +148,9 @@ its own unless noted). Before adding behavior, check what AW did first.
   (`strikeChance` per tick). Guard (`guardPoints`, like Chivalry stamina): blocked damage
   drains it, it recovers at `guardRegen`, and at zero the shield is knocked down for
   `guardBreakTicks`, so shield walls do not stalemate and players can break a turtle.
+  Footwork (`combat.footwork`): inside reach while waiting or recovering, NPCs circle (vanilla
+  strafe, which refuses unwalkable steps), close at the edge of reach, and give ground when
+  pressed. Bash chance per blocked hit is `skill.bashChancePerBlock` (0.08 to 0.25 by tier).
   EMF is handed the shield and night-light arm poses so its own animation does not undo them.
 - Bash: `NpcShieldBash` mirrors Spartan Shields' player bash as a counter after a blocked
   hit. It is telegraphed: the NPC braces `bashWindupTicks` (6) behind the raised shield with
@@ -336,7 +339,9 @@ its own unless noted). Before adding behavior, check what AW did first.
   (below `darkness`) with a free off hand hold a torch or lantern (`ancientempires:night_lights`
   tag), held out level in `NpcModel.holdLight`; never with a bow, crossbow, or Better Combat
   two-hander. Factions with `"nightLights": false` in factions.json (beast, demon, ent, giant,
-  kong, monster, mindflayer, gremlin, vampire) are not issued lights. Owned ones use their backpack's and put it back by
+  kong, monster, mindflayer, gremlin, vampire) are not issued lights. With Amendments (Moonlight's
+  held-item API, `NpcMoonlightCompat`, reflection) NPCs get its arm pose and 3D lantern and torch,
+  which Moonlight only hooks for players; without it the item is stood upright on the level arm. Owned ones use their backpack's and put it back by
   day; faction guards are issued one (`AeNightLight`, stripped before death drops and
   repack). Dynamic light mods light held items on any living thing, so no compat code.
 - Reactions: `NpcBurningGoal` (`upkeep.burningPanic`): burning and not fighting (or any

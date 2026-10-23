@@ -101,10 +101,27 @@ public class NpcModel extends PlayerModel<NpcEntity>
      */
     private boolean holdLight(NpcEntity entity, float ageInTicks)
     {
+        return this.poseLight(entity, ageInTicks);
+    }
+
+    /** Whether {@code stack} is a night light this NPC holds out with our own pose (not Amendments'). */
+    static boolean holdsLightOut(NpcEntity entity, ItemStack stack)
+    {
+        return stack == entity.getOffhandItem() && NpcNightLight.isLight(stack) && !entity.isAttackWindowOpen() && !entity.isUsingItem()
+                && !NpcMoonlightCompat.posesArm(stack);
+    }
+
+    private boolean poseLight(NpcEntity entity, float ageInTicks)
+    {
         ItemStack light = entity.getOffhandItem();
         if (!NpcNightLight.isLight(light))
         {
             return false;
+        }
+        if (NpcMoonlightCompat.posesArm(light))
+        {
+            // Amendments already posed the arm for its held lantern or torch, as for a player.
+            return true;
         }
         boolean leftArm = entity.getMainArm() == HumanoidArm.RIGHT;
         ModelPart arm = leftArm ? this.leftArm : this.rightArm;

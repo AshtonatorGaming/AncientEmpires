@@ -4,6 +4,7 @@ import com.ancientempires.entity.npc.NpcEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.model.ArmedModel;
+import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.ItemInHandRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
@@ -44,10 +45,22 @@ public class NpcHeldItemLayer extends ItemInHandLayer<NpcEntity, NpcModel>
         pose.pushPose();
         // The arm is drawn folded with the upper body; the item has to fold with it.
         NpcCombatAnimations.bendUpperBody(npc, pose);
+        if (NpcMoonlightCompat.render(this.getParentModel(), npc, stack, arm, pose, buffer, light))
+        {
+            // Amendments' 3D lantern or torch, as a player holds it.
+            pose.popPose();
+            return;
+        }
         ((ArmedModel) this.getParentModel()).translateToHand(arm, pose);
         if (!drawingBow)
         {
             NpcCombatAnimations.bendHeldArm(npc, arm, pose);
+        }
+        if (NpcModel.holdsLightOut(npc, stack))
+        {
+            // The light is held out on a level arm: stand it back upright, as it hangs on a player.
+            ModelPart hand = arm == HumanoidArm.LEFT ? this.getParentModel().leftArm : this.getParentModel().rightArm;
+            pose.mulPose(Axis.XP.rotation(-hand.xRot));
         }
         pose.mulPose(Axis.XP.rotationDegrees(-90.0F));
         pose.mulPose(Axis.YP.rotationDegrees(180.0F));

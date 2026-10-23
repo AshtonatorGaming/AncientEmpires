@@ -48,6 +48,8 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.DoubleValue WINDUP_RANGE_SLACK;
     private static final ForgeConfigSpec.BooleanValue STOP_MOVING_DURING_WINDUP;
     private static final ForgeConfigSpec.DoubleValue WINDUP_MOVE_SPEED;
+    private static final ForgeConfigSpec.BooleanValue FOOTWORK;
+    private static final ForgeConfigSpec.DoubleValue FOOTWORK_SPEED;
     private static final ForgeConfigSpec.DoubleValue APPROACH_SPEED;
     private static final ForgeConfigSpec.IntValue PATH_RECALC_TICKS;
     private static final ForgeConfigSpec.BooleanValue REQUIRE_LINE_OF_SIGHT;
@@ -323,6 +325,12 @@ public final class AncientEmpiresConfig
         STOP_MOVING_DURING_WINDUP = builder
                 .comment("Stop pathing once the target is in range during wind-up.")
                 .define("stopMovingDuringWindup", true);
+        FOOTWORK = builder
+                .comment("Inside reach, while waiting to strike or recovering, NPCs circle their opponent, step in at the edge of reach, and give ground when pressed, instead of standing still.")
+                .define("footwork", true);
+        FOOTWORK_SPEED = builder
+                .comment("Sideways footwork input, 0 to 1 (vanilla strafe pace scales it).")
+                .defineInRange("footworkSpeed", 0.6D, 0.0D, 1.0D);
         WINDUP_MOVE_SPEED = builder
                 .comment("Path speed multiplier while winding up and still short of the target.")
                 .defineInRange("windupMoveSpeed", 0.7D, 0.0D, 2.0D);
@@ -488,7 +496,7 @@ public final class AncientEmpiresConfig
                 .defineList("feintChance", List.of(0.0D, 0.1D, 0.2D, 0.3D), AncientEmpiresConfig::isChance);
         SKILL_BASH_CHANCE = builder
                 .comment("Chance, 0 to 1, that a blocked hit is answered with a shield bash (see shield.bashMode).")
-                .defineList("bashChance", List.of(0.3D, 0.45D, 0.6D, 0.75D), AncientEmpiresConfig::isChance);
+                .defineList("bashChancePerBlock", List.of(0.08D, 0.12D, 0.18D, 0.25D), AncientEmpiresConfig::isChance);
         SKILL_SHIELD_REACTION = builder
                 .comment("Most ticks before the shield comes up against a threat; each block waits a random amount up to this.")
                 .defineList("shieldReactionTicks", List.of(8, 6, 4, 2), value -> value instanceof Integer ticks && ticks >= 0 && ticks <= 40);
@@ -944,6 +952,8 @@ public final class AncientEmpiresConfig
     public static double windupRangeSlack = 0.5D;
     public static boolean stopMovingDuringWindup = true;
     public static double windupMoveSpeed = 0.7D;
+    public static boolean footwork = true;
+    public static double footworkSpeed = 0.6D;
     public static double approachSpeed = 1.12D;
     public static int pathRecalcTicks = 8;
     public static boolean requireLineOfSight = true;
@@ -991,7 +1001,7 @@ public final class AncientEmpiresConfig
     public static NpcShieldBash.Mode shieldBashMode = NpcShieldBash.Mode.SPARTAN;
     /** Per skill tier: ordinary, elite, leader, elite leader. */
     public static List<? extends Double> feintChanceByTier = List.of(0.0D, 0.1D, 0.2D, 0.3D);
-    public static List<? extends Double> bashChanceByTier = List.of(0.3D, 0.45D, 0.6D, 0.75D);
+    public static List<? extends Double> bashChanceByTier = List.of(0.08D, 0.12D, 0.18D, 0.25D);
     public static List<? extends Integer> shieldReactionByTier = List.of(8, 6, 4, 2);
     public static double shieldBashRange = 3.0D;
     public static int shieldBashCooldownTicks = 30;
@@ -1196,6 +1206,8 @@ public final class AncientEmpiresConfig
         windupRangeSlack = WINDUP_RANGE_SLACK.get();
         stopMovingDuringWindup = STOP_MOVING_DURING_WINDUP.get();
         windupMoveSpeed = WINDUP_MOVE_SPEED.get();
+        footwork = FOOTWORK.get();
+        footworkSpeed = FOOTWORK_SPEED.get();
         approachSpeed = APPROACH_SPEED.get();
         pathRecalcTicks = PATH_RECALC_TICKS.get();
         requireLineOfSight = REQUIRE_LINE_OF_SIGHT.get();

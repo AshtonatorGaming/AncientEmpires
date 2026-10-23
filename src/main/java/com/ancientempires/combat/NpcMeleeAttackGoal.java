@@ -43,6 +43,9 @@ public class NpcMeleeAttackGoal extends Goal
     private Phase phase = Phase.APPROACH;
     private int windupLeft;
     private int recoveryLeft;
+    /** Which way the footwork circles (1 or -1), and ticks until it may switch. */
+    private int strafeSide = 1;
+    private int strafeSwitch;
     private int pathCooldown;
     private boolean stoppedForWindup;
     private boolean mobCombatSwing;
@@ -159,7 +162,15 @@ public class NpcMeleeAttackGoal extends Goal
         if (this.recoveryLeft > 0)
         {
             this.recoveryLeft--;
-            this.moveToward(target, AncientEmpiresConfig.approachSpeed);
+            AttackSwing upcoming = this.preview();
+            if (this.canEngage(target, upcoming))
+            {
+                this.footwork(target, upcoming);
+            }
+            else
+            {
+                this.moveToward(target, AncientEmpiresConfig.approachSpeed);
+            }
             return;
         }
 
@@ -187,12 +198,13 @@ public class NpcMeleeAttackGoal extends Goal
             return;
         }
 
-        this.npc.getNavigation().stop();
         if (!this.npc.readyToStrike())
         {
             // Behind the shield: it comes down only after a committed block, then a beat before the swing.
+            this.footwork(target, next);
             return;
         }
+        this.npc.getNavigation().stop();
         this.beginWindup(next);
     }
 
@@ -664,6 +676,33 @@ public class NpcMeleeAttackGoal extends Goal
         double dx = target.getX() - this.npc.getX();
         double dz = target.getZ() - this.npc.getZ();
         return (float) (Mth.atan2(dz, dx) * (180.0D / Math.PI) - 90.0D);
+    }
+
+    /**
+     * Footwork while waiting inside reach (behind the shield, between swings): circle
+     * the target, switching sides now and then, step in at the edge of reach and give
+     * a little ground when pressed, rather than stand still. Vanilla's strafe control
+     * refuses steps onto unwalkable blocks, so this does not walk off ledges.
+     */
+    private void footwork(LivingEntity target, AttackSwing swing)
+    {
+        this.npc.getNavigation().stop();
+        if (!AncientEmpiresConfig.footwork || this.npc.isPassenger())
+        {
+            return;
+        }
+        if (--this.strafeSwitch <= 0)
+        {
+            this.strafeSwitch = 20 + this.npc.getRandom().nextInt(30);
+            if (this.npc.getRandom().nextFloat() < 0.6F)
+            {
+                this.strafeSide = -this.strafeSide;
+            }
+        }
+        double reach = swing.range() + target.getBbWidth() * 0.5D;
+        double distance = Math.sqrt(this.npc.distanceToSqr(target));
+        float forward = distance > reach * 0.8D ? 0.6F : distance < reach * 0.45D ? -0.5F : 0.0F;
+        this.npc.getMoveControl().strafe(forward, this.strafeSide * (float) AncientEmpiresConfig.footworkSpeed);
     }
 
     private void moveToward(LivingEntity target, double speed)
