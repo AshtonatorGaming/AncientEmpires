@@ -4,9 +4,9 @@ import com.ancientempires.AncientEmpires;
 import com.ancientempires.entity.npc.NpcFactions;
 import com.ancientempires.network.StandingsPacket;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -16,6 +16,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * The player's standing with every faction, under each faction's banner
@@ -115,7 +116,7 @@ public final class StandingsScreen extends Screen
                     NpcFactions.displayName(hovered.faction()).copy().withStyle(ChatFormatting.GOLD),
                     Component.translatable(hostile ? "gui.ancientempires.standings.hostile" : "gui.ancientempires.standings.peace",
                             hovered.standing()).withStyle(hostile ? ChatFormatting.RED : ChatFormatting.GREEN)),
-                    java.util.Optional.empty(), mouseX, mouseY);
+                    Optional.empty(), mouseX, mouseY);
         }
     }
 

@@ -5,24 +5,25 @@ import com.ancientempires.config.AncientEmpiresConfig;
 import com.ancientempires.registry.ModBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.WeightedRandomList;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.SpawnPlacements;
-import net.minecraft.world.entity.animal.Animal;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
@@ -32,6 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * A hunting lodge: a large hunting ground around it. Hunters ask it for game
@@ -86,7 +88,7 @@ public final class HuntingLodgeBlockEntity extends WorksiteBlockEntity
     }
 
     @Override
-    public void releaseEntity(java.util.UUID creature)
+    public void releaseEntity(UUID creature)
     {
         super.releaseEntity(creature);
         this.game.removeIf(animal -> animal.getUUID().equals(creature));
@@ -213,14 +215,14 @@ public final class HuntingLodgeBlockEntity extends WorksiteBlockEntity
     }
 
     @Override
-    protected void saveAdditional(net.minecraft.nbt.CompoundTag tag)
+    protected void saveAdditional(CompoundTag tag)
     {
         super.saveAdditional(tag);
         tag.putLong("LastWanderIn", this.lastWanderIn);
     }
 
     @Override
-    public void load(net.minecraft.nbt.CompoundTag tag)
+    public void load(CompoundTag tag)
     {
         super.load(tag);
         this.lastWanderIn = tag.getLong("LastWanderIn");

@@ -5,9 +5,10 @@ import com.ancientempires.block.TownHallBlockEntity;
 import com.ancientempires.config.AncientEmpiresConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.HopperBlockEntity;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
@@ -187,7 +188,7 @@ public final class NpcUpkeepGoal extends Goal
             ItemStack rest = this.npc.getInventory().addToBackpack(food);
             if (!rest.isEmpty())
             {
-                net.minecraft.world.level.block.entity.HopperBlockEntity.addItem(null, hall.store(), rest, null);
+                HopperBlockEntity.addItem(null, hall.store(), rest, null);
             }
         }
     }

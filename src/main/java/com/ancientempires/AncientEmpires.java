@@ -57,7 +57,8 @@ public class AncientEmpires
         modBus.addListener(this::registerAttributes);
         modBus.addListener(this::addCreative);
 
-        context.registerConfig(ModConfig.Type.COMMON, AncientEmpiresConfig.SPEC);
+        // Gameplay settings are per world (serverconfig/ancientempires-server.toml) and synced to joining clients.
+        context.registerConfig(ModConfig.Type.SERVER, AncientEmpiresConfig.SPEC);
         context.registerConfig(ModConfig.Type.CLIENT, AncientEmpiresClientConfig.SPEC);
     }
 

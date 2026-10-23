@@ -7,13 +7,14 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
-import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.SimpleContainer;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
@@ -134,12 +135,14 @@ public abstract class WorksiteBlockEntity extends BlockEntity
     protected final void refresh()
     {
         Level level = this.level;
-        if (level == null || level.getGameTime() - this.scannedAt < AncientEmpiresConfig.farmScanTicks)
+        if (level == null || level.getGameTime() - this.scannedAt < AncientEmpiresConfig.workScanTicks)
         {
             return;
         }
         this.scannedAt = level.getGameTime();
+        level.getProfiler().push("ancientempires_worksite_scan");
         this.scan(level);
+        level.getProfiler().pop();
         this.claims.entrySet().removeIf(entry -> entry.getValue()[1] <= level.getGameTime());
         this.entityClaims.entrySet().removeIf(entry -> entry.getValue()[1] <= level.getGameTime());
     }
@@ -173,7 +176,7 @@ public abstract class WorksiteBlockEntity extends BlockEntity
         }
         if (best != null)
         {
-            this.claims.put(best, new long[] {workerId, now + AncientEmpiresConfig.farmClaimTicks});
+            this.claims.put(best, new long[] {workerId, now + AncientEmpiresConfig.workClaimTicks});
         }
         return best;
     }
@@ -191,7 +194,7 @@ public abstract class WorksiteBlockEntity extends BlockEntity
      * creature, not a tile.
      */
     @Nullable
-    protected final <E extends net.minecraft.world.entity.Entity> E claimNearestEntity(List<E> creatures, int workerId, BlockPos from)
+    protected final <E extends Entity> E claimNearestEntity(List<E> creatures, int workerId, BlockPos from)
     {
         long now = this.level == null ? 0L : this.level.getGameTime();
         E best = null;
@@ -212,7 +215,7 @@ public abstract class WorksiteBlockEntity extends BlockEntity
         }
         if (best != null)
         {
-            this.entityClaims.put(best.getUUID(), new long[] {workerId, now + AncientEmpiresConfig.farmClaimTicks});
+            this.entityClaims.put(best.getUUID(), new long[] {workerId, now + AncientEmpiresConfig.workClaimTicks});
         }
         return best;
     }

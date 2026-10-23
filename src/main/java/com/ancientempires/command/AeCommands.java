@@ -3,17 +3,18 @@ package com.ancientempires.command;
 import com.ancientempires.AncientEmpires;
 import com.ancientempires.entity.npc.NpcFactions;
 import com.ancientempires.entity.npc.NpcStandings;
-import com.mojang.brigadier.CommandDispatcher;
+import com.ancientempires.network.ModNetwork;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import net.minecraft.ChatFormatting;
-import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.commands.Commands;
-import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.commands.Commands;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerPlayer;
@@ -53,7 +54,7 @@ public final class AeCommands
                         .executes(context ->
                         {
                             // A player gets the banner screen; the chat list stays for viewing others.
-                            com.ancientempires.network.ModNetwork.sendStandings(context.getSource().getPlayerOrException());
+                            ModNetwork.sendStandings(context.getSource().getPlayerOrException());
                             return 1;
                         })
                         .then(Commands.argument("player", EntityArgument.player())

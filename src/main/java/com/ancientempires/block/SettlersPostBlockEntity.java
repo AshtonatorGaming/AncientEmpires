@@ -6,6 +6,7 @@ import com.ancientempires.registry.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -108,7 +109,7 @@ public final class SettlersPostBlockEntity extends BlockEntity
     {
         super.onLoad();
         // Posts placed before a save, or moved by other mods, rejoin the daily list.
-        if (this.level instanceof net.minecraft.server.level.ServerLevel server)
+        if (this.level instanceof ServerLevel server)
         {
             NpcImmigration.register(server, this.worldPosition);
         }

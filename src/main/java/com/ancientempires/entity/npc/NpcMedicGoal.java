@@ -4,10 +4,11 @@ import com.ancientempires.config.AncientEmpiresConfig;
 import com.ancientempires.item.BandageItem;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
@@ -135,7 +136,7 @@ public final class NpcMedicGoal extends Goal
                     3, 0.3D, 0.2D, 0.3D, 0.0D);
         }
         bandages.shrink(1);
-        this.npc.setItemSlot(net.minecraft.world.entity.EquipmentSlot.OFFHAND, bandages);
+        this.npc.setItemSlot(EquipmentSlot.OFFHAND, bandages);
         if (bandages.isEmpty())
         {
             this.restock();

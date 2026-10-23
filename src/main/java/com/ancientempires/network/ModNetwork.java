@@ -1,17 +1,25 @@
 package com.ancientempires.network;
 
 import com.ancientempires.AncientEmpires;
+import com.ancientempires.entity.npc.NpcFactions;
+import com.ancientempires.entity.npc.NpcStandings;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
+import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Packets the container button click cannot carry. Slot clicks stay on the menu.
  */
 public final class ModNetwork
 {
-    private static final String PROTOCOL = "1";
+    /** Bump whenever a packet is added or changes shape, so mismatched clients are refused cleanly. */
+    private static final String PROTOCOL = "2";
     private static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(
             ResourceLocation.parse(AncientEmpires.MOD_ID + ":main"),
             () -> PROTOCOL,
@@ -53,15 +61,15 @@ public final class ModNetwork
     }
 
     /** Sends a player their standing with every faction, which opens the standings screen. */
-    public static void sendStandings(net.minecraft.server.level.ServerPlayer player)
+    public static void sendStandings(ServerPlayer player)
     {
-        com.ancientempires.entity.npc.NpcStandings standings = com.ancientempires.entity.npc.NpcStandings.get(player.server);
-        java.util.List<StandingsPacket.Entry> entries = new java.util.ArrayList<>();
-        for (String faction : com.ancientempires.entity.npc.NpcFactions.ids())
+        NpcStandings standings = NpcStandings.get(player.server);
+        List<StandingsPacket.Entry> entries = new ArrayList<>();
+        for (String faction : NpcFactions.ids())
         {
             entries.add(new StandingsPacket.Entry(faction, standings.get(player.getUUID(), faction)));
         }
-        CHANNEL.send(net.minecraftforge.network.PacketDistributor.PLAYER.with(() -> player), new StandingsPacket(entries));
+        CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), new StandingsPacket(entries));
     }
 
     public static void sendName(int entityId, String name)

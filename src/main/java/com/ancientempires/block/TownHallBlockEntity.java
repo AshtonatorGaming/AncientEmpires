@@ -9,11 +9,12 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.SimpleContainer;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -168,7 +169,7 @@ public final class TownHallBlockEntity extends WorksiteBlockEntity
     }
 
     /** Whether the store holds {@code count} of the item. */
-    public boolean has(net.minecraft.world.item.Item item, int count)
+    public boolean has(Item item, int count)
     {
         int found = 0;
         SimpleContainer store = this.store();
@@ -184,7 +185,7 @@ public final class TownHallBlockEntity extends WorksiteBlockEntity
     }
 
     /** Takes {@code count} of the item from the store; call {@link #has} first. */
-    public void take(net.minecraft.world.item.Item item, int count)
+    public void take(Item item, int count)
     {
         SimpleContainer store = this.store();
         for (int slot = 0; slot < store.getContainerSize() && count > 0; slot++)

@@ -2,7 +2,10 @@ package com.ancientempires.registry;
 
 import com.ancientempires.AncientEmpires;
 import com.ancientempires.entity.npc.NpcRoster;
+import com.ancientempires.item.BandageItem;
 import com.ancientempires.item.NpcSpawnEggItem;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -18,27 +21,27 @@ public final class ModItems
 
     /** Ancient Warfare's food bundle: settler crafting, and a hearty meal (several NPC rations) a player can eat too. */
     public static final RegistryObject<Item> FOOD_BUNDLE = ITEMS.register("food_bundle", () -> new Item(new Item.Properties()
-            .food(new net.minecraft.world.food.FoodProperties.Builder().nutrition(10).saturationMod(0.8F).build())));
+            .food(new FoodProperties.Builder().nutrition(10).saturationMod(0.8F).build())));
     public static final RegistryObject<Item> BANDAGE = ITEMS.register("bandage",
-            () -> new com.ancientempires.item.BandageItem(new Item.Properties().stacksTo(16)));
+            () -> new BandageItem(new Item.Properties().stacksTo(16)));
     public static final RegistryObject<Item> SETTLERS_POST = ITEMS.register("settlers_post",
-            () -> new net.minecraft.world.item.BlockItem(ModBlocks.SETTLERS_POST.get(), new Item.Properties()));
+            () -> new BlockItem(ModBlocks.SETTLERS_POST.get(), new Item.Properties()));
     public static final RegistryObject<Item> CROP_FARM = ITEMS.register("crop_farm",
-            () -> new net.minecraft.world.item.BlockItem(ModBlocks.CROP_FARM.get(), new Item.Properties()));
+            () -> new BlockItem(ModBlocks.CROP_FARM.get(), new Item.Properties()));
     public static final RegistryObject<Item> TREE_FARM = ITEMS.register("tree_farm",
-            () -> new net.minecraft.world.item.BlockItem(ModBlocks.TREE_FARM.get(), new Item.Properties()));
+            () -> new BlockItem(ModBlocks.TREE_FARM.get(), new Item.Properties()));
     public static final RegistryObject<Item> QUARRY = ITEMS.register("quarry",
-            () -> new net.minecraft.world.item.BlockItem(ModBlocks.QUARRY.get(), new Item.Properties()));
+            () -> new BlockItem(ModBlocks.QUARRY.get(), new Item.Properties()));
     public static final RegistryObject<Item> ANIMAL_PEN = ITEMS.register("animal_pen",
-            () -> new net.minecraft.world.item.BlockItem(ModBlocks.ANIMAL_PEN.get(), new Item.Properties()));
+            () -> new BlockItem(ModBlocks.ANIMAL_PEN.get(), new Item.Properties()));
     public static final RegistryObject<Item> HUNTING_LODGE = ITEMS.register("hunting_lodge",
-            () -> new net.minecraft.world.item.BlockItem(ModBlocks.HUNTING_LODGE.get(), new Item.Properties()));
+            () -> new BlockItem(ModBlocks.HUNTING_LODGE.get(), new Item.Properties()));
     public static final RegistryObject<Item> FISHING_DOCK = ITEMS.register("fishing_dock",
-            () -> new net.minecraft.world.item.BlockItem(ModBlocks.FISHING_DOCK.get(), new Item.Properties()));
+            () -> new BlockItem(ModBlocks.FISHING_DOCK.get(), new Item.Properties()));
     public static final RegistryObject<Item> KITCHEN = ITEMS.register("kitchen",
-            () -> new net.minecraft.world.item.BlockItem(ModBlocks.KITCHEN.get(), new Item.Properties()));
+            () -> new BlockItem(ModBlocks.KITCHEN.get(), new Item.Properties()));
     public static final RegistryObject<Item> TOWN_HALL = ITEMS.register("town_hall",
-            () -> new net.minecraft.world.item.BlockItem(ModBlocks.TOWN_HALL.get(), new Item.Properties()));
+            () -> new BlockItem(ModBlocks.TOWN_HALL.get(), new Item.Properties()));
 
     public static final List<RegistryObject<Item>> OWNED_EGGS;
     public static final List<RegistryObject<Item>> ROSTER_EGGS;

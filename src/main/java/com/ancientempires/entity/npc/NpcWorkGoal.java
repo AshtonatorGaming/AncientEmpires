@@ -7,13 +7,16 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Container;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.HopperBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
+import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
@@ -34,6 +37,7 @@ public abstract class NpcWorkGoal<T extends WorksiteBlockEntity> extends Goal
     protected static final int FETCH = -2;
 
     private static final int CHECK_INTERVAL = 40;
+    private static final int NO_SITE_RETRY = 600;
     private static final int GIVE_UP_TICKS = 240;
     private static final int STORE_FULL_WAIT = 600;
 
@@ -67,6 +71,12 @@ public abstract class NpcWorkGoal<T extends WorksiteBlockEntity> extends Goal
     /** The trade's tool, in the main hand. */
     protected abstract boolean isTool(ItemStack stack);
 
+    /** Whether this trade's tool is in hand, for {@link NpcJobGoal}. */
+    public final boolean isTrade(ItemStack stack)
+    {
+        return this.isTool(stack);
+    }
+
     /** Picks the next job with {@link #assign}; returns false when there is none. */
     protected abstract boolean pickJob();
 
@@ -85,7 +95,7 @@ public abstract class NpcWorkGoal<T extends WorksiteBlockEntity> extends Goal
     /** Ticks from swing to effect. Digging jobs scale with the block's hardness. */
     protected int actionTicks(int kind, BlockPos target)
     {
-        return AncientEmpiresConfig.farmActionTicks;
+        return AncientEmpiresConfig.workActionTicks;
     }
 
     /** Whether the job breaks the target block, so a crack overlay shows while it works. */
@@ -107,11 +117,11 @@ public abstract class NpcWorkGoal<T extends WorksiteBlockEntity> extends Goal
      */
     protected final int digTicks(BlockPos pos)
     {
-        net.minecraft.world.level.block.state.BlockState state = this.npc.level().getBlockState(pos);
+        BlockState state = this.npc.level().getBlockState(pos);
         float hardness = state.getDestroySpeed(this.npc.level(), pos);
         float speed = Math.max(1.0F, this.npc.getMainHandItem().getDestroySpeed(state));
         int ticks = hardness <= 0.0F ? 0 : (int) Math.ceil(hardness * 30.0F / speed);
-        return Math.max(AncientEmpiresConfig.farmActionTicks, ticks);
+        return Math.max(AncientEmpiresConfig.workActionTicks, ticks);
     }
 
     /** Where to walk for a job; the target by default. */
@@ -139,7 +149,13 @@ public abstract class NpcWorkGoal<T extends WorksiteBlockEntity> extends Goal
             return false;
         }
         this.site = this.findSite();
-        return this.site != null && this.pickJob();
+        if (this.site == null)
+        {
+            // No worksite of this trade near home: the chunk search is not repeated for a while.
+            this.nextCheck = this.npc.tickCount + NO_SITE_RETRY + (this.npc.getId() & 63);
+            return false;
+        }
+        return this.pickJob();
     }
 
     @Override
@@ -227,12 +243,12 @@ public abstract class NpcWorkGoal<T extends WorksiteBlockEntity> extends Goal
                 this.repath = animal != null ? 10 : 20;
                 if (animal != null)
                 {
-                    this.npc.getNavigation().moveTo(animal, AncientEmpiresConfig.farmWalkSpeed);
+                    this.npc.getNavigation().moveTo(animal, AncientEmpiresConfig.workWalkSpeed);
                 }
                 else
                 {
                     BlockPos walk = this.kind < 0 ? at : this.walkTarget(this.kind, at);
-                    this.npc.getNavigation().moveTo(walk.getX() + 0.5D, walk.getY(), walk.getZ() + 0.5D, AncientEmpiresConfig.farmWalkSpeed);
+                    this.npc.getNavigation().moveTo(walk.getX() + 0.5D, walk.getY(), walk.getZ() + 0.5D, AncientEmpiresConfig.workWalkSpeed);
                 }
             }
             return;
@@ -241,7 +257,7 @@ public abstract class NpcWorkGoal<T extends WorksiteBlockEntity> extends Goal
         boolean digging = this.kind >= 0 && this.digs(this.kind);
         if (this.actionTicks == 0)
         {
-            this.actionLength = this.kind < 0 ? AncientEmpiresConfig.farmActionTicks : Math.max(1, this.actionTicks(this.kind, at));
+            this.actionLength = this.kind < 0 ? AncientEmpiresConfig.workActionTicks : Math.max(1, this.actionTicks(this.kind, at));
             this.crack = digging ? this.digPos(this.kind, at) : null;
             if (this.kind >= 0)
             {
@@ -364,8 +380,8 @@ public abstract class NpcWorkGoal<T extends WorksiteBlockEntity> extends Goal
     /** Picks up the goods lying around a spot, as far as the backpack holds them, with the pickup animation. */
     protected final void collectAt(ServerLevel level, BlockPos spot, double range)
     {
-        net.minecraft.world.phys.AABB reach = new net.minecraft.world.phys.AABB(spot).inflate(range);
-        for (net.minecraft.world.entity.item.ItemEntity item : level.getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class, reach,
+        AABB reach = new AABB(spot).inflate(range);
+        for (ItemEntity item : level.getEntitiesOfClass(ItemEntity.class, reach,
                 item -> item.isAlive() && !item.hasPickUpDelay()))
         {
             ItemStack stack = item.getItem();
@@ -453,9 +469,9 @@ public abstract class NpcWorkGoal<T extends WorksiteBlockEntity> extends Goal
                 continue;
             }
             ItemStack moving = stack.copy();
-            if (this.isSupply(stack) && kept < AncientEmpiresConfig.farmSeedReserve)
+            if (this.isSupply(stack) && kept < AncientEmpiresConfig.workSupplyReserve)
             {
-                int keep = Math.min(stack.getCount(), AncientEmpiresConfig.farmSeedReserve - kept);
+                int keep = Math.min(stack.getCount(), AncientEmpiresConfig.workSupplyReserve - kept);
                 kept += keep;
                 moving.shrink(keep);
                 if (moving.isEmpty())
@@ -479,7 +495,7 @@ public abstract class NpcWorkGoal<T extends WorksiteBlockEntity> extends Goal
     /** Takes supplies from the store, up to {@code work.seedReserve}. */
     private void fetch(Container store)
     {
-        int wanted = AncientEmpiresConfig.farmSeedReserve;
+        int wanted = AncientEmpiresConfig.workSupplyReserve;
         for (int slot = 0; slot < store.getContainerSize() && wanted > 0; slot++)
         {
             ItemStack stack = store.getItem(slot);
@@ -559,7 +575,7 @@ public abstract class NpcWorkGoal<T extends WorksiteBlockEntity> extends Goal
             }
             supplies += stack.getCount();
         }
-        return supplies > AncientEmpiresConfig.farmSeedReserve;
+        return supplies > AncientEmpiresConfig.workSupplyReserve;
     }
 
     /** The backpack slot of a supply, or -1. */
@@ -612,7 +628,7 @@ public abstract class NpcWorkGoal<T extends WorksiteBlockEntity> extends Goal
             }
         }
         BlockPos center = this.npc.getHome() != null ? this.npc.getHome() : this.npc.blockPosition();
-        int range = AncientEmpiresConfig.farmSearchRange;
+        int range = AncientEmpiresConfig.workSearchRange;
         T best = null;
         double bestDistance = (double) range * range;
         for (int cx = (center.getX() - range) >> 4; cx <= (center.getX() + range) >> 4; cx++)

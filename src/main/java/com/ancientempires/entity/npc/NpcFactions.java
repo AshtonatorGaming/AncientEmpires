@@ -4,6 +4,7 @@ import com.ancientempires.AncientEmpires;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -92,14 +93,14 @@ public final class NpcFactions
     }
 
     /** A faction's name for chat: its id, capitalized ({@code norska} as Norska). */
-    public static net.minecraft.network.chat.Component displayName(String id)
+    public static Component displayName(String id)
     {
         if (id == null || id.isEmpty())
         {
-            return net.minecraft.network.chat.Component.empty();
+            return Component.empty();
         }
         String name = Character.toUpperCase(id.charAt(0)) + id.substring(1).replace('_', ' ');
-        return net.minecraft.network.chat.Component.translatableWithFallback("faction.ancientempires." + id, name);
+        return Component.translatableWithFallback("faction.ancientempires." + id, name);
     }
 
     /**

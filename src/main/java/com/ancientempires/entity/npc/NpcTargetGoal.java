@@ -143,6 +143,7 @@ public final class NpcTargetGoal extends TargetGoal
     private LivingEntity scan(double limitSqr)
     {
         NpcTargetCache.countScan();
+        this.npc.level().getProfiler().push("ancientempires_target_scan");
         double range = Math.min(AncientEmpiresConfig.targetScanRange, this.getFollowDistance());
         TargetingConditions test = this.conditions(range);
         double limit = Math.min(range * range, limitSqr);
@@ -167,6 +168,7 @@ public final class NpcTargetGoal extends TargetGoal
         }
         LivingEntity seen = this.nearestInSight();
         this.passed.clear();
+        this.npc.level().getProfiler().pop();
         return seen;
     }
 

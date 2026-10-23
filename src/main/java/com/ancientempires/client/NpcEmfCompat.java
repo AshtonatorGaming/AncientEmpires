@@ -1,6 +1,7 @@
 package com.ancientempires.client;
 
 import com.ancientempires.entity.npc.NpcEntity;
+import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraftforge.fml.ModList;
@@ -159,7 +160,7 @@ final class NpcEmfCompat
         }
     }
 
-    private static PoseSnapshot arm(net.minecraft.client.model.geom.ModelPart part)
+    private static PoseSnapshot arm(ModelPart part)
     {
         return new PoseSnapshot(part);
     }

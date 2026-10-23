@@ -3,13 +3,14 @@ package com.ancientempires.block;
 import com.ancientempires.config.AncientEmpiresConfig;
 import com.ancientempires.registry.ModBlockEntities;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.IForgeShearable;
 import org.jetbrains.annotations.Nullable;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * An animal pen. Ranchers ask it for animals to cull (adults past
@@ -104,7 +106,7 @@ public final class AnimalPenBlockEntity extends WorksiteBlockEntity
     }
 
     @Override
-    public void releaseEntity(java.util.UUID creature)
+    public void releaseEntity(UUID creature)
     {
         super.releaseEntity(creature);
         this.cull.removeIf(animal -> animal.getUUID().equals(creature));
@@ -163,6 +165,6 @@ public final class AnimalPenBlockEntity extends WorksiteBlockEntity
         {
             return false;
         }
-        return !(animal instanceof net.minecraft.world.entity.TamableAnimal tamable && tamable.isTame());
+        return !(animal instanceof TamableAnimal tamable && tamable.isTame());
     }
 }

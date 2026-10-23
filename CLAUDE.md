@@ -34,7 +34,10 @@ instead of reflecting per call), Skirmisher thresholds (about 4.5 to 28 blocks).
 
 - `entity/npc/NpcEntity` - the NPC. Goals: 0 Float, `OpenDoorGoal`, `NpcNightDoorsGoal`;
   1 `NpcBowAttackGoal`, `NpcShieldGoal` (no flags), `NpcFleeGoal` (civilians only);
-  2 `NpcMeleeAttackGoal`; 3 hold position; 4 follow, `NpcFarmerGoal`, `NpcWoodcutterGoal`, `NpcMinerGoal`, `NpcRancherGoal`, `NpcHunterGoal`, `NpcFisherGoal`, `NpcCookGoal`, also sleep and priest; 5 `NpcReturnHomeGoal`; 6+ idle.
+  2 `NpcMeleeAttackGoal`; 3 hold position, `NpcUpkeepGoal`; 4 follow, sleep, priest, and `NpcJobGoal`
+  (every hands-on trade in one goal: the main-hand tool picks the farmer, woodcutter, miner,
+  rancher, hunter, fisher, or cook goal, so idle NPCs pay one check, not seven); 5
+  `NpcReturnHomeGoal`; 6+ idle.
   Targets: 1 and 2 `NpcOwnerDefenseGoal` (DEFEND, ASSIST), 3 `NpcHurtByTargetGoal` (with
   ally alert), 4 `NpcTargetGoal`: one staggered scan over a shared per-cell candidate list
   (`NpcTargetCache`), faction filter first, sight checks nearest first.
@@ -409,4 +412,13 @@ guessing it compiles.
 - Keep changes small and match the existing code style (Allman braces, `this.` prefixes,
   javadoc on non-obvious behavior).
 - Everything tunable (ranges, wind-up, thresholds, scan radii) belongs in
-  `AncientEmpiresConfig`, not as hard-coded numbers.
+  `AncientEmpiresConfig`, not as hard-coded numbers. It is a SERVER config (per world,
+  `serverconfig/ancientempires-server.toml`, synced to clients); visuals live in
+  `AncientEmpiresClientConfig`. Adding a setting means three edits there (the spec
+  field, the public value, the load line); keep them together.
+- Bump `ModNetwork.PROTOCOL` whenever a packet is added or changes shape.
+- Import classes; do not write fully qualified names inline (one deliberate exception:
+  `StandingsPacket`'s client-only screen call).
+- New per-tick or per-scan work goes inside a profiler section
+  (`level.getProfiler().push("ancientempires_...")`) so `/debug` and Spark show it.
+- Staging: name files; never sweep `src/main` (the user keeps local edits there).

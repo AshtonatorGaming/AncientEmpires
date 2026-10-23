@@ -136,12 +136,12 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.IntValue IMMIGRATION_FOOD_CAPACITY;
     private static final ForgeConfigSpec.IntValue FARM_DEFAULT_RADIUS;
     private static final ForgeConfigSpec.IntValue FARM_MAX_RADIUS;
-    private static final ForgeConfigSpec.IntValue FARM_SCAN_TICKS;
-    private static final ForgeConfigSpec.IntValue FARM_CLAIM_TICKS;
-    private static final ForgeConfigSpec.IntValue FARM_ACTION_TICKS;
-    private static final ForgeConfigSpec.IntValue FARM_SEED_RESERVE;
-    private static final ForgeConfigSpec.IntValue FARM_SEARCH_RANGE;
-    private static final ForgeConfigSpec.DoubleValue FARM_WALK_SPEED;
+    private static final ForgeConfigSpec.IntValue WORK_SCAN_TICKS;
+    private static final ForgeConfigSpec.IntValue WORK_CLAIM_TICKS;
+    private static final ForgeConfigSpec.IntValue WORK_ACTION_TICKS;
+    private static final ForgeConfigSpec.IntValue WORK_SUPPLY_RESERVE;
+    private static final ForgeConfigSpec.IntValue WORK_SEARCH_RANGE;
+    private static final ForgeConfigSpec.DoubleValue WORK_WALK_SPEED;
     private static final ForgeConfigSpec.IntValue TREE_DEFAULT_RADIUS;
     private static final ForgeConfigSpec.IntValue TREE_MAX_RADIUS;
     private static final ForgeConfigSpec.IntValue TREE_SPACING;
@@ -568,29 +568,29 @@ public final class AncientEmpiresConfig
                 .defineInRange("foodCapacity", 64, 1, 1024);
         builder.pop();
 
-        builder.comment("Workers at worksites. A Worker-path NPC with a hoe farms its owner's nearest crop farm by hand.").push("work");
+        builder.comment("Workers at worksites. The tool in a Worker-path NPC's main hand picks its trade (hoe, axe, pickaxe, shears, bow, fishing rod, bowl); it works its owner's nearest worksite of that kind by hand.").push("work");
         FARM_DEFAULT_RADIUS = builder
                 .comment("A new crop farm's area, in blocks from the farm block to its edge (4 is 9 by 9). Sneak-click the block to change it.")
                 .defineInRange("farmDefaultRadius", 4, 1, 16);
         FARM_MAX_RADIUS = builder
                 .comment("Largest crop farm area, in blocks from the farm block (7 is 15 by 15; Ancient Warfare allowed 16 wide).")
                 .defineInRange("farmMaxRadius", 7, 1, 16);
-        FARM_SCAN_TICKS = builder
-                .comment("Ticks between rebuilds of a farm's to-do list. It is rebuilt only while a farmer asks for work.")
+        WORK_SCAN_TICKS = builder
+                .comment("Ticks between rebuilds of a worksite's to-do list. It is rebuilt only while a worker asks for work.")
                 .defineInRange("scanTicks", 100, 10, 1200);
-        FARM_CLAIM_TICKS = builder
-                .comment("How long a farmer's hold on a tile lasts, in ticks, so two farmers do not walk to the same crop.")
+        WORK_CLAIM_TICKS = builder
+                .comment("How long a worker's hold on a tile or animal lasts, in ticks, so two workers do not go for the same one.")
                 .defineInRange("claimTicks", 400, 20, 2400);
-        FARM_ACTION_TICKS = builder
-                .comment("Ticks from a farmer's swing to the till, plant, or harvest landing.")
+        WORK_ACTION_TICKS = builder
+                .comment("Ticks from a worker's swing to the action landing (digging takes a player's mining time instead).")
                 .defineInRange("actionTicks", 12, 1, 100);
-        FARM_SEED_RESERVE = builder
-                .comment("Seeds a farmer keeps on hand for planting; the rest goes into the farm's store.")
-                .defineInRange("seedReserve", 16, 1, 64);
-        FARM_SEARCH_RANGE = builder
-                .comment("How far from its home, in blocks, a farmer looks for its owner's crop farm.")
+        WORK_SUPPLY_RESERVE = builder
+                .comment("Supplies a worker keeps on hand (a farmer's seeds, a woodcutter's saplings, a rancher's feed); the rest goes into the worksite's store.")
+                .defineInRange("supplyReserve", 16, 1, 64);
+        WORK_SEARCH_RANGE = builder
+                .comment("How far from its home, in blocks, a worker looks for its owner's worksite.")
                 .defineInRange("searchRange", 32, 8, 96);
-        FARM_WALK_SPEED = builder
+        WORK_WALK_SPEED = builder
                 .comment("Walking speed while working, as a multiple of the NPC's speed.")
                 .defineInRange("walkSpeed", 0.8D, 0.3D, 1.5D);
         TREE_DEFAULT_RADIUS = builder
@@ -900,12 +900,12 @@ public final class AncientEmpiresConfig
     public static int immigrationFoodCapacity = 64;
     public static int farmDefaultRadius = 4;
     public static int farmMaxRadius = 7;
-    public static int farmScanTicks = 100;
-    public static int farmClaimTicks = 400;
-    public static int farmActionTicks = 12;
-    public static int farmSeedReserve = 16;
-    public static int farmSearchRange = 32;
-    public static double farmWalkSpeed = 0.8D;
+    public static int workScanTicks = 100;
+    public static int workClaimTicks = 400;
+    public static int workActionTicks = 12;
+    public static int workSupplyReserve = 16;
+    public static int workSearchRange = 32;
+    public static double workWalkSpeed = 0.8D;
     public static int treeDefaultRadius = 6;
     public static int treeMaxRadius = 10;
     public static int treeSpacing = 3;
@@ -1115,12 +1115,12 @@ public final class AncientEmpiresConfig
         immigrationFoodCapacity = IMMIGRATION_FOOD_CAPACITY.get();
         farmDefaultRadius = FARM_DEFAULT_RADIUS.get();
         farmMaxRadius = FARM_MAX_RADIUS.get();
-        farmScanTicks = FARM_SCAN_TICKS.get();
-        farmClaimTicks = FARM_CLAIM_TICKS.get();
-        farmActionTicks = FARM_ACTION_TICKS.get();
-        farmSeedReserve = FARM_SEED_RESERVE.get();
-        farmSearchRange = FARM_SEARCH_RANGE.get();
-        farmWalkSpeed = FARM_WALK_SPEED.get();
+        workScanTicks = WORK_SCAN_TICKS.get();
+        workClaimTicks = WORK_CLAIM_TICKS.get();
+        workActionTicks = WORK_ACTION_TICKS.get();
+        workSupplyReserve = WORK_SUPPLY_RESERVE.get();
+        workSearchRange = WORK_SEARCH_RANGE.get();
+        workWalkSpeed = WORK_WALK_SPEED.get();
         treeDefaultRadius = TREE_DEFAULT_RADIUS.get();
         treeMaxRadius = TREE_MAX_RADIUS.get();
         treeSpacing = TREE_SPACING.get();

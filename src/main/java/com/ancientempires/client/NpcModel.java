@@ -1,13 +1,14 @@
 package com.ancientempires.client;
 
 import com.ancientempires.entity.npc.NpcEntity;
+import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
-import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.util.Mth;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.UseAnim;
+import net.minecraftforge.fml.ModList;
 
 /**
  * Player model. Better Mob Combat's stack is applied inside the vanilla setup
@@ -17,9 +18,9 @@ import net.minecraft.world.item.UseAnim;
 public class NpcModel extends PlayerModel<NpcEntity>
 {
     /** Not Enough Animations: players eat with the food at their mouth in third person. */
-    private static final boolean NEA = net.minecraftforge.fml.ModList.get().isLoaded("notenoughanimations");
+    private static final boolean NEA = ModList.get().isLoaded("notenoughanimations");
     /** Its EMF add-on: burning and freezing reactions. */
-    private static final boolean NEA_EMF = net.minecraftforge.fml.ModList.get().isLoaded("emf_compat_not_enough_animations");
+    private static final boolean NEA_EMF = ModList.get().isLoaded("emf_compat_not_enough_animations");
 
     public NpcModel(ModelPart root)
     {

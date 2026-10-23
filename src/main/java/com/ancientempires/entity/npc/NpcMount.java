@@ -6,17 +6,18 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -149,7 +150,7 @@ public final class NpcMount
         // Whatever happens next, this NPC tries once.
         this.lost = true;
         ResourceLocation id = ResourceLocation.tryParse(entry.mount());
-        EntityType<?> type = id == null ? null : net.minecraftforge.registries.ForgeRegistries.ENTITY_TYPES.getValue(id);
+        EntityType<?> type = id == null ? null : ForgeRegistries.ENTITY_TYPES.getValue(id);
         Entity created = type == null ? null : type.create(level);
         if (!(created instanceof Mob mount))
         {

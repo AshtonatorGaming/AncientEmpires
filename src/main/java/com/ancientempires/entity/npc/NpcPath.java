@@ -1,12 +1,20 @@
 package com.ancientempires.entity.npc;
 
 import com.ancientempires.combat.WeaponClassifier;
+import com.ancientempires.item.BandageItem;
 import net.minecraft.world.item.AxeItem;
+import net.minecraft.world.item.BookItem;
+import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.CrossbowItem;
+import net.minecraft.world.item.EnchantedBookItem;
 import net.minecraft.world.item.FishingRodItem;
 import net.minecraft.world.item.HoeItem;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.PickaxeItem;
+import net.minecraft.world.item.ShearsItem;
+import net.minecraft.world.item.WritableBookItem;
+import net.minecraft.world.item.WrittenBookItem;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Locale;
@@ -134,7 +142,7 @@ public enum NpcPath
         {
             return this.id;
         }
-        if (this.combat && offHand.getItem() instanceof com.ancientempires.item.BandageItem)
+        if (this.combat && offHand.getItem() instanceof BandageItem)
         {
             // Bandages in the off hand make a medic, whatever the main hand holds.
             return "medic";
@@ -150,10 +158,10 @@ public enum NpcPath
     /** A book of any kind: a worker holding one is a priest. */
     public static boolean isScripture(ItemStack stack)
     {
-        return stack.getItem() instanceof net.minecraft.world.item.BookItem
-                || stack.getItem() instanceof net.minecraft.world.item.WritableBookItem
-                || stack.getItem() instanceof net.minecraft.world.item.WrittenBookItem
-                || stack.getItem() instanceof net.minecraft.world.item.EnchantedBookItem;
+        return stack.getItem() instanceof BookItem
+                || stack.getItem() instanceof WritableBookItem
+                || stack.getItem() instanceof WrittenBookItem
+                || stack.getItem() instanceof EnchantedBookItem;
     }
 
     public static String translationKey(String roleId)
@@ -199,15 +207,15 @@ public enum NpcPath
         {
             return "priest";
         }
-        if (stack.getItem() instanceof net.minecraft.world.item.ShearsItem)
+        if (stack.getItem() instanceof ShearsItem)
         {
             return "rancher";
         }
-        if (stack.getItem() instanceof net.minecraft.world.item.BowItem)
+        if (stack.getItem() instanceof BowItem)
         {
             return "hunter";
         }
-        if (stack.is(net.minecraft.world.item.Items.BOWL))
+        if (stack.is(Items.BOWL))
         {
             return "cook";
         }

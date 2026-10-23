@@ -2,6 +2,7 @@ package com.ancientempires.entity.npc;
 
 import com.ancientempires.AncientEmpires;
 import com.ancientempires.block.NpcUpkeep;
+import com.ancientempires.block.TownHallBlockEntity;
 import com.ancientempires.combat.AttackSwing;
 import com.ancientempires.combat.NpcBowAttackGoal;
 import com.ancientempires.combat.NpcMeleeAttackGoal;
@@ -12,46 +13,47 @@ import com.ancientempires.registry.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.server.MinecraftServer;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.SimpleMenuProvider;
+import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.OpenDoorGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.Pose;
-import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.FloatGoal;
-import net.minecraft.world.entity.ai.goal.OpenDoorGoal;
-import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
-import net.minecraft.world.entity.ai.navigation.PathNavigation;
-import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
-import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.util.Mth;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.SimpleMenuProvider;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.living.MobSpawnEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -59,6 +61,9 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -174,7 +179,7 @@ public class NpcEntity extends PathfinderMob
     @Nullable
     private LivingEntity fearSource;
     /** Players this NPC holds a faction-mate's death against, with the game time it ends. Saved as {@code AeRevenge}. */
-    private final java.util.Map<UUID, Long> revenge = new java.util.HashMap<>();
+    private final Map<UUID, Long> revenge = new HashMap<>();
     /** Saved as {@code AeWorksite}. */
     @Nullable
     private BlockPos worksite;
@@ -343,13 +348,8 @@ public class NpcEntity extends PathfinderMob
         this.goalSelector.addGoal(4, new NpcFollowOwnerGoal(this, 1.0D, 3.0F));
         this.goalSelector.addGoal(4, new NpcSleepGoal(this));
         this.goalSelector.addGoal(4, new NpcPriestGoal(this));
-        this.goalSelector.addGoal(4, new NpcFarmerGoal(this));
-        this.goalSelector.addGoal(4, new NpcWoodcutterGoal(this));
-        this.goalSelector.addGoal(4, new NpcMinerGoal(this));
-        this.goalSelector.addGoal(4, new NpcRancherGoal(this));
-        this.goalSelector.addGoal(4, new NpcHunterGoal(this));
-        this.goalSelector.addGoal(4, new NpcFisherGoal(this));
-        this.goalSelector.addGoal(4, new NpcCookGoal(this));
+        // Every hands-on trade (farmer, woodcutter, miner, rancher, hunter, fisher, cook) as one goal: the tool picks it.
+        this.goalSelector.addGoal(4, new NpcJobGoal(this));
         this.goalSelector.addGoal(5, new NpcReturnHomeGoal(this, 0.9D));
         this.goalSelector.addGoal(6, new WaterAvoidingRandomStrollGoal(this, 0.8D));
         this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 8.0F));
@@ -763,7 +763,7 @@ public class NpcEntity extends PathfinderMob
     {
         if (!level.isClientSide)
         {
-            this.mealCredit += com.ancientempires.block.TownHallBlockEntity.rations(food);
+            this.mealCredit += TownHallBlockEntity.rations(food);
             this.mealFromCredit();
         }
         return super.eat(level, food);
@@ -1226,7 +1226,7 @@ public class NpcEntity extends PathfinderMob
         return elite ? 1 : 0;
     }
 
-    private static double tierValue(java.util.List<? extends Number> values, int tier)
+    private static double tierValue(List<? extends Number> values, int tier)
     {
         if (values.isEmpty())
         {
@@ -2083,9 +2083,12 @@ public class NpcEntity extends PathfinderMob
             this.standGroundUntil = 0;
             this.setTarget(null);
         }
+        // Named so vanilla's profiler (/debug, F3) and Spark show this mod's share of the tick.
+        this.level().getProfiler().push("ancientempires_npc");
         this.mount.tick();
         this.targetMemory.tick();
         this.sidearm.tick();
+        this.level().getProfiler().pop();
         this.ticksSinceSwing++;
         if (this.comboIndex != 0 && this.lastSwingCooldown > 0
                 && this.ticksSinceSwing > this.lastSwingCooldown * AncientEmpiresConfig.comboResetRate)
@@ -2259,8 +2262,8 @@ public class NpcEntity extends PathfinderMob
         }
         if (!this.revenge.isEmpty())
         {
-            net.minecraft.nbt.ListTag grudges = new net.minecraft.nbt.ListTag();
-            for (java.util.Map.Entry<UUID, Long> entry : this.revenge.entrySet())
+            ListTag grudges = new ListTag();
+            for (Map.Entry<UUID, Long> entry : this.revenge.entrySet())
             {
                 CompoundTag grudge = new CompoundTag();
                 grudge.putUUID("Player", entry.getKey());
@@ -2323,7 +2326,7 @@ public class NpcEntity extends PathfinderMob
         this.mealCredit = tag.getDouble(MEAL_CREDIT_KEY);
         this.bed = tag.contains(BED_KEY) ? BlockPos.of(tag.getLong(BED_KEY)) : null;
         this.revenge.clear();
-        for (net.minecraft.nbt.Tag element : tag.getList(REVENGE_KEY, net.minecraft.nbt.Tag.TAG_COMPOUND))
+        for (Tag element : tag.getList(REVENGE_KEY, Tag.TAG_COMPOUND))
         {
             CompoundTag grudge = (CompoundTag) element;
             if (grudge.hasUUID("Player"))

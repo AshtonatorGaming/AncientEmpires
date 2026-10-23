@@ -1,7 +1,7 @@
 package com.ancientempires.client;
 
-import brachy.modularui.api.IPanelHandler;
 import brachy.modularui.api.drawable.IDrawable;
+import brachy.modularui.api.IPanelHandler;
 import brachy.modularui.drawable.GuiDraw;
 import brachy.modularui.drawable.GuiTextures;
 import brachy.modularui.drawable.Icon;
@@ -15,20 +15,23 @@ import brachy.modularui.value.StringValue;
 import brachy.modularui.widget.ParentWidget;
 import brachy.modularui.widget.Widget;
 import brachy.modularui.widgets.ButtonWidget;
-import brachy.modularui.widgets.TextWidget;
 import brachy.modularui.widgets.textfield.TextFieldWidget;
-import com.ancientempires.entity.npc.NpcPath;
+import brachy.modularui.widgets.TextWidget;
 import com.ancientempires.entity.npc.NpcEntity;
 import com.ancientempires.entity.npc.NpcInventory;
+import com.ancientempires.entity.npc.NpcPath;
 import com.ancientempires.inventory.NpcLayout;
 import com.ancientempires.inventory.NpcMenu;
 import com.ancientempires.network.ModNetwork;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.FormattedText;
+import net.minecraft.network.chat.Style;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -36,6 +39,7 @@ import java.util.function.BooleanSupplier;
 import java.util.function.IntSupplier;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.List;
 
 /**
  * Parchment panel for the NPC inventory. Frames are nine-slices and filled
@@ -342,7 +346,7 @@ public final class NpcInventoryPanel
                 .textAlign(Alignment.TopCenter));
         // Settler sits between the two paths it can split into. For a player it is
         // the current path, so picking it just keeps the NPC as it is.
-        java.util.List<NpcPath> choices = java.util.List.of(NpcPath.WORKER, NpcPath.SETTLER, NpcPath.SOLDIER);
+        List<NpcPath> choices = List.of(NpcPath.WORKER, NpcPath.SETTLER, NpcPath.SOLDIER);
         int gap = 4;
         int buttonW = (width - 12 - gap * (choices.size() - 1)) / choices.size();
         for (int index = 0; index < choices.size(); index++)
@@ -364,8 +368,8 @@ public final class NpcInventoryPanel
     /** Tooltip text wrapped to a compact width, one tooltip line per wrapped line. */
     private static void addWrappedTooltip(ButtonWidget<?> button, Component text)
     {
-        net.minecraft.client.gui.Font font = Minecraft.getInstance().font;
-        for (net.minecraft.network.chat.FormattedText line : font.getSplitter().splitLines(text, TOOLTIP_W, net.minecraft.network.chat.Style.EMPTY))
+        Font font = Minecraft.getInstance().font;
+        for (FormattedText line : font.getSplitter().splitLines(text, TOOLTIP_W, Style.EMPTY))
         {
             button.addTooltipLine(line.getString());
         }
@@ -439,7 +443,7 @@ public final class NpcInventoryPanel
         @Override
         public void draw(GuiContext context, int x, int y, int width, int height, WidgetTheme widgetTheme)
         {
-            net.minecraft.client.gui.Font font = Minecraft.getInstance().font;
+            Font font = Minecraft.getInstance().font;
             String line = this.text.get().getString();
             int max = Math.max(1, width - 4);
             if (font.width(line) > max)
