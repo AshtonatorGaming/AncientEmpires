@@ -175,6 +175,8 @@ public class NpcEntity extends PathfinderMob
     private int riposteUntil;
     /** Bracing for a shield bash: no strike until it lands. */
     private boolean bracing;
+    /** tickCount before which no swing may start (the recovery after a bash). */
+    private int strikeReadyAt;
     /** Own feint chance; below zero means the skill tier decides. */
     private float feintChance = -1.0F;
     /** Cached skill tier from the roster rank; below zero until first asked. */
@@ -904,7 +906,7 @@ public class NpcEntity extends PathfinderMob
      */
     public boolean readyToStrike()
     {
-        if (this.bracing)
+        if (this.bracing || this.tickCount < this.strikeReadyAt)
         {
             return false;
         }
@@ -1004,6 +1006,9 @@ public class NpcEntity extends PathfinderMob
     {
         this.bashReadyTick = this.tickCount + ticks;
         this.shieldDownUntil = this.tickCount + AncientEmpiresConfig.shieldBashRecoveryTicks;
+        // The bash spends the riposte; no swing follows straight on.
+        this.strikeReadyAt = this.tickCount + AncientEmpiresConfig.shieldBashRecoveryTicks;
+        this.riposteUntil = 0;
     }
 
     /**

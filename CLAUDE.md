@@ -146,7 +146,8 @@ its own unless noted). Before adding behavior, check what AW did first.
   EMF is handed the shield and night-light arm poses so its own animation does not undo them.
 - Bash: `NpcShieldBash` mirrors Spartan Shields' player bash as a counter after a blocked
   hit. It is telegraphed: the NPC braces `bashWindupTicks` (6) behind the raised shield with
-  a heavy creak, shoves with a short lunge, and only then lowers the shield for recovery. `shield.bashMode`: SPARTAN (its `shields_with_bash` tag), ALL, OFF.
+  a heavy creak, shoves with a short lunge, and only then lowers the shield for recovery. No
+  swing follows during `bashRecoveryTicks`, and the bash spends the riposte. `shield.bashMode`: SPARTAN (its `shields_with_bash` tag), ALL, OFF.
 - Feint: Better Combat style, break off halfway against a guarded target, never twice in
   a row. Internal attack path only.
 - Skill tiers from roster rank (0 ordinary, 1 elite, 2 leader, 3 elite leader) pick bash

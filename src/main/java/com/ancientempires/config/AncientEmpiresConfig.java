@@ -462,7 +462,7 @@ public final class AncientEmpiresConfig
                 .comment("Ticks between bashes with a tower shield. Spartan Shields' default for a player.")
                 .defineInRange("towerBashCooldownTicks", 50, 1, 1000);
         SHIELD_BASH_RECOVERY = builder
-                .comment("Ticks the shield stays down after a bash.")
+                .comment("Ticks after a bash before the NPC raises its shield or swings again: the bash is the counter on its own, not the start of a combo.")
                 .defineInRange("bashRecoveryTicks", 10, 0, 100);
         builder.pop();
 
