@@ -96,8 +96,8 @@ public class NpcModel extends PlayerModel<NpcEntity>
     }
 
     /**
-     * A night watch light in the off hand, held up as ToroQuest's guards did: a
-     * torch raised high, a lantern held out in front, with a slow sway.
+     * A night watch light in the off hand, held out in front at shoulder height as
+     * ToroQuest's guards did, with a slow sway.
      */
     private boolean holdLight(NpcEntity entity, float ageInTicks)
     {
@@ -110,7 +110,8 @@ public class NpcModel extends PlayerModel<NpcEntity>
         ModelPart arm = leftArm ? this.leftArm : this.rightArm;
         float sway = Mth.sin(ageInTicks * 0.08F) * 0.05F;
         boolean torch = light.getItem() instanceof StandingAndWallBlockItem;
-        arm.xRot = (torch ? -2.2F : -1.1F) + sway;
+        // Held out level in front, the torch a little higher than the hanging lantern.
+        arm.xRot = (torch ? -1.5F : -1.2F) + sway;
         arm.yRot = leftArm ? -0.1F : 0.1F;
         arm.zRot = (leftArm ? 1.0F : -1.0F) * (torch ? 0.15F : 0.05F);
         return true;

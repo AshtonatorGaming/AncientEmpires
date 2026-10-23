@@ -1,6 +1,7 @@
 package com.ancientempires.entity.npc;
 
 import com.ancientempires.AncientEmpires;
+import com.ancientempires.combat.BetterCombatBridge;
 import com.ancientempires.config.AncientEmpiresConfig;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
@@ -9,6 +10,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.ProjectileWeaponItem;
 import net.minecraft.world.level.Level;
 
 /**
@@ -16,7 +18,9 @@ import net.minecraft.world.level.Level;
  * (or somewhere dark) with a free off hand holds up a torch or lantern
  * ({@code ancientempires:night_lights}): an owned one takes it from its
  * backpack and puts it back at dawn; a faction guard is issued one for the
- * night ({@code nightLight.factionGuards}), which never drops or repacks.
+ * night ({@code nightLight.factionGuards}; not beasts, giants, demons, and other factions
+ * whose {@code nightLights} is false), which never drops or repacks. No light with a
+ * weapon that takes both hands (bows, crossbows, Better Combat two-handers).
  * Dynamic light mods light any living thing holding a light item, so the
  * NPC lights its way with no extra code. A shield keeps the off hand.
  */
@@ -53,7 +57,7 @@ public final class NpcNightLight
                 npc.setItemSlot(EquipmentSlot.OFFHAND, inventory.getItem(slot));
                 inventory.setItem(slot, ItemStack.EMPTY);
             }
-            else if (!npc.isOwnedNpc() && AncientEmpiresConfig.nightLightFactionGuards)
+            else if (!npc.isOwnedNpc() && AncientEmpiresConfig.nightLightFactionGuards && NpcFactions.carriesLights(npc.getFaction()))
             {
                 ItemStack issued = new ItemStack(npc.getRandom().nextBoolean() ? Items.LANTERN : Items.TORCH);
                 issued.getOrCreateTag().putBoolean(ISSUED_KEY, true);
@@ -100,12 +104,26 @@ public final class NpcNightLight
     /** A soldier on watch: awake, and it is night or dark where it stands. */
     private static boolean wantsLight(NpcEntity npc)
     {
-        if (!AncientEmpiresConfig.nightLightEnabled || !npc.getNpcPath().combat() || npc.isSleeping())
+        if (!AncientEmpiresConfig.nightLightEnabled || !npc.getNpcPath().combat() || npc.isSleeping() || needsBothHands(npc))
         {
             return false;
         }
         Level level = npc.level();
         return level.isNight() || level.getMaxLocalRawBrightness(npc.blockPosition()) < AncientEmpiresConfig.nightLightDarkness;
+    }
+
+    /**
+     * A weapon that takes both hands leaves none for a light: a bow or crossbow, or
+     * anything Better Combat marks two-handed (pikes, greatswords, halberds).
+     */
+    private static boolean needsBothHands(NpcEntity npc)
+    {
+        ItemStack main = npc.getMainHandItem();
+        if (main.getItem() instanceof ProjectileWeaponItem)
+        {
+            return true;
+        }
+        return BetterCombatBridge.lookup(main).map(BetterCombatBridge.WeaponSnapshot::twoHanded).orElse(false);
     }
 
     private static int backpackLight(NpcEntity npc)

@@ -334,7 +334,9 @@ its own unless noted). Before adding behavior, check what AW did first.
   `bypassHurtCooldown` never applies to players, who keep vanilla's hit immunity.
 - Night lights (`NpcNightLight`, `nightLight`): soldiers awake at night or in the dark
   (below `darkness`) with a free off hand hold a torch or lantern (`ancientempires:night_lights`
-  tag), raised in `NpcModel.holdLight`. Owned ones use their backpack's and put it back by
+  tag), held out level in `NpcModel.holdLight`; never with a bow, crossbow, or Better Combat
+  two-hander. Factions with `"nightLights": false` in factions.json (beast, demon, ent, giant,
+  kong, monster, mindflayer, gremlin, vampire) are not issued lights. Owned ones use their backpack's and put it back by
   day; faction guards are issued one (`AeNightLight`, stripped before death drops and
   repack). Dynamic light mods light held items on any living thing, so no compat code.
 - Reactions: `NpcBurningGoal` (`upkeep.burningPanic`): burning and not fighting (or any
