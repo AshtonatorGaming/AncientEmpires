@@ -90,6 +90,14 @@ public final class NpcMinerGoal extends NpcWorkGoal<QuarryBlockEntity>
         return true;
     }
 
+    /** Down and up the stair a step at a time; one long path runs out of search and walks into the wall. */
+    @Override
+    protected BlockPos waypoint(BlockPos walk)
+    {
+        QuarryBlockEntity quarry = this.site;
+        return quarry == null ? walk : quarry.waypoint(this.npc.blockPosition(), walk);
+    }
+
     /** Stand on the block, or as near as the path gets. */
     @Override
     protected BlockPos walkTarget(int kind, BlockPos target)

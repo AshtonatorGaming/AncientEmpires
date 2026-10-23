@@ -250,7 +250,11 @@ its own unless noted). Before adding behavior, check what AW did first.
   headroom). Steps that are not `ancientempires:stair_stone` blocks (ore, dirt, sand,
   gravel, gaps) are dug out and relaid with cheap stone from the item tag of the same name
   (cobblestone, sandstone, ...; never smooth stone), which miners keep as a supply; a dug
-  layer waits three scans for that before moving on (`quarryStairStone`). Left standing: blocks
+  layer waits three scans for that before moving on (`quarryStairStone`). Miners walk the
+  stair a step at a time (`QuarryStair.waypoint`, through `NpcWorkGoal.waypoint`): one path to the
+  top of a deep pit ran out of the pathfinder's search (its budget comes from follow range 32) and
+  ended at the nearest point, the wall. Each new step resets the give-up count, and the next leg is
+  planned on arrival. Left standing: blocks
   touching lava or water, block entities, unbreakable blocks, and blocks the pickaxe
   cannot harvest (`skip`). The size locks once digging starts (`canResize`).
 - Upkeep (`NpcUpkeepGoal`, priority 3) and the Town Hall (`TownHallBlock`; `NpcUpkeep` is

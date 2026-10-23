@@ -58,6 +58,46 @@ public final class QuarryStair
         return columns;
     }
 
+    /**
+     * Where to walk next on the way from {@code feet} to {@code goal} in a quarry
+     * dug down to {@code dugLayer}: the stair step one level nearer the goal, so a
+     * long climb or descent is many short paths instead of one the pathfinder runs
+     * out of search for (it then walks to the nearest point, the pit wall). The goal
+     * itself once it is within a block of the same level, or off the stair's span.
+     * A step of layer {@code k} is stood on at {@code blockY - k}.
+     */
+    public static BlockPos waypoint(int minX, int minZ, int maxX, int maxZ, int blockX, int blockY, int blockZ, int dugLayer, int wantedWidth,
+            BlockPos feet, BlockPos goal)
+    {
+        int rise = goal.getY() - feet.getY();
+        if (Math.abs(rise) <= 1)
+        {
+            return goal;
+        }
+        int standY = feet.getY() + Integer.signum(rise);
+        int layer = blockY - standY;
+        if (layer < 0 || layer > dugLayer)
+        {
+            // Above the top step (the surface) or below the dig: nothing to climb.
+            return goal;
+        }
+        Set<Long> columns = columns(minX, minZ, maxX, maxZ, blockX, blockZ, layer, wantedWidth);
+        BlockPos best = null;
+        long bestDistance = Long.MAX_VALUE;
+        for (long packed : columns)
+        {
+            BlockPos column = BlockPos.of(packed);
+            long dx = column.getX() - feet.getX();
+            long dz = column.getZ() - feet.getZ();
+            if (dx * dx + dz * dz < bestDistance)
+            {
+                bestDistance = dx * dx + dz * dz;
+                best = new BlockPos(column.getX(), standY, column.getZ());
+            }
+        }
+        return best == null ? goal : best;
+    }
+
     /** Rim tile {@code index} (wrapping) and the tiles inward from it, to {@code width} in all. */
     private static Set<Long> stepColumns(List<BlockPos> rim, int index, int width)
     {

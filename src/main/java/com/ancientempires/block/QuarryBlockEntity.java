@@ -294,6 +294,13 @@ public final class QuarryBlockEntity extends WorksiteBlockEntity
         return true;
     }
 
+    /** The next stair step toward {@code goal} ({@link QuarryStair#waypoint}). */
+    public BlockPos waypoint(BlockPos feet, BlockPos goal)
+    {
+        return QuarryStair.waypoint(this.minX(), this.minZ(), this.maxX(), this.maxZ(), this.worldPosition.getX(), this.worldPosition.getY(),
+                this.worldPosition.getZ(), this.layer, AncientEmpiresConfig.quarryStairWidth, feet, goal);
+    }
+
     /** This layer's stair columns ({@link QuarryStair}). */
     private Set<Long> stairColumns(int layer)
     {

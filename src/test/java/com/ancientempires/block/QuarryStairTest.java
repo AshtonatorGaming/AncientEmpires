@@ -101,6 +101,39 @@ class QuarryStairTest
     }
 
     @Test
+    void waypointsClimbTheWholeStairOneStepAtATime()
+    {
+        // Quarry block at (0, 64, 0), dug 25 layers; the miner stands on the deepest step.
+        int blockY = 64;
+        int dug = 25;
+        BlockPos surface = new BlockPos(0, blockY, 0);
+        BlockPos feet = new BlockPos(BlockPos.of(layer(dug, 2).iterator().next()).getX(), blockY - dug,
+                BlockPos.of(layer(dug, 2).iterator().next()).getZ());
+        for (int climbed = 0; climbed < 100; climbed++)
+        {
+            BlockPos next = QuarryStair.waypoint(MIN_X, MIN_Z, MAX_X, MAX_Z, 0, blockY, 0, dug, 2, feet, surface);
+            if (next.equals(surface))
+            {
+                assertTrue(Math.abs(surface.getY() - feet.getY()) <= 1, "gave up on the stair " + (surface.getY() - feet.getY()) + " below");
+                return;
+            }
+            assertEquals(feet.getY() + 1, next.getY(), "one level at a time");
+            assertTrue(Math.abs(next.getX() - feet.getX()) <= 2 && Math.abs(next.getZ() - feet.getZ()) <= 2,
+                    "a short walk to the next step, not across the pit: " + feet + " to " + next);
+            feet = next;
+        }
+        throw new AssertionError("never reached the top");
+    }
+
+    @Test
+    void waypointsGoStraightToAGoalOnTheSameLevel()
+    {
+        BlockPos feet = new BlockPos(0, 50, -5);
+        BlockPos goal = new BlockPos(2, 51, -6);
+        assertEquals(goal, QuarryStair.waypoint(MIN_X, MIN_Z, MAX_X, MAX_Z, 0, 64, 0, 25, 2, feet, goal));
+    }
+
+    @Test
     void aSmallPitNarrowsTheStairAndAOneColumnPitHasNone()
     {
         // 3 wide: the stair may take at most one column, leaving room to dig.

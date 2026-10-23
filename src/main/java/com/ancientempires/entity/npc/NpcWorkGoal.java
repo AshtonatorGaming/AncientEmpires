@@ -58,6 +58,9 @@ public abstract class NpcWorkGoal<T extends WorksiteBlockEntity> extends Goal
     @Nullable
     private Entity entityTarget;
     private int jobTicks;
+    /** The last place walked toward, so reaching a new waypoint resets the give-up count. */
+    @Nullable
+    private BlockPos lastWaypoint;
     private int actionTicks;
     private int actionLength;
     /** The block showing break progress, if the job digs. */
@@ -128,6 +131,15 @@ public abstract class NpcWorkGoal<T extends WorksiteBlockEntity> extends Goal
         float speed = Math.max(1.0F, this.npc.getMainHandItem().getDestroySpeed(state));
         int ticks = hardness <= 0.0F ? 0 : (int) Math.ceil(hardness * 30.0F / speed);
         return Math.max(AncientEmpiresConfig.workActionTicks, ticks);
+    }
+
+    /**
+     * Where to walk next on the way to {@code walk}; {@code walk} itself by default. A
+     * miner breaks a long way through its quarry into stair steps.
+     */
+    protected BlockPos waypoint(BlockPos walk)
+    {
+        return walk;
     }
 
     /** Where to walk for a job; the target by default. */
@@ -244,7 +256,9 @@ public abstract class NpcWorkGoal<T extends WorksiteBlockEntity> extends Goal
                 this.actionTicks = 0;
                 this.onActionCancelled(this.kind);
             }
-            if (--this.repath <= 0)
+            // Arrived at a waypoint: plan the next leg now rather than standing out the repath wait.
+            boolean arrived = animal == null && this.lastWaypoint != null && this.npc.getNavigation().isDone();
+            if (--this.repath <= 0 || arrived)
             {
                 this.repath = animal != null ? 10 : 20;
                 if (animal != null)
@@ -253,7 +267,18 @@ public abstract class NpcWorkGoal<T extends WorksiteBlockEntity> extends Goal
                 }
                 else
                 {
-                    BlockPos walk = this.kind < 0 ? at : this.walkTarget(this.kind, at);
+                    BlockPos walk = this.waypoint(this.kind < 0 ? at : this.walkTarget(this.kind, at));
+                    if (arrived && walk.equals(this.lastWaypoint))
+                    {
+                        // Still the same leg (it could not get closer): wait out the repath as usual.
+                        return;
+                    }
+                    if (!walk.equals(this.lastWaypoint))
+                    {
+                        // A new step of the way is progress: a long climb is not given up on.
+                        this.lastWaypoint = walk;
+                        this.jobTicks = 0;
+                    }
                     this.npc.getNavigation().moveTo(walk.getX() + 0.5D, walk.getY(), walk.getZ() + 0.5D, AncientEmpiresConfig.workWalkSpeed);
                 }
             }
@@ -439,6 +464,7 @@ public abstract class NpcWorkGoal<T extends WorksiteBlockEntity> extends Goal
 
     private void clearTarget()
     {
+        this.lastWaypoint = null;
         if (this.site != null && this.kind >= 0)
         {
             if (this.entityTarget != null)
