@@ -548,6 +548,9 @@ public class NpcMeleeAttackGoal extends Goal
         {
             return;
         }
+        // As Player.attack does: the hit sound only for a hit that landed. A blocked one gives the shield's thud.
+        this.npc.level().playSound(null, target.getX(), target.getY(), target.getZ(),
+                swing.unarmed() ? SoundEvents.PLAYER_ATTACK_WEAK : SoundEvents.PLAYER_ATTACK_STRONG, this.npc.getSoundSource(), 1.0F, 1.0F);
 
         double knockback = this.npc.getAttributeValue(Attributes.ATTACK_KNOCKBACK);
         if (knockback > 0.0D)
@@ -816,6 +819,7 @@ public class NpcMeleeAttackGoal extends Goal
                 }
             }
         }
-        this.npc.playSound(swing.unarmed() ? SoundEvents.PLAYER_ATTACK_WEAK : SoundEvents.PLAYER_ATTACK_STRONG, 1.0F, 1.0F);
+        // The whoosh of the swing itself; the hit sound comes only if it lands (applyHit), as for a player.
+        this.npc.playSound(SoundEvents.PLAYER_ATTACK_NODAMAGE, 1.0F, 1.0F);
     }
 }

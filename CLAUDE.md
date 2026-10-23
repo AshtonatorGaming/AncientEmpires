@@ -353,7 +353,9 @@ its own unless noted). Before adding behavior, check what AW did first.
   NPC's wind-up (`NpcParryPlanner`, `chanceByTier`, `timingErrorByTier`); feints bait that raise.
   The old separate parry key was dropped: blocking is the parry. NPC hits restore the target's hit
   immunity instead of granting one, so they never eat a player's swing. `NpcModel.guardPose` puts
-  the raised shield back after any combat stance.
+  the raised shield back only when a combat stance overrode it (vanilla's pose is relative; posing
+  twice raised it too high). Sounds follow Player.attack: a whoosh on the swing, the hit sound only
+  when it lands, the shield's thud when blocked.
 - Fairness against players: NPC attack knockback is 0 (every hit already gives 0.4, as for
   players; the old 0.4 base shoved players out of reach each exchange, updated on load), and
   `bypassHurtCooldown` never applies to players, who keep vanilla's hit immunity.

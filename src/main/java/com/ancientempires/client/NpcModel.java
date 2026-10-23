@@ -74,7 +74,7 @@ public class NpcModel extends PlayerModel<NpcEntity>
         boolean posed = NpcCombatAnimations.apply(entity, this, ageInTicks - entity.tickCount);
         // What blocks on the server must show: a combat stance must not lower a raised shield,
         // and a stagger shows as a recoil.
-        if (this.guardPose(entity))
+        if (this.guardPose(entity, posed))
         {
             posed = true;
         }
@@ -105,11 +105,13 @@ public class NpcModel extends PlayerModel<NpcEntity>
      * Vanilla's block pose, put back after any combat stance, on the shield arm while a
      * shield is raised; and the recoil of an NPC staggered by a perfect block.
      */
-    private boolean guardPose(NpcEntity entity)
+    private boolean guardPose(NpcEntity entity, boolean stanceApplied)
     {
         boolean mainLeft = entity.getMainArm() == HumanoidArm.LEFT;
-        if (entity.isUsingItem() && entity.getUseItem().getUseAnimation() == UseAnim.BLOCK)
+        if (stanceApplied && entity.isUsingItem() && entity.getUseItem().getUseAnimation() == UseAnim.BLOCK)
         {
+            // Only when a stance overrode it: vanilla already posed the shield arm otherwise, and
+            // posing it again (the pose is relative) raised it too high and stiff.
             boolean leftArm = (entity.getUsedItemHand() == InteractionHand.MAIN_HAND) == mainLeft;
             blockArm(leftArm ? this.leftArm : this.rightArm, leftArm);
             return true;
@@ -129,10 +131,10 @@ public class NpcModel extends PlayerModel<NpcEntity>
         return false;
     }
 
-    /** {@link HumanoidModel}'s BLOCK arm pose. */
+    /** {@link HumanoidModel}'s BLOCK arm pose, without the walk sway (the stance replaced that). */
     private static void blockArm(ModelPart arm, boolean left)
     {
-        arm.xRot = arm.xRot * 0.5F - 0.9424779F;
+        arm.xRot = -0.9424779F;
         arm.yRot = (left ? 1.0F : -1.0F) * ((float) Math.PI / 6.0F);
         arm.zRot = 0.0F;
     }
