@@ -83,6 +83,9 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.BooleanValue SHIELD_GUARD_IN_RANGE;
     private static final ForgeConfigSpec.IntValue SHIELD_MIN_BLOCK_TICKS;
     private static final ForgeConfigSpec.IntValue SHIELD_STRIKE_DELAY_TICKS;
+    private static final ForgeConfigSpec.IntValue SHIELD_RIPOSTE_TICKS;
+    private static final ForgeConfigSpec.DoubleValue SHIELD_ADVANCE_SPEED;
+    private static final ForgeConfigSpec.IntValue SHIELD_BASH_WINDUP;
     private static final ForgeConfigSpec.DoubleValue SHIELD_AIM_WATCH_RANGE;
     private static final ForgeConfigSpec.IntValue SHIELD_DISABLE_TICKS;
     private static final ForgeConfigSpec.EnumValue<NpcShieldBash.Mode> SHIELD_BASH_MODE;
@@ -434,12 +437,21 @@ public final class AncientEmpiresConfig
         SHIELD_STRIKE_DELAY_TICKS = builder
                 .comment("Ticks after lowering the shield before the NPC can begin a swing: the opening a player can punish.")
                 .defineInRange("strikeDelayTicks", 6, 0, 40);
+        SHIELD_RIPOSTE_TICKS = builder
+                .comment("After blocking a hit, the NPC may strike back within this many ticks without waiting out minBlockTicks. It never lowers the shield while the target is mid-swing.")
+                .defineInRange("riposteTicks", 20, 0, 100);
+        SHIELD_ADVANCE_SPEED = builder
+                .comment("Path speed multiplier while advancing behind a raised shield (Ancient Warfare walked at half speed).")
+                .defineInRange("advanceSpeed", 0.7D, 0.1D, 2.0D);
         SHIELD_DISABLE_TICKS = builder
                 .comment("Ticks an axe hit keeps an NPC's shield down, as it does a player's.")
                 .defineInRange("axeDisableTicks", 100, 0, 400);
         SHIELD_BASH_MODE = builder
                 .comment("Which shields NPCs can bash with after blocking a hit, mirroring Spartan Shields' bash. SPARTAN: shields in spartanshields:shields_with_bash (nothing without that mod). ALL: any shield. OFF: no bashing.")
                 .defineEnum("bashMode", NpcShieldBash.Mode.SPARTAN);
+        SHIELD_BASH_WINDUP = builder
+                .comment("Ticks an NPC braces behind its raised shield, with a warning sound, before the bash lands, so players can read it.")
+                .defineInRange("bashWindupTicks", 6, 0, 40);
         SHIELD_BASH_RANGE = builder
                 .comment("Reach of a bash, in blocks, plus half the target's width.")
                 .defineInRange("bashRange", 3.0D, 0.5D, 8.0D);
@@ -951,6 +963,9 @@ public final class AncientEmpiresConfig
     public static boolean shieldGuardInRange = true;
     public static int shieldMinBlockTicks = 12;
     public static int shieldStrikeDelayTicks = 6;
+    public static int shieldRiposteTicks = 20;
+    public static double shieldAdvanceSpeed = 0.7D;
+    public static int shieldBashWindupTicks = 6;
     public static double shieldAimWatchRange = 24.0D;
     public static int shieldDisableTicks = 100;
     public static NpcShieldBash.Mode shieldBashMode = NpcShieldBash.Mode.SPARTAN;
@@ -1196,6 +1211,9 @@ public final class AncientEmpiresConfig
         shieldGuardInRange = SHIELD_GUARD_IN_RANGE.get();
         shieldMinBlockTicks = SHIELD_MIN_BLOCK_TICKS.get();
         shieldStrikeDelayTicks = SHIELD_STRIKE_DELAY_TICKS.get();
+        shieldRiposteTicks = SHIELD_RIPOSTE_TICKS.get();
+        shieldAdvanceSpeed = SHIELD_ADVANCE_SPEED.get();
+        shieldBashWindupTicks = SHIELD_BASH_WINDUP.get();
         shieldAimWatchRange = SHIELD_AIM_WATCH_RANGE.get();
         shieldDisableTicks = SHIELD_DISABLE_TICKS.get();
         shieldBashMode = SHIELD_BASH_MODE.get();

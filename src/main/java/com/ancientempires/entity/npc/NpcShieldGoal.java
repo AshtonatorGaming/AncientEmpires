@@ -37,6 +37,10 @@ public final class NpcShieldGoal extends Goal
     private LivingEntity candidate;
     private int reactionLeft;
     private int holdLeft;
+    /** Who the NPC is bracing to bash, and the ticks left until it lands. */
+    @Nullable
+    private LivingEntity bashTarget;
+    private int bashLeft;
 
     public NpcShieldGoal(NpcEntity npc)
     {
@@ -92,7 +96,9 @@ public final class NpcShieldGoal extends Goal
     @Override
     public void stop()
     {
+        this.bashTarget = null;
         this.npc.lowerShield();
+        this.npc.setBracing(false);
         this.threat = null;
     }
 
@@ -112,10 +118,26 @@ public final class NpcShieldGoal extends Goal
         {
             this.holdLeft--;
         }
-        LivingEntity bashTarget = this.npc.takePendingBash();
-        if (bashTarget != null)
+        LivingEntity pending = this.npc.takePendingBash();
+        if (pending != null && this.bashTarget == null)
         {
-            NpcShieldBash.bash(this.npc, bashTarget);
+            // Brace first, shield still up, with a sound a player can learn to read.
+            this.bashTarget = pending;
+            this.bashLeft = AncientEmpiresConfig.shieldBashWindupTicks;
+            this.npc.setBracing(true);
+            NpcShieldBash.brace(this.npc);
+        }
+        if (this.bashTarget != null)
+        {
+            this.npc.getLookControl().setLookAt(this.bashTarget, 30.0F, 30.0F);
+            if (--this.bashLeft > 0)
+            {
+                this.npc.raiseShield();
+                return;
+            }
+            NpcShieldBash.bash(this.npc, this.bashTarget);
+            this.bashTarget = null;
+            this.npc.setBracing(false);
             return;
         }
         if (this.npc.isSwingCommitted())
@@ -205,7 +227,7 @@ public final class NpcShieldGoal extends Goal
         return player.getViewVector(1.0F).dot(toMe) > PLAYER_AIM_DOT;
     }
 
-    private static boolean swinging(LivingEntity attacker)
+    static boolean swinging(LivingEntity attacker)
     {
         if (attacker instanceof NpcEntity other && other.isAttackWindowOpen())
         {

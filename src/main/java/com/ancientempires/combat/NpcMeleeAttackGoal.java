@@ -672,6 +672,11 @@ public class NpcMeleeAttackGoal extends Goal
             return;
         }
         this.pathCooldown = AncientEmpiresConfig.pathRecalcTicks;
+        if (this.npc.isRaisingShield())
+        {
+            // Ancient Warfare's guards pressed forward behind the shield, slower.
+            speed *= AncientEmpiresConfig.shieldAdvanceSpeed;
+        }
         NpcTargetMemory memory = this.npc.getTargetMemory();
         if (!memory.targetVisible())
         {

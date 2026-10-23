@@ -67,8 +67,19 @@ public final class NpcShieldBash
     }
 
     /**
-     * Bashes the target if it is still in front and within reach. Lowers the
-     * shield and starts the cooldown either way, like a player's bash.
+     * The tell before a bash: the NPC braces behind its raised shield for
+     * {@code shield.bashWindupTicks} with a heavy creak, so a player hears it coming.
+     */
+    static void brace(NpcEntity npc)
+    {
+        npc.playSound(SoundEvents.ARMOR_EQUIP_IRON, 1.0F, 0.6F);
+    }
+
+    /**
+     * After the brace: the shield, still raised, is shoved forward with a short
+     * lunge, and only then comes down for the recovery, like a player's bash.
+     * Bashes the target if it is still in front and within reach; starts the
+     * cooldown either way.
      */
     static void bash(NpcEntity npc, LivingEntity target)
     {
@@ -78,14 +89,19 @@ public final class NpcShieldBash
         }
         ItemStack shield = npc.getUseItem();
         boolean tower = shield.is(TOWER_SHIELDS);
-        npc.lowerShield();
-        npc.startBashCooldown(tower ? AncientEmpiresConfig.towerBashCooldownTicks : AncientEmpiresConfig.shieldBashCooldownTicks);
         npc.swing(InteractionHand.OFF_HAND);
+        float lungeYaw = npc.getYRot() * Mth.DEG_TO_RAD;
+        npc.push(-Mth.sin(lungeYaw) * 0.3D, 0.0D, Mth.cos(lungeYaw) * 0.3D);
         double reach = AncientEmpiresConfig.shieldBashRange + target.getBbWidth() * 0.5D;
-        if (!target.isAlive() || npc.distanceToSqr(target) > reach * reach || !npc.hasLineOfSight(target))
+        boolean lands = target.isAlive() && npc.distanceToSqr(target) <= reach * reach && npc.hasLineOfSight(target);
+        // The shove lands with the shield up; it comes down after, for the recovery.
+        npc.startBashCooldown(tower ? AncientEmpiresConfig.towerBashCooldownTicks : AncientEmpiresConfig.shieldBashCooldownTicks);
+        if (!lands)
         {
+            npc.lowerShield();
             return;
         }
+        npc.lowerShield();
         float yaw = npc.getYRot() * Mth.DEG_TO_RAD;
         int knockback = shield.getEnchantmentLevel(Enchantments.KNOCKBACK);
         target.knockback(1.0D + knockback, Mth.sin(yaw), -Mth.cos(yaw));

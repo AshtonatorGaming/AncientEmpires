@@ -139,8 +139,14 @@ its own unless noted). Before adding behavior, check what AW did first.
   the swing played like a parry). A block is a commitment (`NpcEntity.readyToStrike`): an NPC
   never swings with its shield up; the shield comes down only after `minBlockTicks` (12)
   raised, stays down through the swing, and the swing starts `strikeDelayTicks` (6) later.
+  As in AW (its block goal held the attack AI's control flag), blocking and attacking never
+  overlap: the shield is never lowered while the target is mid-swing, and a strike being
+  readied is cancelled if the target starts one. A blocked hit opens `riposteTicks` to strike
+  without the minimum. Behind a raised shield the NPC advances at `advanceSpeed` (AW: half).
+  EMF is handed the shield and night-light arm poses so its own animation does not undo them.
 - Bash: `NpcShieldBash` mirrors Spartan Shields' player bash as a counter after a blocked
-  hit. `shield.bashMode`: SPARTAN (its `shields_with_bash` tag), ALL, OFF.
+  hit. It is telegraphed: the NPC braces `bashWindupTicks` (6) behind the raised shield with
+  a heavy creak, shoves with a short lunge, and only then lowers the shield for recovery. `shield.bashMode`: SPARTAN (its `shields_with_bash` tag), ALL, OFF.
 - Feint: Better Combat style, break off halfway against a guarded target, never twice in
   a row. Internal attack path only.
 - Skill tiers from roster rank (0 ordinary, 1 elite, 2 leader, 3 elite leader) pick bash

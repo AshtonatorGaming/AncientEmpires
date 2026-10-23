@@ -4,6 +4,7 @@ import com.ancientempires.AncientEmpires;
 import com.ancientempires.combat.BetterCombatBridge;
 import com.ancientempires.combat.MobCombatBridge;
 import com.ancientempires.entity.npc.NpcEntity;
+import com.ancientempires.entity.npc.NpcNightLight;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.PlayerModel;
@@ -254,6 +255,9 @@ public final class NpcCombatAnimations
                 // The stance stays on under an attack now. EMF still gets one arm pose at a time.
                 hold = !attack && poses == Status.READY && NpcBetterCombatDriver.holdActive(npc);
             }
+            // A raised shield or a held-up night light is a pose of ours too; without this EMF's
+            // own player animation would put its arms back over them.
+            hold = hold || (!attack && (npc.isUsingItem() || NpcNightLight.isLight(npc.getOffhandItem())));
             NpcEmfCompat.afterPose(npc, model, attack, hold, limbSwingAmount);
         }
         catch (Throwable exception)

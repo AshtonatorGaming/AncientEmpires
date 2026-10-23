@@ -171,6 +171,10 @@ public class NpcEntity extends PathfinderMob
     private int shieldLoweredAt = -1000;
     /** The melee goal asked to strike: the shield stays down until the swing ends. */
     private boolean wantsToStrike;
+    /** tickCount until which a riposte after a blocked hit may skip the minimum block. */
+    private int riposteUntil;
+    /** Bracing for a shield bash: no strike until it lands. */
+    private boolean bracing;
     /** Own feint chance; below zero means the skill tier decides. */
     private float feintChance = -1.0F;
     /** Cached skill tier from the roster rank; below zero until first asked. */
@@ -900,16 +904,40 @@ public class NpcEntity extends PathfinderMob
      */
     public boolean readyToStrike()
     {
+        if (this.bracing)
+        {
+            return false;
+        }
+        if (!this.hasShieldInOffhand() || this.isShieldDisabled())
+        {
+            this.wantsToStrike = true;
+            return this.tickCount - this.shieldLoweredAt >= AncientEmpiresConfig.shieldStrikeDelayTicks;
+        }
+        // Ancient Warfare kept blocking and attacking apart: strike only into an opening,
+        // never while the target is mid-swing at this NPC.
+        LivingEntity target = this.getTarget();
+        if (target != null && NpcShieldGoal.swinging(target))
+        {
+            // Caught lowering it: cancel the strike, so the shield goes straight back up.
+            this.wantsToStrike = false;
+            return false;
+        }
         this.wantsToStrike = true;
         if (this.isRaisingShield())
         {
-            if (this.tickCount - this.shieldRaisedAt < AncientEmpiresConfig.shieldMinBlockTicks)
+            boolean riposte = this.tickCount < this.riposteUntil;
+            if (!riposte && this.tickCount - this.shieldRaisedAt < AncientEmpiresConfig.shieldMinBlockTicks)
             {
                 return false;
             }
             this.lowerShield();
         }
         return this.tickCount - this.shieldLoweredAt >= AncientEmpiresConfig.shieldStrikeDelayTicks;
+    }
+
+    void setBracing(boolean bracing)
+    {
+        this.bracing = bracing;
     }
 
     /** The swing is over, or the melee goal gave up: the shield may go back up. */
@@ -949,6 +977,8 @@ public class NpcEntity extends PathfinderMob
             this.playSound(SoundEvents.SHIELD_BREAK, 0.8F, 0.8F + this.level().random.nextFloat() * 0.4F);
             return;
         }
+        // A blocked hit leaves the attacker open: a riposte may skip the minimum block.
+        this.riposteUntil = this.tickCount + AncientEmpiresConfig.shieldRiposteTicks;
         // A blocked hit is the moment to shove back, as a player would with Spartan's bash key.
         if (NpcShieldBash.canBash(this) && this.getRandom().nextDouble() < this.getBashChance())
         {
