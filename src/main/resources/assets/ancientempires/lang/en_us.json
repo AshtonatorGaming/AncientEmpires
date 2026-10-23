@@ -89,6 +89,7 @@
   "gui.ancientempires.npc.mount": "Mount the nearest saddled horse you tamed, or dismount",
   "item.ancientempires.food_bundle": "Food Bundle",
   "item.ancientempires.bandage": "Bandage",
+  "item.ancientempires.bandage_roll": "Bandage Roll",
   "message.ancientempires.priest.raised": "%s has been raised at your Town Hall",
   "block.ancientempires.settlers_post": "Settlers' Post",
   "block.ancientempires.crop_farm": "Crop Farm",

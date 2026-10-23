@@ -33,6 +33,7 @@ import net.minecraft.world.entity.ai.goal.OpenDoorGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.village.poi.PoiTypes;
@@ -62,6 +63,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -106,6 +108,8 @@ public class NpcEntity extends PathfinderMob
     private static final EntityDataAccessor<Boolean> DATA_ATTACK_OFFHAND = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.BOOLEAN);
     /** 1 is a normal player body. Dwarf and giant eggs store a different scale. */
     private static final EntityDataAccessor<Float> DATA_BODY_SCALE = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.FLOAT);
+    /** {@link NpcStatus} ordinal, for the icon over the head. */
+    private static final EntityDataAccessor<Byte> DATA_STATUS = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.BYTE);
     private static final String FOLLOWING_KEY = "Following";
     private static final String CREATIVE_KEY = "Creative";
     private static final String HOLDING_KEY = "HoldPosition";
@@ -258,6 +262,7 @@ public class NpcEntity extends PathfinderMob
         this.entityData.define(DATA_LEVIED, false);
         this.entityData.define(DATA_ATTACK_OFFHAND, false);
         this.entityData.define(DATA_BODY_SCALE, 1.0F);
+        this.entityData.define(DATA_STATUS, (byte) 0);
     }
 
     /**
@@ -2114,6 +2119,23 @@ public class NpcEntity extends PathfinderMob
         super.aiStep();
     }
 
+    /** What the NPC is doing, for the icon over its head. */
+    public NpcStatus getStatus()
+    {
+        return NpcStatus.byId(this.entityData.get(DATA_STATUS));
+    }
+
+    private void updateStatus()
+    {
+        List<Goal> running = new ArrayList<>(4);
+        this.goalSelector.getRunningGoals().forEach(wrapped -> running.add(wrapped.getGoal()));
+        byte status = (byte) NpcStatus.of(this, running).ordinal();
+        if (this.entityData.get(DATA_STATUS) != status)
+        {
+            this.entityData.set(DATA_STATUS, status);
+        }
+    }
+
     @Override
     protected void customServerAiStep()
     {
@@ -2136,6 +2158,10 @@ public class NpcEntity extends PathfinderMob
         this.mount.tick();
         this.targetMemory.tick();
         this.sidearm.tick();
+        if ((this.tickCount + this.getId()) % NpcStatus.UPDATE_TICKS == 0)
+        {
+            this.updateStatus();
+        }
         this.level().getProfiler().pop();
         this.ticksSinceSwing++;
         if (this.comboIndex != 0 && this.lastSwingCooldown > 0

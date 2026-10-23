@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PPP",
+    "PSP",
+    "PPP"
+  ],
+  "key": {
+    "P": {"item": "minecraft:paper"},
+    "S": {"tag": "forge:string"}
+  },
+  "result": {"item": "ancientempires:bandage_roll"}
+}

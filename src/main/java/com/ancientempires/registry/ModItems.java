@@ -26,6 +26,9 @@ public final class ModItems
             .food(new FoodProperties.Builder().nutrition(10).saturationMod(0.8F).build())));
     public static final RegistryObject<Item> BANDAGE = ITEMS.register("bandage",
             () -> new BandageItem(new Item.Properties().stacksTo(16)));
+    /** 32 bandages in one item, as durability: worn items never stack, and a stack of loose ones holds 16. */
+    public static final RegistryObject<Item> BANDAGE_ROLL = ITEMS.register("bandage_roll",
+            () -> new BandageItem(new Item.Properties().durability(32)));
     /** Ancient Warfare's worksite size upgrades: bounds for every worksite, quarry for the quarry. */
     public static final RegistryObject<Item> UPGRADE_SIZE_MEDIUM = ITEMS.register("worksite_upgrade_size_medium",
             () -> new WorksiteUpgradeItem(WorksiteBlockEntity.UpgradeKind.BOUNDS, 1, new Item.Properties().stacksTo(16)));

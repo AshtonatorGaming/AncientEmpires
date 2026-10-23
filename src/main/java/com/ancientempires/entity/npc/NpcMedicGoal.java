@@ -135,7 +135,7 @@ public final class NpcMedicGoal extends Goal
             level.sendParticles(ParticleTypes.HEART, patient.getX(), patient.getY() + patient.getBbHeight() * 0.8D, patient.getZ(),
                     3, 0.3D, 0.2D, 0.3D, 0.0D);
         }
-        bandages.shrink(1);
+        BandageItem.useUp(bandages, this.npc, InteractionHand.OFF_HAND);
         this.npc.setItemSlot(EquipmentSlot.OFFHAND, bandages);
         if (bandages.isEmpty())
         {

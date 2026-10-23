@@ -13,9 +13,10 @@ import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 
 /**
- * A bandage. Carried in the off hand it makes a soldier a medic, who binds
- * wounded allies with it; a player can hold it to bind their own wounds.
- * Either way it heals {@code medic.bandageHeal}.
+ * A bandage, or a bandage roll (32 uses in one unstackable item). Carried in
+ * the off hand it makes a soldier a medic, who binds wounded allies with it;
+ * a player can hold it to bind their own wounds. Either way each use heals
+ * {@code medic.bandageHeal}.
  */
 public final class BandageItem extends Item
 {
@@ -45,10 +46,27 @@ public final class BandageItem extends Item
             bind(user);
             if (!(user instanceof Player player && player.getAbilities().instabuild))
             {
-                stack.shrink(1);
+                useUp(stack, user, user.getUsedItemHand());
             }
         }
         return stack;
+    }
+
+    /**
+     * One use: a loose bandage is spent, a bandage roll loses one of its uses
+     * (it cannot stack, as vanilla never stacks worn items, so it carries
+     * 32 uses instead) and is gone when they run out.
+     */
+    public static void useUp(ItemStack stack, LivingEntity user, InteractionHand hand)
+    {
+        if (stack.isDamageableItem())
+        {
+            stack.hurtAndBreak(1, user, holder -> holder.broadcastBreakEvent(hand));
+        }
+        else
+        {
+            stack.shrink(1);
+        }
     }
 
     /** Heals a wound, with the sound of cloth. */

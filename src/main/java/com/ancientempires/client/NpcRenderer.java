@@ -3,11 +3,15 @@ package com.ancientempires.client;
 import com.ancientempires.AncientEmpires;
 import com.ancientempires.config.AncientEmpiresClientConfig;
 import com.ancientempires.entity.npc.NpcEntity;
+import com.ancientempires.entity.npc.NpcStatus;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.ancientempires.registry.ModEntities;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelLayers;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
 import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
@@ -25,6 +29,7 @@ import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import org.joml.Matrix4f;
 
 /**
  * Wide player model so a held weapon and armor are visible. The texture is the
@@ -62,6 +67,7 @@ public class NpcRenderer extends HumanoidMobRenderer<NpcEntity, NpcModel>
         try
         {
             super.render(entity, entityYaw, partialTick, pose, buffer, packedLight);
+            this.renderStatus(entity, pose, buffer, packedLight);
         }
         finally
         {
@@ -111,6 +117,56 @@ public class NpcRenderer extends HumanoidMobRenderer<NpcEntity, NpcModel>
         }
         RenderLayer<NpcEntity, NpcModel> single = kept;
         this.layers.removeIf(layer -> layer instanceof ItemInHandLayer && layer != single);
+    }
+
+    /** One texture per status, built once. */
+    private static final ResourceLocation[] STATUS_ICONS = statusIcons();
+
+    private static ResourceLocation[] statusIcons()
+    {
+        NpcStatus[] statuses = NpcStatus.values();
+        ResourceLocation[] icons = new ResourceLocation[statuses.length];
+        for (NpcStatus status : statuses)
+        {
+            if (status.icon() != null)
+            {
+                icons[status.ordinal()] = ResourceLocation.fromNamespaceAndPath(AncientEmpires.MOD_ID, "textures/gui/status/" + status.icon() + ".png");
+            }
+        }
+        return icons;
+    }
+
+    /**
+     * Ancient Warfare's task icon over the head, facing the camera, above the
+     * nametag when one shows. Within {@code statusIconRange}; never in the
+     * inventory preview.
+     */
+    private void renderStatus(NpcEntity entity, PoseStack pose, MultiBufferSource buffer, int packedLight)
+    {
+        NpcStatus status = entity.getStatus();
+        if (!AncientEmpiresClientConfig.showStatusIcons || status == NpcStatus.NONE || entity.isNameplateSuppressed() || entity.isInvisible())
+        {
+            return;
+        }
+        double range = AncientEmpiresClientConfig.statusIconRange;
+        if (this.entityRenderDispatcher.distanceToSqr(entity) > range * range)
+        {
+            return;
+        }
+        float lift = entity.getBbHeight() + (this.shouldShowName(entity) ? 0.85F : 0.55F);
+        pose.pushPose();
+        pose.translate(0.0F, lift, 0.0F);
+        pose.mulPose(this.entityRenderDispatcher.cameraOrientation());
+        pose.scale(-0.4F, -0.4F, 0.4F);
+        Matrix4f matrix = pose.last().pose();
+        VertexConsumer consumer = buffer.getBuffer(RenderType.text(STATUS_ICONS[status.ordinal()]));
+        // Readable in the dark, as a nametag is.
+        int light = LightTexture.pack(Math.max(10, LightTexture.block(packedLight)), LightTexture.sky(packedLight));
+        consumer.vertex(matrix, -0.5F, -0.5F, 0.0F).color(255, 255, 255, 255).uv(0.0F, 0.0F).uv2(light).endVertex();
+        consumer.vertex(matrix, -0.5F, 0.5F, 0.0F).color(255, 255, 255, 255).uv(0.0F, 1.0F).uv2(light).endVertex();
+        consumer.vertex(matrix, 0.5F, 0.5F, 0.0F).color(255, 255, 255, 255).uv(1.0F, 1.0F).uv2(light).endVertex();
+        consumer.vertex(matrix, 0.5F, -0.5F, 0.0F).color(255, 255, 255, 255).uv(1.0F, 0.0F).uv2(light).endVertex();
+        pose.popPose();
     }
 
     /**

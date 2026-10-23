@@ -268,7 +268,8 @@ its own unless noted). Before adding behavior, check what AW did first.
   string make 4) in its off hand. It goes to the most hurt ally in `medic.range` (same
   faction or owner, its owner, itself) under `healBelow`, even mid-fight, binds the wound
   (`bandageHeal`, hearts), and waits `cooldownTicks`; the off hand restocks from the
-  backpack. Its cost: no shield, and `medic.meleeProficiency` (0.75). The role label reads
+  backpack. A Bandage Roll (8 paper around a string) holds 32 uses as durability, since
+  vanilla never stacks worn items (`BandageItem.useUp`).  backpack. Its cost: no shield, and `medic.meleeProficiency` (0.75). The role label reads
   the off hand. Players can bind their own wounds with one. Roster items take a count
   (`ancientempires:bandage*16`).
 - Priest (`NpcPriestGoal`, priority 4): a Worker-path NPC holding any book (the role label
@@ -294,6 +295,10 @@ its own unless noted). Before adding behavior, check what AW did first.
   (fleeing, archer repositioning, running while on fire) must pass `isSafeSpot`: no harmful
   path type at the spot (vanilla's lava, fire, cactus, powder snow checks), ground within
   the safe fall, not deep water; up to `safeSpotTries` tries, else stay put.
+- Status icons (AW's task icons, `textures/gui/status`): `NpcStatus` is worked out on the
+  server every 10 ticks from state and running goals (sleep, flee, attack, follow, guard,
+  upkeep, work, home or rain, hungry, levied) and synced as one byte; `NpcRenderer`
+  draws it over the head (client `showStatusIcons`, `statusIconRange`).
 - Reactions: `NpcBurningGoal` (`upkeep.burningPanic`): burning and not fighting (or any
   civilian) runs for water within 8 blocks. Poses are soft dependencies: with Not Enough
   Animations, eating raises the food to the mouth; with its EMF add-on, burning flails and
