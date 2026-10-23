@@ -138,6 +138,7 @@ public class NpcEntity extends PathfinderMob
     /** Packed eggs only. The spawn merge cannot delete the home set at placement. */
     private static final String NO_HOME_KEY = "AeNoHome";
     private static final String SPAWNER_KEY = "AeSpawner";
+    private static final String COMMAND_KEY = "AeCommand";
     private static final String SPAWNER_SLOT_KEY = "AeSpawnerSlot";
     private static final String GARRISON_KEY = "AeGarrison";
     /** The roster row the NPC was spawned from. Repack returns it to that scroll. */
@@ -173,6 +174,10 @@ public class NpcEntity extends PathfinderMob
     private BlockPos spawnerPos;
     private int spawnerSlot = -1;
     private boolean garrison;
+    /** Command inherited from a fallen commander (AeCommand), and the aura reaching this NPC now. */
+    private float inheritedCommand;
+    private int inspiredUntil;
+    private float inspiredStrength;
     /** Counts attack windows (see getAttackWindowSerial). */
     private int attackWindowSerial;
     /** Own feint chance; below zero means the skill tier decides. */
@@ -2249,6 +2254,13 @@ public class NpcEntity extends PathfinderMob
         this.targetMemory.tick();
         this.sidearm.tick();
         this.guard.tick();
+        NpcCommand.tick(this);
+        if (this.inspiredStrength > 0.0F && !this.isInspired())
+        {
+            // Out of the aura a while: the bonuses lapse.
+            this.inspiredStrength = 0.0F;
+            NpcCommand.removeBonuses(this);
+        }
         NpcParryPlanner.tick(this);
         if ((this.tickCount + this.getId()) % NpcNightLight.CHECK_TICKS == 0)
         {
@@ -2353,6 +2365,34 @@ public class NpcEntity extends PathfinderMob
         return InteractionResult.sidedSuccess(this.level().isClientSide);
     }
 
+    /** Command passed to this NPC when its commander fell (0 for none); see {@link NpcCommand}. */
+    public float getInheritedCommand()
+    {
+        return this.inheritedCommand;
+    }
+
+    void setInheritedCommand(float strength)
+    {
+        this.inheritedCommand = strength;
+    }
+
+    /** Inspired by a commander within the last few seconds. Morale will read this. */
+    public boolean isInspired()
+    {
+        return this.tickCount < this.inspiredUntil;
+    }
+
+    /** A commander's aura reached this NPC: its bonuses hold for {@code ticks}, at the strongest commander's strength. */
+    void inspire(float strength, int ticks)
+    {
+        if (!this.isInspired() || strength > this.inspiredStrength)
+        {
+            this.inspiredStrength = strength;
+            NpcCommand.applyBonuses(this, strength);
+        }
+        this.inspiredUntil = this.tickCount + ticks;
+    }
+
     /**
      * Spawned by an NPC spawner: its home is the spawner, and a garrison NPC is
      * taken back in when every player is far, or tells the spawner when it dies.
@@ -2411,6 +2451,11 @@ public class NpcEntity extends PathfinderMob
     @Override
     public void die(DamageSource source)
     {
+        if (!this.isRemoved() && !this.dead && !this.level().isClientSide)
+        {
+            // A commander falls: command passes to the best soldier near it.
+            NpcCommand.succeed(this, source.getEntity() instanceof LivingEntity killer ? killer : null);
+        }
         if (this.garrison && !this.isRemoved() && !this.dead && this.spawner() != null)
         {
             // Killed: gone for good from its garrison.
@@ -2543,6 +2588,10 @@ public class NpcEntity extends PathfinderMob
         }
         tag.putString(FACTION_KEY, this.getFaction());
         tag.putFloat(BODY_SCALE_KEY, this.getBodyScale());
+        if (this.inheritedCommand > 0.0F)
+        {
+            tag.putFloat(COMMAND_KEY, this.inheritedCommand);
+        }
         if (this.spawnerPos != null)
         {
             tag.putLong(SPAWNER_KEY, this.spawnerPos.asLong());
@@ -2555,6 +2604,7 @@ public class NpcEntity extends PathfinderMob
     public void readAdditionalSaveData(CompoundTag tag)
     {
         super.readAdditionalSaveData(tag);
+        this.inheritedCommand = tag.getFloat(COMMAND_KEY);
         this.spawnerPos = tag.contains(SPAWNER_KEY) ? BlockPos.of(tag.getLong(SPAWNER_KEY)) : null;
         this.spawnerSlot = tag.contains(SPAWNER_SLOT_KEY) ? tag.getInt(SPAWNER_SLOT_KEY) : -1;
         this.garrison = tag.getBoolean(GARRISON_KEY);

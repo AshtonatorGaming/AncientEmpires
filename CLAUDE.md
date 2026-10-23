@@ -390,6 +390,13 @@ its own unless noted). Before adding behavior, check what AW did first.
   a time every min to max delay while a player is in range, up to most-at-once and a total. REDSTONE:
   one per pulse. Dark-only and hidden (not drawn, no collision) toggles. Admin-only; one distance
   check a second.
+- Command (`NpcCommand`, `command` config, DESIGN Tier 1): leaders (skill tier `minTier` 2 and up;
+  elite leaders at `eliteScale`) pulse an aura every `auraTicks` over allied soldiers within
+  `auraRadius`: `damageBonus` (15%) melee damage with any weapon and `armorBonus` armour, as
+  transient modifiers that lapse soon after leaving. A fallen commander's command passes to the
+  highest-ranked allied soldier within `successionRange` (none if another commander is there), at
+  `successionScale` (floor `minScale`), saved as `AeCommand`, and it turns on the killer.
+  `isInspired` is for morale later.
 - Skins: a roster row assigns a skin type, which resolved to its pool's first skin, so every
   Empire soldier looked alike. `NpcSkins.randomVariant` pins a random skin of the pool on first
   placement; a repacked scroll's saved skin is applied after the row, so it keeps its own.
@@ -529,7 +536,7 @@ target-scan design.
 - `./gradlew test` (also run by `build`) runs JUnit 5 tests in `src/test/java` on rules kept as pure
   methods so no game is needed: `WorksiteArea`, `QuarryStair.columns`, `Parry.perfectWindow`,
   `NpcGuard.strikesFirst`. Put a new rule in such a method and test it there; the game code calls
-  the same method.
+  the same method. Also `NpcCommand.inherited`.
 
 ## Building
 
