@@ -81,7 +81,8 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.DoubleValue SHIELD_BLOCK_RANGE;
     private static final ForgeConfigSpec.IntValue SHIELD_HOLD_TICKS;
     private static final ForgeConfigSpec.BooleanValue SHIELD_GUARD_IN_RANGE;
-    private static final ForgeConfigSpec.IntValue SHIELD_DROP_TICKS;
+    private static final ForgeConfigSpec.IntValue SHIELD_MIN_BLOCK_TICKS;
+    private static final ForgeConfigSpec.IntValue SHIELD_STRIKE_DELAY_TICKS;
     private static final ForgeConfigSpec.DoubleValue SHIELD_AIM_WATCH_RANGE;
     private static final ForgeConfigSpec.IntValue SHIELD_DISABLE_TICKS;
     private static final ForgeConfigSpec.EnumValue<NpcShieldBash.Mode> SHIELD_BASH_MODE;
@@ -180,6 +181,9 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.BooleanValue BURNING_PANIC;
     private static final ForgeConfigSpec.DoubleValue MEDIC_BANDAGE_HEAL;
     private static final ForgeConfigSpec.DoubleValue MEDIC_RANGE;
+    private static final ForgeConfigSpec.BooleanValue NIGHT_LIGHT_ENABLED;
+    private static final ForgeConfigSpec.BooleanValue NIGHT_LIGHT_FACTION_GUARDS;
+    private static final ForgeConfigSpec.IntValue NIGHT_LIGHT_DARKNESS;
     private static final ForgeConfigSpec.DoubleValue HORN_RANGE;
     private static final ForgeConfigSpec.IntValue HORN_COOLDOWN_TICKS;
     private static final ForgeConfigSpec.IntValue HORN_RALLY_TICKS;
@@ -316,8 +320,8 @@ public final class AncientEmpiresConfig
                 .comment("Path speed multiplier while winding up and still short of the target.")
                 .defineInRange("windupMoveSpeed", 0.7D, 0.0D, 2.0D);
         APPROACH_SPEED = builder
-                .comment("Path speed multiplier while closing to weapon range.")
-                .defineInRange("approachSpeed", 1.0D, 0.1D, 2.0D);
+                .comment("Path speed multiplier while closing to weapon range. A mob's speed counts twice (push and pace), so the multiplier's effect is squared: 1.0 is a player's walk, 1.12 a sprint.")
+                .defineInRange("approachSpeed", 1.12D, 0.1D, 2.0D);
         PATH_RECALC_TICKS = builder
                 .comment("Ticks between path recalculations while chasing.")
                 .defineInRange("pathRecalcTicks", 8, 1, 40);
@@ -424,9 +428,12 @@ public final class AncientEmpiresConfig
         SHIELD_GUARD_IN_RANGE = builder
                 .comment("Guard stance: keep the shield up the whole time an enemy is within blockRange, not only while it swings. Vanilla shields only block after 5 ticks raised, so blocking only on the swing is close to a parry.")
                 .define("guardInRange", true);
-        SHIELD_DROP_TICKS = builder
-                .comment("-1 (default): the shield comes down for the whole of the NPC's own wind-up, as a player lowers it to swing, and goes back up after. A number: it stays up until this many ticks before the hit, so the NPC swings behind its shield.")
-                .defineInRange("dropTicks", -1, -1, 40);
+        SHIELD_MIN_BLOCK_TICKS = builder
+                .comment("A raised shield is a commitment: it stays up at least this many ticks before the NPC may lower it to attack (vanilla shields only block after 5). An NPC never attacks with its shield up.")
+                .defineInRange("minBlockTicks", 12, 0, 100);
+        SHIELD_STRIKE_DELAY_TICKS = builder
+                .comment("Ticks after lowering the shield before the NPC can begin a swing: the opening a player can punish.")
+                .defineInRange("strikeDelayTicks", 6, 0, 40);
         SHIELD_DISABLE_TICKS = builder
                 .comment("Ticks an axe hit keeps an NPC's shield down, as it does a player's.")
                 .defineInRange("axeDisableTicks", 100, 0, 400);
@@ -612,7 +619,7 @@ public final class AncientEmpiresConfig
                 .defineInRange("searchRange", 32, 8, 96);
         WORK_WALK_SPEED = builder
                 .comment("Walking speed while working, as a multiple of the NPC's speed.")
-                .defineInRange("walkSpeed", 0.8D, 0.3D, 1.5D);
+                .defineInRange("walkSpeed", 0.9D, 0.3D, 1.5D);
         WORK_AREA_REACH = builder
                 .comment("How far, in blocks, a worksite's area may sit from its block (0: it must touch or contain the block).")
                 .defineInRange("areaReach", 8, 0, 32);
@@ -730,6 +737,18 @@ public final class AncientEmpiresConfig
         UPKEEP_KEEP_ON_DEATH = builder
                 .comment("Like Ancient Warfare Tweaked's keep-equipment option: when a Town Hall records an owned NPC's death, what it keeps for revival instead of dropping. NONE, EQUIPMENT (armor and hands), BACKPACK, or ALL. Deaths no hall records drop everything as usual.")
                 .defineEnum("keepOnDeath", KeepOnDeath.NONE);
+        builder.pop();
+
+        builder.comment("Night watch lights: soldiers awake at night or in the dark hold up a torch or lantern (the ancientempires:night_lights item tag) in a free off hand. Dynamic light mods light them.").push("nightLight");
+        NIGHT_LIGHT_ENABLED = builder
+                .comment("Soldiers carry lights at night. Owned ones use torches or lanterns from their backpack and put them back at dawn.")
+                .define("enabled", true);
+        NIGHT_LIGHT_FACTION_GUARDS = builder
+                .comment("Faction soldiers with a free off hand are issued a torch or lantern for the night. It never drops or repacks.")
+                .define("factionGuards", true);
+        NIGHT_LIGHT_DARKNESS = builder
+                .comment("Below this light level (0 to 15) it counts as dark by day too, as in caves.")
+                .defineInRange("darkness", 7, 0, 16);
         builder.pop();
 
         builder.comment("The War Horn: blown by an owner to rally their soldiers (Rally), also levy their workers and settlers (Call to Arms), or send everyone back (Stand Down). Sneak-use switches the call.").push("horn");
@@ -897,7 +916,7 @@ public final class AncientEmpiresConfig
     public static double windupRangeSlack = 0.5D;
     public static boolean stopMovingDuringWindup = true;
     public static double windupMoveSpeed = 0.7D;
-    public static double approachSpeed = 1.0D;
+    public static double approachSpeed = 1.12D;
     public static int pathRecalcTicks = 8;
     public static boolean requireLineOfSight = true;
     public static boolean bypassHurtCooldown = true;
@@ -930,7 +949,8 @@ public final class AncientEmpiresConfig
     public static double shieldBlockRange = 4.0D;
     public static int shieldHoldTicks = 40;
     public static boolean shieldGuardInRange = true;
-    public static int shieldDropTicks = -1;
+    public static int shieldMinBlockTicks = 12;
+    public static int shieldStrikeDelayTicks = 6;
     public static double shieldAimWatchRange = 24.0D;
     public static int shieldDisableTicks = 100;
     public static NpcShieldBash.Mode shieldBashMode = NpcShieldBash.Mode.SPARTAN;
@@ -991,7 +1011,7 @@ public final class AncientEmpiresConfig
     public static int workActionTicks = 12;
     public static int workSupplyReserve = 16;
     public static int workSearchRange = 32;
-    public static double workWalkSpeed = 0.8D;
+    public static double workWalkSpeed = 0.9D;
     public static int workAreaReach = 8;
     public static int treeDefaultSize = 13;
     public static List<? extends Integer> treeMaxSize = List.of(21, 27, 33);
@@ -1030,6 +1050,9 @@ public final class AncientEmpiresConfig
     public static boolean burningPanic = true;
     public static double medicBandageHeal = 6.0D;
     public static double medicRange = 16.0D;
+    public static boolean nightLightEnabled = true;
+    public static boolean nightLightFactionGuards = true;
+    public static int nightLightDarkness = 7;
     public static double hornRange = 48.0D;
     public static int hornCooldownTicks = 100;
     public static int hornRallyTicks = 600;
@@ -1171,7 +1194,8 @@ public final class AncientEmpiresConfig
         shieldBlockRange = SHIELD_BLOCK_RANGE.get();
         shieldHoldTicks = SHIELD_HOLD_TICKS.get();
         shieldGuardInRange = SHIELD_GUARD_IN_RANGE.get();
-        shieldDropTicks = SHIELD_DROP_TICKS.get();
+        shieldMinBlockTicks = SHIELD_MIN_BLOCK_TICKS.get();
+        shieldStrikeDelayTicks = SHIELD_STRIKE_DELAY_TICKS.get();
         shieldAimWatchRange = SHIELD_AIM_WATCH_RANGE.get();
         shieldDisableTicks = SHIELD_DISABLE_TICKS.get();
         shieldBashMode = SHIELD_BASH_MODE.get();
@@ -1270,6 +1294,9 @@ public final class AncientEmpiresConfig
         burningPanic = BURNING_PANIC.get();
         medicBandageHeal = MEDIC_BANDAGE_HEAL.get();
         medicRange = MEDIC_RANGE.get();
+        nightLightEnabled = NIGHT_LIGHT_ENABLED.get();
+        nightLightFactionGuards = NIGHT_LIGHT_FACTION_GUARDS.get();
+        nightLightDarkness = NIGHT_LIGHT_DARKNESS.get();
         hornRange = HORN_RANGE.get();
         hornCooldownTicks = HORN_COOLDOWN_TICKS.get();
         hornRallyTicks = HORN_RALLY_TICKS.get();

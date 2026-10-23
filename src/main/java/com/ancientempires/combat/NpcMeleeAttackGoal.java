@@ -112,6 +112,7 @@ public class NpcMeleeAttackGoal extends Goal
     {
         this.npc.getNavigation().stop();
         this.npc.setSwingCommitted(false);
+        this.npc.clearStrike();
         this.feintPlanned = false;
         if (this.mobCombatSwing)
         {
@@ -187,6 +188,11 @@ public class NpcMeleeAttackGoal extends Goal
         }
 
         this.npc.getNavigation().stop();
+        if (!this.npc.readyToStrike())
+        {
+            // Behind the shield: it comes down only after a committed block, then a beat before the swing.
+            return;
+        }
         this.beginWindup(next);
     }
 

@@ -27,6 +27,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
@@ -165,6 +166,11 @@ public class NpcEntity extends PathfinderMob
     private int bashReadyTick;
     /** Tick until which the shield stays down after a bash. */
     private int shieldDownUntil;
+    /** tickCount the shield last went up and came down, for the block commitment. */
+    private int shieldRaisedAt;
+    private int shieldLoweredAt = -1000;
+    /** The melee goal asked to strike: the shield stays down until the swing ends. */
+    private boolean wantsToStrike;
     /** Own feint chance; below zero means the skill tier decides. */
     private float feintChance = -1.0F;
     /** Cached skill tier from the roster rank; below zero until first asked. */
@@ -330,6 +336,11 @@ public class NpcEntity extends PathfinderMob
         return super.isAlliedTo(other);
     }
 
+    /** Movement speed: a player's walking pace at a goal multiplier of 1.0. */
+    public static final double BASE_SPEED = 0.32D;
+    /** The old base, which made NPCs walk at 80% of a player's pace; updated on load. */
+    private static final double OLD_BASE_SPEED = 0.28D;
+
     public static AttributeSupplier.Builder createAttributes()
     {
         // Player-like attack damage and attack speed so held weapons apply their
@@ -337,7 +348,9 @@ public class NpcEntity extends PathfinderMob
         // by default, so it has to be added here.
         return PathfinderMob.createMobAttributes()
                 .add(Attributes.MAX_HEALTH, 20.0D)
-                .add(Attributes.MOVEMENT_SPEED, 0.28D)
+                // A mob's speed counts twice (Mob.setSpeed also sets the forward input), so its
+                // pace goes with the square: 0.32 at a multiplier of 1.0 walks as fast as a player.
+                .add(Attributes.MOVEMENT_SPEED, BASE_SPEED)
                 .add(Attributes.ATTACK_DAMAGE, 1.0D)
                 .add(Attributes.ATTACK_KNOCKBACK, 0.4D)
                 .add(Attributes.FOLLOW_RANGE, 32.0D)
@@ -366,7 +379,7 @@ public class NpcEntity extends PathfinderMob
         this.goalSelector.addGoal(2, new NpcMeleeAttackGoal(this));
         this.goalSelector.addGoal(3, new NpcHoldPositionGoal(this, 0.9D));
         this.goalSelector.addGoal(3, new NpcUpkeepGoal(this));
-        this.goalSelector.addGoal(4, new NpcFollowOwnerGoal(this, 1.0D, 3.0F));
+        this.goalSelector.addGoal(4, new NpcFollowOwnerGoal(this, 1.12D, 3.0F));
         this.goalSelector.addGoal(4, new NpcSleepGoal(this));
         this.goalSelector.addGoal(4, new NpcPriestGoal(this));
         // Every hands-on trade (farmer, woodcutter, miner, rancher, hunter, fisher, cook) as one goal: the tool picks it.
@@ -861,9 +874,11 @@ public class NpcEntity extends PathfinderMob
 
     public void raiseShield()
     {
-        if (!this.isUsingItem() && this.hasShieldInOffhand() && !this.isShieldDisabled() && this.tickCount >= this.shieldDownUntil)
+        if (!this.isUsingItem() && this.hasShieldInOffhand() && !this.isShieldDisabled() && this.tickCount >= this.shieldDownUntil
+                && !this.wantsToStrike)
         {
             this.startUsingItem(InteractionHand.OFF_HAND);
+            this.shieldRaisedAt = this.tickCount;
         }
     }
 
@@ -872,23 +887,46 @@ public class NpcEntity extends PathfinderMob
         if (this.isRaisingShield())
         {
             this.stopUsingItem();
+            this.shieldLoweredAt = this.tickCount;
         }
     }
 
     /**
+     * The melee goal wants to attack. A block is a commitment: the shield comes
+     * down only once it has been up {@code shield.minBlockTicks}, stays down
+     * until the swing is over, and a swing may begin only
+     * {@code shield.strikeDelayTicks} after it came down. True once the NPC may
+     * begin its swing.
+     */
+    public boolean readyToStrike()
+    {
+        this.wantsToStrike = true;
+        if (this.isRaisingShield())
+        {
+            if (this.tickCount - this.shieldRaisedAt < AncientEmpiresConfig.shieldMinBlockTicks)
+            {
+                return false;
+            }
+            this.lowerShield();
+        }
+        return this.tickCount - this.shieldLoweredAt >= AncientEmpiresConfig.shieldStrikeDelayTicks;
+    }
+
+    /** The swing is over, or the melee goal gave up: the shield may go back up. */
+    public void clearStrike()
+    {
+        this.wantsToStrike = false;
+    }
+
+    /**
      * The NPC is committed to its own swing, so the shield stays down, as a
-     * player cannot block and attack at once. On the internal path that is only
-     * the last {@code shield.dropTicks} of the wind-up, so a guard drops for the
-     * strike and comes straight back; the Better Mob Combat path sets the flag.
+     * player cannot block and attack at once: for the whole wind-up. Before it,
+     * {@link #readyToStrike} lowers the shield and keeps it from going back up.
+     * The Better Mob Combat path sets the flag.
      */
     public boolean isSwingCommitted()
     {
-        if (this.swingCommitted)
-        {
-            return true;
-        }
-        int drop = AncientEmpiresConfig.shieldDropTicks;
-        return this.attackWindowOpen && (drop < 0 || this.attackWindupRemaining <= drop);
+        return this.swingCommitted || this.attackWindowOpen;
     }
 
     public void setSwingCommitted(boolean committed)
@@ -1704,6 +1742,7 @@ public class NpcEntity extends PathfinderMob
      */
     private ItemStack createPackedItem()
     {
+        NpcNightLight.stripIssued(this);
         NpcRoster.Entry entry = this.rosterEntry();
         Item egg = entry == null ? null : ModItems.eggFor(entry.id());
         if (egg == null)
@@ -2007,6 +2046,7 @@ public class NpcEntity extends PathfinderMob
      */
     public void completeSwing(int cooldownTicks)
     {
+        this.wantsToStrike = false;
         this.comboIndex++;
         this.ticksSinceSwing = 0;
         this.lastSwingCooldown = Math.max(1, cooldownTicks);
@@ -2043,6 +2083,7 @@ public class NpcEntity extends PathfinderMob
 
     public void closeAttackWindow()
     {
+        this.wantsToStrike = false;
         this.attackWindowOpen = false;
         this.attackWindupRemaining = 0;
         this.attackAnimation = null;
@@ -2200,6 +2241,10 @@ public class NpcEntity extends PathfinderMob
         this.mount.tick();
         this.targetMemory.tick();
         this.sidearm.tick();
+        if ((this.tickCount + this.getId()) % NpcNightLight.CHECK_TICKS == 0)
+        {
+            NpcNightLight.update(this);
+        }
         if ((this.tickCount + this.getId()) % NpcStatus.UPDATE_TICKS == 0)
         {
             this.updateStatus();
@@ -2335,6 +2380,7 @@ public class NpcEntity extends PathfinderMob
     @Override
     protected void dropCustomDeathLoot(DamageSource source, int looting, boolean hitByPlayer)
     {
+        NpcNightLight.stripIssued(this);
         if (!this.keepEquipmentOnDeath)
         {
             super.dropCustomDeathLoot(source, looting, hitByPlayer);
@@ -2432,6 +2478,11 @@ public class NpcEntity extends PathfinderMob
     public void readAdditionalSaveData(CompoundTag tag)
     {
         super.readAdditionalSaveData(tag);
+        AttributeInstance speed = this.getAttribute(Attributes.MOVEMENT_SPEED);
+        if (speed != null && Math.abs(speed.getBaseValue() - OLD_BASE_SPEED) < 1.0E-6D)
+        {
+            speed.setBaseValue(BASE_SPEED);
+        }
         this.inventory.load(tag);
         // After the hands (super) and the backpack, so a saved swap can be undone.
         this.sidearm.load(tag);

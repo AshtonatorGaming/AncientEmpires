@@ -136,9 +136,9 @@ its own unless noted). Before adding behavior, check what AW did first.
   Blocked hits wear the shield; axes and Spartan's Shield Breach (`canDisableShield`)
   disable it. Guard stance (`shield.guardInRange`): the shield stays up while an enemy is
   in `blockRange`, since vanilla shields only block after 5 ticks raised (blocking only on
-  the swing played like a parry). As a player does, it comes down for the NPC's own
-  wind-up and back up after (`dropTicks` -1); a number keeps it up until that many ticks
-  before the hit instead.
+  the swing played like a parry). A block is a commitment (`NpcEntity.readyToStrike`): an NPC
+  never swings with its shield up; the shield comes down only after `minBlockTicks` (12)
+  raised, stays down through the swing, and the swing starts `strikeDelayTicks` (6) later.
 - Bash: `NpcShieldBash` mirrors Spartan Shields' player bash as a counter after a blocked
   hit. `shield.bashMode`: SPARTAN (its `shields_with_bash` tag), ALL, OFF.
 - Feint: Better Combat style, break off halfway against a guarded target, never twice in
@@ -313,6 +313,15 @@ its own unless noted). Before adding behavior, check what AW did first.
   `horn.range` answer its call (`NpcEntity.answerHorn`): Rally wakes soldiers and makes them
   follow (archers leave their posts), Call to Arms also levies settlers and workers to follow,
   Stand Down ends levies, following, and fights. Sneak-use cycles the call (`AeHornCall`).
+- Speed: a mob's speed counts twice (`Mob.setSpeed` also sets the forward input), so pace
+  goes with the square of attribute times multiplier. `BASE_SPEED` 0.32 walks at a player's
+  pace at 1.0; chasing (`approachSpeed`) and following use 1.12, a sprint. Saves with the
+  old 0.28 base are updated on load.
+- Night lights (`NpcNightLight`, `nightLight`): soldiers awake at night or in the dark
+  (below `darkness`) with a free off hand hold a torch or lantern (`ancientempires:night_lights`
+  tag), raised in `NpcModel.holdLight`. Owned ones use their backpack's and put it back by
+  day; faction guards are issued one (`AeNightLight`, stripped before death drops and
+  repack). Dynamic light mods light held items on any living thing, so no compat code.
 - Reactions: `NpcBurningGoal` (`upkeep.burningPanic`): burning and not fighting (or any
   civilian) runs for water within 8 blocks. Poses are soft dependencies: with Not Enough
   Animations, eating raises the food to the mouth; with its EMF add-on, burning flails and

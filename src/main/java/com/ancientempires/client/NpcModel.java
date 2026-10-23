@@ -1,12 +1,15 @@
 package com.ancientempires.client;
 
 import com.ancientempires.entity.npc.NpcEntity;
+import com.ancientempires.entity.npc.NpcNightLight;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.StandingAndWallBlockItem;
 import net.minecraft.world.item.UseAnim;
 import net.minecraftforge.fml.ModList;
 
@@ -73,6 +76,10 @@ public class NpcModel extends PlayerModel<NpcEntity>
         {
             posed = this.reactionPose(entity, ageInTicks);
         }
+        if (!posed && !entity.isAttackWindowOpen() && !entity.isUsingItem())
+        {
+            posed = this.holdLight(entity, ageInTicks);
+        }
         if (!posed && entity.isAttackWindowOpen() && this.attackTime <= 0.0F && !NpcCombatAnimations.attackClipOwnsArms(entity))
         {
             // Vanilla fallback wind-up: the arm drawn back until the swing at the hit.
@@ -86,6 +93,27 @@ public class NpcModel extends PlayerModel<NpcEntity>
             this.copyWear();
         }
         NpcCombatAnimations.yieldToEmf(entity, this, limbSwingAmount);
+    }
+
+    /**
+     * A night watch light in the off hand, held up as ToroQuest's guards did: a
+     * torch raised high, a lantern held out in front, with a slow sway.
+     */
+    private boolean holdLight(NpcEntity entity, float ageInTicks)
+    {
+        ItemStack light = entity.getOffhandItem();
+        if (!NpcNightLight.isLight(light))
+        {
+            return false;
+        }
+        boolean leftArm = entity.getMainArm() == HumanoidArm.RIGHT;
+        ModelPart arm = leftArm ? this.leftArm : this.rightArm;
+        float sway = Mth.sin(ageInTicks * 0.08F) * 0.05F;
+        boolean torch = light.getItem() instanceof StandingAndWallBlockItem;
+        arm.xRot = (torch ? -2.2F : -1.1F) + sway;
+        arm.yRot = leftArm ? -0.1F : 0.1F;
+        arm.zRot = (leftArm ? 1.0F : -1.0F) * (torch ? 0.15F : 0.05F);
+        return true;
     }
 
     /**
