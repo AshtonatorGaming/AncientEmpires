@@ -299,6 +299,12 @@ its own unless noted). Before adding behavior, check what AW did first.
   server every 10 ticks from state and running goals (sleep, flee, attack, follow, guard,
   upkeep, work, home or rain, hungry, levied) and synced as one byte; `NpcRenderer`
   draws it over the head (client `showStatusIcons`, `statusIconRange`).
+  A levied civilian also shows a pitchfork badge (`levied.png`), and NPCs that answered a
+  horn rally show the alarm icon for `horn.rallyTicks`.
+- War Horn (`WarHornItem`; goat horn, gold, leather): blown, the owner's NPCs within
+  `horn.range` answer its call (`NpcEntity.answerHorn`): Rally wakes soldiers and makes them
+  follow (archers leave their posts), Call to Arms also levies settlers and workers to follow,
+  Stand Down ends levies, following, and fights. Sneak-use cycles the call (`AeHornCall`).
 - Reactions: `NpcBurningGoal` (`upkeep.burningPanic`): burning and not fighting (or any
   civilian) runs for water within 8 blocks. Poses are soft dependencies: with Not Enough
   Animations, eating raises the food to the mouth; with its EMF add-on, burning flails and

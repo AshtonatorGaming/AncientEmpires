@@ -62,6 +62,10 @@ public enum NpcStatus
         {
             return ATTACK;
         }
+        if (npc.isRallied())
+        {
+            return ALARM;
+        }
         if (runs(running, NpcFollowOwnerGoal.class))
         {
             return FOLLOW;
@@ -89,10 +93,6 @@ public enum NpcStatus
         if (npc.isHungry())
         {
             return HUNGRY;
-        }
-        if (npc.isLevied())
-        {
-            return ALARM;
         }
         return NONE;
     }

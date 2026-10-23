@@ -5,6 +5,7 @@ import com.ancientempires.block.WorksiteBlockEntity;
 import com.ancientempires.entity.npc.NpcRoster;
 import com.ancientempires.item.BandageItem;
 import com.ancientempires.item.NpcSpawnEggItem;
+import com.ancientempires.item.WarHornItem;
 import com.ancientempires.item.WorksiteUpgradeItem;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.BlockItem;
@@ -38,7 +39,10 @@ public final class ModItems
             () -> new WorksiteUpgradeItem(WorksiteBlockEntity.UpgradeKind.QUARRY, 1, new Item.Properties().stacksTo(16)));
     public static final RegistryObject<Item> UPGRADE_QUARRY_LARGE = ITEMS.register("worksite_upgrade_quarry_large",
             () -> new WorksiteUpgradeItem(WorksiteBlockEntity.UpgradeKind.QUARRY, 2, new Item.Properties().stacksTo(16)));
-    public static final RegistryObject<Item> SETTLERS_POST =ITEMS.register("settlers_post",
+    /** Rallies, calls to arms, or stands down the owner's NPCs in range. */
+    public static final RegistryObject<Item> WAR_HORN = ITEMS.register("war_horn",
+            () -> new WarHornItem(new Item.Properties().stacksTo(1)));
+    public static final RegistryObject<Item> SETTLERS_POST = ITEMS.register("settlers_post",
             () -> new BlockItem(ModBlocks.SETTLERS_POST.get(), new Item.Properties()));
     public static final RegistryObject<Item> CROP_FARM = ITEMS.register("crop_farm",
             () -> new BlockItem(ModBlocks.CROP_FARM.get(), new Item.Properties()));

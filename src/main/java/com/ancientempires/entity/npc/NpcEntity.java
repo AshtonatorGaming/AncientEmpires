@@ -9,6 +9,7 @@ import com.ancientempires.combat.NpcMeleeAttackGoal;
 import com.ancientempires.combat.WeaponClassifier;
 import com.ancientempires.config.AncientEmpiresConfig;
 import com.ancientempires.inventory.NpcMenu;
+import com.ancientempires.item.WarHornItem;
 import com.ancientempires.registry.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -175,6 +176,8 @@ public class NpcEntity extends PathfinderMob
     private String rosterSubtype;
     /** Tick until which a cornered civilian fights instead of running. */
     private int standGroundUntil;
+    /** tickCount until which a horn rally shows; not saved. */
+    private int rallyUntil;
     /** The path this NPC was given; null means the roster rank decides. */
     @Nullable
     private NpcPath chosenPath;
@@ -1118,6 +1121,45 @@ public class NpcEntity extends PathfinderMob
     public boolean isLevied()
     {
         return this.entityData.get(DATA_LEVIED) && this.isCivilian();
+    }
+
+    /**
+     * The owner's War Horn. Rally: soldiers wake, drop their posts, and follow.
+     * Call to arms: the same, and settlers and workers are levied to follow and
+     * fight too. Stand down: levies end, nobody follows, and fights are broken
+     * off, so everyone goes home or back to work.
+     */
+    public void answerHorn(WarHornItem.Call call)
+    {
+        if (this.isSleeping())
+        {
+            this.stopSleeping();
+        }
+        if (call == WarHornItem.Call.STAND_DOWN)
+        {
+            this.setLevied(false);
+            this.setFollowing(false);
+            this.setTarget(null);
+            this.rallyUntil = 0;
+            return;
+        }
+        if (!this.getNpcPath().combat())
+        {
+            if (call != WarHornItem.Call.CALL_TO_ARMS || !this.isCivilian())
+            {
+                return;
+            }
+            this.setLevied(true);
+        }
+        this.setHoldingPosition(false);
+        this.setFollowing(true);
+        this.rallyUntil = this.tickCount + AncientEmpiresConfig.hornRallyTicks;
+    }
+
+    /** Answered a rally lately (the alarm icon). */
+    public boolean isRallied()
+    {
+        return this.tickCount < this.rallyUntil;
     }
 
     /**

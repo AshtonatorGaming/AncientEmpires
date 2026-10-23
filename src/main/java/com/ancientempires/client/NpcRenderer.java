@@ -121,6 +121,7 @@ public class NpcRenderer extends HumanoidMobRenderer<NpcEntity, NpcModel>
 
     /** One texture per status, built once. */
     private static final ResourceLocation[] STATUS_ICONS = statusIcons();
+    private static final ResourceLocation LEVIED_ICON = ResourceLocation.fromNamespaceAndPath(AncientEmpires.MOD_ID, "textures/gui/status/levied.png");
 
     private static ResourceLocation[] statusIcons()
     {
@@ -144,7 +145,9 @@ public class NpcRenderer extends HumanoidMobRenderer<NpcEntity, NpcModel>
     private void renderStatus(NpcEntity entity, PoseStack pose, MultiBufferSource buffer, int packedLight)
     {
         NpcStatus status = entity.getStatus();
-        if (!AncientEmpiresClientConfig.showStatusIcons || status == NpcStatus.NONE || entity.isNameplateSuppressed() || entity.isInvisible())
+        boolean levied = entity.isLevied();
+        if (!AncientEmpiresClientConfig.showStatusIcons || (status == NpcStatus.NONE && !levied) || entity.isNameplateSuppressed()
+                || entity.isInvisible())
         {
             return;
         }
@@ -159,14 +162,30 @@ public class NpcRenderer extends HumanoidMobRenderer<NpcEntity, NpcModel>
         pose.mulPose(this.entityRenderDispatcher.cameraOrientation());
         pose.scale(-0.4F, -0.4F, 0.4F);
         Matrix4f matrix = pose.last().pose();
-        VertexConsumer consumer = buffer.getBuffer(RenderType.text(STATUS_ICONS[status.ordinal()]));
         // Readable in the dark, as a nametag is.
         int light = LightTexture.pack(Math.max(10, LightTexture.block(packedLight)), LightTexture.sky(packedLight));
-        consumer.vertex(matrix, -0.5F, -0.5F, 0.0F).color(255, 255, 255, 255).uv(0.0F, 0.0F).uv2(light).endVertex();
-        consumer.vertex(matrix, -0.5F, 0.5F, 0.0F).color(255, 255, 255, 255).uv(0.0F, 1.0F).uv2(light).endVertex();
-        consumer.vertex(matrix, 0.5F, 0.5F, 0.0F).color(255, 255, 255, 255).uv(1.0F, 1.0F).uv2(light).endVertex();
-        consumer.vertex(matrix, 0.5F, -0.5F, 0.0F).color(255, 255, 255, 255).uv(1.0F, 0.0F).uv2(light).endVertex();
+        if (status != NpcStatus.NONE)
+        {
+            icon(buffer, STATUS_ICONS[status.ordinal()], matrix, 0.0F, 0.0F, 1.0F, light);
+        }
+        if (levied)
+        {
+            // A levied worker or settler: a pitchfork badge beside what it is doing, or alone.
+            boolean alone = status == NpcStatus.NONE;
+            icon(buffer, LEVIED_ICON, matrix, alone ? 0.0F : 0.75F, alone ? 0.0F : 0.2F, alone ? 1.0F : 0.6F, light);
+        }
         pose.popPose();
+    }
+
+    /** One square icon centered at ({@code x}, {@code y}), {@code size} across. */
+    private static void icon(MultiBufferSource buffer, ResourceLocation texture, Matrix4f matrix, float x, float y, float size, int light)
+    {
+        VertexConsumer consumer = buffer.getBuffer(RenderType.text(texture));
+        float half = size / 2.0F;
+        consumer.vertex(matrix, x - half, y - half, 0.0F).color(255, 255, 255, 255).uv(0.0F, 0.0F).uv2(light).endVertex();
+        consumer.vertex(matrix, x - half, y + half, 0.0F).color(255, 255, 255, 255).uv(0.0F, 1.0F).uv2(light).endVertex();
+        consumer.vertex(matrix, x + half, y + half, 0.0F).color(255, 255, 255, 255).uv(1.0F, 1.0F).uv2(light).endVertex();
+        consumer.vertex(matrix, x + half, y - half, 0.0F).color(255, 255, 255, 255).uv(1.0F, 0.0F).uv2(light).endVertex();
     }
 
     /**

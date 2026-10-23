@@ -180,6 +180,9 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.BooleanValue BURNING_PANIC;
     private static final ForgeConfigSpec.DoubleValue MEDIC_BANDAGE_HEAL;
     private static final ForgeConfigSpec.DoubleValue MEDIC_RANGE;
+    private static final ForgeConfigSpec.DoubleValue HORN_RANGE;
+    private static final ForgeConfigSpec.IntValue HORN_COOLDOWN_TICKS;
+    private static final ForgeConfigSpec.IntValue HORN_RALLY_TICKS;
     private static final ForgeConfigSpec.DoubleValue MEDIC_HEAL_BELOW;
     private static final ForgeConfigSpec.IntValue MEDIC_BIND_TICKS;
     private static final ForgeConfigSpec.IntValue MEDIC_COOLDOWN_TICKS;
@@ -729,6 +732,18 @@ public final class AncientEmpiresConfig
                 .defineEnum("keepOnDeath", KeepOnDeath.NONE);
         builder.pop();
 
+        builder.comment("The War Horn: blown by an owner to rally their soldiers (Rally), also levy their workers and settlers (Call to Arms), or send everyone back (Stand Down). Sneak-use switches the call.").push("horn");
+        HORN_RANGE = builder
+                .comment("Blocks from the horn within which the owner's NPCs answer it.")
+                .defineInRange("range", 48.0D, 8.0D, 256.0D);
+        HORN_COOLDOWN_TICKS = builder
+                .comment("Ticks before the horn can be blown again.")
+                .defineInRange("cooldownTicks", 100, 0, 1200);
+        HORN_RALLY_TICKS = builder
+                .comment("Ticks an NPC that answered a rally shows the alarm icon.")
+                .defineInRange("rallyTicks", 600, 20, 6000);
+        builder.pop();
+
         builder.comment("Medics: soldiers with bandages in the off hand.").push("medic");
         MEDIC_BANDAGE_HEAL = builder
                 .comment("Health one bandage restores, for a medic's patient or a player using one.")
@@ -1015,6 +1030,9 @@ public final class AncientEmpiresConfig
     public static boolean burningPanic = true;
     public static double medicBandageHeal = 6.0D;
     public static double medicRange = 16.0D;
+    public static double hornRange = 48.0D;
+    public static int hornCooldownTicks = 100;
+    public static int hornRallyTicks = 600;
     public static double medicHealBelow = 0.7D;
     public static int medicBindTicks = 20;
     public static int medicCooldownTicks = 40;
@@ -1252,6 +1270,9 @@ public final class AncientEmpiresConfig
         burningPanic = BURNING_PANIC.get();
         medicBandageHeal = MEDIC_BANDAGE_HEAL.get();
         medicRange = MEDIC_RANGE.get();
+        hornRange = HORN_RANGE.get();
+        hornCooldownTicks = HORN_COOLDOWN_TICKS.get();
+        hornRallyTicks = HORN_RALLY_TICKS.get();
         medicHealBelow = MEDIC_HEAL_BELOW.get();
         medicBindTicks = MEDIC_BIND_TICKS.get();
         medicCooldownTicks = MEDIC_COOLDOWN_TICKS.get();
