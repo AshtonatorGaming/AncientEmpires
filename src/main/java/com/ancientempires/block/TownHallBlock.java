@@ -2,17 +2,17 @@ package com.ancientempires.block;
 
 import com.ancientempires.config.AncientEmpiresConfig;
 import com.ancientempires.entity.npc.NpcEntity;
+import com.ancientempires.inventory.WorksiteMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.ChestMenu;
-import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
@@ -21,6 +21,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -87,8 +88,8 @@ public final class TownHallBlock extends BaseEntityBlock
             this.showStatus(server, pos, hall, player);
             return InteractionResult.CONSUME;
         }
-        player.openMenu(new SimpleMenuProvider((id, inventory, opener) ->
-                new ChestMenu(MenuType.GENERIC_9x2, id, inventory, hall.store(), 2), state.getBlock().getName()));
+        NetworkHooks.openScreen((ServerPlayer) player, new SimpleMenuProvider((id, inventory, opener) ->
+                new WorksiteMenu(id, inventory, hall), state.getBlock().getName()), pos);
         return InteractionResult.CONSUME;
     }
 

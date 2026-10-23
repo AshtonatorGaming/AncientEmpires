@@ -43,7 +43,7 @@ public final class NpcFarmerGoal extends NpcWorkGoal<CropFarmBlockEntity>
     @Override
     protected boolean isSupply(ItemStack stack)
     {
-        return isSeed(stack);
+        return isSeed(stack) || isBoneMeal(stack);
     }
 
     /** Harvest first, then plant (fetching seeds if needed), then till, then carry the harvest home. */
@@ -68,7 +68,7 @@ public final class NpcFarmerGoal extends NpcWorkGoal<CropFarmBlockEntity>
         }
         if (farm.hasWork(CropFarmBlockEntity.Task.PLANT))
         {
-            if (this.supplySlot() >= 0)
+            if (this.slotOf(NpcFarmerGoal::isSeed) >= 0)
             {
                 tile = farm.claim(CropFarmBlockEntity.Task.PLANT, id, at);
                 if (tile != null)
@@ -76,7 +76,7 @@ public final class NpcFarmerGoal extends NpcWorkGoal<CropFarmBlockEntity>
                     return this.assign(PLANT, tile);
                 }
             }
-            else if (this.tripToFetch())
+            else if (this.tripToFetch(NpcFarmerGoal::isSeed))
             {
                 return true;
             }
@@ -124,10 +124,10 @@ public final class NpcFarmerGoal extends NpcWorkGoal<CropFarmBlockEntity>
         }
     }
 
-    /** Sets a carried seed on bare farmland. */
+    /** Sets a carried seed on bare farmland, with a dose of bone meal if it has any. */
     private void plant(ServerLevel level, BlockPos pos)
     {
-        int slot = this.supplySlot();
+        int slot = this.slotOf(NpcFarmerGoal::isSeed);
         if (slot < 0 || !level.getBlockState(pos).isAir())
         {
             return;
@@ -143,6 +143,7 @@ public final class NpcFarmerGoal extends NpcWorkGoal<CropFarmBlockEntity>
         level.playSound(null, pos, crop.getSoundType().getPlaceSound(), SoundSource.BLOCKS, 1.0F, 1.0F);
         seeds.shrink(1);
         this.npc.getInventory().setItem(slot, seeds);
+        this.boneMeal(level, pos);
     }
 
     /** Turns grass or dirt into farmland, as a hoe would. */
@@ -160,7 +161,7 @@ public final class NpcFarmerGoal extends NpcWorkGoal<CropFarmBlockEntity>
     }
 
     /** Anything that plants as a crop: wheat, carrot, potato, beetroot, pumpkin and melon seeds, modded crops. */
-    static boolean isSeed(ItemStack stack)
+    public static boolean isSeed(ItemStack stack)
     {
         if (stack.isEmpty() || !(stack.getItem() instanceof BlockItem item) || !(item.getBlock() instanceof IPlantable plant))
         {

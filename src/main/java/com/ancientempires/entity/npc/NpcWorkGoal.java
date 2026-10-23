@@ -11,15 +11,21 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.item.BoneMealItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.HopperBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Predicate;
 
 /**
  * A worker at its worksite, by hand. Subclasses say which tool marks the
@@ -291,7 +297,7 @@ public abstract class NpcWorkGoal<T extends WorksiteBlockEntity> extends Goal
         boolean again = false;
         switch (this.kind)
         {
-            case UNLOAD -> this.unload(this.site.store());
+            case UNLOAD -> this.unload(this.site);
             case FETCH -> this.fetch(this.site.store());
             default -> again = this.act(level, this.kind, at);
         }
@@ -418,7 +424,13 @@ public abstract class NpcWorkGoal<T extends WorksiteBlockEntity> extends Goal
 
     protected final boolean tripToFetch()
     {
-        if (this.site != null && this.storeHas(this.site.store()))
+        return this.tripToFetch(this::isSupply);
+    }
+
+    /** The trip to fetch supplies, only when the store has what is needed (seeds, not just bone meal). */
+    protected final boolean tripToFetch(Predicate<ItemStack> needed)
+    {
+        if (this.site != null && this.storeHas(this.site.store(), needed))
         {
             return this.assign(FETCH, this.site.getBlockPos());
         }
@@ -456,23 +468,33 @@ public abstract class NpcWorkGoal<T extends WorksiteBlockEntity> extends Goal
         }
     }
 
-    /** Puts the yield in the store, keeping {@code work.seedReserve} of the supplies. */
-    private void unload(Container store)
+    /**
+     * Puts the yield in the worksite (supply slots first for supplies), keeping
+     * {@code work.supplyReserve} of each supply. Gathered gear (a fished bow, a
+     * saddle) goes too; the worker's own gear stays.
+     */
+    private void unload(WorksiteBlockEntity site)
     {
         NpcInventory inventory = this.npc.getInventory();
-        int kept = 0;
+        Map<Item, Integer> kept = new HashMap<>();
         for (int slot = NpcInventory.BACKPACK_START; slot < NpcInventory.SLOT_COUNT; slot++)
         {
             ItemStack stack = inventory.getItem(slot);
-            if (stack.isEmpty() || !isGoods(stack))
+            boolean gathered = isGathered(stack);
+            if (stack.isEmpty() || (!isGoods(stack) && !gathered))
             {
                 continue;
             }
             ItemStack moving = stack.copy();
-            if (this.isSupply(stack) && kept < AncientEmpiresConfig.workSupplyReserve)
+            if (gathered)
             {
-                int keep = Math.min(stack.getCount(), AncientEmpiresConfig.workSupplyReserve - kept);
-                kept += keep;
+                moving.removeTagKey(GATHERED_KEY);
+            }
+            else if (this.isSupply(stack))
+            {
+                int already = kept.getOrDefault(stack.getItem(), 0);
+                int keep = Math.min(stack.getCount(), Math.max(0, AncientEmpiresConfig.workSupplyReserve - already));
+                kept.put(stack.getItem(), already + keep);
                 moving.shrink(keep);
                 if (moving.isEmpty())
                 {
@@ -480,7 +502,7 @@ public abstract class NpcWorkGoal<T extends WorksiteBlockEntity> extends Goal
                 }
             }
             int moved = moving.getCount();
-            ItemStack rest = HopperBlockEntity.addItem(null, store, moving, null);
+            ItemStack rest = site.deposit(moving);
             stack.shrink(moved - rest.getCount());
             inventory.setItem(slot, stack);
             if (!rest.isEmpty())
@@ -489,38 +511,72 @@ public abstract class NpcWorkGoal<T extends WorksiteBlockEntity> extends Goal
                 this.storeFullUntil = this.npc.tickCount + STORE_FULL_WAIT;
             }
         }
+        if (this.backpackFull())
+        {
+            // Nothing could go (all gear, or the store is full): do not walk straight back.
+            this.storeFullUntil = this.npc.tickCount + STORE_FULL_WAIT;
+        }
         this.npc.level().playSound(null, this.npc.blockPosition(), SoundEvents.BARREL_CLOSE, SoundSource.BLOCKS, 0.5F, 1.2F);
     }
 
-    /** Takes supplies from the store, up to {@code work.seedReserve}. */
+    /** Takes supplies from the store, up to {@code work.supplyReserve} of each. */
     private void fetch(Container store)
     {
-        int wanted = AncientEmpiresConfig.workSupplyReserve;
-        for (int slot = 0; slot < store.getContainerSize() && wanted > 0; slot++)
+        Map<Item, Integer> carried = new HashMap<>();
+        NpcInventory inventory = this.npc.getInventory();
+        for (int slot = NpcInventory.BACKPACK_START; slot < NpcInventory.SLOT_COUNT; slot++)
+        {
+            ItemStack stack = inventory.getItem(slot);
+            if (this.isSupply(stack))
+            {
+                carried.merge(stack.getItem(), stack.getCount(), Integer::sum);
+            }
+        }
+        for (int slot = 0; slot < store.getContainerSize(); slot++)
         {
             ItemStack stack = store.getItem(slot);
             if (stack.isEmpty() || !this.isSupply(stack))
             {
                 continue;
             }
+            int wanted = AncientEmpiresConfig.workSupplyReserve - carried.getOrDefault(stack.getItem(), 0);
+            if (wanted <= 0)
+            {
+                continue;
+            }
             ItemStack taken = stack.split(Math.min(wanted, stack.getCount()));
-            wanted -= taken.getCount();
             ItemStack rest = this.pocket(taken);
+            carried.merge(taken.getItem(), taken.getCount() - rest.getCount(), Integer::sum);
+            stack.grow(rest.getCount());
+            store.setItem(slot, stack);
             if (!rest.isEmpty())
             {
-                stack.grow(rest.getCount());
-                wanted = 0;
+                break;
             }
-            store.setItem(slot, stack);
         }
         this.npc.level().playSound(null, this.npc.blockPosition(), SoundEvents.BARREL_OPEN, SoundSource.BLOCKS, 0.5F, 1.2F);
     }
 
-    /** Adds to the backpack, filling matching stacks first. Returns what did not fit. */
+    /** Marks gear a worker gathered (a fished bow or saddle) so it is unloaded, not kept as its own. */
+    private static final String GATHERED_KEY = "AeGathered";
+
+    private static boolean isGathered(ItemStack stack)
+    {
+        return !stack.isEmpty() && stack.getTag() != null && stack.getTag().getBoolean(GATHERED_KEY);
+    }
+
+    /**
+     * Adds gathered goods to the backpack, filling matching stacks first.
+     * Returns what did not fit. Gathered gear is marked to be unloaded.
+     */
     protected final ItemStack pocket(ItemStack stack)
     {
         NpcInventory inventory = this.npc.getInventory();
         ItemStack rest = stack.copy();
+        if (!isGoods(rest) && !rest.isEmpty())
+        {
+            rest.getOrCreateTag().putBoolean(GATHERED_KEY, true);
+        }
         for (int pass = 0; pass < 2 && !rest.isEmpty(); pass++)
         {
             for (int slot = NpcInventory.BACKPACK_START; slot < NpcInventory.SLOT_COUNT && !rest.isEmpty(); slot++)
@@ -543,28 +599,37 @@ public abstract class NpcWorkGoal<T extends WorksiteBlockEntity> extends Goal
         return rest;
     }
 
+    /**
+     * Time to unload: at most one empty backpack slot left. One is kept free
+     * because a single action can bring several new kinds at once (a catch, a
+     * mined ore's drops), and what does not fit would fall on the ground.
+     */
     protected final boolean backpackFull()
     {
         NpcInventory inventory = this.npc.getInventory();
+        int empty = 0;
         for (int slot = NpcInventory.BACKPACK_START; slot < NpcInventory.SLOT_COUNT; slot++)
         {
-            ItemStack stack = inventory.getItem(slot);
-            if (stack.isEmpty() || (isGoods(stack) && stack.getCount() < stack.getMaxStackSize()))
+            if (inventory.getItem(slot).isEmpty())
             {
-                return false;
+                empty++;
             }
         }
-        return true;
+        return empty <= 1;
     }
 
     /** Carries anything to unload: yield, or supplies beyond the reserve. */
     protected final boolean carriesGoods()
     {
         NpcInventory inventory = this.npc.getInventory();
-        int supplies = 0;
+        Map<Item, Integer> supplies = new HashMap<>();
         for (int slot = NpcInventory.BACKPACK_START; slot < NpcInventory.SLOT_COUNT; slot++)
         {
             ItemStack stack = inventory.getItem(slot);
+            if (isGathered(stack))
+            {
+                return true;
+            }
             if (stack.isEmpty() || !isGoods(stack))
             {
                 continue;
@@ -573,9 +638,12 @@ public abstract class NpcWorkGoal<T extends WorksiteBlockEntity> extends Goal
             {
                 return true;
             }
-            supplies += stack.getCount();
+            if (supplies.merge(stack.getItem(), stack.getCount(), Integer::sum) > AncientEmpiresConfig.workSupplyReserve)
+            {
+                return true;
+            }
         }
-        return supplies > AncientEmpiresConfig.workSupplyReserve;
+        return false;
     }
 
     /**
@@ -587,6 +655,42 @@ public abstract class NpcWorkGoal<T extends WorksiteBlockEntity> extends Goal
         if (AncientEmpiresConfig.workToolWear > 0.0D && this.npc.getRandom().nextDouble() < AncientEmpiresConfig.workToolWear)
         {
             this.npc.getMainHandItem().hurtAndBreak(1, this.npc, npc -> npc.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+        }
+    }
+
+    /** The backpack slot of the first item that matches, or -1. */
+    protected final int slotOf(Predicate<ItemStack> wanted)
+    {
+        NpcInventory inventory = this.npc.getInventory();
+        for (int slot = NpcInventory.BACKPACK_START; slot < NpcInventory.SLOT_COUNT; slot++)
+        {
+            if (!inventory.getItem(slot).isEmpty() && wanted.test(inventory.getItem(slot)))
+            {
+                return slot;
+            }
+        }
+        return -1;
+    }
+
+    protected static boolean isBoneMeal(ItemStack stack)
+    {
+        return stack.is(Items.BONE_MEAL);
+    }
+
+    /** One dose of carried bone meal on a fresh planting, as a player would give it. */
+    protected final void boneMeal(ServerLevel level, BlockPos pos)
+    {
+        int slot = this.slotOf(NpcWorkGoal::isBoneMeal);
+        if (slot < 0)
+        {
+            return;
+        }
+        ItemStack meal = this.npc.getInventory().getItem(slot);
+        if (BoneMealItem.growCrop(meal, level, pos))
+        {
+            // The same green sparks a player's bone meal makes.
+            level.levelEvent(LevelEvent.PARTICLES_AND_SOUND_PLANT_GROWTH, pos, 0);
+            this.npc.getInventory().setItem(slot, meal);
         }
     }
 
@@ -604,11 +708,11 @@ public abstract class NpcWorkGoal<T extends WorksiteBlockEntity> extends Goal
         return -1;
     }
 
-    private boolean storeHas(Container store)
+    private boolean storeHas(Container store, Predicate<ItemStack> needed)
     {
         for (int slot = 0; slot < store.getContainerSize(); slot++)
         {
-            if (this.isSupply(store.getItem(slot)))
+            if (needed.test(store.getItem(slot)))
             {
                 return true;
             }

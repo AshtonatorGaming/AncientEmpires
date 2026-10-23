@@ -1,8 +1,11 @@
 package com.ancientempires.block;
 
 import com.ancientempires.config.AncientEmpiresConfig;
+import com.ancientempires.entity.npc.NpcFarmerGoal;
 import com.ancientempires.registry.ModBlockEntities;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CropBlock;
@@ -44,6 +47,17 @@ public final class CropFarmBlockEntity extends WorksiteBlockEntity
     protected List<? extends Integer> maxSizes()
     {
         return AncientEmpiresConfig.farmMaxSize;
+    }
+
+    private static final List<Supply> SUPPLIES = List.of(
+            new Supply("seeds", NpcFarmerGoal::isSeed, () -> new ItemStack(Items.WHEAT_SEEDS), 5),
+            new Supply("bone_meal", stack -> stack.is(Items.BONE_MEAL), () -> new ItemStack(Items.BONE_MEAL), 4));
+
+    /** Seeds for farmers to plant, and bone meal they give each new crop. */
+    @Override
+    public List<Supply> supplies()
+    {
+        return SUPPLIES;
     }
 
     @Nullable

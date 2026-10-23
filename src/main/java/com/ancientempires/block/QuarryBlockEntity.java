@@ -7,7 +7,12 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
@@ -35,6 +40,8 @@ public final class QuarryBlockEntity extends WorksiteBlockEntity
 {
     /** Blocks a stair step may already be; anything else is relaid. */
     public static final TagKey<Block> STAIR_STONE = BlockTags.create(ResourceLocation.fromNamespaceAndPath("ancientempires", "stair_stone"));
+    /** Cheap stone a miner lays in the stair: cobblestone, sandstone, and the like, never smooth stone. */
+    public static final TagKey<Item> STAIR_STONE_ITEMS = ItemTags.create(ResourceLocation.fromNamespaceAndPath("ancientempires", "stair_stone"));
     /** Scans a finished layer waits for its stair to be relaid before moving down anyway. */
     private static final int STAIR_WAIT_SCANS = 3;
 
@@ -64,6 +71,17 @@ public final class QuarryBlockEntity extends WorksiteBlockEntity
     protected List<? extends Integer> maxSizes()
     {
         return AncientEmpiresConfig.quarryMaxSize;
+    }
+
+    private static final List<Supply> SUPPLIES = List.of(
+            new Supply("stair_stone", stack -> stack.is(STAIR_STONE_ITEMS) && stack.getItem() instanceof BlockItem,
+                    () -> new ItemStack(Items.COBBLESTONE), 9));
+
+    /** Cheap stone for miners to relay the stair with. */
+    @Override
+    public List<Supply> supplies()
+    {
+        return SUPPLIES;
     }
 
     @Override

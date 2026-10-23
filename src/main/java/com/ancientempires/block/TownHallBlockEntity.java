@@ -8,13 +8,16 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -50,6 +53,29 @@ public final class TownHallBlockEntity extends WorksiteBlockEntity
     protected List<? extends Integer> maxSizes()
     {
         return List.of(1);
+    }
+
+    private static final List<Supply> SUPPLIES = List.of(
+            new Supply("food", stack -> stack.isEdible() && rations(stack) > 0.0D, () -> new ItemStack(ModItems.FOOD_BUNDLE.get()), 6),
+            new Supply("offering", TownHallBlockEntity::isOffering, TownHallBlockEntity::offeringIcon, 3));
+
+    /** Food for upkeep, and the priest's offering for a revival ({@code priest.costItem}). */
+    @Override
+    public List<Supply> supplies()
+    {
+        return SUPPLIES;
+    }
+
+    private static boolean isOffering(ItemStack stack)
+    {
+        ResourceLocation id = ForgeRegistries.ITEMS.getKey(stack.getItem());
+        return id != null && id.toString().equals(AncientEmpiresConfig.priestCostItem);
+    }
+
+    private static ItemStack offeringIcon()
+    {
+        Item item = ForgeRegistries.ITEMS.getValue(ResourceLocation.tryParse(AncientEmpiresConfig.priestCostItem));
+        return new ItemStack(item == null ? Items.GOLD_INGOT : item);
     }
 
     /** No area: it works in place. */

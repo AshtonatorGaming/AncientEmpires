@@ -198,6 +198,14 @@ its own unless noted). Before adding behavior, check what AW did first.
   upgrades (AW's 16/32/64) for the quarry only; right-click the block to fit one, large
   replaces medium (returned), breaking the block drops it (`SizeTier`). Kitchen and Town
   Hall have no area (`UpgradeKind.NONE`).
+- Worksite storage (`WorksiteMenu`, `WorksiteScreen`, parchment style like the NPC inventory): a
+  double chest (`STORE_SIZE` 54) plus filtered supply slots after it (`Supply` groups: crop farm
+  seeds and bone meal, tree farm saplings and bone meal, pen feed, quarry stair stone, kitchen
+  fuel and raw food, Town Hall food and the priest's offering), each labelled with a ghost
+  icon. `deposit` puts supplies in their slots first; hoppers obey the filters. Workers keep
+  `supplyReserve` of each supply item, unload when one backpack slot is left, and unload
+  gathered gear too (marked `AeGathered` by `pocket`). Farmers and woodcutters give each new
+  planting a dose of carried bone meal.
 - Tool wear: every trade wears its tool through `NpcWorkGoal.wearTool`, at
   `work.toolWear` (0.2) of a player's rate; AW's workers did not wear tools at all.
 - Woodcutter: a Worker-path NPC with an axe at its owner's Tree Farm. It stands at a

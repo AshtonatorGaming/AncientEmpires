@@ -8,6 +8,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SmokingRecipe;
 import net.minecraft.world.level.Level;
@@ -45,6 +46,27 @@ public final class KitchenBlockEntity extends WorksiteBlockEntity
     protected List<? extends Integer> maxSizes()
     {
         return List.of(1);
+    }
+
+    /** Fuel and raw food. Raw food is whatever a smoker cooks, so it needs the level; asked only once placed. */
+    private final List<Supply> supplies = List.of(
+            new Supply("fuel", KitchenBlockEntity::isFuel, () -> new ItemStack(Items.CHARCOAL), 3),
+            new Supply("raw_food", stack -> this.level != null && smoking(this.level, stack).isPresent(), () -> new ItemStack(Items.BEEF), 6));
+
+    @Override
+    public List<Supply> supplies()
+    {
+        return this.supplies == null ? KITCHEN_LAYOUT : this.supplies;
+    }
+
+    /** The same slot counts, for the moment of construction before the field is set. */
+    private static final List<Supply> KITCHEN_LAYOUT = List.of(
+            new Supply("fuel", KitchenBlockEntity::isFuel, () -> new ItemStack(Items.CHARCOAL), 3),
+            new Supply("raw_food", stack -> false, () -> new ItemStack(Items.BEEF), 6));
+
+    private static boolean isFuel(ItemStack stack)
+    {
+        return !stack.isEmpty() && ForgeHooks.getBurnTime(stack, RecipeType.SMOKING) > 0 && stack.getFoodProperties(null) == null;
     }
 
     /** No area: it works in place. */
@@ -170,7 +192,7 @@ public final class KitchenBlockEntity extends WorksiteBlockEntity
         for (int slot = 0; slot < store.getContainerSize(); slot++)
         {
             ItemStack stack = store.getItem(slot);
-            if (!stack.isEmpty() && ForgeHooks.getBurnTime(stack, RecipeType.SMOKING) > 0 && stack.getFoodProperties(null) == null)
+            if (isFuel(stack))
             {
                 return slot;
             }

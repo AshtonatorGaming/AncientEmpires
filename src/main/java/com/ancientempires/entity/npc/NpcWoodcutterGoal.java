@@ -42,6 +42,12 @@ public final class NpcWoodcutterGoal extends NpcWorkGoal<TreeFarmBlockEntity>
     @Override
     protected boolean isSupply(ItemStack stack)
     {
+        return isSapling(stack) || isBoneMeal(stack);
+    }
+
+    /** A sapling that plants as a block. */
+    public static boolean isSapling(ItemStack stack)
+    {
         return stack.is(ItemTags.SAPLINGS) && stack.getItem() instanceof BlockItem;
     }
 
@@ -72,7 +78,7 @@ public final class NpcWoodcutterGoal extends NpcWorkGoal<TreeFarmBlockEntity>
         }
         if (farm.hasWork(TreeFarmBlockEntity.Task.PLANT))
         {
-            if (this.supplySlot() >= 0)
+            if (this.slotOf(NpcWoodcutterGoal::isSapling) >= 0)
             {
                 tile = farm.claim(TreeFarmBlockEntity.Task.PLANT, id, at);
                 if (tile != null)
@@ -80,7 +86,7 @@ public final class NpcWoodcutterGoal extends NpcWorkGoal<TreeFarmBlockEntity>
                     return this.assign(PLANT, tile);
                 }
             }
-            else if (this.tripToFetch())
+            else if (this.tripToFetch(NpcWoodcutterGoal::isSapling))
             {
                 return true;
             }
@@ -153,7 +159,7 @@ public final class NpcWoodcutterGoal extends NpcWorkGoal<TreeFarmBlockEntity>
     /** Sets a carried sapling on a grid tile. */
     private void plant(ServerLevel level, BlockPos pos)
     {
-        int slot = this.supplySlot();
+        int slot = this.slotOf(NpcWoodcutterGoal::isSapling);
         if (slot < 0 || !level.getBlockState(pos).isAir())
         {
             return;
@@ -169,5 +175,6 @@ public final class NpcWoodcutterGoal extends NpcWorkGoal<TreeFarmBlockEntity>
         level.playSound(null, pos, sapling.getSoundType().getPlaceSound(), SoundSource.BLOCKS, 1.0F, 1.0F);
         saplings.shrink(1);
         this.npc.getInventory().setItem(slot, saplings);
+        this.boneMeal(level, pos);
     }
 }

@@ -1,10 +1,13 @@
 package com.ancientempires.block;
 
 import com.ancientempires.config.AncientEmpiresConfig;
+import com.ancientempires.entity.npc.NpcWoodcutterGoal;
 import com.ancientempires.registry.ModBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -48,6 +51,17 @@ public final class TreeFarmBlockEntity extends WorksiteBlockEntity
     protected List<? extends Integer> maxSizes()
     {
         return AncientEmpiresConfig.treeMaxSize;
+    }
+
+    private static final List<Supply> SUPPLIES = List.of(
+            new Supply("saplings", NpcWoodcutterGoal::isSapling, () -> new ItemStack(Items.OAK_SAPLING), 5),
+            new Supply("bone_meal", stack -> stack.is(Items.BONE_MEAL), () -> new ItemStack(Items.BONE_MEAL), 4));
+
+    /** Saplings for woodcutters to plant, and bone meal they give each new one. */
+    @Override
+    public List<Supply> supplies()
+    {
+        return SUPPLIES;
     }
 
     @Nullable

@@ -29,11 +29,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 /**
  * Shared by worksites (crop farm, tree farm, quarry): an owner, a rectangular
  * area near the block (moved and sized in the bounds screen, up to a limit
- * that size upgrades raise, as in Ancient Warfare), an 18-slot store workers unload into and hoppers can reach,
+ * that size upgrades raise, as in Ancient Warfare), a double-chest store (plus filtered
+ * supply slots) workers unload into and hoppers can reach,
  * and a to-do list the subclass rebuilds in {@link #scan}. The list is rebuilt
  * at most every {@code work.scanTicks}, and only when a worker asks, so an idle
  * worksite costs nothing. A worker claims the tile it walks to, so two workers
@@ -41,24 +44,20 @@ import java.util.UUID;
  */
 public abstract class WorksiteBlockEntity extends BlockEntity
 {
-    public static final int STORE_SIZE = 18;
+    /** A double chest. Supply slots follow it, so old saves keep their items where they were. */
+    public static final int STORE_SIZE = 54;
 
-    private final SimpleContainer store = new SimpleContainer(STORE_SIZE)
+    /**
+     * A group of filtered slots for one kind of supply (seeds, bone meal, feed,
+     * fuel...), shown above the store with a ghost of what goes there. Workers
+     * unloading put supplies here first, and hoppers can only fill them with it.
+     */
+    public record Supply(String key, Predicate<ItemStack> accepts, Supplier<ItemStack> icon, int slots)
     {
-        @Override
-        public void setChanged()
-        {
-            super.setChanged();
-            WorksiteBlockEntity.this.setChanged();
-        }
+    }
 
-        @Override
-        public boolean stillValid(Player player)
-        {
-            return Container.stillValidBlockEntity(WorksiteBlockEntity.this, player);
-        }
-    };
-    private final LazyOptional<IItemHandler> storeHandler = LazyOptional.of(() -> new InvWrapper(this.store));
+    private final SimpleContainer store;
+    private final LazyOptional<IItemHandler> storeHandler;
     @Nullable
     private UUID owner;
     /** Null until the owner sets one; until then {@link #defaultArea}. */
@@ -75,6 +74,117 @@ public abstract class WorksiteBlockEntity extends BlockEntity
     protected WorksiteBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
+        this.store = new SimpleContainer(STORE_SIZE + supplySlots(this.supplies()))
+        {
+            @Override
+            public void setChanged()
+            {
+                super.setChanged();
+                WorksiteBlockEntity.this.setChanged();
+            }
+
+            @Override
+            public boolean stillValid(Player player)
+            {
+                return Container.stillValidBlockEntity(WorksiteBlockEntity.this, player);
+            }
+
+            @Override
+            public boolean canPlaceItem(int slot, ItemStack stack)
+            {
+                return WorksiteBlockEntity.this.canPlace(slot, stack);
+            }
+        };
+        this.storeHandler = LazyOptional.of(() -> new InvWrapper(this.store));
+    }
+
+    /**
+     * This site's supply slot groups, in order; none by default. Built from
+     * constants only: it is asked during construction.
+     */
+    public List<Supply> supplies()
+    {
+        return List.of();
+    }
+
+    public static int supplySlots(List<Supply> supplies)
+    {
+        int count = 0;
+        for (Supply supply : supplies)
+        {
+            count += supply.slots();
+        }
+        return count;
+    }
+
+    /** The supply group a container slot belongs to, or null for a store slot. */
+    @Nullable
+    public Supply supplyAt(int slot)
+    {
+        int index = slot - STORE_SIZE;
+        for (Supply supply : this.supplies())
+        {
+            if (index < 0)
+            {
+                return null;
+            }
+            if (index < supply.slots())
+            {
+                return supply;
+            }
+            index -= supply.slots();
+        }
+        return null;
+    }
+
+    /** Store slots take anything; supply slots only their kind. */
+    public boolean canPlace(int slot, ItemStack stack)
+    {
+        Supply supply = this.supplyAt(slot);
+        return supply == null || supply.accepts().test(stack);
+    }
+
+    /**
+     * Puts a stack away as a worker does: into a matching supply slot first, then
+     * the store, topping up stacks before using empty slots. Returns what did not fit.
+     */
+    public ItemStack deposit(ItemStack stack)
+    {
+        ItemStack rest = stack.copy();
+        int size = this.store.getContainerSize();
+        // Supplies first, then the store; in each, matching stacks before empty slots.
+        for (int range = 0; range < 2 && !rest.isEmpty(); range++)
+        {
+            int from = range == 0 ? STORE_SIZE : 0;
+            int to = range == 0 ? size : STORE_SIZE;
+            for (int pass = 0; pass < 2 && !rest.isEmpty(); pass++)
+            {
+                for (int slot = from; slot < to && !rest.isEmpty(); slot++)
+                {
+                    if (!this.canPlace(slot, rest))
+                    {
+                        continue;
+                    }
+                    ItemStack held = this.store.getItem(slot);
+                    if (pass == 0 && !held.isEmpty() && ItemStack.isSameItemSameTags(held, rest))
+                    {
+                        int move = Math.min(rest.getCount(), Math.min(held.getMaxStackSize(), this.store.getMaxStackSize()) - held.getCount());
+                        if (move > 0)
+                        {
+                            held.grow(move);
+                            rest.shrink(move);
+                            this.store.setItem(slot, held);
+                        }
+                    }
+                    else if (pass == 1 && held.isEmpty())
+                    {
+                        this.store.setItem(slot, rest);
+                        rest = ItemStack.EMPTY;
+                    }
+                }
+            }
+        }
+        return rest;
     }
 
     /** Which size upgrades a site takes. */
@@ -322,8 +432,8 @@ public abstract class WorksiteBlockEntity extends BlockEntity
             tag.putIntArray("Area", new int[] {this.area.minX(), this.area.minZ(), this.area.maxX(), this.area.maxZ()});
         }
         tag.putInt("SizeTier", this.sizeTier);
-        NonNullList<ItemStack> items = NonNullList.withSize(STORE_SIZE, ItemStack.EMPTY);
-        for (int slot = 0; slot < STORE_SIZE; slot++)
+        NonNullList<ItemStack> items = NonNullList.withSize(this.store.getContainerSize(), ItemStack.EMPTY);
+        for (int slot = 0; slot < items.size(); slot++)
         {
             items.set(slot, this.store.getItem(slot));
         }
@@ -339,9 +449,9 @@ public abstract class WorksiteBlockEntity extends BlockEntity
         // Old saves kept a radius; they start from the default area.
         this.area = area.length == 4 ? new WorksiteArea(area[0], area[1], area[2], area[3]) : null;
         this.sizeTier = tag.getInt("SizeTier");
-        NonNullList<ItemStack> items = NonNullList.withSize(STORE_SIZE, ItemStack.EMPTY);
+        NonNullList<ItemStack> items = NonNullList.withSize(this.store.getContainerSize(), ItemStack.EMPTY);
         ContainerHelper.loadAllItems(tag, items);
-        for (int slot = 0; slot < STORE_SIZE; slot++)
+        for (int slot = 0; slot < items.size(); slot++)
         {
             this.store.setItem(slot, items.get(slot));
         }

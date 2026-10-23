@@ -1,16 +1,17 @@
 package com.ancientempires.block;
 
 import com.ancientempires.config.AncientEmpiresConfig;
+import com.ancientempires.entity.npc.NpcRancherGoal;
 import com.ancientempires.registry.ModBlockEntities;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.TamableAnimal;
-import net.minecraft.world.item.Items;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.IForgeShearable;
 import org.jetbrains.annotations.Nullable;
@@ -57,6 +58,16 @@ public final class AnimalPenBlockEntity extends WorksiteBlockEntity
     protected List<? extends Integer> maxSizes()
     {
         return AncientEmpiresConfig.ranchMaxSize;
+    }
+
+    private static final List<Supply> SUPPLIES = List.of(
+            new Supply("feed", stack -> stack.is(NpcRancherGoal.FEED), () -> new ItemStack(Items.WHEAT), 9));
+
+    /** Feed for ranchers to breed with. */
+    @Override
+    public List<Supply> supplies()
+    {
+        return SUPPLIES;
     }
 
     /** The pen's volume. */

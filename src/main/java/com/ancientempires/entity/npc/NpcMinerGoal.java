@@ -29,8 +29,6 @@ import java.util.List;
  */
 public final class NpcMinerGoal extends NpcWorkGoal<QuarryBlockEntity>
 {
-    /** Cheap stone a miner lays in the stair: cobblestone, sandstone, and the like, never smooth stone. */
-    private static final TagKey<Item> STAIR_STONE = ItemTags.create(ResourceLocation.fromNamespaceAndPath("ancientempires", "stair_stone"));
     private static final int DIG = 0;
     private static final int STAIR = 1;
 
@@ -48,7 +46,7 @@ public final class NpcMinerGoal extends NpcWorkGoal<QuarryBlockEntity>
     @Override
     protected boolean isSupply(ItemStack stack)
     {
-        return AncientEmpiresConfig.quarryStairStone && stack.is(STAIR_STONE) && stack.getItem() instanceof BlockItem;
+        return AncientEmpiresConfig.quarryStairStone && stack.is(QuarryBlockEntity.STAIR_STONE_ITEMS) && stack.getItem() instanceof BlockItem;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.ancientempires.block;
 
 import com.ancientempires.entity.npc.NpcEntity;
+import com.ancientempires.inventory.WorksiteMenu;
 import com.ancientempires.item.WorksiteUpgradeItem;
 import com.ancientempires.network.ModNetwork;
 import net.minecraft.core.BlockPos;
@@ -14,8 +15,6 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.ChestMenu;
-import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
@@ -23,6 +22,7 @@ import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -88,8 +88,8 @@ public abstract class WorksiteBlock extends BaseEntityBlock
             ModNetwork.sendWorksiteBounds((ServerPlayer) player, farm);
             return InteractionResult.CONSUME;
         }
-        player.openMenu(new SimpleMenuProvider((id, inventory, opener) ->
-                new ChestMenu(MenuType.GENERIC_9x2, id, inventory, farm.store(), 2), state.getBlock().getName()));
+        NetworkHooks.openScreen((ServerPlayer) player, new SimpleMenuProvider((id, inventory, opener) ->
+                new WorksiteMenu(id, inventory, farm), state.getBlock().getName()), pos);
         return InteractionResult.CONSUME;
     }
 
