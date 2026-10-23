@@ -191,6 +191,13 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.DoubleValue HAZARD_FIRE_COST;
     private static final ForgeConfigSpec.BooleanValue HAZARD_AVOID_WATER_SPOTS;
     private static final ForgeConfigSpec.IntValue HAZARD_SAFE_SPOT_TRIES;
+    private static final ForgeConfigSpec.BooleanValue THREAT_SCORING;
+    private static final ForgeConfigSpec.DoubleValue THREAT_OWNER_WEIGHT;
+    private static final ForgeConfigSpec.DoubleValue THREAT_ALLY_WEIGHT;
+    private static final ForgeConfigSpec.DoubleValue THREAT_SELF_WEIGHT;
+    private static final ForgeConfigSpec.DoubleValue THREAT_WOUNDED_WEIGHT;
+    private static final ForgeConfigSpec.DoubleValue THREAT_FACING_WEIGHT;
+    private static final ForgeConfigSpec.DoubleValue THREAT_ROLE_WEIGHT;
     private static final ForgeConfigSpec.IntValue UPKEEP_FALLEN_RECORDS;
     private static final ForgeConfigSpec.EnumValue<KeepOnDeath> UPKEEP_KEEP_ON_DEATH;
 
@@ -779,8 +786,29 @@ public final class AncientEmpiresConfig
                 .comment("Ticks between rescans while an NPC already has a scanned target. 0 keeps the current target until it is lost.")
                 .defineInRange("retargetInterval", 40, 0, 400);
         TARGET_SWITCH_MARGIN = builder
-                .comment("A rescan only switches when the new target is at least this many blocks closer than the current one.")
+                .comment("A rescan only switches when the new target scores at least this much better (in effective blocks) than the current one.")
                 .defineInRange("switchMargin", 3.0D, 0.0D, 32.0D);
+        THREAT_SCORING = builder
+                .comment("Threat scoring: a target's score is its distance less the bonuses below (in blocks); the lowest wins. Off: the nearest hostile in sight.")
+                .define("threatScoring", true);
+        THREAT_OWNER_WEIGHT = builder
+                .comment("Bonus for an enemy attacking the NPC's owner.")
+                .defineInRange("ownerThreatWeight", 16.0D, 0.0D, 64.0D);
+        THREAT_ALLY_WEIGHT = builder
+                .comment("Bonus for an enemy attacking an ally (same faction or owner).")
+                .defineInRange("allyThreatWeight", 8.0D, 0.0D, 64.0D);
+        THREAT_SELF_WEIGHT = builder
+                .comment("Bonus for an enemy attacking the NPC itself.")
+                .defineInRange("selfThreatWeight", 4.0D, 0.0D, 64.0D);
+        THREAT_WOUNDED_WEIGHT = builder
+                .comment("Bonus for a wounded enemy, scaled by its missing health (all of it at no health): finish them off.")
+                .defineInRange("woundedWeight", 6.0D, 0.0D, 64.0D);
+        THREAT_FACING_WEIGHT = builder
+                .comment("Bonus for an enemy straight in front of the NPC, less to the side, none behind.")
+                .defineInRange("facingWeight", 2.0D, 0.0D, 64.0D);
+        THREAT_ROLE_WEIGHT = builder
+                .comment("Role match: an archer's bonus for an enemy with a bow, crossbow, or throwing weapon.")
+                .defineInRange("roleWeight", 6.0D, 0.0D, 64.0D);
         TARGET_SCAN_RANGE = builder
                 .comment("Search radius, in blocks. The NPC's follow range still caps it.")
                 .defineInRange("scanRange", 32.0D, 4.0D, 64.0D);
@@ -978,6 +1006,13 @@ public final class AncientEmpiresConfig
     public static double hazardFireCost = 16.0D;
     public static boolean hazardAvoidWaterSpots = true;
     public static int hazardSafeSpotTries = 10;
+    public static boolean threatScoring = true;
+    public static double threatOwnerWeight = 16.0D;
+    public static double threatAllyWeight = 8.0D;
+    public static double threatSelfWeight = 4.0D;
+    public static double threatWoundedWeight = 6.0D;
+    public static double threatFacingWeight = 2.0D;
+    public static double threatRoleWeight = 6.0D;
 
     /** How an NPC out of food gets more from its Town Hall: walking there, or delivered to its backpack. */
     public enum Delivery
@@ -1198,6 +1233,13 @@ public final class AncientEmpiresConfig
         hazardFireCost = HAZARD_FIRE_COST.get();
         hazardAvoidWaterSpots = HAZARD_AVOID_WATER_SPOTS.get();
         hazardSafeSpotTries = HAZARD_SAFE_SPOT_TRIES.get();
+        threatScoring = THREAT_SCORING.get();
+        threatOwnerWeight = THREAT_OWNER_WEIGHT.get();
+        threatAllyWeight = THREAT_ALLY_WEIGHT.get();
+        threatSelfWeight = THREAT_SELF_WEIGHT.get();
+        threatWoundedWeight = THREAT_WOUNDED_WEIGHT.get();
+        threatFacingWeight = THREAT_FACING_WEIGHT.get();
+        threatRoleWeight = THREAT_ROLE_WEIGHT.get();
         upkeepFallenRecords = UPKEEP_FALLEN_RECORDS.get();
         upkeepKeepOnDeath = UPKEEP_KEEP_ON_DEATH.get();
 

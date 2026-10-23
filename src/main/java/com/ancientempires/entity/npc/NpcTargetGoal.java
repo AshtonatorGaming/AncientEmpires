@@ -17,18 +17,21 @@ import java.util.List;
  * <ol>
  * <li>a shared candidate list from {@link NpcTargetCache} instead of a box query per NPC,</li>
  * <li>the faction and owner test, then range and vanilla's combat checks, with no raycast,</li>
- * <li>line of sight nearest first, stopping at the first visible candidate.</li>
+ * <li>a threat score per candidate ({@link NpcThreat}: distance, less bonuses for attacking
+ * the owner or allies, being wounded, standing in front, and role match), then line of sight
+ * best first, stopping at the first visible candidate.</li>
  * </ol>
  * Vanilla raycast every candidate that passed step 2 before picking the nearest.
  * Scans are staggered by entity id. While a scanned target is held, a slower
- * rescan switches only to a clearly closer one. Monsters and NPCs are one
- * pool, so the nearest hostile wins; vanilla preferred any monster.
+ * rescan switches only to one that scores clearly better. Monsters and NPCs are one
+ * pool, so the best-scoring hostile wins; vanilla preferred any monster.
  */
 public final class NpcTargetGoal extends TargetGoal
 {
     private final NpcEntity npc;
     private final List<LivingEntity> passed = new ArrayList<>();
-    private final DoubleArrayList distances = new DoubleArrayList();
+    /** Threat scores of {@link #passed}, lowest best ({@link NpcThreat}). */
+    private final DoubleArrayList scores = new DoubleArrayList();
 
     private TargetingConditions conditions;
     private double conditionsRange = -1.0D;
@@ -101,14 +104,12 @@ public final class NpcTargetGoal extends TargetGoal
         {
             return;
         }
+        // Switch only to a target that scores clearly better (switchMargin, in effective blocks).
         double margin = AncientEmpiresConfig.targetSwitchMargin;
-        double closer = Math.sqrt(this.npc.distanceToSqr(current)) - margin;
-        if (closer <= 0.0D)
-        {
-            return;
-        }
-        LivingEntity better = this.scan(closer * closer);
-        if (better != null && better != current)
+        double currentScore = NpcThreat.score(this.npc, current, this.npc.distanceToSqr(current));
+        LivingEntity better = this.scan(Double.MAX_VALUE);
+        if (better != null && better != current
+                && NpcThreat.score(this.npc, better, this.npc.distanceToSqr(better)) < currentScore - margin)
         {
             this.mob.setTarget(better);
             this.targetMob = better;
@@ -137,7 +138,7 @@ public final class NpcTargetGoal extends TargetGoal
     }
 
     /**
-     * The nearest hostile in sight within {@code limitSqr}, or null.
+     * The best-scoring hostile in sight within {@code limitSqr}, or null.
      */
     @Nullable
     private LivingEntity scan(double limitSqr)
@@ -149,7 +150,7 @@ public final class NpcTargetGoal extends TargetGoal
         double limit = Math.min(range * range, limitSqr);
         List<LivingEntity> candidates = NpcTargetCache.candidates(this.npc, AncientEmpiresConfig.targetScanRange);
         this.passed.clear();
-        this.distances.clear();
+        this.scores.clear();
         for (int index = 0; index < candidates.size(); index++)
         {
             LivingEntity candidate = candidates.get(index);
@@ -164,29 +165,29 @@ public final class NpcTargetGoal extends TargetGoal
                 continue;
             }
             this.passed.add(candidate);
-            this.distances.add(distance);
+            this.scores.add(NpcThreat.score(this.npc, candidate, distance));
         }
-        LivingEntity seen = this.nearestInSight();
+        LivingEntity seen = this.bestInSight();
         this.passed.clear();
         this.npc.level().getProfiler().pop();
         return seen;
     }
 
     /**
-     * Picks the next-nearest candidate each round instead of sorting, since
+     * Picks the next-best candidate each round instead of sorting, since
      * only a few rounds run and the first visible one ends the search.
      */
     @Nullable
-    private LivingEntity nearestInSight()
+    private LivingEntity bestInSight()
     {
         int rounds = Math.min(this.passed.size(), Math.max(1, AncientEmpiresConfig.targetMaxSightChecks));
         for (int round = 0; round < rounds; round++)
         {
             int best = -1;
             double bestDistance = Double.MAX_VALUE;
-            for (int index = 0; index < this.distances.size(); index++)
+            for (int index = 0; index < this.scores.size(); index++)
             {
-                double distance = this.distances.getDouble(index);
+                double distance = this.scores.getDouble(index);
                 if (distance < bestDistance)
                 {
                     bestDistance = distance;
@@ -197,7 +198,7 @@ public final class NpcTargetGoal extends TargetGoal
             {
                 return null;
             }
-            this.distances.set(best, Double.MAX_VALUE);
+            this.scores.set(best, Double.MAX_VALUE);
             LivingEntity candidate = this.passed.get(best);
             NpcTargetCache.countSightCheck();
             if (this.npc.getSensing().hasLineOfSight(candidate))

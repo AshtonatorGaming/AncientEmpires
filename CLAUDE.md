@@ -106,7 +106,7 @@ civilians); target memory; cavalry; faction relations and player standing; the S
    behavior behind the remaining roles (bard singing, trader, courier, worker
    jobs beyond the farmer, woodcutter, and miner, commander, patrol). Roles are labels from
    equipment until that behavior exists.
-2. Threat scoring, skirmishers.
+2. Skirmishers.
 3. Spawner block that stores a full NPC NBT snapshot.
 4. Relations follow-ups: trading (AW's only way to raise standing), the nemesis bonus
    (killing one faction raises standing with its rival), teams sharing their worst
@@ -266,6 +266,11 @@ its own unless noted). Before adding behavior, check what AW did first.
   claim, so no two share a bed; saved as `AeBed`), walk there at night, lie down, and get
   up at dawn. Hurt wakes them (vanilla); threats, fights, and orders come first. The
   claim is released when the bed is gone, or on death or repack.
+- Threat scoring (`NpcThreat`, DESIGN Tier 1): `NpcTargetGoal` ranks candidates by a score in
+  effective blocks, distance less `targeting` weights for attacking the owner (16), an ally
+  (8), or the NPC (4), missing health (6), being in front (2), and an archer facing enemy
+  archers (6); sight is checked best-first, and a rescan switches only for a score
+  `switchMargin` better. `threatScoring` off restores nearest-first.
 - Hazards (`NpcSafety`, the old FleeNavigation idea): paths keep `hazard.maxFall` (3) in and
   out of a fight (vanilla lets a healthy fighting mob take big drops, so mobs leap off
   cliffs), and water and fire path costs come from `hazard`. Spots NPCs pick for themselves
