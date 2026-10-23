@@ -164,15 +164,16 @@ public class NpcRenderer extends HumanoidMobRenderer<NpcEntity, NpcModel>
         Matrix4f matrix = pose.last().pose();
         // Readable in the dark, as a nametag is.
         int light = LightTexture.pack(Math.max(10, LightTexture.block(packedLight)), LightTexture.sky(packedLight));
+        // A levied worker or settler wears a pitchfork badge beside what it is doing,
+        // the same size, the pair centered over the head.
+        boolean both = status != NpcStatus.NONE && levied;
         if (status != NpcStatus.NONE)
         {
-            icon(buffer, STATUS_ICONS[status.ordinal()], matrix, 0.0F, 0.0F, 1.0F, light);
+            icon(buffer, STATUS_ICONS[status.ordinal()], matrix, both ? -0.55F : 0.0F, 0.0F, 1.0F, light);
         }
         if (levied)
         {
-            // A levied worker or settler: a pitchfork badge beside what it is doing, or alone.
-            boolean alone = status == NpcStatus.NONE;
-            icon(buffer, LEVIED_ICON, matrix, alone ? 0.0F : 0.75F, alone ? 0.0F : 0.2F, alone ? 1.0F : 0.6F, light);
+            icon(buffer, LEVIED_ICON, matrix, both ? 0.55F : 0.0F, 0.0F, 1.0F, light);
         }
         pose.popPose();
     }

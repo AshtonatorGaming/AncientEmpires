@@ -66,11 +66,13 @@ public enum NpcStatus
         {
             return ALARM;
         }
-        if (runs(running, NpcFollowOwnerGoal.class))
+        // Orders are read from their flags: the goals behind them stop running once
+        // the NPC is in place (beside its leader, at its post), which hid the icon.
+        if (npc.isFollowing() || runs(running, NpcFollowOwnerGoal.class))
         {
             return FOLLOW;
         }
-        if (runs(running, NpcHoldPositionGoal.class))
+        if (npc.isHoldingPosition() || runs(running, NpcHoldPositionGoal.class))
         {
             return GUARD;
         }
