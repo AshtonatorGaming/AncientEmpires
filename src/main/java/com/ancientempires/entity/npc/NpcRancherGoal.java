@@ -10,7 +10,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.item.Item;
@@ -129,7 +128,7 @@ public final class NpcRancherGoal extends NpcWorkGoal<AnimalPenBlockEntity>
                 {
                     List<ItemStack> wool = shearable.onSheared(null, this.npc.getMainHandItem(), level, animal.blockPosition(), 0);
                     level.playSound(null, animal, SoundEvents.SHEEP_SHEAR, SoundSource.NEUTRAL, 1.0F, 1.0F);
-                    this.npc.getMainHandItem().hurtAndBreak(1, this.npc, npc -> npc.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+                    this.wearTool();
                     for (ItemStack stack : wool)
                     {
                         ItemStack rest = this.pocket(stack);

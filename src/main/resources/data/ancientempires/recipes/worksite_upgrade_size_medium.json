@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " S ",
+    "FFF",
+    " S "
+  ],
+  "key": {
+    "S": { "tag": "forge:string" },
+    "F": { "tag": "minecraft:wooden_fences" }
+  },
+  "result": { "item": "ancientempires:worksite_upgrade_size_medium" }
+}

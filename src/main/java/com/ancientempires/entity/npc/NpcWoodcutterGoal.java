@@ -5,7 +5,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
@@ -139,7 +138,7 @@ public final class NpcWoodcutterGoal extends NpcWorkGoal<TreeFarmBlockEntity>
         BlockState state = level.getBlockState(log);
         List<ItemStack> drops = Block.getDrops(state, level, log, level.getBlockEntity(log), this.npc, this.npc.getMainHandItem());
         level.destroyBlock(log, false, this.npc);
-        this.npc.getMainHandItem().hurtAndBreak(1, this.npc, npc -> npc.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+        this.wearTool();
         for (ItemStack drop : drops)
         {
             ItemStack rest = this.pocket(drop);

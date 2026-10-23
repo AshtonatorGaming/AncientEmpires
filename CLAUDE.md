@@ -183,22 +183,38 @@ its own unless noted). Before adding behavior, check what AW did first.
   out of seeds, it fetches some there. Gear (damageable or unstackable items) is never
   unloaded. The farm caches harvest, plant, and till lists rebuilt at most every
   `scanTicks` and only while a farmer asks, and claims tiles so farmers do not collide.
-  Area: a square around the block (sneak-click empty-handed to resize, with an outline),
-  ground from two below to level with the block. Every later worker should follow this
-  carry-it-back pattern: `WorksiteBlock`/`WorksiteBlockEntity` (owner, square, 18-slot
+  Ground from two below to level with the block. Every later worker should follow this
+  carry-it-back pattern: `WorksiteBlock`/`WorksiteBlockEntity` (owner, area, 18-slot
   store, cached lists, claims) and `NpcWorkGoal` (walk, swing, act, carry, unload, fetch
   supplies, find the owner's nearest site; digging uses the player mining time and
   shows break progress) are the base for every trade.
+- Worksite areas (AW's bounds screen): a rectangle (`WorksiteArea`, relative to the block,
+  saved as `Area`) set in `WorksiteBoundsScreen` (sneak-click empty-handed): move it
+  N/S/E/W, set width and length, shift for 5; outlined in the world while open; the server
+  re-checks every change (`WorksiteBoundsSetPacket`). Limits per site are three-entry
+  lists (`farmMaxSize` ...: no upgrade, medium, large), and the area must stay within
+  `work.areaReach` of the block. AW's size upgrades (`WorksiteUpgradeItem`, AW textures
+  and recipes without research): bounds upgrades for every site with an area, quarry
+  upgrades (AW's 16/32/64) for the quarry only; right-click the block to fit one, large
+  replaces medium (returned), breaking the block drops it (`SizeTier`). Kitchen and Town
+  Hall have no area (`UpgradeKind.NONE`).
+- Tool wear: every trade wears its tool through `NpcWorkGoal.wearTool`, at
+  `work.toolWear` (0.2) of a player's rate; AW's workers did not wear tools at all.
 - Woodcutter: a Worker-path NPC with an axe at its owner's Tree Farm. It stands at a
   tree (a log on soil in the square) and chops it log by log from the top down
   (`TreeFarmBlockEntity.trunk`: connected logs within `work.treeReach` of the base, at
   most `treeMaxLogs`), picks up the saplings, apples, and sticks that fall as the leaves
   decay, replants saplings on a `treeSpacing` grid, and carries the rest back.
-- Miner: a Worker-path NPC with a pickaxe at its owner's Quarry. The pit is the square in
-  front of the block (placer's facing; `center()` is offset), dug one layer at a time
-  from just below the block down to `work.quarryMaxDepth`. Each layer keeps one rim
-  block as a spiral stair step (`stairStep`, one tile clockwise per layer from the tile
-  beside the block), so miners walk down and climb back to unload. Left standing: blocks
+- Miner: a Worker-path NPC with a pickaxe at its owner's Quarry. The pit starts in
+  front of the block (placer's facing, `defaultArea`) and may not cover the block's own
+  column; it is dug one layer at a time from just below the block down to
+  `work.quarryMaxDepth`. Each layer keeps a spiral stair step (`stairColumns`: one rim
+  tile, one further clockwise per layer from the tile nearest the block, plus tiles inward
+  to `quarryStairWidth`, 2; corner tiles under the two steps above are dropped for
+  headroom). Steps that are not `ancientempires:stair_stone` blocks (ore, dirt, sand,
+  gravel, gaps) are dug out and relaid with cheap stone from the item tag of the same name
+  (cobblestone, sandstone, ...; never smooth stone), which miners keep as a supply; a dug
+  layer waits three scans for that before moving on (`quarryStairStone`). Left standing: blocks
   touching lava or water, block entities, unbreakable blocks, and blocks the pickaxe
   cannot harvest (`skip`). The size locks once digging starts (`canResize`).
 - Upkeep (`NpcUpkeepGoal`, priority 3) and the Town Hall (`TownHallBlock`; `NpcUpkeep` is

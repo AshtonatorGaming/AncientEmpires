@@ -35,15 +35,15 @@ public final class CropFarmBlockEntity extends WorksiteBlockEntity
     }
 
     @Override
-    protected int defaultRadius()
+    protected int defaultSize()
     {
-        return AncientEmpiresConfig.farmDefaultRadius;
+        return AncientEmpiresConfig.farmDefaultSize;
     }
 
     @Override
-    protected int maxRadius()
+    protected List<? extends Integer> maxSizes()
     {
-        return AncientEmpiresConfig.farmMaxRadius;
+        return AncientEmpiresConfig.farmMaxSize;
     }
 
     @Nullable
@@ -83,16 +83,15 @@ public final class CropFarmBlockEntity extends WorksiteBlockEntity
         this.harvest.clear();
         this.plant.clear();
         this.till.clear();
-        int r = this.radius();
         BlockPos.MutableBlockPos ground = new BlockPos.MutableBlockPos();
         int baseY = this.worldPosition.getY();
-        for (int dx = -r; dx <= r; dx++)
+        for (int x = this.minX(); x <= this.maxX(); x++)
         {
-            for (int dz = -r; dz <= r; dz++)
+            for (int z = this.minZ(); z <= this.maxZ(); z++)
             {
                 for (int y = baseY - 2; y <= baseY; y++)
                 {
-                    ground.set(this.worldPosition.getX() + dx, y, this.worldPosition.getZ() + dz);
+                    ground.set(x, y, z);
                     this.scanTile(level, ground);
                 }
             }

@@ -180,7 +180,7 @@ public final class NpcFisherGoal extends NpcWorkGoal<FishingDockBlockEntity>
                 this.npc.spawnAtLocation(rest);
             }
         }
-        rod.hurtAndBreak(1, this.npc, npc -> npc.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+        this.wearTool();
         // Cast again into the same water while there is room in the backpack.
         return !this.backpackFull() && this.isTool(this.npc.getMainHandItem()) && AncientEmpiresConfig.fishRecast;
     }

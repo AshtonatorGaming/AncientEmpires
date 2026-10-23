@@ -15,6 +15,7 @@ import net.minecraft.world.level.block.entity.HopperBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.ForgeHooks;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -35,15 +36,22 @@ public final class KitchenBlockEntity extends WorksiteBlockEntity
     }
 
     @Override
-    protected int defaultRadius()
+    protected int defaultSize()
     {
         return 1;
     }
 
     @Override
-    protected int maxRadius()
+    protected List<? extends Integer> maxSizes()
     {
-        return 1;
+        return List.of(1);
+    }
+
+    /** No area: it works in place. */
+    @Override
+    public UpgradeKind upgradeKind()
+    {
+        return UpgradeKind.NONE;
     }
 
     @Override

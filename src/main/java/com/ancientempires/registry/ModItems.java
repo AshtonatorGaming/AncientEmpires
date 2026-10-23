@@ -1,9 +1,11 @@
 package com.ancientempires.registry;
 
 import com.ancientempires.AncientEmpires;
+import com.ancientempires.block.WorksiteBlockEntity;
 import com.ancientempires.entity.npc.NpcRoster;
 import com.ancientempires.item.BandageItem;
 import com.ancientempires.item.NpcSpawnEggItem;
+import com.ancientempires.item.WorksiteUpgradeItem;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -24,7 +26,16 @@ public final class ModItems
             .food(new FoodProperties.Builder().nutrition(10).saturationMod(0.8F).build())));
     public static final RegistryObject<Item> BANDAGE = ITEMS.register("bandage",
             () -> new BandageItem(new Item.Properties().stacksTo(16)));
-    public static final RegistryObject<Item> SETTLERS_POST = ITEMS.register("settlers_post",
+    /** Ancient Warfare's worksite size upgrades: bounds for every worksite, quarry for the quarry. */
+    public static final RegistryObject<Item> UPGRADE_SIZE_MEDIUM = ITEMS.register("worksite_upgrade_size_medium",
+            () -> new WorksiteUpgradeItem(WorksiteBlockEntity.UpgradeKind.BOUNDS, 1, new Item.Properties().stacksTo(16)));
+    public static final RegistryObject<Item> UPGRADE_SIZE_LARGE = ITEMS.register("worksite_upgrade_size_large",
+            () -> new WorksiteUpgradeItem(WorksiteBlockEntity.UpgradeKind.BOUNDS, 2, new Item.Properties().stacksTo(16)));
+    public static final RegistryObject<Item> UPGRADE_QUARRY_MEDIUM = ITEMS.register("worksite_upgrade_quarry_medium",
+            () -> new WorksiteUpgradeItem(WorksiteBlockEntity.UpgradeKind.QUARRY, 1, new Item.Properties().stacksTo(16)));
+    public static final RegistryObject<Item> UPGRADE_QUARRY_LARGE = ITEMS.register("worksite_upgrade_quarry_large",
+            () -> new WorksiteUpgradeItem(WorksiteBlockEntity.UpgradeKind.QUARRY, 2, new Item.Properties().stacksTo(16)));
+    public static final RegistryObject<Item> SETTLERS_POST =ITEMS.register("settlers_post",
             () -> new BlockItem(ModBlocks.SETTLERS_POST.get(), new Item.Properties()));
     public static final RegistryObject<Item> CROP_FARM = ITEMS.register("crop_farm",
             () -> new BlockItem(ModBlocks.CROP_FARM.get(), new Item.Properties()));

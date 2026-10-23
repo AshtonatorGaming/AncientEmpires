@@ -41,15 +41,22 @@ public final class TownHallBlockEntity extends WorksiteBlockEntity
     }
 
     @Override
-    protected int defaultRadius()
+    protected int defaultSize()
     {
         return 1;
     }
 
     @Override
-    protected int maxRadius()
+    protected List<? extends Integer> maxSizes()
     {
-        return 1;
+        return List.of(1);
+    }
+
+    /** No area: it works in place. */
+    @Override
+    public UpgradeKind upgradeKind()
+    {
+        return UpgradeKind.NONE;
     }
 
     @Override

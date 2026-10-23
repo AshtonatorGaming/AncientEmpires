@@ -5,7 +5,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.HoeItem;
 import net.minecraft.world.item.ItemStack;
@@ -157,7 +156,7 @@ public final class NpcFarmerGoal extends NpcWorkGoal<CropFarmBlockEntity>
         level.setBlock(pos, farmland, Block.UPDATE_ALL_IMMEDIATE);
         level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(this.npc, farmland));
         level.playSound(null, pos, SoundEvents.HOE_TILL, SoundSource.BLOCKS, 1.0F, 1.0F);
-        this.npc.getMainHandItem().hurtAndBreak(1, this.npc, npc -> npc.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+        this.wearTool();
     }
 
     /** Anything that plants as a crop: wheat, carrot, potato, beetroot, pumpkin and melon seeds, modded crops. */

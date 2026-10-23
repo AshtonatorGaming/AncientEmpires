@@ -5,7 +5,11 @@ import com.ancientempires.registry.ModBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
@@ -18,15 +22,26 @@ import java.util.Set;
 /**
  * A quarry. The pit is the square in front of the block (the way the placer
  * faced), dug one layer at a time from just below the block's level down to
- * {@code work.quarryMaxDepth}. Each layer keeps one block of a spiral staircase
- * around the rim, a step lower per layer, so miners walk down to dig and climb
- * back up to unload at the block. Left in place: blocks touching lava or water,
- * block entities, unbreakable blocks, and what a miner's pickaxe cannot harvest.
+ * {@code work.quarryMaxDepth}. Each layer keeps a step of a spiral staircase
+ * around the rim ({@code work.quarryStairWidth} wide, a step lower per layer),
+ * so miners walk down to dig and climb back up to unload at the block. Steps
+ * that are not plain stone (ore, dirt, sand, gravel, gaps) are dug out and
+ * relaid with cheap stone the miners carry ({@code quarryStairStone}). Left
+ * in place: blocks touching lava or water, block entities, unbreakable blocks,
+ * and what a miner's pickaxe cannot harvest.
  * The area is fixed once digging starts.
  */
 public final class QuarryBlockEntity extends WorksiteBlockEntity
 {
+    /** Blocks a stair step may already be; anything else is relaid. */
+    public static final TagKey<Block> STAIR_STONE = BlockTags.create(ResourceLocation.fromNamespaceAndPath("ancientempires", "stair_stone"));
+    /** Scans a finished layer waits for its stair to be relaid before moving down anyway. */
+    private static final int STAIR_WAIT_SCANS = 3;
+
     private final List<BlockPos> mine = new ArrayList<>();
+    /** Stair steps on the current layer to dig out and relay with stone. */
+    private final List<BlockPos> stairFix = new ArrayList<>();
+    private int stairWaits;
     /** Blocks on the current layer a miner could not take; cleared with each new layer. */
     private final Set<BlockPos> skipped = new HashSet<>();
     private int layer;
@@ -40,15 +55,15 @@ public final class QuarryBlockEntity extends WorksiteBlockEntity
     }
 
     @Override
-    protected int defaultRadius()
+    protected int defaultSize()
     {
-        return AncientEmpiresConfig.quarryDefaultRadius;
+        return AncientEmpiresConfig.quarryDefaultSize;
     }
 
     @Override
-    protected int maxRadius()
+    protected List<? extends Integer> maxSizes()
     {
-        return AncientEmpiresConfig.quarryMaxRadius;
+        return AncientEmpiresConfig.quarryMaxSize;
     }
 
     @Override
@@ -63,10 +78,30 @@ public final class QuarryBlockEntity extends WorksiteBlockEntity
         return state.hasProperty(HorizontalDirectionalBlock.FACING) ? state.getValue(HorizontalDirectionalBlock.FACING) : Direction.NORTH;
     }
 
+    /** The pit starts beside the block, in front of it, centered on it. */
     @Override
-    public BlockPos center()
+    protected WorksiteArea defaultArea()
     {
-        return this.worldPosition.relative(this.facing(), this.radius() + 1);
+        int size = Math.min(this.defaultSize(), this.maxSize());
+        WorksiteArea square = WorksiteArea.centered(size, size);
+        Direction facing = this.facing();
+        // Slide the centered square out along the facing until its near edge is beside the block.
+        int shift = (size - 1) / 2 + 1;
+        return square.moved(facing.getStepX() * (shift + (facing.getStepX() > 0 ? 0 : size % 2 == 0 ? 1 : 0)),
+                facing.getStepZ() * (shift + (facing.getStepZ() > 0 ? 0 : size % 2 == 0 ? 1 : 0)));
+    }
+
+    @Override
+    public UpgradeKind upgradeKind()
+    {
+        return UpgradeKind.QUARRY;
+    }
+
+    /** Miners dig under the pit, so the quarry block cannot stand inside it. */
+    @Override
+    public boolean mayContainBlock()
+    {
+        return false;
     }
 
     /** A miner took a block. */
@@ -96,11 +131,27 @@ public final class QuarryBlockEntity extends WorksiteBlockEntity
         return this.claimNearest(this.mine, workerId, from);
     }
 
+    /** A stair step to relay, for a miner carrying stone, or null. */
+    @Nullable
+    public BlockPos claimStair(int workerId, BlockPos from)
+    {
+        this.refresh();
+        return this.claimNearest(this.stairFix, workerId, from);
+    }
+
+    /** Whether stair steps on this layer wait for stone. */
+    public boolean stairNeedsStone()
+    {
+        this.refresh();
+        return !this.stairFix.isEmpty();
+    }
+
     /** A block the miner cannot take (its pickaxe is too weak); it stays, and the layer moves on without it. */
     public void skip(BlockPos pos)
     {
         this.skipped.add(pos.immutable());
         this.mine.remove(pos);
+        this.stairFix.remove(pos);
         this.setChanged();
     }
 
@@ -108,6 +159,7 @@ public final class QuarryBlockEntity extends WorksiteBlockEntity
     protected void forget(BlockPos tile)
     {
         this.mine.remove(tile);
+        this.stairFix.remove(tile);
     }
 
     private int layerY(int layer)
@@ -124,6 +176,7 @@ public final class QuarryBlockEntity extends WorksiteBlockEntity
     protected void scan(Level level)
     {
         this.mine.clear();
+        this.stairFix.clear();
         for (int pass = 0; pass < 4 && !this.finished; pass++)
         {
             this.scanLayer(level);
@@ -131,6 +184,12 @@ public final class QuarryBlockEntity extends WorksiteBlockEntity
             {
                 return;
             }
+            // Dug out: give the stair a little time to be relaid, then go on regardless.
+            if (!this.stairFix.isEmpty() && this.stairWaits++ < STAIR_WAIT_SCANS)
+            {
+                return;
+            }
+            this.stairFix.clear();
             this.nextLayer(level);
         }
     }
@@ -138,6 +197,7 @@ public final class QuarryBlockEntity extends WorksiteBlockEntity
     private void nextLayer(Level level)
     {
         this.layer++;
+        this.stairWaits = 0;
         this.skipped.clear();
         if (this.layer >= AncientEmpiresConfig.quarryMaxDepth || this.layerY(this.layer) <= level.getMinBuildHeight() + 1)
         {
@@ -148,18 +208,24 @@ public final class QuarryBlockEntity extends WorksiteBlockEntity
 
     private void scanLayer(Level level)
     {
-        int r = this.radius();
-        BlockPos center = this.center();
-        BlockPos step = this.stairStep(this.layer);
+        Set<Long> stair = this.stairColumns(this.layer);
         int y = this.layerY(this.layer);
         BlockPos.MutableBlockPos cursor = new BlockPos.MutableBlockPos();
-        for (int dx = -r; dx <= r; dx++)
+        for (int x = this.minX(); x <= this.maxX(); x++)
         {
-            for (int dz = -r; dz <= r; dz++)
+            for (int z = this.minZ(); z <= this.maxZ(); z++)
             {
-                cursor.set(center.getX() + dx, y, center.getZ() + dz);
-                if ((cursor.getX() == step.getX() && cursor.getZ() == step.getZ()) || this.skipped.contains(cursor))
+                cursor.set(x, y, z);
+                if (this.skipped.contains(cursor))
                 {
+                    continue;
+                }
+                if (stair.contains(BlockPos.asLong(x, 0, z)))
+                {
+                    if (AncientEmpiresConfig.quarryStairStone && needsRelaying(level, cursor))
+                    {
+                        this.stairFix.add(cursor.immutable());
+                    }
                     continue;
                 }
                 if (mineable(level, cursor))
@@ -189,36 +255,90 @@ public final class QuarryBlockEntity extends WorksiteBlockEntity
     }
 
     /**
-     * The column kept as this layer's stair step: the rim tiles in order,
-     * starting beside the block and running clockwise, one tile further per
-     * layer, wrapping round.
+     * A stair step that is not plain stone and can be dug and relaid: ore,
+     * dirt, sand or gravel (which would fall), or a gap. Not beside water or
+     * lava, and not unbreakable or a block entity.
      */
-    private BlockPos stairStep(int layer)
+    private static boolean needsRelaying(Level level, BlockPos pos)
+    {
+        BlockState state = level.getBlockState(pos);
+        if (state.is(STAIR_STONE) || state.hasBlockEntity() || state.getDestroySpeed(level, pos) < 0.0F || !state.getFluidState().isEmpty())
+        {
+            return false;
+        }
+        for (Direction side : Direction.values())
+        {
+            if (!level.getFluidState(pos.relative(side)).isEmpty())
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * The columns kept as this layer's stair step, packed as {@link BlockPos#asLong}
+     * at y 0: one rim tile, starting nearest the block and one tile further
+     * clockwise per layer, plus the tiles inward from it to the stair width.
+     * Columns of the two steps above are left out, so a step never sits under
+     * another (at the corners), which would block the head of anyone climbing.
+     */
+    private Set<Long> stairColumns(int layer)
     {
         List<BlockPos> rim = this.rim();
-        BlockPos entrance = this.worldPosition.relative(this.facing());
+        if (rim.isEmpty())
+        {
+            // A one-column pit has no rim to spare: no stair.
+            return Set.of();
+        }
         int start = 0;
+        long best = Long.MAX_VALUE;
         for (int index = 0; index < rim.size(); index++)
         {
             BlockPos tile = rim.get(index);
-            if (tile.getX() == entrance.getX() && tile.getZ() == entrance.getZ())
+            long dx = tile.getX() - this.worldPosition.getX();
+            long dz = tile.getZ() - this.worldPosition.getZ();
+            if (dx * dx + dz * dz < best)
             {
+                best = dx * dx + dz * dz;
                 start = index;
-                break;
             }
         }
-        return rim.get(Math.floorMod(start + layer, rim.size()));
+        int narrowest = Math.min(this.maxX() - this.minX() + 1, this.maxZ() - this.minZ() + 1);
+        // A small pit keeps room to dig: the stair takes under half its width.
+        int width = Math.max(1, Math.min(AncientEmpiresConfig.quarryStairWidth, (narrowest - 1) / 2));
+        Set<Long> columns = this.stepColumns(rim, start + layer, width);
+        for (int above = 1; above <= 2 && layer - above >= 0; above++)
+        {
+            columns.removeAll(this.stepColumns(rim, start + layer - above, width));
+        }
+        return columns;
     }
 
-    /** The square's edge, clockwise from the north-west corner, at y 0. */
+    /** Rim tile {@code index} (wrapping) and the tiles inward from it, to {@code width} in all. */
+    private Set<Long> stepColumns(List<BlockPos> rim, int index, int width)
+    {
+        BlockPos tile = rim.get(Math.floorMod(index, rim.size()));
+        BlockPos next = rim.get(Math.floorMod(index + 1, rim.size()));
+        // The rim runs clockwise, so inward is a quarter turn clockwise from the way it runs.
+        Direction along = Direction.fromDelta(Integer.signum(next.getX() - tile.getX()), 0, Integer.signum(next.getZ() - tile.getZ()));
+        Direction inward = (along == null ? Direction.EAST : along).getClockWise();
+        Set<Long> columns = new HashSet<>();
+        for (int step = 0; step < width; step++)
+        {
+            columns.add(BlockPos.asLong(tile.getX() + inward.getStepX() * step, 0, tile.getZ() + inward.getStepZ() * step));
+        }
+        return columns;
+    }
+
+    /** The square's edge
+, clockwise from the north-west corner, at y 0. */
     private List<BlockPos> rim()
     {
-        int r = this.radius();
-        BlockPos center = this.center();
-        int minX = center.getX() - r;
-        int maxX = center.getX() + r;
-        int minZ = center.getZ() - r;
-        int maxZ = center.getZ() + r;
+        int minX = this.minX();
+        int maxX = this.maxX();
+        int minZ = this.minZ();
+        int maxZ = this.maxZ();
         List<BlockPos> rim = new ArrayList<>();
         for (int x = minX; x < maxX; x++)
         {

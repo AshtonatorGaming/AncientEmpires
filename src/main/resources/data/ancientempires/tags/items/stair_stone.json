@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:cobblestone",
+    "minecraft:cobbled_deepslate",
+    "minecraft:mossy_cobblestone",
+    "minecraft:sandstone",
+    "minecraft:red_sandstone",
+    "minecraft:andesite",
+    "minecraft:diorite",
+    "minecraft:granite",
+    "minecraft:tuff",
+    "minecraft:blackstone",
+    "minecraft:netherrack",
+    { "id": "#forge:cobblestone", "required": false }
+  ]
+}

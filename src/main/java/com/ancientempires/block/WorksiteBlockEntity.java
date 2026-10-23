@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.SimpleContainer;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
@@ -30,8 +31,9 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * Shared by worksites (crop farm, tree farm, quarry): an owner, a square area
- * around the block, an 18-slot store workers unload into and hoppers can reach,
+ * Shared by worksites (crop farm, tree farm, quarry): an owner, a rectangular
+ * area near the block (moved and sized in the bounds screen, up to a limit
+ * that size upgrades raise, as in Ancient Warfare), an 18-slot store workers unload into and hoppers can reach,
  * and a to-do list the subclass rebuilds in {@link #scan}. The list is rebuilt
  * at most every {@code work.scanTicks}, and only when a worker asks, so an idle
  * worksite costs nothing. A worker claims the tile it walks to, so two workers
@@ -59,7 +61,11 @@ public abstract class WorksiteBlockEntity extends BlockEntity
     private final LazyOptional<IItemHandler> storeHandler = LazyOptional.of(() -> new InvWrapper(this.store));
     @Nullable
     private UUID owner;
-    private int radius = -1;
+    /** Null until the owner sets one; until then {@link #defaultArea}. */
+    @Nullable
+    private WorksiteArea area;
+    /** 0 without a size upgrade, 1 medium, 2 large. */
+    private int sizeTier;
     /** Game time of the last scan; -1 means never, so the next request scans. */
     private long scannedAt = -1L;
     /** Tile to the id of the worker on it, and the game time the claim lapses. */
@@ -71,9 +77,24 @@ public abstract class WorksiteBlockEntity extends BlockEntity
         super(type, pos, state);
     }
 
-    protected abstract int defaultRadius();
+    /** Which size upgrades a site takes. */
+    public enum UpgradeKind
+    {
+        NONE,
+        BOUNDS,
+        QUARRY
+    }
 
-    protected abstract int maxRadius();
+    /** A new site's width and length. */
+    protected abstract int defaultSize();
+
+    /** Largest width or length without an upgrade, with the medium one, and with the large one. */
+    protected abstract List<? extends Integer> maxSizes();
+
+    public UpgradeKind upgradeKind()
+    {
+        return UpgradeKind.BOUNDS;
+    }
 
     /** Rebuilds the to-do lists. */
     protected abstract void scan(Level level);
@@ -98,39 +119,100 @@ public abstract class WorksiteBlockEntity extends BlockEntity
         this.setChanged();
     }
 
-    public int radius()
+    /** The area relative to the block. */
+    public WorksiteArea area()
     {
-        return this.radius < 0 ? this.defaultRadius() : this.radius;
+        return this.area != null ? this.area : this.defaultArea();
     }
 
-    /** Steps the area to the next size, wrapping from the largest back to 2. */
-    int cycleRadius()
+    /** A new site's area: {@code defaultSize} square around the block. A quarry's lies in front. */
+    protected WorksiteArea defaultArea()
     {
-        int next = this.radius() + 1;
-        this.radius = next > this.maxRadius() ? 2 : next;
-        this.scannedAt = -1L;
-        this.setChanged();
-        return this.radius;
+        int size = Math.min(this.defaultSize(), this.maxSize());
+        return WorksiteArea.centered(size, size);
     }
 
-    /** The middle of the square: the block itself, except where the area lies in front of it (a quarry). */
-    public BlockPos center()
+    /** West edge, in world coordinates. */
+    public int minX()
     {
-        return this.worldPosition;
+        return this.worldPosition.getX() + this.area().minX();
     }
 
-    /** Whether the area can change size now. A quarry cannot once digging starts. */
+    public int maxX()
+    {
+        return this.worldPosition.getX() + this.area().maxX();
+    }
+
+    /** North edge, in world coordinates. */
+    public int minZ()
+    {
+        return this.worldPosition.getZ() + this.area().minZ();
+    }
+
+    public int maxZ()
+    {
+        return this.worldPosition.getZ() + this.area().maxZ();
+    }
+
+    /** Whether a column is inside the area. */
+    public boolean inArea(BlockPos pos)
+    {
+        return pos.getX() >= this.minX() && pos.getX() <= this.maxX() && pos.getZ() >= this.minZ() && pos.getZ() <= this.maxZ();
+    }
+
+    /** The area's columns, from {@code below} under the block's level to {@code above} over it. */
+    public AABB columns(int below, int above)
+    {
+        int y = this.worldPosition.getY();
+        return new AABB(this.minX(), y - below, this.minZ(), this.maxX() + 1, y + above + 1, this.maxZ() + 1);
+    }
+
+    /** Largest width or length at the current upgrade. */
+    public int maxSize()
+    {
+        List<? extends Integer> sizes = this.maxSizes();
+        if (sizes.isEmpty())
+        {
+            return 1;
+        }
+        return Math.max(1, sizes.get(Math.min(this.sizeTier, sizes.size() - 1)));
+    }
+
+    /** Whether the area may cover the block's own column. A quarry digs under its area, so not there. */
+    public boolean mayContainBlock()
+    {
+        return true;
+    }
+
+    /** Whether the area can change now. A quarry cannot once digging starts; sites without an area never. */
     public boolean canResize()
     {
         return true;
     }
 
-    /** Whether a column is inside the square. */
-    public boolean inSquare(BlockPos pos)
+    /** Sets the area if it fits the limits; the to-do lists are rebuilt on the next request. */
+    public boolean setArea(WorksiteArea area)
     {
-        int r = this.radius();
-        BlockPos center = this.center();
-        return Math.abs(pos.getX() - center.getX()) <= r && Math.abs(pos.getZ() - center.getZ()) <= r;
+        if (!this.canResize() || !area.fits(this.maxSize(), AncientEmpiresConfig.workAreaReach, this.mayContainBlock()))
+        {
+            return false;
+        }
+        this.area = area;
+        this.scannedAt = -1L;
+        this.setChanged();
+        return true;
+    }
+
+    /** 0 without a size upgrade, 1 medium, 2 large. */
+    public int sizeTier()
+    {
+        return this.sizeTier;
+    }
+
+    public void setSizeTier(int tier)
+    {
+        this.sizeTier = Math.max(0, Math.min(2, tier));
+        this.setChanged();
     }
 
     protected final void refresh()
@@ -235,7 +317,11 @@ public abstract class WorksiteBlockEntity extends BlockEntity
         {
             tag.putUUID("Owner", this.owner);
         }
-        tag.putInt("Radius", this.radius);
+        if (this.area != null)
+        {
+            tag.putIntArray("Area", new int[] {this.area.minX(), this.area.minZ(), this.area.maxX(), this.area.maxZ()});
+        }
+        tag.putInt("SizeTier", this.sizeTier);
         NonNullList<ItemStack> items = NonNullList.withSize(STORE_SIZE, ItemStack.EMPTY);
         for (int slot = 0; slot < STORE_SIZE; slot++)
         {
@@ -249,7 +335,10 @@ public abstract class WorksiteBlockEntity extends BlockEntity
     {
         super.load(tag);
         this.owner = tag.hasUUID("Owner") ? tag.getUUID("Owner") : null;
-        this.radius = tag.contains("Radius") ? tag.getInt("Radius") : -1;
+        int[] area = tag.getIntArray("Area");
+        // Old saves kept a radius; they start from the default area.
+        this.area = area.length == 4 ? new WorksiteArea(area[0], area[1], area[2], area[3]) : null;
+        this.sizeTier = tag.getInt("SizeTier");
         NonNullList<ItemStack> items = NonNullList.withSize(STORE_SIZE, ItemStack.EMPTY);
         ContainerHelper.loadAllItems(tag, items);
         for (int slot = 0; slot < STORE_SIZE; slot++)

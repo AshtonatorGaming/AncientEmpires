@@ -578,6 +578,18 @@ public abstract class NpcWorkGoal<T extends WorksiteBlockEntity> extends Goal
         return supplies > AncientEmpiresConfig.workSupplyReserve;
     }
 
+    /**
+     * Wears the main-hand tool by one, at {@code work.toolWear}'s chance per
+     * action: a worker swings all day, so a player's rate eats tools fast.
+     */
+    protected final void wearTool()
+    {
+        if (AncientEmpiresConfig.workToolWear > 0.0D && this.npc.getRandom().nextDouble() < AncientEmpiresConfig.workToolWear)
+        {
+            this.npc.getMainHandItem().hurtAndBreak(1, this.npc, npc -> npc.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+        }
+    }
+
     /** The backpack slot of a supply, or -1. */
     protected final int supplySlot()
     {

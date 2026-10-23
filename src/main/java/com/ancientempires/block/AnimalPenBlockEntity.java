@@ -48,22 +48,21 @@ public final class AnimalPenBlockEntity extends WorksiteBlockEntity
     }
 
     @Override
-    protected int defaultRadius()
+    protected int defaultSize()
     {
-        return AncientEmpiresConfig.ranchDefaultRadius;
+        return AncientEmpiresConfig.ranchDefaultSize;
     }
 
     @Override
-    protected int maxRadius()
+    protected List<? extends Integer> maxSizes()
     {
-        return AncientEmpiresConfig.ranchMaxRadius;
+        return AncientEmpiresConfig.ranchMaxSize;
     }
 
     /** The pen's volume. */
-    public AABB area()
+    public AABB volume()
     {
-        int r = this.radius();
-        return new AABB(this.worldPosition).inflate(r, 0, r).expandTowards(0, 3, 0).expandTowards(0, -2, 0);
+        return this.columns(2, 3);
     }
 
     @Nullable
@@ -122,7 +121,7 @@ public final class AnimalPenBlockEntity extends WorksiteBlockEntity
         this.breed.clear();
         this.drops.clear();
         Map<EntityType<?>, List<Animal>> adults = new HashMap<>();
-        for (Animal animal : level.getEntitiesOfClass(Animal.class, this.area(), AnimalPenBlockEntity::livestock))
+        for (Animal animal : level.getEntitiesOfClass(Animal.class, this.volume(), AnimalPenBlockEntity::livestock))
         {
             if (animal.isBaby())
             {
@@ -148,7 +147,7 @@ public final class AnimalPenBlockEntity extends WorksiteBlockEntity
                 this.breed.addAll(ready);
             }
         }
-        for (ItemEntity item : level.getEntitiesOfClass(ItemEntity.class, this.area(), item -> item.isAlive() && !item.hasPickUpDelay()))
+        for (ItemEntity item : level.getEntitiesOfClass(ItemEntity.class, this.volume(), item -> item.isAlive() && !item.hasPickUpDelay()))
         {
             BlockPos at = item.blockPosition();
             if (!this.drops.contains(at))

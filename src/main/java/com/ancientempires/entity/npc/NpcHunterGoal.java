@@ -166,6 +166,6 @@ public final class NpcHunterGoal extends NpcWorkGoal<HuntingLodgeBlockEntity>
         arrow.shoot(dx, dy + NpcBowAttackGoal.gravityLift(dx, dy, dz, speed), dz, speed, 1.0F);
         level.addFreshEntity(arrow);
         this.npc.playSound(SoundEvents.ARROW_SHOOT, 1.0F, 1.0F / (this.npc.getRandom().nextFloat() * 0.4F + 1.2F) + 0.5F);
-        bow.hurtAndBreak(1, this.npc, npc -> npc.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+        this.wearTool();
     }
 }

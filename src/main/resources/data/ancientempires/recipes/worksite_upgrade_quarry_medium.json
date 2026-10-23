@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PPP",
+    "F F",
+    "F F"
+  ],
+  "key": {
+    "P": { "tag": "minecraft:planks" },
+    "F": { "tag": "minecraft:wooden_fences" }
+  },
+  "result": { "item": "ancientempires:worksite_upgrade_quarry_medium" }
+}

@@ -9,7 +9,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
-import net.minecraft.util.Mth;
 import net.minecraft.util.random.WeightedRandomList;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.animal.Animal;
@@ -64,15 +63,15 @@ public final class HuntingLodgeBlockEntity extends WorksiteBlockEntity
     }
 
     @Override
-    protected int defaultRadius()
+    protected int defaultSize()
     {
-        return AncientEmpiresConfig.huntDefaultRadius;
+        return AncientEmpiresConfig.huntDefaultSize;
     }
 
     @Override
-    protected int maxRadius()
+    protected List<? extends Integer> maxSizes()
     {
-        return AncientEmpiresConfig.huntMaxRadius;
+        return AncientEmpiresConfig.huntMaxSize;
     }
 
     @Nullable
@@ -96,8 +95,7 @@ public final class HuntingLodgeBlockEntity extends WorksiteBlockEntity
 
     private AABB ground()
     {
-        int r = this.radius();
-        return new AABB(this.worldPosition).inflate(r, VERTICAL, r);
+        return this.columns(VERTICAL, VERTICAL);
     }
 
     @Override
@@ -142,7 +140,7 @@ public final class HuntingLodgeBlockEntity extends WorksiteBlockEntity
         }
         for (AnimalPenBlockEntity pen : pens)
         {
-            if (pen.area().contains(creature.position()))
+            if (pen.volume().contains(creature.position()))
             {
                 return false;
             }
@@ -154,10 +152,15 @@ public final class HuntingLodgeBlockEntity extends WorksiteBlockEntity
     private List<AnimalPenBlockEntity> pensNearby(Level level)
     {
         List<AnimalPenBlockEntity> pens = new ArrayList<>();
-        int reach = this.radius() + AncientEmpiresConfig.ranchMaxRadius;
-        for (int cx = (this.worldPosition.getX() - reach) >> 4; cx <= (this.worldPosition.getX() + reach) >> 4; cx++)
+        // A pen's block can sit up to its own size plus the reach outside the area it covers.
+        int pad = AncientEmpiresConfig.workAreaReach + 1;
+        for (Integer size : AncientEmpiresConfig.ranchMaxSize)
         {
-            for (int cz = (this.worldPosition.getZ() - reach) >> 4; cz <= (this.worldPosition.getZ() + reach) >> 4; cz++)
+            pad = Math.max(pad, size + AncientEmpiresConfig.workAreaReach + 1);
+        }
+        for (int cx = (this.minX() - pad) >> 4; cx <= (this.maxX() + pad) >> 4; cx++)
+        {
+            for (int cz = (this.minZ() - pad) >> 4; cz <= (this.maxZ() + pad) >> 4; cz++)
             {
                 LevelChunk chunk = level.getChunkSource().getChunkNow(cx, cz);
                 if (chunk == null)
@@ -183,13 +186,22 @@ public final class HuntingLodgeBlockEntity extends WorksiteBlockEntity
     private void wanderIn(ServerLevel level)
     {
         RandomSource random = level.getRandom();
-        int r = this.radius();
+        int width = this.maxX() - this.minX() + 1;
+        int length = this.maxZ() - this.minZ() + 1;
         for (int attempt = 0; attempt < SPAWN_TRIES; attempt++)
         {
-            double angle = random.nextDouble() * Math.PI * 2.0D;
-            double reach = r * (0.75D + random.nextDouble() * 0.25D);
-            int x = this.worldPosition.getX() + Mth.floor(Math.cos(angle) * reach);
-            int z = this.worldPosition.getZ() + Mth.floor(Math.sin(angle) * reach);
+            // Somewhere in the outer eighth of the ground, on a random side.
+            int x = this.minX() + random.nextInt(width);
+            int z = this.minZ() + random.nextInt(length);
+            int bandX = random.nextInt(Math.max(1, width / 8));
+            int bandZ = random.nextInt(Math.max(1, length / 8));
+            switch (random.nextInt(4))
+            {
+                case 0 -> x = this.minX() + bandX;
+                case 1 -> x = this.maxX() - bandX;
+                case 2 -> z = this.minZ() + bandZ;
+                default -> z = this.maxZ() - bandZ;
+            }
             if (!level.hasChunk(x >> 4, z >> 4))
             {
                 continue;

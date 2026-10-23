@@ -134,33 +134,37 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.DoubleValue IMMIGRATION_SPAWN_DISTANCE;
     private static final ForgeConfigSpec.IntValue IMMIGRATION_FOOD_PER_SETTLER;
     private static final ForgeConfigSpec.IntValue IMMIGRATION_FOOD_CAPACITY;
-    private static final ForgeConfigSpec.IntValue FARM_DEFAULT_RADIUS;
-    private static final ForgeConfigSpec.IntValue FARM_MAX_RADIUS;
+    private static final ForgeConfigSpec.IntValue FARM_DEFAULT_SIZE;
+    private static final ForgeConfigSpec.ConfigValue<List<? extends Integer>> FARM_MAX_SIZE;
     private static final ForgeConfigSpec.IntValue WORK_SCAN_TICKS;
     private static final ForgeConfigSpec.IntValue WORK_CLAIM_TICKS;
     private static final ForgeConfigSpec.IntValue WORK_ACTION_TICKS;
     private static final ForgeConfigSpec.IntValue WORK_SUPPLY_RESERVE;
     private static final ForgeConfigSpec.IntValue WORK_SEARCH_RANGE;
     private static final ForgeConfigSpec.DoubleValue WORK_WALK_SPEED;
-    private static final ForgeConfigSpec.IntValue TREE_DEFAULT_RADIUS;
-    private static final ForgeConfigSpec.IntValue TREE_MAX_RADIUS;
+    private static final ForgeConfigSpec.IntValue WORK_AREA_REACH;
+    private static final ForgeConfigSpec.IntValue TREE_DEFAULT_SIZE;
+    private static final ForgeConfigSpec.ConfigValue<List<? extends Integer>> TREE_MAX_SIZE;
     private static final ForgeConfigSpec.IntValue TREE_SPACING;
     private static final ForgeConfigSpec.IntValue TREE_REACH;
     private static final ForgeConfigSpec.IntValue TREE_MAX_LOGS;
-    private static final ForgeConfigSpec.IntValue QUARRY_DEFAULT_RADIUS;
-    private static final ForgeConfigSpec.IntValue QUARRY_MAX_RADIUS;
+    private static final ForgeConfigSpec.IntValue QUARRY_DEFAULT_SIZE;
+    private static final ForgeConfigSpec.ConfigValue<List<? extends Integer>> QUARRY_MAX_SIZE;
     private static final ForgeConfigSpec.IntValue QUARRY_MAX_DEPTH;
-    private static final ForgeConfigSpec.IntValue RANCH_DEFAULT_RADIUS;
-    private static final ForgeConfigSpec.IntValue RANCH_MAX_RADIUS;
+    private static final ForgeConfigSpec.IntValue QUARRY_STAIR_WIDTH;
+    private static final ForgeConfigSpec.BooleanValue QUARRY_STAIR_STONE;
+    private static final ForgeConfigSpec.DoubleValue WORK_TOOL_WEAR;
+    private static final ForgeConfigSpec.IntValue RANCH_DEFAULT_SIZE;
+    private static final ForgeConfigSpec.ConfigValue<List<? extends Integer>> RANCH_MAX_SIZE;
     private static final ForgeConfigSpec.IntValue RANCH_HERD_SIZE;
-    private static final ForgeConfigSpec.IntValue HUNT_DEFAULT_RADIUS;
-    private static final ForgeConfigSpec.IntValue HUNT_MAX_RADIUS;
+    private static final ForgeConfigSpec.IntValue HUNT_DEFAULT_SIZE;
+    private static final ForgeConfigSpec.ConfigValue<List<? extends Integer>> HUNT_MAX_SIZE;
     private static final ForgeConfigSpec.IntValue HUNT_KEEP_PER_KIND;
     private static final ForgeConfigSpec.IntValue HUNT_GAME_CAP;
     private static final ForgeConfigSpec.IntValue HUNT_SPAWN_INTERVAL;
     private static final ForgeConfigSpec.DoubleValue HUNT_SHOOT_RANGE;
-    private static final ForgeConfigSpec.IntValue FISH_DEFAULT_RADIUS;
-    private static final ForgeConfigSpec.IntValue FISH_MAX_RADIUS;
+    private static final ForgeConfigSpec.IntValue FISH_DEFAULT_SIZE;
+    private static final ForgeConfigSpec.ConfigValue<List<? extends Integer>> FISH_MAX_SIZE;
     private static final ForgeConfigSpec.BooleanValue FISH_RECAST;
     private static final ForgeConfigSpec.IntValue COOK_TICKS;
     private static final ForgeConfigSpec.IntValue COOK_BUNDLE_NUTRITION;
@@ -582,12 +586,12 @@ public final class AncientEmpiresConfig
         builder.pop();
 
         builder.comment("Workers at worksites. The tool in a Worker-path NPC's main hand picks its trade (hoe, axe, pickaxe, shears, bow, fishing rod, bowl); it works its owner's nearest worksite of that kind by hand.").push("work");
-        FARM_DEFAULT_RADIUS = builder
-                .comment("A new crop farm's area, in blocks from the farm block to its edge (4 is 9 by 9). Sneak-click the block to change it.")
-                .defineInRange("farmDefaultRadius", 4, 1, 16);
-        FARM_MAX_RADIUS = builder
-                .comment("Largest crop farm area, in blocks from the farm block (7 is 15 by 15; Ancient Warfare allowed 16 wide).")
-                .defineInRange("farmMaxRadius", 7, 1, 16);
+        FARM_DEFAULT_SIZE = builder
+                .comment("A new crop farm's width and length, in blocks. Sneak-click the block empty-handed to move or resize it. Farmers hold a hoe.")
+                .defineInRange("farmDefaultSize", 9, 1, 129);
+        FARM_MAX_SIZE = builder
+                .comment("Largest crop farm width or length: without an upgrade, with the medium upgrade, with the large one.")
+                .defineList("farmMaxSize", List.of(15, 21, 27), AncientEmpiresConfig::isSize);
         WORK_SCAN_TICKS = builder
                 .comment("Ticks between rebuilds of a worksite's to-do list. It is rebuilt only while a worker asks for work.")
                 .defineInRange("scanTicks", 100, 10, 1200);
@@ -606,12 +610,18 @@ public final class AncientEmpiresConfig
         WORK_WALK_SPEED = builder
                 .comment("Walking speed while working, as a multiple of the NPC's speed.")
                 .defineInRange("walkSpeed", 0.8D, 0.3D, 1.5D);
-        TREE_DEFAULT_RADIUS = builder
-                .comment("A new tree farm's area, in blocks from the block to its edge (6 is 13 by 13). Woodcutters hold an axe.")
-                .defineInRange("treeDefaultRadius", 6, 1, 16);
-        TREE_MAX_RADIUS = builder
-                .comment("Largest tree farm area, in blocks from the block.")
-                .defineInRange("treeMaxRadius", 10, 1, 16);
+        WORK_AREA_REACH = builder
+                .comment("How far, in blocks, a worksite's area may sit from its block (0: it must touch or contain the block).")
+                .defineInRange("areaReach", 8, 0, 32);
+        WORK_TOOL_WEAR = builder
+                .comment("Chance each work action wears the worker's tool by one, as a player's would be (Unbreaking still applies). 1 is a player's rate, 0 never wears. Ancient Warfare's workers did not wear tools.")
+                .defineInRange("toolWear", 0.2D, 0.0D, 1.0D);
+        TREE_DEFAULT_SIZE = builder
+                .comment("A new tree farm's width and length, in blocks. Sneak-click the block empty-handed to move or resize it. Woodcutters hold an axe.")
+                .defineInRange("treeDefaultSize", 13, 1, 129);
+        TREE_MAX_SIZE = builder
+                .comment("Largest tree farm width or length: without an upgrade, with the medium upgrade, with the large one.")
+                .defineList("treeMaxSize", List.of(21, 27, 33), AncientEmpiresConfig::isSize);
         TREE_SPACING = builder
                 .comment("Saplings are planted on a grid this many blocks apart, so grown trees have room.")
                 .defineInRange("treeSpacing", 3, 1, 8);
@@ -621,30 +631,36 @@ public final class AncientEmpiresConfig
         TREE_MAX_LOGS = builder
                 .comment("Most logs one tree can have; bigger structures are not felled past this.")
                 .defineInRange("treeMaxLogs", 128, 8, 1024);
-        QUARRY_DEFAULT_RADIUS = builder
-                .comment("A new quarry's pit, in blocks from its middle to its edge (3 is 7 by 7). The pit lies in front of the quarry block. Miners hold a pickaxe.")
-                .defineInRange("quarryDefaultRadius", 3, 1, 8);
-        QUARRY_MAX_RADIUS = builder
-                .comment("Largest quarry pit, in blocks from its middle.")
-                .defineInRange("quarryMaxRadius", 6, 1, 8);
+        QUARRY_DEFAULT_SIZE = builder
+                .comment("A new quarry pit's width and length, in blocks. Sneak-click the block empty-handed to move or resize it. The pit starts in front of the block. Miners hold a pickaxe. Quarries take the quarry upgrades (Ancient Warfare: 16, 32, 64).")
+                .defineInRange("quarryDefaultSize", 7, 1, 129);
+        QUARRY_MAX_SIZE = builder
+                .comment("Largest quarry pit width or length: without an upgrade, with the medium upgrade, with the large one.")
+                .defineList("quarryMaxSize", List.of(16, 32, 64), AncientEmpiresConfig::isSize);
         QUARRY_MAX_DEPTH = builder
                 .comment("Layers a quarry digs below its block before it is done.")
                 .defineInRange("quarryMaxDepth", 32, 1, 256);
-        RANCH_DEFAULT_RADIUS = builder
-                .comment("A new animal pen's area, in blocks from the block (5 is 11 by 11). Ranchers hold shears.")
-                .defineInRange("ranchDefaultRadius", 5, 1, 16);
-        RANCH_MAX_RADIUS = builder
-                .comment("Largest animal pen area, in blocks from the block.")
-                .defineInRange("ranchMaxRadius", 10, 1, 16);
+        QUARRY_STAIR_WIDTH = builder
+                .comment("Width of the spiral stair a quarry leaves around its rim, in blocks. Wider is safer to walk; corners narrow so nobody hits their head.")
+                .defineInRange("quarryStairWidth", 2, 1, 3);
+        QUARRY_STAIR_STONE = builder
+                .comment("Miners dig out stair blocks that are not plain stone (ore, dirt, sand, gravel, gaps) and lay stone they carry (the ancientempires:stair_stone item tag) in their place.")
+                .define("quarryStairStone", true);
+        RANCH_DEFAULT_SIZE = builder
+                .comment("A new animal pen's width and length, in blocks. Sneak-click the block empty-handed to move or resize it. Ranchers hold shears.")
+                .defineInRange("ranchDefaultSize", 11, 1, 129);
+        RANCH_MAX_SIZE = builder
+                .comment("Largest animal pen width or length: without an upgrade, with the medium upgrade, with the large one.")
+                .defineList("ranchMaxSize", List.of(21, 27, 33), AncientEmpiresConfig::isSize);
         RANCH_HERD_SIZE = builder
                 .comment("Adults of each kind a pen keeps: ranchers breed up to it and cull past it.")
                 .defineInRange("ranchHerdSize", 8, 2, 64);
-        HUNT_DEFAULT_RADIUS = builder
-                .comment("A new hunting lodge's ground, in blocks from the lodge. Hunters hold a bow.")
-                .defineInRange("huntDefaultRadius", 24, 4, 64);
-        HUNT_MAX_RADIUS = builder
-                .comment("Largest hunting ground, in blocks from the lodge.")
-                .defineInRange("huntMaxRadius", 40, 4, 64);
+        HUNT_DEFAULT_SIZE = builder
+                .comment("A new hunting ground's width and length, in blocks. Sneak-click the block empty-handed to move or resize it. Hunters hold a bow.")
+                .defineInRange("huntDefaultSize", 49, 1, 129);
+        HUNT_MAX_SIZE = builder
+                .comment("Largest hunting ground width or length: without an upgrade, with the medium upgrade, with the large one.")
+                .defineList("huntMaxSize", List.of(81, 97, 129), AncientEmpiresConfig::isSize);
         HUNT_KEEP_PER_KIND = builder
                 .comment("Animals of each kind hunters leave in the ground, so it recovers.")
                 .defineInRange("huntKeepPerKind", 2, 0, 16);
@@ -657,12 +673,12 @@ public final class AncientEmpiresConfig
         HUNT_SHOOT_RANGE = builder
                 .comment("How far, in blocks, a hunter shoots from, with a clear line.")
                 .defineInRange("huntShootRange", 16.0D, 4.0D, 48.0D);
-        FISH_DEFAULT_RADIUS = builder
-                .comment("A new fishing dock's water, in blocks from the dock. Fishers hold a fishing rod.")
-                .defineInRange("fishDefaultRadius", 4, 1, 16);
-        FISH_MAX_RADIUS = builder
-                .comment("Largest fishing dock area, in blocks from the dock.")
-                .defineInRange("fishMaxRadius", 8, 1, 16);
+        FISH_DEFAULT_SIZE = builder
+                .comment("A new fishing dock's width and length, in blocks. Sneak-click the block empty-handed to move or resize it. Fishers hold a fishing rod.")
+                .defineInRange("fishDefaultSize", 9, 1, 129);
+        FISH_MAX_SIZE = builder
+                .comment("Largest fishing dock width or length: without an upgrade, with the medium upgrade, with the large one.")
+                .defineList("fishMaxSize", List.of(17, 23, 29), AncientEmpiresConfig::isSize);
         FISH_RECAST = builder
                 .comment("A fisher casts again into the same water after a catch, until its backpack is full. Off: it picks new water each time.")
                 .define("fishRecast", true);
@@ -953,33 +969,37 @@ public final class AncientEmpiresConfig
     public static double immigrationSpawnDistance = 24.0D;
     public static int immigrationFoodPerSettler = 1;
     public static int immigrationFoodCapacity = 64;
-    public static int farmDefaultRadius = 4;
-    public static int farmMaxRadius = 7;
+    public static int farmDefaultSize = 9;
+    public static List<? extends Integer> farmMaxSize = List.of(15, 21, 27);
     public static int workScanTicks = 100;
     public static int workClaimTicks = 400;
     public static int workActionTicks = 12;
     public static int workSupplyReserve = 16;
     public static int workSearchRange = 32;
     public static double workWalkSpeed = 0.8D;
-    public static int treeDefaultRadius = 6;
-    public static int treeMaxRadius = 10;
+    public static int workAreaReach = 8;
+    public static int treeDefaultSize = 13;
+    public static List<? extends Integer> treeMaxSize = List.of(21, 27, 33);
     public static int treeSpacing = 3;
     public static int treeReach = 4;
     public static int treeMaxLogs = 128;
-    public static int quarryDefaultRadius = 3;
-    public static int quarryMaxRadius = 6;
+    public static int quarryDefaultSize = 7;
+    public static List<? extends Integer> quarryMaxSize = List.of(16, 32, 64);
     public static int quarryMaxDepth = 32;
-    public static int ranchDefaultRadius = 5;
-    public static int ranchMaxRadius = 10;
+    public static int quarryStairWidth = 2;
+    public static boolean quarryStairStone = true;
+    public static double workToolWear = 0.2D;
+    public static int ranchDefaultSize = 11;
+    public static List<? extends Integer> ranchMaxSize = List.of(21, 27, 33);
     public static int ranchHerdSize = 8;
-    public static int huntDefaultRadius = 24;
-    public static int huntMaxRadius = 40;
+    public static int huntDefaultSize = 49;
+    public static List<? extends Integer> huntMaxSize = List.of(81, 97, 129);
     public static int huntKeepPerKind = 2;
     public static int huntGameCap = 6;
     public static int huntSpawnInterval = 2400;
     public static double huntShootRange = 16.0D;
-    public static int fishDefaultRadius = 4;
-    public static int fishMaxRadius = 8;
+    public static int fishDefaultSize = 9;
+    public static List<? extends Integer> fishMaxSize = List.of(17, 23, 29);
     public static boolean fishRecast = true;
     public static int cookTicks = 100;
     public static int cookBundleNutrition = 24;
@@ -1046,6 +1066,11 @@ public final class AncientEmpiresConfig
 
     private AncientEmpiresConfig()
     {
+    }
+
+    private static boolean isSize(Object value)
+    {
+        return value instanceof Integer size && size >= 1 && size <= 129;
     }
 
     private static boolean isChance(Object value)
@@ -1181,33 +1206,37 @@ public final class AncientEmpiresConfig
         immigrationSpawnDistance = IMMIGRATION_SPAWN_DISTANCE.get();
         immigrationFoodPerSettler = IMMIGRATION_FOOD_PER_SETTLER.get();
         immigrationFoodCapacity = IMMIGRATION_FOOD_CAPACITY.get();
-        farmDefaultRadius = FARM_DEFAULT_RADIUS.get();
-        farmMaxRadius = FARM_MAX_RADIUS.get();
+        farmDefaultSize = FARM_DEFAULT_SIZE.get();
+        farmMaxSize = FARM_MAX_SIZE.get();
         workScanTicks = WORK_SCAN_TICKS.get();
         workClaimTicks = WORK_CLAIM_TICKS.get();
         workActionTicks = WORK_ACTION_TICKS.get();
         workSupplyReserve = WORK_SUPPLY_RESERVE.get();
         workSearchRange = WORK_SEARCH_RANGE.get();
         workWalkSpeed = WORK_WALK_SPEED.get();
-        treeDefaultRadius = TREE_DEFAULT_RADIUS.get();
-        treeMaxRadius = TREE_MAX_RADIUS.get();
+        workAreaReach = WORK_AREA_REACH.get();
+        treeDefaultSize = TREE_DEFAULT_SIZE.get();
+        treeMaxSize = TREE_MAX_SIZE.get();
         treeSpacing = TREE_SPACING.get();
         treeReach = TREE_REACH.get();
         treeMaxLogs = TREE_MAX_LOGS.get();
-        quarryDefaultRadius = QUARRY_DEFAULT_RADIUS.get();
-        quarryMaxRadius = QUARRY_MAX_RADIUS.get();
+        quarryDefaultSize = QUARRY_DEFAULT_SIZE.get();
+        quarryMaxSize = QUARRY_MAX_SIZE.get();
         quarryMaxDepth = QUARRY_MAX_DEPTH.get();
-        ranchDefaultRadius = RANCH_DEFAULT_RADIUS.get();
-        ranchMaxRadius = RANCH_MAX_RADIUS.get();
+        quarryStairWidth = QUARRY_STAIR_WIDTH.get();
+        quarryStairStone = QUARRY_STAIR_STONE.get();
+        workToolWear = WORK_TOOL_WEAR.get();
+        ranchDefaultSize = RANCH_DEFAULT_SIZE.get();
+        ranchMaxSize = RANCH_MAX_SIZE.get();
         ranchHerdSize = RANCH_HERD_SIZE.get();
-        huntDefaultRadius = HUNT_DEFAULT_RADIUS.get();
-        huntMaxRadius = HUNT_MAX_RADIUS.get();
+        huntDefaultSize = HUNT_DEFAULT_SIZE.get();
+        huntMaxSize = HUNT_MAX_SIZE.get();
         huntKeepPerKind = HUNT_KEEP_PER_KIND.get();
         huntGameCap = HUNT_GAME_CAP.get();
         huntSpawnInterval = HUNT_SPAWN_INTERVAL.get();
         huntShootRange = HUNT_SHOOT_RANGE.get();
-        fishDefaultRadius = FISH_DEFAULT_RADIUS.get();
-        fishMaxRadius = FISH_MAX_RADIUS.get();
+        fishDefaultSize = FISH_DEFAULT_SIZE.get();
+        fishMaxSize = FISH_MAX_SIZE.get();
         fishRecast = FISH_RECAST.get();
         cookTicks = COOK_TICKS.get();
         cookBundleNutrition = COOK_BUNDLE_NUTRITION.get();

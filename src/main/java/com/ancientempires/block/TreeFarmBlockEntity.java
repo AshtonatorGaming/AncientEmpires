@@ -39,15 +39,15 @@ public final class TreeFarmBlockEntity extends WorksiteBlockEntity
     }
 
     @Override
-    protected int defaultRadius()
+    protected int defaultSize()
     {
-        return AncientEmpiresConfig.treeDefaultRadius;
+        return AncientEmpiresConfig.treeDefaultSize;
     }
 
     @Override
-    protected int maxRadius()
+    protected List<? extends Integer> maxSizes()
     {
-        return AncientEmpiresConfig.treeMaxRadius;
+        return AncientEmpiresConfig.treeMaxSize;
     }
 
     @Nullable
@@ -87,16 +87,15 @@ public final class TreeFarmBlockEntity extends WorksiteBlockEntity
         this.trees.clear();
         this.drops.clear();
         this.plant.clear();
-        int r = this.radius();
         int spacing = Math.max(1, AncientEmpiresConfig.treeSpacing);
         int baseY = this.worldPosition.getY();
         BlockPos.MutableBlockPos cursor = new BlockPos.MutableBlockPos();
-        for (int dx = -r; dx <= r; dx++)
+        for (int x = this.minX(); x <= this.maxX(); x++)
         {
-            for (int dz = -r; dz <= r; dz++)
+            for (int z = this.minZ(); z <= this.maxZ(); z++)
             {
-                int x = this.worldPosition.getX() + dx;
-                int z = this.worldPosition.getZ() + dz;
+                int dx = x - this.worldPosition.getX();
+                int dz = z - this.worldPosition.getZ();
                 for (int y = baseY - 2; y <= baseY + 1; y++)
                 {
                     cursor.set(x, y, z);
@@ -120,7 +119,7 @@ public final class TreeFarmBlockEntity extends WorksiteBlockEntity
                 }
             }
         }
-        AABB area = new AABB(this.worldPosition).inflate(r, 2, r).expandTowards(0, 8, 0);
+        AABB area = this.columns(2, 10);
         for (ItemEntity item : level.getEntitiesOfClass(ItemEntity.class, area, item -> item.isAlive() && !item.hasPickUpDelay()))
         {
             BlockPos at = item.blockPosition();

@@ -1,8 +1,12 @@
 package com.ancientempires.network;
 
 import com.ancientempires.AncientEmpires;
+import com.ancientempires.block.WorksiteArea;
+import com.ancientempires.block.WorksiteBlockEntity;
+import com.ancientempires.config.AncientEmpiresConfig;
 import com.ancientempires.entity.npc.NpcFactions;
 import com.ancientempires.entity.npc.NpcStandings;
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkDirection;
@@ -19,7 +23,7 @@ import java.util.List;
 public final class ModNetwork
 {
     /** Bump whenever a packet is added or changes shape, so mismatched clients are refused cleanly. */
-    private static final String PROTOCOL = "2";
+    private static final String PROTOCOL = "3";
     private static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(
             ResourceLocation.parse(AncientEmpires.MOD_ID + ":main"),
             () -> PROTOCOL,
@@ -53,6 +57,16 @@ public final class ModNetwork
                 .decoder(StandingsPacket::decode)
                 .consumerMainThread(StandingsPacket::handle)
                 .add();
+        CHANNEL.messageBuilder(WorksiteBoundsPacket.class, nextId++, NetworkDirection.PLAY_TO_CLIENT)
+                .encoder(WorksiteBoundsPacket::encode)
+                .decoder(WorksiteBoundsPacket::decode)
+                .consumerMainThread(WorksiteBoundsPacket::handle)
+                .add();
+        CHANNEL.messageBuilder(WorksiteBoundsSetPacket.class, nextId++, NetworkDirection.PLAY_TO_SERVER)
+                .encoder(WorksiteBoundsSetPacket::encode)
+                .decoder(WorksiteBoundsSetPacket::decode)
+                .consumerMainThread(WorksiteBoundsSetPacket::handle)
+                .add();
     }
 
     public static void requestStandings()
@@ -70,6 +84,19 @@ public final class ModNetwork
             entries.add(new StandingsPacket.Entry(faction, standings.get(player.getUUID(), faction)));
         }
         CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), new StandingsPacket(entries));
+    }
+
+    /** Opens or refreshes a player's bounds screen for a worksite. */
+    public static void sendWorksiteBounds(ServerPlayer player, WorksiteBlockEntity site)
+    {
+        WorksiteBoundsPacket.State state = new WorksiteBoundsPacket.State(site.getBlockPos(), site.area(), site.maxSize(),
+                AncientEmpiresConfig.workAreaReach, site.mayContainBlock(), !site.canResize(), site.sizeTier(), site.upgradeKind());
+        CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), new WorksiteBoundsPacket(state));
+    }
+
+    public static void sendWorksiteArea(BlockPos pos, WorksiteArea area)
+    {
+        CHANNEL.sendToServer(new WorksiteBoundsSetPacket(pos, area));
     }
 
     public static void sendName(int entityId, String name)

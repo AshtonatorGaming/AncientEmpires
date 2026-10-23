@@ -29,15 +29,15 @@ public final class FishingDockBlockEntity extends WorksiteBlockEntity
     }
 
     @Override
-    protected int defaultRadius()
+    protected int defaultSize()
     {
-        return AncientEmpiresConfig.fishDefaultRadius;
+        return AncientEmpiresConfig.fishDefaultSize;
     }
 
     @Override
-    protected int maxRadius()
+    protected List<? extends Integer> maxSizes()
     {
-        return AncientEmpiresConfig.fishMaxRadius;
+        return AncientEmpiresConfig.fishMaxSize;
     }
 
     @Nullable
@@ -57,15 +57,14 @@ public final class FishingDockBlockEntity extends WorksiteBlockEntity
     protected void scan(Level level)
     {
         this.water.clear();
-        int r = this.radius();
         BlockPos.MutableBlockPos cursor = new BlockPos.MutableBlockPos();
-        for (int dx = -r; dx <= r; dx++)
+        for (int x = this.minX(); x <= this.maxX(); x++)
         {
-            for (int dz = -r; dz <= r; dz++)
+            for (int z = this.minZ(); z <= this.maxZ(); z++)
             {
                 for (int y = this.worldPosition.getY(); y >= this.worldPosition.getY() - 3; y--)
                 {
-                    cursor.set(this.worldPosition.getX() + dx, y, this.worldPosition.getZ() + dz);
+                    cursor.set(x, y, z);
                     if (level.getFluidState(cursor).is(FluidTags.WATER) && level.getBlockState(cursor.above()).isAir())
                     {
                         this.water.add(cursor.immutable());
