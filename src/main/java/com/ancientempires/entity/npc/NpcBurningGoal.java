@@ -3,7 +3,6 @@ package com.ancientempires.entity.npc;
 import com.ancientempires.config.AncientEmpiresConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.ai.util.DefaultRandomPos;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.phys.Vec3;
@@ -55,7 +54,7 @@ public final class NpcBurningGoal extends Goal
         }
         else
         {
-            spot = DefaultRandomPos.getPos(this.npc, 6, 3);
+            spot = NpcSafety.pos(this.npc, 6, 3);
         }
         if (spot != null)
         {

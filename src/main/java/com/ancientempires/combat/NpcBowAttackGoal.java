@@ -1,11 +1,11 @@
 package com.ancientempires.combat;
 
 import com.ancientempires.entity.npc.NpcEntity;
+import com.ancientempires.entity.npc.NpcSafety;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.ai.util.DefaultRandomPos;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ArrowItem;
 import net.minecraft.world.item.BowItem;
@@ -302,7 +302,7 @@ public class NpcBowAttackGoal extends Goal
             this.wanderDelay--;
             return;
         }
-        Vec3 spot = DefaultRandomPos.getPos(this.npc, 3, 2);
+        Vec3 spot = NpcSafety.pos(this.npc, 3, 2);
         if (spot == null)
         {
             this.wanderDelay = 20;

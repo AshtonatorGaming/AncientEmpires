@@ -226,6 +226,7 @@ public class NpcEntity extends PathfinderMob
         this.setPersistenceRequired();
         this.setCanPickUpLoot(false);
         this.xpReward = 0;
+        NpcSafety.applyPathCosts(this);
         for (EquipmentSlot slot : EquipmentSlot.values())
         {
             this.setDropChance(slot, 1.0F);
@@ -270,6 +271,17 @@ public class NpcEntity extends PathfinderMob
         navigation.setCanOpenDoors(AncientEmpiresConfig.openDoors);
         navigation.setCanPassDoors(true);
         return navigation;
+    }
+
+    /**
+     * The tallest drop a path may include. Vanilla raises this for a healthy mob
+     * with a target, which is how mobs leap off cliffs after the player; NPCs
+     * keep {@code hazard.maxFall} in and out of a fight.
+     */
+    @Override
+    public int getMaxFallDistance()
+    {
+        return Math.max(0, AncientEmpiresConfig.hazardMaxFall);
     }
 
     /**

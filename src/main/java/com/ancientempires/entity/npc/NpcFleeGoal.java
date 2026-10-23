@@ -4,7 +4,6 @@ import com.ancientempires.config.AncientEmpiresConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.ai.util.DefaultRandomPos;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
@@ -151,14 +150,14 @@ public final class NpcFleeGoal extends Goal
     {
         if (!this.npc.hasRestriction())
         {
-            return DefaultRandomPos.getPosAway(this.npc, distance, 7, danger.position());
+            return NpcSafety.posAway(this.npc, distance, 7, danger.position());
         }
         BlockPos center = this.npc.getRestrictCenter();
         int radius = (int) this.npc.getRestrictRadius();
         this.npc.clearRestriction();
         try
         {
-            return DefaultRandomPos.getPosAway(this.npc, distance, 7, danger.position());
+            return NpcSafety.posAway(this.npc, distance, 7, danger.position());
         }
         finally
         {

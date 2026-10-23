@@ -106,7 +106,7 @@ civilians); target memory; cavalry; faction relations and player standing; the S
    behavior behind the remaining roles (bard singing, trader, courier, worker
    jobs beyond the farmer, woodcutter, and miner, commander, patrol). Roles are labels from
    equipment until that behavior exists.
-2. Threat scoring, cliff-safe retreat (`FleeNavigation`), skirmishers.
+2. Threat scoring, skirmishers.
 3. Spawner block that stores a full NPC NBT snapshot.
 4. Relations follow-ups: trading (AW's only way to raise standing), the nemesis bonus
    (killing one faction raises standing with its rival), teams sharing their worst
@@ -266,6 +266,12 @@ its own unless noted). Before adding behavior, check what AW did first.
   claim, so no two share a bed; saved as `AeBed`), walk there at night, lie down, and get
   up at dawn. Hurt wakes them (vanilla); threats, fights, and orders come first. The
   claim is released when the bed is gone, or on death or repack.
+- Hazards (`NpcSafety`, the old FleeNavigation idea): paths keep `hazard.maxFall` (3) in and
+  out of a fight (vanilla lets a healthy fighting mob take big drops, so mobs leap off
+  cliffs), and water and fire path costs come from `hazard`. Spots NPCs pick for themselves
+  (fleeing, archer repositioning, running while on fire) must pass `isSafeSpot`: no harmful
+  path type at the spot (vanilla's lava, fire, cactus, powder snow checks), ground within
+  the safe fall, not deep water; up to `safeSpotTries` tries, else stay put.
 - Reactions: `NpcBurningGoal` (`upkeep.burningPanic`): burning and not fighting (or any
   civilian) runs for water within 8 blocks. Poses are soft dependencies: with Not Enough
   Animations, eating raises the food to the mouth; with its EMF add-on, burning flails and

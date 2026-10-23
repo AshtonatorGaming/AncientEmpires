@@ -186,6 +186,11 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.BooleanValue SLEEP_ENABLED;
     private static final ForgeConfigSpec.BooleanValue SLEEP_SOLDIERS;
     private static final ForgeConfigSpec.IntValue SLEEP_BED_RANGE;
+    private static final ForgeConfigSpec.IntValue HAZARD_MAX_FALL;
+    private static final ForgeConfigSpec.DoubleValue HAZARD_WATER_COST;
+    private static final ForgeConfigSpec.DoubleValue HAZARD_FIRE_COST;
+    private static final ForgeConfigSpec.BooleanValue HAZARD_AVOID_WATER_SPOTS;
+    private static final ForgeConfigSpec.IntValue HAZARD_SAFE_SPOT_TRIES;
     private static final ForgeConfigSpec.IntValue UPKEEP_FALLEN_RECORDS;
     private static final ForgeConfigSpec.EnumValue<KeepOnDeath> UPKEEP_KEEP_ON_DEATH;
 
@@ -745,6 +750,24 @@ public final class AncientEmpiresConfig
                 .defineInRange("bedRange", 32, 4, 96);
         builder.pop();
 
+        builder.comment("Hazard avoidance: paths and the spots NPCs pick for themselves stay clear of lava, fire, cliffs, and deep water.").push("hazard");
+        HAZARD_MAX_FALL = builder
+                .comment("Tallest drop, in blocks, an NPC's path may include. Vanilla lets a healthy mob in a fight take bigger ones, which is how mobs leap off cliffs.")
+                .defineInRange("maxFall", 3, 0, 16);
+        HAZARD_WATER_COST = builder
+                .comment("Path cost of water, as vanilla's malus: higher walks further to stay dry. -1 forbids it.")
+                .defineInRange("waterCost", 8.0D, -1.0D, 64.0D);
+        HAZARD_FIRE_COST = builder
+                .comment("Path cost next to fire (twice this through it). Vanilla uses 8.")
+                .defineInRange("fireCost", 16.0D, -1.0D, 64.0D);
+        HAZARD_AVOID_WATER_SPOTS = builder
+                .comment("Fleeing, wandering, and repositioning never pick a spot in deep water.")
+                .define("avoidWaterSpots", true);
+        HAZARD_SAFE_SPOT_TRIES = builder
+                .comment("Random spots tried before an NPC gives up looking for a safe one this tick.")
+                .defineInRange("safeSpotTries", 10, 1, 40);
+        builder.pop();
+
         builder.push("targeting");
         TARGET_LEGACY_SCAN = builder
                 .comment("Use the two vanilla nearest-target goals instead of the shared scan. For comparison and as a fallback. Applies to NPCs loaded after the change.")
@@ -950,6 +973,11 @@ public final class AncientEmpiresConfig
     public static boolean sleepEnabled = true;
     public static boolean sleepSoldiers = false;
     public static int sleepBedRange = 32;
+    public static int hazardMaxFall = 3;
+    public static double hazardWaterCost = 8.0D;
+    public static double hazardFireCost = 16.0D;
+    public static boolean hazardAvoidWaterSpots = true;
+    public static int hazardSafeSpotTries = 10;
 
     /** How an NPC out of food gets more from its Town Hall: walking there, or delivered to its backpack. */
     public enum Delivery
@@ -1165,6 +1193,11 @@ public final class AncientEmpiresConfig
         sleepEnabled = SLEEP_ENABLED.get();
         sleepSoldiers = SLEEP_SOLDIERS.get();
         sleepBedRange = SLEEP_BED_RANGE.get();
+        hazardMaxFall = HAZARD_MAX_FALL.get();
+        hazardWaterCost = HAZARD_WATER_COST.get();
+        hazardFireCost = HAZARD_FIRE_COST.get();
+        hazardAvoidWaterSpots = HAZARD_AVOID_WATER_SPOTS.get();
+        hazardSafeSpotTries = HAZARD_SAFE_SPOT_TRIES.get();
         upkeepFallenRecords = UPKEEP_FALLEN_RECORDS.get();
         upkeepKeepOnDeath = UPKEEP_KEEP_ON_DEATH.get();
 
