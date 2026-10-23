@@ -35,6 +35,7 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.ai.village.poi.PoiTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
@@ -724,7 +725,11 @@ public class NpcEntity extends PathfinderMob
             {
                 this.stopSleeping();
             }
-            level.getPoiManager().release(this.bed);
+            // A broken bed is already gone from the index, and releasing it there throws.
+            if (level.getPoiManager().existsAtPosition(PoiTypes.HOME, this.bed))
+            {
+                level.getPoiManager().release(this.bed);
+            }
         }
         this.bed = null;
     }
