@@ -72,6 +72,12 @@ public class NpcModel extends PlayerModel<NpcEntity>
             return;
         }
         boolean posed = NpcCombatAnimations.apply(entity, this, ageInTicks - entity.tickCount);
+        // What blocks on the server must show: a combat stance must not lower a raised shield,
+        // and a parry shows the weapon held across as a guard.
+        if (this.guardPose(entity))
+        {
+            posed = true;
+        }
         if (!posed && !entity.isAttackWindowOpen())
         {
             posed = this.reactionPose(entity, ageInTicks);
@@ -93,6 +99,35 @@ public class NpcModel extends PlayerModel<NpcEntity>
             this.copyWear();
         }
         NpcCombatAnimations.yieldToEmf(entity, this, limbSwingAmount);
+    }
+
+    /**
+     * Vanilla's block pose, put back after any combat stance: on the shield arm while a
+     * shield is raised, and on the weapon arm while parrying.
+     */
+    private boolean guardPose(NpcEntity entity)
+    {
+        boolean mainLeft = entity.getMainArm() == HumanoidArm.LEFT;
+        if (entity.isUsingItem() && entity.getUseItem().getUseAnimation() == UseAnim.BLOCK)
+        {
+            boolean leftArm = (entity.getUsedItemHand() == InteractionHand.MAIN_HAND) == mainLeft;
+            blockArm(leftArm ? this.leftArm : this.rightArm, leftArm);
+            return true;
+        }
+        if (entity.isParrying() && !entity.isAttackWindowOpen())
+        {
+            blockArm(mainLeft ? this.leftArm : this.rightArm, mainLeft);
+            return true;
+        }
+        return false;
+    }
+
+    /** {@link HumanoidModel}'s BLOCK arm pose. */
+    private static void blockArm(ModelPart arm, boolean left)
+    {
+        arm.xRot = arm.xRot * 0.5F - 0.9424779F;
+        arm.yRot = (left ? 1.0F : -1.0F) * ((float) Math.PI / 6.0F);
+        arm.zRot = 0.0F;
     }
 
     /**

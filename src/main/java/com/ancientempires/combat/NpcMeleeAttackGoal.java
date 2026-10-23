@@ -160,6 +160,13 @@ public class NpcMeleeAttackGoal extends Goal
         {
             return;
         }
+        if (this.npc.isStaggered())
+        {
+            // Parried: the swing is broken off and the NPC reels for a moment.
+            this.interrupt();
+            this.npc.getNavigation().stop();
+            return;
+        }
         this.faceTarget(target);
 
         if (this.recoveryLeft > 0)
@@ -303,6 +310,32 @@ public class NpcMeleeAttackGoal extends Goal
      * row, and only as often as their own feint chance, which is zero unless a
      * role sets it. The internal path only; Better Mob Combat owns its swings.
      */
+    /** Breaks off a wind-up in progress (a parry staggered the NPC). */
+    private void interrupt()
+    {
+        if (this.phase != Phase.WINDUP)
+        {
+            return;
+        }
+        if (this.mobCombatSwing)
+        {
+            this.mobCombatCancelled = true;
+            MobCombatBridge.cancel(this.npc);
+            this.mobCombatSwing = false;
+        }
+        else
+        {
+            this.stopFistClip();
+            this.npc.cancelAttackPresentation();
+        }
+        this.npc.setSwingCommitted(false);
+        this.phase = Phase.APPROACH;
+        this.active = null;
+        this.windupLeft = 0;
+        this.stoppedForWindup = false;
+        this.feintPlanned = false;
+    }
+
     private boolean planFeint(@Nullable LivingEntity target)
     {
         float chance = this.npc.getFeintChance();
@@ -310,9 +343,11 @@ public class NpcMeleeAttackGoal extends Goal
         {
             return false;
         }
+        // Worth baiting: a raised or carried shield, a player (who blocks and parries), or an NPC
+        // that parries (an early parry whiffs on the feint, and the real swing finds it open).
         boolean guarded = target.isBlocking()
                 || target instanceof Player
-                || target instanceof NpcEntity other && other.hasShieldInOffhand();
+                || target instanceof NpcEntity other && (other.hasShieldInOffhand() || other.getParryChance() > 0.0D);
         return guarded && this.npc.getRandom().nextFloat() < chance;
     }
 
@@ -504,12 +539,14 @@ public class NpcMeleeAttackGoal extends Goal
             target.invulnerableTime = 0;
         }
         boolean hurt = target.hurt(this.npc.damageSources().mobAttack(this.npc), damage);
+        if (bypass)
+        {
+            // Skipping the immunity must not grant a fresh one either: otherwise an NPC's hit
+            // eats a player's (or another NPC's) swing that lands just after it.
+            target.invulnerableTime = previousInvulnerability;
+        }
         if (!hurt)
         {
-            if (bypass)
-            {
-                target.invulnerableTime = previousInvulnerability;
-            }
             return;
         }
 

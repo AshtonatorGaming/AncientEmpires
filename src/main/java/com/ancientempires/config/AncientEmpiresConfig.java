@@ -194,6 +194,13 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.BooleanValue BURNING_PANIC;
     private static final ForgeConfigSpec.DoubleValue MEDIC_BANDAGE_HEAL;
     private static final ForgeConfigSpec.DoubleValue MEDIC_RANGE;
+    private static final ForgeConfigSpec.BooleanValue PARRY_ENABLED;
+    private static final ForgeConfigSpec.IntValue PARRY_WINDOW;
+    private static final ForgeConfigSpec.IntValue PARRY_RECOVERY;
+    private static final ForgeConfigSpec.IntValue PARRY_COOLDOWN;
+    private static final ForgeConfigSpec.IntValue PARRY_STAGGER;
+    private static final ForgeConfigSpec.ConfigValue<List<? extends Double>> PARRY_CHANCE;
+    private static final ForgeConfigSpec.ConfigValue<List<? extends Integer>> PARRY_ERROR;
     private static final ForgeConfigSpec.BooleanValue NIGHT_LIGHT_ENABLED;
     private static final ForgeConfigSpec.BooleanValue NIGHT_LIGHT_FACTION_GUARDS;
     private static final ForgeConfigSpec.IntValue NIGHT_LIGHT_DARKNESS;
@@ -791,6 +798,30 @@ public final class AncientEmpiresConfig
                 .defineEnum("keepOnDeath", KeepOnDeath.NONE);
         builder.pop();
 
+        builder.comment("Parries, for players (the Parry key) and NPCs alike: a short timed guard with the weapon. A melee hit from the front inside the window is parried: the attacker is staggered (slowed, no swing). Mistimed, the parrier is open: no swing for the recovery (a player's attack cooldown resets). Shield users block instead.").push("parry");
+        PARRY_ENABLED = builder
+                .comment("Parries for players and NPCs.")
+                .define("enabled", true);
+        PARRY_WINDOW = builder
+                .comment("Ticks a parry catches hits.")
+                .defineInRange("windowTicks", 6, 1, 40);
+        PARRY_RECOVERY = builder
+                .comment("Ticks after a missed parry with no swing.")
+                .defineInRange("recoveryTicks", 14, 0, 100);
+        PARRY_COOLDOWN = builder
+                .comment("Ticks from one parry to the next.")
+                .defineInRange("cooldownTicks", 24, 0, 200);
+        PARRY_STAGGER = builder
+                .comment("Ticks a parried attacker is staggered: slowed, and no swing.")
+                .defineInRange("staggerTicks", 14, 0, 100);
+        PARRY_CHANCE = builder
+                .comment("Per skill tier (ordinary, elite, leader, elite leader): the chance an NPC without a shield tries to parry a swing it sees coming. Against players, who show no wind-up, it reads a charged attack instead.")
+                .defineList("chanceByTier", List.of(0.05D, 0.15D, 0.3D, 0.45D), AncientEmpiresConfig::isChance);
+        PARRY_ERROR = builder
+                .comment("Per skill tier: up to how many ticks an NPC's parry is mistimed, early or late. A feint baits the early ones.")
+                .defineList("timingErrorByTier", List.of(6, 4, 3, 2), value -> value instanceof Integer ticks && ticks >= 0 && ticks <= 40);
+        builder.pop();
+
         builder.comment("Night watch lights: soldiers awake at night or in the dark hold up a torch or lantern (the ancientempires:night_lights item tag) in a free off hand. Dynamic light mods light them.").push("nightLight");
         NIGHT_LIGHT_ENABLED = builder
                 .comment("Soldiers carry lights at night. Owned ones use torches or lanterns from their backpack and put them back at dawn.")
@@ -1115,6 +1146,13 @@ public final class AncientEmpiresConfig
     public static boolean burningPanic = true;
     public static double medicBandageHeal = 6.0D;
     public static double medicRange = 16.0D;
+    public static boolean parryEnabled = true;
+    public static int parryWindowTicks = 6;
+    public static int parryRecoveryTicks = 14;
+    public static int parryCooldownTicks = 24;
+    public static int parryStaggerTicks = 14;
+    public static List<? extends Double> parryChanceByTier = List.of(0.05D, 0.15D, 0.3D, 0.45D);
+    public static List<? extends Integer> parryErrorByTier = List.of(6, 4, 3, 2);
     public static boolean nightLightEnabled = true;
     public static boolean nightLightFactionGuards = true;
     public static int nightLightDarkness = 7;
@@ -1372,6 +1410,13 @@ public final class AncientEmpiresConfig
         burningPanic = BURNING_PANIC.get();
         medicBandageHeal = MEDIC_BANDAGE_HEAL.get();
         medicRange = MEDIC_RANGE.get();
+        parryEnabled = PARRY_ENABLED.get();
+        parryWindowTicks = PARRY_WINDOW.get();
+        parryRecoveryTicks = PARRY_RECOVERY.get();
+        parryCooldownTicks = PARRY_COOLDOWN.get();
+        parryStaggerTicks = PARRY_STAGGER.get();
+        parryChanceByTier = PARRY_CHANCE.get();
+        parryErrorByTier = PARRY_ERROR.get();
         nightLightEnabled = NIGHT_LIGHT_ENABLED.get();
         nightLightFactionGuards = NIGHT_LIGHT_FACTION_GUARDS.get();
         nightLightDarkness = NIGHT_LIGHT_DARKNESS.get();

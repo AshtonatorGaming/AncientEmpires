@@ -112,6 +112,7 @@ public class NpcEntity extends PathfinderMob
     private static final EntityDataAccessor<Float> DATA_BODY_SCALE = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.FLOAT);
     /** {@link NpcStatus} ordinal, for the icon over the head. */
     private static final EntityDataAccessor<Byte> DATA_STATUS = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.BYTE);
+    private static final EntityDataAccessor<Boolean> DATA_PARRYING = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.BOOLEAN);
     private static final String FOLLOWING_KEY = "Following";
     private static final String CREATIVE_KEY = "Creative";
     private static final String HOLDING_KEY = "HoldPosition";
@@ -183,6 +184,14 @@ public class NpcEntity extends PathfinderMob
     private float guard = -1.0F;
     /** tickCount before which no swing may start (the recovery after a bash). */
     private int strikeReadyAt;
+    /** tickCount until which a parry keeps this NPC staggered. */
+    private int staggerUntil;
+    /** Counts attack windows (see getAttackWindowSerial). */
+    private int attackWindowSerial;
+    /** Parry plan against one swing: the attacker's id and window serial, and the wind-up left at which to parry. */
+    int parryPlanFor = -1;
+    int parryPlanSerial = -1;
+    int parryAt = Integer.MIN_VALUE;
     /** Own feint chance; below zero means the skill tier decides. */
     private float feintChance = -1.0F;
     /** Cached skill tier from the roster rank; below zero until first asked. */
@@ -284,6 +293,7 @@ public class NpcEntity extends PathfinderMob
         this.entityData.define(DATA_ATTACK_OFFHAND, false);
         this.entityData.define(DATA_BODY_SCALE, 1.0F);
         this.entityData.define(DATA_STATUS, (byte) 0);
+        this.entityData.define(DATA_PARRYING, false);
     }
 
     /**
@@ -980,6 +990,60 @@ public class NpcEntity extends PathfinderMob
             return;
         }
         super.knockback(strength, x, z);
+    }
+
+    /** Parrying right now (the weapon arm's guard pose on the client). */
+    public boolean isParrying()
+    {
+        return this.entityData.get(DATA_PARRYING);
+    }
+
+    public void setParrying(boolean parrying)
+    {
+        this.entityData.set(DATA_PARRYING, parrying);
+    }
+
+    /** Thrown off balance by a parry: no swing, and any wind-up is broken off. */
+    public void stagger(int ticks)
+    {
+        this.staggerUntil = this.tickCount + ticks;
+        this.strikeReadyAt = Math.max(this.strikeReadyAt, this.staggerUntil);
+    }
+
+    public boolean isStaggered()
+    {
+        return this.tickCount < this.staggerUntil;
+    }
+
+    /** A parry landed: the attacker reels, so the NPC may strike straight back. */
+    public void onParried(LivingEntity attacker)
+    {
+        this.strikeReadyAt = 0;
+        this.riposteUntil = this.tickCount + AncientEmpiresConfig.shieldRiposteTicks;
+    }
+
+    /** A parry that caught nothing leaves the NPC open: no swing for a moment. */
+    public void parryWhiffed(int ticks)
+    {
+        this.strikeReadyAt = Math.max(this.strikeReadyAt, this.tickCount + ticks);
+    }
+
+    /** Counts attack windows, so a defender can tell one swing from the next. */
+    public int getAttackWindowSerial()
+    {
+        return this.attackWindowSerial;
+    }
+
+    /** Chance to try a parry, by skill tier. */
+    public double getParryChance()
+    {
+        return tierValue(AncientEmpiresConfig.parryChanceByTier, this.getSkillTier());
+    }
+
+    /** Up to how many ticks a parry is mistimed, by skill tier. */
+    public int getParryError()
+    {
+        return (int) Math.round(tierValue(AncientEmpiresConfig.parryErrorByTier, this.getSkillTier()));
     }
 
     /** What is left of the shield's guard, out of {@code shield.guardPoints}. */
@@ -2161,6 +2225,7 @@ public class NpcEntity extends PathfinderMob
 
     public void openAttackWindow(AttackSwing swing)
     {
+        this.attackWindowSerial++;
         this.attackWindowOpen = true;
         this.attackWindupRemaining = swing.windupTicks();
         this.attackAnimation = swing.animationId();
@@ -2354,6 +2419,7 @@ public class NpcEntity extends PathfinderMob
             float regen = (float) AncientEmpiresConfig.shieldGuardRegen;
             this.guard = Math.min(this.guardMax(), this.guard + (this.isRaisingShield() ? regen * 0.25F : regen));
         }
+        NpcParryPlanner.tick(this);
         if ((this.tickCount + this.getId()) % NpcNightLight.CHECK_TICKS == 0)
         {
             NpcNightLight.update(this);
