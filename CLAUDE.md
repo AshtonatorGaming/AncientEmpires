@@ -148,10 +148,11 @@ its own unless noted). Before adding behavior, check what AW did first.
   (`strikeChance` per tick). Guard (`guardPoints`, like Chivalry stamina): blocked damage
   drains it, it recovers at `guardRegen`, and at zero the shield is knocked down for
   `guardBreakTicks`, so shield walls do not stalemate and players can break a turtle.
-  Footwork (`combat.footwork`): inside reach while waiting or recovering, NPCs circle slowly
-  (`circleSpeed`, vanilla strafe, which refuses unwalkable steps), close at the edge of reach,
-  and give ground when pressed; two shield fighters barely circle (`footworkShieldScale`;
-  bouncier footwork is for a later duelist). Against a raised shield an NPC without one starts
+  Footwork (`combat.footwork`): inside reach NPCs mostly stand; after each 1.5 to 3.5 second
+  pause, `sidestepChance` (0.35) of one quick sidestep at `sidestepSpeed` (fast enough that the
+  legs walk; slow drifts slid), closing at the edge of reach or giving ground when pressed (vanilla
+  strafe, which refuses unwalkable steps). Two shield fighters sidestep `shieldSidestepScale` as
+  often; bouncier footwork is for a later duelist. Against a raised shield an NPC without one starts
   a swing only at `pressureChance` per tick. A hit taken on the shield never knocks the NPC
   back (`NpcEntity.knockback`), as a blocking player stands firm. Guard is `shield.guardMax` (30) times
   `skill.guardByTier` (1 to 1.75). Footwork comes in steps with rests, not a constant drift (which
@@ -342,7 +343,8 @@ its own unless noted). Before adding behavior, check what AW did first.
   old 0.28 base are updated on load.
 - Perfect block (`combat/Parry`, `parry` config), the same for players and NPCs: a melee hit from
   the front within `windowTicks` (6) of raising a shield is turned aside whole: no guard cost, and
-  the attacker is staggered (slowness, no swing for `staggerTicks`; `NpcEntity.stagger` breaks off a
+  the attacker is staggered (a louder clang over the thud, "Perfect block!" or "Staggered!" on a
+  player's screen; slowness, no swing for `staggerTicks`; `NpcEntity.stagger` breaks off a
   wind-up and shows a recoil); the NPC defender's shield arm snaps forward. A raise counts only
   `cooldownTicks` after the last, so tapping does not farm them. Held longer it is an ordinary
   block. `shield.instantBlock`: a raised shield blocks from its first tick (vanilla waits five), so

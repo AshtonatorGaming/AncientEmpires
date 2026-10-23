@@ -43,10 +43,9 @@ public class NpcMeleeAttackGoal extends Goal
     private Phase phase = Phase.APPROACH;
     private int windupLeft;
     private int recoveryLeft;
-    /** Which way the footwork circles (1 or -1), and ticks until it may switch. */
+    /** Which way the next sidestep goes (1 or -1). */
     private int strafeSide = 1;
-    private int strafeSwitch;
-    /** Footwork comes in steps: ticks left in this one, then ticks of standing. */
+    /** Footwork: ticks left in the current sidestep, then ticks of standing. */
     private int stepLeft;
     private int stepRest;
     private int pathCooldown;
@@ -738,36 +737,39 @@ public class NpcMeleeAttackGoal extends Goal
         {
             return;
         }
-        // In steps, not a constant drift: a slow drift barely moves the legs and reads as sliding.
+        // Mostly standing; now and then one quick sidestep at a real walking pace. A slow, steady
+        // drift barely moves the legs and reads as sliding.
         if (this.stepRest > 0)
         {
             this.stepRest--;
             return;
         }
-        if (--this.stepLeft <= 0)
+        if (this.stepLeft <= 0)
         {
-            this.stepLeft = 6 + this.npc.getRandom().nextInt(6);
-            this.stepRest = 10 + this.npc.getRandom().nextInt(25);
-        }
-        if (--this.strafeSwitch <= 0)
-        {
-            this.strafeSwitch = 40 + this.npc.getRandom().nextInt(60);
-            if (this.npc.getRandom().nextFloat() < 0.6F)
+            this.stepRest = 30 + this.npc.getRandom().nextInt(40);
+            double chance = AncientEmpiresConfig.sidestepChance;
+            if (this.npc.hasShieldInOffhand() && WeaponClassifier.isShield(target.getOffhandItem()))
+            {
+                // Two shields: a wary standoff, not a dance. Bouncier footwork is for duelists.
+                chance *= AncientEmpiresConfig.shieldSidestepScale;
+            }
+            if (this.npc.getRandom().nextDouble() >= chance)
+            {
+                return;
+            }
+            this.stepLeft = 4 + this.npc.getRandom().nextInt(3);
+            if (this.npc.getRandom().nextBoolean())
             {
                 this.strafeSide = -this.strafeSide;
             }
         }
+        this.stepLeft--;
         double reach = swing.range() + target.getBbWidth() * 0.5D;
         double distance = Math.sqrt(this.npc.distanceToSqr(target));
-        float forward = distance > reach * 0.8D ? 0.5F : distance < reach * 0.45D ? -0.4F : 0.0F;
-        float side = this.strafeSide * (float) AncientEmpiresConfig.footworkSpeed;
-        if (this.npc.hasShieldInOffhand() && WeaponClassifier.isShield(target.getOffhandItem()))
-        {
-            // Two shields: a wary, near-still standoff, not a dance. Bouncier footwork is for duelists.
-            side *= (float) AncientEmpiresConfig.footworkShieldScale;
-        }
-        this.npc.getMoveControl().strafe(forward, side);
+        float forward = distance > reach * 0.8D ? 0.5F : distance < reach * 0.45D ? -0.5F : 0.0F;
+        this.npc.getMoveControl().strafe(forward, this.strafeSide * (float) AncientEmpiresConfig.sidestepSpeed);
     }
+
 
     private void moveToward(LivingEntity target, double speed)
     {

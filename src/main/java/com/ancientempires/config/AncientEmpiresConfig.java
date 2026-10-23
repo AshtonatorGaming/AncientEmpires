@@ -49,8 +49,9 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.BooleanValue STOP_MOVING_DURING_WINDUP;
     private static final ForgeConfigSpec.DoubleValue WINDUP_MOVE_SPEED;
     private static final ForgeConfigSpec.BooleanValue FOOTWORK;
-    private static final ForgeConfigSpec.DoubleValue FOOTWORK_SPEED;
-    private static final ForgeConfigSpec.DoubleValue FOOTWORK_SHIELD_SCALE;
+    private static final ForgeConfigSpec.DoubleValue SIDESTEP_CHANCE;
+    private static final ForgeConfigSpec.DoubleValue SIDESTEP_SPEED;
+    private static final ForgeConfigSpec.DoubleValue SHIELD_SIDESTEP_SCALE;
     private static final ForgeConfigSpec.DoubleValue PRESSURE_CHANCE;
     private static final ForgeConfigSpec.IntValue ATTACK_PAUSE;
     private static final ForgeConfigSpec.DoubleValue APPROACH_SPEED;
@@ -337,14 +338,17 @@ public final class AncientEmpiresConfig
                 .comment("Stop pathing once the target is in range during wind-up.")
                 .define("stopMovingDuringWindup", true);
         FOOTWORK = builder
-                .comment("Inside reach, while waiting to strike or recovering, NPCs circle their opponent, step in at the edge of reach, and give ground when pressed, instead of standing still.")
+                .comment("Inside reach, while waiting to strike or recovering, NPCs now and then take a quick sidestep (stepping in at the edge of reach, giving ground when pressed) instead of standing like posts.")
                 .define("footwork", true);
-        FOOTWORK_SPEED = builder
-                .comment("Sideways footwork input, 0 to 1 (vanilla strafe pace scales it). Kept slow: a wary circle, not a dance.")
-                .defineInRange("circleSpeed", 0.6D, 0.0D, 1.0D);
-        FOOTWORK_SHIELD_SCALE = builder
-                .comment("Sideways footwork when both fighters carry shields, as a fraction of footworkSpeed, so a shield duel is a standoff rather than a dance.")
-                .defineInRange("footworkShieldScale", 0.25D, 0.0D, 1.0D);
+        SIDESTEP_CHANCE = builder
+                .comment("Inside reach an NPC mostly stands; after each pause of 1.5 to 3.5 seconds, the chance it takes one quick sidestep.")
+                .defineInRange("sidestepChance", 0.35D, 0.0D, 1.0D);
+        SIDESTEP_SPEED = builder
+                .comment("Sidestep input, 0 to 1. High enough that the legs walk; slower drifts read as sliding.")
+                .defineInRange("sidestepSpeed", 1.0D, 0.1D, 1.0D);
+        SHIELD_SIDESTEP_SCALE = builder
+                .comment("When both fighters carry shields, sidesteps come this much less often: a standoff, not a dance.")
+                .defineInRange("shieldSidestepScale", 0.5D, 0.0D, 1.0D);
         ATTACK_PAUSE = builder
                 .comment("Extra ticks after every NPC swing before the next, on top of the weapon's own cooldown, so attacks are not spammed. Ancient Warfare used only the weapon cooldown (20 ticks over attack speed); 0 matches it.")
                 .defineInRange("attackPause", 4, 0, 40);
@@ -1000,8 +1004,9 @@ public final class AncientEmpiresConfig
     public static boolean stopMovingDuringWindup = true;
     public static double windupMoveSpeed = 0.7D;
     public static boolean footwork = true;
-    public static double footworkSpeed = 0.6D;
-    public static double footworkShieldScale = 0.25D;
+    public static double sidestepChance = 0.35D;
+    public static double sidestepSpeed = 1.0D;
+    public static double shieldSidestepScale = 0.5D;
     public static double pressureChance = 0.12D;
     public static int attackPause = 4;
     public static double approachSpeed = 1.12D;
@@ -1265,8 +1270,9 @@ public final class AncientEmpiresConfig
         stopMovingDuringWindup = STOP_MOVING_DURING_WINDUP.get();
         windupMoveSpeed = WINDUP_MOVE_SPEED.get();
         footwork = FOOTWORK.get();
-        footworkSpeed = FOOTWORK_SPEED.get();
-        footworkShieldScale = FOOTWORK_SHIELD_SCALE.get();
+        sidestepChance = SIDESTEP_CHANCE.get();
+        sidestepSpeed = SIDESTEP_SPEED.get();
+        shieldSidestepScale = SHIELD_SIDESTEP_SCALE.get();
         pressureChance = PRESSURE_CHANCE.get();
         attackPause = ATTACK_PAUSE.get();
         approachSpeed = APPROACH_SPEED.get();

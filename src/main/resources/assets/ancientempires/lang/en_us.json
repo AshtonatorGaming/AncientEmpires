@@ -97,6 +97,8 @@
   "item.ancientempires.war_horn.current": "Call: %s",
   "item.ancientempires.war_horn.tooltip": "Blow to command your NPCs nearby. Sneak-use to change the call.",
   "message.ancientempires.war_horn.set": "The horn will sound: %s",
+  "message.ancientempires.perfect_block": "Perfect block!",
+  "message.ancientempires.staggered": "Staggered!",
   "message.ancientempires.war_horn.blown": "%s: %s answered",
   "message.ancientempires.priest.raised": "%s has been raised at your Town Hall",
   "block.ancientempires.settlers_post": "Settlers' Post",

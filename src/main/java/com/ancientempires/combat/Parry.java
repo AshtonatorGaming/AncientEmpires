@@ -3,7 +3,9 @@ package com.ancientempires.combat;
 import com.ancientempires.AncientEmpires;
 import com.ancientempires.config.AncientEmpiresConfig;
 import com.ancientempires.entity.npc.NpcEntity;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -136,7 +138,17 @@ public final class Parry
             npc.swing(npc.getUsedItemHand());
         }
         stagger(attacker);
-        target.level().playSound(null, target.blockPosition(), SoundEvents.ANVIL_LAND, SoundSource.PLAYERS, 0.35F, 1.9F);
+        // Unmistakable: a ringing clang over the shield's thud, and a word to any player involved.
+        target.level().playSound(null, target.blockPosition(), SoundEvents.SHIELD_BLOCK, SoundSource.PLAYERS, 1.0F, 0.8F);
+        target.level().playSound(null, target.blockPosition(), SoundEvents.ANVIL_LAND, SoundSource.PLAYERS, 0.7F, 1.6F);
+        if (target instanceof Player player)
+        {
+            player.displayClientMessage(Component.translatable("message.ancientempires.perfect_block").withStyle(ChatFormatting.GOLD), true);
+        }
+        if (attacker instanceof Player player)
+        {
+            player.displayClientMessage(Component.translatable("message.ancientempires.staggered").withStyle(ChatFormatting.RED), true);
+        }
         if (target.level() instanceof ServerLevel level)
         {
             Vec3 at = target.position().subtract(fromAttacker.scale(0.6D)).add(0.0D, target.getBbHeight() * 0.65D, 0.0D);
