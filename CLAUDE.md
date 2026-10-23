@@ -524,6 +524,13 @@ target-scan design.
 - Forge's early loading window failing ("Timed out trying to setup the Game Window") is a
   graphics driver problem; it happens before any mod jar is read.
 
+## Tests
+
+- `./gradlew test` (also run by `build`) runs JUnit 5 tests in `src/test/java` on rules kept as pure
+  methods so no game is needed: `WorksiteArea`, `QuarryStair.columns`, `Parry.perfectWindow`,
+  `NpcGuard.strikesFirst`. Put a new rule in such a method and test it there; the game code calls
+  the same method.
+
 ## Building
 
 `./gradlew build` and `./gradlew runClient` need network access to the Forge and Mojang

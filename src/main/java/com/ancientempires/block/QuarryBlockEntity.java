@@ -294,87 +294,11 @@ public final class QuarryBlockEntity extends WorksiteBlockEntity
         return true;
     }
 
-    /**
-     * The columns kept as this layer's stair step, packed as {@link BlockPos#asLong}
-     * at y 0: one rim tile, starting nearest the block and one tile further
-     * clockwise per layer, plus the tiles inward from it to the stair width.
-     * Columns of the two steps above are left out, so a step never sits under
-     * another (at the corners), which would block the head of anyone climbing.
-     */
+    /** This layer's stair columns ({@link QuarryStair}). */
     private Set<Long> stairColumns(int layer)
     {
-        List<BlockPos> rim = this.rim();
-        if (rim.isEmpty())
-        {
-            // A one-column pit has no rim to spare: no stair.
-            return Set.of();
-        }
-        int start = 0;
-        long best = Long.MAX_VALUE;
-        for (int index = 0; index < rim.size(); index++)
-        {
-            BlockPos tile = rim.get(index);
-            long dx = tile.getX() - this.worldPosition.getX();
-            long dz = tile.getZ() - this.worldPosition.getZ();
-            if (dx * dx + dz * dz < best)
-            {
-                best = dx * dx + dz * dz;
-                start = index;
-            }
-        }
-        int narrowest = Math.min(this.maxX() - this.minX() + 1, this.maxZ() - this.minZ() + 1);
-        // A small pit keeps room to dig: the stair takes under half its width.
-        int width = Math.max(1, Math.min(AncientEmpiresConfig.quarryStairWidth, (narrowest - 1) / 2));
-        Set<Long> columns = this.stepColumns(rim, start + layer, width);
-        for (int above = 1; above <= 2 && layer - above >= 0; above++)
-        {
-            columns.removeAll(this.stepColumns(rim, start + layer - above, width));
-        }
-        return columns;
-    }
-
-    /** Rim tile {@code index} (wrapping) and the tiles inward from it, to {@code width} in all. */
-    private Set<Long> stepColumns(List<BlockPos> rim, int index, int width)
-    {
-        BlockPos tile = rim.get(Math.floorMod(index, rim.size()));
-        BlockPos next = rim.get(Math.floorMod(index + 1, rim.size()));
-        // The rim runs clockwise, so inward is a quarter turn clockwise from the way it runs.
-        Direction along = Direction.fromDelta(Integer.signum(next.getX() - tile.getX()), 0, Integer.signum(next.getZ() - tile.getZ()));
-        Direction inward = (along == null ? Direction.EAST : along).getClockWise();
-        Set<Long> columns = new HashSet<>();
-        for (int step = 0; step < width; step++)
-        {
-            columns.add(BlockPos.asLong(tile.getX() + inward.getStepX() * step, 0, tile.getZ() + inward.getStepZ() * step));
-        }
-        return columns;
-    }
-
-    /** The square's edge
-, clockwise from the north-west corner, at y 0. */
-    private List<BlockPos> rim()
-    {
-        int minX = this.minX();
-        int maxX = this.maxX();
-        int minZ = this.minZ();
-        int maxZ = this.maxZ();
-        List<BlockPos> rim = new ArrayList<>();
-        for (int x = minX; x < maxX; x++)
-        {
-            rim.add(new BlockPos(x, 0, minZ));
-        }
-        for (int z = minZ; z < maxZ; z++)
-        {
-            rim.add(new BlockPos(maxX, 0, z));
-        }
-        for (int x = maxX; x > minX; x--)
-        {
-            rim.add(new BlockPos(x, 0, maxZ));
-        }
-        for (int z = maxZ; z > minZ; z--)
-        {
-            rim.add(new BlockPos(minX, 0, z));
-        }
-        return rim;
+        return QuarryStair.columns(this.minX(), this.minZ(), this.maxX(), this.maxZ(), this.worldPosition.getX(),
+                this.worldPosition.getZ(), layer, AncientEmpiresConfig.quarryStairWidth);
     }
 
     @Override

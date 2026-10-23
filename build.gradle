@@ -142,6 +142,10 @@ dependencies {
     compileOnly files("libs/emf_compat_core_forge_1.20.1_2.3.0.jar")
     compileOnly files("libs/emf_compat_better_combat_forge_1.20.1_2.1.0.jar")
 
+    // Unit tests for the pure rules (areas, stair layout, block windows); no game needed.
+    testImplementation "org.junit.jupiter:junit-jupiter:5.10.2"
+    testRuntimeOnly "org.junit.platform:junit-platform-launcher"
+
     // Example mod dependency with JEI - using fg.deobf() ensures the dependency is remapped to your development mappings
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
     // compileOnly fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}")
@@ -216,4 +220,9 @@ publishing {
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+}
+
+// `./gradlew test` runs the unit tests in src/test/java; `build` runs them too.
+tasks.named('test', Test) {
+    useJUnitPlatform()
 }

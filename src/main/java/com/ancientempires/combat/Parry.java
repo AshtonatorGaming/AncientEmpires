@@ -79,9 +79,8 @@ public final class Parry
         {
             return false;
         }
-        long now = defender.level().getGameTime();
-        return now - raises.current <= AncientEmpiresConfig.parryWindowTicks
-                && raises.current - raises.previous >= AncientEmpiresConfig.parryCooldownTicks;
+        return perfectWindow(defender.level().getGameTime(), raises.current, raises.previous,
+                AncientEmpiresConfig.parryWindowTicks, AncientEmpiresConfig.parryCooldownTicks);
     }
 
     /**
@@ -109,6 +108,16 @@ public final class Parry
                 return;
             }
         }
+    }
+
+    /**
+     * The rule itself: a hit now is a perfect block if the shield went up at most
+     * {@code window} ticks ago, and that raise came at least {@code cooldown} after the
+     * one before (so tapping the shield does not farm them).
+     */
+    public static boolean perfectWindow(long now, long raised, long raisedBefore, int window, int cooldown)
+    {
+        return now - raised <= window && raised - raisedBefore >= cooldown;
     }
 
     @SubscribeEvent

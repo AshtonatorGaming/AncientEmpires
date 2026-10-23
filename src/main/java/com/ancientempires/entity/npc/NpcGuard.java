@@ -160,7 +160,17 @@ public final class NpcGuard
     /** This NPC began readying a strike before {@code other} did (or {@code other} has not). */
     private boolean strikesBefore(NpcGuard other)
     {
-        return this.wantsToStrike && !this.npc.isAttackWindowOpen() && (!other.wantsToStrike || this.strikeSince < other.strikeSince);
+        return strikesFirst(this.wantsToStrike && !this.npc.isAttackWindowOpen(), this.strikeSince, other.wantsToStrike, other.strikeSince);
+    }
+
+    /**
+     * The tie-break between two guards, as a rule: one readying a strike goes first if
+     * the other is not readying one, or began later. A tie cancels neither; it is rare,
+     * since NPCs tick one after another and the second already sees the first readying.
+     */
+    public static boolean strikesFirst(boolean readying, int since, boolean otherReadying, int otherSince)
+    {
+        return readying && (!otherReadying || since < otherSince);
     }
 
     /** The swing is over, or the melee goal gave up: the shield may go back up. */
