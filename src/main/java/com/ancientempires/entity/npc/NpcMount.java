@@ -194,6 +194,16 @@ public final class NpcMount
      * Before the NPC is packed into its scroll: a mount this mod spawned goes
      * with it (it is spawned again on placing), anything else is left standing.
      */
+    /** A deserter takes its roster mount with it; a mount it found stays. */
+    void desert()
+    {
+        Entity vehicle = this.npc.getVehicle();
+        if (vehicle != null && vehicle.getPersistentData().getBoolean(SPAWNED_TAG))
+        {
+            vehicle.discard();
+        }
+    }
+
     void beforeRepack()
     {
         Entity vehicle = this.npc.getVehicle();

@@ -117,6 +117,8 @@ public class NpcEntity extends PathfinderMob
     /** {@link NpcStatus} ordinal, for the icon over the head. */
     private static final EntityDataAccessor<Byte> DATA_STATUS = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<Boolean> DATA_STAGGERED = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.BOOLEAN);
+    /** {@link NpcBadge} ordinal, for the badge beside the status icon. */
+    private static final EntityDataAccessor<Byte> DATA_BADGE = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.BYTE);
     private static final String FOLLOWING_KEY = "Following";
     private static final String CREATIVE_KEY = "Creative";
     private static final String HOLDING_KEY = "HoldPosition";
@@ -169,6 +171,7 @@ public class NpcEntity extends PathfinderMob
     private boolean swingCommitted;
     /** The shield: raising, blocking, guard, bash, stagger. */
     private final NpcGuard guard = new NpcGuard(this);
+    private final NpcMorale morale = new NpcMorale(this);
     /** The NPC spawner that made it (its home), its slot there, and whether it is a garrison. Not packed. */
     @Nullable
     private BlockPos spawnerPos;
@@ -282,6 +285,7 @@ public class NpcEntity extends PathfinderMob
         this.entityData.define(DATA_BODY_SCALE, 1.0F);
         this.entityData.define(DATA_STATUS, (byte) 0);
         this.entityData.define(DATA_STAGGERED, false);
+        this.entityData.define(DATA_BADGE, (byte) 0);
     }
 
     /**
@@ -373,6 +377,8 @@ public class NpcEntity extends PathfinderMob
     protected void registerGoals()
     {
         this.goalSelector.addGoal(0, new FloatGoal(this));
+        // A surrendered soldier kneels; it outranks every goal that moves.
+        this.goalSelector.addGoal(0, new NpcSurrenderGoal(this));
         if (AncientEmpiresConfig.openDoors)
         {
             // Ancient Warfare's NpcAIDoor: open the doors on the path, close them once past.
@@ -385,7 +391,7 @@ public class NpcEntity extends PathfinderMob
         // No flags: blocks beside the melee goal, lowered while the NPC swings.
         this.goalSelector.addGoal(1, new NpcShieldGoal(this));
         this.goalSelector.addGoal(1, new NpcMedicGoal(this));
-        // Civilians run instead of fighting; it holds the move flag above the combat goals.
+        // Civilians and routing soldiers run instead of fighting; it holds the move flag above the combat goals.
         this.goalSelector.addGoal(1, new NpcFleeGoal(this));
         this.goalSelector.addGoal(1, new NpcBurningGoal(this));
         this.goalSelector.addGoal(2, new NpcMeleeAttackGoal(this));
@@ -470,7 +476,7 @@ public class NpcEntity extends PathfinderMob
      */
     private boolean acceptsTarget(NpcEntity target)
     {
-        if (target == this || !target.isAlive() || sameOwner(this, target))
+        if (target == this || !target.isAlive() || sameOwner(this, target) || target.morale.isSurrendered())
         {
             return false;
         }
@@ -878,6 +884,12 @@ public class NpcEntity extends PathfinderMob
         return WeaponClassifier.isShield(this.getOffhandItem());
     }
 
+    /** Morale: steady, wavering, routing, shattered, surrendered. */
+    public NpcMorale getMorale()
+    {
+        return this.morale;
+    }
+
     /** The shield and everything done with it. */
     public NpcGuard getGuard()
     {
@@ -1151,7 +1163,20 @@ public class NpcEntity extends PathfinderMob
      */
     public boolean avoidsFights()
     {
-        if (!this.isCivilian() || this.tickCount < this.standGroundUntil)
+        if (this.morale.isSurrendered())
+        {
+            return true;
+        }
+        if (this.tickCount < this.standGroundUntil)
+        {
+            return false;
+        }
+        if (this.morale.isBroken())
+        {
+            // A routing soldier runs as a civilian does.
+            return true;
+        }
+        if (!this.isCivilian())
         {
             return false;
         }
@@ -1193,6 +1218,7 @@ public class NpcEntity extends PathfinderMob
             }
             this.setLevied(true);
         }
+        this.morale.hornRally();
         this.setHoldingPosition(false);
         this.setFollowing(true);
         this.rallyUntil = this.tickCount + AncientEmpiresConfig.hornRallyTicks;
@@ -1287,6 +1313,43 @@ public class NpcEntity extends PathfinderMob
      * Cornered with nowhere to run: fight the threat for a while with whatever
      * is in hand, then try running again.
      */
+    /** Cornered while fleeing: a router may surrender, otherwise it turns and fights. */
+    void cornered(LivingEntity threat)
+    {
+        if (!this.morale.trySurrender())
+        {
+            this.standGround(threat);
+        }
+    }
+
+    /**
+     * Morale broke (a rout, a shatter, a surrender hit): drop the fight and
+     * run from it, as a civilian runs from what it was about to fight.
+     */
+    void onBroken()
+    {
+        LivingEntity target = this.getTarget();
+        this.standGroundUntil = 0;
+        super.setTarget(null);
+        if (target != null && target.isAlive())
+        {
+            this.fearSource = target;
+        }
+    }
+
+    /** A shattered faction soldier leaves the field: gone, as if killed, for a garrison. */
+    void desert()
+    {
+        NpcSpawnerBlockEntity spawner = this.garrison ? this.spawner() : null;
+        if (spawner != null)
+        {
+            spawner.onGarrisonDeath(this.spawnerSlot);
+            this.garrison = false;
+        }
+        this.mount.desert();
+        this.discard();
+    }
+
     void standGround(LivingEntity threat)
     {
         this.standGroundUntil = this.tickCount + AncientEmpiresConfig.civilianStandGroundTicks;
@@ -1299,7 +1362,7 @@ public class NpcEntity extends PathfinderMob
      */
     public boolean isStandingGround()
     {
-        return this.isCivilian() && this.tickCount < this.standGroundUntil;
+        return (this.isCivilian() || this.morale.isBroken()) && this.tickCount < this.standGroundUntil;
     }
 
     /**
@@ -1309,7 +1372,7 @@ public class NpcEntity extends PathfinderMob
      */
     public boolean civilianFears(LivingEntity other)
     {
-        if (!(other instanceof Player))
+        if (!(other instanceof Player) || this.morale.isBroken())
         {
             return true;
         }
@@ -2212,6 +2275,12 @@ public class NpcEntity extends PathfinderMob
     /** Reused by updateStatus, so the half-second status check allocates nothing. */
     private final List<Goal> statusGoals = new ArrayList<>(4);
 
+    /** The badge beside the status icon: levied, or a soldier's morale. */
+    public NpcBadge getBadge()
+    {
+        return NpcBadge.byId(this.entityData.get(DATA_BADGE));
+    }
+
     /** What the NPC is doing, for the icon over its head. */
     public NpcStatus getStatus()
     {
@@ -2228,6 +2297,11 @@ public class NpcEntity extends PathfinderMob
         if (this.entityData.get(DATA_STATUS) != status)
         {
             this.entityData.set(DATA_STATUS, status);
+        }
+        byte badge = (byte) NpcBadge.of(this).ordinal();
+        if (this.entityData.get(DATA_BADGE) != badge)
+        {
+            this.entityData.set(DATA_BADGE, badge);
         }
     }
 
@@ -2262,6 +2336,7 @@ public class NpcEntity extends PathfinderMob
             NpcCommand.removeBonuses(this);
         }
         NpcParryPlanner.tick(this);
+        this.morale.tick();
         if ((this.tickCount + this.getId()) % NpcNightLight.CHECK_TICKS == 0)
         {
             NpcNightLight.update(this);
@@ -2382,6 +2457,12 @@ public class NpcEntity extends PathfinderMob
         return this.tickCount < this.inspiredUntil;
     }
 
+    /** The strength of the aura reaching this NPC, 0 when none. */
+    float getInspiredStrength()
+    {
+        return this.isInspired() ? this.inspiredStrength : 0.0F;
+    }
+
     /** A commander's aura reached this NPC: its bonuses hold for {@code ticks}, at the strongest commander's strength. */
     void inspire(float strength, int ticks)
     {
@@ -2449,12 +2530,25 @@ public class NpcEntity extends PathfinderMob
     }
 
     @Override
+    public boolean hurt(DamageSource source, float amount)
+    {
+        boolean hurt = super.hurt(source, amount);
+        if (hurt && !this.level().isClientSide)
+        {
+            this.morale.onHurt(source);
+        }
+        return hurt;
+    }
+
+    @Override
     public void die(DamageSource source)
     {
         if (!this.isRemoved() && !this.dead && !this.level().isClientSide)
         {
-            // A commander falls: command passes to the best soldier near it.
+            // A commander falls: command passes to the best soldier near it, and its army feels it.
+            boolean commander = NpcCommand.strength(this) > 0.0F;
             NpcCommand.succeed(this, source.getEntity() instanceof LivingEntity killer ? killer : null);
+            NpcMorale.onDeath(this, commander, source.getEntity());
         }
         if (this.garrison && !this.isRemoved() && !this.dead && this.spawner() != null)
         {
@@ -2518,6 +2612,7 @@ public class NpcEntity extends PathfinderMob
         this.inventory.save(tag);
         this.sidearm.save(tag);
         this.mount.save(tag);
+        this.morale.save(tag);
         if (this.worksite != null)
         {
             tag.putLong(WORKSITE_KEY, this.worksite.asLong());
@@ -2622,6 +2717,7 @@ public class NpcEntity extends PathfinderMob
         // After the hands (super) and the backpack, so a saved swap can be undone.
         this.sidearm.load(tag);
         this.mount.load(tag);
+        this.morale.load(tag);
         this.worksite = tag.contains(WORKSITE_KEY) ? BlockPos.of(tag.getLong(WORKSITE_KEY)) : null;
         this.hungry = tag.getBoolean(HUNGRY_KEY);
         this.nextMeal = tag.contains(NEXT_MEAL_KEY) ? tag.getLong(NEXT_MEAL_KEY) : -1L;

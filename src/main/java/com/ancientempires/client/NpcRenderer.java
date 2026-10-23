@@ -3,6 +3,7 @@ package com.ancientempires.client;
 import com.ancientempires.AncientEmpires;
 import com.ancientempires.config.AncientEmpiresClientConfig;
 import com.ancientempires.entity.npc.NpcEntity;
+import com.ancientempires.entity.npc.NpcBadge;
 import com.ancientempires.entity.npc.NpcStatus;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.ancientempires.registry.ModEntities;
@@ -121,7 +122,21 @@ public class NpcRenderer extends HumanoidMobRenderer<NpcEntity, NpcModel>
 
     /** One texture per status, built once. */
     private static final ResourceLocation[] STATUS_ICONS = statusIcons();
-    private static final ResourceLocation LEVIED_ICON = ResourceLocation.fromNamespaceAndPath(AncientEmpires.MOD_ID, "textures/gui/status/levied.png");
+    private static final ResourceLocation[] BADGE_ICONS = badgeIcons();
+
+    private static ResourceLocation[] badgeIcons()
+    {
+        NpcBadge[] badges = NpcBadge.values();
+        ResourceLocation[] icons = new ResourceLocation[badges.length];
+        for (NpcBadge badge : badges)
+        {
+            if (badge.icon() != null)
+            {
+                icons[badge.ordinal()] = ResourceLocation.fromNamespaceAndPath(AncientEmpires.MOD_ID, "textures/gui/status/" + badge.icon() + ".png");
+            }
+        }
+        return icons;
+    }
 
     private static ResourceLocation[] statusIcons()
     {
@@ -145,8 +160,8 @@ public class NpcRenderer extends HumanoidMobRenderer<NpcEntity, NpcModel>
     private void renderStatus(NpcEntity entity, PoseStack pose, MultiBufferSource buffer, int packedLight)
     {
         NpcStatus status = entity.getStatus();
-        boolean levied = entity.isLevied();
-        if (!AncientEmpiresClientConfig.showStatusIcons || (status == NpcStatus.NONE && !levied) || entity.isNameplateSuppressed()
+        NpcBadge badge = entity.getBadge();
+        if (!AncientEmpiresClientConfig.showStatusIcons || (status == NpcStatus.NONE && badge == NpcBadge.NONE) || entity.isNameplateSuppressed()
                 || entity.isInvisible())
         {
             return;
@@ -164,16 +179,16 @@ public class NpcRenderer extends HumanoidMobRenderer<NpcEntity, NpcModel>
         Matrix4f matrix = pose.last().pose();
         // Readable in the dark, as a nametag is.
         int light = LightTexture.pack(Math.max(10, LightTexture.block(packedLight)), LightTexture.sky(packedLight));
-        // A levied worker or settler wears a pitchfork badge beside what it is doing,
+        // A badge (a levy's pitchfork, a soldier's morale) sits beside what it is doing,
         // the same size, the pair centered over the head.
-        boolean both = status != NpcStatus.NONE && levied;
+        boolean both = status != NpcStatus.NONE && badge != NpcBadge.NONE;
         if (status != NpcStatus.NONE)
         {
             icon(buffer, STATUS_ICONS[status.ordinal()], matrix, both ? -0.55F : 0.0F, 0.0F, 1.0F, light);
         }
-        if (levied)
+        if (badge != NpcBadge.NONE)
         {
-            icon(buffer, LEVIED_ICON, matrix, both ? 0.55F : 0.0F, 0.0F, 1.0F, light);
+            icon(buffer, BADGE_ICONS[badge.ordinal()],matrix, both ? 0.55F : 0.0F, 0.0F, 1.0F, light);
         }
         pose.popPose();
     }

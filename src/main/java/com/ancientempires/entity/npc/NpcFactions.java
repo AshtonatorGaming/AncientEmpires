@@ -50,8 +50,9 @@ public final class NpcFactions
      * One faction's row. {@code huntsTownsfolk} is AW's "friendly" target list, used by the
      * evil factions. {@code nightLights}: its guards carry torches at night (off for beasts,
      * giants, demons, and the like); missing means yes.
+     * {@code fearless}: its soldiers never waver or rout (morale); missing means no.
      */
-    public record Faction(String id, Set<String> hostile, int standing, int kill, int trade, boolean huntsTownsfolk, boolean nightLights)
+    public record Faction(String id, Set<String> hostile, int standing, int kill, int trade, boolean huntsTownsfolk, boolean nightLights, boolean fearless)
     {
     }
 
@@ -66,6 +67,13 @@ public final class NpcFactions
     {
         Faction faction = get(id);
         return faction == null || faction.nightLights();
+    }
+
+    /** Whether a faction never breaks (morale): the undead, demons, monsters. Unknown factions can. */
+    public static boolean fearless(String id)
+    {
+        Faction faction = get(id);
+        return faction != null && faction.fearless();
     }
 
     /** Whether {@code attacker}'s NPCs attack {@code target}'s. Not symmetric. */
@@ -183,7 +191,8 @@ public final class NpcFactions
                 }
                 FACTIONS.put(id, new Faction(id, Set.copyOf(hostile), integer(object, "standing"), integer(object, "kill"),
                         integer(object, "trade"), "townsfolk".equals(object.has("hunts") ? object.get("hunts").getAsString() : ""),
-                        !object.has("nightLights") || object.get("nightLights").getAsBoolean()));
+                        !object.has("nightLights") || object.get("nightLights").getAsBoolean(),
+                        object.has("fearless") && object.get("fearless").getAsBoolean()));
             }
         }
         catch (Exception exception)

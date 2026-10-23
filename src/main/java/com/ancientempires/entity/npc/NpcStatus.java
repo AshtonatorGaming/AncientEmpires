@@ -50,6 +50,11 @@ public enum NpcStatus
     /** The status for an NPC, from its state first, then its running goals in order of importance. */
     static NpcStatus of(NpcEntity npc, List<Goal> running)
     {
+        if (npc.getMorale().isSurrendered())
+        {
+            // The white flag badge says it all.
+            return NONE;
+        }
         if (npc.isSleeping())
         {
             return SLEEP;

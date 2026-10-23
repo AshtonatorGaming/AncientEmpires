@@ -61,6 +61,8 @@ public class NpcModel extends PlayerModel<NpcEntity>
             // every axis the clip leaves free, which Better Combat cancels for players too.
             this.attackTime = 0.0F;
         }
+        // Vanilla sets this only for players. A surrendered NPC kneels (crouches).
+        this.crouching = entity.isCrouching();
         super.setupAnim(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
         if (drawingBow)
         {

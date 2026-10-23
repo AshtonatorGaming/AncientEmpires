@@ -673,6 +673,7 @@
                      },
                      {
                          "id":  "undead",
+                         "fearless":  true,
                          "standing":  -1000,
                          "kill":  -100,
                          "trade":  0,
@@ -706,6 +707,7 @@
                      },
                      {
                          "id":  "demon",
+                         "fearless":  true,
                          "nightLights":  false,
                          "standing":  -1000,
                          "kill":  -100,
@@ -1501,6 +1503,7 @@
                      },
                      {
                          "id":  "monster",
+                         "fearless":  true,
                          "nightLights":  false,
                          "standing":  -1000,
                          "kill":  -100,
@@ -1569,6 +1572,7 @@
                      },
                      {
                          "id":  "ent",
+                         "fearless":  true,
                          "nightLights":  false,
                          "standing":  20,
                          "kill":  -20,
@@ -1676,6 +1680,7 @@
                      },
                      {
                          "id":  "vampire",
+                         "fearless":  true,
                          "nightLights":  false,
                          "standing":  -1000,
                          "kill":  -100,

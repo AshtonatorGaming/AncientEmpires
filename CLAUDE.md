@@ -339,8 +339,10 @@ its own unless noted). Before adding behavior, check what AW did first.
   server every 10 ticks from state and running goals (sleep, flee, attack, follow, guard,
   upkeep, work, home or rain, hungry, levied) and synced as one byte; `NpcRenderer`
   draws it over the head (client `showStatusIcons`, `statusIconRange`).
-  A levied civilian also shows a pitchfork badge (`levied.png`), and NPCs that answered a
-  horn rally show the alarm icon for `horn.rallyTicks`.
+  A badge beside it (`NpcBadge`, its own synced byte): a levy's pitchfork (`levied.png`), or
+  a soldier's morale (wavering, routing, shattered, surrendered, and inspired while fighting
+  in a commander's aura). NPCs that answered a horn rally show the alarm icon for
+  `horn.rallyTicks`.
 - War Horn (`WarHornItem`; goat horn, gold, leather): blown, the owner's NPCs within
   `horn.range` answer its call (`NpcEntity.answerHorn`): Rally wakes soldiers and makes them
   follow (archers leave their posts), Call to Arms also levies settlers and workers to follow,
@@ -400,7 +402,7 @@ its own unless noted). Before adding behavior, check what AW did first.
   transient modifiers that lapse soon after leaving. A fallen commander's command passes to the
   highest-ranked allied soldier within `successionRange` (none if another commander is there), at
   `successionScale` (floor `minScale`), saved as `AeCommand`, and it turns on the killer.
-  `isInspired` is for morale later.
+  The aura also lifts morale (`morale.inspiredBonus`), and a commander's death shocks its army.
 - Skins: a roster row assigns a skin type, which resolved to its pool's first skin, so every
   Empire soldier looked alike. `NpcSkins.randomVariant` pins a random skin of the pool on first
   placement; a repacked scroll's saved skin is applied after the row, so it keeps its own.
@@ -440,6 +442,25 @@ its own unless noted). Before adding behavior, check what AW did first.
   takes a spawned mount along (respawned on placing) and leaves any other mount standing.
   The inventory Mount button seats an owned NPC on its owner's nearest saddled tamed
   horse or dismounts it; admins can seat any NPC on any mob.
+- Morale (`NpcMorale`, `morale` config, on by default, Total War style; not in AW): soldiers
+  (not civilians, not fearless factions: undead, demon, monster, ent, vampire, the
+  `fearless` flag in factions.json; owned ones with `ownedNpcs`) have morale 0 to 100. Once a
+  second (`updateTicks`) it drifts toward a target (`NpcMorale.target`): the tier's
+  `baseByTier`, plus a commander's aura, plus or minus the odds within `range` (each side
+  weighed by health, routing NPCs not counted), less wounds, a hit from outside the 120
+  degree front lately (`flankTicks`), hunger, and routing allies (capped), plus shocks that
+  wear off (an ally dying close by, a commander dying, a kill). It falls faster than it
+  rises. A peaceful steady soldier skips the area count. Wavering below `waverBelow`;
+  below `routBelow` it routs: `avoidsFights` is true, so it flees with `NpcFleeGoal` as a
+  civilian does and stands only when cornered. It rallies at `rallyAbove` after
+  `minRoutTicks`, or on a War Horn rally (`hornRally`). The `shatterAfterRouts`th rout
+  shatters: no rallying; a faction soldier deserts (despawns, a garrison counts it dead,
+  its roster mount goes too) once no player is within `desertRange`, unless named; an
+  owned one recovers after `shatteredRecoverTicks` clear of enemies. Cornered and below
+  `surrenderHealth`, a routing faction soldier may surrender (`surrenderChance`): it
+  kneels (crouch pose, `NpcSurrenderGoal`), NPCs stop targeting it, a hit shatters it, and
+  with no enemy near for `surrenderReleaseTicks` it leaves shattered. Capture and
+  recruiting are later. Saved as `AeMorale`, `AeMoraleState`, `AeRouts` (not packed).
 - Levy (`AeLevy`): an owner can call a civilian up to fight until dismissed. Debuffs in the
   `proficiency` section: damage 0.7, slower wind-ups, no bash or feint, breaks below 30%
   health.
@@ -447,7 +468,7 @@ its own unless noted). Before adding behavior, check what AW did first.
   or backpack, so sidearm swaps count) times 0.5, by a skirmisher times 0.75. Cached on
   hands, backpack, path, and levy changes.
 - NPC NBT keys: `AeRoster` (roster row), `AePath`, `AeLevy`, `AeSkill` (tier override),
-  `AeFeintChance`, `AeSidearmBowSlot`, `AeMountLost`, `AeRevenge`, `AeWorksite`, `AeHungry`, `AeNextMeal`, `AeMealCredit`, `AeBed`, `AeSpawner`, `AeSpawnerSlot`, `AeGarrison` (spawner link, not packed) (`AeMountUuid` is not packed). All carried through repack.
+  `AeFeintChance`, `AeSidearmBowSlot`, `AeMountLost`, `AeRevenge`, `AeWorksite`, `AeHungry`, `AeNextMeal`, `AeMealCredit`, `AeBed`, `AeSpawner`, `AeSpawnerSlot`, `AeGarrison` (spawner link, not packed), `AeMorale`, `AeMoraleState`, `AeRouts` (not packed) (`AeMountUuid` is not packed). All carried through repack.
 
 ## Performance rules and audit findings
 
@@ -540,7 +561,8 @@ target-scan design.
 - `./gradlew test` (also run by `build`) runs JUnit 5 tests in `src/test/java` on rules kept as pure
   methods so no game is needed: `WorksiteArea`, `QuarryStair.columns`, `Parry.perfectWindow`,
   `NpcGuard.strikesFirst`. Put a new rule in such a method and test it there; the game code calls
-  the same method. Also `NpcCommand.inherited`.
+  the same method. Also `NpcCommand.inherited` and the morale math (`NpcMorale.target`, `drift`,
+  `decay`, `fromBehind`).
 
 ## Building
 

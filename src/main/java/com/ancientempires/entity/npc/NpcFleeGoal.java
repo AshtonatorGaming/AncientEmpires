@@ -14,7 +14,7 @@ import java.util.EnumSet;
 
 /**
  * Ancient Warfare's NpcAIFleeHostiles and NpcAIFactionPanic for civilians
- * ({@link NpcEntity#avoidsFights()}). Every few ticks a civilian looks for a
+ * ({@link NpcEntity#avoidsFights()}), and for routing soldiers ({@link NpcMorale}). Every few ticks a civilian looks for a
  * visible threat within {@code civilians.fleeRange}: a hostile mob, an NPC that
  * would target it, or whatever it was about to fight (an attacker, an ally's
  * alert). It runs home if the danger is not at home, otherwise
@@ -46,7 +46,7 @@ public final class NpcFleeGoal extends Goal
     @Override
     public boolean canUse()
     {
-        if (!this.npc.avoidsFights())
+        if (!this.npc.avoidsFights() || this.npc.getMorale().isSurrendered())
         {
             this.npc.takeFearSource();
             return false;
@@ -168,7 +168,7 @@ public final class NpcFleeGoal extends Goal
     /**
      * Cornered: the threat is on top of the civilian and it is not getting away
      * (no path, or the path has run out). After {@code cornerTicks} of that it
-     * stands its ground and fights for a while.
+     * stands its ground and fights for a while, or, routing and badly hurt, may surrender.
      */
     private boolean checkCornered()
     {
@@ -191,7 +191,7 @@ public final class NpcFleeGoal extends Goal
             this.runFrom(danger);
             return false;
         }
-        this.npc.standGround(danger);
+        this.npc.cornered(danger);
         return true;
     }
 
@@ -251,7 +251,7 @@ public final class NpcFleeGoal extends Goal
             // Evil factions live alongside monsters; everyone else runs from them.
             return !this.npc.isFactionNpc() || !AncientEmpiresConfig.relationsEnabled || NpcFactions.hunts(this.npc.getFaction(), other);
         }
-        return other instanceof NpcEntity npc && !npc.isCivilian() && npc.isScanTarget(this.npc);
+        return other instanceof NpcEntity npc && !npc.isCivilian() && !npc.getMorale().isBroken() && npc.isScanTarget(this.npc);
     }
 
     /** Ancient Warfare's fear level: nearby allied soldiers shorten the time spent hiding. */
@@ -259,7 +259,7 @@ public final class NpcFleeGoal extends Goal
     {
         double range = AncientEmpiresConfig.civilianFleeRange;
         int soldiers = this.npc.level().getEntitiesOfClass(NpcEntity.class, this.npc.getBoundingBox().inflate(range, 4.0D, range),
-                other -> this.npc.isAlly(other) && !other.isCivilian()).size();
+                other -> this.npc.isAlly(other) && !other.isCivilian() && !other.getMorale().isBroken()).size();
         return Math.max(AncientEmpiresConfig.civilianSoldierCalmTicks, AncientEmpiresConfig.civilianStayAwayTicks - soldiers * AncientEmpiresConfig.civilianSoldierCalmTicks);
     }
 
