@@ -13,7 +13,8 @@ import net.minecraftforge.fml.ModList;
 /**
  * Player model. Better Mob Combat's stack is applied inside the vanilla setup
  * when that mod is loaded. Otherwise the fallback stack is copied on here.
- * Without either, a swing in progress holds the main arm up.
+ * Without either, or when a weapon's clip is missing, the arm is drawn back
+ * through the wind-up and the vanilla swing plays at the hit.
  */
 public class NpcModel extends PlayerModel<NpcEntity>
 {
@@ -51,6 +52,12 @@ public class NpcModel extends PlayerModel<NpcEntity>
                 this.rightArmPose = HumanoidModel.ArmPose.BLOCK;
             }
         }
+        if (this.attackTime > 0.0F && NpcCombatAnimations.attackClipPlaying(entity))
+        {
+            // A Better Combat clip owns the arms. The vanilla swing would shove them on
+            // every axis the clip leaves free, which Better Combat cancels for players too.
+            this.attackTime = 0.0F;
+        }
         super.setupAnim(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
         if (drawingBow)
         {
@@ -66,8 +73,9 @@ public class NpcModel extends PlayerModel<NpcEntity>
         {
             posed = this.reactionPose(entity, ageInTicks);
         }
-        if (!posed && entity.isAttackWindowOpen() && !NpcCombatAnimations.attackClipOwnsArms(entity))
+        if (!posed && entity.isAttackWindowOpen() && this.attackTime <= 0.0F && !NpcCombatAnimations.attackClipOwnsArms(entity))
         {
+            // Vanilla fallback wind-up: the arm drawn back until the swing at the hit.
             ModelPart arm = entity.getMainArm() == HumanoidArm.LEFT ? this.leftArm : this.rightArm;
             arm.xRot = -1.2F;
             arm.yRot = 0.0F;

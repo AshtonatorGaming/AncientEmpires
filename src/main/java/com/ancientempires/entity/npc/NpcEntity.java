@@ -2085,6 +2085,19 @@ public class NpcEntity extends PathfinderMob
         return this.entityData.get(DATA_ATTACK_OFFHAND);
     }
 
+    /**
+     * Vanilla advances the arm swing only for monsters and players, so a
+     * {@link PathfinderMob}'s {@code swing} would start and never play out:
+     * work, deposits, bandaging, and the vanilla attack fallback showed no arm
+     * movement. Runs on both sides, as {@code Monster.aiStep} does.
+     */
+    @Override
+    public void aiStep()
+    {
+        this.updateSwingTime();
+        super.aiStep();
+    }
+
     @Override
     protected void customServerAiStep()
     {

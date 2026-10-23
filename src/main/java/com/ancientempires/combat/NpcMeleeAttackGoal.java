@@ -248,7 +248,10 @@ public class NpcMeleeAttackGoal extends Goal
         }
 
         this.feintedLast = false;
-        boolean inRange = this.within(target, swing.range()) || !AncientEmpiresConfig.cancelIfOutOfRange;
+        // Always sent: a client playing a Better Combat clip ignores it (NpcModel), and one
+        // whose clip is missing or failed shows the vanilla swing on the hit instead.
+        this.npc.swing(swing.offHandWeapon() ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND);
+        boolean inRange =this.within(target, swing.range()) || !AncientEmpiresConfig.cancelIfOutOfRange;
         if (inRange && this.hasLineOfSight(target) && this.hitFacing(target, swing))
         {
             this.applyHit(target, swing, true);
@@ -342,24 +345,15 @@ public class NpcMeleeAttackGoal extends Goal
         {
             // Better Mob Combat will not start this swing: an empty hand has no
             // item attributes, so its upswing bails and the vanilla arm swing is
-            // all that remains. The id is the fist preset's own attack animation.
+            // all that remains (sent at the hit). The id is the fist preset's own attack animation.
             this.fistClip = MobCombatBridge.playAttackAnimation(
                     this.npc,
                     swing.animationId(),
                     swing.cooldownTicks(),
                     swing.animationUpswing(),
                     swing.offHand());
-            if (!this.fistClip && !BetterCombatBridge.isModLoaded())
-            {
-                this.npc.swing(InteractionHand.MAIN_HAND);
-            }
         }
-        else if (swing.animationId() == null || !BetterCombatBridge.isModLoaded())
-        {
-            // A Better Combat clip owns the arms. The vanilla swing would shove them on
-            // every axis the clip leaves free, which Better Combat cancels for players too.
-            this.npc.swing(InteractionHand.MAIN_HAND);
-        }
+        // The vanilla arm swing comes at the hit (tickWindup); clients drop it while a clip plays.
         this.playSwingSound(swing);
     }
 

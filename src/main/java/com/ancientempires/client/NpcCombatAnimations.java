@@ -292,6 +292,32 @@ public final class NpcCombatAnimations
     }
 
     /**
+     * True while a Better Combat attack clip is actually playing on this NPC,
+     * from either stack. The vanilla arm swing is held off only then, so an
+     * attack whose clip is missing or failed still shows the vanilla swing.
+     */
+    public static boolean attackClipPlaying(NpcEntity npc)
+    {
+        if (attackClipOwnsArms(npc))
+        {
+            return true;
+        }
+        if (mobAnimatorOwnsModel() || !posesReady())
+        {
+            return false;
+        }
+        try
+        {
+            return NpcBetterCombatDriver.attackActive(npc);
+        }
+        catch (Throwable exception)
+        {
+            failPoses(exception);
+            return false;
+        }
+    }
+
+    /**
      * True once Better Mob Combat's own stack is on the mob. A failed read still
      * leaves that stack in place, so the fallback stack must stay idle.
      */
