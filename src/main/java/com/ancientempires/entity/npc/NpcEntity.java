@@ -579,6 +579,17 @@ public class NpcEntity extends PathfinderMob
         return base.scale(scale);
     }
 
+    /**
+     * Sits in the saddle as a player does. Mobs ride with no offset, which left
+     * the player-shaped NPC floating above its mount; a player sits 0.35 lower.
+     * Scaled with the body, so dwarves and giants sit right too.
+     */
+    @Override
+    public double getMyRidingOffset()
+    {
+        return -0.35D * this.getBodyScale();
+    }
+
     @Override
     public void onSyncedDataUpdated(EntityDataAccessor<?> key)
     {
