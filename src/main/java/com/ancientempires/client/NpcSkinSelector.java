@@ -22,8 +22,6 @@ import com.ancientempires.entity.npc.NpcSkins;
 import com.ancientempires.network.ModNetwork;
 import com.ancientempires.registry.ModEntities;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraftforge.api.distmarker.Dist;
@@ -216,6 +214,15 @@ public final class NpcSkinSelector
                     .background(new Rectangle().color(BUTTON))
                     .hoverBackground(new Rectangle().color(BUTTON_HOVER))
                     .overlay(new SkinLabel(() -> Component.literal(slot.label), false))
+                    // Names drawn shrunk (or cut) read in full on hover.
+                    .tooltipDynamic(tooltip ->
+                    {
+                        if (!FitText.fits(Minecraft.getInstance().font, slot.label, LIST_W - 14))
+                        {
+                            tooltip.addLine(slot.label);
+                        }
+                    })
+                    .tooltipAutoUpdate(true)
                     .onMousePressed((context, click) -> select(state, slot, click));
             button.setEnabled(false);
             slot.button = button;
@@ -780,17 +787,8 @@ public final class NpcSkinSelector
         @Override
         public void draw(GuiContext context, int x, int y, int width, int height, WidgetTheme widgetTheme)
         {
-            Font font = Minecraft.getInstance().font;
-            String line = this.text.get().getString();
-            int max = Math.max(1, width - 4);
-            if (font.width(line) > max)
-            {
-                line = font.plainSubstrByWidth(line, max);
-            }
-            int textX = this.center ? x + (width - font.width(line)) / 2 : x + 2;
-            int textY = y + (height - 8) / 2;
-            GuiGraphics graphics = context.getGraphics();
-            graphics.drawString(font, line, textX, textY, NAME_INK, false);
+            FitText.draw(context.getGraphics(), Minecraft.getInstance().font, this.text.get().getString(), x + 2, y, width - 4, height,
+                    NAME_INK, this.center, false);
         }
     }
 }

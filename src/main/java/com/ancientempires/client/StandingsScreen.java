@@ -94,8 +94,7 @@ public final class StandingsScreen extends Screen
             }
             graphics.blit(banner(entry.faction()), flagX, y, FLAG_W, FLAG_H, 1.0F, 1.0F, FLAG_W, FLAG_H, 64, 64);
             Component name = NpcFactions.displayName(entry.faction());
-            String text = this.font.plainSubstrByWidth(name.getString(), CELL_W - 2);
-            graphics.drawCenteredString(this.font, text, x + CELL_W / 2, y + FLAG_H + 2, 0xFFE6D2A2);
+            FitText.draw(graphics, this.font, name.getString(), x + 1, y + FLAG_H + 2, CELL_W - 2, 8, 0xFFE6D2A2, true, true);
             graphics.drawCenteredString(this.font, Integer.toString(entry.standing()), x + CELL_W / 2, y + FLAG_H + 11,
                     hostile ? 0xFFFF6060 : 0xFF70E070);
             if (mouseX >= x && mouseX < x + CELL_W && mouseY >= y && mouseY < y + CELL_H)

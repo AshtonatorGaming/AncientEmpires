@@ -428,7 +428,7 @@ public final class NpcInventoryPanel
         return true;
     }
 
-    /** One line of text centered in its widget, trimmed to fit, read each frame. */
+    /** One line of text centered in its widget, shrunk to fit, read each frame. */
     private static final class CenteredText implements IDrawable
     {
         private final Supplier<Component> text;
@@ -443,16 +443,8 @@ public final class NpcInventoryPanel
         @Override
         public void draw(GuiContext context, int x, int y, int width, int height, WidgetTheme widgetTheme)
         {
-            Font font = Minecraft.getInstance().font;
-            String line = this.text.get().getString();
-            int max = Math.max(1, width - 4);
-            if (font.width(line) > max)
-            {
-                line = font.plainSubstrByWidth(line, max);
-            }
-            int textX = x + (width - font.width(line)) / 2;
-            int textY = y + (height - 8) / 2;
-            context.getGraphics().drawString(font, line, textX, textY, this.color.getAsInt(), false);
+            FitText.draw(context.getGraphics(), Minecraft.getInstance().font, this.text.get().getString(), x + 2, y, width - 4, height,
+                    this.color.getAsInt(), true, false);
         }
     }
 
