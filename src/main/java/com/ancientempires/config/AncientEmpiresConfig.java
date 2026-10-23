@@ -52,6 +52,7 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.DoubleValue FOOTWORK_SPEED;
     private static final ForgeConfigSpec.DoubleValue FOOTWORK_SHIELD_SCALE;
     private static final ForgeConfigSpec.DoubleValue PRESSURE_CHANCE;
+    private static final ForgeConfigSpec.IntValue ATTACK_PAUSE;
     private static final ForgeConfigSpec.DoubleValue APPROACH_SPEED;
     private static final ForgeConfigSpec.IntValue PATH_RECALC_TICKS;
     private static final ForgeConfigSpec.BooleanValue REQUIRE_LINE_OF_SIGHT;
@@ -100,6 +101,7 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.ConfigValue<List<? extends Double>> SKILL_FEINT_CHANCE;
     private static final ForgeConfigSpec.ConfigValue<List<? extends Double>> SKILL_BASH_CHANCE;
     private static final ForgeConfigSpec.ConfigValue<List<? extends Integer>> SKILL_SHIELD_REACTION;
+    private static final ForgeConfigSpec.ConfigValue<List<? extends Double>> SKILL_GUARD;
     private static final ForgeConfigSpec.DoubleValue SHIELD_BASH_RANGE;
     private static final ForgeConfigSpec.IntValue SHIELD_BASH_COOLDOWN;
     private static final ForgeConfigSpec.IntValue TOWER_BASH_COOLDOWN;
@@ -332,10 +334,13 @@ public final class AncientEmpiresConfig
                 .define("footwork", true);
         FOOTWORK_SPEED = builder
                 .comment("Sideways footwork input, 0 to 1 (vanilla strafe pace scales it). Kept slow: a wary circle, not a dance.")
-                .defineInRange("circleSpeed", 0.35D, 0.0D, 1.0D);
+                .defineInRange("circleSpeed", 0.6D, 0.0D, 1.0D);
         FOOTWORK_SHIELD_SCALE = builder
                 .comment("Sideways footwork when both fighters carry shields, as a fraction of footworkSpeed, so a shield duel is a standoff rather than a dance.")
                 .defineInRange("footworkShieldScale", 0.25D, 0.0D, 1.0D);
+        ATTACK_PAUSE = builder
+                .comment("Extra ticks after every NPC swing before the next, on top of the weapon's own cooldown, so attacks are not spammed. Ancient Warfare used only the weapon cooldown (20 ticks over attack speed); 0 matches it.")
+                .defineInRange("attackPause", 4, 0, 40);
         PRESSURE_CHANCE = builder
                 .comment("Against a raised shield, the chance each tick that an NPC without one starts its swing. Below 1 it picks its moments instead of hammering the shield as fast as its weapon allows.")
                 .defineInRange("pressureChance", 0.12D, 0.01D, 1.0D);
@@ -508,6 +513,9 @@ public final class AncientEmpiresConfig
         SKILL_SHIELD_REACTION = builder
                 .comment("Most ticks before the shield comes up against a threat; each block waits a random amount up to this.")
                 .defineList("shieldReactionTicks", List.of(8, 6, 4, 2), value -> value instanceof Integer ticks && ticks >= 0 && ticks <= 40);
+        SKILL_GUARD = builder
+                .comment("Shield guard multiplier per skill tier (shield.guardMax times this): a leader's guard outlasts a grunt's.")
+                .defineList("guardByTier", List.of(1.0D, 1.25D, 1.5D, 1.75D), value -> value instanceof Double d && d > 0.0D && d <= 10.0D);
         builder.pop();
 
         builder.comment("Ancient Warfare's civilians, workers, and traders fled instead of fighting.").push("civilians");
@@ -961,9 +969,10 @@ public final class AncientEmpiresConfig
     public static boolean stopMovingDuringWindup = true;
     public static double windupMoveSpeed = 0.7D;
     public static boolean footwork = true;
-    public static double footworkSpeed = 0.35D;
+    public static double footworkSpeed = 0.6D;
     public static double footworkShieldScale = 0.25D;
     public static double pressureChance = 0.12D;
+    public static int attackPause = 4;
     public static double approachSpeed = 1.12D;
     public static int pathRecalcTicks = 8;
     public static boolean requireLineOfSight = true;
@@ -1013,6 +1022,7 @@ public final class AncientEmpiresConfig
     public static List<? extends Double> feintChanceByTier = List.of(0.0D, 0.1D, 0.2D, 0.3D);
     public static List<? extends Double> bashChanceByTier = List.of(0.08D, 0.12D, 0.18D, 0.25D);
     public static List<? extends Integer> shieldReactionByTier = List.of(8, 6, 4, 2);
+    public static List<? extends Double> guardByTier = List.of(1.0D, 1.25D, 1.5D, 1.75D);
     public static double shieldBashRange = 3.0D;
     public static int shieldBashCooldownTicks = 30;
     public static int towerBashCooldownTicks = 50;
@@ -1220,6 +1230,7 @@ public final class AncientEmpiresConfig
         footworkSpeed = FOOTWORK_SPEED.get();
         footworkShieldScale = FOOTWORK_SHIELD_SCALE.get();
         pressureChance = PRESSURE_CHANCE.get();
+        attackPause = ATTACK_PAUSE.get();
         approachSpeed = APPROACH_SPEED.get();
         pathRecalcTicks = PATH_RECALC_TICKS.get();
         requireLineOfSight = REQUIRE_LINE_OF_SIGHT.get();
@@ -1268,6 +1279,7 @@ public final class AncientEmpiresConfig
         feintChanceByTier = SKILL_FEINT_CHANCE.get();
         bashChanceByTier = SKILL_BASH_CHANCE.get();
         shieldReactionByTier = SKILL_SHIELD_REACTION.get();
+        guardByTier = SKILL_GUARD.get();
         shieldBashRange = SHIELD_BASH_RANGE.get();
         shieldBashCooldownTicks = SHIELD_BASH_COOLDOWN.get();
         towerBashCooldownTicks = TOWER_BASH_COOLDOWN.get();

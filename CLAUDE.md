@@ -153,7 +153,12 @@ its own unless noted). Before adding behavior, check what AW did first.
   and give ground when pressed; two shield fighters barely circle (`footworkShieldScale`;
   bouncier footwork is for a later duelist). Against a raised shield an NPC without one starts
   a swing only at `pressureChance` per tick. A hit taken on the shield never knocks the NPC
-  back (`NpcEntity.knockback`), as a blocking player stands firm. Guard is `shield.guardMax` (30). Bash chance per blocked hit is `skill.bashChancePerBlock` (0.08 to 0.25 by tier).
+  back (`NpcEntity.knockback`), as a blocking player stands firm. Guard is `shield.guardMax` (30) times
+  `skill.guardByTier` (1 to 1.75). Footwork comes in steps with rests, not a constant drift (which
+  slid). Every swing is followed by `combat.attackPause` (4) extra ticks; AW used only the weapon
+  cooldown (20 over attack speed), so 0 matches it. A vanilla mob or player has no wind-up, so
+  only an NPC target's open attack window holds a guard; right after their swing is an opening,
+  and a riposte waits half the strike delay. Bash chance per blocked hit is `skill.bashChancePerBlock` (0.08 to 0.25 by tier).
   EMF is handed the shield and night-light arm poses so its own animation does not undo them.
 - Bash: `NpcShieldBash` mirrors Spartan Shields' player bash as a counter after a blocked
   hit. It is telegraphed: the NPC braces `bashWindupTicks` (6) behind the raised shield with

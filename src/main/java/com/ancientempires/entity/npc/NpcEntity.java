@@ -180,7 +180,7 @@ public class NpcEntity extends PathfinderMob
     /** tickCount of the last blocked hit, so it does not also knock the NPC back. */
     private int blockedAt = -1;
     /** The shield's guard: blocked damage drains it, and at zero the guard breaks. */
-    private float guard = AncientEmpiresConfig.shieldGuardPoints;
+    private float guard = -1.0F;
     /** tickCount before which no swing may start (the recovery after a bash). */
     private int strikeReadyAt;
     /** Own feint chance; below zero means the skill tier decides. */
@@ -928,10 +928,11 @@ public class NpcEntity extends PathfinderMob
             return this.tickCount - this.shieldLoweredAt >= AncientEmpiresConfig.shieldStrikeDelayTicks;
         }
         // Ancient Warfare kept blocking and attacking apart: strike only into an opening,
-        // never while the target is mid-swing at this NPC, nor while it is already lowering
+        // never while an NPC target is winding up at this NPC, nor while it is already lowering
         // its own shield to strike (whoever started first goes; the other blocks, then ripostes).
+        // A vanilla mob or player has no wind-up: its swing is the hit, so just after it is the opening.
         LivingEntity target = this.getTarget();
-        if (target != null && (NpcShieldGoal.swinging(target) || target instanceof NpcEntity other && other.strikesBefore(this)))
+        if (target instanceof NpcEntity other && (other.isAttackWindowOpen() || other.strikesBefore(this)))
         {
             // Caught lowering it: cancel the strike, so the shield goes straight back up.
             this.wantsToStrike = false;
@@ -957,7 +958,8 @@ public class NpcEntity extends PathfinderMob
             this.wantsToStrike = true;
             this.strikeSince = this.tickCount;
         }
-        return this.tickCount - this.shieldLoweredAt >= AncientEmpiresConfig.shieldStrikeDelayTicks;
+        return this.tickCount - this.shieldLoweredAt >= (this.tickCount < this.riposteUntil
+                ? AncientEmpiresConfig.shieldStrikeDelayTicks / 2 : AncientEmpiresConfig.shieldStrikeDelayTicks);
     }
 
     /** This NPC began readying a strike before {@code other} did (or {@code other} has not). */
@@ -983,7 +985,13 @@ public class NpcEntity extends PathfinderMob
     /** What is left of the shield's guard, out of {@code shield.guardPoints}. */
     public float getGuard()
     {
-        return this.guard;
+        return this.guard < 0.0F ? this.guardMax() : this.guard;
+    }
+
+    /** Full guard: {@code shield.guardMax} times the skill tier's {@code skill.guardByTier}. */
+    public float guardMax()
+    {
+        return (float) (AncientEmpiresConfig.shieldGuardPoints * tierValue(AncientEmpiresConfig.guardByTier, this.getSkillTier()));
     }
 
     void setBracing(boolean bracing)
@@ -1453,7 +1461,7 @@ public class NpcEntity extends PathfinderMob
     {
         this.blockedAt = this.tickCount;
         // Guard, as Chivalry's stamina: every blocked hit wears it, so a shield wall can be broken.
-        this.guard -= Math.max(1.0F, amount);
+        this.guard = this.getGuard() - Math.max(1.0F, amount);
         if (this.guard <= 0.0F && WeaponClassifier.isShield(this.getUseItem()))
         {
             this.guard = 0.0F;
@@ -2340,11 +2348,11 @@ public class NpcEntity extends PathfinderMob
         this.mount.tick();
         this.targetMemory.tick();
         this.sidearm.tick();
-        if (this.guard < AncientEmpiresConfig.shieldGuardPoints)
+        if (this.guard >= 0.0F && this.guard < this.guardMax())
         {
             // Recovers between blows, a quarter as fast while still holding the shield up.
             float regen = (float) AncientEmpiresConfig.shieldGuardRegen;
-            this.guard = Math.min((float) AncientEmpiresConfig.shieldGuardPoints, this.guard + (this.isRaisingShield() ? regen * 0.25F : regen));
+            this.guard = Math.min(this.guardMax(), this.guard + (this.isRaisingShield() ? regen * 0.25F : regen));
         }
         if ((this.tickCount + this.getId()) % NpcNightLight.CHECK_TICKS == 0)
         {

@@ -46,6 +46,9 @@ public class NpcMeleeAttackGoal extends Goal
     /** Which way the footwork circles (1 or -1), and ticks until it may switch. */
     private int strafeSide = 1;
     private int strafeSwitch;
+    /** Footwork comes in steps: ticks left in this one, then ticks of standing. */
+    private int stepLeft;
+    private int stepRest;
     private int pathCooldown;
     private boolean stoppedForWindup;
     private boolean mobCombatSwing;
@@ -283,7 +286,8 @@ public class NpcMeleeAttackGoal extends Goal
 
         this.npc.completeSwing(swing.cooldownTicks());
         this.npc.closeAttackWindow();
-        this.recoveryLeft = swing.recoveryTicks();
+        // Plus a short pause between swings so weapons are not spammed (combat.attackPause, 0 off).
+        this.recoveryLeft = swing.recoveryTicks() + AncientEmpiresConfig.attackPause;
         this.phase = Phase.APPROACH;
         this.active = null;
         this.stoppedForWindup = false;
@@ -696,6 +700,17 @@ public class NpcMeleeAttackGoal extends Goal
         if (!AncientEmpiresConfig.footwork || this.npc.isPassenger())
         {
             return;
+        }
+        // In steps, not a constant drift: a slow drift barely moves the legs and reads as sliding.
+        if (this.stepRest > 0)
+        {
+            this.stepRest--;
+            return;
+        }
+        if (--this.stepLeft <= 0)
+        {
+            this.stepLeft = 6 + this.npc.getRandom().nextInt(6);
+            this.stepRest = 10 + this.npc.getRandom().nextInt(25);
         }
         if (--this.strafeSwitch <= 0)
         {
