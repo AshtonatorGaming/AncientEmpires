@@ -177,6 +177,8 @@ public class NpcEntity extends PathfinderMob
     private boolean bracing;
     /** tickCount the current strike began readying, for who-goes-first between guards. */
     private int strikeSince;
+    /** tickCount of the last blocked hit, so it does not also knock the NPC back. */
+    private int blockedAt = -1;
     /** The shield's guard: blocked damage drains it, and at zero the guard breaks. */
     private float guard = AncientEmpiresConfig.shieldGuardPoints;
     /** tickCount before which no swing may start (the recovery after a bash). */
@@ -964,6 +966,20 @@ public class NpcEntity extends PathfinderMob
         return this.wantsToStrike && !this.attackWindowOpen && (!other.wantsToStrike || this.strikeSince < other.strikeSince);
     }
 
+    /**
+     * A hit taken on the shield does not shove the NPC back (vanilla knocks a blocking
+     * mob back as if hit; a blocking player stands firm). Bashes still knock it back.
+     */
+    @Override
+    public void knockback(double strength, double x, double z)
+    {
+        if (this.blockedAt == this.tickCount)
+        {
+            return;
+        }
+        super.knockback(strength, x, z);
+    }
+
     /** What is left of the shield's guard, out of {@code shield.guardPoints}. */
     public float getGuard()
     {
@@ -1435,6 +1451,7 @@ public class NpcEntity extends PathfinderMob
     @Override
     protected void hurtCurrentlyUsedShield(float amount)
     {
+        this.blockedAt = this.tickCount;
         // Guard, as Chivalry's stamina: every blocked hit wears it, so a shield wall can be broken.
         this.guard -= Math.max(1.0F, amount);
         if (this.guard <= 0.0F && WeaponClassifier.isShield(this.getUseItem()))

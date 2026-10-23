@@ -148,9 +148,12 @@ its own unless noted). Before adding behavior, check what AW did first.
   (`strikeChance` per tick). Guard (`guardPoints`, like Chivalry stamina): blocked damage
   drains it, it recovers at `guardRegen`, and at zero the shield is knocked down for
   `guardBreakTicks`, so shield walls do not stalemate and players can break a turtle.
-  Footwork (`combat.footwork`): inside reach while waiting or recovering, NPCs circle (vanilla
-  strafe, which refuses unwalkable steps), close at the edge of reach, and give ground when
-  pressed. Bash chance per blocked hit is `skill.bashChancePerBlock` (0.08 to 0.25 by tier).
+  Footwork (`combat.footwork`): inside reach while waiting or recovering, NPCs circle slowly
+  (`circleSpeed`, vanilla strafe, which refuses unwalkable steps), close at the edge of reach,
+  and give ground when pressed; two shield fighters barely circle (`footworkShieldScale`;
+  bouncier footwork is for a later duelist). Against a raised shield an NPC without one starts
+  a swing only at `pressureChance` per tick. A hit taken on the shield never knocks the NPC
+  back (`NpcEntity.knockback`), as a blocking player stands firm. Guard is `shield.guardMax` (30). Bash chance per blocked hit is `skill.bashChancePerBlock` (0.08 to 0.25 by tier).
   EMF is handed the shield and night-light arm poses so its own animation does not undo them.
 - Bash: `NpcShieldBash` mirrors Spartan Shields' player bash as a counter after a blocked
   hit. It is telegraphed: the NPC braces `bashWindupTicks` (6) behind the raised shield with

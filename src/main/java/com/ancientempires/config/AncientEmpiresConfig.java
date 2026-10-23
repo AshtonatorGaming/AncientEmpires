@@ -50,6 +50,8 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.DoubleValue WINDUP_MOVE_SPEED;
     private static final ForgeConfigSpec.BooleanValue FOOTWORK;
     private static final ForgeConfigSpec.DoubleValue FOOTWORK_SPEED;
+    private static final ForgeConfigSpec.DoubleValue FOOTWORK_SHIELD_SCALE;
+    private static final ForgeConfigSpec.DoubleValue PRESSURE_CHANCE;
     private static final ForgeConfigSpec.DoubleValue APPROACH_SPEED;
     private static final ForgeConfigSpec.IntValue PATH_RECALC_TICKS;
     private static final ForgeConfigSpec.BooleanValue REQUIRE_LINE_OF_SIGHT;
@@ -329,8 +331,14 @@ public final class AncientEmpiresConfig
                 .comment("Inside reach, while waiting to strike or recovering, NPCs circle their opponent, step in at the edge of reach, and give ground when pressed, instead of standing still.")
                 .define("footwork", true);
         FOOTWORK_SPEED = builder
-                .comment("Sideways footwork input, 0 to 1 (vanilla strafe pace scales it).")
-                .defineInRange("footworkSpeed", 0.6D, 0.0D, 1.0D);
+                .comment("Sideways footwork input, 0 to 1 (vanilla strafe pace scales it). Kept slow: a wary circle, not a dance.")
+                .defineInRange("circleSpeed", 0.35D, 0.0D, 1.0D);
+        FOOTWORK_SHIELD_SCALE = builder
+                .comment("Sideways footwork when both fighters carry shields, as a fraction of footworkSpeed, so a shield duel is a standoff rather than a dance.")
+                .defineInRange("footworkShieldScale", 0.25D, 0.0D, 1.0D);
+        PRESSURE_CHANCE = builder
+                .comment("Against a raised shield, the chance each tick that an NPC without one starts its swing. Below 1 it picks its moments instead of hammering the shield as fast as its weapon allows.")
+                .defineInRange("pressureChance", 0.12D, 0.01D, 1.0D);
         WINDUP_MOVE_SPEED = builder
                 .comment("Path speed multiplier while winding up and still short of the target.")
                 .defineInRange("windupMoveSpeed", 0.7D, 0.0D, 2.0D);
@@ -457,7 +465,7 @@ public final class AncientEmpiresConfig
                 .defineInRange("strikeChance", 0.15D, 0.01D, 1.0D);
         SHIELD_GUARD_POINTS = builder
                 .comment("An NPC shield's guard, like stamina in Chivalry: each blocked hit drains it by the damage stopped (at least 1). At zero the guard breaks and the shield is knocked down for guardBreakTicks, so shield walls do not stalemate.")
-                .defineInRange("guardPoints", 20, 1, 200);
+                .defineInRange("guardMax", 30, 1, 200);
         SHIELD_GUARD_REGEN = builder
                 .comment("Guard recovered per tick with the shield down (a quarter of this while it is up).")
                 .defineInRange("guardRegen", 0.2D, 0.0D, 10.0D);
@@ -953,7 +961,9 @@ public final class AncientEmpiresConfig
     public static boolean stopMovingDuringWindup = true;
     public static double windupMoveSpeed = 0.7D;
     public static boolean footwork = true;
-    public static double footworkSpeed = 0.6D;
+    public static double footworkSpeed = 0.35D;
+    public static double footworkShieldScale = 0.25D;
+    public static double pressureChance = 0.12D;
     public static double approachSpeed = 1.12D;
     public static int pathRecalcTicks = 8;
     public static boolean requireLineOfSight = true;
@@ -991,7 +1001,7 @@ public final class AncientEmpiresConfig
     public static int shieldStrikeDelayTicks = 6;
     public static int shieldRiposteTicks = 20;
     public static double shieldStrikeChance = 0.15D;
-    public static int shieldGuardPoints = 20;
+    public static int shieldGuardPoints = 30;
     public static double shieldGuardRegen = 0.2D;
     public static int shieldGuardBreakTicks = 40;
     public static double shieldAdvanceSpeed = 0.7D;
@@ -1208,6 +1218,8 @@ public final class AncientEmpiresConfig
         windupMoveSpeed = WINDUP_MOVE_SPEED.get();
         footwork = FOOTWORK.get();
         footworkSpeed = FOOTWORK_SPEED.get();
+        footworkShieldScale = FOOTWORK_SHIELD_SCALE.get();
+        pressureChance = PRESSURE_CHANCE.get();
         approachSpeed = APPROACH_SPEED.get();
         pathRecalcTicks = PATH_RECALC_TICKS.get();
         requireLineOfSight = REQUIRE_LINE_OF_SIGHT.get();

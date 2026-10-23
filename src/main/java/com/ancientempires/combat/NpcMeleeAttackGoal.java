@@ -198,6 +198,12 @@ public class NpcMeleeAttackGoal extends Goal
             return;
         }
 
+        if (target.isBlocking() && !this.npc.hasShieldInOffhand() && this.npc.getRandom().nextFloat() >= AncientEmpiresConfig.pressureChance)
+        {
+            // Against a raised shield, pick a moment rather than hammer it at weapon speed.
+            this.footwork(target, next);
+            return;
+        }
         if (!this.npc.readyToStrike())
         {
             // Behind the shield: it comes down only after a committed block, then a beat before the swing.
@@ -693,7 +699,7 @@ public class NpcMeleeAttackGoal extends Goal
         }
         if (--this.strafeSwitch <= 0)
         {
-            this.strafeSwitch = 20 + this.npc.getRandom().nextInt(30);
+            this.strafeSwitch = 40 + this.npc.getRandom().nextInt(60);
             if (this.npc.getRandom().nextFloat() < 0.6F)
             {
                 this.strafeSide = -this.strafeSide;
@@ -701,8 +707,14 @@ public class NpcMeleeAttackGoal extends Goal
         }
         double reach = swing.range() + target.getBbWidth() * 0.5D;
         double distance = Math.sqrt(this.npc.distanceToSqr(target));
-        float forward = distance > reach * 0.8D ? 0.6F : distance < reach * 0.45D ? -0.5F : 0.0F;
-        this.npc.getMoveControl().strafe(forward, this.strafeSide * (float) AncientEmpiresConfig.footworkSpeed);
+        float forward = distance > reach * 0.8D ? 0.5F : distance < reach * 0.45D ? -0.4F : 0.0F;
+        float side = this.strafeSide * (float) AncientEmpiresConfig.footworkSpeed;
+        if (this.npc.hasShieldInOffhand() && WeaponClassifier.isShield(target.getOffhandItem()))
+        {
+            // Two shields: a wary, near-still standoff, not a dance. Bouncier footwork is for duelists.
+            side *= (float) AncientEmpiresConfig.footworkShieldScale;
+        }
+        this.npc.getMoveControl().strafe(forward, side);
     }
 
     private void moveToward(LivingEntity target, double speed)
