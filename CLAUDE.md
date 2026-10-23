@@ -434,3 +434,7 @@ guessing it compiles.
 - New per-tick or per-scan work goes inside a profiler section
   (`level.getProfiler().push("ancientempires_...")`) so `/debug` and Spark show it.
 - Staging: name files; never sweep `src/main` (the user keeps local edits there).
+- Never start a "last time" field at `Long.MIN_VALUE` and test `now - last < interval`: the
+  subtraction overflows and the check never passes (this kept every worksite from ever
+  scanning). Use -1 for "never" and test it first.
+- `/ancientempires work`, looking at an NPC, lists every condition its work needs.
