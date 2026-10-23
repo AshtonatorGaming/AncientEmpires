@@ -569,6 +569,9 @@ guessing it compiles.
   subtraction overflows and the check never passes (this kept every worksite from ever
   scanning). Use -1 for "never" and test it first.
 - `/ancientempires work`, looking at an NPC, lists every condition its work needs.
+- `/ancientempires stress <perSide> <factionA> <factionB>` (op) spawns two faction armies 24 blocks
+  apart in front of you (soldier, archer, leader rows; tagged `AeStress`) for profiling with Spark;
+  `stress report` gives the count alive and average ms per tick, `stress clear` removes them.
 - Arm swings: vanilla advances `swingTime` only in `Monster` and `Player`, so `NpcEntity.aiStep`
   calls `updateSwingTime` (without it `swing()` never animates). Any action a player would
   swing for (work, deposits, bandaging) calls `swing`. Melee sends the vanilla swing at the

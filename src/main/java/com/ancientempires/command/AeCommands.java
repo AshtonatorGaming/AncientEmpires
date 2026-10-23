@@ -57,6 +57,22 @@ public final class AeCommands
         dispatcher.register(Commands.literal(AncientEmpires.MOD_ID)
                 .then(Commands.literal("work")
                         .executes(AeCommands::work))
+                .then(Commands.literal("stress")
+                        .requires(source -> source.hasPermission(2))
+                        .then(Commands.literal("clear")
+                                .executes(AeCommands::stressClear))
+                        .then(Commands.literal("report")
+                                .executes(context ->
+                                {
+                                    context.getSource().sendSuccess(() -> StressTest.report(context.getSource().getLevel()), false);
+                                    return 1;
+                                }))
+                        .then(Commands.argument("perSide", IntegerArgumentType.integer(1, StressTest.MAX_PER_SIDE))
+                                .then(Commands.argument("factionA", StringArgumentType.word())
+                                        .suggests((context, builder) -> SharedSuggestionProvider.suggest(NpcFactions.ids(), builder))
+                                        .then(Commands.argument("factionB", StringArgumentType.word())
+                                                .suggests((context, builder) -> SharedSuggestionProvider.suggest(NpcFactions.ids(), builder))
+                                                .executes(AeCommands::stress)))))
                 .then(Commands.literal("standing")
                         .executes(context ->
                         {
@@ -104,6 +120,36 @@ public final class AeCommands
                     .withStyle(line.startsWith("[ok]") ? ChatFormatting.GREEN : ChatFormatting.RED), false);
         }
         return 1;
+    }
+
+    /** Two armies facing each other in front of the player, for profiling. */
+    private static int stress(CommandContext<CommandSourceStack> context) throws CommandSyntaxException
+    {
+        ServerPlayer player = context.getSource().getPlayerOrException();
+        String factionA = StringArgumentType.getString(context, "factionA");
+        String factionB = StringArgumentType.getString(context, "factionB");
+        if (NpcFactions.get(factionA) == null || NpcFactions.get(factionB) == null)
+        {
+            throw UNKNOWN_FACTION.create();
+        }
+        if (!StressTest.fight(factionA, factionB))
+        {
+            context.getSource().sendSuccess(() -> Component.translatable("commands.ancientempires.stress.peace", factionA, factionB)
+                    .withStyle(ChatFormatting.YELLOW), false);
+        }
+        Vec3 look = player.getLookAngle();
+        Vec3 facing = new Vec3(look.x, 0.0D, look.z).normalize();
+        Vec3 centre = player.position().add(facing.scale(20.0D));
+        int spawned = StressTest.spawn(context.getSource().getLevel(), centre, facing, IntegerArgumentType.getInteger(context, "perSide"), factionA, factionB);
+        context.getSource().sendSuccess(() -> Component.translatable("commands.ancientempires.stress.spawned", spawned), true);
+        return spawned;
+    }
+
+    private static int stressClear(CommandContext<CommandSourceStack> context)
+    {
+        int removed = StressTest.clear(context.getSource().getLevel());
+        context.getSource().sendSuccess(() -> Component.translatable("commands.ancientempires.stress.cleared", removed), true);
+        return removed;
     }
 
     /** Two lines: factions at peace with the player, then hostile ones, each best to worst. */
