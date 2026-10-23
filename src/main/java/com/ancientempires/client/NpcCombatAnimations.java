@@ -257,7 +257,7 @@ public final class NpcCombatAnimations
             }
             // A raised shield or a held-up night light is a pose of ours too; without this EMF's
             // own player animation would put its arms back over them.
-            hold = hold || (!attack && (npc.isUsingItem() || NpcNightLight.isLight(npc.getOffhandItem())));
+            hold = hold || (!attack && (npc.isUsingItem() || npc.isStaggered() || NpcNightLight.isLight(npc.getOffhandItem())));
             NpcEmfCompat.afterPose(npc, model, attack, hold, limbSwingAmount);
         }
         catch (Throwable exception)

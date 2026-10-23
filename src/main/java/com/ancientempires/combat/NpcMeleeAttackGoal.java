@@ -819,7 +819,7 @@ public class NpcMeleeAttackGoal extends Goal
                 }
             }
         }
-        // The whoosh of the swing itself; the hit sound comes only if it lands (applyHit), as for a player.
-        this.npc.playSound(SoundEvents.PLAYER_ATTACK_NODAMAGE, 1.0F, 1.0F);
+        // No Better Combat swing sound: silent until it lands (applyHit plays the hit sound then).
+        // Vanilla's only stand-in is the no-damage thump, which sounds like an impact.
     }
 }

@@ -13,6 +13,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.ModList;
 
 import java.lang.reflect.Method;
+import java.util.IdentityHashMap;
+import java.util.Map;
 
 /**
  * Moonlight's held-item hooks, which Amendments (3D held lanterns, torches) and
@@ -29,6 +31,10 @@ final class NpcMoonlightCompat
     private static Method getRenderer;
     private static Method renderItem;
     private static Method getAnimation;
+    /** Per item: Moonlight's renderer (or NO_RENDERER) and whether it poses the arm. Asked every frame. */
+    private static final Map<Item, Object> RENDERERS = new IdentityHashMap<>();
+    private static final Map<Item, Boolean> POSES = new IdentityHashMap<>();
+    private static final Object NO_RENDERER = new Object();
 
     private NpcMoonlightCompat()
     {
@@ -43,7 +49,13 @@ final class NpcMoonlightCompat
         }
         try
         {
-            return getAnimation.invoke(null, stack.getItem()) != null;
+            Boolean poses = POSES.get(stack.getItem());
+            if (poses == null)
+            {
+                poses = getAnimation.invoke(null, stack.getItem()) != null;
+                POSES.put(stack.getItem(), poses);
+            }
+            return poses;
         }
         catch (Throwable exception)
         {
@@ -61,8 +73,13 @@ final class NpcMoonlightCompat
         }
         try
         {
-            Object renderer = getRenderer.invoke(null, stack.getItem());
+            Object renderer = RENDERERS.get(stack.getItem());
             if (renderer == null)
+            {
+                renderer = getRenderer.invoke(null, stack.getItem());
+                RENDERERS.put(stack.getItem(), renderer == null ? NO_RENDERER : renderer);
+            }
+            if (renderer == null || renderer == NO_RENDERER)
             {
                 return false;
             }

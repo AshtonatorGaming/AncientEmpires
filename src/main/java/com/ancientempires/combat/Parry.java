@@ -16,6 +16,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.event.PlayLevelSoundEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -83,6 +84,33 @@ public final class Parry
                 && raises.current - raises.previous >= AncientEmpiresConfig.parryCooldownTicks;
     }
 
+    /**
+     * Players who hit a shield this tick. Vanilla follows a hit that does no damage with
+     * the "no damage" thump, which sounds like an impact; on a shield only the shield's
+     * own sound should play.
+     */
+    private static final Map<Player, Long> SHIELD_HITS = new WeakHashMap<>();
+
+    @SubscribeEvent
+    public static void onSound(PlayLevelSoundEvent.AtPosition event)
+    {
+        if (SHIELD_HITS.isEmpty() || event.getLevel().isClientSide || event.getSound() == null
+                || event.getSound().value() != SoundEvents.PLAYER_ATTACK_NODAMAGE)
+        {
+            return;
+        }
+        long now = event.getLevel().getGameTime();
+        Vec3 at = event.getPosition();
+        for (Map.Entry<Player, Long> hit : SHIELD_HITS.entrySet())
+        {
+            if (hit.getValue() == now && hit.getKey().position().distanceToSqr(at) < 0.01D)
+            {
+                event.setCanceled(true);
+                return;
+            }
+        }
+    }
+
     @SubscribeEvent
     public static void onAttack(LivingAttackEvent event)
     {
@@ -103,6 +131,11 @@ public final class Parry
         if (fromAttacker.dot(facing) >= 0.0D)
         {
             return;
+        }
+        if (attacker instanceof Player player)
+        {
+            // Caught on the shield (perfect, instant, or vanilla's block): only the shield sounds.
+            SHIELD_HITS.put(player, target.level().getGameTime());
         }
         if (inPerfectWindow(target))
         {
@@ -137,6 +170,9 @@ public final class Parry
             // The shield snaps forward, turning the blow aside.
             npc.swing(npc.getUsedItemHand());
         }
+        // The shield bounces the attacker back a step, so the stagger reads at a glance.
+        attacker.knockback(0.6D, target.getX() - attacker.getX(), target.getZ() - attacker.getZ());
+        attacker.hurtMarked = true;
         stagger(attacker);
         // Unmistakable: a ringing clang over the shield's thud, and a word to any player involved.
         target.level().playSound(null, target.blockPosition(), SoundEvents.SHIELD_BLOCK, SoundSource.PLAYERS, 1.0F, 0.8F);

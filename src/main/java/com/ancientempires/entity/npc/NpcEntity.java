@@ -2368,6 +2368,9 @@ public class NpcEntity extends PathfinderMob
         super.aiStep();
     }
 
+    /** Reused by updateStatus, so the half-second status check allocates nothing. */
+    private final List<Goal> statusGoals = new ArrayList<>(4);
+
     /** What the NPC is doing, for the icon over its head. */
     public NpcStatus getStatus()
     {
@@ -2376,9 +2379,11 @@ public class NpcEntity extends PathfinderMob
 
     private void updateStatus()
     {
-        List<Goal> running = new ArrayList<>(4);
+        List<Goal> running = this.statusGoals;
+        running.clear();
         this.goalSelector.getRunningGoals().forEach(wrapped -> running.add(wrapped.getGoal()));
         byte status = (byte) NpcStatus.of(this, running).ordinal();
+        running.clear();
         if (this.entityData.get(DATA_STATUS) != status)
         {
             this.entityData.set(DATA_STATUS, status);

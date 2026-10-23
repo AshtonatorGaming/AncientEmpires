@@ -341,7 +341,7 @@ its own unless noted). Before adding behavior, check what AW did first.
   goes with the square of attribute times multiplier. `BASE_SPEED` 0.32 walks at a player's
   pace at 1.0; chasing (`approachSpeed`) and following use 1.12, a sprint. Saves with the
   old 0.28 base are updated on load.
-- Perfect block (`combat/Parry`, `parry` config), the same for players and NPCs: a melee hit from
+- Perfect block (`combat/Parry`, `perfectBlock` config), the same for players and NPCs: a melee hit from
   the front within `windowTicks` (6) of raising a shield is turned aside whole: no guard cost, and
   the attacker is staggered (a louder clang over the thud, "Perfect block!" or "Staggered!" on a
   player's screen; slowness, no swing for `staggerTicks`; `NpcEntity.stagger` breaks off a
@@ -355,7 +355,10 @@ its own unless noted). Before adding behavior, check what AW did first.
   immunity instead of granting one, so they never eat a player's swing. `NpcModel.guardPose` puts
   the raised shield back only when a combat stance overrode it (vanilla's pose is relative; posing
   twice raised it too high). Sounds follow Player.attack: a whoosh on the swing, the hit sound only
-  when it lands, the shield's thud when blocked.
+  when it lands, the shield's thud when blocked (vanilla's "no damage" thump after a player's hit
+  on a shield is cancelled, `Parry.onSound`). A perfect block also bounces the attacker back a
+  step; the recoil is handed to EMF like the shield pose. `NpcMoonlightCompat` caches Moonlight's
+  answers per item (it is asked for every held item every frame).
 - Fairness against players: NPC attack knockback is 0 (every hit already gives 0.4, as for
   players; the old 0.4 base shoved players out of reach each exchange, updated on load), and
   `bypassHurtCooldown` never applies to players, who keep vanilla's hit immunity.

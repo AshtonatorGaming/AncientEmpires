@@ -805,7 +805,7 @@ public final class AncientEmpiresConfig
                 .defineEnum("keepOnDeath", KeepOnDeath.NONE);
         builder.pop();
 
-        builder.comment("Perfect blocks, for players and NPCs alike: a shield raised just before a melee hit lands turns it aside whole, costing no guard, and the attacker is staggered (slowed, no swing). Held up longer it is an ordinary block.").push("parry");
+        builder.comment("Perfect blocks, for players and NPCs alike: a shield raised just before a melee hit lands turns it aside whole, costing no guard, and the attacker is staggered (slowed, no swing). Held up longer it is an ordinary block.").push("perfectBlock");
         PARRY_ENABLED = builder
                 .comment("Perfect blocks for players and NPCs.")
                 .define("enabled", true);
@@ -817,7 +817,7 @@ public final class AncientEmpiresConfig
                 .defineInRange("cooldownTicks", 24, 0, 200);
         PARRY_STAGGER = builder
                 .comment("Ticks an attacker is staggered by a perfect block: slowed, and no swing.")
-                .defineInRange("staggerTicks", 14, 0, 100);
+                .defineInRange("staggerTicks", 20, 0, 100);
         PARRY_CHANCE = builder
                 .comment("Per skill tier (ordinary, elite, leader, elite leader): the chance a shield NPC with its shield down holds the raise for a perfect block against an NPC's visible wind-up, instead of raising at once. Players show no wind-up, so against them it raises at once.")
                 .defineList("chanceByTier", List.of(0.05D, 0.15D, 0.3D, 0.45D), AncientEmpiresConfig::isChance);
@@ -1155,7 +1155,7 @@ public final class AncientEmpiresConfig
     public static boolean parryEnabled = true;
     public static int parryWindowTicks = 6;
     public static int parryCooldownTicks = 24;
-    public static int parryStaggerTicks = 14;
+    public static int parryStaggerTicks = 20;
     public static List<? extends Double> parryChanceByTier = List.of(0.05D, 0.15D, 0.3D, 0.45D);
     public static List<? extends Integer> parryErrorByTier = List.of(6, 4, 3, 2);
     public static boolean nightLightEnabled = true;
