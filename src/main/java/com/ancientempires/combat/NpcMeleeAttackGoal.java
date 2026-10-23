@@ -475,14 +475,16 @@ public class NpcMeleeAttackGoal extends Goal
         }
 
         int previousInvulnerability = target.invulnerableTime;
-        if (AncientEmpiresConfig.bypassHurtCooldown)
+        // Players keep their half second of hit immunity, as against any vanilla mob.
+        boolean bypass = AncientEmpiresConfig.bypassHurtCooldown && !(target instanceof Player);
+        if (bypass)
         {
             target.invulnerableTime = 0;
         }
         boolean hurt = target.hurt(this.npc.damageSources().mobAttack(this.npc), damage);
         if (!hurt)
         {
-            if (AncientEmpiresConfig.bypassHurtCooldown)
+            if (bypass)
             {
                 target.invulnerableTime = previousInvulnerability;
             }

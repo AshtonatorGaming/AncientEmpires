@@ -146,7 +146,7 @@ its own unless noted). Before adding behavior, check what AW did first.
   EMF is handed the shield and night-light arm poses so its own animation does not undo them.
 - Bash: `NpcShieldBash` mirrors Spartan Shields' player bash as a counter after a blocked
   hit. It is telegraphed: the NPC braces `bashWindupTicks` (6) behind the raised shield with
-  a heavy creak, shoves with a short lunge, and only then lowers the shield for recovery. No
+  a heavy creak (only when bashing a player, so NPC battles stay quiet), shoves with a short lunge, and only then lowers the shield for recovery. No
   swing follows during `bashRecoveryTicks`, and the bash spends the riposte. `shield.bashMode`: SPARTAN (its `shields_with_bash` tag), ALL, OFF.
 - Feint: Better Combat style, break off halfway against a guarded target, never twice in
   a row. Internal attack path only.
@@ -324,6 +324,9 @@ its own unless noted). Before adding behavior, check what AW did first.
   goes with the square of attribute times multiplier. `BASE_SPEED` 0.32 walks at a player's
   pace at 1.0; chasing (`approachSpeed`) and following use 1.12, a sprint. Saves with the
   old 0.28 base are updated on load.
+- Fairness against players: NPC attack knockback is 0 (every hit already gives 0.4, as for
+  players; the old 0.4 base shoved players out of reach each exchange, updated on load), and
+  `bypassHurtCooldown` never applies to players, who keep vanilla's hit immunity.
 - Night lights (`NpcNightLight`, `nightLight`): soldiers awake at night or in the dark
   (below `darkness`) with a free off hand hold a torch or lantern (`ancientempires:night_lights`
   tag), raised in `NpcModel.holdLight`. Owned ones use their backpack's and put it back by

@@ -11,6 +11,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -70,9 +71,13 @@ public final class NpcShieldBash
      * The tell before a bash: the NPC braces behind its raised shield for
      * {@code shield.bashWindupTicks} with a heavy creak, so a player hears it coming.
      */
-    static void brace(NpcEntity npc)
+    static void brace(NpcEntity npc, LivingEntity target)
     {
-        npc.playSound(SoundEvents.ARMOR_EQUIP_IRON, 1.0F, 0.6F);
+        // Only a player needs to read it; NPC-on-NPC bashes in a big battle stay quiet.
+        if (target instanceof Player)
+        {
+            npc.playSound(SoundEvents.ARMOR_EQUIP_IRON, 0.8F, 0.6F);
+        }
     }
 
     /**

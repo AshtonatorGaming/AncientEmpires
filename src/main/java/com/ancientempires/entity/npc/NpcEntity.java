@@ -358,7 +358,9 @@ public class NpcEntity extends PathfinderMob
                 // pace goes with the square: 0.32 at a multiplier of 1.0 walks as fast as a player.
                 .add(Attributes.MOVEMENT_SPEED, BASE_SPEED)
                 .add(Attributes.ATTACK_DAMAGE, 1.0D)
-                .add(Attributes.ATTACK_KNOCKBACK, 0.4D)
+                // No knockback beyond the 0.4 every hit gives, as for players and zombies; 0.4 here
+                // shoved players 50% farther than they shoved NPCs, out of reach every exchange.
+                .add(Attributes.ATTACK_KNOCKBACK, 0.0D)
                 .add(Attributes.FOLLOW_RANGE, 32.0D)
                 .add(Attributes.ATTACK_SPEED, 4.0D);
     }
@@ -2517,6 +2519,11 @@ public class NpcEntity extends PathfinderMob
         if (speed != null && Math.abs(speed.getBaseValue() - OLD_BASE_SPEED) < 1.0E-6D)
         {
             speed.setBaseValue(BASE_SPEED);
+        }
+        AttributeInstance knockback = this.getAttribute(Attributes.ATTACK_KNOCKBACK);
+        if (knockback != null && Math.abs(knockback.getBaseValue() - 0.4D) < 1.0E-6D)
+        {
+            knockback.setBaseValue(0.0D);
         }
         this.inventory.load(tag);
         // After the hands (super) and the backpack, so a saved swap can be undone.

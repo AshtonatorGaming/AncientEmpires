@@ -332,7 +332,7 @@ public final class AncientEmpiresConfig
                 .comment("Require line of sight before starting a swing and again on the hit frame.")
                 .define("requireLineOfSight", true);
         BYPASS_HURT_COOLDOWN = builder
-                .comment("NPC hits ignore the target's short hurt invulnerability so fast weapons and fists land.")
+                .comment("NPC hits on other mobs ignore their short hurt invulnerability so fast weapons and fists land. Players always keep theirs.")
                 .define("bypassHurtCooldown", true);
         COMBO_RESET_RATE = builder
                 .comment("Combo step resets after this many weapon-cooldowns without a swing.")

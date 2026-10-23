@@ -125,7 +125,7 @@ public final class NpcShieldGoal extends Goal
             this.bashTarget = pending;
             this.bashLeft = AncientEmpiresConfig.shieldBashWindupTicks;
             this.npc.setBracing(true);
-            NpcShieldBash.brace(this.npc);
+            NpcShieldBash.brace(this.npc, pending);
         }
         if (this.bashTarget != null)
         {
