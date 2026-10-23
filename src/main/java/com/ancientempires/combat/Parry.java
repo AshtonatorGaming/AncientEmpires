@@ -14,88 +14,78 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import java.util.Iterator;
 import java.util.Map;
 import java.util.WeakHashMap;
 
 /**
- * Parries, the same for players and NPCs. A parry is a short timed guard with
- * the weapon ({@code parry.windowTicks}). A melee hit from the front inside it
- * does nothing to the parrier: the attacker is staggered instead (slowed, and no
- * swing for {@code staggerTicks}), with a ring of steel. A parry that catches
- * nothing leaves the parrier open: no swing for {@code recoveryTicks} (a
- * player's attack cooldown resets). That is what a feint baits.
+ * The perfect block, the same for players and NPCs: a shield raised just before
+ * a melee hit lands ({@code parry.windowTicks} of the raise) turns it aside
+ * whole. It costs no guard, and the attacker is staggered (slowed, and no swing
+ * for {@code staggerTicks}), with a ring of steel. A shield held up longer is an
+ * ordinary block (vanilla's, which wears the guard). It also covers vanilla's
+ * five ticks before a raised shield blocks, so a shield that looks raised always
+ * blocks. A raise only counts as a perfect block if the last one was at least
+ * {@code cooldownTicks} before, so tapping the shield does not farm them.
  * <p>
- * Players parry with the Parry key; NPCs decide in {@link NpcParryPlanner}.
- * Server side only; the state is kept here, not saved.
+ * Players simply raise their shield; NPCs time it in their shield goal.
  */
 @Mod.EventBusSubscriber(modid = AncientEmpires.MOD_ID)
 public final class Parry
 {
-    /** Game times: the window's end, and the earliest next parry. */
-    private static final class State
+    /** Game times of the current raise and the one before it. */
+    private static final class Raises
     {
-        long windowEnd;
-        long cooldownEnd;
-        boolean landed;
-        boolean judged;
+        long current = Long.MIN_VALUE / 2;
+        long previous = Long.MIN_VALUE / 2;
     }
 
-    private static final Map<LivingEntity, State> STATES = new WeakHashMap<>();
+    private static final Map<LivingEntity, Raises> RAISES = new WeakHashMap<>();
 
     private Parry()
     {
     }
 
-    /** Opens a parry. False while the last one is cooling down, or parries are off. */
-    public static boolean start(LivingEntity parrier)
+    /** Remembers when each shield goes up. */
+    @SubscribeEvent
+    public static void onRaise(LivingEntityUseItemEvent.Start event)
     {
-        if (!AncientEmpiresConfig.parryEnabled || parrier.level().isClientSide)
+        LivingEntity entity = event.getEntity();
+        if (entity.level().isClientSide || !WeaponClassifier.isShield(event.getItem()))
+        {
+            return;
+        }
+        Raises raises = RAISES.computeIfAbsent(entity, key -> new Raises());
+        raises.previous = raises.current;
+        raises.current = entity.level().getGameTime();
+    }
+
+    /** Whether a hit landing now would be a perfect block. */
+    public static boolean inPerfectWindow(LivingEntity defender)
+    {
+        if (!AncientEmpiresConfig.parryEnabled || !defender.isUsingItem() || !WeaponClassifier.isShield(defender.getUseItem()))
         {
             return false;
         }
-        long now = parrier.level().getGameTime();
-        State state = STATES.computeIfAbsent(parrier, entity -> new State());
-        if (now < state.cooldownEnd)
+        Raises raises = RAISES.get(defender);
+        if (raises == null)
         {
             return false;
         }
-        state.windowEnd = now + AncientEmpiresConfig.parryWindowTicks;
-        state.cooldownEnd = now + AncientEmpiresConfig.parryCooldownTicks;
-        state.landed = false;
-        state.judged = false;
-        if (parrier instanceof NpcEntity npc)
-        {
-            npc.setParrying(true);
-        }
-        parrier.level().playSound(null, parrier.blockPosition(), SoundEvents.PLAYER_ATTACK_NODAMAGE, SoundSource.PLAYERS, 0.6F, 1.4F);
-        return true;
+        long now = defender.level().getGameTime();
+        return now - raises.current <= AncientEmpiresConfig.parryWindowTicks
+                && raises.current - raises.previous >= AncientEmpiresConfig.parryCooldownTicks;
     }
 
-    public static boolean isParrying(LivingEntity entity)
-    {
-        State state = STATES.get(entity);
-        return state != null && !state.landed && entity.level().getGameTime() <= state.windowEnd;
-    }
-
-    /** Whether the parry can be tried now (off cooldown). */
-    public static boolean ready(LivingEntity entity)
-    {
-        State state = STATES.get(entity);
-        return state == null || entity.level().getGameTime() >= state.cooldownEnd;
-    }
-
-    /** A melee hit on a parrying fighter, from the front, is parried. */
     @SubscribeEvent
     public static void onAttack(LivingAttackEvent event)
     {
         LivingEntity target = event.getEntity();
-        if (target.level().isClientSide || !isParrying(target))
+        if (target.level().isClientSide || !target.isUsingItem() || !WeaponClassifier.isShield(target.getUseItem()))
         {
             return;
         }
@@ -105,30 +95,57 @@ public final class Parry
         {
             return;
         }
-        Vec3 toAttacker = attacker.position().subtract(target.position()).multiply(1.0D, 0.0D, 1.0D).normalize();
-        Vec3 facing = target.getViewVector(1.0F).multiply(1.0D, 0.0D, 1.0D).normalize();
-        if (toAttacker.dot(facing) < 0.3D)
+        // The same front check vanilla uses for a shield, by where the head faces.
+        Vec3 fromAttacker = target.position().subtract(attacker.position()).multiply(1.0D, 0.0D, 1.0D).normalize();
+        Vec3 facing = Vec3.directionFromRotation(0.0F, target.getYHeadRot());
+        if (fromAttacker.dot(facing) >= 0.0D)
         {
-            // From the side or behind: a parry only meets what it faces.
             return;
         }
+        if (inPerfectWindow(target))
+        {
+            perfectBlock(event, target, attacker, fromAttacker);
+            return;
+        }
+        if (AncientEmpiresConfig.shieldInstantBlock && !target.isBlocking())
+        {
+            // Vanilla's five ticks before a raised shield blocks: block anyway, so a shield that
+            // looks raised is raised. An ordinary block, wearing the shield (and an NPC's guard).
+            // With Responsive Shields or the like the shield already blocks, so this never runs.
+            event.setCanceled(true);
+            target.level().broadcastEntityEvent(target, (byte) 29);
+            if (target instanceof NpcEntity npc)
+            {
+                npc.takeOnShield(event.getAmount());
+            }
+            else
+            {
+                target.getUseItem().hurtAndBreak(1 + (int) event.getAmount(), target,
+                        entity -> entity.broadcastBreakEvent(entity.getUsedItemHand()));
+            }
+        }
+    }
+
+    private static void perfectBlock(LivingAttackEvent event, LivingEntity target, LivingEntity attacker, Vec3 fromAttacker)
+    {
         event.setCanceled(true);
-        STATES.get(target).landed = true;
         if (target instanceof NpcEntity npc)
         {
-            npc.setParrying(false);
             npc.onParried(attacker);
+            // The shield snaps forward, turning the blow aside.
+            npc.swing(npc.getUsedItemHand());
         }
         stagger(attacker);
         target.level().playSound(null, target.blockPosition(), SoundEvents.ANVIL_LAND, SoundSource.PLAYERS, 0.35F, 1.9F);
         if (target.level() instanceof ServerLevel level)
         {
-            Vec3 at = target.position().add(toAttacker.scale(0.6D)).add(0.0D, target.getBbHeight() * 0.65D, 0.0D);
+            Vec3 at = target.position().subtract(fromAttacker.scale(0.6D)).add(0.0D, target.getBbHeight() * 0.65D, 0.0D);
             level.sendParticles(ParticleTypes.CRIT, at.x, at.y, at.z, 8, 0.15D, 0.15D, 0.15D, 0.2D);
         }
     }
 
-    /** Thrown off balance by a parry: slowed, and no swing for a moment. The same for players and NPCs. */
+
+    /** Thrown off balance by a perfect block: slowed, and no swing for a moment. The same for players and NPCs. */
     public static void stagger(LivingEntity attacker)
     {
         int ticks = AncientEmpiresConfig.parryStaggerTicks;
@@ -144,54 +161,6 @@ public final class Parry
         else if (attacker instanceof Player player)
         {
             player.resetAttackStrengthTicker();
-        }
-    }
-
-    /** A parry that caught nothing leaves the parrier open, once its window is over. */
-    @SubscribeEvent
-    public static void onServerTick(TickEvent.ServerTickEvent event)
-    {
-        if (event.phase != TickEvent.Phase.END || STATES.isEmpty())
-        {
-            return;
-        }
-        Iterator<Map.Entry<LivingEntity, State>> entries = STATES.entrySet().iterator();
-        while (entries.hasNext())
-        {
-            Map.Entry<LivingEntity, State> entry = entries.next();
-            LivingEntity parrier = entry.getKey();
-            State state = entry.getValue();
-            if (!parrier.isAlive())
-            {
-                entries.remove();
-                continue;
-            }
-            long now = parrier.level().getGameTime();
-            if (state.judged)
-            {
-                if (now >= state.cooldownEnd)
-                {
-                    entries.remove();
-                }
-                continue;
-            }
-            if (now <= state.windowEnd)
-            {
-                continue;
-            }
-            state.judged = true;
-            if (parrier instanceof NpcEntity npc)
-            {
-                npc.setParrying(false);
-                if (!state.landed)
-                {
-                    npc.parryWhiffed(AncientEmpiresConfig.parryRecoveryTicks);
-                }
-            }
-            else if (parrier instanceof Player player && !state.landed)
-            {
-                player.resetAttackStrengthTicker();
-            }
         }
     }
 }

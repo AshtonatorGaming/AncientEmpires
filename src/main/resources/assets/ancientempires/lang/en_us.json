@@ -168,7 +168,6 @@
   "gui.ancientempires.standings.hostile": "Hostile (%s): they attack you and your NPCs",
   "gui.ancientempires.standings.peace": "At peace (%s)",
   "key.ancientempires.standings": "Faction Standings",
-  "key.ancientempires.parry": "Parry",
   "key.categories.ancientempires": "Ancient Empires",
   "commands.ancientempires.work.header": "Work check for %s:",
   "commands.ancientempires.work.none": "Look at one of your NPCs, within 8 blocks",

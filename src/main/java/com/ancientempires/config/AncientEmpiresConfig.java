@@ -89,6 +89,7 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.IntValue SHIELD_MIN_BLOCK_TICKS;
     private static final ForgeConfigSpec.IntValue SHIELD_STRIKE_DELAY_TICKS;
     private static final ForgeConfigSpec.IntValue SHIELD_RIPOSTE_TICKS;
+    private static final ForgeConfigSpec.BooleanValue SHIELD_INSTANT_BLOCK;
     private static final ForgeConfigSpec.DoubleValue SHIELD_STRIKE_CHANCE;
     private static final ForgeConfigSpec.IntValue SHIELD_GUARD_POINTS;
     private static final ForgeConfigSpec.DoubleValue SHIELD_GUARD_REGEN;
@@ -196,7 +197,6 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.DoubleValue MEDIC_RANGE;
     private static final ForgeConfigSpec.BooleanValue PARRY_ENABLED;
     private static final ForgeConfigSpec.IntValue PARRY_WINDOW;
-    private static final ForgeConfigSpec.IntValue PARRY_RECOVERY;
     private static final ForgeConfigSpec.IntValue PARRY_COOLDOWN;
     private static final ForgeConfigSpec.IntValue PARRY_STAGGER;
     private static final ForgeConfigSpec.ConfigValue<List<? extends Double>> PARRY_CHANCE;
@@ -469,6 +469,9 @@ public final class AncientEmpiresConfig
         SHIELD_STRIKE_DELAY_TICKS = builder
                 .comment("Ticks after lowering the shield before the NPC can begin a swing: the opening a player can punish.")
                 .defineInRange("strikeDelayTicks", 6, 0, 40);
+        SHIELD_INSTANT_BLOCK = builder
+                .comment("A raised shield blocks from its first tick, for players and NPCs alike, so a shield that looks raised is raised. Vanilla waits five ticks. Mods like Responsive Shields do the same, and then this has nothing to do.")
+                .define("instantBlock", true);
         SHIELD_RIPOSTE_TICKS = builder
                 .comment("After blocking a hit, the NPC may strike back within this many ticks without waiting out minBlockTicks. It never lowers the shield while the target is mid-swing.")
                 .defineInRange("riposteTicks", 20, 0, 100);
@@ -798,27 +801,24 @@ public final class AncientEmpiresConfig
                 .defineEnum("keepOnDeath", KeepOnDeath.NONE);
         builder.pop();
 
-        builder.comment("Parries, for players (the Parry key) and NPCs alike: a short timed guard with the weapon. A melee hit from the front inside the window is parried: the attacker is staggered (slowed, no swing). Mistimed, the parrier is open: no swing for the recovery (a player's attack cooldown resets). Shield users block instead.").push("parry");
+        builder.comment("Perfect blocks, for players and NPCs alike: a shield raised just before a melee hit lands turns it aside whole, costing no guard, and the attacker is staggered (slowed, no swing). Held up longer it is an ordinary block.").push("parry");
         PARRY_ENABLED = builder
-                .comment("Parries for players and NPCs.")
+                .comment("Perfect blocks for players and NPCs.")
                 .define("enabled", true);
         PARRY_WINDOW = builder
-                .comment("Ticks a parry catches hits.")
+                .comment("A hit landing within this many ticks of raising the shield is a perfect block.")
                 .defineInRange("windowTicks", 6, 1, 40);
-        PARRY_RECOVERY = builder
-                .comment("Ticks after a missed parry with no swing.")
-                .defineInRange("recoveryTicks", 14, 0, 100);
         PARRY_COOLDOWN = builder
-                .comment("Ticks from one parry to the next.")
+                .comment("A raise counts for a perfect block only this many ticks after the last raise, so tapping the shield does not farm them.")
                 .defineInRange("cooldownTicks", 24, 0, 200);
         PARRY_STAGGER = builder
-                .comment("Ticks a parried attacker is staggered: slowed, and no swing.")
+                .comment("Ticks an attacker is staggered by a perfect block: slowed, and no swing.")
                 .defineInRange("staggerTicks", 14, 0, 100);
         PARRY_CHANCE = builder
-                .comment("Per skill tier (ordinary, elite, leader, elite leader): the chance an NPC without a shield tries to parry a swing it sees coming. Against players, who show no wind-up, it reads a charged attack instead.")
+                .comment("Per skill tier (ordinary, elite, leader, elite leader): the chance a shield NPC with its shield down holds the raise for a perfect block against an NPC's visible wind-up, instead of raising at once. Players show no wind-up, so against them it raises at once.")
                 .defineList("chanceByTier", List.of(0.05D, 0.15D, 0.3D, 0.45D), AncientEmpiresConfig::isChance);
         PARRY_ERROR = builder
-                .comment("Per skill tier: up to how many ticks an NPC's parry is mistimed, early or late. A feint baits the early ones.")
+                .comment("Per skill tier: up to how many ticks an NPC's perfect-block raise is mistimed. Late, the hit lands; early, an ordinary block.")
                 .defineList("timingErrorByTier", List.of(6, 4, 3, 2), value -> value instanceof Integer ticks && ticks >= 0 && ticks <= 40);
         builder.pop();
 
@@ -1040,6 +1040,7 @@ public final class AncientEmpiresConfig
     public static int shieldMinBlockTicks = 12;
     public static int shieldStrikeDelayTicks = 6;
     public static int shieldRiposteTicks = 20;
+    public static boolean shieldInstantBlock = true;
     public static double shieldStrikeChance = 0.15D;
     public static int shieldGuardPoints = 30;
     public static double shieldGuardRegen = 0.2D;
@@ -1148,7 +1149,6 @@ public final class AncientEmpiresConfig
     public static double medicRange = 16.0D;
     public static boolean parryEnabled = true;
     public static int parryWindowTicks = 6;
-    public static int parryRecoveryTicks = 14;
     public static int parryCooldownTicks = 24;
     public static int parryStaggerTicks = 14;
     public static List<? extends Double> parryChanceByTier = List.of(0.05D, 0.15D, 0.3D, 0.45D);
@@ -1305,6 +1305,7 @@ public final class AncientEmpiresConfig
         shieldMinBlockTicks = SHIELD_MIN_BLOCK_TICKS.get();
         shieldStrikeDelayTicks = SHIELD_STRIKE_DELAY_TICKS.get();
         shieldRiposteTicks = SHIELD_RIPOSTE_TICKS.get();
+        shieldInstantBlock = SHIELD_INSTANT_BLOCK.get();
         shieldStrikeChance = SHIELD_STRIKE_CHANCE.get();
         shieldGuardPoints = SHIELD_GUARD_POINTS.get();
         shieldGuardRegen = SHIELD_GUARD_REGEN.get();
@@ -1412,7 +1413,6 @@ public final class AncientEmpiresConfig
         medicRange = MEDIC_RANGE.get();
         parryEnabled = PARRY_ENABLED.get();
         parryWindowTicks = PARRY_WINDOW.get();
-        parryRecoveryTicks = PARRY_RECOVERY.get();
         parryCooldownTicks = PARRY_COOLDOWN.get();
         parryStaggerTicks = PARRY_STAGGER.get();
         parryChanceByTier = PARRY_CHANCE.get();

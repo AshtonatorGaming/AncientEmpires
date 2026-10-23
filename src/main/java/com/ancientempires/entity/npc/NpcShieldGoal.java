@@ -150,8 +150,13 @@ public final class NpcShieldGoal extends Goal
             this.reactionLeft--;
             return;
         }
-        this.npc.raiseShield();
         this.npc.getLookControl().setLookAt(threat, 30.0F, 30.0F);
+        if (NpcParryPlanner.waitToRaise(this.npc, threat))
+        {
+            // Holding the raise for a perfect block, just before the hit.
+            return;
+        }
+        this.npc.raiseShield();
     }
 
     private boolean ready()

@@ -73,7 +73,7 @@ public class NpcModel extends PlayerModel<NpcEntity>
         }
         boolean posed = NpcCombatAnimations.apply(entity, this, ageInTicks - entity.tickCount);
         // What blocks on the server must show: a combat stance must not lower a raised shield,
-        // and a parry shows the weapon held across as a guard.
+        // and a stagger shows as a recoil.
         if (this.guardPose(entity))
         {
             posed = true;
@@ -102,8 +102,8 @@ public class NpcModel extends PlayerModel<NpcEntity>
     }
 
     /**
-     * Vanilla's block pose, put back after any combat stance: on the shield arm while a
-     * shield is raised, and on the weapon arm while parrying.
+     * Vanilla's block pose, put back after any combat stance, on the shield arm while a
+     * shield is raised; and the recoil of an NPC staggered by a perfect block.
      */
     private boolean guardPose(NpcEntity entity)
     {
@@ -114,9 +114,16 @@ public class NpcModel extends PlayerModel<NpcEntity>
             blockArm(leftArm ? this.leftArm : this.rightArm, leftArm);
             return true;
         }
-        if (entity.isParrying() && !entity.isAttackWindowOpen())
+        if (entity.isStaggered())
         {
-            blockArm(mainLeft ? this.leftArm : this.rightArm, mainLeft);
+            // Thrown off balance by a perfect block: arms flung out, head snapped back.
+            this.rightArm.xRot = -0.5F;
+            this.rightArm.yRot = 0.0F;
+            this.rightArm.zRot = 0.7F;
+            this.leftArm.xRot = -0.5F;
+            this.leftArm.yRot = 0.0F;
+            this.leftArm.zRot = -0.7F;
+            this.head.xRot = -0.35F;
             return true;
         }
         return false;

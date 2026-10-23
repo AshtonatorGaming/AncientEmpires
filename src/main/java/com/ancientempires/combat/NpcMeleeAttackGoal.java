@@ -343,11 +343,11 @@ public class NpcMeleeAttackGoal extends Goal
         {
             return false;
         }
-        // Worth baiting: a raised or carried shield, a player (who blocks and parries), or an NPC
-        // that parries (an early parry whiffs on the feint, and the real swing finds it open).
+        // Worth baiting: a raised or carried shield, or a player. A shield timed for a perfect block
+        // goes up for the feint, so the real swing finds it held too long: an ordinary block.
         boolean guarded = target.isBlocking()
                 || target instanceof Player
-                || target instanceof NpcEntity other && (other.hasShieldInOffhand() || other.getParryChance() > 0.0D);
+                || target instanceof NpcEntity other && other.hasShieldInOffhand();
         return guarded && this.npc.getRandom().nextFloat() < chance;
     }
 

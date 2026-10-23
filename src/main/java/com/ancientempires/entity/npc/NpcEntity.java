@@ -112,7 +112,7 @@ public class NpcEntity extends PathfinderMob
     private static final EntityDataAccessor<Float> DATA_BODY_SCALE = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.FLOAT);
     /** {@link NpcStatus} ordinal, for the icon over the head. */
     private static final EntityDataAccessor<Byte> DATA_STATUS = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.BYTE);
-    private static final EntityDataAccessor<Boolean> DATA_PARRYING = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> DATA_STAGGERED = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.BOOLEAN);
     private static final String FOLLOWING_KEY = "Following";
     private static final String CREATIVE_KEY = "Creative";
     private static final String HOLDING_KEY = "HoldPosition";
@@ -293,7 +293,7 @@ public class NpcEntity extends PathfinderMob
         this.entityData.define(DATA_ATTACK_OFFHAND, false);
         this.entityData.define(DATA_BODY_SCALE, 1.0F);
         this.entityData.define(DATA_STATUS, (byte) 0);
-        this.entityData.define(DATA_PARRYING, false);
+        this.entityData.define(DATA_STAGGERED, false);
     }
 
     /**
@@ -992,40 +992,34 @@ public class NpcEntity extends PathfinderMob
         super.knockback(strength, x, z);
     }
 
-    /** Parrying right now (the weapon arm's guard pose on the client). */
-    public boolean isParrying()
-    {
-        return this.entityData.get(DATA_PARRYING);
-    }
-
-    public void setParrying(boolean parrying)
-    {
-        this.entityData.set(DATA_PARRYING, parrying);
-    }
-
-    /** Thrown off balance by a parry: no swing, and any wind-up is broken off. */
+    /** Thrown off balance by a perfect block: no swing, and any wind-up is broken off. Shown as a recoil. */
     public void stagger(int ticks)
     {
         this.staggerUntil = this.tickCount + ticks;
+        this.entityData.set(DATA_STAGGERED, true);
         this.strikeReadyAt = Math.max(this.strikeReadyAt, this.staggerUntil);
     }
 
     public boolean isStaggered()
     {
+        if (this.level().isClientSide)
+        {
+            return this.entityData.get(DATA_STAGGERED);
+        }
         return this.tickCount < this.staggerUntil;
     }
 
-    /** A parry landed: the attacker reels, so the NPC may strike straight back. */
+    /** A hit taken on the raised shield outside vanilla's blocking (its first ticks): wear shield and guard. */
+    public void takeOnShield(float amount)
+    {
+        this.hurtCurrentlyUsedShield(amount);
+    }
+
+    /** A perfect block landed: the attacker reels, so the NPC may strike straight back. */
     public void onParried(LivingEntity attacker)
     {
         this.strikeReadyAt = 0;
         this.riposteUntil = this.tickCount + AncientEmpiresConfig.shieldRiposteTicks;
-    }
-
-    /** A parry that caught nothing leaves the NPC open: no swing for a moment. */
-    public void parryWhiffed(int ticks)
-    {
-        this.strikeReadyAt = Math.max(this.strikeReadyAt, this.tickCount + ticks);
     }
 
     /** Counts attack windows, so a defender can tell one swing from the next. */
@@ -2420,6 +2414,11 @@ public class NpcEntity extends PathfinderMob
             this.guard = Math.min(this.guardMax(), this.guard + (this.isRaisingShield() ? regen * 0.25F : regen));
         }
         NpcParryPlanner.tick(this);
+        if (this.staggerUntil > 0 && this.tickCount >= this.staggerUntil)
+        {
+            this.staggerUntil = 0;
+            this.entityData.set(DATA_STAGGERED, false);
+        }
         if ((this.tickCount + this.getId()) % NpcNightLight.CHECK_TICKS == 0)
         {
             NpcNightLight.update(this);

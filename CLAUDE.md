@@ -340,17 +340,18 @@ its own unless noted). Before adding behavior, check what AW did first.
   goes with the square of attribute times multiplier. `BASE_SPEED` 0.32 walks at a player's
   pace at 1.0; chasing (`approachSpeed`) and following use 1.12, a sprint. Saves with the
   old 0.28 base are updated on load.
-- Parry (`combat/Parry`, `parry` config), the same for players and NPCs: a `windowTicks` (6) guard
-  with the weapon. A melee hit from the front inside it is cancelled and the attacker staggered
-  (slowness, no swing for `staggerTicks`; `NpcEntity.stagger` breaks off a wind-up); a parry that
-  catches nothing leaves the parrier open for `recoveryTicks` (a player's attack cooldown resets).
-  Players press Parry (R, `ParryPacket`; no arm swing, which Better Combat could turn into an
-  attack). NPCs without a shield parry in `NpcParryPlanner`: against an NPC, once per swing at
-  `chanceByTier`, timed on the hit within `timingErrorByTier` (an early parry is what a feint
-  baits; feints now also target NPCs that parry); against a player, which shows no wind-up, it
-  reads a charged attack in reach and facing it. NPC hits restore the target's hit immunity
-  instead of granting one, so they never eat a player's swing. `NpcModel.guardPose` puts the
-  raised shield (and the parry guard) back after any combat stance, so what blocks is what shows.
+- Perfect block (`combat/Parry`, `parry` config), the same for players and NPCs: a melee hit from
+  the front within `windowTicks` (6) of raising a shield is turned aside whole: no guard cost, and
+  the attacker is staggered (slowness, no swing for `staggerTicks`; `NpcEntity.stagger` breaks off a
+  wind-up and shows a recoil); the NPC defender's shield arm snaps forward. A raise counts only
+  `cooldownTicks` after the last, so tapping does not farm them. Held longer it is an ordinary
+  block. `shield.instantBlock`: a raised shield blocks from its first tick (vanilla waits five), so
+  what looks raised is raised; with Responsive Shields the game already says it blocks, so this
+  never runs. Shield NPCs with the shield down may hold the raise for a perfect block against an
+  NPC's wind-up (`NpcParryPlanner`, `chanceByTier`, `timingErrorByTier`); feints bait that raise.
+  The old separate parry key was dropped: blocking is the parry. NPC hits restore the target's hit
+  immunity instead of granting one, so they never eat a player's swing. `NpcModel.guardPose` puts
+  the raised shield back after any combat stance.
 - Fairness against players: NPC attack knockback is 0 (every hit already gives 0.4, as for
   players; the old 0.4 base shoved players out of reach each exchange, updated on load), and
   `bypassHurtCooldown` never applies to players, who keep vanilla's hit immunity.
