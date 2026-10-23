@@ -32,6 +32,7 @@ public final class ModCreativeTabs
                         output.accept(ModItems.HUNTING_LODGE.get());
                         output.accept(ModItems.FISHING_DOCK.get());
                         output.accept(ModItems.KITCHEN.get());
+                        output.accept(ModItems.NPC_SPAWNER.get());
                         output.accept(ModItems.UPGRADE_SIZE_MEDIUM.get());
                         output.accept(ModItems.UPGRADE_SIZE_LARGE.get());
                         output.accept(ModItems.UPGRADE_QUARRY_MEDIUM.get());

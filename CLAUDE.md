@@ -87,7 +87,8 @@ instead of reflecting per call), Skirmisher thresholds (about 4.5 to 28 blocks).
 
 ModularUI inventory (equipment cross, backpack, name field, skin button, command buttons);
 unarmed dual-fist combo via the Better Combat fist preset; inventory persistence and repack
-(item keeps name, equipment, skin, home, owner, flags); faction/owned split with the mass AW
+(item keeps name, equipment, skin, owner, flags; not the home, so a placed NPC calls its new spot
+home; priest revival keeps it); faction/owned split with the mass AW
 import; three-level skin selector with search; Player Default and Custom/Misc tabs; archers
 keep shooting at close range and never punch with a bow; home set/clear and return-home;
 outer skin layers; sidearm fallback (`NpcSidearm`, `WeaponClassifier`, `sidearm` config
@@ -107,7 +108,6 @@ civilians); target memory; cavalry; faction relations and player standing; the S
    jobs beyond the farmer, woodcutter, and miner, commander, patrol). Roles are labels from
    equipment until that behavior exists.
 2. Skirmishers.
-3. Spawner block that stores a full NPC NBT snapshot.
 4. Relations follow-ups: trading (AW's only way to raise standing), the nemesis bonus
    (killing one faction raises standing with its rival), teams sharing their worst
    standing. Then worksites, town hall, orders, the structure
@@ -379,6 +379,20 @@ its own unless noted). Before adding behavior, check what AW did first.
   civilian) runs for water within 8 blocks. Poses are soft dependencies: with Not Enough
   Animations, eating raises the food to the mouth; with its EMF add-on, burning flails and
   freezing shivers (`NpcModel.reactionPose`). Without them NPCs look as vanilla mobs do.
+- NPC spawner (`block/NpcSpawnerBlock`, `NpcSpawnerBlockEntity`, `NpcSpawnerMenu`, parchment
+  `NpcSpawnerScreen`), AW's advanced spawner kept to its features: nine slots of scrolls (roster
+  scrolls, repacked NPCs, vanilla spawn eggs; the stack is how many). GARRISON (AW's one-shot):
+  a non-creative player within `playerRange` sends everyone out, homed on the spawner
+  (`NpcEntity.linkSpawner`, `AeSpawner`, `AeSpawnerSlot`, `AeGarrison`); a killed one shrinks its
+  slot for good; once every player is past `returnRange` the survivors go back in
+  (`NpcEntity.checkDespawn`), so the structure is manned again next visit; when all are dead the
+  block removes itself; with none of its NPCs about and nobody near it re-arms. REPEATING: one at
+  a time every min to max delay while a player is in range, up to most-at-once and a total. REDSTONE:
+  one per pulse. Dark-only and hidden (not drawn, no collision) toggles. Admin-only; one distance
+  check a second.
+- Skins: a roster row assigns a skin type, which resolved to its pool's first skin, so every
+  Empire soldier looked alike. `NpcSkins.randomVariant` pins a random skin of the pool on first
+  placement; a repacked scroll's saved skin is applied after the row, so it keeps its own.
 - Getting settlers in survival: the Settler scroll recipe (2 gold, AW's food bundle, a bed),
   and the Settlers' Post (`block/SettlersPostBlock`, `NpcImmigration`), Dwarf Fortress
   style immigration kept apart from the future Town Hall (upkeep, priest revival within
@@ -422,7 +436,7 @@ its own unless noted). Before adding behavior, check what AW did first.
   or backpack, so sidearm swaps count) times 0.5, by a skirmisher times 0.75. Cached on
   hands, backpack, path, and levy changes.
 - NPC NBT keys: `AeRoster` (roster row), `AePath`, `AeLevy`, `AeSkill` (tier override),
-  `AeFeintChance`, `AeSidearmBowSlot`, `AeMountLost`, `AeRevenge`, `AeWorksite`, `AeHungry`, `AeNextMeal`, `AeMealCredit`, `AeBed` (`AeMountUuid` is not packed). All carried through repack.
+  `AeFeintChance`, `AeSidearmBowSlot`, `AeMountLost`, `AeRevenge`, `AeWorksite`, `AeHungry`, `AeNextMeal`, `AeMealCredit`, `AeBed`, `AeSpawner`, `AeSpawnerSlot`, `AeGarrison` (spawner link, not packed) (`AeMountUuid` is not packed). All carried through repack.
 
 ## Performance rules and audit findings
 
@@ -495,8 +509,10 @@ target-scan design.
   exceptions (fixed). UI screens are dirty-flag driven and fine. `NpcEmfCompat` now caches
   the mod check; its pose snapshots stay per frame because EMF Compat keeps them by
   reference. `placesArm` (about 15-20 ns per arm) was left as is.
-- Still open: server 6 (per-swing sound id parse, string animation id sync) and the
-  first-render PNG decode hitch for new skins.
+- Server 6: the swing sound is now resolved once per id (`SWING_SOUNDS`). The animation id stays a
+  synced string: entity data only sends on change, once per swing, so an int registry would not pay
+  for itself. First-render PNG hitch: `NpcSkinPrefetch` preloads a skin on the texture manager's
+  background executor when an NPC arrives on the client or its skin changes.
 
 ## Testing
 

@@ -2,7 +2,9 @@ package com.ancientempires.entity.npc;
 
 import com.ancientempires.AncientEmpires;
 import com.ancientempires.block.NpcUpkeep;
+import com.ancientempires.block.NpcSpawnerBlockEntity;
 import com.ancientempires.block.TownHallBlockEntity;
+import com.ancientempires.client.NpcSkinPrefetch;
 import com.ancientempires.combat.AttackSwing;
 import com.ancientempires.combat.NpcBowAttackGoal;
 import com.ancientempires.combat.NpcMeleeAttackGoal;
@@ -60,7 +62,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.living.MobSpawnEvent;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
@@ -133,6 +137,9 @@ public class NpcEntity extends PathfinderMob
     private static final String UNNAMED_KEY = "AeUnnamed";
     /** Packed eggs only. The spawn merge cannot delete the home set at placement. */
     private static final String NO_HOME_KEY = "AeNoHome";
+    private static final String SPAWNER_KEY = "AeSpawner";
+    private static final String SPAWNER_SLOT_KEY = "AeSpawnerSlot";
+    private static final String GARRISON_KEY = "AeGarrison";
     /** The roster row the NPC was spawned from. Repack returns it to that scroll. */
     private static final String ROSTER_KEY = "AeRoster";
     private static final String FEINT_KEY = "AeFeintChance";
@@ -161,6 +168,11 @@ public class NpcEntity extends PathfinderMob
     private boolean swingCommitted;
     /** The shield: raising, blocking, guard, bash, stagger. */
     private final NpcGuard guard = new NpcGuard(this);
+    /** The NPC spawner that made it (its home), its slot there, and whether it is a garrison. Not packed. */
+    @Nullable
+    private BlockPos spawnerPos;
+    private int spawnerSlot = -1;
+    private boolean garrison;
     /** Counts attack windows (see getAttackWindowSerial). */
     private int attackWindowSerial;
     /** Own feint chance; below zero means the skill tier decides. */
@@ -617,6 +629,11 @@ public class NpcEntity extends PathfinderMob
         else if (DATA_SKIN.equals(key))
         {
             this.skinTextureResolved = false;
+            if (this.level().isClientSide)
+            {
+                // Start loading the new skin off the render thread before its first frame.
+                DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> NpcSkinPrefetch.request(this));
+            }
         }
         else if (DATA_HOME.equals(key))
         {
@@ -1702,7 +1719,8 @@ public class NpcEntity extends PathfinderMob
         this.sidearm.restore();
         this.mount.beforeRepack();
         this.releaseBed();
-        ItemStack packed = this.createPackedItem();
+        // A repacked NPC forgets its home: placed again, the spot it lands on is its new one.
+        ItemStack packed = this.createPackedItem(false);
         if (packed.isEmpty())
         {
             return false;
@@ -1723,7 +1741,7 @@ public class NpcEntity extends PathfinderMob
      * then the packed state overwrites gear, skin, faction, owner, and name.
      * An NPC with no known row uses the generic owned scroll.
      */
-    private ItemStack createPackedItem()
+    private ItemStack createPackedItem(boolean keepHome)
     {
         NpcNightLight.stripIssued(this);
         NpcRoster.Entry entry = this.rosterEntry();
@@ -1740,7 +1758,7 @@ public class NpcEntity extends PathfinderMob
         CompoundTag entityTag = new CompoundTag();
         Component customName = this.getCustomName();
         boolean unnamed = customName == null || customName.getString().isBlank();
-        this.writePackedState(entityTag, customName, unnamed);
+        this.writePackedState(entityTag, customName, unnamed, keepHome);
         stack.getOrCreateTag().put("EntityTag", entityTag);
         if (unnamed)
         {
@@ -1789,7 +1807,7 @@ public class NpcEntity extends PathfinderMob
      * Gear, backpack slots, skin, faction, home, owner, name, flags, and body scale.
      * Position, motion, and the old UUID stay off this tag.
      */
-    private void writePackedState(CompoundTag tag, @Nullable Component customName, boolean unnamed)
+    private void writePackedState(CompoundTag tag, @Nullable Component customName, boolean unnamed, boolean keepHome)
     {
         ListTag hands = new ListTag();
         hands.add(this.saveEquipment(EquipmentSlot.MAINHAND));
@@ -1826,12 +1844,12 @@ public class NpcEntity extends PathfinderMob
         this.writeHoldAnchor(tag);
         tag.putFloat(BODY_SCALE_KEY, this.getBodyScale());
         BlockPos home = this.getHome();
-        if (home != null)
+        if (keepHome && home != null)
         {
             tag.putLong(HOME_KEY, home.asLong());
             tag.putString(HOME_DIM_KEY, this.getHomeDimension());
         }
-        else
+        else if (keepHome)
         {
             tag.putBoolean(NO_HOME_KEY, true);
         }
@@ -2335,9 +2353,70 @@ public class NpcEntity extends PathfinderMob
         return InteractionResult.sidedSuccess(this.level().isClientSide);
     }
 
+    /**
+     * Spawned by an NPC spawner: its home is the spawner, and a garrison NPC is
+     * taken back in when every player is far, or tells the spawner when it dies.
+     */
+    public void linkSpawner(BlockPos spawner, int slot, boolean garrison)
+    {
+        this.spawnerPos = spawner.immutable();
+        this.spawnerSlot = slot;
+        this.garrison = garrison;
+        this.assignHome(spawner);
+    }
+
+    @Nullable
+    public BlockPos getSpawnerPos()
+    {
+        return this.spawnerPos;
+    }
+
+    @Nullable
+    private NpcSpawnerBlockEntity spawner()
+    {
+        if (this.spawnerPos == null || !this.level().isLoaded(this.spawnerPos))
+        {
+            return null;
+        }
+        return this.level().getBlockEntity(this.spawnerPos) instanceof NpcSpawnerBlockEntity spawner ? spawner : null;
+    }
+
+    /**
+     * A garrison NPC goes back into its spawner once every player is past its
+     * return range, as Ancient Warfare's one-shot spawns despawned and their
+     * spawner came back, so the structure is manned again on the next visit.
+     */
+    @Override
+    public void checkDespawn()
+    {
+        if (this.garrison && !this.level().isClientSide && (this.tickCount + this.getId()) % 20 == 0)
+        {
+            NpcSpawnerBlockEntity spawner = this.spawner();
+            if (spawner == null)
+            {
+                return;
+            }
+            double range = spawner.returnRange();
+            Player near = this.level().getNearestPlayer(this, range);
+            if (near == null || near.isSpectator())
+            {
+                spawner.onGarrisonReturn();
+                this.discard();
+            }
+            return;
+        }
+        super.checkDespawn();
+    }
+
     @Override
     public void die(DamageSource source)
     {
+        if (this.garrison && !this.isRemoved() && !this.dead && this.spawner() != null)
+        {
+            // Killed: gone for good from its garrison.
+            this.spawner().onGarrisonDeath(this.spawnerSlot);
+            this.garrison = false;
+        }
         boolean alive = !this.isRemoved() && !this.dead;
         boolean recorded = alive && this.isOwnedNpc() && !this.isCreative() && this.level() instanceof ServerLevel server
                 && NpcUpkeep.recordsDeathOf(server, this);
@@ -2363,7 +2442,8 @@ public class NpcEntity extends PathfinderMob
             if (recorded && this.level() instanceof ServerLevel level)
             {
                 // After the death drops: the record holds only what the setting kept, for a priest to raise.
-                NpcUpkeep.recordFallen(level, this, this.createPackedItem(), source.getLocalizedDeathMessage(this));
+                // A revived NPC comes back to the home it had.
+                NpcUpkeep.recordFallen(level, this, this.createPackedItem(true), source.getLocalizedDeathMessage(this));
             }
         }
     }
@@ -2463,12 +2543,21 @@ public class NpcEntity extends PathfinderMob
         }
         tag.putString(FACTION_KEY, this.getFaction());
         tag.putFloat(BODY_SCALE_KEY, this.getBodyScale());
+        if (this.spawnerPos != null)
+        {
+            tag.putLong(SPAWNER_KEY, this.spawnerPos.asLong());
+            tag.putInt(SPAWNER_SLOT_KEY, this.spawnerSlot);
+            tag.putBoolean(GARRISON_KEY, this.garrison);
+        }
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag tag)
     {
         super.readAdditionalSaveData(tag);
+        this.spawnerPos = tag.contains(SPAWNER_KEY) ? BlockPos.of(tag.getLong(SPAWNER_KEY)) : null;
+        this.spawnerSlot = tag.contains(SPAWNER_SLOT_KEY) ? tag.getInt(SPAWNER_SLOT_KEY) : -1;
+        this.garrison = tag.getBoolean(GARRISON_KEY);
         AttributeInstance speed = this.getAttribute(Attributes.MOVEMENT_SPEED);
         if (speed != null && Math.abs(speed.getBaseValue() - OLD_BASE_SPEED) < 1.0E-6D)
         {

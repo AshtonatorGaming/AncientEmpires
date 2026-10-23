@@ -363,7 +363,9 @@ public final class NpcRoster
             {
                 npc.assignFaction(this.faction);
             }
-            npc.assignSkin(this.skin);
+            // A random one of the class's skins, pinned. A repacked scroll's saved skin is applied after
+            // this and replaces it, so only a first placement is randomized.
+            npc.assignSkin(NpcSkins.randomVariant(this.skin, npc.getRandom()));
             if (!this.name.isEmpty())
             {
                 String shown = this.name;

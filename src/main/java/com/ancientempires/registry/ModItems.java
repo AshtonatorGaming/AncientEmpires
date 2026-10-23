@@ -42,6 +42,8 @@ public final class ModItems
     /** Rallies, calls to arms, or stands down the owner's NPCs in range. */
     public static final RegistryObject<Item> WAR_HORN = ITEMS.register("war_horn",
             () -> new WarHornItem(new Item.Properties().stacksTo(1)));
+    public static final RegistryObject<Item> NPC_SPAWNER = ITEMS.register("npc_spawner",
+            () -> new BlockItem(ModBlocks.NPC_SPAWNER.get(), new Item.Properties()));
     public static final RegistryObject<Item> SETTLERS_POST = ITEMS.register("settlers_post",
             () -> new BlockItem(ModBlocks.SETTLERS_POST.get(), new Item.Properties()));
     public static final RegistryObject<Item> CROP_FARM = ITEMS.register("crop_farm",

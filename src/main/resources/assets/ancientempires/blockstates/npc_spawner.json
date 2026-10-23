@@ -1,0 +1,6 @@
+{
+  "variants": {
+    "hidden=false": {"model": "ancientempires:block/npc_spawner"},
+    "hidden=true": {"model": "ancientempires:block/npc_spawner"}
+  }
+}

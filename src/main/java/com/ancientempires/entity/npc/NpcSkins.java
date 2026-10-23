@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
@@ -33,6 +34,8 @@ public final class NpcSkins
     private static final List<Faction> FACTIONS;
     private static final Map<String, Entry> BY_ID;
     private static final Map<String, Entry> BY_TYPE;
+    /** Every distinct skin of each type, for a random pick when an NPC is first placed. */
+    private static final Map<String, List<Entry>> POOLS;
     private static final int MAX_POOL;
 
     static
@@ -41,6 +44,9 @@ public final class NpcSkins
         FACTIONS = List.copyOf(loaded.factions);
         BY_ID = Map.copyOf(loaded.byId);
         BY_TYPE = Map.copyOf(loaded.byType);
+        Map<String, List<Entry>> pools = new HashMap<>();
+        loaded.pools.forEach((type, entries) -> pools.put(type, List.copyOf(entries)));
+        POOLS = Map.copyOf(pools);
         MAX_POOL = loaded.maxPool;
     }
 
@@ -136,6 +142,21 @@ public final class NpcSkins
             }
         }
         return BY_TYPE.get(skinId);
+    }
+
+    /**
+     * A random skin of a type, pinned by its id, so a fresh NPC of a class does not
+     * always wear the first of the many variants drawn for it. A pinned id, or a type
+     * with one skin, comes back as it is.
+     */
+    public static String randomVariant(String skinId, RandomSource random)
+    {
+        List<Entry> pool = skinId == null ? null : POOLS.get(skinId);
+        if (pool == null || pool.size() < 2)
+        {
+            return skinId;
+        }
+        return pool.get(random.nextInt(pool.size())).id();
     }
 
     @Nullable
@@ -235,6 +256,7 @@ public final class NpcSkins
                                 if (build.listFile(file))
                                 {
                                     build.skins.add(entry);
+                                    loaded.pools.computeIfAbsent(typeId, key -> new ArrayList<>()).add(entry);
                                 }
                             }
                         }
@@ -723,6 +745,7 @@ public final class NpcSkins
         private final List<Faction> factions = new ArrayList<>();
         private final Map<String, Entry> byId = new HashMap<>();
         private final Map<String, Entry> byType = new HashMap<>();
+        private final Map<String, List<Entry>> pools = new HashMap<>();
         private int maxPool;
     }
 }

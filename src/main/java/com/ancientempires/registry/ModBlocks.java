@@ -6,6 +6,7 @@ import com.ancientempires.block.CropFarmBlock;
 import com.ancientempires.block.FishingDockBlock;
 import com.ancientempires.block.HuntingLodgeBlock;
 import com.ancientempires.block.KitchenBlock;
+import com.ancientempires.block.NpcSpawnerBlock;
 import com.ancientempires.block.QuarryBlock;
 import com.ancientempires.block.SettlersPostBlock;
 import com.ancientempires.block.TownHallBlock;
@@ -21,6 +22,14 @@ import net.minecraftforge.registries.RegistryObject;
 public final class ModBlocks
 {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, AncientEmpires.MOD_ID);
+
+    /** An admin block: spawns NPCs from the scrolls it holds (garrison, repeating, redstone). */
+    public static final RegistryObject<Block> NPC_SPAWNER = BLOCKS.register("npc_spawner",
+            () -> new NpcSpawnerBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.STONE)
+                    .strength(5.0F, 1200.0F)
+                    .sound(SoundType.METAL)
+                    .noOcclusion()));
 
     public static final RegistryObject<Block> SETTLERS_POST = BLOCKS.register("settlers_post",
             () -> new SettlersPostBlock(BlockBehaviour.Properties.of()

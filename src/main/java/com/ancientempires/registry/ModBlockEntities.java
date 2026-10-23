@@ -6,6 +6,7 @@ import com.ancientempires.block.CropFarmBlockEntity;
 import com.ancientempires.block.FishingDockBlockEntity;
 import com.ancientempires.block.HuntingLodgeBlockEntity;
 import com.ancientempires.block.KitchenBlockEntity;
+import com.ancientempires.block.NpcSpawnerBlockEntity;
 import com.ancientempires.block.QuarryBlockEntity;
 import com.ancientempires.block.SettlersPostBlockEntity;
 import com.ancientempires.block.TownHallBlockEntity;
@@ -52,6 +53,8 @@ public final class ModBlockEntities
             () -> BlockEntityType.Builder.of(FishingDockBlockEntity::new, ModBlocks.FISHING_DOCK.get()).build(null));
 
     @SuppressWarnings("DataFlowIssue")
+    public static final RegistryObject<BlockEntityType<NpcSpawnerBlockEntity>> NPC_SPAWNER = BLOCK_ENTITIES.register("npc_spawner",
+            () -> BlockEntityType.Builder.of(NpcSpawnerBlockEntity::new, ModBlocks.NPC_SPAWNER.get()).build(null));
     public static final RegistryObject<BlockEntityType<KitchenBlockEntity>> KITCHEN = BLOCK_ENTITIES.register("kitchen",
             () -> BlockEntityType.Builder.of(KitchenBlockEntity::new, ModBlocks.KITCHEN.get()).build(null));
 

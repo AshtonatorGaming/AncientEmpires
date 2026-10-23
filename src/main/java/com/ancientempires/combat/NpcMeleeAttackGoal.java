@@ -6,6 +6,7 @@ import com.ancientempires.entity.npc.NpcTargetMemory;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -24,6 +25,9 @@ import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
+import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Closes to weapon range, winds up, then applies one hit. Better Mob Combat,
@@ -798,28 +802,35 @@ public class NpcMeleeAttackGoal extends Goal
         this.npc.getNavigation().moveTo(target, speed);
     }
 
+    /** Swing sounds by id, resolved once. Empty for an id that names no sound. */
+    private static final Map<String, Optional<SoundEvent>> SWING_SOUNDS = new ConcurrentHashMap<>();
+
+    private static Optional<SoundEvent> lookupSound(String id)
+    {
+        ResourceLocation location = ResourceLocation.tryParse(id);
+        return location == null ? Optional.empty() : Optional.ofNullable(ForgeRegistries.SOUND_EVENTS.getValue(location));
+    }
+
     private void playSwingSound(AttackSwing swing)
     {
-        if (swing.swingSoundId() != null)
+        if (swing.swingSoundId() == null)
         {
-            ResourceLocation id = ResourceLocation.tryParse(swing.swingSoundId());
-            if (id != null)
-            {
-                var event = ForgeRegistries.SOUND_EVENTS.getValue(id);
-                if (event != null)
-                {
-                    float pitch = swing.swingPitch();
-                    float randomness = swing.swingPitchRandomness();
-                    if (randomness > 0.0F)
-                    {
-                        pitch += (this.npc.getRandom().nextFloat() - 0.5F) * 2.0F * randomness;
-                    }
-                    this.npc.playSound(event, swing.swingVolume(), pitch);
-                    return;
-                }
-            }
+            // No Better Combat swing sound: silent until it lands (applyHit plays the hit sound then).
+            // Vanilla's only stand-in is the no-damage thump, which sounds like an impact.
+            return;
         }
-        // No Better Combat swing sound: silent until it lands (applyHit plays the hit sound then).
-        // Vanilla's only stand-in is the no-damage thump, which sounds like an impact.
+        // Looked up once per sound name, not on every swing.
+        SoundEvent event = SWING_SOUNDS.computeIfAbsent(swing.swingSoundId(), NpcMeleeAttackGoal::lookupSound).orElse(null);
+        if (event == null)
+        {
+            return;
+        }
+        float pitch = swing.swingPitch();
+        float randomness = swing.swingPitchRandomness();
+        if (randomness > 0.0F)
+        {
+            pitch += (this.npc.getRandom().nextFloat() - 0.5F) * 2.0F * randomness;
+        }
+        this.npc.playSound(event, swing.swingVolume(), pitch);
     }
 }

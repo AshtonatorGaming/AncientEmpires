@@ -2,6 +2,7 @@ package com.ancientempires.registry;
 
 import com.ancientempires.AncientEmpires;
 import com.ancientempires.inventory.NpcMenu;
+import com.ancientempires.inventory.NpcSpawnerMenu;
 import com.ancientempires.inventory.WorksiteMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.common.extensions.IForgeMenuType;
@@ -16,6 +17,8 @@ public final class ModMenus
     public static final RegistryObject<MenuType<NpcMenu>> NPC_INVENTORY = MENUS.register("npc_inventory",
             () -> IForgeMenuType.create(NpcMenu::fromNetwork));
     /** A worksite's or Town Hall's store, with its supply slots. */
+    public static final RegistryObject<MenuType<NpcSpawnerMenu>> NPC_SPAWNER = MENUS.register("npc_spawner",
+            () -> IForgeMenuType.create(NpcSpawnerMenu::fromNetwork));
     public static final RegistryObject<MenuType<WorksiteMenu>> WORKSITE = MENUS.register("worksite",
             () -> IForgeMenuType.create(WorksiteMenu::fromNetwork));
 
