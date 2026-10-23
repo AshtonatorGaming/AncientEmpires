@@ -1,7 +1,9 @@
 package com.ancientempires.command;
 
 import com.ancientempires.AncientEmpires;
+import com.ancientempires.entity.npc.NpcEntity;
 import com.ancientempires.entity.npc.NpcFactions;
+import com.ancientempires.entity.npc.NpcJobGoal;
 import com.ancientempires.entity.npc.NpcStandings;
 import com.ancientempires.network.ModNetwork;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
@@ -18,6 +20,9 @@ import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -50,6 +55,8 @@ public final class AeCommands
     private static void register(CommandDispatcher<CommandSourceStack> dispatcher)
     {
         dispatcher.register(Commands.literal(AncientEmpires.MOD_ID)
+                .then(Commands.literal("work")
+                        .executes(AeCommands::work))
                 .then(Commands.literal("standing")
                         .executes(context ->
                         {
@@ -72,6 +79,31 @@ public final class AeCommands
                                                         .executes(context -> change(context, true)))))
                                 .then(Commands.literal("reset")
                                         .executes(AeCommands::reset)))));
+    }
+
+    /**
+     * What stops the NPC the player is looking at (within 8 blocks) from working:
+     * a checklist of every condition the worker goals need. Owner or admin.
+     */
+    private static int work(CommandContext<CommandSourceStack> context) throws CommandSyntaxException
+    {
+        ServerPlayer player = context.getSource().getPlayerOrException();
+        Vec3 eye = player.getEyePosition();
+        Vec3 end = eye.add(player.getViewVector(1.0F).scale(8.0D));
+        EntityHitResult hit = ProjectileUtil.getEntityHitResult(player, eye, end, player.getBoundingBox().expandTowards(end.subtract(eye)).inflate(1.0D),
+                entity -> entity instanceof NpcEntity, 64.0D);
+        if (hit == null || !(hit.getEntity() instanceof NpcEntity npc) || !npc.canOpenInventory(player))
+        {
+            context.getSource().sendFailure(Component.translatable("commands.ancientempires.work.none"));
+            return 0;
+        }
+        context.getSource().sendSuccess(() -> Component.translatable("commands.ancientempires.work.header", npc.getDisplayName()), false);
+        for (String line : NpcJobGoal.diagnose(npc))
+        {
+            context.getSource().sendSuccess(() -> Component.literal(line)
+                    .withStyle(line.startsWith("[ok]") ? ChatFormatting.GREEN : ChatFormatting.RED), false);
+        }
+        return 1;
     }
 
     /** Two lines: factions at peace with the player, then hostile ones, each best to worst. */

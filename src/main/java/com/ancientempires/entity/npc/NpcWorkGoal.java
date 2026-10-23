@@ -170,7 +170,7 @@ public abstract class NpcWorkGoal<T extends WorksiteBlockEntity> extends Goal
         return this.npc.getNpcPath() == NpcPath.WORKER && this.isTool(this.npc.getMainHandItem())
                 && this.npc.isOwnedNpc() && !this.npc.isFollowing() && this.npc.getTarget() == null
                 && !this.npc.isPassenger() && !this.npc.isHungry()
-                && this.npc.level().isDay() && !this.npc.level().isRaining();
+                && this.npc.level().isDay() && !this.npc.level().isRainingAt(this.npc.blockPosition().above());
     }
 
     @Override

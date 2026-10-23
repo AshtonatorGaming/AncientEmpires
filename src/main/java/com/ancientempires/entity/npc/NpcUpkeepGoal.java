@@ -66,6 +66,12 @@ public final class NpcUpkeepGoal extends Goal
             return true;
         }
         TownHallBlockEntity hall = this.hall();
+        if (hall == null && !AncientEmpiresConfig.upkeepRequireHall)
+        {
+            // No Town Hall in reach: this NPC lives off the land, as before halls existed.
+            this.npc.skipMeal();
+            return false;
+        }
         if (hall == null || hall.storedRations() <= 0.0D)
         {
             this.npc.setHungry(true);

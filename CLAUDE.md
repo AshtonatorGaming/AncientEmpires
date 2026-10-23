@@ -209,7 +209,8 @@ its own unless noted). Before adding behavior, check what AW did first.
   main hand and used, so animation mods show it; `NpcEntity.eat` counts it), so soldiers
   on campaign carry their own. With none, it walks to its owner's nearest hall within
   `range` (100) and takes `carryRations` (or `delivery` TELEPORT puts it in the
-  backpack). No food anywhere: hungry (`AeHungry`), retried later; hungry workers do not
+  backpack). No hall in reach: fed anyway (lives off the land) unless `requireHall`. A hall
+  with no food: hungry (`AeHungry`), retried later; hungry workers do not
   work. An owned NPC dying within range of its owner's hall is recorded there the moment
   it dies: its packed scroll, the death message, where, and when, up to
   `fallenRecords`, for priest revival later. `keepOnDeath` (AW Tweaked's option: NONE,

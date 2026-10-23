@@ -1,9 +1,11 @@
 package com.ancientempires.entity.npc;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -55,6 +57,37 @@ public final class NpcJobGoal extends Goal
             }
         }
         return null;
+    }
+
+    /**
+     * Why this NPC is or is not working, one condition per line, for
+     * {@code /ancientempires work}. Mirrors {@link NpcWorkGoal#mayWork}.
+     */
+    public static List<String> diagnose(NpcEntity npc)
+    {
+        NpcJobGoal probe = new NpcJobGoal(npc);
+        NpcWorkGoal<?> trade = probe.tradeFor(npc.getMainHandItem());
+        List<String> lines = new ArrayList<>();
+        lines.add(check(npc.getNpcPath() == NpcPath.WORKER, "Worker path (now " + npc.getNpcPath().id() + ")"));
+        lines.add(check(trade != null, "Trade tool in main hand (" + npc.getMainHandItem().getHoverName().getString()
+                + (trade == null ? ": not a trade tool" : ": " + trade.getClass().getSimpleName().replace("Npc", "").replace("Goal", "")) + ")"));
+        lines.add(check(npc.isOwnedNpc(), "Owned by a player"));
+        lines.add(check(!npc.isFollowing(), "Not following"));
+        lines.add(check(npc.getTarget() == null, "Not fighting"));
+        lines.add(check(!npc.isPassenger(), "Not riding"));
+        lines.add(check(!npc.isHungry(), "Not hungry"));
+        lines.add(check(npc.level().isDay(), "Daytime"));
+        lines.add(check(!npc.level().isRainingAt(npc.blockPosition().above()), "No rain on it"));
+        BlockPos site = npc.getWorksite();
+        lines.add(check(site != null, site == null
+                ? "Worksite found (none yet; it searches its owner's worksites of its trade within work.searchRange of its home)"
+                : "Worksite at " + site.toShortString()));
+        return lines;
+    }
+
+    private static String check(boolean ok, String text)
+    {
+        return (ok ? "[ok] " : "[NO] ") + text;
     }
 
     @Override

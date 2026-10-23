@@ -60,7 +60,8 @@ public abstract class WorksiteBlockEntity extends BlockEntity
     @Nullable
     private UUID owner;
     private int radius = -1;
-    private long scannedAt = Long.MIN_VALUE;
+    /** Game time of the last scan; -1 means never, so the next request scans. */
+    private long scannedAt = -1L;
     /** Tile to the id of the worker on it, and the game time the claim lapses. */
     private final Map<BlockPos, long[]> claims = new HashMap<>();
     private final Map<UUID, long[]> entityClaims = new HashMap<>();
@@ -107,7 +108,7 @@ public abstract class WorksiteBlockEntity extends BlockEntity
     {
         int next = this.radius() + 1;
         this.radius = next > this.maxRadius() ? 2 : next;
-        this.scannedAt = Long.MIN_VALUE;
+        this.scannedAt = -1L;
         this.setChanged();
         return this.radius;
     }
@@ -135,7 +136,8 @@ public abstract class WorksiteBlockEntity extends BlockEntity
     protected final void refresh()
     {
         Level level = this.level;
-        if (level == null || level.getGameTime() - this.scannedAt < AncientEmpiresConfig.workScanTicks)
+        // Not "now - scannedAt" alone: with an unset time that subtraction would overflow.
+        if (level == null || (this.scannedAt >= 0L && level.getGameTime() - this.scannedAt < AncientEmpiresConfig.workScanTicks))
         {
             return;
         }
@@ -150,7 +152,7 @@ public abstract class WorksiteBlockEntity extends BlockEntity
     /** Forces the next request to rescan, after a change the lists would miss. */
     protected final void invalidateScan()
     {
-        this.scannedAt = Long.MIN_VALUE;
+        this.scannedAt = -1L;
     }
 
     /** The nearest unclaimed tile in the list, claimed for the worker, or null. */

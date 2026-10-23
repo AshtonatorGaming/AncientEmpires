@@ -172,6 +172,7 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.IntValue UPKEEP_MEAL_INTERVAL;
     private static final ForgeConfigSpec.IntValue UPKEEP_CARRY_RATIONS;
     private static final ForgeConfigSpec.EnumValue<Delivery> UPKEEP_DELIVERY;
+    private static final ForgeConfigSpec.BooleanValue UPKEEP_REQUIRE_HALL;
     private static final ForgeConfigSpec.BooleanValue BURNING_PANIC;
     private static final ForgeConfigSpec.DoubleValue MEDIC_BANDAGE_HEAL;
     private static final ForgeConfigSpec.DoubleValue MEDIC_RANGE;
@@ -698,6 +699,9 @@ public final class AncientEmpiresConfig
         UPKEEP_DELIVERY = builder
                 .comment("WALK: an NPC out of food walks to its hall to take some. TELEPORT: the food appears in its backpack, from the hall's store.")
                 .defineEnum("delivery", Delivery.WALK);
+        UPKEEP_REQUIRE_HALL = builder
+                .comment("If on, an NPC with no food and no Town Hall in reach goes hungry. Off: only NPCs near a hall depend on it; others live off the land.")
+                .define("requireHall", false);
         BURNING_PANIC = builder
                 .comment("An NPC on fire and not fighting runs for water nearby, as vanilla mobs panic. Civilians always do.")
                 .define("burningPanic", true);
@@ -987,6 +991,7 @@ public final class AncientEmpiresConfig
     public static int upkeepMealInterval = 24000;
     public static int upkeepCarryRations = 3;
     public static Delivery upkeepDelivery = Delivery.WALK;
+    public static boolean upkeepRequireHall = false;
     public static boolean burningPanic = true;
     public static double medicBandageHeal = 6.0D;
     public static double medicRange = 16.0D;
@@ -1214,6 +1219,7 @@ public final class AncientEmpiresConfig
         upkeepMealInterval = UPKEEP_MEAL_INTERVAL.get();
         upkeepCarryRations = UPKEEP_CARRY_RATIONS.get();
         upkeepDelivery = UPKEEP_DELIVERY.get();
+        upkeepRequireHall = UPKEEP_REQUIRE_HALL.get();
         burningPanic = BURNING_PANIC.get();
         medicBandageHeal = MEDIC_BANDAGE_HEAL.get();
         medicRange = MEDIC_RANGE.get();

@@ -769,6 +769,13 @@ public class NpcEntity extends PathfinderMob
         return true;
     }
 
+    /** A meal that needs no food (no Town Hall to depend on): the NPC is fed until the next one. */
+    public void skipMeal()
+    {
+        this.nextMeal = this.level().getGameTime() + AncientEmpiresConfig.upkeepMealInterval;
+        this.hungry = false;
+    }
+
     /** Vanilla eating ends here; what was eaten counts toward the NPC's rations. */
     @Override
     public ItemStack eat(Level level, ItemStack food)

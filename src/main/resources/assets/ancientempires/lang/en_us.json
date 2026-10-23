@@ -124,6 +124,8 @@
   "gui.ancientempires.standings.peace": "At peace (%s)",
   "key.ancientempires.standings": "Faction Standings",
   "key.categories.ancientempires": "Ancient Empires",
+  "commands.ancientempires.work.header": "Work check for %s:",
+  "commands.ancientempires.work.none": "Look at one of your NPCs, within 8 blocks",
   "commands.ancientempires.standing.header": "Faction standing for %s:",
   "commands.ancientempires.standing.friendly": "At peace: %s",
   "commands.ancientempires.standing.hostile": "Hostile: %s",
