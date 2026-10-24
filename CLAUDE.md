@@ -149,7 +149,8 @@ its own unless noted). Before adding behavior, check what AW did first.
   readied is cancelled if the target starts one. A blocked hit opens `riposteTicks` to strike
   without the minimum. Behind a raised shield the NPC advances at `advanceSpeed` (AW: half).
   Between two guards, whoever starts readying a strike first goes (`strikesBefore`); the other
-  holds its guard, blocks, and ripostes. Past the minimum, a strike comes at a random beat
+  holds its guard, blocks, and ripostes. Only between two guards: against a foe with no shield (always "readying")
+  deferring meant a shield NPC never got its turn. Past the minimum, a strike comes at a random beat
   (`strikeChance` per tick). Guard (`guardPoints`, like Chivalry stamina): blocked damage
   drains it, it recovers at `guardRegen`, and at zero the shield is knocked down for
   `guardBreakTicks`, so shield walls do not stalemate and players can break a turtle.

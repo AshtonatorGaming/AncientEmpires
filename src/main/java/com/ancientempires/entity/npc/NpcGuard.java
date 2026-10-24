@@ -238,7 +238,10 @@ public final class NpcGuard
         // never while an NPC target is winding up at this NPC, nor while it is already lowering
         // its own shield to strike (whoever started first goes; the other blocks, then ripostes).
         // A vanilla mob or player has no wind-up: its swing is the hit, so just after it is the opening.
-        if (this.npc.getTarget() instanceof NpcEntity other && (other.isAttackWindowOpen() || other.getGuard().strikesBefore(this)))
+        // Turn-taking is between two guards: a foe with no shield is always "readying", so deferring
+        // to it left a shield NPC waiting for a turn that never came.
+        if (this.npc.getTarget() instanceof NpcEntity other && (other.isAttackWindowOpen()
+                || other.hasShieldInOffhand() && other.getGuard().strikesBefore(this)))
         {
             // Caught lowering it: cancel the strike, so the shield goes straight back up.
             this.wantsToStrike = false;
