@@ -60,6 +60,12 @@ public final class WeaponClassifier
         return KINDS.get(stack.getItem().getClass());
     }
 
+    /** A Spartan Weaponry throwing weapon (javelin, tomahawk, throwing knife, boomerang). */
+    public static boolean isThrowing(ItemStack stack)
+    {
+        return THROWING != null && !stack.isEmpty() && THROWING.isInstance(stack.getItem());
+    }
+
     public static boolean isBow(ItemStack stack)
     {
         return kind(stack) == Kind.BOW;

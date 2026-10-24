@@ -8,6 +8,8 @@ import com.ancientempires.client.NpcSkinPrefetch;
 import com.ancientempires.combat.AttackSwing;
 import com.ancientempires.combat.NpcBowAttackGoal;
 import com.ancientempires.combat.NpcMeleeAttackGoal;
+import com.ancientempires.combat.NpcSkirmishGoal;
+import com.ancientempires.combat.SpartanThrowing;
 import com.ancientempires.combat.WeaponClassifier;
 import com.ancientempires.config.AncientEmpiresConfig;
 import com.ancientempires.inventory.NpcMenu;
@@ -411,6 +413,8 @@ public class NpcEntity extends PathfinderMob
         }
         // A bow keeps this goal for the whole fight. Melee does not run while it does.
         this.goalSelector.addGoal(1, new NpcBowAttackGoal(this));
+        // A Spartan throwing weapon keeps the skirmish goal; a drawn sidearm hands the fight to melee.
+        this.goalSelector.addGoal(1, new NpcSkirmishGoal(this));
         // No flags: blocks beside the melee goal, lowered while the NPC swings.
         this.goalSelector.addGoal(1, new NpcShieldGoal(this));
         this.goalSelector.addGoal(1, new NpcMedicGoal(this));
@@ -2632,6 +2636,12 @@ public class NpcEntity extends PathfinderMob
         }
         NpcParryPlanner.tick(this);
         this.morale.tick();
+        if (this.getTarget() == null && (this.tickCount + this.getId()) % AncientEmpiresConfig.skirmishRestockTicks == 0
+                && SpartanThrowing.isThrowing(this.getMainHandItem()))
+        {
+            // Spent javelins and knives come back between fights, one at a time.
+            SpartanThrowing.restockOne(this.getMainHandItem());
+        }
         if ((this.tickCount + this.getId()) % NpcNightLight.CHECK_TICKS == 0)
         {
             NpcNightLight.update(this);

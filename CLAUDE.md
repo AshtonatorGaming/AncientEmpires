@@ -118,7 +118,14 @@ A. Governor: done (`NpcGovernorGoal`, `governor` config). An owned Worker-path N
    per worker per `taxTicksPerWorker` (2400). Later: settlement heartbeat (Tier 4), tax by production.
 B. Structure templates: AW structures generating in the world with garrison spawners (Tier 1; the
    spawner exists). First milestone: one faction structure with a working garrison.
-C. Skirmisher (item 2 below): throwing weapons at range, melee sidearm when closed (`NpcSidearm`).
+C. Skirmisher: done (`combat/NpcSkirmishGoal`, `SpartanThrowing`, `skirmish` config; AncientTactics'
+   NpcAISkirmishAttack rebuilt). Holding a Spartan throwing weapon, an NPC throws from `minRange` 4.5 to
+   `maxRange` 28, winding up only while still (Spartan's charge ticks), `throwCooldownTicks` 40 apart,
+   aimed with the archers' gravity lift; inside `dangerRange` (6) it kites to a safe spot. Cornered
+   (sidearm range) or out of throws it draws its best backpack melee weapon (`NpcSidearm`, now for any
+   ranged primary: bow or thrower) and the melee goal takes over. Spartan only throws for players, so
+   the projectile is built by reflection (item `XItem` to entity `XEntity`), ammo is Spartan's own
+   `AmmoUsed` count, restocked one per `restockTicks` out of a fight; thrown ones are not pickups.
 D. Banner Bearer: done (basic). Any banner in a soldier's off hand adds `morale.bannerBonus` (10) to allies
    within `morale.range`, shown as a reason; its death shocks them `bannerDeathShock` (15). Later: a role
    label, faction banner rows, planting the banner as a rally point.
@@ -136,7 +143,6 @@ G. Banner bearer pose: hold the banner raised like a two-hander, not the small i
    behavior behind the remaining roles (bard singing, trader, courier, worker
    jobs beyond the farmer, woodcutter, and miner, commander, patrol). Roles are labels from
    equipment until that behavior exists.
-2. Skirmishers.
 4. Relations follow-ups: trading (AW's only way to raise standing), the nemesis bonus
    (killing one faction raises standing with its rival), teams sharing their worst
    standing. Then worksites, town hall, orders, the structure

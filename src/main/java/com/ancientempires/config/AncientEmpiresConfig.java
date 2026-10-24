@@ -239,6 +239,13 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.DoubleValue COMMAND_SUCCESSION_RANGE;
     private static final ForgeConfigSpec.DoubleValue COMMAND_SUCCESSION_SCALE;
     private static final ForgeConfigSpec.DoubleValue COMMAND_MIN_SCALE;
+    private static final ForgeConfigSpec.BooleanValue SKIRMISH_ENABLED;
+    private static final ForgeConfigSpec.DoubleValue SKIRMISH_MIN;
+    private static final ForgeConfigSpec.DoubleValue SKIRMISH_MAX;
+    private static final ForgeConfigSpec.DoubleValue SKIRMISH_DANGER;
+    private static final ForgeConfigSpec.IntValue SKIRMISH_COOLDOWN;
+    private static final ForgeConfigSpec.DoubleValue SKIRMISH_SPEED;
+    private static final ForgeConfigSpec.IntValue SKIRMISH_RESTOCK;
     private static final ForgeConfigSpec.BooleanValue GOVERNOR_ENABLED;
     private static final ForgeConfigSpec.IntValue GOVERNOR_PULSE;
     private static final ForgeConfigSpec.DoubleValue GOVERNOR_RADIUS;
@@ -1013,6 +1020,16 @@ public final class AncientEmpiresConfig
         COMMAND_MIN_SCALE = builder.comment("The weakest a passed-down aura gets, however many times command passes.").defineInRange("minScale", 0.3D, 0.05D, 1.0D);
         builder.pop();
 
+        builder.comment("Skirmishers (DESIGN Tier 2, AncientTactics' numbers): an NPC holding a Spartan throwing weapon (javelin, tomahawk, throwing knife, boomerang) throws it at range, kites foes that close in, and draws its best backpack melee weapon when cornered or out of throws.").push("skirmish");
+        SKIRMISH_ENABLED = builder.define("enabled", true);
+        SKIRMISH_MIN = builder.comment("Closest it throws from.").defineInRange("minRange", 4.5D, 1.0D, 32.0D);
+        SKIRMISH_MAX = builder.comment("Farthest it throws from; beyond, it closes in.").defineInRange("maxRange", 28.0D, 4.0D, 64.0D);
+        SKIRMISH_DANGER = builder.comment("A foe closer than this is kited: the skirmisher steps back instead of throwing.").defineInRange("dangerRange", 6.0D, 0.0D, 32.0D);
+        SKIRMISH_COOLDOWN = builder.comment("Ticks between throws.").defineInRange("throwCooldownTicks", 40, 0, 400);
+        SKIRMISH_SPEED = builder.comment("Throw speed (a full bow shot is 3).").defineInRange("throwSpeed", 2.2D, 0.5D, 5.0D);
+        SKIRMISH_RESTOCK = builder.comment("Out of a fight, one spent throw comes back every this many ticks.").defineInRange("restockTicks", 100, 1, 24000);
+        builder.pop();
+
         builder.comment("Governor (DESIGN Tier 1): an owned Worker-path NPC holding a map goes to its owner's nearest Town Hall by day; the owner's workers around it work faster, and each one it oversees earns the hall a tax.").push("governor");
         GOVERNOR_ENABLED = builder.define("enabled", true);
         GOVERNOR_PULSE = builder.comment("Ticks between the governor's rounds (aura and tax).").defineInRange("pulseTicks", 40, 10, 400);
@@ -1457,6 +1474,13 @@ public final class AncientEmpiresConfig
     public static double commandSuccessionRange = 16.0D;
     public static double commandSuccessionScale = 0.6D;
     public static double commandMinScale = 0.3D;
+    public static boolean skirmishEnabled = true;
+    public static double skirmishMinRange = 4.5D;
+    public static double skirmishMaxRange = 28.0D;
+    public static double skirmishDangerRange = 6.0D;
+    public static int skirmishCooldownTicks = 40;
+    public static double skirmishThrowSpeed = 2.2D;
+    public static int skirmishRestockTicks = 100;
     public static boolean governorEnabled = true;
     public static int governorPulseTicks = 40;
     public static double governorAuraRadius = 24.0D;
@@ -1822,6 +1846,13 @@ public final class AncientEmpiresConfig
         commandSuccessionRange = COMMAND_SUCCESSION_RANGE.get();
         commandSuccessionScale = COMMAND_SUCCESSION_SCALE.get();
         commandMinScale = COMMAND_MIN_SCALE.get();
+        skirmishEnabled = SKIRMISH_ENABLED.get();
+        skirmishMinRange = SKIRMISH_MIN.get();
+        skirmishMaxRange = SKIRMISH_MAX.get();
+        skirmishDangerRange = SKIRMISH_DANGER.get();
+        skirmishCooldownTicks = SKIRMISH_COOLDOWN.get();
+        skirmishThrowSpeed = SKIRMISH_SPEED.get();
+        skirmishRestockTicks = SKIRMISH_RESTOCK.get();
         governorEnabled = GOVERNOR_ENABLED.get();
         governorPulseTicks = GOVERNOR_PULSE.get();
         governorAuraRadius = GOVERNOR_RADIUS.get();

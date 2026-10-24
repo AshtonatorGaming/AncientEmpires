@@ -1,5 +1,6 @@
 package com.ancientempires.entity.npc;
 
+import com.ancientempires.combat.SpartanThrowing;
 import com.ancientempires.combat.WeaponClassifier;
 import com.ancientempires.config.AncientEmpiresConfig;
 import net.minecraft.nbt.CompoundTag;
@@ -62,13 +63,29 @@ public final class NpcSidearm
         return this.bestSlot();
     }
 
+    /** A ranged primary the sidearm swap can stand in for: a bow, or a Spartan throwing weapon (skirmishers). */
+    public static boolean primary(ItemStack stack)
+    {
+        return WeaponClassifier.isBow(stack) || SpartanThrowing.isThrowing(stack);
+    }
+
+    /** Backpack slot of the best sidearm to draw whatever the distance (a skirmisher out of throws), or -1. */
+    public int anySlot()
+    {
+        if (!AncientEmpiresConfig.sidearmEnabled || this.bowSlot >= 0 || this.cooldown > 0)
+        {
+            return -1;
+        }
+        return this.bestSlot();
+    }
+
     /**
      * Swaps the bow in the main hand with the given backpack slot. The caller
      * stops the bow draw first.
      */
     public void draw(int slot)
     {
-        if (this.bowSlot >= 0 || !this.npc.isHoldingBow())
+        if (this.bowSlot >= 0 || !primary(this.npc.getMainHandItem()))
         {
             return;
         }
@@ -112,6 +129,12 @@ public final class NpcSidearm
         else
         {
             this.farTicks = 0;
+        }
+        ItemStack stored = this.npc.getInventory().getItem(NpcInventory.BACKPACK_START + this.bowSlot);
+        if (SpartanThrowing.isThrowing(stored) && SpartanThrowing.ammoLeft(stored) <= 0)
+        {
+            // Out of throws: the sidearm stays drawn until the fight is over.
+            return;
         }
         if (this.farTicks >= AncientEmpiresConfig.sidearmReleaseTicks && this.cooldown <= 0)
         {
@@ -171,7 +194,7 @@ public final class NpcSidearm
     private boolean bowStillStored()
     {
         ItemStack stored = this.npc.getInventory().getItem(NpcInventory.BACKPACK_START + this.bowSlot);
-        return WeaponClassifier.isBow(stored) && !this.npc.isHoldingBow();
+        return primary(stored) && !primary(this.npc.getMainHandItem());
     }
 
     /**
