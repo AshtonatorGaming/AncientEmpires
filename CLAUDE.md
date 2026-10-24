@@ -127,8 +127,8 @@ C. Skirmisher: done (`combat/NpcSkirmishGoal`, `SpartanThrowing`, `skirmish` con
    the projectile is built by reflection (item `XItem` to entity `XEntity`), ammo is Spartan's own
    `AmmoUsed` count, restocked one per `restockTicks` out of a fight; thrown ones are not pickups.
 D. Banner Bearer: done (basic). Any banner in a soldier's off hand adds `morale.bannerBonus` (10) to allies
-   within `morale.range`, shown as a reason; its death shocks them `bannerDeathShock` (15). Later: a role
-   label, faction banner rows, planting the banner as a rally point.
+   within `morale.range`, shown as a reason; its death shocks them `bannerDeathShock` (15). Role label
+   Standard Bearer. Later: faction banner rows, planting the banner as a rally point.
 E. Squads under leaders and a command screen (groups, formations, orders), then squad morale and patrols.
 F. Combat, player-doable: done. Backstep dodge (`NpcMeleeAttackGoal.dodging`): an NPC without a shield,
    `combat.dodgeLeadTicks` (6) before an NPC's visible wind-up lands, backsteps for `dodgeTicks` (7) at
@@ -137,6 +137,9 @@ F. Combat, player-doable: done. Backstep dodge (`NpcMeleeAttackGoal.dodging`): a
    `flankAngle` 70 of its facing) circles the shorter way to its side, at striking distance; footwork
    only runs while waiting, so a lowered shield is still struck at once.
 G. Banner bearer pose: hold the banner raised like a two-hander, not the small item (later, visual).
+H. Sidearms beyond ranged (later, the user wants this): a pikeman with a reach weapon swapping to a shorter one
+   in close quarters, and similar weapon-for-the-distance swaps; `NpcSidearm` already does it for bows and
+   throwers.
 
 1. Ancient Warfare baseline still missing: lance charges and other mounted tactics,
    vampire factions avoiding sunlight, day and night patrols, and the

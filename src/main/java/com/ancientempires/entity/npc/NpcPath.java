@@ -10,6 +10,7 @@ import net.minecraft.world.item.EnchantedBookItem;
 import net.minecraft.world.item.FishingRodItem;
 import net.minecraft.world.item.HoeItem;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.BannerItem;
 import net.minecraft.world.item.EmptyMapItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.MapItem;
@@ -148,6 +149,11 @@ public enum NpcPath
         {
             // Bandages in the off hand make a medic, whatever the main hand holds.
             return "medic";
+        }
+        if (this.combat && offHand.getItem() instanceof BannerItem)
+        {
+            // A banner in the off hand: the standard bearer (morale aura, NpcMorale).
+            return "standard_bearer";
         }
         String tool = this.combat ? weaponRole(mainHand) : toolRole(mainHand);
         if (tool != null)
