@@ -56,6 +56,8 @@ public final class NpcGuard
     int planAt = Integer.MIN_VALUE;
     /** The current raise was timed by the planner, so a perfect block may come of it. */
     private boolean plannedRaise;
+    /** tickCount of the last perfect block, -1 for never. */
+    private int perfectAt = -1;
 
     NpcGuard(NpcEntity npc)
     {
@@ -97,6 +99,20 @@ public final class NpcGuard
     }
 
     /** Keeps the shield down for {@code ticks} (a swing's follow-through), on top of any longer hold. */
+    /**
+     * A player's blow on the raised shield: no wind-up to time against, so a
+     * skill roll ({@code perfectBlock.vsPlayerScale} of the parry chance) decides
+     * whether it is turned aside as a perfect block, at most once per cooldown.
+     */
+    public boolean rollsPerfectAgainstPlayer()
+    {
+        if (!this.npc.isRaisingShield() || this.perfectAt >= 0 && this.npc.tickCount - this.perfectAt < AncientEmpiresConfig.parryCooldownTicks)
+        {
+            return false;
+        }
+        return this.npc.getRandom().nextDouble() < this.npc.getParryChance() * AncientEmpiresConfig.parryVsPlayerScale;
+    }
+
     /** Whether this raise was a planned perfect-block attempt (NPCs only perfect-block on purpose). */
     public boolean isPlannedRaise()
     {
@@ -212,6 +228,7 @@ public final class NpcGuard
     /** A perfect block landed: the attacker reels, so the NPC may strike straight back. */
     public void onPerfectBlock()
     {
+        this.perfectAt = this.npc.tickCount;
         this.strikeReadyAt = 0;
         this.riposteUntil = this.npc.tickCount + AncientEmpiresConfig.shieldRiposteTicks;
     }

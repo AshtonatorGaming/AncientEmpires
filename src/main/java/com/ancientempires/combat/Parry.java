@@ -152,7 +152,7 @@ public final class Parry
             // Caught on the shield (perfect, instant, or vanilla's block): only the shield sounds.
             SHIELD_HITS.put(player, target.level().getGameTime());
         }
-        if (inPerfectWindow(target))
+        if (inPerfectWindow(target) || target instanceof NpcEntity npc && attacker instanceof Player && npc.getGuard().rollsPerfectAgainstPlayer())
         {
             perfectBlock(event, target, attacker, fromAttacker);
             return;

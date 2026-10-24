@@ -396,6 +396,9 @@ its own unless noted). Before adding behavior, check what AW did first.
   `followThroughTicks`). An NPC perfect-blocks only on a planned raise (`NpcGuard.isPlannedRaise`,
   at its skill's chance); any other raise that happened to land just before a hit (very common
   against fast spears) is an ordinary block.
+  Against players (no wind-up to time) a raised shield turns a player's blow into a perfect block
+  at `perfectBlock.vsPlayerScale` (0.35) of the level's parry chance, at most once per
+  `cooldownTicks` (`NpcGuard.rollsPerfectAgainstPlayer`).
   `/ancientempires morale <state> [radius]` (op) forces the looked-at NPC, or its side within
   the radius, into steady, wavering, routing, shattered, or surrendered, for testing.
 - Tuning history (user, first battle tests): routs were too eager (now `routAt` 12, `oddsWeight`

@@ -205,6 +205,7 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.BooleanValue PARRY_ENABLED;
     private static final ForgeConfigSpec.IntValue PARRY_WINDOW;
     private static final ForgeConfigSpec.IntValue PARRY_COOLDOWN;
+    private static final ForgeConfigSpec.DoubleValue PARRY_VS_PLAYER;
     private static final ForgeConfigSpec.IntValue PARRY_STAGGER;
     private static final ForgeConfigSpec.ConfigValue<List<? extends Double>> PARRY_CHANCE;
     private static final ForgeConfigSpec.ConfigValue<List<? extends Integer>> PARRY_ERROR;
@@ -904,6 +905,9 @@ public final class AncientEmpiresConfig
         PARRY_COOLDOWN = builder
                 .comment("A raise counts for a perfect block only this many ticks after the last raise, so tapping the shield does not farm them.")
                 .defineInRange("cooldownTicks", 24, 0, 200);
+        PARRY_VS_PLAYER = builder
+                .comment("A player's swing shows no wind-up for an NPC to time against, so against players a shield NPC whose raised shield takes a hit turns it into a perfect block at this fraction of its skill's chanceByTier (a recruit almost never, a champion now and then), at most once per cooldownTicks.")
+                .defineInRange("vsPlayerScale", 0.35D, 0.0D, 1.0D);
         PARRY_STAGGER = builder
                 .comment("Ticks an attacker is staggered by a perfect block: slowed, and no swing.")
                 .defineInRange("staggerTicks", 20, 0, 100);
@@ -1330,6 +1334,7 @@ public final class AncientEmpiresConfig
     public static boolean parryEnabled = true;
     public static int parryWindowTicks = 6;
     public static int parryCooldownTicks = 24;
+    public static double parryVsPlayerScale = 0.35D;
     public static int parryStaggerTicks = 20;
     public static List<? extends Double> parryChanceByTier = List.of(0.05D, 0.15D, 0.3D, 0.45D);
     public static List<? extends Integer> parryErrorByTier = List.of(6, 4, 3, 2);
@@ -1666,6 +1671,7 @@ public final class AncientEmpiresConfig
         parryEnabled = PARRY_ENABLED.get();
         parryWindowTicks = PARRY_WINDOW.get();
         parryCooldownTicks = PARRY_COOLDOWN.get();
+        parryVsPlayerScale = PARRY_VS_PLAYER.get();
         parryStaggerTicks = PARRY_STAGGER.get();
         parryChanceByTier = PARRY_CHANCE.get();
         parryErrorByTier = PARRY_ERROR.get();
