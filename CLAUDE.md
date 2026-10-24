@@ -390,6 +390,12 @@ its own unless noted). Before adding behavior, check what AW did first.
   hits from the front.
   For the same reason a fighting NPC standing still (no path) takes its heading from its head each
   tick, or the body swung toward the last walk whenever a knock or sidestep moved it.
+  An NPC hit by an NPC takes `combat.npcVsNpcKnockback` (0.3) of the knockback: full knockback shoved
+  a fighter out of reach mid-swing, so its swing missed and whoever hit first won. After its own
+  swing the shield stays down for the rest of the attack animation (the swing's recovery, at least
+  `followThroughTicks`). An NPC perfect-blocks only on a planned raise (`NpcGuard.isPlannedRaise`,
+  at its skill's chance); any other raise that happened to land just before a hit (very common
+  against fast spears) is an ordinary block.
   `/ancientempires morale <state> [radius]` (op) forces the looked-at NPC, or its side within
   the radius, into steady, wavering, routing, shattered, or surrendered, for testing.
 - Tuning history (user, first battle tests): routs were too eager (now `routAt` 12, `oddsWeight`

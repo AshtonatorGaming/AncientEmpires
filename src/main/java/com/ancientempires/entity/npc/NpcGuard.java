@@ -54,6 +54,8 @@ public final class NpcGuard
     int planFor = -1;
     int planSerial = -1;
     int planAt = Integer.MIN_VALUE;
+    /** The current raise was timed by the planner, so a perfect block may come of it. */
+    private boolean plannedRaise;
 
     NpcGuard(NpcEntity npc)
     {
@@ -89,11 +91,19 @@ public final class NpcGuard
         {
             this.npc.startUsingItem(InteractionHand.OFF_HAND);
             this.raisedAt = this.npc.tickCount;
+            // A raise counts as a perfect-block attempt only if the planner chose to try one for this swing.
+            this.plannedRaise = this.planAt != Integer.MIN_VALUE;
         }
     }
 
     /** Keeps the shield down for {@code ticks} (a swing's follow-through), on top of any longer hold. */
-    void holdDown(int ticks)
+    /** Whether this raise was a planned perfect-block attempt (NPCs only perfect-block on purpose). */
+    public boolean isPlannedRaise()
+    {
+        return this.plannedRaise;
+    }
+
+    public void holdDown(int ticks)
     {
         this.downUntil = Math.max(this.downUntil, this.npc.tickCount + ticks);
     }

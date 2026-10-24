@@ -972,6 +972,11 @@ public class NpcEntity extends PathfinderMob
         {
             return;
         }
+        if (this.getLastHurtByMob() instanceof NpcEntity && this.getLastHurtByMobTimestamp() == this.tickCount)
+        {
+            // Hit by another NPC: a lighter shove, so a fighter mid-swing is not pushed out of reach.
+            strength *= AncientEmpiresConfig.npcVsNpcKnockback;
+        }
         super.knockback(strength, x, z);
     }
 

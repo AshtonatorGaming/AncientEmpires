@@ -74,6 +74,12 @@ public final class Parry
         {
             return false;
         }
+        if (defender instanceof NpcEntity npc && !npc.getGuard().isPlannedRaise())
+        {
+            // An NPC raising its shield for any other reason (its guard stance, after its own swing)
+            // just blocks; only a timed attempt can be perfect, at its skill's chance.
+            return false;
+        }
         Raises raises = RAISES.get(defender);
         if (raises == null)
         {

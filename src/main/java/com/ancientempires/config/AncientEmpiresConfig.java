@@ -65,6 +65,7 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.DoubleValue NPC_WINDUP_SCALE;
     private static final ForgeConfigSpec.DoubleValue MAX_SPEED;
     private static final ForgeConfigSpec.DoubleValue NPC_VS_NPC_DAMAGE;
+    private static final ForgeConfigSpec.DoubleValue NPC_VS_NPC_KNOCKBACK;
     private static final ForgeConfigSpec.DoubleValue ENGAGE_RANGE_FACTOR;
 
     private static final ForgeConfigSpec.BooleanValue SIDEARM_ENABLED;
@@ -455,6 +456,9 @@ public final class AncientEmpiresConfig
         NPC_VS_NPC_DAMAGE = builder
                 .comment("Damage an NPC deals to another NPC, as a fraction, so battles between them last longer. Fights with players are unchanged.")
                 .defineInRange("npcVsNpcDamage", 0.7D, 0.05D, 4.0D);
+        NPC_VS_NPC_KNOCKBACK = builder
+                .comment("Knockback an NPC takes from another NPC's hit, as a fraction of vanilla's. Full knockback shoved the one hit out of reach mid-swing, so its swing missed and whoever hit first won.")
+                .defineInRange("npcVsNpcKnockback", 0.3D, 0.0D, 2.0D);
         ENGAGE_RANGE_FACTOR = builder
                 .comment("A swing starts only inside this fraction of the weapon's reach, so a target stepping back during the wind-up is still hit. The hit checks the full reach. 1.0 swings from the edge.")
                 .defineInRange("engageRangeFactor", 0.85D, 0.5D, 1.0D);
@@ -1185,6 +1189,7 @@ public final class AncientEmpiresConfig
     public static double npcWindupScale = 1.25D;
     public static double maxSpeed = 1.14D;
     public static double npcVsNpcDamage = 0.7D;
+    public static double npcVsNpcKnockback = 0.3D;
     public static double engageRangeFactor = 0.85D;
 
     public static boolean sidearmEnabled = true;
@@ -1521,6 +1526,7 @@ public final class AncientEmpiresConfig
         npcWindupScale = NPC_WINDUP_SCALE.get();
         maxSpeed = MAX_SPEED.get();
         npcVsNpcDamage = NPC_VS_NPC_DAMAGE.get();
+        npcVsNpcKnockback = NPC_VS_NPC_KNOCKBACK.get();
         engageRangeFactor = ENGAGE_RANGE_FACTOR.get();
 
         sidearmEnabled = SIDEARM_ENABLED.get();

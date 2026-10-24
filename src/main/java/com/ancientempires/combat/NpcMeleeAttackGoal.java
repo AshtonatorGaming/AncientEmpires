@@ -301,6 +301,8 @@ public class NpcMeleeAttackGoal extends Goal
         this.npc.closeAttackWindow();
         // Plus a short pause between swings so weapons are not spammed (combat.attackPause, 0 off).
         this.recoveryLeft = swing.recoveryTicks() + AncientEmpiresConfig.attackPause;
+        // The shield stays down until the attack animation has played out, as a player's would.
+        this.npc.getGuard().holdDown(Math.max(AncientEmpiresConfig.shieldFollowThroughTicks, swing.recoveryTicks()));
         this.phase = Phase.APPROACH;
         this.active = null;
         this.stoppedForWindup = false;
