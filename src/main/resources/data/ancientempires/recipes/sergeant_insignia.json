@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {"tag": "forge:ingots/iron"},
+    {"tag": "forge:ingots/iron"},
+    {"item": "minecraft:leather"},
+    {"tag": "forge:dyes/red"}
+  ],
+  "result": {"item": "ancientempires:sergeant_insignia"}
+}

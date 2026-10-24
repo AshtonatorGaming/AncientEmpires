@@ -143,6 +143,7 @@
                      },
                      {
                          "id":  "norska",
+                         "ranks":  {"sergeant":  "Huscarl", "captain":  "Hersir", "general":  "Jarl"},
                          "standing":  -1000,
                          "kill":  -100,
                          "trade":  2,
@@ -1502,6 +1503,7 @@
                      },
                      {
                          "id":  "monster",
+                         "command":  "pack",
                          "fearless":  true,
                          "nightLights":  false,
                          "standing":  -1000,
@@ -1537,6 +1539,7 @@
                      },
                      {
                          "id":  "beast",
+                         "command":  "pack",
                          "nightLights":  false,
                          "standing":  -1000,
                          "kill":  -100,
@@ -1716,6 +1719,7 @@
                      },
                      {
                          "id":  "giant",
+                         "command":  "pack",
                          "nightLights":  false,
                          "standing":  -1000,
                          "kill":  -100,

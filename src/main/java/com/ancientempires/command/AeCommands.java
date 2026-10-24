@@ -4,6 +4,7 @@ import com.ancientempires.AncientEmpires;
 import com.ancientempires.entity.npc.NpcEntity;
 import com.ancientempires.entity.npc.NpcFactions;
 import com.ancientempires.entity.npc.NpcJobGoal;
+import com.ancientempires.entity.npc.NpcRank;
 import com.ancientempires.entity.npc.NpcStandings;
 import com.ancientempires.network.ModNetwork;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
@@ -30,6 +31,7 @@ import net.minecraftforge.fml.common.Mod;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
@@ -59,6 +61,12 @@ public final class AeCommands
         dispatcher.register(Commands.literal(AncientEmpires.MOD_ID)
                 .then(Commands.literal("work")
                         .executes(AeCommands::work))
+                .then(Commands.literal("rank")
+                        .requires(source -> source.hasPermission(2))
+                        .then(Commands.argument("rank", StringArgumentType.word())
+                                .suggests((context, builder) -> SharedSuggestionProvider.suggest(
+                                        Arrays.stream(NpcRank.values()).map(NpcRank::id), builder))
+                                .executes(AeCommands::rank)))
                 .then(Commands.literal("level")
                         .executes(context -> level(context, -1))
                         .then(Commands.argument("level", IntegerArgumentType.integer(1, 100))
@@ -113,6 +121,21 @@ public final class AeCommands
         EntityHitResult hit = ProjectileUtil.getEntityHitResult(player, eye, end, player.getBoundingBox().expandTowards(end.subtract(eye)).inflate(1.0D),
                 entity -> entity instanceof NpcEntity, 64.0D);
         return hit != null && hit.getEntity() instanceof NpcEntity npc && npc.canOpenInventory(player) ? npc : null;
+    }
+
+    /** Sets the looked-at NPC's rank (admins). */
+    private static int rank(CommandContext<CommandSourceStack> context) throws CommandSyntaxException
+    {
+        NpcEntity npc = lookedAt(context.getSource().getPlayerOrException());
+        NpcRank rank = NpcRank.byName(StringArgumentType.getString(context, "rank"));
+        if (npc == null || rank == null)
+        {
+            context.getSource().sendFailure(Component.translatable(npc == null ? "commands.ancientempires.work.none" : "commands.ancientempires.rank.unknown"));
+            return 0;
+        }
+        npc.setRank(rank);
+        context.getSource().sendSuccess(() -> Component.translatable("message.ancientempires.npc.promoted", npc.getDisplayName(), npc.getRankName()), false);
+        return 1;
     }
 
     /** The looked-at NPC's level and XP; with a number (admins), sets the level. */

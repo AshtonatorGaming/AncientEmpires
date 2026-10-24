@@ -8,13 +8,15 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
  * Command (DESIGN Tier 1): a commander inspires the allied soldiers around it,
  * who hit harder and stand better armoured while near it, with any melee
- * weapon. Leaders (skill tier {@code command.minTier} and up) command; an elite
- * leader inspires {@code eliteScale} as strongly. When a commander falls, the
+ * weapon. Every rank above soldier commands ({@link NpcRank}), with the strength and
+ * reach of {@code command.strengthByRank} and {@code radiusByRank}; a faction with
+ * {@code command: none} has no commanders. When a commander falls, the
  * highest-ranked allied soldier near it takes command, at
  * {@code successionScale} of the strength, and turns on the commander's killer
  * (its last order, until orders exist). Inspired is also what morale will read.
@@ -42,12 +44,23 @@ public final class NpcCommand
         {
             return npc.getInheritedCommand();
         }
-        int tier = npc.getSkillTier();
-        if (tier < AncientEmpiresConfig.commandMinTier)
+        if (NpcFactions.commandStyle(npc.getFaction()) == NpcFactions.CommandStyle.NONE)
         {
             return 0.0F;
         }
-        return tier >= 3 ? (float) AncientEmpiresConfig.commandEliteScale : 1.0F;
+        return (float) byRank(AncientEmpiresConfig.commandStrengthByRank, npc.getRank());
+    }
+
+    /** How far the aura reaches: the rank's reach, or a captain's for a soldier holding inherited command. */
+    static double radius(NpcEntity npc)
+    {
+        double radius = byRank(AncientEmpiresConfig.commandRadiusByRank, npc.getRank());
+        return radius > 0.0D ? radius : byRank(AncientEmpiresConfig.commandRadiusByRank, NpcRank.CAPTAIN);
+    }
+
+    static double byRank(List<? extends Number> values, NpcRank rank)
+    {
+        return values.isEmpty() ? 0.0D : values.get(Math.min(rank.ordinal(), values.size() - 1)).doubleValue();
     }
 
     /** A commander's tick: inspire the allied soldiers in reach. */
@@ -59,7 +72,7 @@ public final class NpcCommand
             return;
         }
         commander.level().getProfiler().push("ancientempires_command");
-        double radius = AncientEmpiresConfig.commandAuraRadius;
+        double radius = radius(commander);
         int until = AncientEmpiresConfig.commandAuraTicks * 2 + 20;
         for (NpcEntity ally : commander.level().getEntitiesOfClass(NpcEntity.class, commander.getBoundingBox().inflate(radius),
                 other -> other != commander && other.isAlive() && other.getNpcPath().combat() && commander.isAlly(other)))
@@ -150,9 +163,9 @@ public final class NpcCommand
         return (float) Math.max(floor, strength * scale);
     }
 
-    /** Who inherits: the highest skill tier, then the healthiest. */
+    /** Who inherits: the highest rank, then the highest level, then the healthiest. */
     private static double rank(NpcEntity npc)
     {
-        return npc.getSkillTier() * 1000.0D + npc.getHealth();
+        return npc.getRank().ordinal() * 10000.0D + npc.getLevel() * 100.0D + npc.getHealth();
     }
 }

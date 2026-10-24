@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {"tag": "forge:gems/diamond"},
+    {"tag": "forge:ingots/gold"},
+    {"tag": "forge:ingots/gold"},
+    {"tag": "forge:dyes/purple"}
+  ],
+  "result": {"item": "ancientempires:general_insignia"}
+}

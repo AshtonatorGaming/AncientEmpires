@@ -203,12 +203,12 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.ConfigValue<List<? extends Double>> PARRY_CHANCE;
     private static final ForgeConfigSpec.ConfigValue<List<? extends Integer>> PARRY_ERROR;
     private static final ForgeConfigSpec.BooleanValue COMMAND_ENABLED;
-    private static final ForgeConfigSpec.IntValue COMMAND_MIN_TIER;
-    private static final ForgeConfigSpec.DoubleValue COMMAND_RADIUS;
+    private static final ForgeConfigSpec.ConfigValue<List<? extends Double>> COMMAND_STRENGTH;
+    private static final ForgeConfigSpec.ConfigValue<List<? extends Double>> COMMAND_RADIUS;
+    private static final ForgeConfigSpec.ConfigValue<List<? extends Integer>> COMMAND_PROMOTE_LEVELS;
     private static final ForgeConfigSpec.IntValue COMMAND_TICKS;
     private static final ForgeConfigSpec.DoubleValue COMMAND_DAMAGE;
     private static final ForgeConfigSpec.DoubleValue COMMAND_ARMOR;
-    private static final ForgeConfigSpec.DoubleValue COMMAND_ELITE_SCALE;
     private static final ForgeConfigSpec.DoubleValue COMMAND_SUCCESSION_RANGE;
     private static final ForgeConfigSpec.DoubleValue COMMAND_SUCCESSION_SCALE;
     private static final ForgeConfigSpec.DoubleValue COMMAND_MIN_SCALE;
@@ -887,14 +887,17 @@ public final class AncientEmpiresConfig
                 .defineList("timingErrorByTier", List.of(6, 4, 3, 2), value -> value instanceof Integer ticks && ticks >= 0 && ticks <= 40);
         builder.pop();
 
-        builder.comment("Command: leaders inspire the allied soldiers around them (more damage with any melee weapon, more armour). When a commander falls, the highest-ranked allied soldier near it takes command, weakened, and turns on the killer.").push("command");
+        builder.comment("Command: ranked soldiers (sergeants, captains, generals) inspire the allied soldiers around them (more damage with any melee weapon, more armour). When a commander falls, the highest-ranked allied soldier near it takes command, weakened, and turns on the killer.").push("command");
         COMMAND_ENABLED = builder.comment("Commanders and their aura.").define("enabled", true);
-        COMMAND_MIN_TIER = builder.comment("Skill tier that commands: 2 leaders, 3 elite leaders only (0 ordinary, 1 elite).").defineInRange("minTier", 2, 0, 3);
-        COMMAND_RADIUS = builder.comment("Blocks the aura reaches.").defineInRange("auraRadius", 12.0D, 2.0D, 48.0D);
+        COMMAND_STRENGTH = builder.comment("Aura strength by rank: soldier, sergeant, captain, general (0 commands nobody). Faction leaders are captains, elite leaders generals.")
+                .defineList("strengthByRank", List.of(0.0D, 0.5D, 1.0D, 1.25D), value -> value instanceof Double d && d >= 0.0D && d <= 4.0D);
+        COMMAND_RADIUS = builder.comment("Blocks the aura reaches, by rank.")
+                .defineList("radiusByRank", List.of(0.0D, 8.0D, 12.0D, 16.0D), value -> value instanceof Double d && d >= 0.0D && d <= 64.0D);
+        COMMAND_PROMOTE_LEVELS = builder.comment("Level a player's soldier needs to be promoted to each rank with its baton: soldier, sergeant, captain, general.")
+                .defineList("promoteLevels", List.of(1, 6, 12, 18), value -> value instanceof Integer i && i >= 1 && i <= 100);
         COMMAND_TICKS = builder.comment("Ticks between aura pulses; it lasts two pulses and a second, so it lapses soon after leaving.").defineInRange("auraTicks", 40, 10, 400);
         COMMAND_DAMAGE = builder.comment("Extra melee damage for the inspired, as a fraction (0.15 is 15% more).").defineInRange("damageBonus", 0.15D, 0.0D, 2.0D);
         COMMAND_ARMOR = builder.comment("Extra armour points for the inspired.").defineInRange("armorBonus", 2.0D, 0.0D, 20.0D);
-        COMMAND_ELITE_SCALE = builder.comment("How much stronger an elite leader's aura is.").defineInRange("eliteScale", 1.25D, 1.0D, 4.0D);
         COMMAND_SUCCESSION_RANGE = builder.comment("Blocks from a fallen commander within which a successor is found.").defineInRange("successionRange", 16.0D, 2.0D, 64.0D);
         COMMAND_SUCCESSION_SCALE = builder.comment("A successor's aura, as a fraction of the fallen commander's.").defineInRange("successionScale", 0.6D, 0.1D, 1.0D);
         COMMAND_MIN_SCALE = builder.comment("The weakest a passed-down aura gets, however many times command passes.").defineInRange("minScale", 0.3D, 0.05D, 1.0D);
@@ -1293,12 +1296,12 @@ public final class AncientEmpiresConfig
     public static List<? extends Double> parryChanceByTier = List.of(0.05D, 0.15D, 0.3D, 0.45D);
     public static List<? extends Integer> parryErrorByTier = List.of(6, 4, 3, 2);
     public static boolean commandEnabled = true;
-    public static int commandMinTier = 2;
-    public static double commandAuraRadius = 12.0D;
+    public static List<? extends Double> commandStrengthByRank = List.of(0.0D, 0.5D, 1.0D, 1.25D);
+    public static List<? extends Double> commandRadiusByRank = List.of(0.0D, 8.0D, 12.0D, 16.0D);
+    public static List<? extends Integer> commandPromoteLevels = List.of(1, 6, 12, 18);
     public static int commandAuraTicks = 40;
     public static double commandDamageBonus = 0.15D;
     public static double commandArmorBonus = 2.0D;
-    public static double commandEliteScale = 1.25D;
     public static double commandSuccessionRange = 16.0D;
     public static double commandSuccessionScale = 0.6D;
     public static double commandMinScale = 0.3D;
@@ -1619,12 +1622,12 @@ public final class AncientEmpiresConfig
         parryChanceByTier = PARRY_CHANCE.get();
         parryErrorByTier = PARRY_ERROR.get();
         commandEnabled = COMMAND_ENABLED.get();
-        commandMinTier = COMMAND_MIN_TIER.get();
-        commandAuraRadius = COMMAND_RADIUS.get();
+        commandStrengthByRank = COMMAND_STRENGTH.get();
+        commandRadiusByRank = COMMAND_RADIUS.get();
+        commandPromoteLevels = COMMAND_PROMOTE_LEVELS.get();
         commandAuraTicks = COMMAND_TICKS.get();
         commandDamageBonus = COMMAND_DAMAGE.get();
         commandArmorBonus = COMMAND_ARMOR.get();
-        commandEliteScale = COMMAND_ELITE_SCALE.get();
         commandSuccessionRange = COMMAND_SUCCESSION_RANGE.get();
         commandSuccessionScale = COMMAND_SUCCESSION_SCALE.get();
         commandMinScale = COMMAND_MIN_SCALE.get();

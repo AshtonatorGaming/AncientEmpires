@@ -191,8 +191,7 @@ its own unless noted). Before adding behavior, check what AW did first.
   `factionMaxByTier` 5/12/16/20); older saves roll on load. Owned NPCs start at 1. Level-ups
   sparkle, chime, and tell the owner (`announce`). The inventory role label reads
   "Archer, Lv 13", its tooltip the band and XP. `/ancientempires level` shows the looked-at
-  NPC's; admins add a number to set it. Next: ranks (sergeant, captain, general, by promotion
-  item and level), then squads under leaders and squad morale.
+  NPC's; admins add a number to set it. Next: squads under leaders and squad morale.
 - Paths (`NpcPath`, saved as `AePath`; old `AeCalling` and `AeRole` saves still load): the locked
   path. SETTLER (flavor, undecided), WORKER (trades, traders, priests, bards, faction
   townsfolk; runs), SOLDIER (fights). Old saves' `commoner` and `civilian` map to the
@@ -417,13 +416,25 @@ its own unless noted). Before adding behavior, check what AW did first.
   a time every min to max delay while a player is in range, up to most-at-once and a total. REDSTONE:
   one per pulse. Dark-only and hidden (not drawn, no collision) toggles. Admin-only; one distance
   check a second.
-- Command (`NpcCommand`, `command` config, DESIGN Tier 1): leaders (skill tier `minTier` 2 and up;
-  elite leaders at `eliteScale`) pulse an aura every `auraTicks` over allied soldiers within
-  `auraRadius`: `damageBonus` (15%) melee damage with any weapon and `armorBonus` armour, as
+- Ranks (`NpcRank`, leadership apart from level): soldier, sergeant, captain, general, synced
+  for the inventory label ("Captain, Lv 14"; the tooltip keeps the role). Faction leaders are
+  captains and elite leaders generals; elite soldiers are better troops (a higher starting
+  level), not sergeants by row, since many are monsters (squads will pick a sergeant from
+  them). A player's soldier is promoted one rank at a time by using that rank's insignia on it
+  (`InsigniaItem`: sergeant, captain, general; crafted, used up, no batons; the user dislikes
+  batons) once it has the level (`command.promoteLevels` 6/12/18). Saved as
+  `AeRank` and packed. Admins: `/ancientempires rank <rank>`, or an insignia in creative on
+  anyone. factions.json may name the ranks (`ranks`: Norska Huscarl, Hersir, Jarl) and set
+  `command`: `ranks` (default), `pack` (beast, monster, giant: Packleader, Alpha, Great Alpha;
+  pack behavior comes with squads), or `none` (no commanders). Commanders use any weapon.
+- Command (`NpcCommand`, `command` config, DESIGN Tier 1): every rank above soldier pulses an
+  aura every `auraTicks` at its rank's `strengthByRank` (0.5, 1, 1.25) over allied soldiers
+  within `radiusByRank` (8, 12, 16): `damageBonus` (15%) melee damage with any weapon and `armorBonus` armour, as
   transient modifiers that lapse soon after leaving. A fallen commander's command passes to the
-  highest-ranked allied soldier within `successionRange` (none if another commander is there), at
+  highest-ranked (then highest-level) allied soldier within `successionRange` (none if another commander is there), at
   `successionScale` (floor `minScale`), saved as `AeCommand`, and it turns on the killer.
-  The aura also lifts morale (`morale.inspiredBonus`), and a commander's death shocks its army.
+  The aura also lifts morale (`morale.inspiredBonus`), and a commander's death shocks its army
+  by its strength (a sergeant's less than a general's).
 - Skins: a roster row assigns a skin type, which resolved to its pool's first skin, so every
   Empire soldier looked alike. `NpcSkins.randomVariant` pins a random skin of the pool on first
   placement; a repacked scroll's saved skin is applied after the row, so it keeps its own.

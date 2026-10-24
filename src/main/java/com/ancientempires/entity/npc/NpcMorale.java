@@ -419,9 +419,9 @@ public final class NpcMorale
     /**
      * A death felt by those around it: allies close by take {@code allyDeathShock},
      * and if a commander fell, every ally in {@code commanderDeathRange} takes
-     * {@code commanderDeathShock}. The killer, if a soldier, takes heart.
+     * {@code commanderDeathShock} times its command strength. The killer, if a soldier, takes heart.
      */
-    static void onDeath(NpcEntity fallen, boolean commander, @Nullable Entity killer)
+    static void onDeath(NpcEntity fallen, float command, @Nullable Entity killer)
     {
         if (!AncientEmpiresConfig.moraleEnabled)
         {
@@ -431,6 +431,7 @@ public final class NpcMorale
         {
             victor.getMorale().addShock((float) AncientEmpiresConfig.moraleKillBoost);
         }
+        boolean commander = command > 0.0F;
         double allyRange = AncientEmpiresConfig.moraleAllyDeathRange;
         double range = commander ? Math.max(allyRange, AncientEmpiresConfig.moraleCommanderDeathRange) : allyRange;
         if (range <= 0.0D)
@@ -447,7 +448,8 @@ public final class NpcMorale
             }
             if (commander)
             {
-                shock += (float) AncientEmpiresConfig.moraleCommanderDeathShock;
+                // Scaled by rank: a sergeant's fall shakes less than a general's.
+                shock += (float) AncientEmpiresConfig.moraleCommanderDeathShock * command;
             }
             ally.getMorale().addShock(-shock);
         }

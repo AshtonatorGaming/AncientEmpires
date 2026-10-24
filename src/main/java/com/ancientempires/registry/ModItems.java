@@ -2,8 +2,10 @@ package com.ancientempires.registry;
 
 import com.ancientempires.AncientEmpires;
 import com.ancientempires.block.WorksiteBlockEntity;
+import com.ancientempires.entity.npc.NpcRank;
 import com.ancientempires.entity.npc.NpcRoster;
 import com.ancientempires.item.BandageItem;
+import com.ancientempires.item.InsigniaItem;
 import com.ancientempires.item.NpcSpawnEggItem;
 import com.ancientempires.item.WarHornItem;
 import com.ancientempires.item.WorksiteUpgradeItem;
@@ -42,6 +44,13 @@ public final class ModItems
     /** Rallies, calls to arms, or stands down the owner's NPCs in range. */
     public static final RegistryObject<Item> WAR_HORN = ITEMS.register("war_horn",
             () -> new WarHornItem(new Item.Properties().stacksTo(1)));
+    /** Rank insignia: used on a soldier of the level, promotes it (sergeant, captain, general). */
+    public static final RegistryObject<Item> SERGEANT_INSIGNIA = ITEMS.register("sergeant_insignia",
+            () -> new InsigniaItem(NpcRank.SERGEANT, new Item.Properties().stacksTo(16)));
+    public static final RegistryObject<Item> CAPTAIN_INSIGNIA = ITEMS.register("captain_insignia",
+            () -> new InsigniaItem(NpcRank.CAPTAIN, new Item.Properties().stacksTo(16)));
+    public static final RegistryObject<Item> GENERAL_INSIGNIA = ITEMS.register("general_insignia",
+            () -> new InsigniaItem(NpcRank.GENERAL, new Item.Properties().stacksTo(16)));
     public static final RegistryObject<Item> NPC_SPAWNER = ITEMS.register("npc_spawner",
             () -> new BlockItem(ModBlocks.NPC_SPAWNER.get(), new Item.Properties()));
     public static final RegistryObject<Item> SETTLERS_POST = ITEMS.register("settlers_post",

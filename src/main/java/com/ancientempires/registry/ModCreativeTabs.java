@@ -23,6 +23,9 @@ public final class ModCreativeTabs
                         output.accept(ModItems.BANDAGE.get());
                         output.accept(ModItems.BANDAGE_ROLL.get());
                         output.accept(ModItems.WAR_HORN.get());
+                        output.accept(ModItems.SERGEANT_INSIGNIA.get());
+                        output.accept(ModItems.CAPTAIN_INSIGNIA.get());
+                        output.accept(ModItems.GENERAL_INSIGNIA.get());
                         output.accept(ModItems.SETTLERS_POST.get());
                         output.accept(ModItems.TOWN_HALL.get());
                         output.accept(ModItems.CROP_FARM.get());

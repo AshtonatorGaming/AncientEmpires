@@ -20,6 +20,7 @@ import brachy.modularui.widgets.TextWidget;
 import com.ancientempires.entity.npc.NpcEntity;
 import com.ancientempires.entity.npc.NpcInventory;
 import com.ancientempires.entity.npc.NpcPath;
+import com.ancientempires.entity.npc.NpcRank;
 import com.ancientempires.inventory.NpcLayout;
 import com.ancientempires.inventory.NpcMenu;
 import com.ancientempires.network.ModNetwork;
@@ -298,6 +299,11 @@ public final class NpcInventoryPanel
                 .tooltipDynamic(tooltip ->
                 {
                     tooltip.addLine(Component.translatable(choosable ? "gui.ancientempires.npc.path" : "gui.ancientempires.npc.role").getString());
+                    if (npc.getRank() != NpcRank.SOLDIER)
+                    {
+                        tooltip.addLine(Component.translatable("gui.ancientempires.npc.rank_role", npc.getRankName(),
+                                Component.translatable(NpcPath.translationKey(npc.getRoleId()))).getString());
+                    }
                     if (npc.levels())
                     {
                         // The band and the way to the next level.
@@ -309,11 +315,13 @@ public final class NpcInventoryPanel
                 .tooltipAutoUpdate(true);
     }
 
-    /** The role, with the level for NPCs that level: "Archer, Lv 13". */
+    /** The role (or a ranked soldier's rank), with the level for NPCs that level: "Archer, Lv 13", "Captain, Lv 14". */
     private static Component roleLabel(NpcEntity npc)
     {
         Component role = Component.translatable(NpcPath.translationKey(npc.getRoleId()));
-        return npc.levels() ? Component.translatable("gui.ancientempires.npc.role_level", role, npc.getLevel()) : role;
+        // A ranked soldier is known by its rank; the tooltip still names its role.
+        Component name = npc.getRank() != NpcRank.SOLDIER ? npc.getRankName() : role;
+        return npc.levels() ? Component.translatable("gui.ancientempires.npc.role_level", name, npc.getLevel()) : name;
     }
 
     private static boolean mayChoose(NpcEntity npc)

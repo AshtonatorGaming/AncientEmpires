@@ -18,6 +18,7 @@ import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -51,9 +52,34 @@ public final class NpcFactions
      * evil factions. {@code nightLights}: its guards carry torches at night (off for beasts,
      * giants, demons, and the like); missing means yes.
      * {@code fearless}: its soldiers never waver or rout (morale); missing means no.
+     * {@code ranks}: its own names for sergeant, captain, general (Norska jarls). {@code command}:
+     * {@code ranks} (default), {@code pack} (beasts: the leaders are alphas), or {@code none}.
      */
-    public record Faction(String id, Set<String> hostile, int standing, int kill, int trade, boolean huntsTownsfolk, boolean nightLights, boolean fearless)
+    public record Faction(String id, Set<String> hostile, int standing, int kill, int trade, boolean huntsTownsfolk, boolean nightLights, boolean fearless,
+            Map<String, String> rankNames, CommandStyle command)
     {
+    }
+
+    /** How a faction is led: by ranks, as a pack under alphas, or not at all. */
+    public enum CommandStyle
+    {
+        RANKS,
+        PACK,
+        NONE
+    }
+
+    /** A faction's own name for a rank, or null for the default. */
+    @Nullable
+    public static String rankName(String id, NpcRank rank)
+    {
+        Faction faction = get(id);
+        return faction == null ? null : faction.rankNames().get(rank.id());
+    }
+
+    public static CommandStyle commandStyle(String id)
+    {
+        Faction faction = get(id);
+        return faction == null ? CommandStyle.RANKS : faction.command();
     }
 
     @Nullable
@@ -192,13 +218,28 @@ public final class NpcFactions
                 FACTIONS.put(id, new Faction(id, Set.copyOf(hostile), integer(object, "standing"), integer(object, "kill"),
                         integer(object, "trade"), "townsfolk".equals(object.has("hunts") ? object.get("hunts").getAsString() : ""),
                         !object.has("nightLights") || object.get("nightLights").getAsBoolean(),
-                        object.has("fearless") && object.get("fearless").getAsBoolean()));
+                        object.has("fearless") && object.get("fearless").getAsBoolean(), rankNames(object),
+                        object.has("command") ? CommandStyle.valueOf(object.get("command").getAsString().toUpperCase(Locale.ROOT)) : CommandStyle.RANKS));
             }
         }
         catch (Exception exception)
         {
             AncientEmpires.LOGGER.error("Could not read the faction table", exception);
         }
+    }
+
+    private static Map<String, String> rankNames(JsonObject object)
+    {
+        if (!object.has("ranks"))
+        {
+            return Map.of();
+        }
+        Map<String, String> names = new HashMap<>();
+        for (Map.Entry<String, JsonElement> entry : object.getAsJsonObject("ranks").entrySet())
+        {
+            names.put(entry.getKey(), entry.getValue().getAsString());
+        }
+        return Map.copyOf(names);
     }
 
     private static int integer(JsonObject object, String key)

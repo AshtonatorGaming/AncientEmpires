@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {"tag": "forge:ingots/gold"},
+    {"tag": "forge:ingots/gold"},
+    {"item": "minecraft:leather"},
+    {"tag": "forge:dyes/blue"}
+  ],
+  "result": {"item": "ancientempires:captain_insignia"}
+}

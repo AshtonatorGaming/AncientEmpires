@@ -11,6 +11,7 @@ import com.ancientempires.combat.NpcMeleeAttackGoal;
 import com.ancientempires.combat.WeaponClassifier;
 import com.ancientempires.config.AncientEmpiresConfig;
 import com.ancientempires.inventory.NpcMenu;
+import com.ancientempires.item.InsigniaItem;
 import com.ancientempires.item.WarHornItem;
 import com.ancientempires.registry.ModItems;
 import net.minecraft.core.BlockPos;
@@ -124,6 +125,9 @@ public class NpcEntity extends PathfinderMob
     /** Level 1 to {@code leveling.maxLevel}, and the XP toward the next, for the inventory. */
     private static final EntityDataAccessor<Byte> DATA_LEVEL = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<Float> DATA_XP = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.FLOAT);
+    /** {@link NpcRank} ordinal, for the inventory label. */
+    private static final EntityDataAccessor<Byte> DATA_RANK = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.BYTE);
+    private static final String RANK_KEY = "AeRank";
     private static final String LEVEL_KEY = "AeLevel";
     private static final String XP_KEY = "AeXp";
     private static final UUID LEVEL_HEALTH_ID = UUID.fromString("3c2b8f4e-71d9-4a8b-9e57-0f6a2d1c5b93");
@@ -197,6 +201,9 @@ public class NpcEntity extends PathfinderMob
     private int skillTier = -1;
     /** Saved per-NPC skill tier ({@code AeSkill}); below zero when unset. */
     private int skillOverride = -1;
+    /** A promoted rank ({@code AeRank}); null for the roster's. */
+    @Nullable
+    private NpcRank rankOverride;
     /** Cached roster rank; null until first asked. */
     @Nullable
     private String rosterSubtype;
@@ -295,6 +302,7 @@ public class NpcEntity extends PathfinderMob
         this.entityData.define(DATA_STAGGERED, false);
         this.entityData.define(DATA_BADGE, (byte) 0);
         this.entityData.define(DATA_LEVEL, (byte) 1);
+        this.entityData.define(DATA_RANK, (byte) 0);
         this.entityData.define(DATA_XP, 0.0F);
     }
 
@@ -1466,6 +1474,32 @@ public class NpcEntity extends PathfinderMob
         return NpcLeveling.band(this.getLevel(), AncientEmpiresConfig.levelMax);
     }
 
+    /**
+     * Leadership: a promoted rank ({@code AeRank}), else the roster's (faction
+     * leaders are captains, elite leaders generals). The client reads the synced copy.
+     */
+    public NpcRank getRank()
+    {
+        if (this.level().isClientSide)
+        {
+            return NpcRank.byId(this.entityData.get(DATA_RANK));
+        }
+        return this.rankOverride != null ? this.rankOverride : NpcRank.ofTier(this.getSkillTier());
+    }
+
+    /** Promotes (or, for admins, sets) the rank. */
+    public void setRank(NpcRank rank)
+    {
+        this.rankOverride = rank;
+        this.entityData.set(DATA_RANK, (byte) rank.ordinal());
+    }
+
+    /** The rank's name in this NPC's faction (Huscarl, Alpha, Captain...). */
+    public Component getRankName()
+    {
+        return this.getRank().displayName(this.getFaction());
+    }
+
     /** Sets the level (admins, faction rolls, loading) and its stat gains. */
     public void setLevel(int level)
     {
@@ -2064,6 +2098,10 @@ public class NpcEntity extends PathfinderMob
         }
         tag.putInt(LEVEL_KEY, this.getLevel());
         tag.putFloat(XP_KEY, this.getXp());
+        if (this.rankOverride != null)
+        {
+            tag.putString(RANK_KEY, this.rankOverride.id());
+        }
         // Always written: the scroll may be the generic one, whose row would imply another path.
         tag.putString(PATH_KEY, this.getNpcPath().id());
         tag.putBoolean(LEVY_KEY, this.isLevied());
@@ -2465,6 +2503,11 @@ public class NpcEntity extends PathfinderMob
         {
             this.entityData.set(DATA_STATUS, status);
         }
+        byte rank = (byte) this.getRank().ordinal();
+        if (this.entityData.get(DATA_RANK) != rank)
+        {
+            this.entityData.set(DATA_RANK, rank);
+        }
         byte badge = (byte) NpcBadge.of(this).ordinal();
         if (this.entityData.get(DATA_BADGE) != badge)
         {
@@ -2582,6 +2625,10 @@ public class NpcEntity extends PathfinderMob
         if (hand != InteractionHand.MAIN_HAND || player.isSpectator())
         {
             return InteractionResult.PASS;
+        }
+        if (player.getItemInHand(hand).getItem() instanceof InsigniaItem insignia)
+        {
+            return insignia.promote(this, player, player.getItemInHand(hand));
         }
         if (!this.canOpenInventory(player))
         {
@@ -2713,9 +2760,9 @@ public class NpcEntity extends PathfinderMob
         if (!this.isRemoved() && !this.dead && !this.level().isClientSide)
         {
             // A commander falls: command passes to the best soldier near it, and its army feels it.
-            boolean commander = NpcCommand.strength(this) > 0.0F;
+            float command = NpcCommand.strength(this);
             NpcCommand.succeed(this, source.getEntity() instanceof LivingEntity killer ? killer : null);
-            NpcMorale.onDeath(this, commander, source.getEntity());
+            NpcMorale.onDeath(this, command, source.getEntity());
         }
         if (this.garrison && !this.isRemoved() && !this.dead && this.spawner() != null)
         {
@@ -2856,6 +2903,10 @@ public class NpcEntity extends PathfinderMob
         }
         tag.putInt(LEVEL_KEY, this.getLevel());
         tag.putFloat(XP_KEY, this.getXp());
+        if (this.rankOverride != null)
+        {
+            tag.putString(RANK_KEY, this.rankOverride.id());
+        }
         if (this.spawnerPos != null)
         {
             tag.putLong(SPAWNER_KEY, this.spawnerPos.asLong());
@@ -2869,6 +2920,14 @@ public class NpcEntity extends PathfinderMob
     {
         super.readAdditionalSaveData(tag);
         this.inheritedCommand = tag.getFloat(COMMAND_KEY);
+        if (tag.contains(RANK_KEY))
+        {
+            NpcRank rank = NpcRank.byName(tag.getString(RANK_KEY));
+            if (rank != null)
+            {
+                this.setRank(rank);
+            }
+        }
         if (tag.contains(LEVEL_KEY))
         {
             this.entityData.set(DATA_XP, tag.getFloat(XP_KEY));
