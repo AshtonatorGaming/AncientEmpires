@@ -207,6 +207,24 @@ public final class NpcGuard
      * {@code shield.strikeDelayTicks} after it came down. True once the NPC may
      * begin its swing.
      */
+    /** A foe with no shield in hand, or with its shield knocked out: it cannot block a blow. */
+    private static boolean cannotBlock(@Nullable LivingEntity target)
+    {
+        if (target == null)
+        {
+            return false;
+        }
+        if (target instanceof NpcEntity other)
+        {
+            return !other.hasShieldInOffhand() || other.isShieldDisabled();
+        }
+        if (target instanceof Player player && player.getCooldowns().isOnCooldown(player.getOffhandItem().getItem()))
+        {
+            return true;
+        }
+        return !WeaponClassifier.isShield(target.getOffhandItem()) && !WeaponClassifier.isShield(target.getMainHandItem());
+    }
+
     /** A mob with no wind-up that is after this NPC and close: bait it rather than open up to it. */
     private boolean baitsMob(@Nullable LivingEntity target)
     {
@@ -260,13 +278,17 @@ public final class NpcGuard
                 // A mob shows no wind-up: let its blow land on the shield, then riposte while it recovers.
                 return false;
             }
-            if (!riposte && now - this.raisedAt < AncientEmpiresConfig.shieldMinBlockTicks)
+            // A foe that cannot block is pressed: a short guard, then the kill. Against a shield, patience.
+            boolean press = cannotBlock(this.npc.getTarget());
+            int minBlock = press ? AncientEmpiresConfig.shieldPressMinBlockTicks : AncientEmpiresConfig.shieldMinBlockTicks;
+            if (!riposte && now - this.raisedAt < minBlock)
             {
                 return false;
             }
             // Not on the first allowed tick: a random beat later, so strikes are hard to time
             // and two guards do not open together.
-            if (!riposte && this.npc.getRandom().nextFloat() >= AncientEmpiresConfig.shieldStrikeChance)
+            double chance = press ? AncientEmpiresConfig.shieldPressStrikeChance : AncientEmpiresConfig.shieldStrikeChance;
+            if (!riposte && this.npc.getRandom().nextFloat() >= chance)
             {
                 return false;
             }

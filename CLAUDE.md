@@ -150,7 +150,9 @@ its own unless noted). Before adding behavior, check what AW did first.
   without the minimum. Behind a raised shield the NPC advances at `advanceSpeed` (AW: half).
   Between two guards, whoever starts readying a strike first goes (`strikesBefore`); the other
   holds its guard, blocks, and ripostes. Only between two guards: against a foe with no shield (always "readying")
-  deferring meant a shield NPC never got its turn. Past the minimum, a strike comes at a random beat
+  deferring meant a shield NPC never got its turn. Against a foe that cannot block (no shield, or
+  shield knocked out) a shield NPC presses: `shield.pressMinBlockTicks` (4) and `pressStrikeChance` (0.5)
+  replace the patient 12 and 0.15, so it still guards but goes for the kill. Past the minimum, a strike comes at a random beat
   (`strikeChance` per tick). Guard (`guardPoints`, like Chivalry stamina): blocked damage
   drains it, it recovers at `guardRegen`, and at zero the shield is knocked down for
   `guardBreakTicks`, so shield walls do not stalemate and players can break a turtle.

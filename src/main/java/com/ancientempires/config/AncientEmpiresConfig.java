@@ -119,6 +119,8 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.IntValue SHIELD_BASH_RECOVERY;
     private static final ForgeConfigSpec.IntValue SHIELD_FOLLOW_THROUGH;
     private static final ForgeConfigSpec.IntValue SHIELD_MOB_PATIENCE;
+    private static final ForgeConfigSpec.IntValue SHIELD_PRESS_MIN_BLOCK;
+    private static final ForgeConfigSpec.DoubleValue SHIELD_PRESS_STRIKE;
     private static final ForgeConfigSpec.IntValue SHIELD_DUEL_BLOCK_MIN;
     private static final ForgeConfigSpec.IntValue SHIELD_DUEL_BLOCK_MAX;
     private static final ForgeConfigSpec.IntValue SHIELD_DUEL_OPEN_MIN;
@@ -630,6 +632,10 @@ public final class AncientEmpiresConfig
         SHIELD_MOB_PATIENCE = builder
                 .comment("Against a mob (no wind-up to read), a shield NPC baits: shield up until the mob's blow lands on it, then ripostes while the mob's attack recovers. If the mob has not struck for this many ticks, it takes the opening anyway. Mobs that cannot hit back (not after this NPC, out of reach) are just attacked.")
                 .defineInRange("mobPatienceTicks", 40, 0, 400);
+        SHIELD_PRESS_MIN_BLOCK = builder
+                .comment("Against a foe that cannot block (no shield, or its shield knocked out) a shield NPC presses: its shield comes down after this many ticks up instead of minBlockTicks, and it strikes at pressStrikeChance per tick instead of strikeChance. It still guards; it just goes for the kill.")
+                .defineInRange("pressMinBlockTicks", 4, 0, 100);
+        SHIELD_PRESS_STRIKE = builder.defineInRange("pressStrikeChance", 0.5D, 0.01D, 1.0D);
         SHIELD_DUEL_BLOCK_MIN = builder
                 .comment("Duels (ToroQuest style): once the foe has struck, the shield goes up in spells of between duelBlockMin and duelBlockMax ticks (shorter up close), then stays down for between duelOpenMin and duelOpenMax while the NPC attacks. Half the time a blow on the shield cuts a spell to half a second. Lines keep the steady guard.")
                 .defineInRange("duelBlockMin", 20, 1, 400);
@@ -1282,6 +1288,8 @@ public final class AncientEmpiresConfig
     public static int shieldBashRecoveryTicks = 10;
     public static int shieldFollowThroughTicks = 8;
     public static int shieldMobPatienceTicks = 40;
+    public static int shieldPressMinBlockTicks = 4;
+    public static double shieldPressStrikeChance = 0.5D;
     public static int shieldDuelBlockMin = 20;
     public static int shieldDuelBlockMax = 80;
     public static int shieldDuelOpenMin = 30;
@@ -1629,6 +1637,8 @@ public final class AncientEmpiresConfig
         shieldBashRecoveryTicks = SHIELD_BASH_RECOVERY.get();
         shieldFollowThroughTicks = SHIELD_FOLLOW_THROUGH.get();
         shieldMobPatienceTicks = SHIELD_MOB_PATIENCE.get();
+        shieldPressMinBlockTicks = SHIELD_PRESS_MIN_BLOCK.get();
+        shieldPressStrikeChance = SHIELD_PRESS_STRIKE.get();
         shieldDuelBlockMin = SHIELD_DUEL_BLOCK_MIN.get();
         shieldDuelBlockMax = Math.max(shieldDuelBlockMin, SHIELD_DUEL_BLOCK_MAX.get());
         shieldDuelOpenMin = SHIELD_DUEL_OPEN_MIN.get();
