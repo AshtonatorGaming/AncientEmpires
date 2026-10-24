@@ -120,8 +120,13 @@ D. Banner Bearer: done (basic). Any banner in a soldier's off hand adds `morale.
    within `morale.range`, shown as a reason; its death shocks them `bannerDeathShock` (15). Later: a role
    label, faction banner rows, planting the banner as a rally point.
 E. Squads under leaders and a command screen (groups, formations, orders), then squad morale and patrols.
-F. Combat, agreed and player-doable: backstep dodge of visible wind-ups by skill; flanking raised
-   shields while still taking frontal openings.
+F. Combat, player-doable: done. Backstep dodge (`NpcMeleeAttackGoal.dodging`): an NPC without a shield,
+   `combat.dodgeLeadTicks` (6) before an NPC's visible wind-up lands, backsteps for `dodgeTicks` (7) at
+   `skill.dodgeChance` (0.1 to 0.4 by level), once per swing; players show no wind-up, so are not dodged.
+   Flanking (`shouldFlank`, `flank`): a fighter without a shield facing a raised shield (within
+   `flankAngle` 70 of its facing) circles the shorter way to its side, at striking distance; footwork
+   only runs while waiting, so a lowered shield is still struck at once.
+G. Banner bearer pose: hold the banner raised like a two-hander, not the small item (later, visual).
 
 1. Ancient Warfare baseline still missing: lance charges and other mounted tactics,
    vampire factions avoiding sunlight, day and night patrols, and the

@@ -57,6 +57,10 @@ public class NpcMeleeAttackGoal extends Goal
     private boolean backingOff;
     /** Ticks until the next duel check and stance roll. */
     private int duelCheck;
+    /** The swing (attacker id and window serial) a dodge was decided for, and ticks of backstep left. */
+    private int dodgeFor = -1;
+    private int dodgeSerial = -1;
+    private int dodgeLeft;
     /** Footwork: ticks left in the current sidestep, then ticks of standing. */
     private int stepLeft;
     private int stepRest;
@@ -182,6 +186,10 @@ public class NpcMeleeAttackGoal extends Goal
             return;
         }
         this.faceTarget(target);
+        if (this.dodging(target))
+        {
+            return;
+        }
 
         if (this.recoveryLeft > 0)
         {
@@ -786,6 +794,11 @@ public class NpcMeleeAttackGoal extends Goal
                 this.backingOff = false;
             }
         }
+        if (this.shouldFlank(target))
+        {
+            this.flank(target, swing);
+            return;
+        }
         if (this.duel)
         {
             this.duelMove(target, swing);
@@ -824,6 +837,78 @@ public class NpcMeleeAttackGoal extends Goal
         double distance = Math.sqrt(this.npc.distanceToSqr(target));
         float forward = distance > reach * 0.8D ? 0.5F : distance < this.keepOff(target, swing) ? -0.5F : 0.0F;
         this.npc.getMoveControl().strafe(forward, this.strafeSide * (float) AncientEmpiresConfig.sidestepSpeed);
+    }
+
+    /**
+     * The backstep dodge, as a player steps out of a swing: an NPC without a
+     * shield reads an NPC's wind-up aimed at it and, once per swing,
+     * {@code combat.dodgeLeadTicks} before the hit, steps back out of reach at its
+     * skill's {@code skill.dodgeChance}. The whiff leaves the attacker open. A
+     * player's swing shows no wind-up, so players are never dodged this way.
+     */
+    private boolean dodging(LivingEntity target)
+    {
+        if (this.dodgeLeft > 0)
+        {
+            this.dodgeLeft--;
+            this.npc.getNavigation().stop();
+            this.npc.getMoveControl().strafe(-0.9F, this.strafeSide * 0.2F);
+            if (this.dodgeLeft == 0)
+            {
+                this.stopStepping();
+            }
+            return true;
+        }
+        if (this.phase == Phase.WINDUP || this.npc.hasShieldInOffhand() || this.npc.isPassenger()
+                || !(target instanceof NpcEntity attacker) || !attacker.isAttackWindowOpen() || attacker.getTarget() != this.npc
+                || attacker.getAttackWindupRemaining() > AncientEmpiresConfig.dodgeLeadTicks)
+        {
+            return false;
+        }
+        int serial = attacker.getAttackWindowSerial();
+        if (this.dodgeFor == attacker.getId() && this.dodgeSerial == serial)
+        {
+            return false;
+        }
+        this.dodgeFor = attacker.getId();
+        this.dodgeSerial = serial;
+        if (this.npc.getRandom().nextDouble() >= this.npc.getDodgeChance())
+        {
+            return false;
+        }
+        this.dodgeLeft = AncientEmpiresConfig.dodgeTicks;
+        return this.dodging(target);
+    }
+
+    /** A raised shield faces this NPC, which has none, and there is room to go around it. */
+    private boolean shouldFlank(LivingEntity target)
+    {
+        if (!AncientEmpiresConfig.flank || this.npc.hasShieldInOffhand() || !target.isBlocking() || this.crowded(target))
+        {
+            return false;
+        }
+        Vec3 facing = Vec3.directionFromRotation(0.0F, target.getYHeadRot());
+        Vec3 toMe = this.npc.position().subtract(target.position()).multiply(1.0D, 0.0D, 1.0D).normalize();
+        return facing.dot(toMe) > Math.cos(Math.toRadians(AncientEmpiresConfig.flankAngle));
+    }
+
+    /**
+     * Circles toward the shield holder's side, the shorter way round, keeping
+     * striking distance. Footwork only runs while the NPC waits, so a shield
+     * that comes down is still struck at once from wherever it stands.
+     */
+    private void flank(LivingEntity target, AttackSwing swing)
+    {
+        Vec3 facing = Vec3.directionFromRotation(0.0F, target.getYHeadRot());
+        Vec3 toMe = this.npc.position().subtract(target.position());
+        // A positive sideways input (left, facing the target) turns the bearing anticlockwise; pick the
+        // side that takes it away from the shield's facing.
+        double cross = facing.x * toMe.z - facing.z * toMe.x;
+        float side = cross >= 0.0D ? 1.0F : -1.0F;
+        double reach = swing.range() + target.getBbWidth() * 0.5D;
+        double distance = Math.sqrt(this.npc.distanceToSqr(target));
+        float forward = distance > reach * 0.85D ? 0.3F : distance < this.keepOff(target, swing) ? -0.3F : 0.0F;
+        this.npc.getMoveControl().strafe(forward, side * 0.6F);
     }
 
     /**

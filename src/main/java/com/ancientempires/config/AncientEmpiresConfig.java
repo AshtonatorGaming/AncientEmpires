@@ -112,6 +112,11 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.DoubleValue SHIELD_NPC_AXE_CHANCE;
     private static final ForgeConfigSpec.EnumValue<NpcShieldBash.Mode> SHIELD_BASH_MODE;
     private static final ForgeConfigSpec.ConfigValue<List<? extends Double>> SKILL_FEINT_CHANCE;
+    private static final ForgeConfigSpec.ConfigValue<List<? extends Double>> SKILL_DODGE_CHANCE;
+    private static final ForgeConfigSpec.IntValue DODGE_LEAD;
+    private static final ForgeConfigSpec.IntValue DODGE_TICKS;
+    private static final ForgeConfigSpec.BooleanValue FLANK;
+    private static final ForgeConfigSpec.DoubleValue FLANK_ANGLE;
     private static final ForgeConfigSpec.ConfigValue<List<? extends Double>> SKILL_BASH_CHANCE;
     private static final ForgeConfigSpec.ConfigValue<List<? extends Integer>> SKILL_SHIELD_REACTION;
     private static final ForgeConfigSpec.ConfigValue<List<? extends Double>> SKILL_GUARD;
@@ -426,6 +431,16 @@ public final class AncientEmpiresConfig
         WINDUP_KEEP_RANGE = builder
                 .comment("During a wind-up the NPC keeps closing until the target is within this fraction of its reach, so a target drifting a little does not turn the swing into a sure miss (a real backstep still dodges it).")
                 .defineInRange("windupKeepRange", 0.8D, 0.1D, 1.0D);
+        DODGE_LEAD = builder
+                .comment("A dodge is decided this many ticks before an NPC's wind-up lands (skill.dodgeChance), and backsteps for dodgeTicks.")
+                .defineInRange("dodgeLeadTicks", 6, 1, 40);
+        DODGE_TICKS = builder.defineInRange("dodgeTicks", 7, 1, 40);
+        FLANK = builder
+                .comment("Fighters without a shield work around a raised shield toward its holder's side or back (shields cover only the front) instead of hammering it, but still strike the moment it comes down.")
+                .define("flank", true);
+        FLANK_ANGLE = builder
+                .comment("Degrees off the shield holder's facing at which the flanker is round far enough.")
+                .defineInRange("flankAngle", 70.0D, 0.0D, 180.0D);
         MIN_GAP_REACH = builder
                 .comment("Fighters keep the foe at least this fraction of their reach away (centre to centre), backing off when pressed closer, so they fight at weapon length instead of hugging.")
                 .defineInRange("minGapReach", 0.55D, 0.0D, 1.0D);
@@ -665,6 +680,9 @@ public final class AncientEmpiresConfig
         SKILL_FEINT_CHANCE = builder
                 .comment("Chance, 0 to 1, that a swing at a guarded target is a feint. An NPC's own AeFeintChance overrides this.")
                 .defineList("feintChance", List.of(0.0D, 0.1D, 0.2D, 0.3D), AncientEmpiresConfig::isChance);
+        SKILL_DODGE_CHANCE = builder
+                .comment("Chance, 0 to 1, that an NPC without a shield steps back out of reach of an NPC's visible wind-up instead of taking it (combat.dodgeLeadTicks before the hit), as a player can. Read along the levels like the other skill lists.")
+                .defineList("dodgeChance", List.of(0.1D, 0.2D, 0.3D, 0.4D), AncientEmpiresConfig::isChance);
         SKILL_BASH_CHANCE = builder
                 .comment("Chance, 0 to 1, that a blocked hit is answered with a shield bash (see shield.bashMode).")
                 .defineList("bashChancePerBlock", List.of(0.08D, 0.12D, 0.18D, 0.25D), AncientEmpiresConfig::isChance);
@@ -1297,6 +1315,11 @@ public final class AncientEmpiresConfig
     public static NpcShieldBash.Mode shieldBashMode = NpcShieldBash.Mode.SPARTAN;
     /** Per skill tier: ordinary, elite, leader, elite leader. */
     public static List<? extends Double> feintChanceByTier = List.of(0.0D, 0.1D, 0.2D, 0.3D);
+    public static List<? extends Double> dodgeChanceByTier = List.of(0.1D, 0.2D, 0.3D, 0.4D);
+    public static int dodgeLeadTicks = 6;
+    public static int dodgeTicks = 7;
+    public static boolean flank = true;
+    public static double flankAngle = 70.0D;
     public static List<? extends Double> bashChanceByTier = List.of(0.08D, 0.12D, 0.18D, 0.25D);
     public static List<? extends Integer> shieldReactionByTier = List.of(8, 6, 4, 2);
     public static List<? extends Double> guardByTier = List.of(1.0D, 1.25D, 1.5D, 1.75D);
@@ -1651,6 +1674,11 @@ public final class AncientEmpiresConfig
         shieldNpcAxeChance = SHIELD_NPC_AXE_CHANCE.get();
         shieldBashMode = SHIELD_BASH_MODE.get();
         feintChanceByTier = SKILL_FEINT_CHANCE.get();
+        dodgeChanceByTier = SKILL_DODGE_CHANCE.get();
+        dodgeLeadTicks = DODGE_LEAD.get();
+        dodgeTicks = DODGE_TICKS.get();
+        flank = FLANK.get();
+        flankAngle = FLANK_ANGLE.get();
         bashChanceByTier = SKILL_BASH_CHANCE.get();
         shieldReactionByTier = SKILL_SHIELD_REACTION.get();
         guardByTier = SKILL_GUARD.get();

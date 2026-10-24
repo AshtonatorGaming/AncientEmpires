@@ -1082,6 +1082,12 @@ public class NpcEntity extends PathfinderMob
         this.feintChance = Mth.clamp(chance, 0.0F, 1.0F);
     }
 
+    /** Chance, 0 to 1, that an NPC without a shield backsteps out of an NPC's visible wind-up. */
+    public double getDodgeChance()
+    {
+        return this.isLevied() ? 0.0D : this.skillValue(AncientEmpiresConfig.dodgeChanceByTier);
+    }
+
     /** Chance, 0 to 1, that a blocked hit is answered with a shield bash. */
     public double getBashChance()
     {
