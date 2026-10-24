@@ -51,6 +51,8 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.BooleanValue FOOTWORK;
     private static final ForgeConfigSpec.DoubleValue SIDESTEP_CHANCE;
     private static final ForgeConfigSpec.IntValue FOOTWORK_CROWD;
+    private static final ForgeConfigSpec.DoubleValue DUEL_FOOTWORK;
+    private static final ForgeConfigSpec.DoubleValue DUEL_RANGE;
     private static final ForgeConfigSpec.DoubleValue SIDESTEP_SPEED;
     private static final ForgeConfigSpec.DoubleValue SHIELD_SIDESTEP_SCALE;
     private static final ForgeConfigSpec.DoubleValue PRESSURE_CHANCE;
@@ -114,6 +116,7 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.IntValue TOWER_BASH_COOLDOWN;
     private static final ForgeConfigSpec.IntValue SHIELD_BASH_RECOVERY;
     private static final ForgeConfigSpec.IntValue SHIELD_FOLLOW_THROUGH;
+    private static final ForgeConfigSpec.IntValue SHIELD_MOB_PATIENCE;
     private static final ForgeConfigSpec.BooleanValue FEINTS;
     private static final ForgeConfigSpec.IntValue FEINT_RECOVERY;
 
@@ -418,6 +421,12 @@ public final class AncientEmpiresConfig
         FOOTWORK_CROWD = builder
                 .comment("Footwork is for duels: with this many other NPCs within 2.5 blocks, an NPC stands its ground instead of stepping (crowded lines turned into a scramble).")
                 .defineInRange("crowdLimit", 3, 1, 20);
+        DUEL_RANGE = builder
+                .comment("Duel mode: no other NPC within this many blocks of an NPC and its foe. Duelists circle (steps kept to one side, shorter rests), and step back out of reach after their own blow, so trading hits takes timing. Otherwise line mode: hold the place, little footwork.")
+                .defineInRange("duelRange", 5.0D, 0.0D, 32.0D);
+        DUEL_FOOTWORK = builder
+                .comment("In a duel, the chance after each (shorter) pause that the NPC steps.")
+                .defineInRange("duelFootworkChance", 0.6D, 0.0D, 1.0D);
         SIDESTEP_SPEED = builder
                 .comment("Sidestep input, 0 to 1. High enough that the legs walk; slower drifts read as sliding.")
                 .defineInRange("sidestepSpeed", 1.0D, 0.1D, 1.0D);
@@ -605,6 +614,9 @@ public final class AncientEmpiresConfig
         SHIELD_FOLLOW_THROUGH = builder
                 .comment("Ticks after its own swing lands that an NPC keeps its shield down: the arm is still following through, as a player's is.")
                 .defineInRange("followThroughTicks", 8, 0, 40);
+        SHIELD_MOB_PATIENCE = builder
+                .comment("Against a mob (no wind-up to read), a shield NPC baits: shield up until the mob's blow lands on it, then ripostes while the mob's attack recovers. If the mob has not struck for this many ticks, it takes the opening anyway. Mobs that cannot hit back (not after this NPC, out of reach) are just attacked.")
+                .defineInRange("mobPatienceTicks", 40, 0, 400);
         builder.pop();
 
         builder.comment("Combat skill by roster rank, four values each: ordinary, elite, leader, elite leader. An NPC's AeSkill tag (0 to 3) overrides its rank.").push("skill");
@@ -1179,6 +1191,8 @@ public final class AncientEmpiresConfig
     public static boolean footwork = true;
     public static double sidestepChance = 0.35D;
     public static int footworkCrowd = 3;
+    public static double duelRange = 5.0D;
+    public static double duelFootworkChance = 0.6D;
     public static double sidestepSpeed = 1.0D;
     public static double shieldSidestepScale = 0.5D;
     public static double pressureChance = 0.12D;
@@ -1243,6 +1257,7 @@ public final class AncientEmpiresConfig
     public static int towerBashCooldownTicks = 50;
     public static int shieldBashRecoveryTicks = 10;
     public static int shieldFollowThroughTicks = 8;
+    public static int shieldMobPatienceTicks = 40;
     public static boolean feints = true;
     public static int feintRecoveryTicks = 6;
 
@@ -1517,6 +1532,8 @@ public final class AncientEmpiresConfig
         footwork = FOOTWORK.get();
         sidestepChance = SIDESTEP_CHANCE.get();
         footworkCrowd = FOOTWORK_CROWD.get();
+        duelRange = DUEL_RANGE.get();
+        duelFootworkChance = DUEL_FOOTWORK.get();
         sidestepSpeed = SIDESTEP_SPEED.get();
         shieldSidestepScale = SHIELD_SIDESTEP_SCALE.get();
         pressureChance = PRESSURE_CHANCE.get();
@@ -1580,6 +1597,7 @@ public final class AncientEmpiresConfig
         towerBashCooldownTicks = TOWER_BASH_COOLDOWN.get();
         shieldBashRecoveryTicks = SHIELD_BASH_RECOVERY.get();
         shieldFollowThroughTicks = SHIELD_FOLLOW_THROUGH.get();
+        shieldMobPatienceTicks = SHIELD_MOB_PATIENCE.get();
         feints = FEINTS.get();
         feintRecoveryTicks = FEINT_RECOVERY.get();
 

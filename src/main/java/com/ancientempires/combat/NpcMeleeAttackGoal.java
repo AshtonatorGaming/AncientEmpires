@@ -19,6 +19,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -50,6 +51,10 @@ public class NpcMeleeAttackGoal extends Goal
     private int recoveryLeft;
     /** Which way the next sidestep goes (1 or -1). */
     private int strafeSide = 1;
+    /** Duel mode, judged at each step decision: one foe, nobody else close. */
+    private boolean duel;
+    /** Stepping back out of reach after the NPC's own blow (duels). */
+    private boolean backingOff;
     /** Footwork: ticks left in the current sidestep, then ticks of standing. */
     private int stepLeft;
     private int stepRest;
@@ -123,6 +128,7 @@ public class NpcMeleeAttackGoal extends Goal
         this.npc.getNavigation().stop();
         this.stopStepping();
         this.stepLeft = 0;
+        this.backingOff = false;
         this.npc.setSwingCommitted(false);
         this.npc.getGuard().clearStrike();
         this.feintPlanned = false;
@@ -179,7 +185,7 @@ public class NpcMeleeAttackGoal extends Goal
         {
             this.recoveryLeft--;
             AttackSwing upcoming = this.preview();
-            if (this.canEngage(target, upcoming))
+            if (this.backingOff || this.canEngage(target, upcoming))
             {
                 this.footwork(target, upcoming);
             }
@@ -299,6 +305,7 @@ public class NpcMeleeAttackGoal extends Goal
 
         this.npc.completeSwing(swing.cooldownTicks());
         this.npc.closeAttackWindow();
+        this.stepOut();
         // Plus a short pause between swings so weapons are not spammed (combat.attackPause, 0 off).
         this.recoveryLeft = swing.recoveryTicks() + AncientEmpiresConfig.attackPause;
         // The shield stays down until the attack animation has played out, as a player's would.
@@ -737,9 +744,11 @@ public class NpcMeleeAttackGoal extends Goal
     }
 
     /**
-     * Footwork while waiting inside reach (behind the shield, between swings): circle
-     * the target, switching sides now and then, step in at the edge of reach and give
-     * a little ground when pressed, rather than stand still. Vanilla's strafe control
+     * Footwork while waiting inside reach (behind the shield, between swings). In a
+     * duel (no one else close) the NPC circles, mostly keeping to one side, and steps
+     * out of reach after its own blow; in a line it mostly holds its place with a
+     * rare sidestep, and none when crowded. Either way it steps in at the edge of
+     * reach and gives a little ground when pressed. Vanilla's strafe control
      * refuses steps onto unwalkable blocks, so this does not walk off ledges.
      */
     private void footwork(LivingEntity target, AttackSwing swing)
@@ -760,24 +769,37 @@ public class NpcMeleeAttackGoal extends Goal
         if (this.stepLeft <= 0)
         {
             this.stopStepping();
-            this.stepRest = 30 + this.npc.getRandom().nextInt(40);
-            double chance = AncientEmpiresConfig.sidestepChance;
-            if (this.npc.hasShieldInOffhand() && WeaponClassifier.isShield(target.getOffhandItem()))
+            this.backingOff = false;
+            this.duel = this.isDuel(target);
+            double chance;
+            if (this.duel)
             {
-                // Two shields: a wary standoff, not a dance. Bouncier footwork is for duelists.
-                chance *= AncientEmpiresConfig.shieldSidestepScale;
+                // A duel: circling, short rests, mostly keeping to one side, shield or not.
+                this.stepRest = 10 + this.npc.getRandom().nextInt(20);
+                chance = AncientEmpiresConfig.duelFootworkChance;
+            }
+            else
+            {
+                // Line mode: mostly standing; now and then one quick sidestep at a walking pace.
+                this.stepRest = 30 + this.npc.getRandom().nextInt(40);
+                chance = AncientEmpiresConfig.sidestepChance;
+                if (this.npc.hasShieldInOffhand() && WeaponClassifier.isShield(target.getOffhandItem()))
+                {
+                    // Two shields in a line: a wary standoff, not a dance.
+                    chance *= AncientEmpiresConfig.shieldSidestepScale;
+                }
             }
             if (this.npc.getRandom().nextDouble() >= chance)
             {
                 return;
             }
-            if (this.crowded(target))
+            if (!this.duel && this.crowded(target))
             {
                 // In a press of bodies a soldier holds its place; footwork is for open ground.
                 return;
             }
-            this.stepLeft = 5 + this.npc.getRandom().nextInt(4);
-            if (this.npc.getRandom().nextBoolean())
+            this.stepLeft = this.duel ? 6 + this.npc.getRandom().nextInt(5) : 5 + this.npc.getRandom().nextInt(4);
+            if (this.duel ? this.npc.getRandom().nextFloat() < 0.25F : this.npc.getRandom().nextBoolean())
             {
                 this.strafeSide = -this.strafeSide;
             }
@@ -785,8 +807,40 @@ public class NpcMeleeAttackGoal extends Goal
         this.stepLeft--;
         double reach = swing.range() + target.getBbWidth() * 0.5D;
         double distance = Math.sqrt(this.npc.distanceToSqr(target));
-        float forward = distance > reach * 0.8D ? 0.5F : distance < reach * 0.45D ? -0.5F : 0.0F;
-        this.npc.getMoveControl().strafe(forward, this.strafeSide * (float) AncientEmpiresConfig.sidestepSpeed);
+        float forward;
+        if (this.backingOff)
+        {
+            // Out of reach after the blow, so the answer has to come in after it.
+            forward = distance < reach * 1.1D ? -0.7F : 0.0F;
+        }
+        else
+        {
+            forward = distance > reach * 0.8D ? 0.5F : distance < reach * 0.45D ? -0.5F : 0.0F;
+        }
+        this.npc.getMoveControl().strafe(forward, this.strafeSide * (float) AncientEmpiresConfig.sidestepSpeed * (this.backingOff ? 0.5F : 1.0F));
+    }
+
+    /** One foe and no other NPC within {@code combat.duelRange} of either: a duel. Judged per step decision. */
+    private boolean isDuel(LivingEntity target)
+    {
+        double range = AncientEmpiresConfig.duelRange;
+        if (range <= 0.0D)
+        {
+            return false;
+        }
+        AABB around = this.npc.getBoundingBox().minmax(target.getBoundingBox()).inflate(range, 2.0D, range);
+        return this.npc.level().getEntitiesOfClass(NpcEntity.class, around, other -> other != this.npc && other != target && other.isAlive()).isEmpty();
+    }
+
+    /** After the NPC's own blow lands in a duel: step back out of reach. */
+    private void stepOut()
+    {
+        if (this.duel && AncientEmpiresConfig.footwork && !this.npc.isPassenger())
+        {
+            this.backingOff = true;
+            this.stepRest = 0;
+            this.stepLeft = 5 + this.npc.getRandom().nextInt(3);
+        }
     }
 
 

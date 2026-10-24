@@ -5,6 +5,7 @@ import com.ancientempires.config.AncientEmpiresConfig;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.Nullable;
 
@@ -140,6 +141,17 @@ public final class NpcGuard
      * {@code shield.strikeDelayTicks} after it came down. True once the NPC may
      * begin its swing.
      */
+    /** A mob with no wind-up that is after this NPC and close: bait it rather than open up to it. */
+    private boolean baitsMob(@Nullable LivingEntity target)
+    {
+        if (!(target instanceof Mob mob) || target instanceof NpcEntity || mob.getTarget() != this.npc)
+        {
+            return false;
+        }
+        double reach = AncientEmpiresConfig.shieldBlockRange;
+        return this.npc.distanceToSqr(target) < reach * reach;
+    }
+
     public boolean readyToStrike()
     {
         int now = this.npc.tickCount;
@@ -169,6 +181,11 @@ public final class NpcGuard
         boolean riposte = now < this.riposteUntil;
         if (this.npc.isRaisingShield())
         {
+            if (!riposte && baitsMob(this.npc.getTarget()) && now - Math.max(this.raisedAt, this.blockedAt) < AncientEmpiresConfig.shieldMobPatienceTicks)
+            {
+                // A mob shows no wind-up: let its blow land on the shield, then riposte while it recovers.
+                return false;
+            }
             if (!riposte && now - this.raisedAt < AncientEmpiresConfig.shieldMinBlockTicks)
             {
                 return false;

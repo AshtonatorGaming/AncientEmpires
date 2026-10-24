@@ -399,6 +399,16 @@ its own unless noted). Before adding behavior, check what AW did first.
   Against players (no wind-up to time) a raised shield turns a player's blow into a perfect block
   at `perfectBlock.vsPlayerScale` (0.35) of the level's parry chance, at most once per
   `cooldownTicks` (`NpcGuard.rollsPerfectAgainstPlayer`).
+- Two stances, picked per step decision (`NpcMeleeAttackGoal.isDuel`): duel mode when no other NPC is
+  within `combat.duelRange` (5) of the NPC and its foe (a player counts as a foe, so player duels
+  are duels): it circles (`duelFootworkChance` 0.6, rests of 0.5 to 1.5 seconds, steps of 6 to 10
+  ticks kept mostly to one side, shields or not) and steps out of reach after its own blow
+  (`stepOut`), so trades take timing. Line mode otherwise: the old rare sidestep, none when
+  crowded, shield wall. The user found fights most fluid when NPCs danced; that belongs to duels.
+- Against mobs (no wind-up to read) a shield NPC baits (`NpcGuard.baitsMob`): shield up until the
+  mob's blow lands, then the riposte while the mob recovers; after `shield.mobPatienceTicks` (40)
+  without a blow it takes the opening anyway. Mobs not after the NPC are not a shield threat at
+  all, so helpless or distracted ones are simply attacked. Lowering on a timer gave zombies free hits.
   `/ancientempires morale <state> [radius]` (op) forces the looked-at NPC, or its side within
   the radius, into steady, wavering, routing, shattered, or surrendered, for testing.
 - Tuning history (user, first battle tests): routs were too eager (now `routAt` 12, `oddsWeight`
