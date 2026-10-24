@@ -5,6 +5,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
@@ -116,7 +117,8 @@ public final class NpcShieldGoal extends Goal
         }
         else
         {
-            this.holdLeft--;
+            // In a duel the shield comes down as soon as the spell ends: the open stretch is the point.
+            this.holdLeft = this.npc.getGuard().isDuel() ? 0 : this.holdLeft - 1;
         }
         LivingEntity pending = this.npc.getGuard().takePendingBash();
         if (pending != null && this.bashTarget == null)
@@ -177,13 +179,15 @@ public final class NpcShieldGoal extends Goal
         {
             return false;
         }
-        if (aiming(attacker))
+        if (aiming(attacker) || this.npc.getGuard().inSpell())
         {
             return true;
         }
         double range = AncientEmpiresConfig.shieldBlockRange;
-        // Guard stance: an enemy in reach is a threat whether or not it is mid-swing.
-        return (AncientEmpiresConfig.shieldGuardInRange || swinging(attacker)) && this.npc.distanceToSqr(attacker) < range * range;
+        // Guard stance: an enemy in reach is a threat whether or not it is mid-swing. Not in a
+        // duel, whose spells raise the shield in turns (a visible wind-up still raises it).
+        boolean guard = AncientEmpiresConfig.shieldGuardInRange && !this.npc.getGuard().isDuel();
+        return (guard || swinging(attacker)) && this.npc.distanceToSqr(attacker) < range * range;
     }
 
     /**
@@ -198,6 +202,13 @@ public final class NpcShieldGoal extends Goal
         if (range <= 0.0D)
         {
             return null;
+        }
+        LivingEntity incoming = this.incomingArrowFrom(range);
+        if (incoming != null)
+        {
+            // ToroQuest's guards: an arrow on its way puts the shield up at once.
+            this.npc.getGuard().blockFor(AncientEmpiresConfig.shieldArrowBlockTicks);
+            return incoming;
         }
         LivingEntity nearest = null;
         double best = Double.MAX_VALUE;
@@ -216,6 +227,28 @@ public final class NpcShieldGoal extends Goal
             }
         }
         return nearest;
+    }
+
+    /** The shooter of an arrow in flight within {@code range} heading at this NPC, if not an ally's. */
+    @Nullable
+    private LivingEntity incomingArrowFrom(double range)
+    {
+        Vec3 centre = this.npc.getBoundingBox().getCenter();
+        for (AbstractArrow arrow : this.npc.level().getEntitiesOfClass(AbstractArrow.class, this.npc.getBoundingBox().inflate(range),
+                arrow -> arrow.isAlive() && arrow.getDeltaMovement().lengthSqr() > 0.01D))
+        {
+            if (!(arrow.getOwner() instanceof LivingEntity shooter) || shooter == this.npc
+                    || shooter instanceof NpcEntity other && this.npc.isAlly(other) || shooter.getUUID().equals(this.npc.getOwner()))
+            {
+                continue;
+            }
+            Vec3 toMe = centre.subtract(arrow.position()).normalize();
+            if (arrow.getDeltaMovement().normalize().dot(toMe) > 0.97D)
+            {
+                return shooter;
+            }
+        }
+        return null;
     }
 
     private boolean aimsAtMe(LivingEntity aimer)

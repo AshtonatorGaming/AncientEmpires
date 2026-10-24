@@ -51,7 +51,8 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.BooleanValue FOOTWORK;
     private static final ForgeConfigSpec.DoubleValue SIDESTEP_CHANCE;
     private static final ForgeConfigSpec.IntValue FOOTWORK_CROWD;
-    private static final ForgeConfigSpec.DoubleValue DUEL_FOOTWORK;
+    private static final ForgeConfigSpec.DoubleValue DUEL_STRAFE;
+    private static final ForgeConfigSpec.DoubleValue DUEL_BACKPEDAL;
     private static final ForgeConfigSpec.DoubleValue DUEL_RANGE;
     private static final ForgeConfigSpec.DoubleValue SIDESTEP_SPEED;
     private static final ForgeConfigSpec.DoubleValue SHIELD_SIDESTEP_SCALE;
@@ -117,6 +118,12 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.IntValue SHIELD_BASH_RECOVERY;
     private static final ForgeConfigSpec.IntValue SHIELD_FOLLOW_THROUGH;
     private static final ForgeConfigSpec.IntValue SHIELD_MOB_PATIENCE;
+    private static final ForgeConfigSpec.IntValue SHIELD_DUEL_BLOCK_MIN;
+    private static final ForgeConfigSpec.IntValue SHIELD_DUEL_BLOCK_MAX;
+    private static final ForgeConfigSpec.IntValue SHIELD_DUEL_OPEN_MIN;
+    private static final ForgeConfigSpec.IntValue SHIELD_DUEL_OPEN_MAX;
+    private static final ForgeConfigSpec.DoubleValue SHIELD_DUEL_SHOVE;
+    private static final ForgeConfigSpec.IntValue SHIELD_ARROW_BLOCK;
     private static final ForgeConfigSpec.BooleanValue FEINTS;
     private static final ForgeConfigSpec.IntValue FEINT_RECOVERY;
 
@@ -424,9 +431,12 @@ public final class AncientEmpiresConfig
         DUEL_RANGE = builder
                 .comment("Duel mode: no other NPC within this many blocks of an NPC and its foe. Duelists circle (steps kept to one side, shorter rests), and step back out of reach after their own blow, so trading hits takes timing. Otherwise line mode: hold the place, little footwork.")
                 .defineInRange("duelRange", 5.0D, 0.0D, 32.0D);
-        DUEL_FOOTWORK = builder
-                .comment("In a duel, the chance after each (shorter) pause that the NPC steps.")
-                .defineInRange("duelFootworkChance", 0.6D, 0.0D, 1.0D);
+        DUEL_STRAFE = builder
+                .comment("In a duel the NPC never stands still (ToroQuest's guards): it drifts sideways at this input (0 to 1; half again behind a raised shield) in its stance's direction, which changes now and then, while closing to the edge of reach.")
+                .defineInRange("duelStrafe", 0.45D, 0.0D, 1.0D);
+        DUEL_BACKPEDAL = builder
+                .comment("Chance a new duel stance is a backpedal: out of the foe's reach, then in again. After its own blow a duelist always backpedals.")
+                .defineInRange("duelBackpedalChance", 0.25D, 0.0D, 1.0D);
         SIDESTEP_SPEED = builder
                 .comment("Sidestep input, 0 to 1. High enough that the legs walk; slower drifts read as sliding.")
                 .defineInRange("sidestepSpeed", 1.0D, 0.1D, 1.0D);
@@ -617,6 +627,18 @@ public final class AncientEmpiresConfig
         SHIELD_MOB_PATIENCE = builder
                 .comment("Against a mob (no wind-up to read), a shield NPC baits: shield up until the mob's blow lands on it, then ripostes while the mob's attack recovers. If the mob has not struck for this many ticks, it takes the opening anyway. Mobs that cannot hit back (not after this NPC, out of reach) are just attacked.")
                 .defineInRange("mobPatienceTicks", 40, 0, 400);
+        SHIELD_DUEL_BLOCK_MIN = builder
+                .comment("Duels (ToroQuest style): once the foe has struck, the shield goes up in spells of between duelBlockMin and duelBlockMax ticks (shorter up close), then stays down for between duelOpenMin and duelOpenMax while the NPC attacks. Half the time a blow on the shield cuts a spell to half a second. Lines keep the steady guard.")
+                .defineInRange("duelBlockMin", 20, 1, 400);
+        SHIELD_DUEL_BLOCK_MAX = builder.defineInRange("duelBlockMax", 80, 1, 400);
+        SHIELD_DUEL_OPEN_MIN = builder.defineInRange("duelOpenMin", 30, 0, 400);
+        SHIELD_DUEL_OPEN_MAX = builder.defineInRange("duelOpenMax", 65, 0, 400);
+        SHIELD_DUEL_SHOVE = builder
+                .comment("In a duel, the first blow on the shield in each spell shoves the attacker back this hard (vanilla knockback strength; 0 off).")
+                .defineInRange("duelShove", 0.5D, 0.0D, 3.0D);
+        SHIELD_ARROW_BLOCK = builder
+                .comment("An arrow in flight at the NPC from a foe puts its shield up for this many ticks.")
+                .defineInRange("arrowBlockTicks", 25, 0, 200);
         builder.pop();
 
         builder.comment("Combat skill by roster rank, four values each: ordinary, elite, leader, elite leader. An NPC's AeSkill tag (0 to 3) overrides its rank.").push("skill");
@@ -1192,7 +1214,8 @@ public final class AncientEmpiresConfig
     public static double sidestepChance = 0.35D;
     public static int footworkCrowd = 3;
     public static double duelRange = 5.0D;
-    public static double duelFootworkChance = 0.6D;
+    public static double duelStrafe = 0.45D;
+    public static double duelBackpedalChance = 0.25D;
     public static double sidestepSpeed = 1.0D;
     public static double shieldSidestepScale = 0.5D;
     public static double pressureChance = 0.12D;
@@ -1258,6 +1281,12 @@ public final class AncientEmpiresConfig
     public static int shieldBashRecoveryTicks = 10;
     public static int shieldFollowThroughTicks = 8;
     public static int shieldMobPatienceTicks = 40;
+    public static int shieldDuelBlockMin = 20;
+    public static int shieldDuelBlockMax = 80;
+    public static int shieldDuelOpenMin = 30;
+    public static int shieldDuelOpenMax = 65;
+    public static double shieldDuelShove = 0.5D;
+    public static int shieldArrowBlockTicks = 25;
     public static boolean feints = true;
     public static int feintRecoveryTicks = 6;
 
@@ -1533,7 +1562,8 @@ public final class AncientEmpiresConfig
         sidestepChance = SIDESTEP_CHANCE.get();
         footworkCrowd = FOOTWORK_CROWD.get();
         duelRange = DUEL_RANGE.get();
-        duelFootworkChance = DUEL_FOOTWORK.get();
+        duelStrafe = DUEL_STRAFE.get();
+        duelBackpedalChance = DUEL_BACKPEDAL.get();
         sidestepSpeed = SIDESTEP_SPEED.get();
         shieldSidestepScale = SHIELD_SIDESTEP_SCALE.get();
         pressureChance = PRESSURE_CHANCE.get();
@@ -1598,6 +1628,12 @@ public final class AncientEmpiresConfig
         shieldBashRecoveryTicks = SHIELD_BASH_RECOVERY.get();
         shieldFollowThroughTicks = SHIELD_FOLLOW_THROUGH.get();
         shieldMobPatienceTicks = SHIELD_MOB_PATIENCE.get();
+        shieldDuelBlockMin = SHIELD_DUEL_BLOCK_MIN.get();
+        shieldDuelBlockMax = Math.max(shieldDuelBlockMin, SHIELD_DUEL_BLOCK_MAX.get());
+        shieldDuelOpenMin = SHIELD_DUEL_OPEN_MIN.get();
+        shieldDuelOpenMax = Math.max(shieldDuelOpenMin, SHIELD_DUEL_OPEN_MAX.get());
+        shieldDuelShove = SHIELD_DUEL_SHOVE.get();
+        shieldArrowBlockTicks = SHIELD_ARROW_BLOCK.get();
         feints = FEINTS.get();
         feintRecoveryTicks = FEINT_RECOVERY.get();
 

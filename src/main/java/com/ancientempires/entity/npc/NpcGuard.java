@@ -57,6 +57,17 @@ public final class NpcGuard
     int planAt = Integer.MIN_VALUE;
     /** The current raise was timed by the planner, so a perfect block may come of it. */
     private boolean plannedRaise;
+    /**
+     * Duel mode (set by the melee goal): the shield goes up in timed spells, as
+     * ToroQuest's guards did, instead of whenever an enemy is in reach. A spell
+     * lasts until {@code spellUntil}; after it the NPC stays open (and attacks)
+     * until {@code openUntil}. Spells start only once the foe has hit it.
+     */
+    private boolean duel;
+    private int spellUntil;
+    private int openUntil;
+    /** The shove on the first blocked hit of a spell has been spent. */
+    private boolean shoved;
     /** tickCount of the last perfect block, -1 for never. */
     private int perfectAt = -1;
 
@@ -79,6 +90,67 @@ public final class NpcGuard
             this.staggerUntil = 0;
             this.npc.setStaggeredFlag(false);
         }
+        this.tickSpells();
+    }
+
+    /** Ends a spent block spell into an open stretch, and in a duel starts the next spell when due. */
+    private void tickSpells()
+    {
+        int now = this.npc.tickCount;
+        if (this.spellUntil > 0 && now >= this.spellUntil)
+        {
+            this.spellUntil = 0;
+            int gap = AncientEmpiresConfig.shieldDuelOpenMin
+                    + this.npc.getRandom().nextInt(Math.max(1, AncientEmpiresConfig.shieldDuelOpenMax - AncientEmpiresConfig.shieldDuelOpenMin + 1));
+            this.openUntil = now + gap;
+        }
+        if (!this.duel || this.spellUntil > 0 || now < this.openUntil || !this.npc.hasShieldInOffhand() || this.isDisabled())
+        {
+            return;
+        }
+        LivingEntity target = this.npc.getTarget();
+        double reach = AncientEmpiresConfig.shieldBlockRange;
+        // Only once the foe has struck at it: an untested foe is pressed, not feared.
+        if (target != null && target.isAlive() && this.npc.getLastHurtByMob() == target && this.npc.distanceToSqr(target) < reach * reach)
+        {
+            double distance = Math.sqrt(this.npc.distanceToSqr(target));
+            int span = AncientEmpiresConfig.shieldDuelBlockMin
+                    + this.npc.getRandom().nextInt(Math.max(1, AncientEmpiresConfig.shieldDuelBlockMax - AncientEmpiresConfig.shieldDuelBlockMin + 1));
+            // Shorter up close, where the next blow comes sooner.
+            this.blockFor(Math.max(AncientEmpiresConfig.shieldDuelBlockMin, span - (int) (distance * 8.0D)));
+        }
+    }
+
+    /** Holds the shield up for {@code ticks} (a duel spell, or an arrow on its way). */
+    public void blockFor(int ticks)
+    {
+        if (this.spellUntil <= 0)
+        {
+            this.shoved = false;
+        }
+        this.spellUntil = Math.max(this.spellUntil, this.npc.tickCount + ticks);
+    }
+
+    /** In a block spell: the shield goal keeps the shield up and no strike is begun. */
+    public boolean inSpell()
+    {
+        return this.spellUntil > 0 && this.npc.tickCount < this.spellUntil;
+    }
+
+    public boolean isDuel()
+    {
+        return this.duel;
+    }
+
+    /** The melee goal's stance: a duel uses spells, a line the steady guard. */
+    public void setDuel(boolean duel)
+    {
+        if (this.duel && !duel)
+        {
+            this.spellUntil = 0;
+            this.openUntil = 0;
+        }
+        this.duel = duel;
     }
 
     /** True while an axe hit or a broken guard keeps the shield down. */
@@ -179,6 +251,11 @@ public final class NpcGuard
             return false;
         }
         boolean riposte = now < this.riposteUntil;
+        if (!riposte && this.inSpell())
+        {
+            // A duel's block spell: the shield stays up until it ends or a blow cuts it short.
+            return false;
+        }
         if (this.npc.isRaisingShield())
         {
             if (!riposte && baitsMob(this.npc.getTarget()) && now - Math.max(this.raisedAt, this.blockedAt) < AncientEmpiresConfig.shieldMobPatienceTicks)
@@ -269,6 +346,11 @@ public final class NpcGuard
     void onShieldHit(float amount)
     {
         this.blockedAt = this.npc.tickCount;
+        if (this.inSpell() && this.spellUntil - this.npc.tickCount > 10 && this.npc.getRandom().nextBoolean())
+        {
+            // Half the time a blow on the shield cuts the spell short: half a second, then the answer.
+            this.spellUntil = this.npc.tickCount + 10;
+        }
         this.points = this.points() - Math.max(1.0F, amount);
         if (this.points <= 0.0F && WeaponClassifier.isShield(this.npc.getUseItem()))
         {
@@ -311,6 +393,13 @@ public final class NpcGuard
         }
         // A blocked hit leaves the attacker open: a riposte may skip the minimum block.
         this.riposteUntil = this.npc.tickCount + AncientEmpiresConfig.shieldRiposteTicks;
+        if (this.duel && this.inSpell() && !this.shoved && AncientEmpiresConfig.shieldDuelShove > 0.0D)
+        {
+            // The first blow of a spell is met with a shove off the shield (ToroQuest's shield push).
+            this.shoved = true;
+            attacker.knockback(AncientEmpiresConfig.shieldDuelShove, this.npc.getX() - attacker.getX(), this.npc.getZ() - attacker.getZ());
+            attacker.hurtMarked = true;
+        }
         // A blocked hit is the moment to shove back, as a player would with Spartan's bash key.
         if (NpcShieldBash.canBash(this.npc) && this.npc.getRandom().nextDouble() < this.npc.getBashChance())
         {

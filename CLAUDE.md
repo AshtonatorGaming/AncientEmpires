@@ -399,12 +399,19 @@ its own unless noted). Before adding behavior, check what AW did first.
   Against players (no wind-up to time) a raised shield turns a player's blow into a perfect block
   at `perfectBlock.vsPlayerScale` (0.35) of the level's parry chance, at most once per
   `cooldownTicks` (`NpcGuard.rollsPerfectAgainstPlayer`).
-- Two stances, picked per step decision (`NpcMeleeAttackGoal.isDuel`): duel mode when no other NPC is
-  within `combat.duelRange` (5) of the NPC and its foe (a player counts as a foe, so player duels
-  are duels): it circles (`duelFootworkChance` 0.6, rests of 0.5 to 1.5 seconds, steps of 6 to 10
-  ticks kept mostly to one side, shields or not) and steps out of reach after its own blow
-  (`stepOut`), so trades take timing. Line mode otherwise: the old rare sidestep, none when
-  crowded, shield wall. The user found fights most fluid when NPCs danced; that belongs to duels.
+- Two stances (`NpcMeleeAttackGoal.isDuel`, judged every 0.7 s): duel mode when no other NPC is within
+  `combat.duelRange` (5) of the NPC and its foe (a player counts as a foe), done ToroQuest's way
+  (Rebirth-of-the-Night/ToroQuestRevamped `EntityGuard`): the NPC never stands still, drifting
+  sideways at `duelStrafe` (0.45, half again behind a raised shield) in a stance direction re-rolled a
+  third of the time, closing to the edge of reach; `duelBackpedalChance` (0.25) stances, and every own
+  blow, backpedal out of reach and come in again. Steering is set every tick, so it walks rather than
+  glides. The shield goes up in spells (`NpcGuard.blockFor`, `inSpell`): once the foe has hit it,
+  `shield.duelBlockMin` to `duelBlockMax` ticks up (shorter up close), then `duelOpenMin` to `duelOpenMax`
+  down while it attacks; half the time a blow on the shield cuts the spell to 10 ticks (the riposte);
+  the first blow of a spell shoves the attacker (`duelShove`). No guard stance in a duel, but a
+  visible NPC wind-up still raises the shield. Line mode otherwise: the old rare sidestep, none when
+  crowded, shield wall. Any shield NPC raises for an arrow in flight at it from a foe
+  (`arrowBlockTicks`). The user found fights most fluid when NPCs danced; that belongs to duels.
 - Against mobs (no wind-up to read) a shield NPC baits (`NpcGuard.baitsMob`): shield up until the
   mob's blow lands, then the riposte while the mob recovers; after `shield.mobPatienceTicks` (40)
   without a blow it takes the opening anyway. Mobs not after the NPC are not a shield threat at
