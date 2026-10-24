@@ -110,6 +110,17 @@ civilians); target memory; cavalry; faction relations and player standing; the S
 
 ## Not done yet
 
+Agreed order (user, after the combat pass; DESIGN.md Tier 1 first, combat tweaks only from play):
+A. Governor: an NPC at the Town Hall with an efficiency aura for nearby workers and passive tax into
+   the hall's store (Tier 1; reuse the `NpcCommand` aura and `TownHallBlock`).
+B. Structure templates: AW structures generating in the world with garrison spawners (Tier 1; the
+   spawner exists). First milestone: one faction structure with a working garrison.
+C. Skirmisher (item 2 below): throwing weapons at range, melee sidearm when closed (`NpcSidearm`).
+D. Banner Bearer: morale aura, shock when it falls.
+E. Squads under leaders and a command screen (groups, formations, orders), then squad morale and patrols.
+F. Combat, agreed and player-doable: backstep dodge of visible wind-ups by skill; flanking raised
+   shields while still taking frontal openings.
+
 1. Ancient Warfare baseline still missing: lance charges and other mounted tactics,
    vampire factions avoiding sunlight, day and night patrols, and the
    behavior behind the remaining roles (bard singing, trader, courier, worker
