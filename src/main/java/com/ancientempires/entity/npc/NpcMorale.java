@@ -9,6 +9,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BannerItem;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
 
@@ -78,7 +79,8 @@ public final class NpcMorale
     public static final int REASON_INSPIRED = 8;
     public static final int REASON_OWNER = 9;
     public static final int REASON_ROUTED_BEFORE = 10;
-    public static final int REASON_COUNT = 11;
+    public static final int REASON_BANNER = 11;
+    public static final int REASON_COUNT = 12;
     /** A term this large (in morale points) is worth naming. */
     private static final double REASON_THRESHOLD = 4.0D;
 
@@ -107,6 +109,8 @@ public final class NpcMorale
     private int clearTicks;
     /** The reasons found at the last check ({@code REASON_} bits). */
     private int reasons;
+    /** A banner bearer was in range at the last check. */
+    private boolean bannerNear;
 
     NpcMorale(NpcEntity npc)
     {
@@ -195,7 +199,7 @@ public final class NpcMorale
         Situation situation = this.look(base);
         Weights weights = Weights.fromConfig();
         float target = target(situation, weights) + this.shock;
-        this.reasons = reasons(situation, weights, this.shock) | (this.routs > 0 ? 1 << REASON_ROUTED_BEFORE : 0);
+        this.reasons = reasons(situation, weights, this.shock) | (this.routs > 0 ? 1 << REASON_ROUTED_BEFORE : 0) | (this.bannerNear ? 1 << REASON_BANNER : 0);
         this.value = drift(this.value, target, AncientEmpiresConfig.moraleRiseRate, AncientEmpiresConfig.moraleFallRate);
         this.clearTicks = situation.enemies() > 0.0D ? 0 : this.clearTicks + interval;
         this.step();
@@ -224,6 +228,7 @@ public final class NpcMorale
         double allies = weight(this.npc);
         double enemies = 0.0D;
         int routing = 0;
+        boolean banner = false;
         for (LivingEntity other : this.npc.level().getEntitiesOfClass(LivingEntity.class, area, LivingEntity::isAlive))
         {
             if (other == this.npc)
@@ -245,6 +250,7 @@ public final class NpcMorale
                     else
                     {
                         allies += weight(npc);
+                        banner |= carriesBanner(npc);
                     }
                     continue;
                 }
@@ -261,8 +267,15 @@ public final class NpcMorale
         }
         boolean flanked = this.flankedAt >= 0 && this.npc.tickCount - this.flankedAt <= AncientEmpiresConfig.moraleFlankTicks;
         float health = this.npc.getMaxHealth() <= 0.0F ? 1.0F : this.npc.getHealth() / this.npc.getMaxHealth();
+        this.bannerNear = banner || carriesBanner(this.npc);
         return new Situation(base, this.npc.isInspired() ? this.npc.getInspiredStrength() : 0.0F, allies, enemies, health, flanked,
-                this.npc.isHungry(), routing, this.presence());
+                this.npc.isHungry(), routing, this.presence() + (this.bannerNear ? (float) AncientEmpiresConfig.moraleBannerBonus : 0.0F));
+    }
+
+    /** A standard: any banner in the off hand. */
+    static boolean carriesBanner(LivingEntity living)
+    {
+        return living.getOffhandItem().getItem() instanceof BannerItem;
     }
 
     /** A player's soldiers take heart from their owner fighting close by ({@code ownerPresenceBonus}). */
@@ -525,6 +538,7 @@ public final class NpcMorale
         }
         boolean commander = command > 0.0F;
         double allyRange = AncientEmpiresConfig.moraleAllyDeathRange;
+        commander |= carriesBanner(fallen);
         double range = commander ? Math.max(allyRange, AncientEmpiresConfig.moraleCommanderDeathRange) : allyRange;
         if (range <= 0.0D)
         {
@@ -537,6 +551,11 @@ public final class NpcMorale
             if (ally.distanceToSqr(fallen) <= allySqr)
             {
                 shock += (float) AncientEmpiresConfig.moraleAllyDeathShock;
+            }
+            if (carriesBanner(fallen))
+            {
+                // The standard falls.
+                shock += (float) AncientEmpiresConfig.moraleBannerDeathShock;
             }
             if (commander)
             {

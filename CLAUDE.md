@@ -116,7 +116,9 @@ A. Governor: an NPC at the Town Hall with an efficiency aura for nearby workers 
 B. Structure templates: AW structures generating in the world with garrison spawners (Tier 1; the
    spawner exists). First milestone: one faction structure with a working garrison.
 C. Skirmisher (item 2 below): throwing weapons at range, melee sidearm when closed (`NpcSidearm`).
-D. Banner Bearer: morale aura, shock when it falls.
+D. Banner Bearer: done (basic). Any banner in a soldier's off hand adds `morale.bannerBonus` (10) to allies
+   within `morale.range`, shown as a reason; its death shocks them `bannerDeathShock` (15). Later: a role
+   label, faction banner rows, planting the banner as a rally point.
 E. Squads under leaders and a command screen (groups, formations, orders), then squad morale and patrols.
 F. Combat, agreed and player-doable: backstep dodge of visible wind-ups by skill; flanking raised
    shields while still taking frontal openings.

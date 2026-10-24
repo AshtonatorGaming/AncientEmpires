@@ -272,6 +272,8 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.DoubleValue MORALE_OWNER_PRESENCE;
     private static final ForgeConfigSpec.DoubleValue MORALE_OWNER_RANGE;
     private static final ForgeConfigSpec.DoubleValue MORALE_CHASE_RANGE;
+    private static final ForgeConfigSpec.DoubleValue MORALE_BANNER;
+    private static final ForgeConfigSpec.DoubleValue MORALE_BANNER_SHOCK;
     private static final ForgeConfigSpec.BooleanValue LEVEL_ENABLED;
     private static final ForgeConfigSpec.IntValue LEVEL_MAX;
     private static final ForgeConfigSpec.DoubleValue LEVEL_XP_BASE;
@@ -1027,6 +1029,8 @@ public final class AncientEmpiresConfig
         MORALE_OWNER_PRESENCE = builder.comment("Morale a player's soldiers draw from their owner fighting nearby, as from a general.").defineInRange("ownerPresenceBonus", 15.0D, 0.0D, 100.0D);
         MORALE_OWNER_RANGE = builder.comment("Blocks within which the owner's presence counts.").defineInRange("ownerPresenceRange", 16.0D, 0.0D, 64.0D);
         MORALE_CHASE_RANGE = builder.comment("Foot soldiers let routing enemies go once they are this far: they hold the field instead of scattering after them. Riders run them down at any range, as cavalry does. 0 chases everywhere.").defineInRange("chaseRange", 8.0D, 0.0D, 64.0D);
+        MORALE_BANNER = builder.comment("Banner bearers: a soldier with a banner in its off hand steadies allies within range by this much morale; when it falls, allies in range take bannerDeathShock.").defineInRange("bannerBonus", 10.0D, 0.0D, 100.0D);
+        MORALE_BANNER_SHOCK = builder.defineInRange("bannerDeathShock", 15.0D, 0.0D, 100.0D);
         builder.pop();
 
         builder.comment("Levels: NPCs (soldiers and workers; not settlers) earn XP and level up to maxLevel. A level is mostly skill: the skill section's four-entry lists are read along the levels (entry 1 at level 1, entry 4 at the cap), so every level counts. Bands of five: soldiers Recruit, Regular, Veteran, Champion; workers Apprentice, Journeyman, Expert, Master. Ancient Warfare capped at 10 and gave XP only for kills.").push("levels");
@@ -1453,6 +1457,8 @@ public final class AncientEmpiresConfig
     public static double moraleOwnerPresenceBonus = 15.0D;
     public static double moraleOwnerPresenceRange = 16.0D;
     public static double moraleChaseRange = 8.0D;
+    public static double moraleBannerBonus = 10.0D;
+    public static double moraleBannerDeathShock = 15.0D;
     public static boolean levelEnabled = true;
     public static int levelMax = 20;
     public static double levelXpBase = 20.0D;
@@ -1805,6 +1811,8 @@ public final class AncientEmpiresConfig
         moraleOwnerPresenceBonus = MORALE_OWNER_PRESENCE.get();
         moraleOwnerPresenceRange = MORALE_OWNER_RANGE.get();
         moraleChaseRange = MORALE_CHASE_RANGE.get();
+        moraleBannerBonus = MORALE_BANNER.get();
+        moraleBannerDeathShock = MORALE_BANNER_SHOCK.get();
         levelEnabled = LEVEL_ENABLED.get();
         levelMax = LEVEL_MAX.get();
         levelXpBase = LEVEL_XP_BASE.get();
