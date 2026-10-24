@@ -111,8 +111,11 @@ civilians); target memory; cavalry; faction relations and player standing; the S
 ## Not done yet
 
 Agreed order (user, after the combat pass; DESIGN.md Tier 1 first, combat tweaks only from play):
-A. Governor: an NPC at the Town Hall with an efficiency aura for nearby workers and passive tax into
-   the hall's store (Tier 1; reuse the `NpcCommand` aura and `TownHallBlock`).
+A. Governor: done (`NpcGovernorGoal`, `governor` config). An owned Worker-path NPC holding a map (role
+   label Governor) walks by day to its owner's nearest Town Hall (`NpcUpkeep.hallFor`) and stays within
+   6 blocks; every `pulseTicks` the owner's workers within `auraRadius` (24) work `workBonus` (15%)
+   faster (`NpcEntity.govern`, read in `getWorkSpeed`), and the hall gets `taxItem` (gold nugget), one
+   per worker per `taxTicksPerWorker` (2400). Later: settlement heartbeat (Tier 4), tax by production.
 B. Structure templates: AW structures generating in the world with garrison spawners (Tier 1; the
    spawner exists). First milestone: one faction structure with a working garrison.
 C. Skirmisher (item 2 below): throwing weapons at range, melee sidearm when closed (`NpcSidearm`).

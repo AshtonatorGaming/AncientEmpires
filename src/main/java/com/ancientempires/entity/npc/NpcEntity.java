@@ -204,6 +204,8 @@ public class NpcEntity extends PathfinderMob
     private int skillTier = -1;
     /** Saved per-NPC skill tier ({@code AeSkill}); below zero when unset. */
     private int skillOverride = -1;
+    /** tickCount until which a governor oversees this worker. */
+    private int governedUntil;
     /** A promoted rank ({@code AeRank}); null for the roster's. */
     @Nullable
     private NpcRank rankOverride;
@@ -421,6 +423,7 @@ public class NpcEntity extends PathfinderMob
         this.goalSelector.addGoal(4, new NpcFollowOwnerGoal(this, 1.12D, 3.0F));
         this.goalSelector.addGoal(4, new NpcSleepGoal(this));
         this.goalSelector.addGoal(4, new NpcPriestGoal(this));
+        this.goalSelector.addGoal(4, new NpcGovernorGoal(this));
         // Every hands-on trade (farmer, woodcutter, miner, rancher, hunter, fisher, cook) as one goal: the tool picks it.
         this.goalSelector.addGoal(4, new NpcJobGoal(this));
         this.goalSelector.addGoal(5, new NpcReturnHomeGoal(this, 0.9D));
@@ -1664,10 +1667,17 @@ public class NpcEntity extends PathfinderMob
         return 1.0D + (this.getLevel() - 1) * AncientEmpiresConfig.levelDamagePerLevel;
     }
 
+    /** A governor at the Town Hall oversees this worker for {@code ticks}: it works faster ({@code governor.workBonus}). */
+    void govern(int ticks)
+    {
+        this.governedUntil = this.tickCount + ticks;
+    }
+
     /** Work speed multiplier from level, for workers' action times. */
     public double getWorkSpeed()
     {
-        return 1.0D + (this.getLevel() - 1) * AncientEmpiresConfig.levelWorkSpeedPerLevel;
+        return (1.0D + (this.getLevel() - 1) * AncientEmpiresConfig.levelWorkSpeedPerLevel)
+                * (this.tickCount < this.governedUntil ? 1.0D + AncientEmpiresConfig.governorWorkBonus : 1.0D);
     }
 
     /** Tool wear multiplier from level: skilled hands wear tools less. */

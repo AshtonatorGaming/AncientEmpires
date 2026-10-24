@@ -10,7 +10,9 @@ import net.minecraft.world.item.EnchantedBookItem;
 import net.minecraft.world.item.FishingRodItem;
 import net.minecraft.world.item.HoeItem;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.EmptyMapItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.MapItem;
 import net.minecraft.world.item.PickaxeItem;
 import net.minecraft.world.item.ShearsItem;
 import net.minecraft.world.item.WritableBookItem;
@@ -206,6 +208,10 @@ public enum NpcPath
         if (isScripture(stack))
         {
             return "priest";
+        }
+        if (stack.getItem() instanceof MapItem || stack.getItem() instanceof EmptyMapItem)
+        {
+            return "governor";
         }
         if (stack.getItem() instanceof ShearsItem)
         {

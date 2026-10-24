@@ -239,6 +239,12 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.DoubleValue COMMAND_SUCCESSION_RANGE;
     private static final ForgeConfigSpec.DoubleValue COMMAND_SUCCESSION_SCALE;
     private static final ForgeConfigSpec.DoubleValue COMMAND_MIN_SCALE;
+    private static final ForgeConfigSpec.BooleanValue GOVERNOR_ENABLED;
+    private static final ForgeConfigSpec.IntValue GOVERNOR_PULSE;
+    private static final ForgeConfigSpec.DoubleValue GOVERNOR_RADIUS;
+    private static final ForgeConfigSpec.DoubleValue GOVERNOR_BONUS;
+    private static final ForgeConfigSpec.ConfigValue<String> GOVERNOR_TAX_ITEM;
+    private static final ForgeConfigSpec.IntValue GOVERNOR_TAX_TICKS;
     private static final ForgeConfigSpec.BooleanValue MORALE_ENABLED;
     private static final ForgeConfigSpec.BooleanValue MORALE_OWNED;
     private static final ForgeConfigSpec.ConfigValue<List<? extends Double>> MORALE_BASE;
@@ -1007,6 +1013,15 @@ public final class AncientEmpiresConfig
         COMMAND_MIN_SCALE = builder.comment("The weakest a passed-down aura gets, however many times command passes.").defineInRange("minScale", 0.3D, 0.05D, 1.0D);
         builder.pop();
 
+        builder.comment("Governor (DESIGN Tier 1): an owned Worker-path NPC holding a map goes to its owner's nearest Town Hall by day; the owner's workers around it work faster, and each one it oversees earns the hall a tax.").push("governor");
+        GOVERNOR_ENABLED = builder.define("enabled", true);
+        GOVERNOR_PULSE = builder.comment("Ticks between the governor's rounds (aura and tax).").defineInRange("pulseTicks", 40, 10, 400);
+        GOVERNOR_RADIUS = builder.comment("Blocks around the governor its aura reaches.").defineInRange("auraRadius", 24.0D, 4.0D, 64.0D);
+        GOVERNOR_BONUS = builder.comment("Extra work speed for governed workers, as a fraction (0.15 is 15% faster).").defineInRange("workBonus", 0.15D, 0.0D, 2.0D);
+        GOVERNOR_TAX_ITEM = builder.comment("The tax, put in the Town Hall's store.").define("taxItem", "minecraft:gold_nugget");
+        GOVERNOR_TAX_TICKS = builder.comment("Ticks of oversight per worker for one tax item (2400: one nugget per worker every two minutes). 0 turns tax off.").defineInRange("taxTicksPerWorker", 2400, 0, 240000);
+        builder.pop();
+
         builder.comment("Morale, Total War style: soldiers waver, rout, and shatter. Each soldier's morale (0 to 100) drifts toward what its situation is worth: its rank's base, a commander's aura, the odds around it, its wounds, a recent hit from behind, hunger, and routing allies; deaths and kills nearby shock it. Below routBelow it runs (as civilians do, fighting only when cornered) and rallies once recovered; the third rout shatters it for good. Fearless factions (factions.json) never break.").push("morale");
         MORALE_ENABLED = builder.comment("Morale on. Off, soldiers fight to the death as before.").define("enabled", true);
         MORALE_OWNED = builder.comment("Players' own soldiers have morale too.").define("ownedNpcs", true);
@@ -1442,6 +1457,12 @@ public final class AncientEmpiresConfig
     public static double commandSuccessionRange = 16.0D;
     public static double commandSuccessionScale = 0.6D;
     public static double commandMinScale = 0.3D;
+    public static boolean governorEnabled = true;
+    public static int governorPulseTicks = 40;
+    public static double governorAuraRadius = 24.0D;
+    public static double governorWorkBonus = 0.15D;
+    public static String governorTaxItem = "minecraft:gold_nugget";
+    public static int governorTaxTicksPerWorker = 2400;
     public static boolean moraleEnabled = true;
     public static boolean moraleOwnedNpcs = true;
     public static List<? extends Double> moraleBaseByTier = List.of(60.0D, 70.0D, 80.0D, 90.0D);
@@ -1801,6 +1822,12 @@ public final class AncientEmpiresConfig
         commandSuccessionRange = COMMAND_SUCCESSION_RANGE.get();
         commandSuccessionScale = COMMAND_SUCCESSION_SCALE.get();
         commandMinScale = COMMAND_MIN_SCALE.get();
+        governorEnabled = GOVERNOR_ENABLED.get();
+        governorPulseTicks = GOVERNOR_PULSE.get();
+        governorAuraRadius = GOVERNOR_RADIUS.get();
+        governorWorkBonus = GOVERNOR_BONUS.get();
+        governorTaxItem = GOVERNOR_TAX_ITEM.get();
+        governorTaxTicksPerWorker = GOVERNOR_TAX_TICKS.get();
         moraleEnabled = MORALE_ENABLED.get();
         moraleOwnedNpcs = MORALE_OWNED.get();
         moraleBaseByTier = MORALE_BASE.get();
