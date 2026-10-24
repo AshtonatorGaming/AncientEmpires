@@ -2,6 +2,7 @@ package com.ancientempires.inventory;
 
 import com.ancientempires.entity.npc.NpcEntity;
 import com.ancientempires.entity.npc.NpcInventory;
+import com.ancientempires.entity.npc.NpcMorale;
 import com.ancientempires.registry.ModMenus;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.network.FriendlyByteBuf;
@@ -14,7 +15,9 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
@@ -39,9 +42,19 @@ public class NpcMenu extends AbstractContainerMenu
     public static final int BUTTON_PATH_SETTLER = 9;
     public static final int BUTTON_MOUNT = 10;
 
+    /** Stats for the open screen's panel, synced to the viewer only (container data is shorts). */
+    public static final int STAT_MORALE = 0;
+    public static final int STAT_MORALE_STATE = 1;
+    public static final int STAT_MORALE_REASONS = 2;
+    public static final int STAT_GUARD = 3;
+    public static final int STAT_GUARD_MAX = 4;
+    public static final int STAT_HUNGRY = 5;
+    private static final int STAT_COUNT = 6;
+
     @Nullable
     private final NpcEntity npc;
     private final Container inventory;
+    private final ContainerData stats;
 
     public NpcMenu(int containerId, Inventory playerInventory, @Nullable NpcEntity npc)
     {
@@ -50,6 +63,8 @@ public class NpcMenu extends AbstractContainerMenu
         this.inventory = npc == null ? new SimpleContainer(NpcInventory.SLOT_COUNT) : npc.getInventory();
         checkContainerSize(this.inventory, NpcInventory.SLOT_COUNT);
         this.inventory.startOpen(playerInventory.player);
+        this.stats = npc == null || playerInventory.player.level().isClientSide ? new SimpleContainerData(STAT_COUNT) : new Stats(npc);
+        this.addDataSlots(this.stats);
 
         this.addGear(NpcInventory.MAIN_HAND_SLOT, EquipmentSlot.MAINHAND, false, null);
         this.addGear(NpcInventory.OFFHAND_SLOT, EquipmentSlot.OFFHAND, false, InventoryMenu.EMPTY_ARMOR_SLOT_SHIELD);
@@ -86,6 +101,51 @@ public class NpcMenu extends AbstractContainerMenu
     private void addGear(int index, EquipmentSlot equipmentSlot, boolean armorOnly, @Nullable ResourceLocation icon)
     {
         this.addSlot(new GearSlot(this.inventory, index, this.npc, equipmentSlot, armorOnly, icon, NpcLayout.slotX(index), NpcLayout.slotY(index)));
+    }
+
+    /** A stat for the panel: morale and guard are tenths, -1 when the NPC has none. */
+    public int stat(int index)
+    {
+        return this.stats.get(index);
+    }
+
+    /** The server's live view of the NPC's stats; read only while the screen is open. */
+    private static final class Stats implements ContainerData
+    {
+        private final NpcEntity npc;
+
+        private Stats(NpcEntity npc)
+        {
+            this.npc = npc;
+        }
+
+        @Override
+        public int get(int index)
+        {
+            NpcMorale morale = this.npc.getMorale();
+            boolean shield = this.npc.hasShieldInOffhand();
+            return switch (index)
+            {
+                case STAT_MORALE -> morale.applies() ? Math.round(morale.value() * 10.0F) : -1;
+                case STAT_MORALE_STATE -> morale.state().ordinal();
+                case STAT_MORALE_REASONS -> morale.reasons();
+                case STAT_GUARD -> shield ? Math.round(this.npc.getGuard().points() * 10.0F) : -1;
+                case STAT_GUARD_MAX -> shield ? Math.round(this.npc.getGuard().max() * 10.0F) : -1;
+                case STAT_HUNGRY -> this.npc.isHungry() ? 1 : 0;
+                default -> 0;
+            };
+        }
+
+        @Override
+        public void set(int index, int value)
+        {
+        }
+
+        @Override
+        public int getCount()
+        {
+            return STAT_COUNT;
+        }
     }
 
     @Nullable

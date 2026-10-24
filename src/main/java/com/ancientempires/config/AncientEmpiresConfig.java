@@ -246,6 +246,9 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.BooleanValue MORALE_DESERT;
     private static final ForgeConfigSpec.DoubleValue MORALE_DESERT_RANGE;
     private static final ForgeConfigSpec.IntValue MORALE_RECOVER_TICKS;
+    private static final ForgeConfigSpec.DoubleValue MORALE_OWNED_BASE;
+    private static final ForgeConfigSpec.DoubleValue MORALE_OWNER_PRESENCE;
+    private static final ForgeConfigSpec.DoubleValue MORALE_OWNER_RANGE;
     private static final ForgeConfigSpec.BooleanValue LEVEL_ENABLED;
     private static final ForgeConfigSpec.IntValue LEVEL_MAX;
     private static final ForgeConfigSpec.DoubleValue LEVEL_XP_BASE;
@@ -939,6 +942,9 @@ public final class AncientEmpiresConfig
         MORALE_DESERT = builder.comment("Shattered faction soldiers leave the field (despawn) once no player is near. Named ones stay.").define("shatteredDesert", true);
         MORALE_DESERT_RANGE = builder.comment("No player within this many blocks: a shattered faction soldier is gone.").defineInRange("desertRange", 48.0D, 8.0D, 256.0D);
         MORALE_RECOVER_TICKS = builder.comment("A player's shattered soldier recovers after this long with no enemy in range.").defineInRange("shatteredRecoverTicks", 1200, 20, 24000);
+        MORALE_OWNED_BASE = builder.comment("Extra base morale for players' own soldiers: losing your army unexpectedly feels worse than routing an enemy feels good.").defineInRange("ownedBaseBonus", 10.0D, 0.0D, 100.0D);
+        MORALE_OWNER_PRESENCE = builder.comment("Morale a player's soldiers draw from their owner fighting nearby, as from a general.").defineInRange("ownerPresenceBonus", 15.0D, 0.0D, 100.0D);
+        MORALE_OWNER_RANGE = builder.comment("Blocks within which the owner's presence counts.").defineInRange("ownerPresenceRange", 16.0D, 0.0D, 64.0D);
         builder.pop();
 
         builder.comment("Levels: NPCs (soldiers and workers; not settlers) earn XP and level up to maxLevel. A level is mostly skill: the skill section's four-entry lists are read along the levels (entry 1 at level 1, entry 4 at the cap), so every level counts. Bands of five: soldiers Recruit, Regular, Veteran, Champion; workers Apprentice, Journeyman, Expert, Master. Ancient Warfare capped at 10 and gave XP only for kills.").push("leveling");
@@ -1339,6 +1345,9 @@ public final class AncientEmpiresConfig
     public static boolean moraleShatteredDesert = true;
     public static double moraleDesertRange = 48.0D;
     public static int moraleShatteredRecoverTicks = 1200;
+    public static double moraleOwnedBaseBonus = 10.0D;
+    public static double moraleOwnerPresenceBonus = 15.0D;
+    public static double moraleOwnerPresenceRange = 16.0D;
     public static boolean levelEnabled = true;
     public static int levelMax = 20;
     public static double levelXpBase = 20.0D;
@@ -1665,6 +1674,9 @@ public final class AncientEmpiresConfig
         moraleShatteredDesert = MORALE_DESERT.get();
         moraleDesertRange = MORALE_DESERT_RANGE.get();
         moraleShatteredRecoverTicks = MORALE_RECOVER_TICKS.get();
+        moraleOwnedBaseBonus = MORALE_OWNED_BASE.get();
+        moraleOwnerPresenceBonus = MORALE_OWNER_PRESENCE.get();
+        moraleOwnerPresenceRange = MORALE_OWNER_RANGE.get();
         levelEnabled = LEVEL_ENABLED.get();
         levelMax = LEVEL_MAX.get();
         levelXpBase = LEVEL_XP_BASE.get();

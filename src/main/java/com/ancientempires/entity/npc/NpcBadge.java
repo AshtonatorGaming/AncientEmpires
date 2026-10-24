@@ -55,7 +55,8 @@ public enum NpcBadge
             case SURRENDERED -> SURRENDERED;
             case SHATTERED -> SHATTERED;
             case ROUTING -> ROUTING;
-            case WAVERING -> WAVERING;
+            // Wavering matters only in a fight; out of one it is noise.
+            case WAVERING -> npc.getTarget() != null ? WAVERING : NONE;
             // In a fight only: a garrison at peace around its leader would all wear stars.
             case STEADY -> npc.isInspired() && npc.getTarget() != null ? INSPIRED : NONE;
         };

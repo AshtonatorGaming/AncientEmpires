@@ -7,6 +7,7 @@ import com.ancientempires.entity.npc.NpcBadge;
 import com.ancientempires.entity.npc.NpcStatus;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.ancientempires.registry.ModEntities;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelLayers;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -23,6 +24,7 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterClientReloadListenersEvent;
 import net.minecraftforge.client.event.RenderNameTagEvent;
@@ -165,6 +167,14 @@ public class NpcRenderer extends HumanoidMobRenderer<NpcEntity, NpcModel>
                 || entity.isInvisible())
         {
             return;
+        }
+        if (AncientEmpiresClientConfig.statusIconsOwnOnly)
+        {
+            Player viewer = Minecraft.getInstance().player;
+            if (viewer == null || !viewer.getUUID().equals(entity.getOwner()))
+            {
+                return;
+            }
         }
         double range = AncientEmpiresClientConfig.statusIconRange;
         if (this.entityRenderDispatcher.distanceToSqr(entity) > range * range)

@@ -61,9 +61,26 @@ public final class NpcMorale
     }
 
     /** What morale sees around a soldier, for {@link #target}. Forces are summed health over 20 (a full-health man is 1). */
-    record Situation(float base, float inspired, double allies, double enemies, float health, boolean flanked, boolean hungry, int routingAllies)
+    record Situation(float base, float inspired, double allies, double enemies, float health, boolean flanked, boolean hungry, int routingAllies,
+            float presence)
     {
     }
+
+    /** Why morale stands where it does, as bits, for the NPC's stats panel. */
+    public static final int REASON_OUTNUMBERED = 0;
+    public static final int REASON_OUTNUMBERING = 1;
+    public static final int REASON_WOUNDED = 2;
+    public static final int REASON_FLANKED = 3;
+    public static final int REASON_HUNGRY = 4;
+    public static final int REASON_PANIC = 5;
+    public static final int REASON_SHOCK = 6;
+    public static final int REASON_HEARTENED = 7;
+    public static final int REASON_INSPIRED = 8;
+    public static final int REASON_OWNER = 9;
+    public static final int REASON_ROUTED_BEFORE = 10;
+    public static final int REASON_COUNT = 11;
+    /** A term this large (in morale points) is worth naming. */
+    private static final double REASON_THRESHOLD = 4.0D;
 
     /** The weights of {@link #target}, from the config. */
     record Weights(double outnumber, double wounds, double flank, double hunger, double routingAlly, double routingCap, double inspired)
@@ -88,6 +105,8 @@ public final class NpcMorale
     private int flankedAt = -1;
     /** Checks in a row with no enemy in range, for recovery and release. */
     private int clearTicks;
+    /** The reasons found at the last check ({@code REASON_} bits). */
+    private int reasons;
 
     NpcMorale(NpcEntity npc)
     {
@@ -123,6 +142,12 @@ public final class NpcMorale
         return this.state == State.SURRENDERED;
     }
 
+    /** The reasons found at the last check, as {@code 1 << REASON_...} bits. */
+    public int reasons()
+    {
+        return this.reasons;
+    }
+
     public float value()
     {
         return this.value < 0.0F ? this.base() : this.value;
@@ -130,9 +155,10 @@ public final class NpcMorale
 
     private float base()
     {
-        // Read along the list by level, as the other skills are.
+        // Read along the list by level, as the other skills are; a player's own soldiers a little steadier.
         List<? extends Double> bases = AncientEmpiresConfig.moraleBaseByTier;
-        return bases.isEmpty() ? 60.0F : (float) this.npc.skillValue(bases);
+        float base = bases.isEmpty() ? 60.0F : (float) this.npc.skillValue(bases);
+        return this.npc.isOwnedNpc() ? base + (float) AncientEmpiresConfig.moraleOwnedBaseBonus : base;
     }
 
     void tick()
@@ -160,12 +186,16 @@ public final class NpcMorale
         if (this.isCalm())
         {
             // Nothing going on: no count of the area, just back toward the base.
-            this.value = drift(this.value, base + this.inspiredBonus(), AncientEmpiresConfig.moraleRiseRate, AncientEmpiresConfig.moraleFallRate);
+            float presence = this.presence();
+            this.value = drift(this.value, base + this.inspiredBonus() + presence, AncientEmpiresConfig.moraleRiseRate, AncientEmpiresConfig.moraleFallRate);
+            this.reasons = (this.npc.isInspired() ? 1 << REASON_INSPIRED : 0) | (presence > 0.0F ? 1 << REASON_OWNER : 0);
             this.npc.level().getProfiler().pop();
             return;
         }
         Situation situation = this.look(base);
-        float target = target(situation, Weights.fromConfig()) + this.shock;
+        Weights weights = Weights.fromConfig();
+        float target = target(situation, weights) + this.shock;
+        this.reasons = reasons(situation, weights, this.shock) | (this.routs > 0 ? 1 << REASON_ROUTED_BEFORE : 0);
         this.value = drift(this.value, target, AncientEmpiresConfig.moraleRiseRate, AncientEmpiresConfig.moraleFallRate);
         this.clearTicks = situation.enemies() > 0.0D ? 0 : this.clearTicks + interval;
         this.step();
@@ -232,7 +262,20 @@ public final class NpcMorale
         boolean flanked = this.flankedAt >= 0 && this.npc.tickCount - this.flankedAt <= AncientEmpiresConfig.moraleFlankTicks;
         float health = this.npc.getMaxHealth() <= 0.0F ? 1.0F : this.npc.getHealth() / this.npc.getMaxHealth();
         return new Situation(base, this.npc.isInspired() ? this.npc.getInspiredStrength() : 0.0F, allies, enemies, health, flanked,
-                this.npc.isHungry(), routing);
+                this.npc.isHungry(), routing, this.presence());
+    }
+
+    /** A player's soldiers take heart from their owner fighting close by ({@code ownerPresenceBonus}). */
+    private float presence()
+    {
+        if (!this.npc.isOwnedNpc() || AncientEmpiresConfig.moraleOwnerPresenceBonus <= 0.0D)
+        {
+            return 0.0F;
+        }
+        Player owner = this.npc.level().getPlayerByUUID(this.npc.getOwner());
+        double range = AncientEmpiresConfig.moraleOwnerPresenceRange;
+        return owner != null && owner.isAlive() && !owner.isSpectator() && owner.distanceToSqr(this.npc) <= range * range
+                ? (float) AncientEmpiresConfig.moraleOwnerPresenceBonus : 0.0F;
     }
 
     /** A fighter's weight in the odds: its health, a full-health man being 1 (a giant counts for several). */
@@ -498,8 +541,28 @@ public final class NpcMorale
                 - (1.0D - Mth.clamp(situation.health(), 0.0F, 1.0F)) * weights.wounds()
                 - (situation.flanked() ? weights.flank() : 0.0D)
                 - (situation.hungry() ? weights.hunger() : 0.0D)
-                - Math.min(weights.routingCap(), situation.routingAllies() * weights.routingAlly());
+                - Math.min(weights.routingCap(), situation.routingAllies() * weights.routingAlly())
+                + situation.presence();
         return (float) target;
+    }
+
+    /** Which terms of {@link #target} (and the shock) matter enough to name, as {@code 1 << REASON_...} bits. */
+    static int reasons(Situation situation, Weights weights, float shock)
+    {
+        double total = situation.allies() + situation.enemies();
+        double odds = total <= 0.0D ? 0.0D : (situation.allies() - situation.enemies()) / total * weights.outnumber();
+        int bits = 0;
+        bits |= odds <= -REASON_THRESHOLD ? 1 << REASON_OUTNUMBERED : 0;
+        bits |= odds >= REASON_THRESHOLD && situation.enemies() > 0.0D ? 1 << REASON_OUTNUMBERING : 0;
+        bits |= (1.0D - Mth.clamp(situation.health(), 0.0F, 1.0F)) * weights.wounds() >= REASON_THRESHOLD ? 1 << REASON_WOUNDED : 0;
+        bits |= situation.flanked() && weights.flank() > 0.0D ? 1 << REASON_FLANKED : 0;
+        bits |= situation.hungry() && weights.hunger() > 0.0D ? 1 << REASON_HUNGRY : 0;
+        bits |= situation.routingAllies() > 0 && weights.routingAlly() > 0.0D ? 1 << REASON_PANIC : 0;
+        bits |= shock <= -REASON_THRESHOLD ? 1 << REASON_SHOCK : 0;
+        bits |= shock >= REASON_THRESHOLD ? 1 << REASON_HEARTENED : 0;
+        bits |= situation.inspired() > 0.0F && weights.inspired() > 0.0D ? 1 << REASON_INSPIRED : 0;
+        bits |= situation.presence() > 0.0F ? 1 << REASON_OWNER : 0;
+        return bits;
     }
 
     /** Morale closes {@code rise} or {@code fall} of the gap to the target per check, kept within 0 to 100. */

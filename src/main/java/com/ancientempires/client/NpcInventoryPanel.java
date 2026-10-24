@@ -293,12 +293,13 @@ public final class NpcInventoryPanel
                 .pos(2, PREVIEW_H - 14)
                 .size(PREVIEW_W - 18, 12)
                 .background(new Rectangle().color(BUTTON))
-                .hoverBackground(new Rectangle().color(choosable ? BUTTON_HOVER : BUTTON))
+                .hoverBackground(new Rectangle().color(BUTTON_HOVER))
                 .overlay(new CenteredText(() -> roleLabel(npc), () -> mayChoose(npc) ? GOLD : NAME_INK))
                 .onMousePressed((context, pressed) -> openPaths(menu, npc, pressed))
                 .tooltipDynamic(tooltip ->
                 {
                     tooltip.addLine(Component.translatable(choosable ? "gui.ancientempires.npc.path" : "gui.ancientempires.npc.role").getString());
+                    tooltip.addLine(Component.translatable("gui.ancientempires.npc.stats_hint").getString());
                     if (npc.getRank() != NpcRank.SOLDIER)
                     {
                         tooltip.addLine(Component.translatable("gui.ancientempires.npc.rank_role", npc.getRankName(),
@@ -337,13 +338,35 @@ public final class NpcInventoryPanel
     private static boolean openPaths(NpcMenu menu, NpcEntity npc, int pressed)
     {
         Minecraft minecraft = Minecraft.getInstance();
-        if (pressed != 0 || !mayChoose(npc) || !(minecraft.screen instanceof NpcScreen npcScreen))
+        if (!(minecraft.screen instanceof NpcScreen npcScreen))
         {
             return false;
         }
         ModularPanel<?> parent = npcScreen.screen().getMainPanel();
-        IPanelHandler.simple(parent, (ignored, player) -> pathPanel(menu, npc), true).openPanel();
+        // Left click on a settler its owner may decide for: the path chooser. Otherwise
+        // (or right click): the stats sheet.
+        if (pressed == 0 && mayChoose(npc))
+        {
+            IPanelHandler.simple(parent, (ignored, player) -> pathPanel(menu, npc), true).openPanel();
+            return true;
+        }
+        IPanelHandler.simple(parent, (ignored, player) -> statsPanel(menu, npc), true).openPanel();
         return true;
+    }
+
+    /** Level, rank, morale and its reasons, guard, and upkeep, read live while open. */
+    private static ModularPanel<?> statsPanel(NpcMenu menu, NpcEntity npc)
+    {
+        ModularPanel<?> panel = ModularPanel.defaultPanel("npc_stats", NpcStatsSheet.WIDTH, NpcStatsSheet.HEIGHT)
+                .background(new SlotBevel(PARCHMENT, false, false))
+                .hoverBackground(new SlotBevel(PARCHMENT, false, false))
+                .disablePanelsBelow(true)
+                .closeOnOutOfBoundsClick(true);
+        panel.child(new Widget<>()
+                .pos(0, 0)
+                .size(NpcStatsSheet.WIDTH, NpcStatsSheet.HEIGHT)
+                .overlay(new NpcStatsSheet(menu, npc)));
+        return panel;
     }
 
     private static ModularPanel<?> pathPanel(NpcMenu menu, NpcEntity npc)

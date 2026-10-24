@@ -18,6 +18,7 @@ public final class AncientEmpiresClientConfig
     private static final ForgeConfigSpec.BooleanValue SHOW_NAMETAGS;
     private static final ForgeConfigSpec.BooleanValue SHOW_STATUS_ICONS;
     private static final ForgeConfigSpec.IntValue STATUS_ICON_RANGE;
+    private static final ForgeConfigSpec.BooleanValue STATUS_ICONS_OWN_ONLY;
 
     static
     {
@@ -31,6 +32,9 @@ public final class AncientEmpiresClientConfig
         STATUS_ICON_RANGE = builder
                 .comment("Status icons show for NPCs within this many blocks.")
                 .defineInRange("statusIconRange", 24, 4, 128);
+        STATUS_ICONS_OWN_ONLY = builder
+                .comment("Show status icons and morale badges only over your own NPCs, for less clutter in big battles.")
+                .define("statusIconsOwnOnly", false);
         SPEC = builder.build();
     }
 
@@ -38,6 +42,7 @@ public final class AncientEmpiresClientConfig
     public static boolean showNametags = false;
     public static boolean showStatusIcons = true;
     public static int statusIconRange = 24;
+    public static boolean statusIconsOwnOnly = false;
 
     private AncientEmpiresClientConfig()
     {
@@ -53,5 +58,6 @@ public final class AncientEmpiresClientConfig
         showNametags = SHOW_NAMETAGS.get();
         showStatusIcons = SHOW_STATUS_ICONS.get();
         statusIconRange = STATUS_ICON_RANGE.get();
+        statusIconsOwnOnly = STATUS_ICONS_OWN_ONLY.get();
     }
 }

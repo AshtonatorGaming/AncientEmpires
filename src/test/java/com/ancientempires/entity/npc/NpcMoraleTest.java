@@ -13,7 +13,7 @@ class NpcMoraleTest
 
     private static float target(double allies, double enemies, float health, boolean flanked, int routing)
     {
-        return NpcMorale.target(new NpcMorale.Situation(60.0F, 0.0F, allies, enemies, health, flanked, false, routing), WEIGHTS);
+        return NpcMorale.target(new NpcMorale.Situation(60.0F, 0.0F, allies, enemies, health, flanked, false, routing, 0.0F), WEIGHTS);
     }
 
     @Test
@@ -43,7 +43,7 @@ class NpcMoraleTest
     void aCommanderLiftsMorale()
     {
         float plain = target(2.0D, 2.0D, 1.0F, false, 0);
-        float inspired = NpcMorale.target(new NpcMorale.Situation(60.0F, 1.0F, 2.0D, 2.0D, 1.0F, false, false, 0), WEIGHTS);
+        float inspired = NpcMorale.target(new NpcMorale.Situation(60.0F, 1.0F, 2.0D, 2.0D, 1.0F, false, false, 0, 0.0F), WEIGHTS);
         assertEquals(plain + 20.0F, inspired, 1.0E-4F);
     }
 
@@ -77,5 +77,24 @@ class NpcMoraleTest
         // Facing west (yaw 90, -x): an attacker to the west is in front.
         assertFalse(NpcMorale.fromBehind(90.0F, -3.0D, 0.0D, 120.0D));
         assertTrue(NpcMorale.fromBehind(90.0F, 3.0D, 0.0D, 120.0D));
+    }
+
+    @Test
+    void reasonsNameWhatMatters()
+    {
+        int calm = NpcMorale.reasons(new NpcMorale.Situation(60.0F, 0.0F, 3.0D, 3.0D, 1.0F, false, false, 0, 0.0F), WEIGHTS, 0.0F);
+        assertEquals(0, calm, "an even fight at full health has nothing to say");
+        int bad = NpcMorale.reasons(new NpcMorale.Situation(60.0F, 0.0F, 1.0D, 3.0D, 0.3F, true, false, 2, 0.0F), WEIGHTS, -20.0F);
+        assertTrue((bad & 1 << NpcMorale.REASON_OUTNUMBERED) != 0);
+        assertTrue((bad & 1 << NpcMorale.REASON_WOUNDED) != 0);
+        assertTrue((bad & 1 << NpcMorale.REASON_FLANKED) != 0);
+        assertTrue((bad & 1 << NpcMorale.REASON_PANIC) != 0);
+        assertTrue((bad & 1 << NpcMorale.REASON_SHOCK) != 0);
+        assertFalse((bad & 1 << NpcMorale.REASON_OUTNUMBERING) != 0);
+        int owner = NpcMorale.reasons(new NpcMorale.Situation(70.0F, 0.0F, 4.0D, 1.0D, 1.0F, false, false, 0, 15.0F), WEIGHTS, 0.0F);
+        assertTrue((owner & 1 << NpcMorale.REASON_OWNER) != 0);
+        assertTrue((owner & 1 << NpcMorale.REASON_OUTNUMBERING) != 0);
+        assertEquals(60.0F + 15.0F + 15.0F,
+                NpcMorale.target(new NpcMorale.Situation(60.0F, 0.0F, 4.0D, 1.0D, 1.0F, false, false, 0, 15.0F), WEIGHTS), 1.0E-4F);
     }
 }
