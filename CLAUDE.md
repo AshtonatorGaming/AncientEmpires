@@ -383,6 +383,11 @@ its own unless noted). Before adding behavior, check what AW did first.
   its own swing lands an NPC keeps the shield down `shield.followThroughTicks` (8) while the arm
   follows through (it was coming up mid-animation). A blocked hit plays only the shield's sound
   (`playHurtSound` skipped: vanilla played the hurt sound on blocked hits too).
+  NPC blocks are heard: `NpcGuard.onShieldHit` plays the shield sound from the server (vanilla's
+  block event plays an entity's sound on the client only for the local player, so NPC blocks
+  were silent). `NpcEntity.isDamageSourceBlocked` checks the front by head yaw, as `Parry`
+  does; vanilla used the mob's walking heading, so turned NPCs blocked from behind and took
+  hits from the front.
   `/ancientempires morale <state> [radius]` (op) forces the looked-at NPC, or its side within
   the radius, into steady, wavering, routing, shattered, or surrendered, for testing.
 - Tuning history (user, first battle tests): routs were too eager (now `routAt` 12, `oddsWeight`

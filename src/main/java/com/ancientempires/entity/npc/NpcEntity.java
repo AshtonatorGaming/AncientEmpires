@@ -28,6 +28,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -54,6 +55,7 @@ import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -62,6 +64,7 @@ import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.living.MobSpawnEvent;
@@ -1016,6 +1019,30 @@ public class NpcEntity extends PathfinderMob
     public void setSwingCommitted(boolean committed)
     {
         this.swingCommitted = committed;
+    }
+
+    /**
+     * Vanilla's shield check, but by where the NPC faces. Vanilla reads the view
+     * vector from the entity's yaw, which for a mob is its last heading while
+     * walking: an NPC that walked one way and turned to its attacker blocked hits
+     * from behind and let through hits from the front it was facing. The head
+     * yaw is what is seen, and what the perfect-block check already uses.
+     */
+    @Override
+    public boolean isDamageSourceBlocked(DamageSource source)
+    {
+        if (source.is(DamageTypeTags.BYPASSES_SHIELD) || !this.isBlocking()
+                || source.getDirectEntity() instanceof AbstractArrow arrow && arrow.getPierceLevel() > 0)
+        {
+            return false;
+        }
+        Vec3 from = source.getSourcePosition();
+        if (from == null)
+        {
+            return false;
+        }
+        Vec3 toward = from.vectorTo(this.position()).multiply(1.0D, 0.0D, 1.0D).normalize();
+        return toward.dot(Vec3.directionFromRotation(0.0F, this.getYHeadRot())) < 0.0D;
     }
 
     /** Vanilla calls this for every blocked melee hit; the guard decides what follows. */

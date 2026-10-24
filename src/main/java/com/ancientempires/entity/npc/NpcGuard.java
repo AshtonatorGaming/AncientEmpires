@@ -233,6 +233,12 @@ public final class NpcGuard
             this.lower();
             this.npc.playSound(SoundEvents.SHIELD_BREAK, 0.8F, 0.7F + this.npc.getRandom().nextFloat() * 0.2F);
         }
+        else
+        {
+            // The hit rings on the shield. Vanilla sends this as an entity event, but the client plays
+            // an entity's own sounds only for the local player, so an NPC's block was silent.
+            this.npc.playSound(SoundEvents.SHIELD_BLOCK, 1.0F, 0.8F + this.npc.getRandom().nextFloat() * 0.4F);
+        }
     }
 
     /** A hit just taken on the shield does not also shove the NPC back. */
