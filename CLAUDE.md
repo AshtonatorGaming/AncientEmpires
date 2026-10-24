@@ -209,7 +209,10 @@ its own unless noted). Before adding behavior, check what AW did first.
   makes the NPC within its path, as in Albion Online. Bow archer, crossbow crossbowman,
   thrown weapon skirmisher; hoe farmer, pickaxe miner, axe woodcutter, rod fisher. Without
   such an item, the trade the rank names (medic, trader, ...), then the path.
-- Access: only admins can open a faction NPC's inventory or command it. Owned NPCs answer
+- Access: only admins can open a faction NPC's inventory or command it, with sneak + right-click: a
+  faction NPC takes no plain right-click at all, nor does an NPC the player may not command (the click
+  passes to the held item, so a shield raised at an enemy blocks; it used to show a "locked" message and
+  eat the click). AW Tweaked's talking may use right-click later. Owned NPCs answer
   to their owner and admins.
 - Civilians (`avoidsFights`): never hold a target (`setTarget` turns it into a fear
   source), flee home or away even when armed, stay away less per nearby soldier, alert

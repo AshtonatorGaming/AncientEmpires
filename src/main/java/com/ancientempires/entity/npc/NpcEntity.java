@@ -2695,19 +2695,16 @@ public class NpcEntity extends PathfinderMob
         {
             return InteractionResult.PASS;
         }
+        // A faction NPC takes no right-click (admins sneak to open it), and neither does an NPC the
+        // player may not command: the click passes on to the held item, so a shield raised while
+        // looking at an enemy blocks instead of showing a message.
+        if (this.isFactionNpc() && !player.isShiftKeyDown() || !this.canOpenInventory(player))
+        {
+            return InteractionResult.PASS;
+        }
         if (player.getItemInHand(hand).getItem() instanceof InsigniaItem insignia)
         {
             return insignia.promote(this, player, player.getItemInHand(hand));
-        }
-        if (!this.canOpenInventory(player))
-        {
-            if (!this.level().isClientSide)
-            {
-                player.displayClientMessage(Component.translatable(this.isFactionNpc()
-                        ? "message.ancientempires.npc.faction_locked"
-                        : "message.ancientempires.npc.not_owner"), true);
-            }
-            return InteractionResult.CONSUME;
         }
         if (!this.level().isClientSide && player instanceof ServerPlayer serverPlayer)
         {

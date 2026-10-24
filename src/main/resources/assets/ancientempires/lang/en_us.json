@@ -68,8 +68,6 @@
   "skin.ancientempires.bard": "Bard",
   "gui.ancientempires.npc.backpack": "Backpack",
   "gui.ancientempires.npc.inventory": "Inventory",
-  "message.ancientempires.npc.not_owner": "This NPC belongs to someone else",
-  "message.ancientempires.npc.faction_locked": "This NPC serves its faction",
   "message.ancientempires.npc.skin_unavailable": "Skin packs are not installed",
   "message.ancientempires.npc.follow_on": "Following",
   "message.ancientempires.npc.follow_off": "Stopped following",
