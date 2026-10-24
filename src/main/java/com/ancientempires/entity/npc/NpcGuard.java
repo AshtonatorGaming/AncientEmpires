@@ -1,12 +1,17 @@
 package com.ancientempires.entity.npc;
 
+import com.ancientempires.combat.BetterCombatBridge;
 import com.ancientempires.combat.WeaponClassifier;
 import com.ancientempires.config.AncientEmpiresConfig;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.AxeItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -47,6 +52,8 @@ public final class NpcGuard
     private int bashReadyTick;
     /** tickCount of the last blocked hit, so it does not also knock the NPC back. */
     private int blockedAt = -1;
+    @Nullable
+    private LivingEntity incoming;
     /** The shield's guard; below zero means full. */
     private float points = -1.0F;
     /** tickCount until which a perfect block keeps this NPC staggered. */
@@ -362,6 +369,31 @@ public final class NpcGuard
      * A hit taken on the raised shield. Guard, as Chivalry's stamina: every blocked
      * hit wears it, so a shield wall can be broken; at zero the shield is knocked down.
      */
+    /** Who is hitting the NPC right now, set before vanilla's damage runs, for the guard's weighting. */
+    void setIncoming(@Nullable Entity attacker)
+    {
+        this.incoming = attacker instanceof LivingEntity living ? living : null;
+    }
+
+    /** An axe, a shield-breaching weapon (Spartan halberds), or a Better Combat two-hander. */
+    static boolean heavy(@Nullable LivingEntity attacker)
+    {
+        if (attacker == null)
+        {
+            return false;
+        }
+        ItemStack weapon = attacker.getMainHandItem();
+        if (weapon.isEmpty())
+        {
+            return false;
+        }
+        if (weapon.getItem() instanceof AxeItem || weapon.canDisableShield(new ItemStack(Items.SHIELD), attacker, attacker))
+        {
+            return true;
+        }
+        return BetterCombatBridge.lookup(weapon).map(BetterCombatBridge.WeaponSnapshot::twoHanded).orElse(false);
+    }
+
     void onShieldHit(float amount)
     {
         this.blockedAt = this.npc.tickCount;
@@ -370,7 +402,9 @@ public final class NpcGuard
             // Half the time a blow on the shield cuts the spell short: half a second, then the answer.
             this.spellUntil = this.npc.tickCount + 10;
         }
-        this.points = this.points() - Math.max(1.0F, amount);
+        // Heavy weapons (axes, two-handers, shield breakers) batter a guard down faster, a player's too.
+        float drain = Math.max(1.0F, amount) * (heavy(this.incoming) ? (float) AncientEmpiresConfig.shieldHeavyGuardDrain : 1.0F);
+        this.points = this.points() - drain;
         if (this.points <= 0.0F && WeaponClassifier.isShield(this.npc.getUseItem()))
         {
             this.points = 0.0F;

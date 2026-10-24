@@ -2838,7 +2838,9 @@ public class NpcEntity extends PathfinderMob
     @Override
     public boolean hurt(DamageSource source, float amount)
     {
+        this.guard.setIncoming(source.getEntity());
         boolean hurt = super.hurt(source, amount);
+        this.guard.setIncoming(null);
         if (hurt && !this.level().isClientSide)
         {
             this.morale.onHurt(source);

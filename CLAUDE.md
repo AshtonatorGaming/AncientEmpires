@@ -159,7 +159,11 @@ its own unless noted). Before adding behavior, check what AW did first.
   holds its guard, blocks, and ripostes. Only between two guards: against a foe with no shield (always "readying")
   deferring meant a shield NPC never got its turn. Against a foe that cannot block (no shield, or
   shield knocked out) a shield NPC presses: `shield.pressMinBlockTicks` (4) and `pressStrikeChance` (0.5)
-  replace the patient 12 and 0.15, so it still guards but goes for the kill. Past the minimum, a strike comes at a random beat
+  replace the patient 12 and 0.15, so it still guards but goes for the kill. Heavy weapons (axes, shield
+  breachers like Spartan halberds, Better Combat two-handers; `NpcGuard.heavy`) drain guard
+  `shield.heavyGuardDrain` (1.75) times as fast, players' too. Next, agreed with the user (all things a
+  player can also do): a backstep dodge of visible NPC wind-ups by skill, and flanking raised shields
+  while still taking frontal openings. Past the minimum, a strike comes at a random beat
   (`strikeChance` per tick). Guard (`guardPoints`, like Chivalry stamina): blocked damage
   drains it, it recovers at `guardRegen`, and at zero the shield is knocked down for
   `guardBreakTicks`, so shield walls do not stalemate and players can break a turtle.

@@ -121,6 +121,7 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.IntValue SHIELD_BASH_RECOVERY;
     private static final ForgeConfigSpec.IntValue SHIELD_FOLLOW_THROUGH;
     private static final ForgeConfigSpec.IntValue SHIELD_MOB_PATIENCE;
+    private static final ForgeConfigSpec.DoubleValue SHIELD_HEAVY_DRAIN;
     private static final ForgeConfigSpec.IntValue SHIELD_PRESS_MIN_BLOCK;
     private static final ForgeConfigSpec.DoubleValue SHIELD_PRESS_STRIKE;
     private static final ForgeConfigSpec.IntValue SHIELD_DUEL_BLOCK_MIN;
@@ -640,6 +641,9 @@ public final class AncientEmpiresConfig
         SHIELD_MOB_PATIENCE = builder
                 .comment("Against a mob (no wind-up to read), a shield NPC baits: shield up until the mob's blow lands on it, then ripostes while the mob's attack recovers. If the mob has not struck for this many ticks, it takes the opening anyway. Mobs that cannot hit back (not after this NPC, out of reach) are just attacked.")
                 .defineInRange("mobPatienceTicks", 40, 0, 400);
+        SHIELD_HEAVY_DRAIN = builder
+                .comment("Guard drained by a blocked blow from a heavy weapon (an axe, a shield breacher like Spartan's halberds, a Better Combat two-hander), as a multiple of the damage. Players' heavy weapons count too.")
+                .defineInRange("heavyGuardDrain", 1.75D, 1.0D, 10.0D);
         SHIELD_PRESS_MIN_BLOCK = builder
                 .comment("Against a foe that cannot block (no shield, or its shield knocked out) a shield NPC presses: its shield comes down after this many ticks up instead of minBlockTicks, and it strikes at pressStrikeChance per tick instead of strikeChance. It still guards; it just goes for the kill.")
                 .defineInRange("pressMinBlockTicks", 4, 0, 100);
@@ -1298,6 +1302,7 @@ public final class AncientEmpiresConfig
     public static int shieldBashRecoveryTicks = 10;
     public static int shieldFollowThroughTicks = 8;
     public static int shieldMobPatienceTicks = 40;
+    public static double shieldHeavyGuardDrain = 1.75D;
     public static int shieldPressMinBlockTicks = 4;
     public static double shieldPressStrikeChance = 0.5D;
     public static int shieldDuelBlockMin = 20;
@@ -1649,6 +1654,7 @@ public final class AncientEmpiresConfig
         shieldBashRecoveryTicks = SHIELD_BASH_RECOVERY.get();
         shieldFollowThroughTicks = SHIELD_FOLLOW_THROUGH.get();
         shieldMobPatienceTicks = SHIELD_MOB_PATIENCE.get();
+        shieldHeavyGuardDrain = SHIELD_HEAVY_DRAIN.get();
         shieldPressMinBlockTicks = SHIELD_PRESS_MIN_BLOCK.get();
         shieldPressStrikeChance = SHIELD_PRESS_STRIKE.get();
         shieldDuelBlockMin = SHIELD_DUEL_BLOCK_MIN.get();
