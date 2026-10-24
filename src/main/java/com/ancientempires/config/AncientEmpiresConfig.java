@@ -239,6 +239,7 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.DoubleValue COMMAND_SUCCESSION_RANGE;
     private static final ForgeConfigSpec.DoubleValue COMMAND_SUCCESSION_SCALE;
     private static final ForgeConfigSpec.DoubleValue COMMAND_MIN_SCALE;
+    private static final ForgeConfigSpec.BooleanValue SUNLIGHT_ENABLED;
     private static final ForgeConfigSpec.BooleanValue SKIRMISH_ENABLED;
     private static final ForgeConfigSpec.DoubleValue SKIRMISH_MIN;
     private static final ForgeConfigSpec.DoubleValue SKIRMISH_MAX;
@@ -1020,6 +1021,10 @@ public final class AncientEmpiresConfig
         COMMAND_MIN_SCALE = builder.comment("The weakest a passed-down aura gets, however many times command passes.").defineInRange("minScale", 0.3D, 0.05D, 1.0D);
         builder.pop();
 
+        builder.comment("Daylight: factions with \"sunlight\": \"burn\" in factions.json (the undead) burn in daylight like zombies (a helmet takes the wear) and seek shade once burning; \"avoid\" (vampires, as in Ancient Warfare) also keep to shade by day.").push("sunlight");
+        SUNLIGHT_ENABLED = builder.define("enabled", true);
+        builder.pop();
+
         builder.comment("Skirmishers (DESIGN Tier 2, AncientTactics' numbers): an NPC holding a Spartan throwing weapon (javelin, tomahawk, throwing knife, boomerang) throws it at range, kites foes that close in, and draws its best backpack melee weapon when cornered or out of throws.").push("skirmish");
         SKIRMISH_ENABLED = builder.define("enabled", true);
         SKIRMISH_MIN = builder.comment("Closest it throws from.").defineInRange("minRange", 4.5D, 1.0D, 32.0D);
@@ -1474,6 +1479,7 @@ public final class AncientEmpiresConfig
     public static double commandSuccessionRange = 16.0D;
     public static double commandSuccessionScale = 0.6D;
     public static double commandMinScale = 0.3D;
+    public static boolean sunlightEnabled = true;
     public static boolean skirmishEnabled = true;
     public static double skirmishMinRange = 4.5D;
     public static double skirmishMaxRange = 28.0D;
@@ -1846,6 +1852,7 @@ public final class AncientEmpiresConfig
         commandSuccessionRange = COMMAND_SUCCESSION_RANGE.get();
         commandSuccessionScale = COMMAND_SUCCESSION_SCALE.get();
         commandMinScale = COMMAND_MIN_SCALE.get();
+        sunlightEnabled = SUNLIGHT_ENABLED.get();
         skirmishEnabled = SKIRMISH_ENABLED.get();
         skirmishMinRange = SKIRMISH_MIN.get();
         skirmishMaxRange = SKIRMISH_MAX.get();

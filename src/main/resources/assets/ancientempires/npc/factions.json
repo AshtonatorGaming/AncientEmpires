@@ -673,6 +673,7 @@
                      },
                      {
                          "id":  "undead",
+                         "sunlight":  "burn",
                          "fearless":  true,
                          "standing":  -1000,
                          "kill":  -100,
@@ -1682,6 +1683,7 @@
                      },
                      {
                          "id":  "vampire",
+                         "sunlight":  "avoid",
                          "fearless":  true,
                          "nightLights":  false,
                          "standing":  -1000,

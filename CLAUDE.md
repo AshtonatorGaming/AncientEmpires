@@ -137,12 +137,15 @@ F. Combat, player-doable: done. Backstep dodge (`NpcMeleeAttackGoal.dodging`): a
    `flankAngle` 70 of its facing) circles the shorter way to its side, at striking distance; footwork
    only runs while waiting, so a lowered shield is still struck at once.
 G. Banner bearer pose: hold the banner raised like a two-hander, not the small item (later, visual).
+Done since: daylight (`NpcSunGoal`, `sunlight` config, factions.json `sunlight`): undead (`burn`) burn in
+   daylight like zombies, a helmet taking the wear (`NpcEntity.burnInSun`, vanilla `isSunBurnTick`), and seek
+   shade once alight; vampires (`avoid`, Ancient Warfare's) keep to shade by day whenever not fighting.
 H. Sidearms beyond ranged (later, the user wants this): a pikeman with a reach weapon swapping to a shorter one
    in close quarters, and similar weapon-for-the-distance swaps; `NpcSidearm` already does it for bows and
    throwers.
 
 1. Ancient Warfare baseline still missing: lance charges and other mounted tactics,
-   vampire factions avoiding sunlight, day and night patrols, and the
+   day and night patrols, and the
    behavior behind the remaining roles (bard singing, trader, courier, worker
    jobs beyond the farmer, woodcutter, and miner, commander, patrol). Roles are labels from
    equipment until that behavior exists.

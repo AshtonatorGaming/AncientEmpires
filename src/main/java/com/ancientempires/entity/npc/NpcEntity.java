@@ -421,6 +421,7 @@ public class NpcEntity extends PathfinderMob
         // Civilians and routing soldiers run instead of fighting; it holds the move flag above the combat goals.
         this.goalSelector.addGoal(1, new NpcFleeGoal(this));
         this.goalSelector.addGoal(1, new NpcBurningGoal(this));
+        this.goalSelector.addGoal(1, new NpcSunGoal(this));
         this.goalSelector.addGoal(2, new NpcMeleeAttackGoal(this));
         this.goalSelector.addGoal(3, new NpcHoldPositionGoal(this, 0.9D));
         this.goalSelector.addGoal(3, new NpcUpkeepGoal(this));
@@ -1671,6 +1672,26 @@ public class NpcEntity extends PathfinderMob
         return 1.0D + (this.getLevel() - 1) * AncientEmpiresConfig.levelDamagePerLevel;
     }
 
+    /** Daylight on an undead or vampire NPC: a helmet takes the wear, as a zombie's does; bare-headed, it burns. */
+    private void burnInSun()
+    {
+        ItemStack helmet = this.getItemBySlot(EquipmentSlot.HEAD);
+        if (helmet.isEmpty())
+        {
+            this.setSecondsOnFire(8);
+            return;
+        }
+        if (helmet.isDamageableItem())
+        {
+            helmet.setDamageValue(helmet.getDamageValue() + this.random.nextInt(2));
+            if (helmet.getDamageValue() >= helmet.getMaxDamage())
+            {
+                this.broadcastBreakEvent(EquipmentSlot.HEAD);
+                this.setItemSlot(EquipmentSlot.HEAD, ItemStack.EMPTY);
+            }
+        }
+    }
+
     /** A governor at the Town Hall oversees this worker for {@code ticks}: it works faster ({@code governor.workBonus}). */
     void govern(int ticks)
     {
@@ -2636,6 +2657,10 @@ public class NpcEntity extends PathfinderMob
         }
         NpcParryPlanner.tick(this);
         this.morale.tick();
+        if (AncientEmpiresConfig.sunlightEnabled && NpcFactions.sunlight(this.getFaction()) != NpcFactions.Sunlight.NONE && this.isSunBurnTick())
+        {
+            this.burnInSun();
+        }
         if (this.getTarget() == null && (this.tickCount + this.getId()) % AncientEmpiresConfig.skirmishRestockTicks == 0
                 && SpartanThrowing.isThrowing(this.getMainHandItem()))
         {

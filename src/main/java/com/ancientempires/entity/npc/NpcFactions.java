@@ -56,8 +56,25 @@ public final class NpcFactions
      * {@code ranks} (default), {@code pack} (beasts: the leaders are alphas), or {@code none}.
      */
     public record Faction(String id, Set<String> hostile, int standing, int kill, int trade, boolean huntsTownsfolk, boolean nightLights, boolean fearless,
-            Map<String, String> rankNames, CommandStyle command)
+            Map<String, String> rankNames, CommandStyle command, Sunlight sunlight)
     {
+    }
+
+    /**
+     * Daylight (AW: vampires avoid the sun): BURN burns in daylight like a zombie and seeks shade once
+     * burning; AVOID also keeps to shade by day before it catches fire. Missing means NONE.
+     */
+    public enum Sunlight
+    {
+        NONE,
+        BURN,
+        AVOID
+    }
+
+    public static Sunlight sunlight(String id)
+    {
+        Faction faction = get(id);
+        return faction == null ? Sunlight.NONE : faction.sunlight();
     }
 
     /** How a faction is led: by ranks, as a pack under alphas, or not at all. */
@@ -219,7 +236,8 @@ public final class NpcFactions
                         integer(object, "trade"), "townsfolk".equals(object.has("hunts") ? object.get("hunts").getAsString() : ""),
                         !object.has("nightLights") || object.get("nightLights").getAsBoolean(),
                         object.has("fearless") && object.get("fearless").getAsBoolean(), rankNames(object),
-                        object.has("command") ? CommandStyle.valueOf(object.get("command").getAsString().toUpperCase(Locale.ROOT)) : CommandStyle.RANKS));
+                        object.has("command") ? CommandStyle.valueOf(object.get("command").getAsString().toUpperCase(Locale.ROOT)) : CommandStyle.RANKS,
+                        object.has("sunlight") ? Sunlight.valueOf(object.get("sunlight").getAsString().toUpperCase(Locale.ROOT)) : Sunlight.NONE));
             }
         }
         catch (Exception exception)
