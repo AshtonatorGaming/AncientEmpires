@@ -762,12 +762,12 @@ public class NpcMeleeAttackGoal extends Goal
         }
         if (--this.duelCheck <= 0)
         {
-            // Every 0.7 seconds: still a duel? And, a third of the time, a new stance (ToroQuest's guards).
-            this.duelCheck = 14;
+            // Every second: still a duel? And, a quarter of the time, a new stance (ToroQuest's guards).
+            this.duelCheck = 20;
             boolean wasDuel = this.duel;
             this.duel = this.isDuel(target);
             this.npc.getGuard().setDuel(this.duel);
-            if (this.duel && (!wasDuel || this.npc.getRandom().nextInt(3) == 0))
+            if (this.duel && (!wasDuel || this.npc.getRandom().nextInt(4) == 0))
             {
                 this.rollStance();
             }
@@ -848,14 +848,15 @@ public class NpcMeleeAttackGoal extends Goal
             }
             else
             {
-                forward = -0.8F;
+                forward = -0.4F;
             }
         }
         else
         {
-            forward = distance > reach * 0.85D ? 0.6F : distance < reach * 0.5D ? -0.4F : 0.1F;
+            // Unhurried: a duelist measures distance, it does not dart.
+            forward = distance > reach * 0.85D ? 0.35F : distance < reach * 0.5D ? -0.25F : 0.05F;
         }
-        float side = (float) (this.strafeSide * AncientEmpiresConfig.duelStrafe * (this.npc.isRaisingShield() ? 1.5D : 1.0D));
+        float side = (float) (this.strafeSide * AncientEmpiresConfig.duelStrafe * (this.npc.isRaisingShield() ? 1.2D : 1.0D));
         this.npc.getMoveControl().strafe(forward, Mth.clamp(side, -1.0F, 1.0F));
     }
 
@@ -874,7 +875,7 @@ public class NpcMeleeAttackGoal extends Goal
     /** After the NPC's own blow lands in a duel: step back out of reach. */
     private void stepOut()
     {
-        if (this.duel && AncientEmpiresConfig.footwork && !this.npc.isPassenger())
+        if (this.duel && AncientEmpiresConfig.footwork && !this.npc.isPassenger() && this.npc.getRandom().nextBoolean())
         {
             this.backingOff = true;
         }

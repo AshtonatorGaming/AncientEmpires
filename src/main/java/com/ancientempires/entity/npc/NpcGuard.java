@@ -66,8 +66,6 @@ public final class NpcGuard
     private boolean duel;
     private int spellUntil;
     private int openUntil;
-    /** The shove on the first blocked hit of a spell has been spent. */
-    private boolean shoved;
     /** tickCount of the last perfect block, -1 for never. */
     private int perfectAt = -1;
 
@@ -124,10 +122,6 @@ public final class NpcGuard
     /** Holds the shield up for {@code ticks} (a duel spell, or an arrow on its way). */
     public void blockFor(int ticks)
     {
-        if (this.spellUntil <= 0)
-        {
-            this.shoved = false;
-        }
         this.spellUntil = Math.max(this.spellUntil, this.npc.tickCount + ticks);
     }
 
@@ -393,13 +387,6 @@ public final class NpcGuard
         }
         // A blocked hit leaves the attacker open: a riposte may skip the minimum block.
         this.riposteUntil = this.npc.tickCount + AncientEmpiresConfig.shieldRiposteTicks;
-        if (this.duel && this.inSpell() && !this.shoved && AncientEmpiresConfig.shieldDuelShove > 0.0D)
-        {
-            // The first blow of a spell is met with a shove off the shield (ToroQuest's shield push).
-            this.shoved = true;
-            attacker.knockback(AncientEmpiresConfig.shieldDuelShove, this.npc.getX() - attacker.getX(), this.npc.getZ() - attacker.getZ());
-            attacker.hurtMarked = true;
-        }
         // A blocked hit is the moment to shove back, as a player would with Spartan's bash key.
         if (NpcShieldBash.canBash(this.npc) && this.npc.getRandom().nextDouble() < this.npc.getBashChance())
         {

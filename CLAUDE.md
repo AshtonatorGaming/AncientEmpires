@@ -402,13 +402,12 @@ its own unless noted). Before adding behavior, check what AW did first.
 - Two stances (`NpcMeleeAttackGoal.isDuel`, judged every 0.7 s): duel mode when no other NPC is within
   `combat.duelRange` (5) of the NPC and its foe (a player counts as a foe), done ToroQuest's way
   (Rebirth-of-the-Night/ToroQuestRevamped `EntityGuard`): the NPC never stands still, drifting
-  sideways at `duelStrafe` (0.45, half again behind a raised shield) in a stance direction re-rolled a
-  third of the time, closing to the edge of reach; `duelBackpedalChance` (0.25) stances, and every own
-  blow, backpedal out of reach and come in again. Steering is set every tick, so it walks rather than
+  sideways at `duelDrift` (0.25, a fifth more behind a raised shield; 0.45 with full-speed closing looked
+  frantic) in a stance direction re-rolled a quarter of the time each second, closing unhurried to the
+  edge of reach; `backpedalChance` (0.15) stances, and half its own blows, backpedal out of reach. Steering is set every tick, so it walks rather than
   glides. The shield goes up in spells (`NpcGuard.blockFor`, `inSpell`): once the foe has hit it,
   `shield.duelBlockMin` to `duelBlockMax` ticks up (shorter up close), then `duelOpenMin` to `duelOpenMax`
-  down while it attacks; half the time a blow on the shield cuts the spell to 10 ticks (the riposte);
-  the first blow of a spell shoves the attacker (`duelShove`). No guard stance in a duel, but a
+  down while it attacks; half the time a blow on the shield cuts the spell to 10 ticks (the riposte). No shove (tried; the user did not want the extra knockback). No guard stance in a duel, but a
   visible NPC wind-up still raises the shield. Line mode otherwise: the old rare sidestep, none when
   crowded, shield wall. Any shield NPC raises for an arrow in flight at it from a foe
   (`arrowBlockTicks`). The user found fights most fluid when NPCs danced; that belongs to duels.
