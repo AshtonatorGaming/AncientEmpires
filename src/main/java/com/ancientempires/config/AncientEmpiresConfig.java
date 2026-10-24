@@ -412,10 +412,10 @@ public final class AncientEmpiresConfig
                 .define("footwork", true);
         SIDESTEP_CHANCE = builder
                 .comment("Inside reach an NPC mostly stands; after each pause of 1.5 to 3.5 seconds, the chance it takes one quick sidestep.")
-                .defineInRange("stepChance", 0.2D, 0.0D, 1.0D);
+                .defineInRange("footworkChance", 0.35D, 0.0D, 1.0D);
         FOOTWORK_CROWD = builder
                 .comment("Footwork is for duels: with this many other NPCs within 2.5 blocks, an NPC stands its ground instead of stepping (crowded lines turned into a scramble).")
-                .defineInRange("footworkCrowd", 2, 1, 20);
+                .defineInRange("crowdLimit", 3, 1, 20);
         SIDESTEP_SPEED = builder
                 .comment("Sidestep input, 0 to 1. High enough that the legs walk; slower drifts read as sliding.")
                 .defineInRange("sidestepSpeed", 1.0D, 0.1D, 1.0D);
@@ -423,8 +423,8 @@ public final class AncientEmpiresConfig
                 .comment("When both fighters carry shields, sidesteps come this much less often: a standoff, not a dance.")
                 .defineInRange("shieldSidestepScale", 0.5D, 0.0D, 1.0D);
         ATTACK_PAUSE = builder
-                .comment("Extra ticks after every NPC swing before the next, on top of the weapon's own cooldown, so attacks are not spammed. Ancient Warfare used only the weapon cooldown (20 ticks over attack speed); 0 matches it. 10 slows fights to a readable pace.")
-                .defineInRange("swingPause", 10, 0, 40);
+                .comment("Extra ticks after every NPC swing before the next, on top of the weapon's own cooldown, so attacks are not spammed. Ancient Warfare used only the weapon cooldown (20 ticks over attack speed); 0 matches it. 6 gives a readable pace without idling.")
+                .defineInRange("swingDelay", 6, 0, 40);
         PRESSURE_CHANCE = builder
                 .comment("Against a raised shield, the chance each tick that an NPC without one starts its swing. Below 1 it picks its moments instead of hammering the shield as fast as its weapon allows.")
                 .defineInRange("pressureChance", 0.12D, 0.01D, 1.0D);
@@ -1169,12 +1169,12 @@ public final class AncientEmpiresConfig
     public static boolean stopMovingDuringWindup = true;
     public static double windupMoveSpeed = 0.7D;
     public static boolean footwork = true;
-    public static double sidestepChance = 0.2D;
-    public static int footworkCrowd = 2;
+    public static double sidestepChance = 0.35D;
+    public static int footworkCrowd = 3;
     public static double sidestepSpeed = 1.0D;
     public static double shieldSidestepScale = 0.5D;
     public static double pressureChance = 0.12D;
-    public static int attackPause = 10;
+    public static int attackPause = 6;
     public static double approachSpeed = 1.12D;
     public static int pathRecalcTicks = 8;
     public static boolean requireLineOfSight = true;

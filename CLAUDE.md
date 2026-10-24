@@ -160,7 +160,7 @@ its own unless noted). Before adding behavior, check what AW did first.
   a swing only at `pressureChance` per tick. A hit taken on the shield never knocks the NPC
   back (`NpcEntity.knockback`), as a blocking player stands firm. Guard is `shield.guardMax` (30) times
   `skill.guardByTier` (1 to 1.75). Footwork comes in steps with rests, not a constant drift (which
-  slid). Every swing is followed by `combat.swingPause` (10; the field is `attackPause`) extra ticks; AW used only the weapon
+  slid). Every swing is followed by `combat.swingDelay` (6; the field is `attackPause`) extra ticks; AW used only the weapon
   cooldown (20 over attack speed), so 0 matches it. A vanilla mob or player has no wind-up, so
   only an NPC target's open attack window holds a guard; right after their swing is an opening,
   and a riposte waits half the strike delay. Bash chance per blocked hit is `skill.bashChancePerBlock` (0.08 to 0.25 by tier).
@@ -377,8 +377,8 @@ its own unless noted). Before adding behavior, check what AW did first.
   a player's always does. With every axe hit disabling shields, Brigand axemen beat Empire
   shield spearmen. `/ancientempires stress report` lists each side: standing of fielded,
   broken, average level, and health left.
-- Battles stay readable: footwork is off when `combat.footworkCrowd` (2) other NPCs are within
-  2.5 blocks (`stepChance` 0.2), so lines do not jostle; foot soldiers drop a routing target
+- Battles stay readable: footwork is off when `combat.crowdLimit` (3) other NPCs are within
+  2.5 blocks (`footworkChance` 0.35, steps of 5 to 8 ticks; 0.2 and 2 felt dead), so lines do not jostle; foot soldiers drop a routing target
   past `morale.chaseRange` (8) and hold the field (`NpcEntity.chases`), riders run them down. After
   its own swing lands an NPC keeps the shield down `shield.followThroughTicks` (8) while the arm
   follows through (it was coming up mid-animation). A blocked hit plays only the shield's sound

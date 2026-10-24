@@ -774,7 +774,7 @@ public class NpcMeleeAttackGoal extends Goal
                 // In a press of bodies a soldier holds its place; footwork is for open ground.
                 return;
             }
-            this.stepLeft = 4 + this.npc.getRandom().nextInt(3);
+            this.stepLeft = 5 + this.npc.getRandom().nextInt(4);
             if (this.npc.getRandom().nextBoolean())
             {
                 this.strafeSide = -this.strafeSide;
