@@ -267,6 +267,11 @@ public class NpcMeleeAttackGoal extends Goal
                 this.npc.getNavigation().stop();
                 this.stoppedForWindup = true;
             }
+            if (this.npc.distanceToSqr(target) < Mth.square(this.keepOff(target, swing)))
+            {
+                // Pressed too close mid-swing: ease back rather than swing from inside the foe.
+                this.npc.getMoveControl().strafe(-0.3F, 0.0F);
+            }
         }
         else
         {
@@ -817,7 +822,7 @@ public class NpcMeleeAttackGoal extends Goal
         this.stepLeft--;
         double reach = swing.range() + target.getBbWidth() * 0.5D;
         double distance = Math.sqrt(this.npc.distanceToSqr(target));
-        float forward = distance > reach * 0.8D ? 0.5F : distance < reach * 0.45D ? -0.5F : 0.0F;
+        float forward = distance > reach * 0.8D ? 0.5F : distance < this.keepOff(target, swing) ? -0.5F : 0.0F;
         this.npc.getMoveControl().strafe(forward, this.strafeSide * (float) AncientEmpiresConfig.sidestepSpeed);
     }
 
@@ -858,10 +863,23 @@ public class NpcMeleeAttackGoal extends Goal
         else
         {
             // Unhurried: a duelist measures distance, it does not dart.
-            forward = distance > reach * 0.85D ? 0.35F : distance < reach * 0.5D ? -0.25F : 0.05F;
+            // Holding the gap: no creeping forward inside reach, which walked shield duelists into each other.
+            forward = distance > reach * 0.85D ? 0.35F : distance < this.keepOff(target, swing) ? -0.3F : 0.0F;
         }
         float side = (float) (this.strafeSide * AncientEmpiresConfig.duelStrafe * (this.npc.isRaisingShield() ? 1.2D : 1.0D));
         this.npc.getMoveControl().strafe(forward, Mth.clamp(side, -1.0F, 1.0F));
+    }
+
+    /**
+     * The closest an NPC lets a foe be, centre to centre: {@code combat.minGapReach}
+     * of its reach, and never less than the two bodies plus {@code combat.minGap}.
+     * Fighters stand off at weapon length instead of hugging or pushing through each other.
+     */
+    private double keepOff(LivingEntity target, AttackSwing swing)
+    {
+        double reach = swing.range() + target.getBbWidth() * 0.5D;
+        double bodies = (this.npc.getBbWidth() + target.getBbWidth()) * 0.5D + AncientEmpiresConfig.minGap;
+        return Math.max(bodies, reach * AncientEmpiresConfig.minGapReach);
     }
 
     /** One foe and no other NPC within {@code combat.duelRange} of either: a duel. Judged per step decision. */

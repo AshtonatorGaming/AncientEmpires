@@ -47,6 +47,8 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.BooleanValue CANCEL_IF_OUT_OF_RANGE;
     private static final ForgeConfigSpec.DoubleValue WINDUP_RANGE_SLACK;
     private static final ForgeConfigSpec.DoubleValue WINDUP_KEEP_RANGE;
+    private static final ForgeConfigSpec.DoubleValue MIN_GAP;
+    private static final ForgeConfigSpec.DoubleValue MIN_GAP_REACH;
     private static final ForgeConfigSpec.BooleanValue STOP_MOVING_DURING_WINDUP;
     private static final ForgeConfigSpec.DoubleValue WINDUP_MOVE_SPEED;
     private static final ForgeConfigSpec.BooleanValue FOOTWORK;
@@ -421,6 +423,12 @@ public final class AncientEmpiresConfig
         WINDUP_KEEP_RANGE = builder
                 .comment("During a wind-up the NPC keeps closing until the target is within this fraction of its reach, so a target drifting a little does not turn the swing into a sure miss (a real backstep still dodges it).")
                 .defineInRange("windupKeepRange", 0.8D, 0.1D, 1.0D);
+        MIN_GAP_REACH = builder
+                .comment("Fighters keep the foe at least this fraction of their reach away (centre to centre), backing off when pressed closer, so they fight at weapon length instead of hugging.")
+                .defineInRange("minGapReach", 0.55D, 0.0D, 1.0D);
+        MIN_GAP = builder
+                .comment("And never closer than their two bodies plus this many blocks.")
+                .defineInRange("minGap", 0.5D, 0.0D, 3.0D);
         STOP_MOVING_DURING_WINDUP = builder
                 .comment("Stop pathing once the target is in range during wind-up.")
                 .define("stopMovingDuringWindup", true);
@@ -1215,6 +1223,8 @@ public final class AncientEmpiresConfig
     public static boolean cancelIfOutOfRange = true;
     public static double windupRangeSlack = 0.5D;
     public static double windupKeepRange = 0.8D;
+    public static double minGap = 0.5D;
+    public static double minGapReach = 0.55D;
     public static boolean stopMovingDuringWindup = true;
     public static double windupMoveSpeed = 0.7D;
     public static boolean footwork = true;
@@ -1565,6 +1575,8 @@ public final class AncientEmpiresConfig
         cancelIfOutOfRange = CANCEL_IF_OUT_OF_RANGE.get();
         windupRangeSlack = WINDUP_RANGE_SLACK.get();
         windupKeepRange = WINDUP_KEEP_RANGE.get();
+        minGap = MIN_GAP.get();
+        minGapReach = MIN_GAP_REACH.get();
         stopMovingDuringWindup = STOP_MOVING_DURING_WINDUP.get();
         windupMoveSpeed = WINDUP_MOVE_SPEED.get();
         footwork = FOOTWORK.get();
