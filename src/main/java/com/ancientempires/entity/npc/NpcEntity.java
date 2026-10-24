@@ -2695,10 +2695,10 @@ public class NpcEntity extends PathfinderMob
         {
             return InteractionResult.PASS;
         }
-        // A faction NPC takes no right-click (admins sneak to open it), and neither does an NPC the
-        // player may not command: the click passes on to the held item, so a shield raised while
-        // looking at an enemy blocks instead of showing a message.
-        if (this.isFactionNpc() && !player.isShiftKeyDown() || !this.canOpenInventory(player))
+        // An NPC the player may not command (any faction NPC, unless an admin) takes no right-click:
+        // the click passes on to the held item, so a shield raised while looking at an enemy blocks
+        // instead of showing a message.
+        if (!this.canOpenInventory(player))
         {
             return InteractionResult.PASS;
         }
