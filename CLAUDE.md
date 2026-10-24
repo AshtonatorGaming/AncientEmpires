@@ -492,7 +492,18 @@ its own unless noted). Before adding behavior, check what AW did first.
   `surrenderHealth`, a routing faction soldier may surrender (`surrenderChance`): it
   kneels (crouch pose, `NpcSurrenderGoal`), NPCs stop targeting it, a hit shatters it, and
   with no enemy near for `surrenderReleaseTicks` it leaves shattered. Capture and
-  recruiting are later. Saved as `AeMorale`, `AeMoraleState`, `AeRouts` (not packed), `AeLevel`, `AeXp`.
+  recruiting are later. Saved as `AeMorale`, `AeMoraleState`, `AeRouts` (not packed).
+  Players' own soldiers are steadier (`ownedBaseBonus` 10) and take heart from their owner
+  within `ownerPresenceRange` (`ownerPresenceBonus` 15), since an army running unexpectedly
+  feels worse than an enemy routing feels good. Each check records its reasons
+  (`NpcMorale.reasons`, `REASON_` bits) for the stats sheet.
+- Stats sheet (`NpcStatsSheet`): clicking the role label (right click for a settler, whose left
+  click picks a path) opens a panel with rank, band, level and an XP bar (workers: work speed),
+  morale with a bar marked at the waver and rout lines, its state, and up to three reasons,
+  guard, and fed or hungry. Morale, guard, and hunger come through the menu's container data
+  (`NpcMenu.stat`, synced to the viewer only); level and rank are entity data. Wavering and
+  inspired badges show only in a fight; client `statusIconsOwnOnly` hides other players' and
+  faction NPCs' icons.
 - Levy (`AeLevy`): an owner can call a civilian up to fight until dismissed. Debuffs in the
   `proficiency` section: damage 0.7, slower wind-ups, no bash or feint, breaks below 30%
   health.
@@ -500,7 +511,7 @@ its own unless noted). Before adding behavior, check what AW did first.
   or backpack, so sidearm swaps count) times 0.5, by a skirmisher times 0.75. Cached on
   hands, backpack, path, and levy changes.
 - NPC NBT keys: `AeRoster` (roster row), `AePath`, `AeLevy`, `AeSkill` (tier override),
-  `AeFeintChance`, `AeSidearmBowSlot`, `AeMountLost`, `AeRevenge`, `AeWorksite`, `AeHungry`, `AeNextMeal`, `AeMealCredit`, `AeBed`, `AeSpawner`, `AeSpawnerSlot`, `AeGarrison` (spawner link, not packed), `AeMorale`, `AeMoraleState`, `AeRouts` (not packed) (`AeMountUuid` is not packed). All carried through repack.
+  `AeFeintChance`, `AeSidearmBowSlot`, `AeMountLost`, `AeRevenge`, `AeWorksite`, `AeHungry`, `AeNextMeal`, `AeMealCredit`, `AeBed`, `AeSpawner`, `AeSpawnerSlot`, `AeGarrison` (spawner link, not packed), `AeMorale`, `AeMoraleState`, `AeRouts` (not packed), `AeLevel`, `AeXp`, `AeRank` (`AeMountUuid` is not packed). All carried through repack.
 
 ## Performance rules and audit findings
 
