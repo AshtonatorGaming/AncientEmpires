@@ -130,12 +130,9 @@ public final class NpcMorale
 
     private float base()
     {
+        // Read along the list by level, as the other skills are.
         List<? extends Double> bases = AncientEmpiresConfig.moraleBaseByTier;
-        if (bases.isEmpty())
-        {
-            return 60.0F;
-        }
-        return bases.get(Mth.clamp(this.npc.getSkillTier(), 0, bases.size() - 1)).floatValue();
+        return bases.isEmpty() ? 60.0F : (float) this.npc.skillValue(bases);
     }
 
     void tick()

@@ -171,8 +171,28 @@ its own unless noted). Before adding behavior, check what AW did first.
   swing follows during `bashRecoveryTicks`, and the bash spends the riposte. `shield.bashMode`: SPARTAN (its `shields_with_bash` tag), ALL, OFF.
 - Feint: Better Combat style, break off halfway against a guarded target, never twice in
   a row. Internal attack path only.
-- Skill tiers from roster rank (0 ordinary, 1 elite, 2 leader, 3 elite leader) pick bash
-  chance, feint chance, and shield reaction from the `skill` lists.
+- Skill comes from level (below); the roster rank (`getSkillTier`: 0 ordinary, 1 elite, 2 leader,
+  3 elite leader) is now only rank: who commands (`NpcCommand`) and the level a faction NPC
+  starts at. `AeSkill` still pins an NPC to one list entry.
+- Levels (`NpcLeveling`, `leveling` config; AW's `NpcLevelingStats` capped at 10, XP only from
+  kills at 5 each, and gave +5% damage and +1 health per level): 1 to `maxLevel` (20), saved as
+  `AeLevel` and `AeXp` and packed with the NPC, synced for the inventory. XP to the next level is
+  `xpBase` plus `xpStep` per level (540 to level 10, 2090 to 20), from damage dealt to foes
+  (`LivingDamageEvent`, after armour), kills (plus the victim's level), blocked hits
+  (`NpcGuard.onBlocked`), perfect blocks, and work actions (`NpcWorkGoal.wearTool`). Settlers
+  do not level. A level is mostly skill: every `skill` list (parry, timing error, guard, feint,
+  bash, shield reaction) and `morale.baseByTier` is read along the levels
+  (`NpcLeveling.position`, `lerp`: entry 1 at level 1, entry 4 at the cap), so each level counts.
+  Stats stay small: `healthPerLevel` (a saved max-health modifier, so a reload keeps the health),
+  `damagePerLevel` (in the melee and ranged proficiency), and for workers `workSpeedPerLevel`
+  (shorter actions) and `toolWearCutPerLevel`. Bands of five: soldiers Recruit, Regular,
+  Veteran, Champion; workers Apprentice, Journeyman, Expert, Master (`NpcEntity.bandKey`).
+  Faction NPCs roll a level by rank on first placement (`factionMinByTier` 1/8/12/16 to
+  `factionMaxByTier` 5/12/16/20); older saves roll on load. Owned NPCs start at 1. Level-ups
+  sparkle, chime, and tell the owner (`announce`). The inventory role label reads
+  "Archer, Lv 13", its tooltip the band and XP. `/ancientempires level` shows the looked-at
+  NPC's; admins add a number to set it. Next: ranks (sergeant, captain, general, by promotion
+  item and level), then squads under leaders and squad morale.
 - Paths (`NpcPath`, saved as `AePath`; old `AeCalling` and `AeRole` saves still load): the locked
   path. SETTLER (flavor, undecided), WORKER (trades, traders, priests, bards, faction
   townsfolk; runs), SOLDIER (fights). Old saves' `commoner` and `civilian` map to the
@@ -376,7 +396,8 @@ its own unless noted). Before adding behavior, check what AW did first.
   (below `darkness`) with a free off hand hold a torch or lantern (`ancientempires:night_lights`
   tag), held out level in `NpcModel.holdLight`; never with a bow, crossbow, or Better Combat
   two-hander. Factions with `"nightLights": false` in factions.json (beast, demon, ent, giant,
-  kong, monster, mindflayer, gremlin, vampire) are not issued lights. With Amendments (Moonlight's
+  monster, mindflayer, gremlin, vampire) are not issued lights (Kongs are a human jungle tribe in
+  AW's guide, so they carry them). With Amendments (Moonlight's
   held-item API, `NpcMoonlightCompat`, reflection) NPCs get its arm pose and 3D lantern and torch,
   which Moonlight only hooks for players; without it the item is stood upright on the level arm. Owned ones use their backpack's and put it back by
   day; faction guards are issued one (`AeNightLight`, stripped before death drops and
@@ -460,7 +481,7 @@ its own unless noted). Before adding behavior, check what AW did first.
   `surrenderHealth`, a routing faction soldier may surrender (`surrenderChance`): it
   kneels (crouch pose, `NpcSurrenderGoal`), NPCs stop targeting it, a hit shatters it, and
   with no enemy near for `surrenderReleaseTicks` it leaves shattered. Capture and
-  recruiting are later. Saved as `AeMorale`, `AeMoraleState`, `AeRouts` (not packed).
+  recruiting are later. Saved as `AeMorale`, `AeMoraleState`, `AeRouts` (not packed), `AeLevel`, `AeXp`.
 - Levy (`AeLevy`): an owner can call a civilian up to fight until dismissed. Debuffs in the
   `proficiency` section: damage 0.7, slower wind-ups, no bash or feint, breaks below 30%
   health.
@@ -562,7 +583,7 @@ target-scan design.
   methods so no game is needed: `WorksiteArea`, `QuarryStair.columns`, `Parry.perfectWindow`,
   `NpcGuard.strikesFirst`. Put a new rule in such a method and test it there; the game code calls
   the same method. Also `NpcCommand.inherited` and the morale math (`NpcMorale.target`, `drift`,
-  `decay`, `fromBehind`).
+  `decay`, `fromBehind`), and the level curve and skill reading (`NpcLeveling`).
 
 ## Building
 

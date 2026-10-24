@@ -293,10 +293,27 @@ public final class NpcInventoryPanel
                 .size(PREVIEW_W - 18, 12)
                 .background(new Rectangle().color(BUTTON))
                 .hoverBackground(new Rectangle().color(choosable ? BUTTON_HOVER : BUTTON))
-                .overlay(new CenteredText(() -> Component.translatable(NpcPath.translationKey(npc.getRoleId())),
-                        () -> mayChoose(npc) ? GOLD : NAME_INK))
+                .overlay(new CenteredText(() -> roleLabel(npc), () -> mayChoose(npc) ? GOLD : NAME_INK))
                 .onMousePressed((context, pressed) -> openPaths(menu, npc, pressed))
-                .addTooltipLine(Component.translatable(choosable ? "gui.ancientempires.npc.path" : "gui.ancientempires.npc.role").getString());
+                .tooltipDynamic(tooltip ->
+                {
+                    tooltip.addLine(Component.translatable(choosable ? "gui.ancientempires.npc.path" : "gui.ancientempires.npc.role").getString());
+                    if (npc.levels())
+                    {
+                        // The band and the way to the next level.
+                        tooltip.addLine(Component.translatable(npc.getXpToNext() > 0.0D ? "gui.ancientempires.npc.level_progress" : "gui.ancientempires.npc.level_max",
+                                Component.translatable(NpcEntity.bandKey(npc.getNpcPath(), npc.getLevelBand())), npc.getLevel(),
+                                (int) npc.getXp(), (int) Math.ceil(npc.getXpToNext())).getString());
+                    }
+                })
+                .tooltipAutoUpdate(true);
+    }
+
+    /** The role, with the level for NPCs that level: "Archer, Lv 13". */
+    private static Component roleLabel(NpcEntity npc)
+    {
+        Component role = Component.translatable(NpcPath.translationKey(npc.getRoleId()));
+        return npc.levels() ? Component.translatable("gui.ancientempires.npc.role_level", role, npc.getLevel()) : role;
     }
 
     private static boolean mayChoose(NpcEntity npc)

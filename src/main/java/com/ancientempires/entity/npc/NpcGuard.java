@@ -237,6 +237,7 @@ public final class NpcGuard
     /** After vanilla blocked a melee hit: an axe disables the shield; otherwise a riposte opens, and maybe a bash. */
     void onBlocked(LivingEntity attacker)
     {
+        this.npc.addXp(AncientEmpiresConfig.levelXpPerBlock);
         if (this.isDisabled())
         {
             // The guard broke on this hit: no riposte or bash from behind a shield that is down.

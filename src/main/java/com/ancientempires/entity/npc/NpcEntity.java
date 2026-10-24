@@ -22,6 +22,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.MinecraftServer;
@@ -29,6 +30,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -119,6 +121,12 @@ public class NpcEntity extends PathfinderMob
     private static final EntityDataAccessor<Boolean> DATA_STAGGERED = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.BOOLEAN);
     /** {@link NpcBadge} ordinal, for the badge beside the status icon. */
     private static final EntityDataAccessor<Byte> DATA_BADGE = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.BYTE);
+    /** Level 1 to {@code leveling.maxLevel}, and the XP toward the next, for the inventory. */
+    private static final EntityDataAccessor<Byte> DATA_LEVEL = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.BYTE);
+    private static final EntityDataAccessor<Float> DATA_XP = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.FLOAT);
+    private static final String LEVEL_KEY = "AeLevel";
+    private static final String XP_KEY = "AeXp";
+    private static final UUID LEVEL_HEALTH_ID = UUID.fromString("3c2b8f4e-71d9-4a8b-9e57-0f6a2d1c5b93");
     private static final String FOLLOWING_KEY = "Following";
     private static final String CREATIVE_KEY = "Creative";
     private static final String HOLDING_KEY = "HoldPosition";
@@ -286,6 +294,8 @@ public class NpcEntity extends PathfinderMob
         this.entityData.define(DATA_STATUS, (byte) 0);
         this.entityData.define(DATA_STAGGERED, false);
         this.entityData.define(DATA_BADGE, (byte) 0);
+        this.entityData.define(DATA_LEVEL, (byte) 1);
+        this.entityData.define(DATA_XP, 0.0F);
     }
 
     /**
@@ -594,7 +604,7 @@ public class NpcEntity extends PathfinderMob
         return super.canAttack(target);
     }
 
-    private static boolean sameOwner(NpcEntity left, NpcEntity right)
+    static boolean sameOwner(NpcEntity left, NpcEntity right)
     {
         UUID owner = left.getOwner();
         return owner != null && owner.equals(right.getOwner());
@@ -951,19 +961,19 @@ public class NpcEntity extends PathfinderMob
     /** Chance to try a perfect block, by skill tier. */
     public double getParryChance()
     {
-        return tierValue(AncientEmpiresConfig.parryChanceByTier, this.getSkillTier());
+        return this.skillValue(AncientEmpiresConfig.parryChanceByTier);
     }
 
     /** Up to how many ticks a perfect-block raise is mistimed, by skill tier. */
     public int getParryError()
     {
-        return (int) Math.round(tierValue(AncientEmpiresConfig.parryErrorByTier, this.getSkillTier()));
+        return (int) Math.round(this.skillValue(AncientEmpiresConfig.parryErrorByTier));
     }
 
     /** The skill tier's guard multiplier ({@code skill.guardByTier}). */
     double getGuardScale()
     {
-        return tierValue(AncientEmpiresConfig.guardByTier, this.getSkillTier());
+        return this.skillValue(AncientEmpiresConfig.guardByTier);
     }
 
     /**
@@ -1006,7 +1016,7 @@ public class NpcEntity extends PathfinderMob
         {
             return this.feintChance;
         }
-        return (float) tierValue(AncientEmpiresConfig.feintChanceByTier, this.getSkillTier());
+        return (float) this.skillValue(AncientEmpiresConfig.feintChanceByTier);
     }
 
     public void setFeintChance(float chance)
@@ -1021,13 +1031,13 @@ public class NpcEntity extends PathfinderMob
         {
             return 0.0D;
         }
-        return tierValue(AncientEmpiresConfig.bashChanceByTier, this.getSkillTier());
+        return this.skillValue(AncientEmpiresConfig.bashChanceByTier);
     }
 
     /** Most ticks before the shield comes up against a threat. Skilled NPCs react faster. */
     public int getShieldReactionTicks()
     {
-        return (int) Math.round(tierValue(AncientEmpiresConfig.shieldReactionByTier, this.getSkillTier()));
+        return (int) Math.round(this.skillValue(AncientEmpiresConfig.shieldReactionByTier));
     }
 
     /**
@@ -1272,7 +1282,7 @@ public class NpcEntity extends PathfinderMob
         if (version != this.proficiencyVersion)
         {
             this.proficiencyVersion = version;
-            this.meleeProficiency = (float) (this.unitMeleeMultiplier() * this.getLevyDamage());
+            this.meleeProficiency = (float) (this.unitMeleeMultiplier() * this.getLevyDamage() * this.getLevelDamage());
         }
         return this.meleeProficiency;
     }
@@ -1280,7 +1290,7 @@ public class NpcEntity extends PathfinderMob
     /** Damage multiplier for arrows and other shots: only a levy is worse at it. */
     public float getRangedProficiency()
     {
-        return (float) this.getLevyDamage();
+        return (float) (this.getLevyDamage() * this.getLevelDamage());
     }
 
     private double getLevyDamage()
@@ -1413,13 +1423,168 @@ public class NpcEntity extends PathfinderMob
         return elite ? 1 : 0;
     }
 
-    private static double tierValue(List<? extends Number> values, int tier)
+    /**
+     * A four-entry {@code skill} list read at this NPC's skill: along the list by
+     * level ({@link NpcLeveling#position}), or exactly at the {@code AeSkill}
+     * override's entry.
+     */
+    double skillValue(List<? extends Number> values)
     {
-        if (values.isEmpty())
+        double position = this.skillOverride >= 0 ? this.skillOverride
+                : NpcLeveling.position(this.getLevel(), AncientEmpiresConfig.levelMax);
+        return NpcLeveling.lerp(values, position);
+    }
+
+    public int getLevel()
+    {
+        return Math.max(1, this.entityData.get(DATA_LEVEL));
+    }
+
+    /** XP toward the next level. */
+    public float getXp()
+    {
+        return this.entityData.get(DATA_XP);
+    }
+
+    /** XP from this level to the next, or 0 at the cap. */
+    public double getXpToNext()
+    {
+        int level = this.getLevel();
+        return level >= AncientEmpiresConfig.levelMax ? 0.0D
+                : NpcLeveling.xpToNext(level, AncientEmpiresConfig.levelXpBase, AncientEmpiresConfig.levelXpStep);
+    }
+
+    /** Settlers do not level; workers and soldiers do. */
+    public boolean levels()
+    {
+        return this.getNpcPath() != NpcPath.SETTLER;
+    }
+
+    /** The level's band, 0 to 3: Recruit, Regular, Veteran, Champion (soldiers) or Apprentice to Master (workers). */
+    public int getLevelBand()
+    {
+        return NpcLeveling.band(this.getLevel(), AncientEmpiresConfig.levelMax);
+    }
+
+    /** Sets the level (admins, faction rolls, loading) and its stat gains. */
+    public void setLevel(int level)
+    {
+        int clamped = Mth.clamp(level, 1, Math.max(1, AncientEmpiresConfig.levelMax));
+        this.entityData.set(DATA_LEVEL, (byte) clamped);
+        this.applyLevelStats();
+    }
+
+    /**
+     * XP for something done (a hit, a kill, a block, a work action). Levels
+     * come one at a time, each with a little health; an owner hears of it.
+     */
+    public void addXp(double amount)
+    {
+        if (amount <= 0.0D || !AncientEmpiresConfig.levelEnabled || this.level().isClientSide || !this.levels() || this.isCreative())
         {
-            return 0.0D;
+            return;
         }
-        return values.get(Mth.clamp(tier, 0, values.size() - 1)).doubleValue();
+        int level = this.getLevel();
+        if (level >= AncientEmpiresConfig.levelMax)
+        {
+            return;
+        }
+        double xp = this.getXp() + amount;
+        double need = this.getXpToNext();
+        int gained = 0;
+        while (need > 0.0D && xp >= need && level < AncientEmpiresConfig.levelMax)
+        {
+            xp -= need;
+            level++;
+            gained++;
+            need = NpcLeveling.xpToNext(level, AncientEmpiresConfig.levelXpBase, AncientEmpiresConfig.levelXpStep);
+        }
+        if (level >= AncientEmpiresConfig.levelMax)
+        {
+            xp = 0.0D;
+        }
+        this.entityData.set(DATA_XP, (float) xp);
+        if (gained > 0)
+        {
+            float before = this.getMaxHealth();
+            this.setLevel(level);
+            // The health a level brings comes with it, as a fresh wind.
+            this.heal(this.getMaxHealth() - before);
+            this.onLevelUp(level);
+        }
+    }
+
+    private void onLevelUp(int level)
+    {
+        if (this.level() instanceof ServerLevel server)
+        {
+            server.sendParticles(ParticleTypes.HAPPY_VILLAGER, this.getX(), this.getY() + this.getBbHeight() * 0.6D, this.getZ(),
+                    10, 0.4D, 0.5D, 0.4D, 0.0D);
+            this.playSound(SoundEvents.PLAYER_LEVELUP, 0.4F, 1.2F);
+        }
+        UUID owner = this.getOwner();
+        Player player = owner == null || !AncientEmpiresConfig.levelAnnounce ? null : this.level().getPlayerByUUID(owner);
+        if (player != null)
+        {
+            player.displayClientMessage(Component.translatable("message.ancientempires.npc.level_up", this.getDisplayName(),
+                    Component.translatable(bandKey(this.getNpcPath(), this.getLevelBand())), level), true);
+        }
+    }
+
+    /** Translation key of a band name for the path: soldiers and workers name them differently. */
+    public static String bandKey(NpcPath path, int band)
+    {
+        return "npc.ancientempires.band." + (path.combat() ? "soldier" : "worker") + "." + Mth.clamp(band, 0, NpcLeveling.BANDS - 1);
+    }
+
+    /** Health per level, as a saved modifier so a reload keeps the health it allows. Damage is in the proficiencies. */
+    private void applyLevelStats()
+    {
+        this.proficiencyVersion = Integer.MIN_VALUE;
+        AttributeInstance health = this.getAttribute(Attributes.MAX_HEALTH);
+        if (health == null)
+        {
+            return;
+        }
+        double bonus = (this.getLevel() - 1) * AncientEmpiresConfig.levelHealthPerLevel;
+        AttributeModifier current = health.getModifier(LEVEL_HEALTH_ID);
+        if (current != null && current.getAmount() == bonus)
+        {
+            return;
+        }
+        health.removeModifier(LEVEL_HEALTH_ID);
+        if (bonus > 0.0D)
+        {
+            health.addPermanentModifier(new AttributeModifier(LEVEL_HEALTH_ID, "Ancient Empires level", bonus, AttributeModifier.Operation.ADDITION));
+        }
+        if (this.getHealth() > this.getMaxHealth())
+        {
+            this.setHealth(this.getMaxHealth());
+        }
+    }
+
+    /** Damage multiplier from level ({@code leveling.damagePerLevel}). */
+    private double getLevelDamage()
+    {
+        return 1.0D + (this.getLevel() - 1) * AncientEmpiresConfig.levelDamagePerLevel;
+    }
+
+    /** Work speed multiplier from level, for workers' action times. */
+    public double getWorkSpeed()
+    {
+        return 1.0D + (this.getLevel() - 1) * AncientEmpiresConfig.levelWorkSpeedPerLevel;
+    }
+
+    /** Tool wear multiplier from level: skilled hands wear tools less. */
+    public double getToolWearScale()
+    {
+        return Math.max(0.1D, 1.0D - (this.getLevel() - 1) * AncientEmpiresConfig.levelToolWearCutPerLevel);
+    }
+
+    /** A faction NPC's starting level by rank; the roster row rolls it on first placement. */
+    void rollLevel(String subtype)
+    {
+        this.setLevel(NpcLeveling.roll(tierOf(subtype), this.getRandom()));
     }
 
     /**
@@ -1897,6 +2062,8 @@ public class NpcEntity extends PathfinderMob
         {
             tag.putInt(SKILL_KEY, this.skillOverride);
         }
+        tag.putInt(LEVEL_KEY, this.getLevel());
+        tag.putFloat(XP_KEY, this.getXp());
         // Always written: the scroll may be the generic one, whose row would imply another path.
         tag.putString(PATH_KEY, this.getNpcPath().id());
         tag.putBoolean(LEVY_KEY, this.isLevied());
@@ -2687,6 +2854,8 @@ public class NpcEntity extends PathfinderMob
         {
             tag.putFloat(COMMAND_KEY, this.inheritedCommand);
         }
+        tag.putInt(LEVEL_KEY, this.getLevel());
+        tag.putFloat(XP_KEY, this.getXp());
         if (this.spawnerPos != null)
         {
             tag.putLong(SPAWNER_KEY, this.spawnerPos.asLong());
@@ -2700,6 +2869,11 @@ public class NpcEntity extends PathfinderMob
     {
         super.readAdditionalSaveData(tag);
         this.inheritedCommand = tag.getFloat(COMMAND_KEY);
+        if (tag.contains(LEVEL_KEY))
+        {
+            this.entityData.set(DATA_XP, tag.getFloat(XP_KEY));
+            this.setLevel(tag.getInt(LEVEL_KEY));
+        }
         this.spawnerPos = tag.contains(SPAWNER_KEY) ? BlockPos.of(tag.getLong(SPAWNER_KEY)) : null;
         this.spawnerSlot = tag.contains(SPAWNER_SLOT_KEY) ? tag.getInt(SPAWNER_SLOT_KEY) : -1;
         this.garrison = tag.getBoolean(GARRISON_KEY);
@@ -2800,6 +2974,11 @@ public class NpcEntity extends PathfinderMob
         if (tag.contains(FACTION_KEY))
         {
             this.assignFaction(tag.getString(FACTION_KEY));
+        }
+        if (!tag.contains(LEVEL_KEY) && this.isFactionNpc())
+        {
+            // Saved before levels: a level for its rank, as a new one would roll.
+            this.rollLevel(this.getRosterSubtype());
         }
     }
 

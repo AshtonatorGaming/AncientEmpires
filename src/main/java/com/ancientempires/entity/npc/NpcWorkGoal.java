@@ -288,7 +288,9 @@ public abstract class NpcWorkGoal<T extends WorksiteBlockEntity> extends Goal
         boolean digging = this.kind >= 0 && this.digs(this.kind);
         if (this.actionTicks == 0)
         {
-            this.actionLength = this.kind < 0 ? AncientEmpiresConfig.workActionTicks : Math.max(1, this.actionTicks(this.kind, at));
+            int length = this.kind < 0 ? AncientEmpiresConfig.workActionTicks : this.actionTicks(this.kind, at);
+            // Skilled hands are quicker (leveling.workSpeedPerLevel).
+            this.actionLength = Math.max(1, (int) Math.round(length / this.npc.getWorkSpeed()));
             this.crack = digging ? this.digPos(this.kind, at) : null;
             if (this.kind >= 0)
             {
@@ -678,7 +680,10 @@ public abstract class NpcWorkGoal<T extends WorksiteBlockEntity> extends Goal
      */
     protected final void wearTool()
     {
-        if (AncientEmpiresConfig.workToolWear > 0.0D && this.npc.getRandom().nextDouble() < AncientEmpiresConfig.workToolWear)
+        // Every trade wears its tool once per action, so this is where work earns XP.
+        this.npc.addXp(AncientEmpiresConfig.levelXpPerWork);
+        double wear = AncientEmpiresConfig.workToolWear * this.npc.getToolWearScale();
+        if (wear > 0.0D && this.npc.getRandom().nextDouble() < wear)
         {
             this.npc.getMainHandItem().hurtAndBreak(1, this.npc, npc -> npc.broadcastBreakEvent(InteractionHand.MAIN_HAND));
         }

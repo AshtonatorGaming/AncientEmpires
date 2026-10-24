@@ -176,6 +176,7 @@ public final class Parry
         if (target instanceof NpcEntity npc)
         {
             npc.getGuard().onPerfectBlock();
+            npc.addXp(AncientEmpiresConfig.levelXpPerPerfectBlock);
             // The shield snaps forward, turning the blow aside.
             npc.swing(npc.getUsedItemHand());
         }

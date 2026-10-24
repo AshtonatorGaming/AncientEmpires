@@ -462,7 +462,6 @@
                      },
                      {
                          "id":  "kong",
-                         "nightLights":  false,
                          "standing":  -100,
                          "kill":  -100,
                          "trade":  0,

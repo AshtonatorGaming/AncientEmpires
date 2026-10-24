@@ -27,6 +27,8 @@ import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -57,6 +59,11 @@ public final class AeCommands
         dispatcher.register(Commands.literal(AncientEmpires.MOD_ID)
                 .then(Commands.literal("work")
                         .executes(AeCommands::work))
+                .then(Commands.literal("level")
+                        .executes(context -> level(context, -1))
+                        .then(Commands.argument("level", IntegerArgumentType.integer(1, 100))
+                                .requires(source -> source.hasPermission(2))
+                                .executes(context -> level(context, IntegerArgumentType.getInteger(context, "level")))))
                 .then(Commands.literal("stress")
                         .requires(source -> source.hasPermission(2))
                         .then(Commands.literal("clear")
@@ -97,6 +104,36 @@ public final class AeCommands
                                         .executes(AeCommands::reset)))));
     }
 
+    /** The NPC the player is looking at within 8 blocks that they may command (owner or admin), or null. */
+    @Nullable
+    private static NpcEntity lookedAt(ServerPlayer player)
+    {
+        Vec3 eye = player.getEyePosition();
+        Vec3 end = eye.add(player.getViewVector(1.0F).scale(8.0D));
+        EntityHitResult hit = ProjectileUtil.getEntityHitResult(player, eye, end, player.getBoundingBox().expandTowards(end.subtract(eye)).inflate(1.0D),
+                entity -> entity instanceof NpcEntity, 64.0D);
+        return hit != null && hit.getEntity() instanceof NpcEntity npc && npc.canOpenInventory(player) ? npc : null;
+    }
+
+    /** The looked-at NPC's level and XP; with a number (admins), sets the level. */
+    private static int level(CommandContext<CommandSourceStack> context, int level) throws CommandSyntaxException
+    {
+        NpcEntity npc = lookedAt(context.getSource().getPlayerOrException());
+        if (npc == null)
+        {
+            context.getSource().sendFailure(Component.translatable("commands.ancientempires.work.none"));
+            return 0;
+        }
+        if (level > 0)
+        {
+            npc.setLevel(level);
+        }
+        context.getSource().sendSuccess(() -> Component.translatable("commands.ancientempires.level", npc.getDisplayName(),
+                Component.translatable(NpcEntity.bandKey(npc.getNpcPath(), npc.getLevelBand())), npc.getLevel(),
+                String.format("%.1f", npc.getXp()), String.format("%.0f", npc.getXpToNext())), false);
+        return 1;
+    }
+
     /**
      * What stops the NPC the player is looking at (within 8 blocks) from working:
      * a checklist of every condition the worker goals need. Owner or admin.
@@ -104,11 +141,8 @@ public final class AeCommands
     private static int work(CommandContext<CommandSourceStack> context) throws CommandSyntaxException
     {
         ServerPlayer player = context.getSource().getPlayerOrException();
-        Vec3 eye = player.getEyePosition();
-        Vec3 end = eye.add(player.getViewVector(1.0F).scale(8.0D));
-        EntityHitResult hit = ProjectileUtil.getEntityHitResult(player, eye, end, player.getBoundingBox().expandTowards(end.subtract(eye)).inflate(1.0D),
-                entity -> entity instanceof NpcEntity, 64.0D);
-        if (hit == null || !(hit.getEntity() instanceof NpcEntity npc) || !npc.canOpenInventory(player))
+        NpcEntity npc = lookedAt(player);
+        if (npc == null)
         {
             context.getSource().sendFailure(Component.translatable("commands.ancientempires.work.none"));
             return 0;

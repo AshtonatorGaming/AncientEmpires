@@ -366,6 +366,11 @@ public final class NpcRoster
             // A random one of the class's skins, pinned. A repacked scroll's saved skin is applied after
             // this and replaces it, so only a first placement is randomized.
             npc.assignSkin(NpcSkins.randomVariant(this.skin, npc.getRandom()));
+            if (!this.owned)
+            {
+                // Faction NPCs start at a level for their rank; a repacked scroll's saved level replaces it.
+                npc.rollLevel(this.subtype());
+            }
             if (!this.name.isEmpty())
             {
                 String shown = this.name;

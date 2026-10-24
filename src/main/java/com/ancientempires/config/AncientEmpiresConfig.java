@@ -246,6 +246,23 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.BooleanValue MORALE_DESERT;
     private static final ForgeConfigSpec.DoubleValue MORALE_DESERT_RANGE;
     private static final ForgeConfigSpec.IntValue MORALE_RECOVER_TICKS;
+    private static final ForgeConfigSpec.BooleanValue LEVEL_ENABLED;
+    private static final ForgeConfigSpec.IntValue LEVEL_MAX;
+    private static final ForgeConfigSpec.DoubleValue LEVEL_XP_BASE;
+    private static final ForgeConfigSpec.DoubleValue LEVEL_XP_STEP;
+    private static final ForgeConfigSpec.DoubleValue LEVEL_XP_DAMAGE;
+    private static final ForgeConfigSpec.DoubleValue LEVEL_XP_KILL;
+    private static final ForgeConfigSpec.DoubleValue LEVEL_XP_KILL_LEVEL;
+    private static final ForgeConfigSpec.DoubleValue LEVEL_XP_BLOCK;
+    private static final ForgeConfigSpec.DoubleValue LEVEL_XP_PERFECT;
+    private static final ForgeConfigSpec.DoubleValue LEVEL_XP_WORK;
+    private static final ForgeConfigSpec.DoubleValue LEVEL_HEALTH;
+    private static final ForgeConfigSpec.DoubleValue LEVEL_DAMAGE;
+    private static final ForgeConfigSpec.DoubleValue LEVEL_WORK_SPEED;
+    private static final ForgeConfigSpec.DoubleValue LEVEL_TOOL_WEAR;
+    private static final ForgeConfigSpec.ConfigValue<List<? extends Integer>> LEVEL_FACTION_MIN;
+    private static final ForgeConfigSpec.ConfigValue<List<? extends Integer>> LEVEL_FACTION_MAX;
+    private static final ForgeConfigSpec.BooleanValue LEVEL_ANNOUNCE;
     private static final ForgeConfigSpec.BooleanValue NIGHT_LIGHT_ENABLED;
     private static final ForgeConfigSpec.BooleanValue NIGHT_LIGHT_FACTION_GUARDS;
     private static final ForgeConfigSpec.IntValue NIGHT_LIGHT_DARKNESS;
@@ -921,6 +938,28 @@ public final class AncientEmpiresConfig
         MORALE_RECOVER_TICKS = builder.comment("A player's shattered soldier recovers after this long with no enemy in range.").defineInRange("shatteredRecoverTicks", 1200, 20, 24000);
         builder.pop();
 
+        builder.comment("Levels: NPCs (soldiers and workers; not settlers) earn XP and level up to maxLevel. A level is mostly skill: the skill section's four-entry lists are read along the levels (entry 1 at level 1, entry 4 at the cap), so every level counts. Bands of five: soldiers Recruit, Regular, Veteran, Champion; workers Apprentice, Journeyman, Expert, Master. Ancient Warfare capped at 10 and gave XP only for kills.").push("leveling");
+        LEVEL_ENABLED = builder.comment("NPCs earn XP and level up. Off, levels stay as they are.").define("enabled", true);
+        LEVEL_MAX = builder.comment("The highest level.").defineInRange("maxLevel", 20, 4, 100);
+        LEVEL_XP_BASE = builder.comment("XP from level 1 to 2.").defineInRange("xpBase", 20.0D, 1.0D, 100000.0D);
+        LEVEL_XP_STEP = builder.comment("Extra XP needed for each level after that (20 then 30, 40, ...: 540 XP to level 10, 2090 to 20).").defineInRange("xpStep", 10.0D, 0.0D, 100000.0D);
+        LEVEL_XP_DAMAGE = builder.comment("XP per point of damage dealt to an enemy, after armour (2 points is a heart).").defineInRange("xpPerDamage", 0.5D, 0.0D, 100.0D);
+        LEVEL_XP_KILL = builder.comment("XP for a kill.").defineInRange("xpPerKill", 5.0D, 0.0D, 1000.0D);
+        LEVEL_XP_KILL_LEVEL = builder.comment("Extra XP per level of a slain NPC (other creatures count as level 1).").defineInRange("xpPerVictimLevel", 1.0D, 0.0D, 1000.0D);
+        LEVEL_XP_BLOCK = builder.comment("XP for a hit taken on the shield.").defineInRange("xpPerBlock", 1.0D, 0.0D, 1000.0D);
+        LEVEL_XP_PERFECT = builder.comment("XP for a perfect block.").defineInRange("xpPerPerfectBlock", 4.0D, 0.0D, 1000.0D);
+        LEVEL_XP_WORK = builder.comment("XP for each work action (a harvest, a log, a block dug, a catch, a dish).").defineInRange("xpPerWork", 0.25D, 0.0D, 1000.0D);
+        LEVEL_HEALTH = builder.comment("Max health per level past the first (0.25: about two and a half hearts at 20).").defineInRange("healthPerLevel", 0.25D, 0.0D, 10.0D);
+        LEVEL_DAMAGE = builder.comment("Melee and ranged damage per level past the first, as a fraction (0.01: 19% more at 20; Ancient Warfare gave 0.05).").defineInRange("damagePerLevel", 0.01D, 0.0D, 1.0D);
+        LEVEL_WORK_SPEED = builder.comment("Workers: work speed per level past the first, as a fraction (0.03: 57% faster at 20; Ancient Warfare gave 0.05).").defineInRange("workSpeedPerLevel", 0.03D, 0.0D, 1.0D);
+        LEVEL_TOOL_WEAR = builder.comment("Workers: tool wear cut per level past the first, as a fraction (0.02: 38% less at 20).").defineInRange("toolWearCutPerLevel", 0.02D, 0.0D, 0.1D);
+        LEVEL_FACTION_MIN = builder.comment("Faction NPCs start at a random level by rank: the lowest for ordinary, elite, leader, elite leader.")
+                .defineList("factionMinByTier", List.of(1, 8, 12, 16), value -> value instanceof Integer i && i >= 1 && i <= 100);
+        LEVEL_FACTION_MAX = builder.comment("The highest starting level by rank.")
+                .defineList("factionMaxByTier", List.of(5, 12, 16, 20), value -> value instanceof Integer i && i >= 1 && i <= 100);
+        LEVEL_ANNOUNCE = builder.comment("Tell an owner on screen when one of their NPCs levels up.").define("announce", true);
+        builder.pop();
+
         builder.comment("Night watch lights: soldiers awake at night or in the dark hold up a torch or lantern (the ancientempires:night_lights item tag) in a free off hand. Dynamic light mods light them.").push("nightLight");
         NIGHT_LIGHT_ENABLED = builder
                 .comment("Soldiers carry lights at night. Owned ones use torches or lanterns from their backpack and put them back at dawn.")
@@ -1297,6 +1336,23 @@ public final class AncientEmpiresConfig
     public static boolean moraleShatteredDesert = true;
     public static double moraleDesertRange = 48.0D;
     public static int moraleShatteredRecoverTicks = 1200;
+    public static boolean levelEnabled = true;
+    public static int levelMax = 20;
+    public static double levelXpBase = 20.0D;
+    public static double levelXpStep = 10.0D;
+    public static double levelXpPerDamage = 0.5D;
+    public static double levelXpPerKill = 5.0D;
+    public static double levelXpPerKillLevel = 1.0D;
+    public static double levelXpPerBlock = 1.0D;
+    public static double levelXpPerPerfectBlock = 4.0D;
+    public static double levelXpPerWork = 0.25D;
+    public static double levelHealthPerLevel = 0.25D;
+    public static double levelDamagePerLevel = 0.01D;
+    public static double levelWorkSpeedPerLevel = 0.03D;
+    public static double levelToolWearCutPerLevel = 0.02D;
+    public static List<? extends Integer> levelFactionMin = List.of(1, 8, 12, 16);
+    public static List<? extends Integer> levelFactionMax = List.of(5, 12, 16, 20);
+    public static boolean levelAnnounce = true;
     public static boolean nightLightEnabled = true;
     public static boolean nightLightFactionGuards = true;
     public static int nightLightDarkness = 7;
@@ -1606,6 +1662,23 @@ public final class AncientEmpiresConfig
         moraleShatteredDesert = MORALE_DESERT.get();
         moraleDesertRange = MORALE_DESERT_RANGE.get();
         moraleShatteredRecoverTicks = MORALE_RECOVER_TICKS.get();
+        levelEnabled = LEVEL_ENABLED.get();
+        levelMax = LEVEL_MAX.get();
+        levelXpBase = LEVEL_XP_BASE.get();
+        levelXpStep = LEVEL_XP_STEP.get();
+        levelXpPerDamage = LEVEL_XP_DAMAGE.get();
+        levelXpPerKill = LEVEL_XP_KILL.get();
+        levelXpPerKillLevel = LEVEL_XP_KILL_LEVEL.get();
+        levelXpPerBlock = LEVEL_XP_BLOCK.get();
+        levelXpPerPerfectBlock = LEVEL_XP_PERFECT.get();
+        levelXpPerWork = LEVEL_XP_WORK.get();
+        levelHealthPerLevel = LEVEL_HEALTH.get();
+        levelDamagePerLevel = LEVEL_DAMAGE.get();
+        levelWorkSpeedPerLevel = LEVEL_WORK_SPEED.get();
+        levelToolWearCutPerLevel = LEVEL_TOOL_WEAR.get();
+        levelFactionMin = LEVEL_FACTION_MIN.get();
+        levelFactionMax = LEVEL_FACTION_MAX.get();
+        levelAnnounce = LEVEL_ANNOUNCE.get();
         nightLightEnabled = NIGHT_LIGHT_ENABLED.get();
         nightLightFactionGuards = NIGHT_LIGHT_FACTION_GUARDS.get();
         nightLightDarkness = NIGHT_LIGHT_DARKNESS.get();
