@@ -121,6 +121,8 @@ public class NpcMeleeAttackGoal extends Goal
     public void stop()
     {
         this.npc.getNavigation().stop();
+        this.stopStepping();
+        this.stepLeft = 0;
         this.npc.setSwingCommitted(false);
         this.npc.getGuard().clearStrike();
         this.feintPlanned = false;
@@ -750,10 +752,12 @@ public class NpcMeleeAttackGoal extends Goal
         if (this.stepRest > 0)
         {
             this.stepRest--;
+            this.stopStepping();
             return;
         }
         if (this.stepLeft <= 0)
         {
+            this.stopStepping();
             this.stepRest = 30 + this.npc.getRandom().nextInt(40);
             double chance = AncientEmpiresConfig.sidestepChance;
             if (this.npc.hasShieldInOffhand() && WeaponClassifier.isShield(target.getOffhandItem()))
@@ -783,6 +787,17 @@ public class NpcMeleeAttackGoal extends Goal
         this.npc.getMoveControl().strafe(forward, this.strafeSide * (float) AncientEmpiresConfig.sidestepSpeed);
     }
 
+
+    /**
+     * Ends a sidestep. Vanilla's move control clears the forward input when it
+     * stops strafing but never the sideways one, which only fades 2% a tick, so a
+     * fighter left between steps (or after the fight) glided on sideways.
+     */
+    private void stopStepping()
+    {
+        this.npc.setXxa(0.0F);
+        this.npc.setZza(0.0F);
+    }
 
     /** Other NPCs (not the target) close enough that stepping about would only jostle them. Checked once per step decision. */
     private boolean crowded(LivingEntity target)
