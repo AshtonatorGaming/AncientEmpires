@@ -4,9 +4,11 @@ import com.ancientempires.AncientEmpires;
 import com.ancientempires.entity.npc.NpcEntity;
 import com.ancientempires.entity.npc.NpcFactions;
 import com.ancientempires.entity.npc.NpcJobGoal;
+import com.ancientempires.entity.npc.NpcMorale;
 import com.ancientempires.entity.npc.NpcRank;
 import com.ancientempires.entity.npc.NpcStandings;
 import com.ancientempires.network.ModNetwork;
+import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.CommandDispatcher;
@@ -33,6 +35,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Locale;
 import java.util.List;
 
 /**
@@ -61,6 +64,14 @@ public final class AeCommands
         dispatcher.register(Commands.literal(AncientEmpires.MOD_ID)
                 .then(Commands.literal("work")
                         .executes(AeCommands::work))
+                .then(Commands.literal("morale")
+                        .requires(source -> source.hasPermission(2))
+                        .then(Commands.argument("state", StringArgumentType.word())
+                                .suggests((context, builder) -> SharedSuggestionProvider.suggest(
+                                        Arrays.stream(NpcMorale.State.values()).map(state -> state.name().toLowerCase(Locale.ROOT)), builder))
+                                .executes(context -> morale(context, 0.0D))
+                                .then(Commands.argument("radius", DoubleArgumentType.doubleArg(1.0D, 128.0D))
+                                        .executes(context -> morale(context, DoubleArgumentType.getDouble(context, "radius"))))))
                 .then(Commands.literal("rank")
                         .requires(source -> source.hasPermission(2))
                         .then(Commands.argument("rank", StringArgumentType.word())
@@ -124,6 +135,41 @@ public final class AeCommands
         EntityHitResult hit = ProjectileUtil.getEntityHitResult(player, eye, end, player.getBoundingBox().expandTowards(end.subtract(eye)).inflate(1.0D),
                 entity -> entity instanceof NpcEntity, 64.0D);
         return hit != null && hit.getEntity() instanceof NpcEntity npc && npc.canOpenInventory(player) ? npc : null;
+    }
+
+    /**
+     * Testing (admins): puts the looked-at NPC, or with a radius every NPC on
+     * its side within it, straight into a morale state.
+     */
+    private static int morale(CommandContext<CommandSourceStack> context, double radius) throws CommandSyntaxException
+    {
+        NpcEntity npc = lookedAt(context.getSource().getPlayerOrException());
+        NpcMorale.State state;
+        try
+        {
+            state = NpcMorale.State.valueOf(StringArgumentType.getString(context, "state").toUpperCase(Locale.ROOT));
+        }
+        catch (IllegalArgumentException exception)
+        {
+            state = null;
+        }
+        if (npc == null || state == null)
+        {
+            context.getSource().sendFailure(Component.translatable(npc == null ? "commands.ancientempires.work.none" : "commands.ancientempires.morale.unknown"));
+            return 0;
+        }
+        List<NpcEntity> targets = radius <= 0.0D ? List.of(npc)
+                : npc.level().getEntitiesOfClass(NpcEntity.class, npc.getBoundingBox().inflate(radius), other -> other == npc || npc.isAlly(other));
+        int changed = 0;
+        for (NpcEntity target : targets)
+        {
+            changed += target.getMorale().force(state) ? 1 : 0;
+        }
+        int count = changed;
+        String name = state.name().toLowerCase(Locale.ROOT);
+        context.getSource().sendSuccess(() -> Component.translatable("commands.ancientempires.morale", count,
+                Component.translatable("gui.ancientempires.morale." + name)), false);
+        return count;
     }
 
     /** Sets the looked-at NPC's rank (admins). */

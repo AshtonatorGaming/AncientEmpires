@@ -271,6 +271,8 @@
   "message.ancientempires.promote.one_step": "%s must be a %4$s first",
   "message.ancientempires.promote.level": "%s needs level %3$s to become a %2$s",
   "commands.ancientempires.rank.unknown": "Unknown rank: soldier, sergeant, captain, or general",
+  "commands.ancientempires.morale": "%s NPCs set to %s",
+  "commands.ancientempires.morale.unknown": "Unknown state: steady, wavering, routing, shattered, or surrendered",
   "gui.ancientempires.npc.level_progress": "%s, level %s: %s / %s XP to the next",
   "gui.ancientempires.npc.level_max": "%s, level %s (the highest)",
   "npc.ancientempires.band.soldier.0": "Recruit",

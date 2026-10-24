@@ -444,6 +444,12 @@ public final class NpcMorale
         {
             return false;
         }
+        this.surrender();
+        return true;
+    }
+
+    private void surrender()
+    {
         this.state = State.SURRENDERED;
         this.clearTicks = 0;
         this.npc.getNavigation().stop();
@@ -455,6 +461,49 @@ public final class NpcMorale
         {
             // Its enemies leave it be; a fresh scan will not pick it either.
             other.setTarget(null);
+        }
+    }
+
+    /**
+     * Admins and testing ({@code /ancientempires morale}): puts the NPC straight
+     * into a state, as the real causes would. Returns false where morale does
+     * not apply (civilians, fearless factions, morale off).
+     */
+    public boolean force(State wanted)
+    {
+        if (!this.applies())
+        {
+            return false;
+        }
+        switch (wanted)
+        {
+            case STEADY ->
+            {
+                this.leaveSurrender();
+                this.state = State.STEADY;
+                this.value = this.base();
+                this.shock = 0.0F;
+                this.routs = 0;
+            }
+            case WAVERING ->
+            {
+                this.leaveSurrender();
+                this.state = State.WAVERING;
+                this.value = (float) ((AncientEmpiresConfig.moraleWaverBelow + AncientEmpiresConfig.moraleRoutBelow) / 2.0D);
+            }
+            case ROUTING ->
+            {
+                this.leaveSurrender();
+                this.value = (float) Math.max(0.0D, AncientEmpiresConfig.moraleRoutBelow - 1.0D);
+                this.routs = Math.max(0, Math.min(this.routs, AncientEmpiresConfig.moraleShatterAfterRouts - 2));
+                this.rout();
+            }
+            case SHATTERED -> this.shatter();
+            case SURRENDERED ->
+            {
+                this.value = 0.0F;
+                this.surrender();
+            }
         }
         return true;
     }

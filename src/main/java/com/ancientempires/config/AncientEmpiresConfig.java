@@ -50,6 +50,7 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.DoubleValue WINDUP_MOVE_SPEED;
     private static final ForgeConfigSpec.BooleanValue FOOTWORK;
     private static final ForgeConfigSpec.DoubleValue SIDESTEP_CHANCE;
+    private static final ForgeConfigSpec.IntValue FOOTWORK_CROWD;
     private static final ForgeConfigSpec.DoubleValue SIDESTEP_SPEED;
     private static final ForgeConfigSpec.DoubleValue SHIELD_SIDESTEP_SCALE;
     private static final ForgeConfigSpec.DoubleValue PRESSURE_CHANCE;
@@ -111,6 +112,7 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.IntValue SHIELD_BASH_COOLDOWN;
     private static final ForgeConfigSpec.IntValue TOWER_BASH_COOLDOWN;
     private static final ForgeConfigSpec.IntValue SHIELD_BASH_RECOVERY;
+    private static final ForgeConfigSpec.IntValue SHIELD_FOLLOW_THROUGH;
     private static final ForgeConfigSpec.BooleanValue FEINTS;
     private static final ForgeConfigSpec.IntValue FEINT_RECOVERY;
 
@@ -252,6 +254,7 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.DoubleValue MORALE_OWNED_BASE;
     private static final ForgeConfigSpec.DoubleValue MORALE_OWNER_PRESENCE;
     private static final ForgeConfigSpec.DoubleValue MORALE_OWNER_RANGE;
+    private static final ForgeConfigSpec.DoubleValue MORALE_CHASE_RANGE;
     private static final ForgeConfigSpec.BooleanValue LEVEL_ENABLED;
     private static final ForgeConfigSpec.IntValue LEVEL_MAX;
     private static final ForgeConfigSpec.DoubleValue LEVEL_XP_BASE;
@@ -409,7 +412,10 @@ public final class AncientEmpiresConfig
                 .define("footwork", true);
         SIDESTEP_CHANCE = builder
                 .comment("Inside reach an NPC mostly stands; after each pause of 1.5 to 3.5 seconds, the chance it takes one quick sidestep.")
-                .defineInRange("sidestepChance", 0.35D, 0.0D, 1.0D);
+                .defineInRange("stepChance", 0.2D, 0.0D, 1.0D);
+        FOOTWORK_CROWD = builder
+                .comment("Footwork is for duels: with this many other NPCs within 2.5 blocks, an NPC stands its ground instead of stepping (crowded lines turned into a scramble).")
+                .defineInRange("footworkCrowd", 2, 1, 20);
         SIDESTEP_SPEED = builder
                 .comment("Sidestep input, 0 to 1. High enough that the legs walk; slower drifts read as sliding.")
                 .defineInRange("sidestepSpeed", 1.0D, 0.1D, 1.0D);
@@ -591,6 +597,9 @@ public final class AncientEmpiresConfig
         SHIELD_BASH_RECOVERY = builder
                 .comment("Ticks after a bash before the NPC raises its shield or swings again: the bash is the counter on its own, not the start of a combo.")
                 .defineInRange("bashRecoveryTicks", 10, 0, 100);
+        SHIELD_FOLLOW_THROUGH = builder
+                .comment("Ticks after its own swing lands that an NPC keeps its shield down: the arm is still following through, as a player's is.")
+                .defineInRange("followThroughTicks", 8, 0, 40);
         builder.pop();
 
         builder.comment("Combat skill by roster rank, four values each: ordinary, elite, leader, elite leader. An NPC's AeSkill tag (0 to 3) overrides its rank.").push("skill");
@@ -957,6 +966,7 @@ public final class AncientEmpiresConfig
         MORALE_OWNED_BASE = builder.comment("Extra base morale for players' own soldiers: losing your army unexpectedly feels worse than routing an enemy feels good.").defineInRange("ownedBaseBonus", 10.0D, 0.0D, 100.0D);
         MORALE_OWNER_PRESENCE = builder.comment("Morale a player's soldiers draw from their owner fighting nearby, as from a general.").defineInRange("ownerPresenceBonus", 15.0D, 0.0D, 100.0D);
         MORALE_OWNER_RANGE = builder.comment("Blocks within which the owner's presence counts.").defineInRange("ownerPresenceRange", 16.0D, 0.0D, 64.0D);
+        MORALE_CHASE_RANGE = builder.comment("Foot soldiers let routing enemies go once they are this far: they hold the field instead of scattering after them. Riders run them down at any range, as cavalry does. 0 chases everywhere.").defineInRange("chaseRange", 8.0D, 0.0D, 64.0D);
         builder.pop();
 
         builder.comment("Levels: NPCs (soldiers and workers; not settlers) earn XP and level up to maxLevel. A level is mostly skill: the skill section's four-entry lists are read along the levels (entry 1 at level 1, entry 4 at the cap), so every level counts. Bands of five: soldiers Recruit, Regular, Veteran, Champion; workers Apprentice, Journeyman, Expert, Master. Ancient Warfare capped at 10 and gave XP only for kills.").push("levels");
@@ -1159,7 +1169,8 @@ public final class AncientEmpiresConfig
     public static boolean stopMovingDuringWindup = true;
     public static double windupMoveSpeed = 0.7D;
     public static boolean footwork = true;
-    public static double sidestepChance = 0.35D;
+    public static double sidestepChance = 0.2D;
+    public static int footworkCrowd = 2;
     public static double sidestepSpeed = 1.0D;
     public static double shieldSidestepScale = 0.5D;
     public static double pressureChance = 0.12D;
@@ -1222,6 +1233,7 @@ public final class AncientEmpiresConfig
     public static int shieldBashCooldownTicks = 30;
     public static int towerBashCooldownTicks = 50;
     public static int shieldBashRecoveryTicks = 10;
+    public static int shieldFollowThroughTicks = 8;
     public static boolean feints = true;
     public static int feintRecoveryTicks = 6;
 
@@ -1363,6 +1375,7 @@ public final class AncientEmpiresConfig
     public static double moraleOwnedBaseBonus = 10.0D;
     public static double moraleOwnerPresenceBonus = 15.0D;
     public static double moraleOwnerPresenceRange = 16.0D;
+    public static double moraleChaseRange = 8.0D;
     public static boolean levelEnabled = true;
     public static int levelMax = 20;
     public static double levelXpBase = 20.0D;
@@ -1493,6 +1506,7 @@ public final class AncientEmpiresConfig
         windupMoveSpeed = WINDUP_MOVE_SPEED.get();
         footwork = FOOTWORK.get();
         sidestepChance = SIDESTEP_CHANCE.get();
+        footworkCrowd = FOOTWORK_CROWD.get();
         sidestepSpeed = SIDESTEP_SPEED.get();
         shieldSidestepScale = SHIELD_SIDESTEP_SCALE.get();
         pressureChance = PRESSURE_CHANCE.get();
@@ -1554,6 +1568,7 @@ public final class AncientEmpiresConfig
         shieldBashCooldownTicks = SHIELD_BASH_COOLDOWN.get();
         towerBashCooldownTicks = TOWER_BASH_COOLDOWN.get();
         shieldBashRecoveryTicks = SHIELD_BASH_RECOVERY.get();
+        shieldFollowThroughTicks = SHIELD_FOLLOW_THROUGH.get();
         feints = FEINTS.get();
         feintRecoveryTicks = FEINT_RECOVERY.get();
 
@@ -1695,6 +1710,7 @@ public final class AncientEmpiresConfig
         moraleOwnedBaseBonus = MORALE_OWNED_BASE.get();
         moraleOwnerPresenceBonus = MORALE_OWNER_PRESENCE.get();
         moraleOwnerPresenceRange = MORALE_OWNER_RANGE.get();
+        moraleChaseRange = MORALE_CHASE_RANGE.get();
         levelEnabled = LEVEL_ENABLED.get();
         levelMax = LEVEL_MAX.get();
         levelXpBase = LEVEL_XP_BASE.get();

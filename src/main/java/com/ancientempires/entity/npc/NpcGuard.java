@@ -92,6 +92,12 @@ public final class NpcGuard
         }
     }
 
+    /** Keeps the shield down for {@code ticks} (a swing's follow-through), on top of any longer hold. */
+    void holdDown(int ticks)
+    {
+        this.downUntil = Math.max(this.downUntil, this.npc.tickCount + ticks);
+    }
+
     public void lower()
     {
         if (this.npc.isRaisingShield())

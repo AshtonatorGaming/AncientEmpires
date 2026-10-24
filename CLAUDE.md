@@ -377,6 +377,14 @@ its own unless noted). Before adding behavior, check what AW did first.
   a player's always does. With every axe hit disabling shields, Brigand axemen beat Empire
   shield spearmen. `/ancientempires stress report` lists each side: standing of fielded,
   broken, average level, and health left.
+- Battles stay readable: footwork is off when `combat.footworkCrowd` (2) other NPCs are within
+  2.5 blocks (`stepChance` 0.2), so lines do not jostle; foot soldiers drop a routing target
+  past `morale.chaseRange` (8) and hold the field (`NpcEntity.chases`), riders run them down. After
+  its own swing lands an NPC keeps the shield down `shield.followThroughTicks` (8) while the arm
+  follows through (it was coming up mid-animation). A blocked hit plays only the shield's sound
+  (`playHurtSound` skipped: vanilla played the hurt sound on blocked hits too).
+  `/ancientempires morale <state> [radius]` (op) forces the looked-at NPC, or its side within
+  the radius, into steady, wavering, routing, shattered, or surrendered, for testing.
 - Tuning history (user, first battle tests): routs were too eager (now `routAt` 12, `oddsWeight`
   15, `woundsWeight` 20, `fallSpeed` 0.15, `panicPerRouter` 4), XP came too fast (the `levels`
   section, about 720 XP to level 10), and faction level-ups were heard (now silent; only owned

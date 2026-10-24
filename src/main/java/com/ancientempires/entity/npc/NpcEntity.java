@@ -447,7 +447,7 @@ public class NpcEntity extends PathfinderMob
      * Same side: the same faction for faction NPCs, the same owner for owned ones.
      * Allies answer each other's alerts.
      */
-    boolean isAlly(NpcEntity other)
+    public boolean isAlly(NpcEntity other)
     {
         if (other == this)
         {
@@ -498,6 +498,10 @@ public class NpcEntity extends PathfinderMob
         {
             return false;
         }
+        if (!this.chases(target))
+        {
+            return false;
+        }
         if (this.isFactionNpc())
         {
             if (target.isFactionNpc())
@@ -511,6 +515,20 @@ public class NpcEntity extends PathfinderMob
             return false;
         }
         return !AncientEmpiresConfig.relationsEnabled || target.isHostileToPlayer(this.getOwner());
+    }
+
+    /**
+     * Whether this NPC goes after a target: anyone fighting, and a routing NPC
+     * only within {@code morale.chaseRange} on foot, so a won fight does not
+     * scatter the winners across the field; riders run routers down.
+     */
+    boolean chases(LivingEntity target)
+    {
+        if (!(target instanceof NpcEntity npc) || !npc.morale.isBroken() || this.isPassenger() || AncientEmpiresConfig.moraleChaseRange <= 0.0D)
+        {
+            return true;
+        }
+        return this.distanceToSqr(target) <= AncientEmpiresConfig.moraleChaseRange * AncientEmpiresConfig.moraleChaseRange;
     }
 
     /** A faction NPC's view of a player in the world. Creative and spectator players are never enemies. */
@@ -2364,6 +2382,8 @@ public class NpcEntity extends PathfinderMob
     public void closeAttackWindow()
     {
         this.guard.clearStrike();
+        // The swing landed; the arm follows through before the shield can come back up.
+        this.guard.holdDown(AncientEmpiresConfig.shieldFollowThroughTicks);
         this.attackWindowOpen = false;
         this.attackWindupRemaining = 0;
         this.attackAnimation = null;
@@ -2528,6 +2548,11 @@ public class NpcEntity extends PathfinderMob
         if (target != null && this.avoidsFights())
         {
             // A cornered civilian's stand is over; it runs again rather than keep fighting.
+            this.setTarget(null);
+        }
+        else if (target != null && (this.tickCount + this.getId()) % 10 == 0 && !this.chases(target))
+        {
+            // The enemy broke and got clear: let it go and hold the field.
             this.setTarget(null);
         }
         else if (target != null && this.isStandingGround() && !this.isLevied()
@@ -2759,6 +2784,19 @@ public class NpcEntity extends PathfinderMob
     {
         float cap = (float) (this.getAttributeValue(Attributes.MOVEMENT_SPEED) * AncientEmpiresConfig.maxSpeed);
         super.setSpeed(Math.min(speed, cap));
+    }
+
+    /**
+     * Vanilla plays the hurt sound even for a hit taken on a shield. A player
+     * blocking hears only the shield, so an NPC that blocked stays quiet too.
+     */
+    @Override
+    protected void playHurtSound(DamageSource source)
+    {
+        if (!this.guard.blockedThisTick())
+        {
+            super.playHurtSound(source);
+        }
     }
 
     @Override

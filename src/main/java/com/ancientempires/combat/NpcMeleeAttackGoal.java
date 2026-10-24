@@ -25,6 +25,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -764,6 +765,11 @@ public class NpcMeleeAttackGoal extends Goal
             {
                 return;
             }
+            if (this.crowded(target))
+            {
+                // In a press of bodies a soldier holds its place; footwork is for open ground.
+                return;
+            }
             this.stepLeft = 4 + this.npc.getRandom().nextInt(3);
             if (this.npc.getRandom().nextBoolean())
             {
@@ -777,6 +783,14 @@ public class NpcMeleeAttackGoal extends Goal
         this.npc.getMoveControl().strafe(forward, this.strafeSide * (float) AncientEmpiresConfig.sidestepSpeed);
     }
 
+
+    /** Other NPCs (not the target) close enough that stepping about would only jostle them. Checked once per step decision. */
+    private boolean crowded(LivingEntity target)
+    {
+        List<NpcEntity> near = this.npc.level().getEntitiesOfClass(NpcEntity.class, this.npc.getBoundingBox().inflate(2.5D, 1.0D, 2.5D),
+                other -> other != this.npc && other != target && other.isAlive());
+        return near.size() >= AncientEmpiresConfig.footworkCrowd;
+    }
 
     private void moveToward(LivingEntity target, double speed)
     {
