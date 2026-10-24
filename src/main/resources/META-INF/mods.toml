@@ -94,6 +94,15 @@ description='''${mod_description}'''
     versionRange="[0,)"
     ordering="AFTER"
     side="CLIENT"
+# Spartan Weaponry (optional): this mod loads after it, so its data overrides Spartan's: the
+# spears take the trident's Better Combat attacks (data/spartanweaponry/weapon_attributes/base/spear.json),
+# which an animation datapack like Malfu's fills with stabs and sweeps.
+[[dependencies.${mod_id}]]
+    modId="spartanweaponry"
+    mandatory=false
+    versionRange="[0,)"
+    ordering="AFTER"
+    side="BOTH"
 # Better Mob Combat owns the upswing and the attack clip for mobs. The hit
 # stays in this mod. Absent, the internal wind-up is used.
 [[dependencies.${mod_id}]]

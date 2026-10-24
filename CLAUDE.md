@@ -81,6 +81,10 @@ instead of reflecting per call), Skirmisher thresholds (about 4.5 to 28 blocks).
   hit frame (that mod only listens to BMC's mob event). `NpcEggColors` and
   `NpcSpawnEggItem.getColor` give faction scroll tints; Forge's own spawn egg handler
   reads `getColor`, so both agree.
+- Spartan spears take the trident's Better Combat attacks (`data/spartanweaponry/weapon_attributes/base/spear.json`,
+  overriding Spartan's single stab; mods.toml orders this mod after Spartan so its data wins), keeping
+  reach 3.5 and one hand. The user's pack has Malfu's Combat Animation datapack, which gives the trident
+  an 11-step combo of stabs and sweeps; without it the spear gets Better Combat's plain trident stab.
 - Libs in `libs/` are jars wired through `fg.deobf` in `build.gradle`. Soft deps are
   `compileOnly`; ModularUI is `implementation`.
 
