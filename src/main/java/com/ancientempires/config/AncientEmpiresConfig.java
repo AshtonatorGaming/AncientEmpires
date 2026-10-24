@@ -46,6 +46,7 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.DoubleValue TALL_PITCH_OFFSET;
     private static final ForgeConfigSpec.BooleanValue CANCEL_IF_OUT_OF_RANGE;
     private static final ForgeConfigSpec.DoubleValue WINDUP_RANGE_SLACK;
+    private static final ForgeConfigSpec.DoubleValue WINDUP_KEEP_RANGE;
     private static final ForgeConfigSpec.BooleanValue STOP_MOVING_DURING_WINDUP;
     private static final ForgeConfigSpec.DoubleValue WINDUP_MOVE_SPEED;
     private static final ForgeConfigSpec.BooleanValue FOOTWORK;
@@ -415,6 +416,9 @@ public final class AncientEmpiresConfig
         WINDUP_RANGE_SLACK = builder
                 .comment("Extra blocks of reach allowed during wind-up so stopping to swing does not instantly cancel. The hit itself uses the real range.")
                 .defineInRange("windupRangeSlack", 0.5D, 0.0D, 4.0D);
+        WINDUP_KEEP_RANGE = builder
+                .comment("During a wind-up the NPC keeps closing until the target is within this fraction of its reach, so a target drifting a little does not turn the swing into a sure miss (a real backstep still dodges it).")
+                .defineInRange("windupKeepRange", 0.8D, 0.1D, 1.0D);
         STOP_MOVING_DURING_WINDUP = builder
                 .comment("Stop pathing once the target is in range during wind-up.")
                 .define("stopMovingDuringWindup", true);
@@ -1204,6 +1208,7 @@ public final class AncientEmpiresConfig
     public static double tallPitchOffset = 15.0D;
     public static boolean cancelIfOutOfRange = true;
     public static double windupRangeSlack = 0.5D;
+    public static double windupKeepRange = 0.8D;
     public static boolean stopMovingDuringWindup = true;
     public static double windupMoveSpeed = 0.7D;
     public static boolean footwork = true;
@@ -1551,6 +1556,7 @@ public final class AncientEmpiresConfig
         tallPitchOffset = TALL_PITCH_OFFSET.get();
         cancelIfOutOfRange = CANCEL_IF_OUT_OF_RANGE.get();
         windupRangeSlack = WINDUP_RANGE_SLACK.get();
+        windupKeepRange = WINDUP_KEEP_RANGE.get();
         stopMovingDuringWindup = STOP_MOVING_DURING_WINDUP.get();
         windupMoveSpeed = WINDUP_MOVE_SPEED.get();
         footwork = FOOTWORK.get();

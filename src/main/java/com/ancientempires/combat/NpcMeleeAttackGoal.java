@@ -258,8 +258,9 @@ public class NpcMeleeAttackGoal extends Goal
             return;
         }
 
-        double slackRange = swing.range() + AncientEmpiresConfig.windupRangeSlack;
-        if (this.within(target, swing.range()) && AncientEmpiresConfig.stopMovingDuringWindup)
+        // Close in until well inside reach, not just barely: a target drifting a little would
+        // otherwise leave it before the hit and make the swing a sure miss.
+        if (this.within(target, swing.range() * AncientEmpiresConfig.windupKeepRange) && AncientEmpiresConfig.stopMovingDuringWindup)
         {
             if (!this.stoppedForWindup)
             {
@@ -387,6 +388,9 @@ public class NpcMeleeAttackGoal extends Goal
 
     private void beginWindup(AttackSwing swing)
     {
+        // A sidestep's sideways input outlives the step; left on, the swing slid the attacker out of reach.
+        this.stopStepping();
+        this.backingOff = false;
         // A player cannot block and swing at once; neither can an NPC.
         this.npc.getGuard().lower();
         if (MobCombatBridge.owns(this.npc))

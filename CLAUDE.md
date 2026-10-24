@@ -56,7 +56,8 @@ instead of reflecting per call), Skirmisher thresholds (about 4.5 to 28 blocks).
   swaps that weapon's main-hand modifiers in (`withOffHandModifiers`), as BC does for
   players. Every swing then goes through `slowWindup` (`combat.npcWindupScale`).
 - `NpcMeleeAttackGoal` starts a swing inside `engageRangeFactor` of reach and checks the
-  full reach at the hit. Facing allows for the target's angular width; touching bodies
+  full reach at the hit. During the wind-up it closes until the target is inside `windupKeepRange` (0.8)
+  of reach, and a wind-up clears any leftover sidestep input (it slid attackers out of reach mid-swing). Facing allows for the target's angular width; touching bodies
   always count as facing.
 - `combat/BetterCombatBridge`, `MobCombatBridge`, `MobCombatHooks` are reflection bridges.
   BC weapon snapshots are cached per item, stamped on BC's `containers` map identity.
