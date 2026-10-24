@@ -388,6 +388,8 @@ its own unless noted). Before adding behavior, check what AW did first.
   were silent). `NpcEntity.isDamageSourceBlocked` checks the front by head yaw, as `Parry`
   does; vanilla used the mob's walking heading, so turned NPCs blocked from behind and took
   hits from the front.
+  For the same reason a fighting NPC standing still (no path) takes its heading from its head each
+  tick, or the body swung toward the last walk whenever a knock or sidestep moved it.
   `/ancientempires morale <state> [radius]` (op) forces the looked-at NPC, or its side within
   the radius, into steady, wavering, routing, shattered, or surrendered, for testing.
 - Tuning history (user, first battle tests): routs were too eager (now `routAt` 12, `oddsWeight`

@@ -2589,6 +2589,13 @@ public class NpcEntity extends PathfinderMob
             this.standGroundUntil = 0;
             this.setTarget(null);
         }
+        if (target != null && this.getNavigation().isDone() && !this.isPassenger())
+        {
+            // Standing in a fight, the heading follows the eyes. A mob's body turns to its heading
+            // whenever it moves at all (a knock, a sidestep), and a stale heading from the last walk
+            // twisted the body toward a movement that never happened. Sidesteps go by it too.
+            this.setYRot(this.getYHeadRot());
+        }
         // Named so vanilla's profiler (/debug, F3) and Spark show this mod's share of the tick.
         this.level().getProfiler().push("ancientempires_npc");
         this.mount.tick();
