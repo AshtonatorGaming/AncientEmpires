@@ -160,7 +160,7 @@ its own unless noted). Before adding behavior, check what AW did first.
   a swing only at `pressureChance` per tick. A hit taken on the shield never knocks the NPC
   back (`NpcEntity.knockback`), as a blocking player stands firm. Guard is `shield.guardMax` (30) times
   `skill.guardByTier` (1 to 1.75). Footwork comes in steps with rests, not a constant drift (which
-  slid). Every swing is followed by `combat.attackPause` (4) extra ticks; AW used only the weapon
+  slid). Every swing is followed by `combat.swingPause` (10; the field is `attackPause`) extra ticks; AW used only the weapon
   cooldown (20 over attack speed), so 0 matches it. A vanilla mob or player has no wind-up, so
   only an NPC target's open attack window holds a guard; right after their swing is an opening,
   and a riposte waits half the strike delay. Bash chance per blocked hit is `skill.bashChancePerBlock` (0.08 to 0.25 by tier).
@@ -174,10 +174,10 @@ its own unless noted). Before adding behavior, check what AW did first.
 - Skill comes from level (below); the roster rank (`getSkillTier`: 0 ordinary, 1 elite, 2 leader,
   3 elite leader) is now only rank: who commands (`NpcCommand`) and the level a faction NPC
   starts at. `AeSkill` still pins an NPC to one list entry.
-- Levels (`NpcLeveling`, `leveling` config; AW's `NpcLevelingStats` capped at 10, XP only from
+- Levels (`NpcLeveling`, `levels` config; AW's `NpcLevelingStats` capped at 10, XP only from
   kills at 5 each, and gave +5% damage and +1 health per level): 1 to `maxLevel` (20), saved as
   `AeLevel` and `AeXp` and packed with the NPC, synced for the inventory. XP to the next level is
-  `xpBase` plus `xpStep` per level (540 to level 10, 2090 to 20), from damage dealt to foes
+  `xpBase` plus `xpStep` per level (720 to level 10, 2945 to 20), from damage dealt to foes
   (`LivingDamageEvent`, after armour), kills (plus the victim's level), blocked hits
   (`NpcGuard.onBlocked`), perfect blocks, and work actions (`NpcWorkGoal.wearTool`). Settlers
   do not level. A level is mostly skill: every `skill` list (parry, timing error, guard, feint,
@@ -369,7 +369,18 @@ its own unless noted). Before adding behavior, check what AW did first.
 - Speed: a mob's speed counts twice (`Mob.setSpeed` also sets the forward input), so pace
   goes with the square of attribute times multiplier. `BASE_SPEED` 0.32 walks at a player's
   pace at 1.0; chasing (`approachSpeed`) and following use 1.12, a sprint. Saves with the
-  old 0.28 base are updated on load.
+  old 0.28 base are updated on load. No NPC goes faster than a player sprints: `NpcEntity.setSpeed`
+  caps the multiplier at `combat.maxSpeed` (1.14) for every goal (fleeing had run at 1.2).
+- Pace of NPC battles: `combat.npcVsNpcDamage` (0.7, `NpcDamage`) scales NPC-on-NPC hits only, so
+  battles last and morale has time to work; fights with players keep their numbers. An NPC's
+  axe disables a shield `shield.npcAxeDisableChance` (0.25, a mob's vanilla chance) of the time;
+  a player's always does. With every axe hit disabling shields, Brigand axemen beat Empire
+  shield spearmen. `/ancientempires stress report` lists each side: standing of fielded,
+  broken, average level, and health left.
+- Tuning history (user, first battle tests): routs were too eager (now `routAt` 12, `oddsWeight`
+  15, `woundsWeight` 20, `fallSpeed` 0.15, `panicPerRouter` 4), XP came too fast (the `levels`
+  section, about 720 XP to level 10), and faction level-ups were heard (now silent; only owned
+  NPCs sparkle and chime). Keys were renamed so saved world configs take the new defaults.
 - Perfect block (`combat/Parry`, `perfectBlock` config), the same for players and NPCs: a melee hit from
   the front within `windowTicks` (6) of raising a shield is turned aside whole: no guard cost, and
   the attacker is staggered (a louder clang over the thud, "Perfect block!" or "Staggered!" on a

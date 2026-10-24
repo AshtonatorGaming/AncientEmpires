@@ -1550,6 +1550,11 @@ public class NpcEntity extends PathfinderMob
 
     private void onLevelUp(int level)
     {
+        if (!this.isOwnedNpc())
+        {
+            // A faction NPC grows quietly; only a player's own get the fanfare.
+            return;
+        }
         if (this.level() instanceof ServerLevel server)
         {
             server.sendParticles(ParticleTypes.HAPPY_VILLAGER, this.getX(), this.getY() + this.getBbHeight() * 0.6D, this.getZ(),
@@ -2741,6 +2746,19 @@ public class NpcEntity extends PathfinderMob
             return;
         }
         super.checkDespawn();
+    }
+
+    /**
+     * Never faster than a player sprints ({@code combat.maxSpeed}): move
+     * controls set the speed as attribute times the goal's multiplier, so the
+     * multiplier is capped here for every goal at once (fleeing ran at 1.2,
+     * past a sprint).
+     */
+    @Override
+    public void setSpeed(float speed)
+    {
+        float cap = (float) (this.getAttributeValue(Attributes.MOVEMENT_SPEED) * AncientEmpiresConfig.maxSpeed);
+        super.setSpeed(Math.min(speed, cap));
     }
 
     @Override

@@ -79,7 +79,10 @@ public final class AeCommands
                         .then(Commands.literal("report")
                                 .executes(context ->
                                 {
-                                    context.getSource().sendSuccess(() -> StressTest.report(context.getSource().getLevel()), false);
+                                    for (Component line : StressTest.report(context.getSource().getLevel()))
+                                    {
+                                        context.getSource().sendSuccess(() -> line, false);
+                                    }
                                     return 1;
                                 }))
                         .then(Commands.argument("perSide", IntegerArgumentType.integer(1, StressTest.MAX_PER_SIDE))

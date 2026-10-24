@@ -212,6 +212,7 @@
   "commands.ancientempires.stress.peace": "%s and %s are not hostile to each other, so they will not fight",
   "commands.ancientempires.stress.cleared": "Removed %s stress-test NPCs",
   "commands.ancientempires.stress.report": "%s stress-test NPCs alive; the server averages %s ms per tick (50 is the limit)",
+  "commands.ancientempires.stress.side": "  %s: %s of %s standing, %s broken, average level %s, %s%% health left",
   "commands.ancientempires.work.none": "Look at one of your NPCs, within 8 blocks",
   "commands.ancientempires.standing.header": "Faction standing for %s:",
   "commands.ancientempires.standing.friendly": "At peace: %s",

@@ -5,6 +5,7 @@ import com.ancientempires.config.AncientEmpiresConfig;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -243,7 +244,9 @@ public final class NpcGuard
             // The guard broke on this hit: no riposte or bash from behind a shield that is down.
             return;
         }
-        if (attacker.getMainHandItem().canDisableShield(this.npc.getUseItem(), this.npc, attacker))
+        // A player's axe always knocks the shield out (vanilla); another NPC's only sometimes.
+        if (attacker.getMainHandItem().canDisableShield(this.npc.getUseItem(), this.npc, attacker)
+                && (attacker instanceof Player || this.npc.getRandom().nextDouble() < AncientEmpiresConfig.shieldNpcAxeChance))
         {
             this.disabledUntil = this.npc.tickCount + AncientEmpiresConfig.shieldDisableTicks;
             this.lower();

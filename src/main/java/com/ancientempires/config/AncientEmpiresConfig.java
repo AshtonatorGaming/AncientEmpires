@@ -62,6 +62,8 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.BooleanValue SWEEP_EFFECTS;
     private static final ForgeConfigSpec.BooleanValue DUAL_WIELD;
     private static final ForgeConfigSpec.DoubleValue NPC_WINDUP_SCALE;
+    private static final ForgeConfigSpec.DoubleValue MAX_SPEED;
+    private static final ForgeConfigSpec.DoubleValue NPC_VS_NPC_DAMAGE;
     private static final ForgeConfigSpec.DoubleValue ENGAGE_RANGE_FACTOR;
 
     private static final ForgeConfigSpec.BooleanValue SIDEARM_ENABLED;
@@ -99,6 +101,7 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.IntValue SHIELD_BASH_WINDUP;
     private static final ForgeConfigSpec.DoubleValue SHIELD_AIM_WATCH_RANGE;
     private static final ForgeConfigSpec.IntValue SHIELD_DISABLE_TICKS;
+    private static final ForgeConfigSpec.DoubleValue SHIELD_NPC_AXE_CHANCE;
     private static final ForgeConfigSpec.EnumValue<NpcShieldBash.Mode> SHIELD_BASH_MODE;
     private static final ForgeConfigSpec.ConfigValue<List<? extends Double>> SKILL_FEINT_CHANCE;
     private static final ForgeConfigSpec.ConfigValue<List<? extends Double>> SKILL_BASH_CHANCE;
@@ -414,8 +417,8 @@ public final class AncientEmpiresConfig
                 .comment("When both fighters carry shields, sidesteps come this much less often: a standoff, not a dance.")
                 .defineInRange("shieldSidestepScale", 0.5D, 0.0D, 1.0D);
         ATTACK_PAUSE = builder
-                .comment("Extra ticks after every NPC swing before the next, on top of the weapon's own cooldown, so attacks are not spammed. Ancient Warfare used only the weapon cooldown (20 ticks over attack speed); 0 matches it.")
-                .defineInRange("attackPause", 4, 0, 40);
+                .comment("Extra ticks after every NPC swing before the next, on top of the weapon's own cooldown, so attacks are not spammed. Ancient Warfare used only the weapon cooldown (20 ticks over attack speed); 0 matches it. 10 slows fights to a readable pace.")
+                .defineInRange("swingPause", 10, 0, 40);
         PRESSURE_CHANCE = builder
                 .comment("Against a raised shield, the chance each tick that an NPC without one starts its swing. Below 1 it picks its moments instead of hammering the shield as fast as its weapon allows.")
                 .defineInRange("pressureChance", 0.12D, 0.01D, 1.0D);
@@ -440,6 +443,12 @@ public final class AncientEmpiresConfig
         NPC_WINDUP_SCALE = builder
                 .comment("Multiplies every NPC wind-up, so NPCs swing a little slower than a player with the same weapon. Recovery is unchanged, so the whole swing gets longer. 1.0 matches players.")
                 .defineInRange("npcWindupScale", 1.25D, 0.5D, 3.0D);
+        MAX_SPEED = builder
+                .comment("The fastest an NPC moves, as a speed multiplier: 1.14 is a player's sprint (a mob's pace goes with the square of it). Fleeing, chasing, and every other goal are held to it; riding is the mount's own.")
+                .defineInRange("maxSpeed", 1.14D, 0.5D, 3.0D);
+        NPC_VS_NPC_DAMAGE = builder
+                .comment("Damage an NPC deals to another NPC, as a fraction, so battles between them last longer. Fights with players are unchanged.")
+                .defineInRange("npcVsNpcDamage", 0.7D, 0.05D, 4.0D);
         ENGAGE_RANGE_FACTOR = builder
                 .comment("A swing starts only inside this fraction of the weapon's reach, so a target stepping back during the wind-up is still hit. The hit checks the full reach. 1.0 swings from the edge.")
                 .defineInRange("engageRangeFactor", 0.85D, 0.5D, 1.0D);
@@ -561,6 +570,9 @@ public final class AncientEmpiresConfig
         SHIELD_DISABLE_TICKS = builder
                 .comment("Ticks an axe hit keeps an NPC's shield down, as it does a player's.")
                 .defineInRange("axeDisableTicks", 100, 0, 400);
+        SHIELD_NPC_AXE_CHANCE = builder
+                .comment("Chance an NPC's axe knocks a shield out with a blocked hit. A player's axe always does (vanilla); a mob's did a quarter of the time, and an army of axemen disabling every shield made shield walls useless.")
+                .defineInRange("npcAxeDisableChance", 0.25D, 0.0D, 1.0D);
         SHIELD_BASH_MODE = builder
                 .comment("Which shields NPCs can bash with after blocking a hit, mirroring Spartan Shields' bash. SPARTAN: shields in spartanshields:shields_with_bash (nothing without that mod). ALL: any shield. OFF: no bashing.")
                 .defineEnum("bashMode", NpcShieldBash.Mode.SPARTAN);
@@ -914,18 +926,18 @@ public final class AncientEmpiresConfig
         MORALE_UPDATE_TICKS = builder.comment("Ticks between morale checks per soldier (staggered).").defineInRange("updateTicks", 20, 5, 200);
         MORALE_RANGE = builder.comment("Blocks around a soldier counted for the odds and routing allies.").defineInRange("range", 12.0D, 4.0D, 48.0D);
         MORALE_WAVER_BELOW = builder.comment("Below this, the soldier wavers (a warning badge).").defineInRange("waverBelow", 50.0D, 0.0D, 100.0D);
-        MORALE_ROUT_BELOW = builder.comment("Below this, the soldier routs.").defineInRange("routBelow", 20.0D, 0.0D, 100.0D);
+        MORALE_ROUT_BELOW = builder.comment("Below this, the soldier routs.").defineInRange("routAt", 12.0D, 0.0D, 100.0D);
         MORALE_RALLY_ABOVE = builder.comment("A routing soldier rallies once its morale is back above this.").defineInRange("rallyAbove", 40.0D, 0.0D, 100.0D);
         MORALE_MIN_ROUT_TICKS = builder.comment("A rout lasts at least this long before it can rally.").defineInRange("minRoutTicks", 200, 0, 6000);
         MORALE_SHATTER_AFTER = builder.comment("The rout that shatters a soldier: it cannot rally again, and faction soldiers leave the field.").defineInRange("shatterAfterRouts", 3, 1, 20);
-        MORALE_FALL_RATE = builder.comment("Fraction of the gap closed per check when morale is falling.").defineInRange("fallRate", 0.25D, 0.01D, 1.0D);
+        MORALE_FALL_RATE = builder.comment("Fraction of the gap closed per check when morale is falling.").defineInRange("fallSpeed", 0.15D, 0.01D, 1.0D);
         MORALE_RISE_RATE = builder.comment("Fraction of the gap closed per check when morale is rising (slower: heart is lost faster than it is regained).").defineInRange("riseRate", 0.1D, 0.01D, 1.0D);
-        MORALE_OUTNUMBER = builder.comment("Morale from the odds: the full amount when alone against many (or many against none). Each side is weighed by health, so a giant counts for several men.").defineInRange("outnumberWeight", 25.0D, 0.0D, 100.0D);
-        MORALE_WOUNDS = builder.comment("Morale lost at the brink of death, in proportion to health lost.").defineInRange("woundWeight", 30.0D, 0.0D, 100.0D);
+        MORALE_OUTNUMBER = builder.comment("Morale from the odds: the full amount when alone against many (or many against none). Each side is weighed by health, so a giant counts for several men.").defineInRange("oddsWeight", 15.0D, 0.0D, 100.0D);
+        MORALE_WOUNDS = builder.comment("Morale lost at the brink of death, in proportion to health lost.").defineInRange("woundsWeight", 20.0D, 0.0D, 100.0D);
         MORALE_FLANK = builder.comment("Morale lost while recently hit from behind or the side.").defineInRange("flankPenalty", 15.0D, 0.0D, 100.0D);
         MORALE_FLANK_TICKS = builder.comment("How long a hit from behind counts.").defineInRange("flankTicks", 60, 0, 1200);
         MORALE_HUNGER = builder.comment("Morale lost while hungry (upkeep).").defineInRange("hungerPenalty", 10.0D, 0.0D, 100.0D);
-        MORALE_ROUTING_ALLY = builder.comment("Morale lost for each routing ally in range: panic spreads.").defineInRange("routingAllyPenalty", 6.0D, 0.0D, 100.0D);
+        MORALE_ROUTING_ALLY = builder.comment("Morale lost for each routing ally in range: panic spreads.").defineInRange("panicPerRouter", 4.0D, 0.0D, 100.0D);
         MORALE_ROUTING_CAP = builder.comment("The most morale routing allies can take away.").defineInRange("routingAllyCap", 24.0D, 0.0D, 100.0D);
         MORALE_INSPIRED = builder.comment("Morale from a commander's aura, times the commander's strength.").defineInRange("inspiredBonus", 20.0D, 0.0D, 100.0D);
         MORALE_COMMANDER_SHOCK = builder.comment("Shock when an allied commander falls.").defineInRange("commanderDeathShock", 35.0D, 0.0D, 100.0D);
@@ -947,17 +959,17 @@ public final class AncientEmpiresConfig
         MORALE_OWNER_RANGE = builder.comment("Blocks within which the owner's presence counts.").defineInRange("ownerPresenceRange", 16.0D, 0.0D, 64.0D);
         builder.pop();
 
-        builder.comment("Levels: NPCs (soldiers and workers; not settlers) earn XP and level up to maxLevel. A level is mostly skill: the skill section's four-entry lists are read along the levels (entry 1 at level 1, entry 4 at the cap), so every level counts. Bands of five: soldiers Recruit, Regular, Veteran, Champion; workers Apprentice, Journeyman, Expert, Master. Ancient Warfare capped at 10 and gave XP only for kills.").push("leveling");
+        builder.comment("Levels: NPCs (soldiers and workers; not settlers) earn XP and level up to maxLevel. A level is mostly skill: the skill section's four-entry lists are read along the levels (entry 1 at level 1, entry 4 at the cap), so every level counts. Bands of five: soldiers Recruit, Regular, Veteran, Champion; workers Apprentice, Journeyman, Expert, Master. Ancient Warfare capped at 10 and gave XP only for kills.").push("levels");
         LEVEL_ENABLED = builder.comment("NPCs earn XP and level up. Off, levels stay as they are.").define("enabled", true);
         LEVEL_MAX = builder.comment("The highest level.").defineInRange("maxLevel", 20, 4, 100);
         LEVEL_XP_BASE = builder.comment("XP from level 1 to 2.").defineInRange("xpBase", 20.0D, 1.0D, 100000.0D);
-        LEVEL_XP_STEP = builder.comment("Extra XP needed for each level after that (20 then 30, 40, ...: 540 XP to level 10, 2090 to 20).").defineInRange("xpStep", 10.0D, 0.0D, 100000.0D);
-        LEVEL_XP_DAMAGE = builder.comment("XP per point of damage dealt to an enemy, after armour (2 points is a heart).").defineInRange("xpPerDamage", 0.5D, 0.0D, 100.0D);
-        LEVEL_XP_KILL = builder.comment("XP for a kill.").defineInRange("xpPerKill", 5.0D, 0.0D, 1000.0D);
-        LEVEL_XP_KILL_LEVEL = builder.comment("Extra XP per level of a slain NPC (other creatures count as level 1).").defineInRange("xpPerVictimLevel", 1.0D, 0.0D, 1000.0D);
-        LEVEL_XP_BLOCK = builder.comment("XP for a hit taken on the shield.").defineInRange("xpPerBlock", 1.0D, 0.0D, 1000.0D);
-        LEVEL_XP_PERFECT = builder.comment("XP for a perfect block.").defineInRange("xpPerPerfectBlock", 4.0D, 0.0D, 1000.0D);
-        LEVEL_XP_WORK = builder.comment("XP for each work action (a harvest, a log, a block dug, a catch, a dish).").defineInRange("xpPerWork", 0.25D, 0.0D, 1000.0D);
+        LEVEL_XP_STEP = builder.comment("Extra XP needed for each level after that (20 then 35, 50, ...: 720 XP to level 10, 2945 to 20).").defineInRange("xpStep", 15.0D, 0.0D, 100000.0D);
+        LEVEL_XP_DAMAGE = builder.comment("XP per point of damage dealt to an enemy, after armour (2 points is a heart).").defineInRange("xpPerDamage", 0.2D, 0.0D, 100.0D);
+        LEVEL_XP_KILL = builder.comment("XP for a kill.").defineInRange("xpPerKill", 3.0D, 0.0D, 1000.0D);
+        LEVEL_XP_KILL_LEVEL = builder.comment("Extra XP per level of a slain NPC (other creatures count as level 1).").defineInRange("xpPerVictimLevel", 0.5D, 0.0D, 1000.0D);
+        LEVEL_XP_BLOCK = builder.comment("XP for a hit taken on the shield.").defineInRange("xpPerBlock", 0.4D, 0.0D, 1000.0D);
+        LEVEL_XP_PERFECT = builder.comment("XP for a perfect block.").defineInRange("xpPerPerfectBlock", 2.0D, 0.0D, 1000.0D);
+        LEVEL_XP_WORK = builder.comment("XP for each work action (a harvest, a log, a block dug, a catch, a dish).").defineInRange("xpPerWork", 0.1D, 0.0D, 1000.0D);
         LEVEL_HEALTH = builder.comment("Max health per level past the first (0.25: about two and a half hearts at 20).").defineInRange("healthPerLevel", 0.25D, 0.0D, 10.0D);
         LEVEL_DAMAGE = builder.comment("Melee and ranged damage per level past the first, as a fraction (0.01: 19% more at 20; Ancient Warfare gave 0.05).").defineInRange("damagePerLevel", 0.01D, 0.0D, 1.0D);
         LEVEL_WORK_SPEED = builder.comment("Workers: work speed per level past the first, as a fraction (0.03: 57% faster at 20; Ancient Warfare gave 0.05).").defineInRange("workSpeedPerLevel", 0.03D, 0.0D, 1.0D);
@@ -1151,7 +1163,7 @@ public final class AncientEmpiresConfig
     public static double sidestepSpeed = 1.0D;
     public static double shieldSidestepScale = 0.5D;
     public static double pressureChance = 0.12D;
-    public static int attackPause = 4;
+    public static int attackPause = 10;
     public static double approachSpeed = 1.12D;
     public static int pathRecalcTicks = 8;
     public static boolean requireLineOfSight = true;
@@ -1160,6 +1172,8 @@ public final class AncientEmpiresConfig
     public static boolean sweepEffects = false;
     public static boolean dualWield = true;
     public static double npcWindupScale = 1.25D;
+    public static double maxSpeed = 1.14D;
+    public static double npcVsNpcDamage = 0.7D;
     public static double engageRangeFactor = 0.85D;
 
     public static boolean sidearmEnabled = true;
@@ -1197,6 +1211,7 @@ public final class AncientEmpiresConfig
     public static int shieldBashWindupTicks = 6;
     public static double shieldAimWatchRange = 24.0D;
     public static int shieldDisableTicks = 100;
+    public static double shieldNpcAxeChance = 0.25D;
     public static NpcShieldBash.Mode shieldBashMode = NpcShieldBash.Mode.SPARTAN;
     /** Per skill tier: ordinary, elite, leader, elite leader. */
     public static List<? extends Double> feintChanceByTier = List.of(0.0D, 0.1D, 0.2D, 0.3D);
@@ -1317,18 +1332,18 @@ public final class AncientEmpiresConfig
     public static int moraleUpdateTicks = 20;
     public static double moraleRange = 12.0D;
     public static double moraleWaverBelow = 50.0D;
-    public static double moraleRoutBelow = 20.0D;
+    public static double moraleRoutBelow = 12.0D;
     public static double moraleRallyAbove = 40.0D;
     public static int moraleMinRoutTicks = 200;
     public static int moraleShatterAfterRouts = 3;
-    public static double moraleFallRate = 0.25D;
+    public static double moraleFallRate = 0.15D;
     public static double moraleRiseRate = 0.1D;
-    public static double moraleOutnumberWeight = 25.0D;
-    public static double moraleWoundWeight = 30.0D;
+    public static double moraleOutnumberWeight = 15.0D;
+    public static double moraleWoundWeight = 20.0D;
     public static double moraleFlankPenalty = 15.0D;
     public static int moraleFlankTicks = 60;
     public static double moraleHungerPenalty = 10.0D;
-    public static double moraleRoutingAllyPenalty = 6.0D;
+    public static double moraleRoutingAllyPenalty = 4.0D;
     public static double moraleRoutingAllyCap = 24.0D;
     public static double moraleInspiredBonus = 20.0D;
     public static double moraleCommanderDeathShock = 35.0D;
@@ -1351,13 +1366,13 @@ public final class AncientEmpiresConfig
     public static boolean levelEnabled = true;
     public static int levelMax = 20;
     public static double levelXpBase = 20.0D;
-    public static double levelXpStep = 10.0D;
-    public static double levelXpPerDamage = 0.5D;
-    public static double levelXpPerKill = 5.0D;
-    public static double levelXpPerKillLevel = 1.0D;
-    public static double levelXpPerBlock = 1.0D;
-    public static double levelXpPerPerfectBlock = 4.0D;
-    public static double levelXpPerWork = 0.25D;
+    public static double levelXpStep = 15.0D;
+    public static double levelXpPerDamage = 0.2D;
+    public static double levelXpPerKill = 3.0D;
+    public static double levelXpPerKillLevel = 0.5D;
+    public static double levelXpPerBlock = 0.4D;
+    public static double levelXpPerPerfectBlock = 2.0D;
+    public static double levelXpPerWork = 0.1D;
     public static double levelHealthPerLevel = 0.25D;
     public static double levelDamagePerLevel = 0.01D;
     public static double levelWorkSpeedPerLevel = 0.03D;
@@ -1490,6 +1505,8 @@ public final class AncientEmpiresConfig
         sweepEffects = SWEEP_EFFECTS.get();
         dualWield = DUAL_WIELD.get();
         npcWindupScale = NPC_WINDUP_SCALE.get();
+        maxSpeed = MAX_SPEED.get();
+        npcVsNpcDamage = NPC_VS_NPC_DAMAGE.get();
         engageRangeFactor = ENGAGE_RANGE_FACTOR.get();
 
         sidearmEnabled = SIDEARM_ENABLED.get();
@@ -1527,6 +1544,7 @@ public final class AncientEmpiresConfig
         shieldBashWindupTicks = SHIELD_BASH_WINDUP.get();
         shieldAimWatchRange = SHIELD_AIM_WATCH_RANGE.get();
         shieldDisableTicks = SHIELD_DISABLE_TICKS.get();
+        shieldNpcAxeChance = SHIELD_NPC_AXE_CHANCE.get();
         shieldBashMode = SHIELD_BASH_MODE.get();
         feintChanceByTier = SKILL_FEINT_CHANCE.get();
         bashChanceByTier = SKILL_BASH_CHANCE.get();
