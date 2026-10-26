@@ -28,7 +28,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 final class NpcBannerLayer extends RenderLayer<NpcEntity, NpcModel>
 {
-    /** Half a placed banner's size: the pole rises about a block above the shoulders. */
+    /** Half a placed banner's size, raised so the flag flies above the shoulders. */
     private static final float SCALE = 0.5F;
 
     private final ModelPart flag;
@@ -54,8 +54,9 @@ final class NpcBannerLayer extends RenderLayer<NpcEntity, NpcModel>
         }
         pose.pushPose();
         this.getParentModel().body.translateAndRotate(pose);
-        // Behind the back, the flag facing the way the bearer looks back from.
-        pose.translate(0.0F, 0.2F, 0.22F);
+        // On the upper back, raised so the whole flag flies above the shoulders and shows over the
+        // head from the front and sides (hung lower, the body and head hid most of it).
+        pose.translate(0.0F, -0.4F, 0.22F);
         pose.mulPose(Axis.YP.rotationDegrees(180.0F));
         pose.scale(SCALE, SCALE, SCALE);
         VertexConsumer base = ModelBakery.BANNER_BASE.buffer(buffer, RenderType::entitySolid);
