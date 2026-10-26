@@ -7,11 +7,16 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ProjectileWeaponItem;
 import net.minecraft.world.level.Level;
+
+import java.util.UUID;
 
 /**
  * Night watch lights, as ToroQuest's guards carried. A soldier awake at night
@@ -29,6 +34,7 @@ public final class NpcNightLight
     public static final TagKey<Item> NIGHT_LIGHTS = ItemTags.create(ResourceLocation.fromNamespaceAndPath(AncientEmpires.MOD_ID, "night_lights"));
     /** Ticks between checks, staggered by entity id. */
     public static final int CHECK_TICKS = 20;
+    private static final UUID WATCH_DAMAGE_ID = UUID.fromString("7a1f3c2d-5e6b-4c8a-9d0e-1f2a3b4c5d6e");
     /** Marks a light issued to a faction guard for the night. */
     private static final String ISSUED_KEY = "AeNightLight";
 
@@ -44,7 +50,9 @@ public final class NpcNightLight
     static void update(NpcEntity npc)
     {
         ItemStack offHand = npc.getOffhandItem();
-        if (wantsLight(npc))
+        boolean watch = onWatch(npc);
+        setWatch(npc, watch);
+        if (watch && !needsBothHands(npc))
         {
             if (!offHand.isEmpty())
             {
@@ -102,14 +110,36 @@ public final class NpcNightLight
     }
 
     /** A soldier on watch: awake, and it is night or dark where it stands. */
-    private static boolean wantsLight(NpcEntity npc)
+    /** A soldier awake at night or in the dark: on the watch, with a light if a hand is free. */
+    static boolean onWatch(NpcEntity npc)
     {
-        if (!AncientEmpiresConfig.nightLightEnabled || !npc.getNpcPath().combat() || npc.isSleeping() || needsBothHands(npc))
+        if (!AncientEmpiresConfig.nightLightEnabled || !npc.getNpcPath().combat() || npc.isSleeping())
         {
             return false;
         }
         Level level = npc.level();
         return level.isNight() || level.getMaxLocalRawBrightness(npc.blockPosition()) < AncientEmpiresConfig.nightLightDarkness;
+    }
+
+    /** Night Watch: a transient damage bonus while on the watch (morale reads {@link NpcEntity#isOnWatch}). */
+    private static void setWatch(NpcEntity npc, boolean watch)
+    {
+        npc.setOnWatch(watch);
+        AttributeInstance damage = npc.getAttribute(Attributes.ATTACK_DAMAGE);
+        if (damage == null)
+        {
+            return;
+        }
+        boolean has = damage.getModifier(WATCH_DAMAGE_ID) != null;
+        if (watch && !has && AncientEmpiresConfig.nightWatchDamage > 0.0D)
+        {
+            damage.addTransientModifier(new AttributeModifier(WATCH_DAMAGE_ID, "Night watch", AncientEmpiresConfig.nightWatchDamage,
+                    AttributeModifier.Operation.MULTIPLY_TOTAL));
+        }
+        else if (!watch && has)
+        {
+            damage.removeModifier(WATCH_DAMAGE_ID);
+        }
     }
 
     /**

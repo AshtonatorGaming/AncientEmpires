@@ -313,6 +313,8 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.BooleanValue NIGHT_LIGHT_ENABLED;
     private static final ForgeConfigSpec.BooleanValue NIGHT_LIGHT_FACTION_GUARDS;
     private static final ForgeConfigSpec.IntValue NIGHT_LIGHT_DARKNESS;
+    private static final ForgeConfigSpec.DoubleValue NIGHT_WATCH_DAMAGE;
+    private static final ForgeConfigSpec.DoubleValue NIGHT_WATCH_MORALE;
     private static final ForgeConfigSpec.DoubleValue HORN_RANGE;
     private static final ForgeConfigSpec.IntValue HORN_COOLDOWN_TICKS;
     private static final ForgeConfigSpec.IntValue HORN_RALLY_TICKS;
@@ -1120,6 +1122,10 @@ public final class AncientEmpiresConfig
         NIGHT_LIGHT_DARKNESS = builder
                 .comment("Below this light level (0 to 15) it counts as dark by day too, as in caves.")
                 .defineInRange("darkness", 7, 0, 16);
+        NIGHT_WATCH_DAMAGE = builder
+                .comment("Night Watch (DESIGN Tier 2): soldiers awake at night or in the dark (the same test as the lights) hit this much harder, as a fraction, and keep watchMorale more morale: the watch expects trouble.")
+                .defineInRange("watchDamageBonus", 0.1D, 0.0D, 2.0D);
+        NIGHT_WATCH_MORALE = builder.defineInRange("watchMorale", 5.0D, 0.0D, 100.0D);
         builder.pop();
 
         builder.comment("The War Horn: blown by an owner to rally their soldiers (Rally), also levy their workers and settlers (Call to Arms), or send everyone back (Stand Down). Sneak-use switches the call.").push("horn");
@@ -1553,6 +1559,8 @@ public final class AncientEmpiresConfig
     public static boolean nightLightEnabled = true;
     public static boolean nightLightFactionGuards = true;
     public static int nightLightDarkness = 7;
+    public static double nightWatchDamage = 0.1D;
+    public static double nightWatchMorale = 5.0D;
     public static double hornRange = 48.0D;
     public static int hornCooldownTicks = 100;
     public static int hornRallyTicks = 600;
@@ -1926,6 +1934,8 @@ public final class AncientEmpiresConfig
         nightLightEnabled = NIGHT_LIGHT_ENABLED.get();
         nightLightFactionGuards = NIGHT_LIGHT_FACTION_GUARDS.get();
         nightLightDarkness = NIGHT_LIGHT_DARKNESS.get();
+        nightWatchDamage = NIGHT_WATCH_DAMAGE.get();
+        nightWatchMorale = NIGHT_WATCH_MORALE.get();
         hornRange = HORN_RANGE.get();
         hornCooldownTicks = HORN_COOLDOWN_TICKS.get();
         hornRallyTicks = HORN_RALLY_TICKS.get();

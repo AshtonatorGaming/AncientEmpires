@@ -80,7 +80,8 @@ public final class NpcMorale
     public static final int REASON_OWNER = 9;
     public static final int REASON_ROUTED_BEFORE = 10;
     public static final int REASON_BANNER = 11;
-    public static final int REASON_COUNT = 12;
+    public static final int REASON_WATCH = 12;
+    public static final int REASON_COUNT = 13;
     /** A term this large (in morale points) is worth naming. */
     private static final double REASON_THRESHOLD = 4.0D;
 
@@ -199,7 +200,7 @@ public final class NpcMorale
         Situation situation = this.look(base);
         Weights weights = Weights.fromConfig();
         float target = target(situation, weights) + this.shock;
-        this.reasons = reasons(situation, weights, this.shock) | (this.routs > 0 ? 1 << REASON_ROUTED_BEFORE : 0) | (this.bannerNear ? 1 << REASON_BANNER : 0);
+        this.reasons = reasons(situation, weights, this.shock) | (this.routs > 0 ? 1 << REASON_ROUTED_BEFORE : 0) | (this.bannerNear ? 1 << REASON_BANNER : 0) | (this.npc.isOnWatch() && AncientEmpiresConfig.nightWatchMorale > 0.0D ? 1 << REASON_WATCH : 0);
         this.value = drift(this.value, target, AncientEmpiresConfig.moraleRiseRate, AncientEmpiresConfig.moraleFallRate);
         this.clearTicks = situation.enemies() > 0.0D ? 0 : this.clearTicks + interval;
         this.step();
@@ -269,7 +270,8 @@ public final class NpcMorale
         float health = this.npc.getMaxHealth() <= 0.0F ? 1.0F : this.npc.getHealth() / this.npc.getMaxHealth();
         this.bannerNear = banner || carriesBanner(this.npc);
         return new Situation(base, this.npc.isInspired() ? this.npc.getInspiredStrength() : 0.0F, allies, enemies, health, flanked,
-                this.npc.isHungry(), routing, this.presence() + (this.bannerNear ? (float) AncientEmpiresConfig.moraleBannerBonus : 0.0F));
+                this.npc.isHungry(), routing, this.presence() + (this.bannerNear ? (float) AncientEmpiresConfig.moraleBannerBonus : 0.0F)
+                        + (this.npc.isOnWatch() ? (float) AncientEmpiresConfig.nightWatchMorale : 0.0F));
     }
 
     /** A standard: any banner in the off hand. */

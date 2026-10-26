@@ -142,7 +142,12 @@ Done since: daylight (`NpcSunGoal`, `sunlight` config, factions.json `sunlight`)
    shade once alight; vampires (`avoid`, Ancient Warfare's) keep to shade by day whenever not fighting.
    By day the burning panic (water) stands aside for these factions, since the two goals fought; vampires'
    paths avoid the sun (vanilla `setAvoidSun`), so wandering or going home does not walk them into it; the
-   shade search lifts the home leash and tries 24 spots.H. Sidearms beyond ranged (later, the user wants this): a pikeman with a reach weapon swapping to a shorter one
+   shade search lifts the home leash and tries 24 spots.
+   Night Watch (`NpcNightLight.onWatch`, `nightLight` config): soldiers awake at night or in the dark (the
+   lights' test) hit `watchDamageBonus` (10%) harder (a transient modifier) and keep `watchMorale` (5) more
+   morale (a named reason). Sight range is untouched: the target scan shares one candidate list per area.
+   Skins: randomizing works; 217 of 606 roster rows have a one-skin pool (beast, monster, many spellcasters,
+   bards, traders, smaller factions), which reads as spotty. Fix is data in skins.json (the user curates it).H. Sidearms beyond ranged (later, the user wants this): a pikeman with a reach weapon swapping to a shorter one
    in close quarters, and similar weapon-for-the-distance swaps; `NpcSidearm` already does it for bows and
    throwers.
 

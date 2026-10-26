@@ -206,6 +206,8 @@ public class NpcEntity extends PathfinderMob
     private int skillTier = -1;
     /** Saved per-NPC skill tier ({@code AeSkill}); below zero when unset. */
     private int skillOverride = -1;
+    /** On the night watch (NpcNightLight): a little harder-hitting and steadier. */
+    private boolean onWatch;
     /** tickCount until which a governor oversees this worker. */
     private int governedUntil;
     /** A promoted rank ({@code AeRank}); null for the roster's. */
@@ -1690,6 +1692,17 @@ public class NpcEntity extends PathfinderMob
                 this.setItemSlot(EquipmentSlot.HEAD, ItemStack.EMPTY);
             }
         }
+    }
+
+    void setOnWatch(boolean watch)
+    {
+        this.onWatch = watch;
+    }
+
+    /** Awake on the night watch (or in the dark): steadier and harder-hitting. */
+    public boolean isOnWatch()
+    {
+        return this.onWatch;
     }
 
     /** A governor at the Town Hall oversees this worker for {@code ticks}: it works faster ({@code governor.workBonus}). */
