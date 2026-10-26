@@ -2657,6 +2657,13 @@ public class NpcEntity extends PathfinderMob
         }
         NpcParryPlanner.tick(this);
         this.morale.tick();
+        if ((this.tickCount + this.getId()) % 20 == 0 && this.getNavigation() instanceof GroundPathNavigation ground)
+        {
+            // Vampires plan every path through the shade by day (vanilla's avoid-sun, as skeletons use),
+            // so wandering, going home or working does not walk them into the sun.
+            ground.setAvoidSun(AncientEmpiresConfig.sunlightEnabled && this.level().isDay()
+                    && NpcFactions.sunlight(this.getFaction()) == NpcFactions.Sunlight.AVOID);
+        }
         if (AncientEmpiresConfig.sunlightEnabled && NpcFactions.sunlight(this.getFaction()) != NpcFactions.Sunlight.NONE && this.isSunBurnTick())
         {
             this.burnInSun();

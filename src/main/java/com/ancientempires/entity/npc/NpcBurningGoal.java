@@ -34,6 +34,11 @@ public final class NpcBurningGoal extends Goal
         {
             return false;
         }
+        if (AncientEmpiresConfig.sunlightEnabled && NpcFactions.sunlight(this.npc.getFaction()) != NpcFactions.Sunlight.NONE && this.npc.level().isDay())
+        {
+            // Set alight by the sun: shade, not water, is the cure (NpcSunGoal), and the two goals fought.
+            return false;
+        }
         return this.npc.getTarget() == null || this.npc.isCivilian();
     }
 

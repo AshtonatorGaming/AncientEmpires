@@ -13,12 +13,13 @@ import java.util.EnumSet;
  * avoid} keeps to shade by day whenever it is not fighting, and one with
  * {@code burn} (the undead) heads for shade once the sun has set it alight,
  * as zombies do. The burning itself is in {@link NpcEntity}. Looked for every
- * second, and only by such factions in the open by day.
+ * half second, and only by such factions in the open by day. Their burning-panic
+ * run for water stands aside for it by day.
  */
 final class NpcSunGoal extends Goal
 {
-    private static final int CHECK_INTERVAL = 20;
-    private static final int SHADE_TRIES = 10;
+    private static final int CHECK_INTERVAL = 10;
+    private static final int SHADE_TRIES = 24;
 
     private final NpcEntity npc;
     private int nextCheck;
@@ -76,6 +77,27 @@ final class NpcSunGoal extends Goal
     /** A safe spot within ten blocks with a roof over it. */
     @Nullable
     private Vec3 findShade()
+    {
+        if (this.npc.hasRestriction())
+        {
+            // The home leash would keep the search to sunny ground near home; lift it for the search.
+            BlockPos center = this.npc.getRestrictCenter();
+            int radius = (int) this.npc.getRestrictRadius();
+            this.npc.clearRestriction();
+            try
+            {
+                return this.searchShade();
+            }
+            finally
+            {
+                this.npc.restrictTo(center, radius);
+            }
+        }
+        return this.searchShade();
+    }
+
+    @Nullable
+    private Vec3 searchShade()
     {
         for (int attempt = 0; attempt < SHADE_TRIES; attempt++)
         {

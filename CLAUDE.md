@@ -140,7 +140,9 @@ G. Banner bearer pose: hold the banner raised like a two-hander, not the small i
 Done since: daylight (`NpcSunGoal`, `sunlight` config, factions.json `sunlight`): undead (`burn`) burn in
    daylight like zombies, a helmet taking the wear (`NpcEntity.burnInSun`, vanilla `isSunBurnTick`), and seek
    shade once alight; vampires (`avoid`, Ancient Warfare's) keep to shade by day whenever not fighting.
-H. Sidearms beyond ranged (later, the user wants this): a pikeman with a reach weapon swapping to a shorter one
+   By day the burning panic (water) stands aside for these factions, since the two goals fought; vampires'
+   paths avoid the sun (vanilla `setAvoidSun`), so wandering or going home does not walk them into it; the
+   shade search lifts the home leash and tries 24 spots.H. Sidearms beyond ranged (later, the user wants this): a pikeman with a reach weapon swapping to a shorter one
    in close quarters, and similar weapon-for-the-distance swaps; `NpcSidearm` already does it for bows and
    throwers.
 
