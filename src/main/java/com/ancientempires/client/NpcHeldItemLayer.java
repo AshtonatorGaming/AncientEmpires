@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemDisplayContext;
+import net.minecraft.world.item.BannerItem;
 import net.minecraft.world.item.ItemStack;
 
 /**
@@ -34,6 +35,11 @@ public class NpcHeldItemLayer extends ItemInHandLayer<NpcEntity, NpcModel>
     {
         if (stack.isEmpty() || !(entity instanceof NpcEntity npc))
         {
+            return;
+        }
+        if (stack.getItem() instanceof BannerItem)
+        {
+            // A standard is worn on the back (NpcBannerLayer), not shown as the small item in hand.
             return;
         }
         if (NpcCombatAnimations.emfPlacesArm(arm))

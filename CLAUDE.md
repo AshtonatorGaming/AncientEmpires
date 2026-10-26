@@ -126,7 +126,9 @@ C. Skirmisher: done (`combat/NpcSkirmishGoal`, `SpartanThrowing`, `skirmish` con
    ranged primary: bow or thrower) and the melee goal takes over. Spartan only throws for players, so
    the projectile is built by reflection (item `XItem` to entity `XEntity`), ammo is Spartan's own
    `AmmoUsed` count, restocked one per `restockTicks` out of a fight; thrown ones are not pickups.
-D. Banner Bearer: done (basic). Any banner in a soldier's off hand adds `morale.bannerBonus` (10) to allies
+D. Banner Bearer: done. A soldier with a banner in its off hand or anywhere in its backpack (`NpcEntity.getCarriedBanner`,
+   synced) is the standard bearer; the banner is worn on its back like a sashimono (`client/NpcBannerLayer`: vanilla's
+   banner model at half size with its patterns, never the small item in hand), so its hands stay free. It adds `morale.bannerBonus` (10) to allies
    within `morale.range`, shown as a reason; its death shocks them `bannerDeathShock` (15). Role label
    Standard Bearer. Later: faction banner rows, planting the banner as a rally point.
 E. Squads under leaders and a command screen (groups, formations, orders), then squad morale and patrols.
@@ -136,7 +138,6 @@ F. Combat, player-doable: done. Backstep dodge (`NpcMeleeAttackGoal.dodging`): a
    Flanking (`shouldFlank`, `flank`): a fighter without a shield facing a raised shield (within
    `flankAngle` 70 of its facing) circles the shorter way to its side, at striking distance; footwork
    only runs while waiting, so a lowered shield is still struck at once.
-G. Banner bearer pose: hold the banner raised like a two-hander, not the small item (later, visual).
 Done since: daylight (`NpcSunGoal`, `sunlight` config, factions.json `sunlight`): undead (`burn`) burn in
    daylight like zombies, a helmet taking the wear (`NpcEntity.burnInSun`, vanilla `isSunBurnTick`), and seek
    shade once alight; vampires (`avoid`, Ancient Warfare's) keep to shade by day whenever not fighting.

@@ -277,6 +277,11 @@ public final class NpcMorale
     /** A standard: any banner in the off hand. */
     static boolean carriesBanner(LivingEntity living)
     {
+        if (living instanceof NpcEntity npc)
+        {
+            // Off hand or backpack: a standard can be worn on the back.
+            return !npc.getCarriedBanner().isEmpty();
+        }
         return living.getOffhandItem().getItem() instanceof BannerItem;
     }
 

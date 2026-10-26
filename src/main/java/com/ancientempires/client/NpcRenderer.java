@@ -53,6 +53,7 @@ public class NpcRenderer extends HumanoidMobRenderer<NpcEntity, NpcModel>
                 new HumanoidModel<>(context.bakeLayer(ModelLayers.PLAYER_OUTER_ARMOR)),
                 context.getModelManager()));
         this.addLayer(new NpcHeldItemLayer(this, context.getItemInHandRenderer()));
+        this.addLayer(new NpcBannerLayer(this, context.bakeLayer(ModelLayers.BANNER)));
         this.keepSingleHeldItemLayer();
     }
 

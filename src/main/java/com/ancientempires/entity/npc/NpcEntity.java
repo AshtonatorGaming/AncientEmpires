@@ -61,6 +61,7 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.item.BannerItem;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.Item;
@@ -132,6 +133,8 @@ public class NpcEntity extends PathfinderMob
     private static final EntityDataAccessor<Float> DATA_XP = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.FLOAT);
     /** {@link NpcRank} ordinal, for the inventory label. */
     private static final EntityDataAccessor<Byte> DATA_RANK = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.BYTE);
+    /** The banner a standard bearer carries (off hand or backpack), drawn on its back. */
+    private static final EntityDataAccessor<ItemStack> DATA_BANNER = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.ITEM_STACK);
     private static final String RANK_KEY = "AeRank";
     private static final String LEVEL_KEY = "AeLevel";
     private static final String XP_KEY = "AeXp";
@@ -312,6 +315,7 @@ public class NpcEntity extends PathfinderMob
         this.entityData.define(DATA_BADGE, (byte) 0);
         this.entityData.define(DATA_LEVEL, (byte) 1);
         this.entityData.define(DATA_RANK, (byte) 0);
+        this.entityData.define(DATA_BANNER, ItemStack.EMPTY);
         this.entityData.define(DATA_XP, 0.0F);
     }
 
@@ -1182,6 +1186,10 @@ public class NpcEntity extends PathfinderMob
     /** The role label: what the main hand says, then the rank's trade, then the path. */
     public String getRoleId()
     {
+        if (this.getNpcPath().combat() && !this.getCarriedBanner().isEmpty())
+        {
+            return "standard_bearer";
+        }
         return this.getNpcPath().roleId(this.getMainHandItem(), this.getOffhandItem(), this.entityData.get(DATA_TRADE));
     }
 
@@ -1697,6 +1705,35 @@ public class NpcEntity extends PathfinderMob
     void setOnWatch(boolean watch)
     {
         this.onWatch = watch;
+    }
+
+    /**
+     * The banner a soldier carries as standard bearer: in its off hand, or else
+     * the first in its backpack (worn on its back, hands free). Synced; empty for none.
+     */
+    public ItemStack getCarriedBanner()
+    {
+        return this.entityData.get(DATA_BANNER);
+    }
+
+    private ItemStack findBanner()
+    {
+        if (!this.getNpcPath().combat())
+        {
+            return ItemStack.EMPTY;
+        }
+        if (this.getOffhandItem().getItem() instanceof BannerItem)
+        {
+            return this.getOffhandItem();
+        }
+        for (int slot = NpcInventory.BACKPACK_START; slot < NpcInventory.SLOT_COUNT; slot++)
+        {
+            if (this.inventory.getItem(slot).getItem() instanceof BannerItem)
+            {
+                return this.inventory.getItem(slot);
+            }
+        }
+        return ItemStack.EMPTY;
     }
 
     /** Awake on the night watch (or in the dark): steadier and harder-hitting. */
@@ -2613,6 +2650,11 @@ public class NpcEntity extends PathfinderMob
         if (this.entityData.get(DATA_STATUS) != status)
         {
             this.entityData.set(DATA_STATUS, status);
+        }
+        ItemStack banner = this.findBanner();
+        if (!ItemStack.matches(banner, this.entityData.get(DATA_BANNER)))
+        {
+            this.entityData.set(DATA_BANNER, banner.copyWithCount(1));
         }
         byte rank = (byte) this.getRank().ordinal();
         if (this.entityData.get(DATA_RANK) != rank)
