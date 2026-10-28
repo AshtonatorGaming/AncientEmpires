@@ -149,3 +149,61 @@ It is a map of the design space that stays coherent *because* it refuses to leav
 ---
 
 *Last synthesized from extended design discussions. Update when a major primitive changes or a large idea is explicitly promoted into `DESIGN.md`.*
+
+---
+
+## Extended Design Notes (appended from later discussions — additions only)
+
+The following material was decided or refined in subsequent planning sessions. It is additive. Existing sections above remain authoritative for the core primitives and priorities.
+
+### Settlement Binding and Specialized Anchors
+
+NPCs register themselves to a specific anchor block (Town Hall, Fort, Outpost, or similar) rather than performing continuous radius checks against a large area. Registration is rare (on spawn, on assignment, or on a slow pulse). The anchor owns the list of bound NPCs. This removes the lag source that large AW-style town radii created and allows settlements of essentially arbitrary size within practical pathfinding limits.
+
+**Proposed specialized blocks (each is an anchor with distinct director signals and modifiers):**
+
+- **Town Hall** — primary civilian and military registry. Tax/ledger pulse. Default binding point.
+- **Fort** — defensive morale source for owner-faction units. Director treats the area as restricted for normal pathing (no ordinary army marches through); only intrigue, spy, or clandestine goals may enter. Can act as a garrison anchor.
+- **Outpost** — lighter awareness node. Contributes to director scouting or early-warning scores. Optional secondary binding for small detachments.
+- **Granary** — supply ledger. Can be drained or destroyed as a siege objective to force attrition. Materialization still slow.
+- **Armory** — repair or equipment modifier for bound military units.
+- **Chapel** — morale recovery anchor. Units resting nearby recover the morale integer faster.
+- **War Council** — high-level order entry point (player or general). Writes objectives the director or local captains read.
+- **Siege Camp / War Camp** — player- or AI-placed attrition objective. Closer to Villager Recruits style siege cores. Tracks a simple progress or supply value; does not require full volumetric destruction simulation.
+
+All of these remain optional and configurable. They reuse the existing anchor pattern.
+
+### Garrison Rules (refined)
+
+- Banner or structure-specific anchor stores the roster, owner faction, and acts as a dummy leader for morale and defense orders while the real commander is unspawned.
+- Higher-ranking or “final boss” commanders remain data-only until the player enters fighting range or the banner/anchor is attacked. They do not path out of their intended arena prematurely.
+- On low health or death of the top commander, remaining roster can receive a Sally-out order (spawn and engage the invader).
+- Owner-faction units receive a defensive morale buff sourced from the banner/anchor. Visitors or invaders in the same structure receive none.
+- Multi-faction structures distinguish a single owner faction on the anchor; others are treated as visitors or temporary.
+- Foreign (non-AW) mobs that appear in structures (e.g. Grimoire of Gaia minotaurs, etc.) resolve via the live entity registry. They can optionally be flagged as temporary allies of the structure owner for the duration of a defense. No special AI is required beyond existing combat.
+
+### Civilian / Admin Hierarchy (block-centric)
+
+Laborers draw efficiency, upkeep, or other modifiers from the work block or Town Hall they are bound to. Foreman, Overseer, and Governor ranks apply their buffs to the block itself rather than ticking on individual NPCs. This supports a simplified chain for levies or civilian work without formation logic. Higher ranks remain pure data or rare-event lookups.
+
+Nobility layer (Count/Baron → Duke → King/Emperor) can dual-role with military ranks. A general can also hold a noble title. Cabinet titles (Chancellor, Marshal, Steward, Spymaster, etc.) set global modifiers while active. Cultural or playstyle buffs (heavy infantry focus, horse-archer tradition, etc.) are realm-level modifiers pulled from origins or player choices and read by the director or ledger.
+
+### Optional Hardcore Heir System
+
+Inspired by MCA Descendants. Strictly optional and off by default (hardcore feature). On player death, an eligible heir NPC can be overwritten with the player’s identity and relevant traits/flags. The player continues as that heir. No continuous family simulation is required; lineage data is only read on the succession event.
+
+### Personality and Decision Flags
+
+High-level NPCs can carry simple trait flags (Martial, Just, Cruel, Ambitious, Loyal, etc.) and integer leanings (Aggression, Loyalty, etc., -100 to 100). These are read only on rare events, ledger ticks, dialogue, or director decisions. They do not drive per-tick AI. Useful for flavor in reports, loyalty checks, and occasional director choices without performance cost.
+
+### Director Events, Loyalty, and Turncoats
+
+The director can occasionally spawn small reactive groups: caravans, visitors, refugees (including “chased” variants), scouts from either side. These are rare, pre-composed, and bind to existing anchors if they stay.
+
+Loyalty offers are interaction-only. An NPC can receive an offer flag with a progress value. Trait-gated cases (highly loyal or despicable) can accept or reject immediately. Everyone else enters an intermediate consideration state. Any actual rewrite of the superior UUID requires a prior threat-assessment check (survival-oriented). The director may only resolve offers that interaction or a major event has already created; it does not generate them autonomously.
+
+Spies and certain nobles can generate in-character reports stored as ordinary messages. Detail and hedging scale with the success of the observation and the reporter’s skill flags.
+
+Guilds and subfactions are lightweight extra flags or records. They are readable by dialogue, prices, loyalty checks, or director events. No additional ticking.
+
+All of the above continue to obey the architectural primitives. They are recorded so the design space stays coherent as the mod grows.
