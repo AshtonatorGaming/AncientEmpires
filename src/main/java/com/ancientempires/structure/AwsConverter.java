@@ -6,6 +6,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.FloatTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.nbt.TagParser;
 
 import java.util.ArrayList;
@@ -217,7 +218,7 @@ public final class AwsConverter
         {
             // AW's blocks and other mods': keep the whole rule for placing to resolve.
             blockEntity = new CompoundTag();
-            blockEntity.put("aeRule", data);
+            blockEntity.put("aeRule", this.upgradeKept(name, data));
             blockEntity.putString("aePlugin", plugin);
             kept.merge(name, 1, Integer::sum);
         }
@@ -226,6 +227,40 @@ public final class AwsConverter
         {
             blockEntityOf.put(number, blockEntity);
         }
+    }
+
+    /**
+     * A kept rule upgraded where it holds vanilla things: items anywhere (an AW
+     * NPC's custom gear, loot), and an advanced spawner's vanilla mob ids and
+     * the data it gives them. AW's own ids and other mods' stay as written.
+     */
+    private CompoundTag upgradeKept(String name, CompoundTag data)
+    {
+        CompoundTag upgraded = (CompoundTag) this.fixer.items(data);
+        if (!name.equals("ancientwarfarestructure:advanced_spawner"))
+        {
+            return upgraded;
+        }
+        CompoundTag settings = upgraded.getCompound("teData").getCompound("spawnerSettings");
+        for (Tag group : settings.getList("spawnGroups", Tag.TAG_COMPOUND))
+        {
+            for (Tag item : ((CompoundTag) group).getList("settingsList", Tag.TAG_COMPOUND))
+            {
+                CompoundTag entry = (CompoundTag) item;
+                String id = entry.getString("entityId");
+                if (!id.startsWith("minecraft:"))
+                {
+                    continue;
+                }
+                CompoundTag mob = entry.getCompound("customTag").copy();
+                mob.putString("id", id);
+                CompoundTag fixed = this.fixer.entity(mob);
+                entry.putString("entityId", fixed.getString("id"));
+                fixed.remove("id");
+                entry.put("customTag", fixed);
+            }
+        }
+        return upgraded;
     }
 
     private static boolean isUpperTallPlant(CompoundTag rule)
@@ -297,7 +332,7 @@ public final class AwsConverter
         {
             // AW's own (NPCs, vehicles, gates): the whole rule, for placing to resolve.
             nbt = new CompoundTag();
-            nbt.put("aeRule", data);
+            nbt.put("aeRule", this.fixer.items(data));
             if (!id.isEmpty())
             {
                 nbt.putString("id", id);

@@ -105,7 +105,17 @@ instead of reflecting per call), Skirmisher thresholds (about 4.5 to 28 blocks).
   sidecars at datapack reload and caches loaded templates up to `structures.templateCacheMb`. AW's offset y is
   the first layer above ground, so the build key goes at a player's feet. `/ancientempires structure list`,
   `place <id> [rotation]`, `check <id>`, `export <id>` (vanilla `.nbt` in `generated/` for a Structure Block).
-  AW spawners, gates, NPCs, vehicles, and flags are kept but not placed yet (S2, S3, S5).
+  AW gates, NPCs placed directly, vehicles, and flags are kept but not placed yet (S2, S3, S5).
+- Garrisons from structures (S2a): an AW advanced spawner becomes our `NpcSpawnerBlock` (`AwSpawnerImport` writes
+  the spawner's saved form and loads it): one-shot ones GARRISON, ones with more to give REPEATING, redstone ones
+  REDSTONE; AW's per-block `playerRange` is kept (it staged the fight: walls first, leaders last). AW NPC entries
+  become roster scrolls (`factionName` + type) with the spawner's custom name, gear, and skin (`NpcSkins.byFile`);
+  other mobs a `MobScrollItem` (id plus data, resolved at spawn through `AeRemap`, else
+  `structures.missingEntity`). All 35,354 library spawners import; 2 name an AW worker with no roster row. The
+  spawner gained AW's options: `ClearXp`, `Pool` (one slot by weight), `Hostile` (blocks claiming), a per-scroll
+  least count (`AeMinCount`), and spawn radius 0 (a post: on the spawner's own spot). `CaptureWandItem` (admins):
+  right-click a mob to capture it (our NPCs as their scroll via `NpcEntity.captureScroll`), then each right-click
+  on a block places another one-soldier post, or adds to a spawner clicked; sneak-use clears.
 
 ## Done
 

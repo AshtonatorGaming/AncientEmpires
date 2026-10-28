@@ -255,6 +255,7 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.IntValue GOVERNOR_TAX_TICKS;
     private static final ForgeConfigSpec.IntValue STRUCTURES_CACHE_MB;
     private static final ForgeConfigSpec.ConfigValue<String> STRUCTURES_MISSING_BLOCK;
+    private static final ForgeConfigSpec.ConfigValue<String> STRUCTURES_MISSING_ENTITY;
     private static final ForgeConfigSpec.BooleanValue MORALE_ENABLED;
     private static final ForgeConfigSpec.BooleanValue MORALE_OWNED;
     private static final ForgeConfigSpec.ConfigValue<List<? extends Double>> MORALE_BASE;
@@ -1051,6 +1052,7 @@ public final class AncientEmpiresConfig
         builder.comment("Structure templates (STRUCTURES.md): Ancient Warfare's library, converted, placed by /ancientempires structure and later by world generation.").push("structures");
         STRUCTURES_CACHE_MB = builder.comment("Memory for templates kept loaded, in MB; the least recently used are dropped past it. The largest AW island takes about 27.").defineInRange("templateCacheMb", 256, 16, 4096);
         STRUCTURES_MISSING_BLOCK = builder.comment("What a block becomes when neither this game nor the ae_remap tables know it (a mod that is not installed).").define("missingBlock", "minecraft:air");
+        STRUCTURES_MISSING_ENTITY = builder.comment("What a spawner's mob becomes when neither this game nor the ae_remap tables know it (a mod that is not installed). Empty: nothing spawns.").define("missingEntity", "minecraft:zombie");
         builder.pop();
 
         builder.comment("Morale, Total War style: soldiers waver, rout, and shatter. Each soldier's morale (0 to 100) drifts toward what its situation is worth: its rank's base, a commander's aura, the odds around it, its wounds, a recent hit from behind, hunger, and routing allies; deaths and kills nearby shock it. Below routBelow it runs (as civilians do, fighting only when cornered) and rallies once recovered; the third rout shatters it for good. Fearless factions (factions.json) never break.").push("morale");
@@ -1508,6 +1510,7 @@ public final class AncientEmpiresConfig
     public static int governorTaxTicksPerWorker = 2400;
     public static int structuresTemplateCacheMb = 256;
     public static String structuresMissingBlock = "minecraft:air";
+    public static String structuresMissingEntity = "minecraft:zombie";
     public static boolean moraleEnabled = true;
     public static boolean moraleOwnedNpcs = true;
     public static List<? extends Double> moraleBaseByTier = List.of(60.0D, 70.0D, 80.0D, 90.0D);
@@ -1885,6 +1888,7 @@ public final class AncientEmpiresConfig
         governorTaxTicksPerWorker = GOVERNOR_TAX_TICKS.get();
         structuresTemplateCacheMb = STRUCTURES_CACHE_MB.get();
         structuresMissingBlock = STRUCTURES_MISSING_BLOCK.get();
+        structuresMissingEntity = STRUCTURES_MISSING_ENTITY.get();
         moraleEnabled = MORALE_ENABLED.get();
         moraleOwnedNpcs = MORALE_OWNED.get();
         moraleBaseByTier = MORALE_BASE.get();

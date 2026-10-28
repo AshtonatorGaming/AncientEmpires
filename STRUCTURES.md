@@ -176,7 +176,8 @@ Biome lists become biome tags per template or territory, with modded biomes as o
   All 1,471 convert in about a minute (34 MB); the game test places the Empire church (56k blocks) in 1.7 s and
   a 1.5M-cell island in 2.6 s, chunk generation included. Remap tables so far: AW stand-ins and the moved
   namespaces and port renames; per-mod block and item tables are next, for the user to review.
-- S2: spawners as garrison spawners with roster scrolls and the capture wand; protection flag as the anchor with
+- S2a (done 2026-10-28): spawners as garrison spawners with roster scrolls and the capture wand (every library spawner
+  imports; see CLAUDE.md). S2b: coins and loot; S2c: protection flag as the anchor with
   claiming, block protection, loot chest lock; coins and loot tables. Milestone: one Empire structure.
 - S3: gates as entities (the six AW types) and the Gate Spawner.
 - S4: rotation normalization, overlap registry, then world generation (off by default).

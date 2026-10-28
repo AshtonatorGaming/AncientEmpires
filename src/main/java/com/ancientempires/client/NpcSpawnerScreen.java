@@ -44,6 +44,17 @@ public class NpcSpawnerScreen extends AbstractContainerScreen<NpcSpawnerMenu>
     private static final int ROW_TOP = 46;
     private static final int ROW_H = 13;
 
+    /** An on/off setting under the rows: which one, and its label key. */
+    private record Toggle(int setting, String key)
+    {
+    }
+
+    private static final Toggle[] TOGGLES = {
+            new Toggle(NpcSpawnerBlockEntity.LIGHT_SENSITIVE, "light"),
+            new Toggle(NpcSpawnerBlockEntity.HIDDEN, "hidden"),
+            new Toggle(NpcSpawnerBlockEntity.POOL, "pool"),
+            new Toggle(NpcSpawnerBlockEntity.HOSTILE, "hostile")};
+
     /** A settings row: which setting, and its label key. */
     private record Row(int setting, String key)
     {
@@ -77,7 +88,11 @@ public class NpcSpawnerScreen extends AbstractContainerScreen<NpcSpawnerMenu>
         this.rows.add(new Row(NpcSpawnerBlockEntity.SPAWN_RADIUS, "spawn_radius"));
         switch (NpcSpawnerBlockEntity.Mode.values()[this.shownMode])
         {
-            case GARRISON -> this.rows.add(new Row(NpcSpawnerBlockEntity.RETURN_RANGE, "return_range"));
+            case GARRISON ->
+            {
+                this.rows.add(new Row(NpcSpawnerBlockEntity.RETURN_RANGE, "return_range"));
+                this.rows.add(new Row(NpcSpawnerBlockEntity.CLEAR_XP, "clear_xp"));
+            }
             case REPEATING ->
             {
                 this.rows.add(new Row(NpcSpawnerBlockEntity.MIN_DELAY, "min_delay"));
@@ -103,17 +118,16 @@ public class NpcSpawnerScreen extends AbstractContainerScreen<NpcSpawnerMenu>
                     .bounds(right - 13, y, 13, 12).build());
         }
         int toggleY = this.topPos + ROW_TOP + this.rows.size() * ROW_H + 3;
-        int half = (right - left - 2) / 2;
-        this.addRenderableWidget(Button.builder(Component.translatable("gui.ancientempires.spawner.light"),
-                        button -> this.press(NpcSpawnerBlockEntity.LIGHT_SENSITIVE, true))
-                .bounds(left, toggleY, half, 14)
-                .tooltip(Tooltip.create(Component.translatable("gui.ancientempires.spawner.light.tooltip")))
-                .build());
-        this.addRenderableWidget(Button.builder(Component.translatable("gui.ancientempires.spawner.hidden"),
-                        button -> this.press(NpcSpawnerBlockEntity.HIDDEN, true))
-                .bounds(left + half + 2, toggleY, half, 14)
-                .tooltip(Tooltip.create(Component.translatable("gui.ancientempires.spawner.hidden.tooltip")))
-                .build());
+        int quarter = (right - left - 6) / 4;
+        for (int index = 0; index < TOGGLES.length; index++)
+        {
+            Toggle toggle = TOGGLES[index];
+            this.addRenderableWidget(Button.builder(Component.translatable("gui.ancientempires.spawner." + toggle.key()),
+                            button -> this.press(toggle.setting(), true))
+                    .bounds(left + index * (quarter + 2), toggleY, quarter, 14)
+                    .tooltip(Tooltip.create(Component.translatable("gui.ancientempires.spawner." + toggle.key() + ".tooltip")))
+                    .build());
+        }
     }
 
     private void press(int setting, boolean up)
@@ -194,13 +208,14 @@ public class NpcSpawnerScreen extends AbstractContainerScreen<NpcSpawnerMenu>
             FitText.draw(graphics, this.font, this.value(row.setting()), right - 62, y, 32, 9, GOLD, true, false);
         }
         int toggleY = ROW_TOP + this.rows.size() * ROW_H + 3 + 17;
-        String light = Component.translatable(this.menu.get(NpcSpawnerBlockEntity.LIGHT_SENSITIVE) != 0
-                ? "gui.ancientempires.spawner.light.on" : "gui.ancientempires.spawner.light.off").getString();
-        String hidden = Component.translatable(this.menu.get(NpcSpawnerBlockEntity.HIDDEN) != 0
-                ? "gui.ancientempires.spawner.hidden.on" : "gui.ancientempires.spawner.hidden.off").getString();
-        int half = (right - PANEL_X - 2) / 2;
-        FitText.draw(graphics, this.font, light, PANEL_X, toggleY, half, 9, DIM, true, false);
-        FitText.draw(graphics, this.font, hidden, PANEL_X + half + 2, toggleY, half, 9, DIM, true, false);
+        int quarter = (right - PANEL_X - 6) / 4;
+        for (int index = 0; index < TOGGLES.length; index++)
+        {
+            Toggle toggle = TOGGLES[index];
+            String state = Component.translatable("gui.ancientempires.spawner." + toggle.key()
+                    + (this.menu.get(toggle.setting()) != 0 ? ".on" : ".off")).getString();
+            FitText.draw(graphics, this.font, state, PANEL_X + index * (quarter + 2), toggleY, quarter, 9, DIM, true, false);
+        }
         graphics.drawString(this.font, this.playerInventoryTitle, this.inventoryLabelX, this.inventoryLabelY, INK, false);
     }
 

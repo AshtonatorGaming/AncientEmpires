@@ -34,8 +34,11 @@ public final class AePlacer
 {
     private static final int FLAGS = Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE;
 
-    /** What happened: cells set, palette entries that needed a table or fallback, entities placed and skipped. */
-    public record Report(int blocks, Map<String, Integer> substituted, int entities, Map<String, Integer> skipped)
+    /**
+     * What happened: cells set, palette entries that needed a table or fallback, AW blocks made real
+     * (spawners), entities placed, and what was skipped or went wrong.
+     */
+    public record Report(int blocks, Map<String, Integer> substituted, Map<String, Integer> aw, int entities, Map<String, Integer> skipped)
     {
     }
 
@@ -69,6 +72,8 @@ public final class AePlacer
             notes[i] = resolved.note();
         }
         int[] uses = new int[size];
+        Map<String, Integer> aw = new TreeMap<>();
+        Map<String, Integer> skipped = new TreeMap<>();
         int[] placed = new int[1];
         BlockPos.MutableBlockPos cursor = new BlockPos.MutableBlockPos();
         for (int tz = 0; tz < template.tilesZ(); tz++)
@@ -91,7 +96,15 @@ public final class AePlacer
                     uses[state]++;
                     placed[0]++;
                     CompoundTag nbt = template.blockEntityAt(x, y, z);
-                    if (nbt != null && !nbt.contains("aeRule"))
+                    if (nbt != null && nbt.contains("aeRule"))
+                    {
+                        String name = template.palette().get(state).getString("Name");
+                        if (placeAw(level, pos, name, nbt.getCompound("aeRule"), skipped))
+                        {
+                            aw.merge(name, 1, Integer::sum);
+                        }
+                    }
+                    else if (nbt != null)
                     {
                         BlockEntity blockEntity = level.getBlockEntity(pos);
                         if (blockEntity != null)
@@ -136,9 +149,25 @@ public final class AePlacer
                 substituted.merge(template.palette().get(i).getString("Name") + " (" + notes[i] + ")", uses[i], Integer::sum);
             }
         }
-        Map<String, Integer> skipped = new TreeMap<>();
         int entities = placeEntities(level, template, offset, anchor, rotation, limit, skipped);
-        return new Report(placed[0], substituted, entities, skipped);
+        return new Report(placed[0], substituted, aw, entities, skipped);
+    }
+
+    /** AW's own blocks that have become ours; false leaves the table's stand-in. */
+    private static boolean placeAw(ServerLevelAccessor level, BlockPos pos, String name, CompoundTag rule, Map<String, Integer> problems)
+    {
+        switch (name)
+        {
+            case "ancientwarfarestructure:advanced_spawner" ->
+            {
+                AwSpawnerImport.place(level, pos, rule, problems);
+                return true;
+            }
+            default ->
+            {
+                return false;
+            }
+        }
     }
 
     private static int placeEntities(ServerLevelAccessor level, AeTemplate template, int[] offset, BlockPos anchor, Rotation rotation,

@@ -2,6 +2,7 @@ package com.ancientempires.block;
 
 import com.ancientempires.entity.npc.NpcEntity;
 import com.ancientempires.entity.npc.NpcSafety;
+import com.ancientempires.item.MobScrollItem;
 import com.ancientempires.item.NpcSpawnEggItem;
 import com.ancientempires.registry.ModBlockEntities;
 import net.minecraft.core.BlockPos;
@@ -13,6 +14,7 @@ import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
@@ -62,7 +64,10 @@ public final class NpcSpawnerBlockEntity extends BlockEntity
     public static final int HIDDEN = 9;
     public static final int OUT = 10;
     public static final int SPAWNED = 11;
-    public static final int DATA_COUNT = 12;
+    public static final int CLEAR_XP = 12;
+    public static final int POOL = 13;
+    public static final int HOSTILE = 14;
+    public static final int DATA_COUNT = 15;
 
     public enum Mode
     {
@@ -75,12 +80,17 @@ public final class NpcSpawnerBlockEntity extends BlockEntity
     private static final int[][] LIMITS = {
             {0, 2, 1},
             {4, 64, 2},
-            {1, 16, 1},
+            {0, 16, 1},
             {16, 128, 8},
             {20, 2400, 20},
             {20, 4800, 20},
             {1, 32, 1},
             {0, 500, 1},
+            {0, 1, 1},
+            {0, 1, 1},
+            {0, 0, 0},
+            {0, 0, 0},
+            {0, 1000, 5},
             {0, 1, 1},
             {0, 1, 1}};
     private static final int CHECK_TICKS = 20;
@@ -117,6 +127,14 @@ public final class NpcSpawnerBlockEntity extends BlockEntity
     private int totalLimit;
     private boolean lightSensitive;
     private boolean hidden;
+    /** GARRISON: experience dropped when the last of the garrison dies and the spawner goes. */
+    private int clearXp;
+    /** GARRISON: one slot, picked by weight the first time, instead of all of them. */
+    private boolean pool;
+    /** Its structure cannot be claimed while it holds anyone (AW's hostile spawner). */
+    private boolean hostile = true;
+    /** GARRISON: pool pick and count rolls done, on the first trigger. */
+    private boolean settled;
     /** GARRISON: NPCs of this spawner out in the world now. */
     private int out;
     /** REPEATING: spawned so far, against totalLimit. */
@@ -153,7 +171,7 @@ public final class NpcSpawnerBlockEntity extends BlockEntity
     /** What a slot takes: an NPC scroll or a vanilla spawn egg. */
     public static boolean spawns(ItemStack stack)
     {
-        return stack.getItem() instanceof NpcSpawnEggItem || stack.getItem() instanceof SpawnEggItem;
+        return stack.getItem() instanceof NpcSpawnEggItem || stack.getItem() instanceof SpawnEggItem || stack.getItem() instanceof MobScrollItem;
     }
 
     public SimpleContainer slots()
@@ -187,6 +205,9 @@ public final class NpcSpawnerBlockEntity extends BlockEntity
             case HIDDEN -> this.hidden ? 1 : 0;
             case OUT -> this.out;
             case SPAWNED -> this.spawned;
+            case CLEAR_XP -> this.clearXp;
+            case POOL -> this.pool ? 1 : 0;
+            case HOSTILE -> this.hostile ? 1 : 0;
             default -> 0;
         };
     }
@@ -207,6 +228,9 @@ public final class NpcSpawnerBlockEntity extends BlockEntity
             case HIDDEN -> this.setHidden(value != 0);
             case OUT -> this.out = value;
             case SPAWNED -> this.spawned = value;
+            case CLEAR_XP -> this.clearXp = value;
+            case POOL -> this.pool = value != 0;
+            case HOSTILE -> this.hostile = value != 0;
             default ->
             {
             }
@@ -222,7 +246,7 @@ public final class NpcSpawnerBlockEntity extends BlockEntity
     {
         int setting = button / 4;
         int op = button % 4;
-        if (setting < 0 || setting >= LIMITS.length)
+        if (setting < 0 || setting >= LIMITS.length || setting == OUT || setting == SPAWNED)
         {
             return;
         }
@@ -233,7 +257,7 @@ public final class NpcSpawnerBlockEntity extends BlockEntity
         {
             value = Math.floorMod(value + Integer.signum(step), Mode.values().length);
         }
-        else if (setting == LIGHT_SENSITIVE || setting == HIDDEN)
+        else if (setting == LIGHT_SENSITIVE || setting == HIDDEN || setting == POOL || setting == HOSTILE)
         {
             value = value == 0 ? 1 : 0;
         }
@@ -298,6 +322,10 @@ public final class NpcSpawnerBlockEntity extends BlockEntity
         if (this.out > 0 || this.isEmpty() || !this.lightAllows(level) || !this.playerWithin(level, this.playerRange))
         {
             return;
+        }
+        if (!this.settled)
+        {
+            this.settle(level.getRandom());
         }
         // Everyone out, each slot's stack being how many of that one.
         for (int slot = 0; slot < SLOTS; slot++)
@@ -390,6 +418,10 @@ public final class NpcSpawnerBlockEntity extends BlockEntity
         {
             spawned = NpcSpawnEggItem.spawnFrom(level, one, at, null);
         }
+        else if (one.getItem() instanceof MobScrollItem)
+        {
+            spawned = MobScrollItem.spawn(level, one, at);
+        }
         else if (one.getItem() instanceof SpawnEggItem egg)
         {
             EntityType<?> type = egg.getType(one.getTag());
@@ -413,6 +445,13 @@ public final class NpcSpawnerBlockEntity extends BlockEntity
     @Nullable
     private BlockPos findSpot(ServerLevel level)
     {
+        if (this.spawnRadius == 0)
+        {
+            // A post: on the spawner's own spot (a hidden spawner is no obstacle), or just above it.
+            BlockPos here = this.worldPosition;
+            boolean passable = this.hidden || level.isEmptyBlock(here);
+            return passable && level.isEmptyBlock(here.above()) ? here : level.isEmptyBlock(here.above()) && level.isEmptyBlock(here.above(2)) ? here.above() : null;
+        }
         RandomSource random = level.getRandom();
         for (int attempt = 0; attempt < PLACE_TRIES; attempt++)
         {
@@ -424,6 +463,70 @@ public final class NpcSpawnerBlockEntity extends BlockEntity
             }
         }
         return null;
+    }
+
+    /** A scroll's least count (AW's minToSpawn); the stack size is the most. Rolled once, on the first trigger. */
+    public static final String MIN_COUNT_KEY = "AeMinCount";
+
+    /**
+     * GARRISON, the first time it is set off: each slot's count is rolled
+     * between its scroll's {@link #MIN_COUNT_KEY} and its stack size, and with
+     * pool on, one slot is kept (picked by weight, its count) and the rest
+     * emptied. Done once, so the garrison stays the same between visits.
+     */
+    private void settle(RandomSource random)
+    {
+        for (int slot = 0; slot < SLOTS; slot++)
+        {
+            ItemStack stack = this.slots.getItem(slot);
+            if (stack.isEmpty() || !stack.hasTag() || !stack.getTag().contains(MIN_COUNT_KEY))
+            {
+                continue;
+            }
+            int min = Math.max(0, Math.min(stack.getCount(), stack.getTag().getInt(MIN_COUNT_KEY)));
+            int count = min + random.nextInt(stack.getCount() - min + 1);
+            stack.getTag().remove(MIN_COUNT_KEY);
+            if (stack.getTag().isEmpty())
+            {
+                stack.setTag(null);
+            }
+            this.slots.setItem(slot, count == 0 ? ItemStack.EMPTY : stack.copyWithCount(count));
+        }
+        if (this.pool)
+        {
+            int total = 0;
+            for (int slot = 0; slot < SLOTS; slot++)
+            {
+                total += this.slots.getItem(slot).getCount();
+            }
+            int pick = total > 0 ? random.nextInt(total) : -1;
+            for (int slot = 0; slot < SLOTS; slot++)
+            {
+                int count = this.slots.getItem(slot).getCount();
+                if (pick >= 0 && pick < count)
+                {
+                    pick = -1;
+                    continue;
+                }
+                pick -= count;
+                this.slots.setItem(slot, ItemStack.EMPTY);
+            }
+        }
+        this.settled = true;
+        this.setChanged();
+    }
+
+    /** A post for one soldier: its people stand on the spawner's own spot. The capture wand places these. */
+    public void makePost()
+    {
+        this.spawnRadius = 0;
+        this.setChanged();
+    }
+
+    /** Hostile, and still holding people: its structure cannot be claimed yet. */
+    public boolean blocksClaim()
+    {
+        return this.hostile && !this.isEmpty();
     }
 
     /** GARRISON: one of ours was killed. It is gone for good, and when none are left the spawner goes too. */
@@ -439,6 +542,10 @@ public final class NpcSpawnerBlockEntity extends BlockEntity
         if (this.out == 0 && this.isEmpty() && this.level != null)
         {
             // Cleared: the structure's people are dead.
+            if (this.clearXp > 0 && this.level instanceof ServerLevel server)
+            {
+                ExperienceOrb.award(server, this.worldPosition.getCenter(), this.clearXp);
+            }
             this.level.removeBlock(this.worldPosition, false);
         }
     }
@@ -521,6 +628,10 @@ public final class NpcSpawnerBlockEntity extends BlockEntity
         tag.putInt("Out", this.out);
         tag.putInt("Spawned", this.spawned);
         tag.putBoolean("Powered", this.powered);
+        tag.putInt("ClearXp", this.clearXp);
+        tag.putBoolean("Pool", this.pool);
+        tag.putBoolean("Hostile", this.hostile);
+        tag.putBoolean("Settled", this.settled);
     }
 
     @Override
@@ -553,5 +664,9 @@ public final class NpcSpawnerBlockEntity extends BlockEntity
         this.out = tag.getInt("Out");
         this.spawned = tag.getInt("Spawned");
         this.powered = tag.getBoolean("Powered");
+        this.clearXp = tag.getInt("ClearXp");
+        this.pool = tag.getBoolean("Pool");
+        this.hostile = !tag.contains("Hostile") || tag.getBoolean("Hostile");
+        this.settled = tag.getBoolean("Settled");
     }
 }

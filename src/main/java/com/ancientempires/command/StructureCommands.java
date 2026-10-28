@@ -153,10 +153,12 @@ public final class StructureCommands
                 id.toString(), report.blocks(), report.entities(), millis, rotation.name().toLowerCase(Locale.ROOT)), true);
         report.substituted().entrySet().stream().limit(SHOWN).forEach(entry -> context.getSource().sendSuccess(
                 () -> Component.literal("  " + entry.getValue() + " x " + entry.getKey()), false));
+        report.aw().forEach((what, count) -> context.getSource().sendSuccess(
+                () -> Component.translatable("commands.ancientempires.structure.made", count, what), false));
         report.skipped().forEach((what, count) -> context.getSource().sendSuccess(
                 () -> Component.translatable("commands.ancientempires.structure.skipped", count, what), false));
-        AncientEmpires.LOGGER.info("Placed {} at {} ({}): {} blocks, {} entities, {} ms; substituted {}; skipped {}",
-                id, anchor, rotation, report.blocks(), report.entities(), millis, report.substituted(), report.skipped());
+        AncientEmpires.LOGGER.info("Placed {} at {} ({}): {} blocks, {} entities, {} ms; substituted {}; made {}; skipped {}",
+                id, anchor, rotation, report.blocks(), report.entities(), millis, report.substituted(), report.aw(), report.skipped());
         return 1;
     }
 

@@ -34,6 +34,8 @@ public final class NpcSkins
     private static final List<Faction> FACTIONS;
     private static final Map<String, Entry> BY_ID;
     private static final Map<String, Entry> BY_TYPE;
+    /** By texture file name (AW's skin pack name, lower case), for structures naming AW skins. */
+    private static final Map<String, Entry> BY_FILE;
     /** Every distinct skin of each type, for a random pick when an NPC is first placed. */
     private static final Map<String, List<Entry>> POOLS;
     private static final int MAX_POOL;
@@ -44,6 +46,7 @@ public final class NpcSkins
         FACTIONS = List.copyOf(loaded.factions);
         BY_ID = Map.copyOf(loaded.byId);
         BY_TYPE = Map.copyOf(loaded.byType);
+        BY_FILE = Map.copyOf(loaded.byFile);
         Map<String, List<Entry>> pools = new HashMap<>();
         loaded.pools.forEach((type, entries) -> pools.put(type, List.copyOf(entries)));
         POOLS = Map.copyOf(pools);
@@ -159,6 +162,22 @@ public final class NpcSkins
         return pool.get(random.nextInt(pool.size())).id();
     }
 
+    /**
+     * A skin by AW's texture path or file name ({@code ancientwarfare:skinpack/custom_monster_wolfie.png}
+     * or just the file), as AW's spawners name them; null when the catalog has no such file.
+     */
+    @Nullable
+    public static Entry byFile(String path)
+    {
+        if (path == null || path.isEmpty())
+        {
+            return null;
+        }
+        String file = path.substring(path.lastIndexOf('/') + 1);
+        file = file.substring(file.indexOf(':') + 1).toLowerCase(Locale.ROOT);
+        return BY_FILE.get(file.endsWith(".png") ? file : file + ".png");
+    }
+
     @Nullable
     public static ResourceLocation texture(String skinId)
     {
@@ -253,6 +272,10 @@ public final class NpcSkins
                                 Entry entry = new Entry(id, typeId, name, storedFaction, storedClass, texture);
                                 loaded.byId.put(id, entry);
                                 loaded.byType.putIfAbsent(typeId, entry);
+                                if (!file.isEmpty())
+                                {
+                                    loaded.byFile.putIfAbsent(file.toLowerCase(Locale.ROOT), entry);
+                                }
                                 if (build.listFile(file))
                                 {
                                     build.skins.add(entry);
@@ -745,6 +768,7 @@ public final class NpcSkins
         private final List<Faction> factions = new ArrayList<>();
         private final Map<String, Entry> byId = new HashMap<>();
         private final Map<String, Entry> byType = new HashMap<>();
+        private final Map<String, Entry> byFile = new HashMap<>();
         private final Map<String, List<Entry>> pools = new HashMap<>();
         private int maxPool;
     }

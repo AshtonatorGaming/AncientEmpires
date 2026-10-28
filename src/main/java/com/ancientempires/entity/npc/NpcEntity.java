@@ -13,6 +13,7 @@ import com.ancientempires.combat.SpartanThrowing;
 import com.ancientempires.combat.WeaponClassifier;
 import com.ancientempires.config.AncientEmpiresConfig;
 import com.ancientempires.inventory.NpcMenu;
+import com.ancientempires.item.CaptureWandItem;
 import com.ancientempires.item.InsigniaItem;
 import com.ancientempires.item.WarHornItem;
 import com.ancientempires.registry.ModItems;
@@ -2149,6 +2150,15 @@ public class NpcEntity extends PathfinderMob
     }
 
     /**
+     * A scroll of this NPC as it stands (row, gear, skin, name, level), leaving
+     * it in the world: the capture wand's copy for a spawner.
+     */
+    public ItemStack captureScroll()
+    {
+        return this.createPackedItem(false);
+    }
+
+    /**
      * The scroll this NPC came from, so a faction soldier keeps its faction
      * colors and class icon. The egg's spawn re-applies its roster row first,
      * then the packed state overwrites gear, skin, faction, owner, and name.
@@ -2818,6 +2828,11 @@ public class NpcEntity extends PathfinderMob
         if (player.getItemInHand(hand).getItem() instanceof InsigniaItem insignia)
         {
             return insignia.promote(this, player, player.getItemInHand(hand));
+        }
+        if (player.getItemInHand(hand).getItem() instanceof CaptureWandItem)
+        {
+            // The wand captures this NPC (its interactLivingEntity), rather than opening the inventory.
+            return InteractionResult.PASS;
         }
         if (!this.level().isClientSide && player instanceof ServerPlayer serverPlayer)
         {
