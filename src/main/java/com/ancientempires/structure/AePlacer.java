@@ -1,5 +1,6 @@
 package com.ancientempires.structure;
 
+import com.ancientempires.worldgen.AwSiteIndex;
 import com.ancientempires.AncientEmpires;
 import com.ancientempires.block.CoinStackBlock;
 import com.ancientempires.block.FlagBlock;
@@ -30,6 +31,8 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.DoorBlock;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -178,6 +181,8 @@ public final class AePlacer
             notes[i] = resolved.note();
         }
         int[] uses = new int[size];
+        int waterBelow = waterBelow(name, offset);
+        BlockState water = Blocks.WATER.defaultBlockState();
         Map<String, Integer> aw = new TreeMap<>();
         Map<String, Integer> skipped = new TreeMap<>();
         int[] placed = new int[1];
@@ -203,7 +208,7 @@ public final class AePlacer
                     {
                         Clearable.tryClear(old);
                     }
-                    level.setBlock(pos, states[state], FLAGS);
+                    level.setBlock(pos, y < waterBelow && states[state].isAir() ? water : states[state], FLAGS);
                     uses[state]++;
                     placed[0]++;
                     CompoundTag nbt = template.blockEntityAt(x, y, z);
@@ -259,6 +264,18 @@ public final class AePlacer
                         return;
                     }
                     BlockState current = level.getBlockState(cursor);
+                    if (current.getBlock() instanceof DoorBlock)
+                    {
+                        // AW built a door from its upper half, whose saved state is whole (facing, hinge, open);
+                        // the lower half kept only part. A door is never reshaped, which would copy the wrong half.
+                        BlockState above = level.getBlockState(cursor.above());
+                        if (current.getValue(DoorBlock.HALF) == DoubleBlockHalf.LOWER && above.is(current.getBlock())
+                                && above.getValue(DoorBlock.HALF) == DoubleBlockHalf.UPPER)
+                        {
+                            level.setBlock(cursor, above.setValue(DoorBlock.HALF, DoubleBlockHalf.LOWER), FLAGS);
+                        }
+                        return;
+                    }
                     BlockState shaped = Block.updateFromNeighbourShapes(current, level, cursor);
                     if (shaped != current)
                     {
@@ -300,6 +317,27 @@ public final class AePlacer
             record(level, name, bounds(template, offset, anchor, rotation), protectionFlags, factions);
         }
         return new Report(placed[0], substituted, aw, entities, skipped);
+    }
+
+    /**
+     * AW's clearing for water templates (its validators' handleClearAction): a
+     * boat's, island's, or harbor's empty cells below its ground layer are
+     * water, not air, so the sea does not drop around it; an underwater one's
+     * are all water. The template layer from which cells are air, or none.
+     */
+    private static int waterBelow(String name, int[] offset)
+    {
+        AwSiteIndex.Site site = AwSiteIndex.get().byName(name);
+        if (site == null)
+        {
+            return Integer.MIN_VALUE;
+        }
+        return switch (site.kind())
+        {
+            case "water", "island", "harbor" -> offset[1];
+            case "underwater" -> Integer.MAX_VALUE;
+            default -> Integer.MIN_VALUE;
+        };
     }
 
     private static boolean onEdge(BoundingBox box, BlockPos pos)

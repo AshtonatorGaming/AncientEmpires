@@ -14,6 +14,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -213,6 +214,7 @@ public class AwDecorBlock extends Block implements EntityBlock
         {
             state = state.setValue(BlockStateProperties.AXIS, looking.getClockWise().getAxis());
         }
+        state = this.connected(state, context.getLevel(), context.getClickedPos());
         List<Part> layout = LAYOUTS.get(this.spec.name());
         if (layout != null)
         {
@@ -227,6 +229,57 @@ public class AwDecorBlock extends Block implements EntityBlock
             }
         }
         return state;
+    }
+
+    @Override
+    public BlockState updateShape(BlockState state, Direction direction, BlockState neighbour, LevelAccessor level, BlockPos pos, BlockPos neighbourPos)
+    {
+        return this.connected(state, level, pos);
+    }
+
+    /**
+     * AW's table and bench legs, worked out from neighbours as its getActualState
+     * did: a table has a leg at a corner only where neither side touching it has
+     * another table; a bench (along its axis, only benches lying the same way)
+     * has legs at its free ends.
+     */
+    private BlockState connected(BlockState state, BlockGetter level, BlockPos pos)
+    {
+        BooleanProperty[] legs = this.legs(state);
+        if (legs != null)
+        {
+            boolean north = level.getBlockState(pos.north()).is(this);
+            boolean east = level.getBlockState(pos.east()).is(this);
+            boolean south = level.getBlockState(pos.south()).is(this);
+            boolean west = level.getBlockState(pos.west()).is(this);
+            return state.setValue(legs[0], !north && !east).setValue(legs[1], !south && !east)
+                    .setValue(legs[2], !south && !west).setValue(legs[3], !north && !west);
+        }
+        Property<?> benchLegs = this.stateDefinition.getProperty("legs");
+        if (benchLegs instanceof AwStringProperty named && state.hasProperty(BlockStateProperties.AXIS))
+        {
+            Direction.Axis axis = state.getValue(BlockStateProperties.AXIS);
+            String value;
+            if (axis == Direction.Axis.X)
+            {
+                boolean west = this.sameBench(state, level.getBlockState(pos.west()));
+                boolean east = this.sameBench(state, level.getBlockState(pos.east()));
+                value = west && !east ? "left" : !west && east ? "right" : !west ? "both" : "none";
+            }
+            else
+            {
+                boolean south = this.sameBench(state, level.getBlockState(pos.south()));
+                boolean north = this.sameBench(state, level.getBlockState(pos.north()));
+                value = north && !south ? "right" : !north && south ? "left" : !north ? "both" : "none";
+            }
+            return named.getPossibleValues().contains(value) ? state.setValue(named, value) : state;
+        }
+        return state;
+    }
+
+    private boolean sameBench(BlockState state, BlockState other)
+    {
+        return other.is(this) && other.getValue(BlockStateProperties.AXIS) == state.getValue(BlockStateProperties.AXIS);
     }
 
     /** The rest of a tall piece goes up with it. */

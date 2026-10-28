@@ -3,7 +3,6 @@
  "textures": {
   "t0_1": "ancientempires:block/aw/structure/totem_part_elephant_ear",
   "t0_3": "ancientempires:block/aw/structure/totem_part_elephant_parts",
-  "t0_null": "null",
   "particle": "ancientempires:block/aw/structure/totem_part_elephant_parts"
  },
  "elements": [
@@ -162,15 +161,6 @@
     12.5714
    ],
    "faces": {
-    "north": {
-     "uv": [
-      0,
-      0,
-      0,
-      0
-     ],
-     "texture": "#t0_null"
-    },
     "east": {
      "uv": [
       3.5,
@@ -218,6 +208,15 @@
       4
      ],
      "rotation": 180,
+     "texture": "#t0_3"
+    },
+    "north": {
+     "uv": [
+      2.5,
+      5,
+      1,
+      6.5
+     ],
      "texture": "#t0_3"
     }
    }

@@ -56,9 +56,10 @@ public enum GateType
         return this.iron;
     }
 
+    /** AW's own gate sounds (shipped under this mod's name), played once as the gate starts to move. */
     public SoundEvent moveSound()
     {
-        return this.iron ? SoundEvents.IRON_DOOR_OPEN : SoundEvents.WOODEN_DOOR_OPEN;
+        return SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(AncientEmpires.MOD_ID, this.iron ? "iron_gate" : "wooden_gate"));
     }
 
     public SoundEvent hurtSound()
@@ -68,7 +69,7 @@ public enum GateType
 
     public SoundEvent breakSound()
     {
-        return SoundEvents.ZOMBIE_BREAK_WOODEN_DOOR;
+        return SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(AncientEmpires.MOD_ID, this.iron ? "iron_gate_break" : "wooden_gate_break"));
     }
 
     public static GateType byAwName(String name)

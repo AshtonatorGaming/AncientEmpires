@@ -72,6 +72,8 @@ function copyModel(ref) {
   if (!ref.file || models.has(ref.id)) return;
   const json = JSON.parse(fs.readFileSync(ref.file, "utf8"));
   delete json.credit; delete json.__comment;
+  if (json.elements) for (const el of json.elements) for (const [k, f] of Object.entries(el.faces || {}))
+    if (f.texture === "null" || f.texture === "#missing" && !json.textures?.missing) delete el.faces[k];
   if (json.elements) fillFaces(json.elements);
   if (json.parent) { if (json.parent.startsWith("ancientwarfare:")) { const p = modelRef(json.parent.replace(/^ancientwarfare:block\//, "ancientwarfare:")); copyModel(p); json.parent = p.id; } else json.parent = "minecraft:" + json.parent.replace(/^minecraft:/, ""); }
   if (json.textures) for (const k of Object.keys(json.textures)) json.textures[k] = tex(json.textures[k]);

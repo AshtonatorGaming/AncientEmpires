@@ -7,6 +7,8 @@ import com.ancientempires.block.decor.StatueBlock;
 import com.ancientempires.registry.ModBlockEntities;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.core.Direction;
@@ -47,7 +49,17 @@ public final class DecorBlockRenderers
         @Override
         public void render(AwSoundBlockEntity sound, float partialTick, PoseStack pose, MultiBufferSource buffers, int light, int overlay)
         {
-            Minecraft.getInstance().getBlockRenderer().renderSingleBlock(sound.disguise(), pose, buffers, light, overlay, ModelData.EMPTY, null);
+            // The block is solid, so the light inside it is 0 and the disguise drew black; take the brightest side's.
+            int lit = light;
+            if (sound.getLevel() != null)
+            {
+                for (Direction side : Direction.values())
+                {
+                    int around = LevelRenderer.getLightColor(sound.getLevel(), sound.getBlockPos().relative(side));
+                    lit = Math.max(LightTexture.block(lit), LightTexture.block(around)) << 4 | Math.max(LightTexture.sky(lit), LightTexture.sky(around)) << 20;
+                }
+            }
+            Minecraft.getInstance().getBlockRenderer().renderSingleBlock(sound.disguise(), pose, buffers, lit, overlay, ModelData.EMPTY, null);
         }
     }
 

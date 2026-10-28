@@ -64,7 +64,6 @@ public class GateEntity extends Entity implements IEntityAdditionalSpawnData
     private static final EntityDataAccessor<Float> EDGE = SynchedEntityData.defineId(GateEntity.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Byte> STATUS = SynchedEntityData.defineId(GateEntity.class, EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<Integer> HEALTH = SynchedEntityData.defineId(GateEntity.class, EntityDataSerializers.INT);
-    private static final int SOUND_TICKS = 15;
 
     private BlockPos pos1 = BlockPos.ZERO;
     private BlockPos pos2 = BlockPos.ZERO;
@@ -250,9 +249,10 @@ public class GateEntity extends Entity implements IEntityAdditionalSpawnData
         }
         float speed = this.type.motion == GateType.Motion.BRIDGE ? AncientEmpiresConfig.gateBridgeSpeed : AncientEmpiresConfig.gateMoveSpeed;
         float edge = this.edge() + status * speed;
-        if (this.soundTicks++ % SOUND_TICKS == 0)
+        if (this.soundTicks++ == 0)
         {
-            this.level().playSound(null, this.pos1, this.type.moveSound(), SoundSource.BLOCKS, 1.0F, 0.8F + this.random.nextFloat() * 0.2F);
+            // Once per move, as AW did; its sound lasts the move.
+            this.level().playSound(null, this.pos1, this.type.moveSound(), SoundSource.BLOCKS, 2.0F, 1.0F);
         }
         if (edge >= this.edgeMax())
         {
@@ -272,6 +272,7 @@ public class GateEntity extends Entity implements IEntityAdditionalSpawnData
                 // Someone stands in the opening: open again rather than shut them in the wall.
                 edge = 0.0F;
                 this.entityData.set(STATUS, (byte) 1);
+                this.soundTicks = 0;
             }
             else
             {
@@ -292,6 +293,7 @@ public class GateEntity extends Entity implements IEntityAdditionalSpawnData
         if (opening)
         {
             this.entityData.set(STATUS, (byte) -1);
+            this.soundTicks = 0;
             if (this.type.motion == GateType.Motion.BRIDGE)
             {
                 this.clear(this.deckArea());

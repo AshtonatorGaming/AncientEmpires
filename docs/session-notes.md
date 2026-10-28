@@ -57,6 +57,14 @@ post); altar candles and cloths keep their colour when broken (copy_nbt); the so
 disguise, empty hand = tune editor); structures cluster (`clusterChanceBoost` 4 within `clusterRange` 96).
 Still unseen: whether the icons look right in game, whether the rate now feels right.
 
+Third play test (2026-10-28, commit after 33e35fd; jar NOT installed, the game was running): sound block disguises
+were drawn black (light inside a solid block is 0; now the brightest side's); doors laid from their upper half (AW's
+rule), so double doors pair; tables and benches take legs from neighbours (AW's getActualState); gates play AW's own
+gate sound once per move (and AW's break sounds); water/island/harbor templates fill empty cells below the ground
+layer with water (AW's handleClearAction); textureless faces in AW's idol and totem models dropped. Admin nametag
+over NPC spawners (33e35fd). Open: terrain blending around land sites (beard_thin cuts pits into slopes; AW smoothed
+its borders), not yet changed.
+
 ## Next, in order
 
 1. Finish the play test above; fix what the user finds.

@@ -2,7 +2,6 @@
  "parent": "minecraft:block/block",
  "textures": {
   "t0_1": "ancientempires:block/aw/structure/golden_idol_head",
-  "t0_null": "null",
   "t0_0": "ancientempires:block/aw/structure/golden_idol",
   "particle": "ancientempires:block/aw/structure/golden_idol"
  },
@@ -227,15 +226,6 @@
     ]
    },
    "faces": {
-    "north": {
-     "uv": [
-      0,
-      0,
-      0,
-      0
-     ],
-     "texture": "#t0_null"
-    },
     "east": {
      "uv": [
       1.5,
@@ -263,23 +253,14 @@
      ],
      "texture": "#t0_1"
     },
-    "up": {
+    "north": {
      "uv": [
-      0,
-      0,
-      0,
-      0
+      1.5,
+      9,
+      1.75,
+      9.5
      ],
-     "texture": "#t0_null"
-    },
-    "down": {
-     "uv": [
-      0,
-      0,
-      0,
-      0
-     ],
-     "texture": "#t0_null"
+     "texture": "#t0_1"
     }
    }
   },
@@ -305,15 +286,6 @@
     ]
    },
    "faces": {
-    "north": {
-     "uv": [
-      0,
-      0,
-      0,
-      0
-     ],
-     "texture": "#t0_null"
-    },
     "east": {
      "uv": [
       0,
@@ -341,23 +313,14 @@
      ],
      "texture": "#t0_1"
     },
-    "up": {
+    "north": {
      "uv": [
       0,
-      0,
-      0,
-      0
+      9,
+      0.5,
+      9.5
      ],
-     "texture": "#t0_null"
-    },
-    "down": {
-     "uv": [
-      0,
-      0,
-      0,
-      0
-     ],
-     "texture": "#t0_null"
+     "texture": "#t0_1"
     }
    }
   },
@@ -704,15 +667,6 @@
      ],
      "texture": "#t0_0"
     },
-    "west": {
-     "uv": [
-      0,
-      0,
-      0,
-      0
-     ],
-     "texture": "#t0_null"
-    },
     "up": {
      "uv": [
       2,
@@ -728,6 +682,15 @@
       6,
       2,
       7
+     ],
+     "texture": "#t0_0"
+    },
+    "west": {
+     "uv": [
+      1,
+      7,
+      0,
+      10
      ],
      "texture": "#t0_0"
     }

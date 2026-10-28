@@ -102,7 +102,9 @@ instead of reflecting per call), Skirmisher thresholds (about 4.5 to 28 blocks).
   column tiles (vanilla's `.nbt` would need about 2 GB for the 27M-cell islands); palette 0 is structure void.
   The fixer's gaps are filled by hand: 1.12 block entity contents (items, spawners, skulls, banners, signs,
   beds, flower pots) and door halves; AW saved states unconnected, so `AePlacer` recomputes every block's
-  shape from its neighbours after placing. Non-vanilla blocks and AW's own keep AW's rule in the block entity
+  shape from its neighbours after placing, except doors: AW built a door from its upper half (the whole state), so the
+  lower half is laid from the upper. Water, island, and harbor templates' empty cells below the ground layer are water
+  (underwater ones all), as AW's validators cleared them, so the sea does not drop around a boat. Non-vanilla blocks and AW's own keep AW's rule in the block entity
   (`aeRule`) and resolve when placed through `AeRemap` (registry, then `data/*/ae_remap/*.json` tables, then
   namespace renames, then `structures.missingBlock`), so a mod added later just works. `AeTemplates` indexes
   sidecars at datapack reload and caches loaded templates up to `structures.templateCacheMb`. AW's offset y is
