@@ -181,7 +181,8 @@ Biome lists become biome tags per template or territory, with modded biomes as o
   NPC coin drops. S2c (done): flags (per-faction items), structure records, claiming with standing cost, block protection,
   loot lock; garrison trigger ranges widened. Was S2c: protection flag as the anchor with
   claiming, block protection, loot chest lock; coins and loot tables. Milestone: one Empire structure.
-- S3: gates as entities (the six AW types) and the Gate Spawner.
+- S3 (done 2026-10-28): gates as entities (AW's seven types, its own models) and the Gate Spawner; NPCs using gates is
+  still to do.
 - S4: rotation normalization, overlap registry, then world generation (off by default).
 - S5: real decor blocks, placeholder siege engines, the Scanner.
 - Then chain of command (garrisons are its first real use).

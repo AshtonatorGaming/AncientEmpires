@@ -268,6 +268,9 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.DoubleValue PROTECTION_MULTIPLIER;
     private static final ForgeConfigSpec.BooleanValue LOOT_LOCK;
     private static final ForgeConfigSpec.BooleanValue ALLOW_STEALING;
+    private static final ForgeConfigSpec.IntValue GATE_HEALTH;
+    private static final ForgeConfigSpec.DoubleValue GATE_SPEED;
+    private static final ForgeConfigSpec.DoubleValue GATE_BRIDGE_SPEED;
     private static final ForgeConfigSpec.BooleanValue MORALE_ENABLED;
     private static final ForgeConfigSpec.BooleanValue MORALE_OWNED;
     private static final ForgeConfigSpec.ConfigValue<List<? extends Double>> MORALE_BASE;
@@ -1077,6 +1080,9 @@ public final class AncientEmpiresConfig
         PROTECTION_MULTIPLIER = builder.comment("Blocks of an unclaimed faction structure take this many times as long to mine (AW's block protection). 1 turns it off.").defineInRange("protectionMultiplier", 100.0D, 1.0D, 10000.0D);
         LOOT_LOCK = builder.comment("Containers in an unclaimed faction structure stay shut until it is claimed (AW's loot chest protection).").define("lootLock", true);
         ALLOW_STEALING = builder.comment("With lootLock, a container can still be opened while none of the faction can see you (AW's stealing).").define("allowStealing", true);
+        GATE_HEALTH = builder.comment("A gate's health (AW's 80). Explosions do ten times their damage; an axe half against wood, a pickaxe a half or third against iron, anything else a quarter; arrows nothing.").defineInRange("gateHealth", 80, 1, 10000);
+        GATE_SPEED = builder.comment("Blocks a gate's wall moves per tick (AW's was 0.025: a five-high gate took ten seconds).").defineInRange("gateMoveSpeed", 0.05D, 0.005D, 1.0D);
+        GATE_BRIDGE_SPEED = builder.comment("Degrees a drawbridge turns per tick (AW's 1: ninety ticks to lower).").defineInRange("gateBridgeSpeed", 1.0D, 0.1D, 10.0D);
         builder.pop();
 
         builder.comment("Morale, Total War style: soldiers waver, rout, and shatter. Each soldier's morale (0 to 100) drifts toward what its situation is worth: its rank's base, a commander's aura, the odds around it, its wounds, a recent hit from behind, hunger, and routing allies; deaths and kills nearby shock it. Below routBelow it runs (as civilians do, fighting only when cornered) and rallies once recovered; the third rout shatters it for good. Fearless factions (factions.json) never break.").push("morale");
@@ -1547,6 +1553,9 @@ public final class AncientEmpiresConfig
     public static double protectionMultiplier = 100.0D;
     public static boolean lootLock = true;
     public static boolean allowStealing = true;
+    public static int gateHealth = 80;
+    public static float gateMoveSpeed = 0.05F;
+    public static float gateBridgeSpeed = 1.0F;
     public static boolean moraleEnabled = true;
     public static boolean moraleOwnedNpcs = true;
     public static List<? extends Double> moraleBaseByTier = List.of(60.0D, 70.0D, 80.0D, 90.0D);
@@ -1937,6 +1946,9 @@ public final class AncientEmpiresConfig
         protectionMultiplier = PROTECTION_MULTIPLIER.get();
         lootLock = LOOT_LOCK.get();
         allowStealing = ALLOW_STEALING.get();
+        gateHealth = GATE_HEALTH.get();
+        gateMoveSpeed = (float) (double) GATE_SPEED.get();
+        gateBridgeSpeed = (float) (double) GATE_BRIDGE_SPEED.get();
         moraleEnabled = MORALE_ENABLED.get();
         moraleOwnedNpcs = MORALE_OWNED.get();
         moraleBaseByTier = MORALE_BASE.get();

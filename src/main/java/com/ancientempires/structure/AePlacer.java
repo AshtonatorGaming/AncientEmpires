@@ -3,8 +3,11 @@ package com.ancientempires.structure;
 import com.ancientempires.block.CoinStackBlock;
 import com.ancientempires.block.FlagBlock;
 import com.ancientempires.block.FlagBlockEntity;
+import com.ancientempires.gate.GateEntity;
+import com.ancientempires.gate.GateType;
 import com.ancientempires.registry.ModBlocks;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -14,6 +17,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -265,6 +269,18 @@ public final class AePlacer
         for (CompoundTag entry : template.entities())
         {
             CompoundTag nbt = entry.getCompound("nbt").copy();
+            if (entry.getString("plugin").equals("awGate"))
+            {
+                if (placeGate(level, entry, nbt.getCompound("aeRule"), offset, anchor, rotation, limit))
+                {
+                    count++;
+                }
+                else
+                {
+                    skipped.merge("awGate (opening blocked)", 1, Integer::sum);
+                }
+                continue;
+            }
             if (nbt.contains("aeRule"))
             {
                 skipped.merge(entry.getString("plugin") + " " + nbt.getString("id"), 1, Integer::sum);
@@ -305,6 +321,41 @@ public final class AePlacer
             count++;
         }
         return count;
+    }
+
+    /**
+     * An AW gate: its corners are its position cell plus AW's {@code pos1} and
+     * {@code pos2} offsets, turned with the structure, as is its facing. The
+     * opening is cleared (AW's gate proxies were placed as air) and the gate
+     * built closed, with no owner: a structure's gate answers to its faction.
+     */
+    private static boolean placeGate(ServerLevelAccessor level, CompoundTag entry, CompoundTag rule, int[] offset, BlockPos anchor, Rotation rotation,
+            @Nullable BoundingBox limit)
+    {
+        ListTag pos = entry.getList("pos", Tag.TAG_DOUBLE);
+        int x = (int) Math.floor(pos.getDouble(0));
+        int y = (int) Math.floor(pos.getDouble(1));
+        int z = (int) Math.floor(pos.getDouble(2));
+        CompoundTag one = rule.getCompound("pos1");
+        CompoundTag two = rule.getCompound("pos2");
+        BlockPos pos1 = cellToWorld(offset, anchor, rotation, x + one.getInt("x"), y + one.getInt("y"), z + one.getInt("z"));
+        BlockPos pos2 = cellToWorld(offset, anchor, rotation, x + two.getInt("x"), y + two.getInt("y"), z + two.getInt("z"));
+        if (limit != null && !limit.isInside(pos1))
+        {
+            return false;
+        }
+        for (BlockPos cell : BlockPos.betweenClosed(pos1, pos2))
+        {
+            level.setBlock(cell, Blocks.AIR.defaultBlockState(), FLAGS);
+        }
+        Direction facing = rotation.rotate(Direction.from2DDataValue(rule.getByte("orientation")));
+        GateEntity gate = GateEntity.create(level.getLevel(), pos1, pos2, GateType.byAwName(rule.getString("gateType")), facing, null);
+        if (gate == null)
+        {
+            return false;
+        }
+        level.addFreshEntity(gate);
+        return true;
     }
 
     /**

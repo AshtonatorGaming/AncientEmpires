@@ -147,6 +147,21 @@ instead of reflecting per call), Skirmisher thresholds (about 4.5 to 28 blocks).
   the loot lock (containers shut while one of the faction sees you; `allowStealing` otherwise). Imported garrison
   trigger ranges are scaled by `structures.triggerRangeScale` (1.5) and floored at `triggerMinRange` (10): tight
   structures spawned their people on top of the player.
+- Gates (S3, `gate/`; read from AW's decompiled 1.12 code): `GateEntity` spans its opening (`pos1`, `pos2` as given,
+  one block thick) and, while closed, fills it with `GateProxyBlock`s (invisible, solid, unmineable; clicks and blows go
+  to the gate), so collision and paths treat it as a wall; opening clears them. Seven `GateType`s: vertical wood and
+  iron (the wall rises), single (slides away from `pos1`), double (halves part), and the drawbridge (turns 90 degrees
+  outward, its deck proxies laid flat once down; it lowers only onto open air). Redstone at either bottom corner
+  toggles, as AW's did. AW's damage: 80 health (`gateHealth`), arrows nothing, explosions ten times, an axe half on
+  wood, a pickaxe a half or third on iron, else a quarter. Who may use one: admins, its owner (or team), for a gate of
+  an unclaimed faction structure anyone not hostile to the faction, once claimed the claimer; no owner and no
+  structure: anyone (AW's template gates). Owners and admins sneak-click to pack it. `GateRenderer` is AW's own
+  ModelGateBasic and ModelGateBridge rebuilt box for box on AW's sheets, with AW's per-cell frame and wall logic in
+  AW's flipped space. `GateSpawnerItem`, one per type: click two corners, then again to build. Structures build
+  AW's `awGate` entries closed (`AePlacer.placeGate`). `gateMoveSpeed` 0.05 (AW's 0.025 took ten seconds for a
+  five-high gate), `gateBridgeSpeed` 1 degree a tick. Not yet: NPCs opening gates for themselves (AW's soldiers did).
+- Template text: 240 of AW's templates are Latin-1, not UTF-8; `AwsConvertTool.text` falls back to Latin-1 (their
+  signs' section signs had become question marks), and sign lines drop formatting codes.
 
 ## Done
 

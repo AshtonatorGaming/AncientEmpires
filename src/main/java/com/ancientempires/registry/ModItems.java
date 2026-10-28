@@ -4,6 +4,8 @@ import com.ancientempires.AncientEmpires;
 import com.ancientempires.block.WorksiteBlockEntity;
 import com.ancientempires.entity.npc.NpcRank;
 import com.ancientempires.entity.npc.NpcRoster;
+import com.ancientempires.gate.GateSpawnerItem;
+import com.ancientempires.gate.GateType;
 import com.ancientempires.item.BandageItem;
 import com.ancientempires.item.CaptureWandItem;
 import com.ancientempires.item.FlagItem;
@@ -69,6 +71,19 @@ public final class ModItems
     public static final RegistryObject<Item> CAPTURE_WAND = ITEMS.register("capture_wand", () -> new CaptureWandItem(new Item.Properties().stacksTo(1)));
     /** AW's flags; the faction and kind ride in each stack's BlockEntityTag (one creative entry per faction). */
     public static final RegistryObject<FlagItem> FLAG = ITEMS.register("flag", () -> new FlagItem(ModBlocks.FLAG.get(), new Item.Properties()));
+    /** AW's Gate Spawners, one per gate type, in GateType order. */
+    public static final List<RegistryObject<Item>> GATE_SPAWNERS = gateSpawners();
+
+    private static List<RegistryObject<Item>> gateSpawners()
+    {
+        List<RegistryObject<Item>> items = new ArrayList<>();
+        for (GateType type : GateType.values())
+        {
+            items.add(ITEMS.register(type.itemId, () -> new GateSpawnerItem(type, new Item.Properties().stacksTo(16))));
+        }
+        return List.copyOf(items);
+    }
+
     public static final RegistryObject<Item> NPC_SPAWNER = ITEMS.register("npc_spawner",
             () -> new BlockItem(ModBlocks.NPC_SPAWNER.get(), new Item.Properties()));
     public static final RegistryObject<Item> SETTLERS_POST = ITEMS.register("settlers_post",

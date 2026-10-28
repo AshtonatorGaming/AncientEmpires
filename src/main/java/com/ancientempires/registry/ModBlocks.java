@@ -13,6 +13,7 @@ import com.ancientempires.block.QuarryBlock;
 import com.ancientempires.block.SettlersPostBlock;
 import com.ancientempires.block.TownHallBlock;
 import com.ancientempires.block.TreeFarmBlock;
+import com.ancientempires.gate.GateProxyBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -47,6 +48,10 @@ public final class ModBlocks
     /** AW's faction flags: decorative, or a structure's protection flag. Drawn by FlagRenderer. */
     public static final RegistryObject<Block> FLAG = BLOCKS.register("flag", () -> new FlagBlock(BlockBehaviour.Properties.of()
             .mapColor(MapColor.WOOD).strength(1.0F).sound(SoundType.WOOD).noOcclusion()));
+
+    /** The invisible solid stand-in a closed gate fills its opening with; cannot be mined. */
+    public static final RegistryObject<Block> GATE_PROXY = BLOCKS.register("gate_proxy", () -> new GateProxyBlock(BlockBehaviour.Properties.of()
+            .mapColor(MapColor.NONE).strength(-1.0F, 3600000.0F).noLootTable().noOcclusion().isValidSpawn((state, level, pos, type) -> false)));
 
     public static final RegistryObject<Block> SETTLERS_POST = BLOCKS.register("settlers_post",
             () -> new SettlersPostBlock(BlockBehaviour.Properties.of()

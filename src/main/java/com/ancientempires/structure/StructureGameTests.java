@@ -4,11 +4,14 @@ import com.ancientempires.AncientEmpires;
 import com.google.gson.JsonObject;
 import com.ancientempires.block.FlagBlockEntity;
 import com.ancientempires.block.NpcSpawnerBlockEntity;
+import com.ancientempires.gate.GateEntity;
+import com.ancientempires.registry.ModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.MinecraftForge;
@@ -280,8 +283,10 @@ public final class StructureGameTests
         BoundingBox bounds = AePlacer.bounds(template, offset(id), anchor, Rotation.NONE);
         StructureRecords.Record record = StructureRecords.get(level).at(bounds.getCenter());
         helper.assertTrue(record != null && "empire".equals(record.faction) && record.flag != null, "an Empire record with its flag");
-        FlagBlockEntity flag = (FlagBlockEntity) level.getBlockEntity(record.flag);
-        helper.assertTrue(flag != null && flag.isProtection() && flag.record() == record.id, "the flag guards the record");
+        AncientEmpires.LOGGER.info("GAMETEST flag at {}: {} / {}", record.flag, level.getBlockState(record.flag), level.getBlockEntity(record.flag));
+        FlagBlockEntity flag = level.getBlockEntity(record.flag) instanceof FlagBlockEntity found ? found : null;
+        helper.assertTrue(flag != null && flag.isProtection() && flag.record() == record.id, "the flag guards the record: flag "
+                + (flag == null ? "missing" : flag.isProtection() + " record " + flag.record()) + ", record " + record.id + " " + record.template);
 
         Player player = helper.makeMockPlayer();
         StructureClaims.tryClaim(level, record.flag, flag, player);
@@ -304,6 +309,42 @@ public final class StructureGameTests
         StructureClaims.tryClaim(level, record.flag, flag, player);
         helper.assertTrue(record.claimed() && flag.claimedBy() != null, "claimed once cleared");
         helper.succeed();
+    }
+
+    /**
+     * The Empire border tower's three iron portcullises: built from the
+     * template, closed with proxies filling their openings, and opening clears
+     * them; then closed again.
+     */
+    @GameTest(template = ARENA, timeoutTicks = 600)
+    public static void gatesBuildOpenAndClose(GameTestHelper helper)
+    {
+        String path = "normal/awnationempire/empirebordertower";
+        // Close by: gates are entities, which tick only near the test.
+        BlockPos anchor = helper.absolutePos(new BlockPos(0, 1, 0)).offset(12, 2, 12);
+        placeAndLog(helper, path, anchor, Rotation.CLOCKWISE_90);
+        ServerLevel level = helper.getLevel();
+        ResourceLocation id = ResourceLocation.fromNamespaceAndPath(AncientEmpires.MOD_ID, path);
+        BoundingBox bounds = AePlacer.bounds(AeTemplates.get(id).orElseThrow(), offset(id), anchor, Rotation.CLOCKWISE_90);
+        List<GateEntity> gates = level.getEntitiesOfClass(GateEntity.class, AABB.of(bounds).inflate(2.0D));
+        helper.assertTrue(gates.size() == 3, "three gates built, found " + gates.size());
+        GateEntity gate = gates.get(0);
+        AncientEmpires.LOGGER.info("GAMETEST gate {} pos1 {} pos2 {} min state {}", gate.gateType(), gate.pos1(), gate.pos2(), level.getBlockState(gate.min()));
+        helper.runAfterDelay(5, () ->
+        {
+            helper.assertTrue(level.getBlockState(gate.min()).is(ModBlocks.GATE_PROXY.get()), "closed: the opening is blocked; status "
+                    + gate.status() + " edge " + gate.edge() + " removed " + gate.isRemoved() + " state " + level.getBlockState(gate.min()));
+            gate.toggle();
+            helper.runAfterDelay(5, () ->
+            {
+                helper.assertTrue(level.getBlockState(gate.min()).isAir(), "opening: the way is clear");
+                helper.assertTrue(gate.edge() > 0.0F, "the wall is rising");
+                AncientEmpires.LOGGER.info("GAMETEST gate {} {}x{} edge {} of {}", gate.gateType(), gate.width(), gate.height(), gate.edge(), gate.edgeMax());
+                gate.toggle();
+                helper.succeedWhen(() -> helper.assertTrue(gate.edge() == 0.0F && level.getBlockState(gate.min()).is(ModBlocks.GATE_PROXY.get()),
+                        "closed again and blocked"));
+            });
+        });
     }
 
     @GameTest(template = ARENA, timeoutTicks = 2400)

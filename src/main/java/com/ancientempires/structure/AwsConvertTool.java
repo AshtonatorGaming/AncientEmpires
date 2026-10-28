@@ -8,6 +8,10 @@ import net.minecraft.nbt.NbtIo;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
+import java.nio.charset.CharacterCodingException;
+import java.nio.charset.CodingErrorAction;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
@@ -70,13 +74,10 @@ public final class AwsConvertTool
                 // Drop the pack folder (MohawkyPackTweaked1.12.2V75/); keep the rest as the template's path.
                 String inPack = relative.substring(relative.indexOf('/') + 1);
                 String path = resourcePath(inPack.substring(0, inPack.length() - ".aws".length()));
-                List<String> lines = new ArrayList<>();
-                try (BufferedReader reader = new BufferedReader(new InputStreamReader(zip.getInputStream(entry), StandardCharsets.UTF_8)))
+                List<String> lines;
+                try (InputStream stream = zip.getInputStream(entry))
                 {
-                    for (String line = reader.readLine(); line != null; line = reader.readLine())
-                    {
-                        lines.add(line);
-                    }
+                    lines = text(stream.readAllBytes()).lines().toList();
                 }
                 try
                 {
@@ -159,6 +160,24 @@ public final class AwsConvertTool
             }
         }
         return count;
+    }
+
+    /**
+     * A template's text. Most are UTF-8, but 240 of AW's were saved in Latin-1,
+     * where a sign's formatting code (the section sign) read as UTF-8 became a
+     * replacement character; those are read as Latin-1.
+     */
+    static String text(byte[] bytes)
+    {
+        try
+        {
+            return StandardCharsets.UTF_8.newDecoder().onMalformedInput(CodingErrorAction.REPORT)
+                    .onUnmappableCharacter(CodingErrorAction.REPORT).decode(ByteBuffer.wrap(bytes)).toString();
+        }
+        catch (CharacterCodingException exception)
+        {
+            return new String(bytes, StandardCharsets.ISO_8859_1);
+        }
     }
 
     /** A path safe for a resource location: lower case, anything else an underscore. */

@@ -50,6 +50,10 @@ public final class ModCreativeTabs
                         output.accept(ModItems.KITCHEN.get());
                         output.accept(ModItems.NPC_SPAWNER.get());
                         output.accept(ModItems.CAPTURE_WAND.get());
+                        for (RegistryObject<Item> gate : ModItems.GATE_SPAWNERS)
+                        {
+                            output.accept(gate.get());
+                        }
                         List<String> factions = new ArrayList<>(NpcFactions.ids());
                         factions.sort(String::compareTo);
                         for (boolean protection : new boolean[] {true, false})

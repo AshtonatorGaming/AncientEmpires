@@ -271,7 +271,9 @@ public final class LegacyFixer
         ListTag messages = new ListTag();
         for (int line = 0; line < 4; line++)
         {
-            messages.add(StringTag.valueOf(new JsonPrimitive(rule.getString("signContents" + line)).toString()));
+            // AW's lines carry stray formatting codes (a section sign and a letter, mostly resets); a sign shows plain text.
+            String words = rule.getString("signContents" + line).replaceAll("\u00A7.", "");
+            messages.add(StringTag.valueOf(new JsonPrimitive(words).toString()));
         }
         text.put("messages", messages);
         text.putString("color", "black");

@@ -79,7 +79,7 @@ public final class StructureRecords extends SavedData
         return this.records.get(id);
     }
 
-    /** The structure a block is in (the innermost, if two overlap), or null. */
+    /** The structure a block is in (the innermost if two overlap; of two alike, the newest), or null. */
     @Nullable
     public Record at(BlockPos pos)
     {
@@ -91,7 +91,8 @@ public final class StructureRecords extends SavedData
         Record best = null;
         for (Record record : here)
         {
-            if (record.bounds.isInside(pos) && (best == null || volume(record.bounds) < volume(best.bounds)))
+            if (record.bounds.isInside(pos) && (best == null || volume(record.bounds) < volume(best.bounds)
+                    || volume(record.bounds) == volume(best.bounds) && record.id > best.id))
             {
                 best = record;
             }
