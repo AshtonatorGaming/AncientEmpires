@@ -1,5 +1,6 @@
 package com.ancientempires.structure;
 
+import com.ancientempires.AncientEmpires;
 import com.ancientempires.block.CoinStackBlock;
 import com.ancientempires.block.FlagBlock;
 import com.ancientempires.block.FlagBlockEntity;
@@ -20,6 +21,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Clearable;
 import net.minecraft.world.entity.Entity;
@@ -205,31 +207,41 @@ public final class AePlacer
                     uses[state]++;
                     placed[0]++;
                     CompoundTag nbt = template.blockEntityAt(x, y, z);
-                    if (nbt != null && nbt.contains("aeRule"))
+                    try
                     {
-                        String blockName = template.palette().get(state).getString("Name");
-                        if (placeAw(level, pos, blockName, nbt.getCompound("aeRule"), rotation, skipped, protectionFlags, factions))
+                        if (nbt != null && nbt.contains("aeRule"))
                         {
-                            aw.merge(blockName, 1, Integer::sum);
-                        }
-                    }
-                    else if (nbt != null)
-                    {
-                        BlockEntity blockEntity = level.getBlockEntity(pos);
-                        if (blockEntity != null)
-                        {
-                            CompoundTag data = nbt.copy();
-                            data.putInt("x", pos.getX());
-                            data.putInt("y", pos.getY());
-                            data.putInt("z", pos.getZ());
-                            blockEntity.load(data);
-                            blockEntity.setChanged();
-                            if (blockEntity instanceof FlagBlockEntity flag && flag.isProtection())
+                            String blockName = template.palette().get(state).getString("Name");
+                            if (placeAw(level, pos, blockName, nbt.getCompound("aeRule"), rotation, skipped, protectionFlags, factions))
                             {
-                                // A scanned protection flag guards the structure it came with, as AW's did.
-                                protectionFlags.put(pos.immutable(), flag.faction());
+                                aw.merge(blockName, 1, Integer::sum);
                             }
                         }
+                        else if (nbt != null)
+                        {
+                            BlockEntity blockEntity = level.getBlockEntity(pos);
+                            if (blockEntity != null)
+                            {
+                                CompoundTag data = cleanLegacyText(nbt.copy());
+                                data.putInt("x", pos.getX());
+                                data.putInt("y", pos.getY());
+                                data.putInt("z", pos.getZ());
+                                blockEntity.load(data);
+                                blockEntity.setChanged();
+                                if (blockEntity instanceof FlagBlockEntity flag && flag.isProtection())
+                                {
+                                    // A scanned protection flag guards the structure it came with, as AW's did.
+                                    protectionFlags.put(pos.immutable(), flag.faction());
+                                }
+                            }
+                        }
+                    }
+                    catch (RuntimeException exception)
+                    {
+                        // One unreadable block's data must never take a chunk (and the game) down with it.
+                        skipped.merge("unreadable data at " + x + "," + y + "," + z, 1, Integer::sum);
+                        AncientEmpires.LOGGER.warn("Structure {}: could not set up the block at {} ({}): {}", name, pos,
+                                template.palette().get(state).getString("Name"), exception.toString());
                     }
                 });
             }
@@ -267,7 +279,18 @@ public final class AePlacer
                 substituted.merge(template.palette().get(i).getString("Name") + " (" + notes[i] + ")", uses[i], Integer::sum);
             }
         }
-        int entities = placeEntities(level, template, offset, anchor, rotation, limit, skipped);
+        int entities;
+        try
+        {
+            entities = placeEntities(level, template, offset, anchor, rotation, limit, skipped);
+        }
+        catch (RuntimeException exception)
+        {
+            // As with blocks: a bad entity entry is reported, never a crash.
+            entities = 0;
+            skipped.merge("entities (unreadable data)", 1, Integer::sum);
+            AncientEmpires.LOGGER.warn("Structure {}: could not place its entities: {}", name, exception.toString());
+        }
         if (worldGenFaction != null)
         {
             guard(level, protectionFlags, worldGenFaction, 0);
@@ -421,6 +444,23 @@ public final class AePlacer
             }
         }
         return true;
+    }
+
+    /**
+     * 1.12 kept a command block's name and last output as plain text where 1.20
+     * reads JSON (the fixer leaves block entity contents alone); reading it threw
+     * and crashed generation. Plain names become text components, the old output
+     * is dropped.
+     */
+    private static CompoundTag cleanLegacyText(CompoundTag data)
+    {
+        data.remove("LastOutput");
+        String name = data.getString("CustomName");
+        if (!name.isEmpty() && !name.startsWith("{") && !name.startsWith("[") && !name.startsWith("\""))
+        {
+            data.putString("CustomName", Component.Serializer.toJson(Component.literal(name)));
+        }
+        return data;
     }
 
     private static int placeEntities(ServerLevelAccessor level, AeTemplate template, int[] offset, BlockPos anchor, Rotation rotation,
