@@ -116,6 +116,18 @@ instead of reflecting per call), Skirmisher thresholds (about 4.5 to 28 blocks).
   least count (`AeMinCount`), and spawn radius 0 (a post: on the spawner's own spot). `CaptureWandItem` (admins):
   right-click a mob to capture it (our NPCs as their scroll via `NpcEntity.captureScroll`), then each right-click
   on a block places another one-soldier post, or adds to a spawner clicked; sneak-use clears.
+- Coins and loot (S2b): AW's coins (`coin_copper` Copper Owl, `coin_silver` Silver Stag, `coin_gold` Gold Dragon,
+  `coin_ancient`; AW's one coin texture tinted in `NpcEggColors`) and `CoinStackBlock` (layers 1 to 8, one stack
+  item of 8 coins each, AW's own models; structures map AW's size 8 to 64). The converter also turns AW's 185 loot
+  tables into `data/ancientempires/loot_tables/aw/` (`AwsLootConverter`): vanilla items flattened by their 1.12
+  data (a random data range becomes one entry per value, weights rescaled), coins by metal, and every other item
+  an `ancientempires:item` entry (`AeLootItem`, `ModLoot`) resolved when rolled through `ae_remap` `items` (a
+  list is tried in order: AW spears become Spartan's, else a vanilla sword), so a missing mod costs one entry,
+  not the table. Faction NPCs drop AW's table for their type (`NpcEntity.getDefaultLootTable`; owned NPCs only
+  their gear). AW loot chests, baskets, and urns become chests, barrels, and decorated pots (`AwLoot`): the
+  table set for vanilla to roll, and AW's extras (more rolls, the trapped mob, potions, splash within 4, the
+  message) kept as `AeLoot` in the block entity's persistent data and done on first right-click; a pot spills
+  its loot.
 
 ## Done
 

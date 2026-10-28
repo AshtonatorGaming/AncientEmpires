@@ -1,0 +1,503 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": {
+        "min": 8,
+        "max": 10
+      },
+      "entries": [
+        {
+          "weight": 20,
+          "type": "ancientempires:item",
+          "name": "harvestcraft:herringrawitem",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            }
+          ]
+        },
+        {
+          "weight": 20,
+          "type": "ancientempires:item",
+          "name": "harvestcraft:jellyfishrawitem",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            }
+          ]
+        },
+        {
+          "weight": 20,
+          "type": "ancientempires:item",
+          "name": "harvestcraft:mudfishrawitem",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            }
+          ]
+        },
+        {
+          "weight": 20,
+          "type": "ancientempires:item",
+          "name": "harvestcraft:octopusrawitem",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            }
+          ]
+        },
+        {
+          "weight": 20,
+          "type": "ancientempires:item",
+          "name": "harvestcraft:perchrawitem",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            }
+          ]
+        },
+        {
+          "weight": 20,
+          "type": "ancientempires:item",
+          "name": "harvestcraft:scalloprawitem",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            }
+          ]
+        },
+        {
+          "weight": 20,
+          "type": "ancientempires:item",
+          "name": "harvestcraft:shrimprawitem",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            }
+          ]
+        },
+        {
+          "weight": 20,
+          "type": "ancientempires:item",
+          "name": "harvestcraft:snailrawitem",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            }
+          ]
+        },
+        {
+          "weight": 20,
+          "type": "ancientempires:item",
+          "name": "harvestcraft:snapperrawitem",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            }
+          ]
+        },
+        {
+          "weight": 20,
+          "type": "ancientempires:item",
+          "name": "harvestcraft:grouperrawitem",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            }
+          ]
+        },
+        {
+          "weight": 20,
+          "type": "ancientempires:item",
+          "name": "harvestcraft:frograwitem",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            }
+          ]
+        },
+        {
+          "weight": 20,
+          "type": "ancientempires:item",
+          "name": "harvestcraft:eelrawitem",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            }
+          ]
+        },
+        {
+          "weight": 16,
+          "type": "ancientempires:item",
+          "name": "harvestcraft:crayfishrawitem",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            }
+          ]
+        },
+        {
+          "weight": 20,
+          "type": "ancientempires:item",
+          "name": "harvestcraft:crabrawitem",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            }
+          ]
+        },
+        {
+          "weight": 20,
+          "type": "ancientempires:item",
+          "name": "harvestcraft:clamrawitem",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            }
+          ]
+        },
+        {
+          "weight": 20,
+          "type": "ancientempires:item",
+          "name": "harvestcraft:charrrawitem",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            }
+          ]
+        },
+        {
+          "weight": 20,
+          "type": "ancientempires:item",
+          "name": "harvestcraft:catfishrawitem",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            }
+          ]
+        },
+        {
+          "weight": 20,
+          "type": "ancientempires:item",
+          "name": "harvestcraft:carprawitem",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            }
+          ]
+        },
+        {
+          "weight": 20,
+          "type": "ancientempires:item",
+          "name": "harvestcraft:seaweeditem",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            }
+          ]
+        },
+        {
+          "weight": 20,
+          "type": "ancientempires:item",
+          "name": "harvestcraft:troutrawitem",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            }
+          ]
+        },
+        {
+          "weight": 20,
+          "type": "ancientempires:item",
+          "name": "harvestcraft:tunarawitem",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            }
+          ]
+        },
+        {
+          "weight": 20,
+          "type": "ancientempires:item",
+          "name": "harvestcraft:turtlerawitem",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            }
+          ]
+        },
+        {
+          "weight": 20,
+          "type": "ancientempires:item",
+          "name": "harvestcraft:walleyerawitem",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            }
+          ]
+        },
+        {
+          "weight": 20,
+          "type": "ancientempires:item",
+          "name": "harvestcraft:greenheartfishitem",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            }
+          ]
+        },
+        {
+          "weight": 20,
+          "type": "ancientempires:item",
+          "name": "harvestcraft:sardinerawitem",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            }
+          ]
+        },
+        {
+          "weight": 20,
+          "type": "ancientempires:item",
+          "name": "harvestcraft:musselrawitem",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            }
+          ]
+        },
+        {
+          "weight": 20,
+          "type": "ancientempires:item",
+          "name": "harvestcraft:oysterrawitem",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            }
+          ]
+        },
+        {
+          "weight": 20,
+          "type": "ancientempires:item",
+          "name": "harvestcraft:bassrawitem",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            }
+          ]
+        },
+        {
+          "weight": 20,
+          "type": "ancientempires:item",
+          "name": "harvestcraft:anchovyrawitem",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            }
+          ]
+        },
+        {
+          "weight": 20,
+          "type": "ancientempires:item",
+          "name": "harvestcraft:calamarirawitem",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            }
+          ]
+        },
+        {
+          "weight": 20,
+          "type": "ancientempires:item",
+          "name": "harvestcraft:tilapiarawitem",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            }
+          ]
+        },
+        {
+          "weight": 7,
+          "type": "minecraft:item",
+          "name": "minecraft:cod"
+        },
+        {
+          "weight": 7,
+          "type": "minecraft:item",
+          "name": "minecraft:salmon"
+        },
+        {
+          "weight": 7,
+          "type": "minecraft:item",
+          "name": "minecraft:tropical_fish"
+        },
+        {
+          "weight": 7,
+          "type": "minecraft:item",
+          "name": "minecraft:pufferfish"
+        }
+      ]
+    },
+    {
+      "rolls": {
+        "min": 0,
+        "max": 2
+      },
+      "entries": [
+        {
+          "weight": 5,
+          "type": "minecraft:item",
+          "name": "ancientempires:coin_copper",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            }
+          ]
+        },
+        {
+          "weight": 2,
+          "type": "minecraft:item",
+          "name": "ancientempires:coin_silver",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

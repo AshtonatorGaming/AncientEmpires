@@ -1,5 +1,6 @@
 package com.ancientempires.structure;
 
+import com.ancientempires.block.CoinStackBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -162,6 +163,23 @@ public final class AePlacer
             {
                 AwSpawnerImport.place(level, pos, rule, problems);
                 return true;
+            }
+            case "ancientwarfarestructure:advanced_loot_chest", "ancientwarfarestructure:loot_basket", "ancientwarfarestructure:urn" ->
+            {
+                AwLoot.place(level, pos, rule);
+                return true;
+            }
+            case "ancientwarfarestructure:coin_stack_copper", "ancientwarfarestructure:coin_stack_silver", "ancientwarfarestructure:coin_stack_gold",
+                    "ancientwarfarestructure:coin_stack_ancient" ->
+            {
+                BlockState state = level.getBlockState(pos);
+                if (state.getBlock() instanceof CoinStackBlock)
+                {
+                    int coins = Integer.parseInt("0" + rule.getCompound("blockState").getCompound("properties").getString("size"));
+                    level.setBlock(pos, state.setValue(CoinStackBlock.LAYERS, CoinStackBlock.layersForCoins(coins)), FLAGS);
+                    return true;
+                }
+                return false;
             }
             default ->
             {

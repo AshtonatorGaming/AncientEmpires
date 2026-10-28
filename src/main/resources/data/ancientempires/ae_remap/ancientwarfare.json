@@ -13,30 +13,88 @@
     "ancientwarfarestructure:chair": "minecraft:oak_stairs",
     "ancientwarfarestructure:tribal_chair": "minecraft:jungle_stairs",
     "ancientwarfarestructure:wooden_throne": "minecraft:dark_oak_stairs",
-    "ancientwarfarestructure:golden_throne": {"Name": "minecraft:smooth_quartz_stairs"},
-    "ancientwarfarestructure:stool": {"Name": "minecraft:oak_slab", "Properties": {"type": "bottom"}},
-    "ancientwarfarestructure:tribal_stool": {"Name": "minecraft:jungle_slab", "Properties": {"type": "bottom"}},
-    "ancientwarfarestructure:scissor_seat": {"Name": "minecraft:spruce_slab", "Properties": {"type": "bottom"}},
-    "ancientwarfarestructure:bench": {"Name": "minecraft:oak_slab", "Properties": {"type": "bottom"}},
-    "ancientwarfarestructure:table": {"Name": "minecraft:oak_slab", "Properties": {"type": "top"}},
-    "ancientwarfarestructure:stretching_rack": {"Name": "minecraft:spruce_slab", "Properties": {"type": "top"}},
-    "ancientwarfarestructure:wooden_coffin": {"Name": "minecraft:spruce_slab", "Properties": {"type": "bottom"}},
-    "ancientwarfarestructure:stone_coffin": {"Name": "minecraft:smooth_stone_slab", "Properties": {"type": "bottom"}},
+    "ancientwarfarestructure:golden_throne": {
+      "Name": "minecraft:smooth_quartz_stairs"
+    },
+    "ancientwarfarestructure:stool": {
+      "Name": "minecraft:oak_slab",
+      "Properties": {
+        "type": "bottom"
+      }
+    },
+    "ancientwarfarestructure:tribal_stool": {
+      "Name": "minecraft:jungle_slab",
+      "Properties": {
+        "type": "bottom"
+      }
+    },
+    "ancientwarfarestructure:scissor_seat": {
+      "Name": "minecraft:spruce_slab",
+      "Properties": {
+        "type": "bottom"
+      }
+    },
+    "ancientwarfarestructure:bench": {
+      "Name": "minecraft:oak_slab",
+      "Properties": {
+        "type": "bottom"
+      }
+    },
+    "ancientwarfarestructure:table": {
+      "Name": "minecraft:oak_slab",
+      "Properties": {
+        "type": "top"
+      }
+    },
+    "ancientwarfarestructure:stretching_rack": {
+      "Name": "minecraft:spruce_slab",
+      "Properties": {
+        "type": "top"
+      }
+    },
+    "ancientwarfarestructure:wooden_coffin": {
+      "Name": "minecraft:spruce_slab",
+      "Properties": {
+        "type": "bottom"
+      }
+    },
+    "ancientwarfarestructure:stone_coffin": {
+      "Name": "minecraft:smooth_stone_slab",
+      "Properties": {
+        "type": "bottom"
+      }
+    },
     "ancientwarfarestructure:gravestone": "minecraft:stone_brick_wall",
     "ancientwarfarestructure:statue": "minecraft:stone_brick_wall",
     "ancientwarfarestructure:wooden_post": "minecraft:oak_fence",
     "ancientwarfarestructure:stake": "minecraft:oak_fence",
     "ancientwarfarestructure:gibbet": "minecraft:chain",
     "ancientwarfarestructure:iron_cage": "minecraft:iron_bars",
-    "ancientwarfarestructure:altar_candle": {"Name": "minecraft:white_candle", "Properties": {"candles": "1", "lit": "true"}},
+    "ancientwarfarestructure:altar_candle": {
+      "Name": "minecraft:white_candle",
+      "Properties": {
+        "candles": "1",
+        "lit": "true"
+      }
+    },
     "ancientwarfarestructure:altar_lectern": "minecraft:lectern",
     "ancientwarfarestructure:altar_long_cloth": "minecraft:white_wool",
     "ancientwarfarestructure:altar_short_cloth": "minecraft:white_wool",
     "ancientwarfarestructure:altar_sun": "minecraft:gold_block",
     "ancientwarfarestructure:golden_idol": "minecraft:gold_block",
     "ancientwarfarestructure:fire_pit": "minecraft:campfire",
-    "ancientwarfarestructure:brazier_flame": {"Name": "minecraft:campfire", "Properties": {"lit": "true"}},
-    "ancientwarfarestructure:brazier_ember": {"Name": "minecraft:campfire", "Properties": {"lit": "false"}},
+    "ancientwarfarestructure:brazier_flame": {
+      "Name": "minecraft:campfire",
+      "Properties": {
+        "lit": "true"
+      }
+    },
+    "ancientwarfarestructure:brazier_ember": {
+      "Name": "minecraft:campfire",
+      "Properties": {
+        "lit": "false"
+      }
+    },
     "ancientwarfarestructure:totem_part": "minecraft:stripped_spruce_log",
     "ancientwarfarestructure:orc_totem_1": "minecraft:stripped_spruce_log",
     "ancientwarfarestructure:orc_totem_2": "minecraft:stripped_spruce_log",
@@ -44,10 +102,10 @@
     "ancientwarfarestructure:goblin_totem_1": "minecraft:stripped_jungle_log",
     "ancientwarfarestructure:goblin_totem_2": "minecraft:stripped_jungle_log",
     "ancientwarfarestructure:goblin_totem_2_lit": "minecraft:jack_o_lantern",
-    "ancientwarfarestructure:coin_stack_gold": "minecraft:light_weighted_pressure_plate",
-    "ancientwarfarestructure:coin_stack_ancient": "minecraft:light_weighted_pressure_plate",
-    "ancientwarfarestructure:coin_stack_silver": "minecraft:heavy_weighted_pressure_plate",
-    "ancientwarfarestructure:coin_stack_copper": "minecraft:stone_pressure_plate",
+    "ancientwarfarestructure:coin_stack_gold": "ancientempires:coin_stack_gold",
+    "ancientwarfarestructure:coin_stack_ancient": "ancientempires:coin_stack_ancient",
+    "ancientwarfarestructure:coin_stack_silver": "ancientempires:coin_stack_silver",
+    "ancientwarfarestructure:coin_stack_copper": "ancientempires:coin_stack_copper",
     "ancientwarfarestructure:drafting_station": "minecraft:cartography_table",
     "ancientwarfare:engineering_station": "minecraft:smithing_table",
     "ancientwarfare:research_station": "minecraft:lectern",
@@ -56,5 +114,105 @@
     "ancientwarfareautomation:windmill_generator": "minecraft:oak_planks",
     "ancientwarfareautomation:hand_cranked_generator": "minecraft:oak_planks",
     "ancientwarfareautomation:stirling_generator": "minecraft:furnace"
+  },
+  "_comment_items": "AW items (in loot and NPC gear): a list is tried in order, the first this game has wins. AW's own weapons are not wanted with their old look, so spears, halberds and lances become Spartan Weaponry's, else a vanilla sword; AW shields the vanilla shield until they are ported.",
+  "items": {
+    "ancientwarfarenpc:wooden_spear": [
+      "spartanweaponry:wooden_spear",
+      "minecraft:wooden_sword"
+    ],
+    "ancientwarfarenpc:wooden_halberd": [
+      "spartanweaponry:wooden_halberd",
+      "minecraft:wooden_sword"
+    ],
+    "ancientwarfarenpc:wooden_lance": [
+      "spartanweaponry:wooden_lance",
+      "minecraft:wooden_sword"
+    ],
+    "ancientwarfarenpc:stone_spear": [
+      "spartanweaponry:stone_spear",
+      "minecraft:stone_sword"
+    ],
+    "ancientwarfarenpc:stone_halberd": [
+      "spartanweaponry:stone_halberd",
+      "minecraft:stone_sword"
+    ],
+    "ancientwarfarenpc:stone_lance": [
+      "spartanweaponry:stone_lance",
+      "minecraft:stone_sword"
+    ],
+    "ancientwarfarenpc:iron_spear": [
+      "spartanweaponry:iron_spear",
+      "minecraft:iron_sword"
+    ],
+    "ancientwarfarenpc:iron_halberd": [
+      "spartanweaponry:iron_halberd",
+      "minecraft:iron_sword"
+    ],
+    "ancientwarfarenpc:iron_lance": [
+      "spartanweaponry:iron_lance",
+      "minecraft:iron_sword"
+    ],
+    "ancientwarfarenpc:golden_spear": [
+      "spartanweaponry:golden_spear",
+      "minecraft:golden_sword"
+    ],
+    "ancientwarfarenpc:golden_halberd": [
+      "spartanweaponry:golden_halberd",
+      "minecraft:golden_sword"
+    ],
+    "ancientwarfarenpc:golden_lance": [
+      "spartanweaponry:golden_lance",
+      "minecraft:golden_sword"
+    ],
+    "ancientwarfarenpc:diamond_spear": [
+      "spartanweaponry:diamond_spear",
+      "minecraft:diamond_sword"
+    ],
+    "ancientwarfarenpc:diamond_halberd": [
+      "spartanweaponry:diamond_halberd",
+      "minecraft:diamond_sword"
+    ],
+    "ancientwarfarenpc:diamond_lance": [
+      "spartanweaponry:diamond_lance",
+      "minecraft:diamond_sword"
+    ],
+    "ancientwarfarenpc:obsidian_spear": [
+      "spartanweaponry:diamond_spear",
+      "minecraft:diamond_sword"
+    ],
+    "ancientwarfarenpc:sickle": "minecraft:iron_hoe",
+    "ancientwarfarenpc:scythe": [
+      "spartanweaponry:iron_scythe",
+      "minecraft:iron_hoe"
+    ],
+    "ancientwarfarenpc:pitchfork": "minecraft:iron_hoe",
+    "ancientwarfarenpc:macuahuitl": "minecraft:stone_sword",
+    "ancientwarfarenpc:stone_cleaver": "minecraft:stone_axe",
+    "ancientwarfarenpc:shield_tribal_1": "minecraft:shield",
+    "ancientwarfarenpc:shield_tribal_2": "minecraft:shield",
+    "ancientwarfarenpc:stone_shield": "minecraft:shield",
+    "ancientwarfarenpc:iron_shield": "minecraft:shield",
+    "ancientwarfarenpc:wooden_shield": "minecraft:shield",
+    "ancientwarfarenpc:diamond_shield": "minecraft:shield",
+    "ancientwarfarenpc:gold_shield": "minecraft:shield",
+    "ancientwarfarenpc:shield_round_1": "minecraft:shield",
+    "ancientwarfarenpc:shield_buffloka": "minecraft:shield",
+    "ancientwarfarenpc:food_bundle": "ancientempires:food_bundle",
+    "ancientwarfare:steel_ingot": "minecraft:iron_ingot",
+    "ancientwarfare:research_note": "minecraft:paper",
+    "ancientwarfare:manual": "minecraft:book",
+    "ancientwarfare:wooden_quill": "minecraft:feather",
+    "ancientwarfare:stone_quill": "minecraft:feather",
+    "ancientwarfare:iron_quill": "minecraft:feather",
+    "ancientwarfare:wooden_hammer": "minecraft:stick",
+    "ancientwarfarestructure:coin_stack_copper": "ancientempires:coin_stack_copper",
+    "ancientwarfarestructure:coin_stack_silver": "ancientempires:coin_stack_silver",
+    "ancientwarfarestructure:coin_stack_gold": "ancientempires:coin_stack_gold",
+    "ancientwarfarestructure:coin_stack_ancient": "ancientempires:coin_stack_ancient",
+    "ancientwarfarevehicle:flame_charge": "minecraft:fire_charge",
+    "ancientwarfarevehicle:napalm_charge": "minecraft:fire_charge",
+    "ancientwarfarevehicle:rocket_charge": "minecraft:firework_rocket",
+    "ancientwarfarevehicle:iron_casing": "minecraft:iron_nugget"
   }
 }

@@ -1,0 +1,157 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": {
+        "min": 3,
+        "max": 4
+      },
+      "entries": [
+        {
+          "weight": 6,
+          "type": "minecraft:item",
+          "name": "minecraft:dark_oak_fence_gate",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 5
+              }
+            }
+          ]
+        },
+        {
+          "weight": 6,
+          "type": "minecraft:item",
+          "name": "minecraft:dark_oak_fence",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 5
+              }
+            }
+          ]
+        },
+        {
+          "weight": 6,
+          "type": "minecraft:item",
+          "name": "minecraft:dark_oak_stairs",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 5
+              }
+            }
+          ]
+        },
+        {
+          "weight": 6,
+          "type": "minecraft:item",
+          "name": "minecraft:dark_oak_door",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 5
+              }
+            }
+          ]
+        },
+        {
+          "weight": 6,
+          "type": "minecraft:item",
+          "name": "minecraft:dark_oak_slab",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 5
+              }
+            }
+          ]
+        },
+        {
+          "weight": 6,
+          "type": "ancientempires:item",
+          "name": "ancientwarfarestructure:bench",
+          "functions": [
+            {
+              "function": "minecraft:set_nbt",
+              "count": {
+                "min": 1,
+                "max": 3
+              },
+              "tag": "{variant:\"dark_oak\"}"
+            }
+          ]
+        },
+        {
+          "weight": 6,
+          "type": "ancientempires:item",
+          "name": "ancientwarfarestructure:stool",
+          "functions": [
+            {
+              "function": "minecraft:set_nbt",
+              "count": {
+                "min": 1,
+                "max": 3
+              },
+              "tag": "{variant:\"dark_oak\"}"
+            }
+          ]
+        },
+        {
+          "weight": 6,
+          "type": "ancientempires:item",
+          "name": "ancientwarfarestructure:table",
+          "functions": [
+            {
+              "function": "minecraft:set_nbt",
+              "count": {
+                "min": 1,
+                "max": 3
+              },
+              "tag": "{variant:\"dark_oak\"}"
+            }
+          ]
+        },
+        {
+          "weight": 6,
+          "type": "ancientempires:item",
+          "name": "ancientwarfarestructure:chair",
+          "functions": [
+            {
+              "function": "minecraft:set_nbt",
+              "count": {
+                "min": 1,
+                "max": 3
+              },
+              "tag": "{variant:\"dark_oak\"}"
+            }
+          ]
+        },
+        {
+          "weight": 2,
+          "type": "minecraft:item",
+          "name": "minecraft:iron_axe",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 1
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

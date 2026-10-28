@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "ancientempires:coin_stack_gold"
+    }
+  ],
+  "result": {
+    "item": "ancientempires:coin_gold",
+    "count": 8
+  }
+}

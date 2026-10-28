@@ -1,0 +1,52 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "weight": 4,
+          "type": "ancientempires:item",
+          "name": "ancientwarfarevehicle:ammo_hwacha_rocket",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 5
+              }
+            }
+          ]
+        },
+        {
+          "weight": 3,
+          "type": "ancientempires:item",
+          "name": "ancientwarfarevehicle:ammo_hwacha_rocket_flame",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 3
+              }
+            }
+          ]
+        },
+        {
+          "weight": 3,
+          "type": "ancientempires:item",
+          "name": "ancientwarfarevehicle:ammo_hwacha_rocket_airburst",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 3
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

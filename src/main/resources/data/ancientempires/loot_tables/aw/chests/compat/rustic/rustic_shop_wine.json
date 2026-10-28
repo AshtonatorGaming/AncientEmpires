@@ -1,0 +1,244 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": {
+        "min": 3,
+        "max": 5
+      },
+      "entries": [
+        {
+          "weight": 3,
+          "type": "ancientempires:item",
+          "name": "rustic:fluid_bottle",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            },
+            {
+              "function": "minecraft:set_nbt",
+              "tag": "{Fluid:{FluidName:\"ironwine\",Amount:1000,Tag:{Quality:0.75f}}}"
+            }
+          ]
+        },
+        {
+          "weight": 4,
+          "type": "ancientempires:item",
+          "name": "rustic:fluid_bottle",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            },
+            {
+              "function": "minecraft:set_nbt",
+              "tag": "{Fluid:{FluidName:\"ironwine\",Amount:1000,Tag:{Quality:0.5f}}}"
+            }
+          ]
+        },
+        {
+          "weight": 3,
+          "type": "ancientempires:item",
+          "name": "rustic:fluid_bottle",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            },
+            {
+              "function": "minecraft:set_nbt",
+              "tag": "{Fluid:{FluidName:\"wildberrywine\",Amount:1000,Tag:{Quality:0.75f}}}"
+            }
+          ]
+        },
+        {
+          "weight": 4,
+          "type": "ancientempires:item",
+          "name": "rustic:fluid_bottle",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            },
+            {
+              "function": "minecraft:set_nbt",
+              "tag": "{Fluid:{FluidName:\"wildberrywine\",Amount:1000,Tag:{Quality:0.5f}}}"
+            }
+          ]
+        },
+        {
+          "weight": 3,
+          "type": "ancientempires:item",
+          "name": "rustic:fluid_bottle",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            },
+            {
+              "function": "minecraft:set_nbt",
+              "tag": "{Fluid:{FluidName:\"wine\",Amount:1000,Tag:{Quality:0.75f}}}"
+            }
+          ]
+        },
+        {
+          "weight": 4,
+          "type": "ancientempires:item",
+          "name": "rustic:fluid_bottle",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            },
+            {
+              "function": "minecraft:set_nbt",
+              "tag": "{Fluid:{FluidName:\"wine\",Amount:1000,Tag:{Quality:0.5f}}}"
+            }
+          ]
+        },
+        {
+          "weight": 4,
+          "type": "minecraft:item",
+          "name": "minecraft:potion",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            },
+            {
+              "function": "minecraft:set_nbt",
+              "tag": "{CustomPotionEffects:[{ShowParticles:0b,Duration:2400,Id:1b,Amplifier:1b},{ShowParticles:0b,Duration:1200,Id:11b,Amplifier:0b},{ShowParticles:0b,Duration:200,Id:23b,Amplifier:0b}],CustomPotionColor:13041592,HideFlags:32,display:{Name:\"Green Wine\"}}"
+            }
+          ]
+        },
+        {
+          "weight": 4,
+          "type": "minecraft:item",
+          "name": "minecraft:potion",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            },
+            {
+              "function": "minecraft:set_nbt",
+              "tag": "{CustomPotionEffects:[{ShowParticles:0b,Duration:2400,Id:1b,Amplifier:0b},{ShowParticles:0b,Duration:600,Id:11b,Amplifier:0b}],CustomPotionColor:16751861,HideFlags:32,display:{Name:\"Rosé Wine\"}}"
+            }
+          ]
+        },
+        {
+          "weight": 4,
+          "type": "minecraft:item",
+          "name": "minecraft:potion",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            },
+            {
+              "function": "minecraft:set_nbt",
+              "tag": "{CustomPotionEffects:[{ShowParticles:0b,Duration:2400,Id:1b,Amplifier:1b},{ShowParticles:0b,Duration:1200,Id:11b,Amplifier:0b},{ShowParticles:0b,Duration:200,Id:23b,Amplifier:0b}],CustomPotionColor:5373952,HideFlags:32,display:{Name:\"Red Wine\"}}"
+            }
+          ]
+        },
+        {
+          "weight": 4,
+          "type": "minecraft:item",
+          "name": "minecraft:potion",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            },
+            {
+              "function": "minecraft:set_nbt",
+              "tag": "{CustomPotionEffects:[{ShowParticles:0b,Duration:2400,Id:1b,Amplifier:1b},{ShowParticles:0b,Duration:1200,Id:11b,Amplifier:0b},{ShowParticles:0b,Duration:200,Id:23b,Amplifier:0b}],CustomPotionColor:14277081,HideFlags:32,display:{Name:\"White Wine\"}}"
+            }
+          ]
+        },
+        {
+          "weight": 1,
+          "type": "minecraft:item",
+          "name": "minecraft:potion",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": 1
+            },
+            {
+              "function": "minecraft:set_nbt",
+              "tag": "{CustomPotionEffects:[{ShowParticles:0b,Duration:2400,Id:1b,Amplifier:2b},{ShowParticles:0b,Duration:600,Id:3b,Amplifier:1b},{ShowParticles:0b,Duration:10,Id:9b,Amplifier:0b},{ShowParticles:0b,Duration:1200,Id:11b,Amplifier:1b},{ShowParticles:0b,Duration:600,Id:23b,Amplifier:1b},{ShowParticles:0b,Duration:1200,Id:27b,Amplifier:1b}],CustomPotionColor:6358277,HideFlags:32,display:{Lore:[\"The best of the best!\"],Name:\"Vintage Wine\"}}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "rolls": {
+        "min": 0,
+        "max": 2
+      },
+      "entries": [
+        {
+          "weight": 5,
+          "type": "minecraft:item",
+          "name": "ancientempires:coin_copper",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            }
+          ]
+        },
+        {
+          "weight": 2,
+          "type": "minecraft:item",
+          "name": "ancientempires:coin_silver",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

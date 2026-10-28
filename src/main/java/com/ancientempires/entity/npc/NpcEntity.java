@@ -68,6 +68,7 @@ import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
@@ -84,6 +85,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -3022,6 +3024,30 @@ public class NpcEntity extends PathfinderMob
             }
         }
     }
+
+    /**
+     * A faction NPC drops AW's loot for its type (coin: copper for soldiers
+     * and archers, silver for riders and priests, gold for leaders; the undead
+     * their own), from the converted {@code ancientempires:aw/entities} tables;
+     * types AW gave none, and owned NPCs, drop only their gear.
+     */
+    @Override
+    protected ResourceLocation getDefaultLootTable()
+    {
+        NpcRoster.Entry entry = this.rosterEntry();
+        if (this.isOwnedNpc() || entry == null)
+        {
+            return BuiltInLootTables.EMPTY;
+        }
+        String type = entry.subtype().replace('.', '_');
+        return AW_DROPS.contains(type)
+                ? ResourceLocation.fromNamespaceAndPath(AncientEmpires.MOD_ID, "aw/entities/" + ("undead".equals(this.getFaction()) ? "undead_" : "") + type)
+                : BuiltInLootTables.EMPTY;
+    }
+
+    /** NPC types AW's drop tables cover (the undead have all but the siege engineer's; the table lookup copes). */
+    private static final Set<String> AW_DROPS = Set.of("soldier", "soldier_elite", "archer", "archer_elite", "leader", "leader_elite",
+            "cavalry", "mounted_archer", "priest", "siege_engineer");
 
     @Override
     protected void dropCustomDeathLoot(DamageSource source, int looting, boolean hitByPlayer)

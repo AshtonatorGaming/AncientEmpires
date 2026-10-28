@@ -2,6 +2,8 @@ package com.ancientempires.structure;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import net.minecraft.nbt.NbtIo;
 
 import java.io.BufferedReader;
@@ -107,6 +109,8 @@ public final class AwsConvertTool
                 }
             }
         }
+        int tables = convertLoot(jar, output.getParent().resolve("loot_tables").resolve("aw"), gson, new AwsLootConverter(new LegacyFixer()), report);
+        System.out.println("Converted " + tables + " loot tables");
         Files.createDirectories(reportFile.toAbsolutePath().getParent());
         try (PrintWriter writer = new PrintWriter(Files.newBufferedWriter(reportFile, StandardCharsets.UTF_8)))
         {
@@ -119,6 +123,42 @@ public final class AwsConvertTool
             keptTotal.forEach((id, count) -> writer.println(count + "\t" + id));
         }
         System.out.println("Converted " + converted + ", failed " + failed + "; report at " + reportFile);
+    }
+
+    /**
+     * AW's loot tables (chests, compat chests, NPC drops) into
+     * {@code loot_tables/aw/}, as {@link AwsLootConverter#tableId} names them.
+     */
+    private static int convertLoot(Path jar, Path output, Gson gson, AwsLootConverter loot, List<String> report) throws IOException
+    {
+        String prefix = "assets/ancientwarfare/loot_tables/";
+        int count = 0;
+        try (ZipFile zip = new ZipFile(jar.toFile()))
+        {
+            for (Enumeration<? extends ZipEntry> all = zip.entries(); all.hasMoreElements(); )
+            {
+                ZipEntry entry = all.nextElement();
+                if (!entry.getName().startsWith(prefix) || !entry.getName().endsWith(".json"))
+                {
+                    continue;
+                }
+                String path = resourcePath(entry.getName().substring(prefix.length()));
+                try (BufferedReader reader = new BufferedReader(new InputStreamReader(zip.getInputStream(entry), StandardCharsets.UTF_8)))
+                {
+                    JsonObject old = JsonParser.parseReader(reader).getAsJsonObject();
+                    JsonObject table = loot.convert(old, path.startsWith("entities/") ? "minecraft:entity" : "minecraft:chest");
+                    Path file = output.resolve(path);
+                    Files.createDirectories(file.getParent());
+                    Files.writeString(file, gson.toJson(table), StandardCharsets.UTF_8);
+                    count++;
+                }
+                catch (RuntimeException exception)
+                {
+                    report.add("loot " + path + ": FAILED " + exception);
+                }
+            }
+        }
+        return count;
     }
 
     /** A path safe for a resource location: lower case, anything else an underscore. */

@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "ancientempires:coin_stack_silver"
+    }
+  ],
+  "result": {
+    "item": "ancientempires:coin_silver",
+    "count": 8
+  }
+}

@@ -22,6 +22,10 @@ import net.minecraftforge.registries.RegistryObject;
 public final class NpcEggColors
 {
     private static final int WHITE = 0xFFFFFFFF;
+    private static final int COPPER = 0xFFD08048;
+    private static final int SILVER = 0xFFE0E4EC;
+    private static final int GOLD = 0xFFF4C842;
+    private static final int ANCIENT = 0xFFA8946A;
 
     private NpcEggColors()
     {
@@ -37,6 +41,11 @@ public final class NpcEggColors
             items[index] = egg.get();
         }
         event.register(NpcEggColors::color, items);
+        // AW drew every coin from one grey coin, tinted by metal.
+        event.register((stack, tint) -> COPPER, ModItems.COIN_COPPER.get());
+        event.register((stack, tint) -> SILVER, ModItems.COIN_SILVER.get());
+        event.register((stack, tint) -> GOLD, ModItems.COIN_GOLD.get());
+        event.register((stack, tint) -> ANCIENT, ModItems.COIN_ANCIENT.get());
     }
 
     private static int color(ItemStack stack, int tint)

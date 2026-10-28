@@ -2,6 +2,7 @@ package com.ancientempires.registry;
 
 import com.ancientempires.AncientEmpires;
 import com.ancientempires.block.AnimalPenBlock;
+import com.ancientempires.block.CoinStackBlock;
 import com.ancientempires.block.CropFarmBlock;
 import com.ancientempires.block.FishingDockBlock;
 import com.ancientempires.block.HuntingLodgeBlock;
@@ -30,6 +31,17 @@ public final class ModBlocks
                     .strength(5.0F, 1200.0F)
                     .sound(SoundType.METAL)
                     .noOcclusion()));
+
+    /** Ancient Warfare's coin stacks, by metal: Copper Owls, Silver Stags, Gold Dragons, Ancient Coins. */
+    public static final RegistryObject<Block> COIN_STACK_COPPER = BLOCKS.register("coin_stack_copper", () -> coinStack(MapColor.COLOR_ORANGE));
+    public static final RegistryObject<Block> COIN_STACK_SILVER = BLOCKS.register("coin_stack_silver", () -> coinStack(MapColor.METAL));
+    public static final RegistryObject<Block> COIN_STACK_GOLD = BLOCKS.register("coin_stack_gold", () -> coinStack(MapColor.GOLD));
+    public static final RegistryObject<Block> COIN_STACK_ANCIENT = BLOCKS.register("coin_stack_ancient", () -> coinStack(MapColor.TERRACOTTA_BROWN));
+
+    private static Block coinStack(MapColor color)
+    {
+        return new CoinStackBlock(BlockBehaviour.Properties.of().mapColor(color).strength(0.5F).sound(SoundType.CHAIN).noOcclusion());
+    }
 
     public static final RegistryObject<Block> SETTLERS_POST = BLOCKS.register("settlers_post",
             () -> new SettlersPostBlock(BlockBehaviour.Properties.of()

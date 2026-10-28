@@ -53,6 +53,15 @@ public final class ModItems
             () -> new InsigniaItem(NpcRank.CAPTAIN, new Item.Properties().stacksTo(16)));
     public static final RegistryObject<Item> GENERAL_INSIGNIA = ITEMS.register("general_insignia",
             () -> new InsigniaItem(NpcRank.GENERAL, new Item.Properties().stacksTo(16)));
+    /** Ancient Warfare's coins: loot and faction NPC drops for now; trade and wages come with the economy. */
+    public static final RegistryObject<Item> COIN_COPPER = ITEMS.register("coin_copper", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> COIN_SILVER = ITEMS.register("coin_silver", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> COIN_GOLD = ITEMS.register("coin_gold", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> COIN_ANCIENT = ITEMS.register("coin_ancient", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> COIN_STACK_COPPER = ITEMS.register("coin_stack_copper", () -> new BlockItem(ModBlocks.COIN_STACK_COPPER.get(), new Item.Properties()));
+    public static final RegistryObject<Item> COIN_STACK_SILVER = ITEMS.register("coin_stack_silver", () -> new BlockItem(ModBlocks.COIN_STACK_SILVER.get(), new Item.Properties()));
+    public static final RegistryObject<Item> COIN_STACK_GOLD = ITEMS.register("coin_stack_gold", () -> new BlockItem(ModBlocks.COIN_STACK_GOLD.get(), new Item.Properties()));
+    public static final RegistryObject<Item> COIN_STACK_ANCIENT = ITEMS.register("coin_stack_ancient", () -> new BlockItem(ModBlocks.COIN_STACK_ANCIENT.get(), new Item.Properties()));
     /** A captured mob for a spawner slot (anything but our NPCs, which use their own scrolls). */
     public static final RegistryObject<Item> MOB_SCROLL = ITEMS.register("mob_scroll", () -> new MobScrollItem(new Item.Properties()));
     /** AW's Mob Spawner Placement Tool: captures a mob, places or fills a garrison spawner. Admins only. */

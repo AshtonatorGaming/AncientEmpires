@@ -31,7 +31,7 @@ import java.util.Optional;
  * new block has them), or to {@code {"Name": ..., "Properties": {...}}} for an
  * exact state. Used for renamed blocks, dead mods, and AW's own blocks until
  * they exist.</li>
- * <li>{@code entities}: an id to an id.</li>
+ * <li>{@code entities}, {@code items}: an id to an id.</li>
  * </ul>
  * A block resolves through the live registry first, so a mod installed later
  * just works; then the table; then the namespace rename; then
@@ -41,14 +41,14 @@ import java.util.Optional;
 public final class AeRemap extends SimpleJsonResourceReloadListener
 {
     private static final Gson GSON = new Gson();
-    private static volatile Tables tables = new Tables(Map.of(), Map.of(), Map.of());
+    private static volatile Tables tables = new Tables(Map.of(), Map.of(), Map.of(), Map.of());
 
     /** What a palette entry became, and how: null for a direct match, else a short note for reports. */
     public record Resolved(BlockState state, @Nullable String note)
     {
     }
 
-    private record Tables(Map<String, String> namespaces, Map<String, JsonElement> blocks, Map<String, String> entities)
+    private record Tables(Map<String, String> namespaces, Map<String, JsonElement> blocks, Map<String, String> entities, Map<String, String> items)
     {
     }
 
@@ -63,6 +63,7 @@ public final class AeRemap extends SimpleJsonResourceReloadListener
         Map<String, String> namespaces = new HashMap<>();
         Map<String, JsonElement> blocks = new HashMap<>();
         Map<String, String> entities = new HashMap<>();
+        Map<String, String> items = new HashMap<>();
         files.entrySet().stream().sorted(Map.Entry.comparingByKey()).forEach(file ->
         {
             if (!file.getValue().isJsonObject())
@@ -82,9 +83,16 @@ public final class AeRemap extends SimpleJsonResourceReloadListener
             {
                 json.getAsJsonObject("entities").entrySet().forEach(entry -> entities.put(entry.getKey(), entry.getValue().getAsString()));
             }
+            if (json.has("items"))
+            {
+                // A list is tried in order: the first id this game has wins (a Spartan spear, else an iron sword).
+                json.getAsJsonObject("items").entrySet().forEach(entry -> items.put(entry.getKey(), entry.getValue().isJsonArray()
+                        ? String.join("|", entry.getValue().getAsJsonArray().asList().stream().map(JsonElement::getAsString).toList())
+                        : entry.getValue().getAsString()));
+            }
         });
-        tables = new Tables(Map.copyOf(namespaces), Map.copyOf(blocks), Map.copyOf(entities));
-        AncientEmpires.LOGGER.info("Structure remap: {} blocks, {} entities, {} namespaces", blocks.size(), entities.size(), namespaces.size());
+        tables = new Tables(Map.copyOf(namespaces), Map.copyOf(blocks), Map.copyOf(entities), Map.copyOf(items));
+        AncientEmpires.LOGGER.info("Structure remap: {} blocks, {} entities, {} items, {} namespaces", blocks.size(), entities.size(), items.size(), namespaces.size());
     }
 
     /** A palette entry ({@code Name}, {@code Properties}) as a block state here. */
@@ -154,6 +162,41 @@ public final class AeRemap extends SimpleJsonResourceReloadListener
         }
         int colon = id.indexOf(':');
         if (colon > 0 && !ForgeRegistries.ENTITY_TYPES.containsKey(ResourceLocation.tryParse(id)))
+        {
+            String renamed = current.namespaces().get(id.substring(0, colon));
+            if (renamed != null)
+            {
+                return renamed + id.substring(colon);
+            }
+        }
+        return id;
+    }
+
+    /** An item id here: as it is when registered, else the table, else the namespace rename; unchanged otherwise. */
+    public static String itemId(String id)
+    {
+        ResourceLocation location = ResourceLocation.tryParse(id);
+        if (location != null && ForgeRegistries.ITEMS.containsKey(location))
+        {
+            return id;
+        }
+        Tables current = tables;
+        String mapped = current.items().get(id);
+        if (mapped != null)
+        {
+            String[] choices = mapped.split("\\|");
+            for (String choice : choices)
+            {
+                ResourceLocation candidate = ResourceLocation.tryParse(choice);
+                if (candidate != null && ForgeRegistries.ITEMS.containsKey(candidate))
+                {
+                    return choice;
+                }
+            }
+            return choices[choices.length - 1];
+        }
+        int colon = id.indexOf(':');
+        if (colon > 0)
         {
             String renamed = current.namespaces().get(id.substring(0, colon));
             if (renamed != null)

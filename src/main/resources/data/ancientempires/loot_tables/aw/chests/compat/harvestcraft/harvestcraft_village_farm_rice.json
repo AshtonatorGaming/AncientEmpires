@@ -1,0 +1,106 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": {
+        "min": 1,
+        "max": 2
+      },
+      "bonus_rolls": 1,
+      "entries": [
+        {
+          "weight": 2,
+          "type": "ancientempires:item",
+          "name": "ancientwarfarenpc:sickle"
+        },
+        {
+          "weight": 2,
+          "type": "ancientempires:item",
+          "name": "ancientwarfarenpc:scythe"
+        },
+        {
+          "weight": 2,
+          "type": "ancientempires:item",
+          "name": "ancientwarfarenpc:pitchfork"
+        },
+        {
+          "weight": 3,
+          "type": "minecraft:item",
+          "name": "minecraft:water_bucket"
+        },
+        {
+          "weight": 3,
+          "type": "minecraft:item",
+          "name": "minecraft:bucket"
+        },
+        {
+          "weight": 2,
+          "type": "minecraft:item",
+          "name": "minecraft:iron_hoe"
+        }
+      ]
+    },
+    {
+      "rolls": {
+        "min": 2,
+        "max": 8
+      },
+      "bonus_rolls": {
+        "min": 1,
+        "max": 4
+      },
+      "entries": [
+        {
+          "weight": 5,
+          "type": "ancientempires:item",
+          "name": "harvestcraft:riceitem",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 2,
+                "max": 8
+              }
+            }
+          ]
+        },
+        {
+          "weight": 5,
+          "type": "ancientempires:item",
+          "name": "harvestcraft:riceseeditem",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 2,
+                "max": 8
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "rolls": {
+        "min": 0,
+        "max": 1
+      },
+      "entries": [
+        {
+          "weight": 5,
+          "type": "ancientempires:item",
+          "name": "harvestcraft:ricesoupitem",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 2,
+                "max": 8
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

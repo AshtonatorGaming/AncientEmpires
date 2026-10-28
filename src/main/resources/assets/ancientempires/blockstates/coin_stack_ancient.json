@@ -1,0 +1,28 @@
+{
+  "variants": {
+    "layers=1": {
+      "model": "ancientempires:block/coin_stack_ancient_1"
+    },
+    "layers=2": {
+      "model": "ancientempires:block/coin_stack_ancient_2"
+    },
+    "layers=3": {
+      "model": "ancientempires:block/coin_stack_ancient_3"
+    },
+    "layers=4": {
+      "model": "ancientempires:block/coin_stack_ancient_4"
+    },
+    "layers=5": {
+      "model": "ancientempires:block/coin_stack_ancient_5"
+    },
+    "layers=6": {
+      "model": "ancientempires:block/coin_stack_ancient_6"
+    },
+    "layers=7": {
+      "model": "ancientempires:block/coin_stack_ancient_7"
+    },
+    "layers=8": {
+      "model": "ancientempires:block/coin_stack_ancient_8"
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "parent": "ancientempires:block/coin_stack_layers_5",
+  "textures": {
+    "0": "ancientempires:block/coin_stack_gold",
+    "particle": "ancientempires:block/coin_stack_gold"
+  }
+}

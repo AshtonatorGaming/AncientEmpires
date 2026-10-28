@@ -1,0 +1,138 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "weight": 1,
+          "type": "minecraft:item",
+          "name": "ancientempires:coin_gold",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 3
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "weight": 999,
+          "type": "minecraft:loot_table",
+          "name": "ancientempires:aw/chests/ammo_ballista"
+        },
+        {
+          "weight": 999,
+          "type": "minecraft:loot_table",
+          "name": "ancientempires:aw/chests/ammo_catapult_trebuchet"
+        },
+        {
+          "weight": 999,
+          "type": "minecraft:loot_table",
+          "name": "ancientempires:aw/chests/ammo_catapult_trebuchet"
+        },
+        {
+          "weight": 999,
+          "type": "minecraft:loot_table",
+          "name": "ancientempires:aw/chests/ammo_cannon"
+        },
+        {
+          "weight": 999,
+          "type": "minecraft:loot_table",
+          "name": "ancientempires:aw/chests/ammo_hwacha"
+        },
+        {
+          "weight": 1,
+          "type": "ancientempires:item",
+          "name": "ancientwarfarevehicle:explosive_charge",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 6
+              }
+            }
+          ]
+        },
+        {
+          "weight": 1,
+          "type": "ancientempires:item",
+          "name": "ancientwarfarevehicle:iron_casing",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 4
+              }
+            }
+          ]
+        },
+        {
+          "weight": 1,
+          "type": "ancientempires:item",
+          "name": "ancientwarfarevehicle:cluster_charge",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 4
+              }
+            }
+          ]
+        },
+        {
+          "weight": 1,
+          "type": "ancientempires:item",
+          "name": "ancientwarfarevehicle:rocket_charge",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 4
+              }
+            }
+          ]
+        },
+        {
+          "weight": 1,
+          "type": "ancientempires:item",
+          "name": "ancientwarfarevehicle:flame_charge",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 4
+              }
+            }
+          ]
+        },
+        {
+          "weight": 1,
+          "type": "ancientempires:item",
+          "name": "ancientwarfarevehicle:napalm_charge",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

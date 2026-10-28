@@ -20,6 +20,14 @@ public final class ModCreativeTabs
                     .displayItems((parameters, output) ->
                     {
                         output.accept(ModItems.FOOD_BUNDLE.get());
+                        output.accept(ModItems.COIN_COPPER.get());
+                        output.accept(ModItems.COIN_SILVER.get());
+                        output.accept(ModItems.COIN_GOLD.get());
+                        output.accept(ModItems.COIN_ANCIENT.get());
+                        output.accept(ModItems.COIN_STACK_COPPER.get());
+                        output.accept(ModItems.COIN_STACK_SILVER.get());
+                        output.accept(ModItems.COIN_STACK_GOLD.get());
+                        output.accept(ModItems.COIN_STACK_ANCIENT.get());
                         output.accept(ModItems.BANDAGE.get());
                         output.accept(ModItems.BANDAGE_ROLL.get());
                         output.accept(ModItems.WAR_HORN.get());

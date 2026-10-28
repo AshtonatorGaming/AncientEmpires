@@ -4,6 +4,14 @@ import com.ancientempires.AncientEmpires;
 import com.google.gson.JsonObject;
 import com.ancientempires.block.NpcSpawnerBlockEntity;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.gametest.framework.GameTest;
@@ -16,11 +24,16 @@ import net.minecraft.world.level.block.FenceBlock;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.ChestType;
+import net.minecraft.world.level.storage.loot.LootDataManager;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraftforge.gametest.GameTestHolder;
 import net.minecraftforge.gametest.PrefixGameTestTemplate;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.stream.IntStream;
 
 /**
  * Places real converted templates on the game test server
@@ -183,6 +196,67 @@ public final class StructureGameTests
         }
         AncientEmpires.LOGGER.info("GAMETEST spawners: {} imported, {} holding someone; problems {}", counts[0], counts[1], problems);
         helper.assertTrue(counts[1] > counts[0] * 0.95, "nearly every spawner holds someone: " + counts[1] + " of " + counts[0]);
+        helper.succeed();
+    }
+
+    /** Every converted AW loot table loads (1.20 drops a table it cannot read, quietly). */
+    @GameTest(template = ARENA)
+    public static void awLootTablesLoad(GameTestHelper helper)
+    {
+        LootDataManager loot = helper.getLevel().getServer().getLootData();
+        List<ResourceLocation> missing = new ArrayList<>();
+        int checked = 0;
+        for (String type : new String[] {"chests/castle_treasury_high_value", "chests/shop_wool_carpet", "chests/lizardman",
+                "chests/compat/harvestcraft/harvestcraft_shop_sea_life", "entities/soldier", "entities/leader_elite", "entities/undead_archer"})
+        {
+            ResourceLocation id = ResourceLocation.fromNamespaceAndPath(AncientEmpires.MOD_ID, "aw/" + type);
+            checked++;
+            if (loot.getLootTable(id) == LootTable.EMPTY)
+            {
+                missing.add(id);
+            }
+        }
+        AncientEmpires.LOGGER.info("GAMETEST loot: {} checked, missing {}", checked, missing);
+        helper.assertTrue(missing.isEmpty(), "AW loot tables load: missing " + missing);
+        helper.succeed();
+    }
+
+    /** The undead mausoleum: its loot chests, urns, and coin stacks become real. */
+    @GameTest(template = ARENA, timeoutTicks = 400)
+    public static void lootAndCoinsPlace(GameTestHelper helper)
+    {
+        // Well above the test world's floor: the mausoleum's crypt runs deep.
+        BlockPos anchor = helper.absolutePos(new BlockPos(0, 1, 0)).offset(0, 100, -300);
+        AePlacer.Report report = placeAndLog(helper, "normal/awpowersundead/undeadmausoleum", anchor, Rotation.NONE);
+        helper.assertTrue(report.aw().getOrDefault("ancientwarfarestructure:advanced_loot_chest", 0) > 0, "loot chests made real: " + report.aw());
+        helper.assertTrue(report.aw().getOrDefault("ancientwarfarestructure:urn", 0) > 0, "urns made real: " + report.aw());
+        // Open each loot chest as a player would: vanilla's roll plus AW's extras, then plain chests.
+        ResourceLocation id = ResourceLocation.fromNamespaceAndPath(AncientEmpires.MOD_ID, "normal/awpowersundead/undeadmausoleum");
+        AeTemplate template = AeTemplates.get(id).orElseThrow();
+        int[] offset = offset(id);
+        Player player = helper.makeMockPlayer();
+        int[] chests = new int[2];
+        for (Map.Entry<Integer, CompoundTag> entry : template.blockEntities().entrySet())
+        {
+            if (!entry.getValue().getCompound("aeRule").getCompound("blockState").getString("blockName").equals("ancientwarfarestructure:advanced_loot_chest"))
+            {
+                continue;
+            }
+            int[] cell = template.cellOf(entry.getKey());
+            BlockPos pos = AePlacer.cellToWorld(offset, anchor, Rotation.NONE, cell[0], cell[1], cell[2]);
+            if (helper.getLevel().getBlockEntity(pos) instanceof RandomizableContainerBlockEntity chest)
+            {
+                MinecraftForge.EVENT_BUS.post(new PlayerInteractEvent.RightClickBlock(player, InteractionHand.MAIN_HAND, pos,
+                        new BlockHitResult(Vec3.atCenterOf(pos), Direction.UP, pos, false)));
+                chest.unpackLootTable(player);
+                chests[0]++;
+                chests[1] += chest.isEmpty() ? 0 : 1;
+                AncientEmpires.LOGGER.info("GAMETEST loot chest at {}: {} stacks, AeLoot left {}", pos,
+                        IntStream.range(0, chest.getContainerSize()).filter(slot -> !chest.getItem(slot).isEmpty()).count(), chest.getPersistentData().contains(AwLoot.KEY));
+            }
+        }
+        helper.assertTrue(chests[0] == 2 && chests[1] == 2, "both loot chests fill: " + chests[1] + " of " + chests[0]);
+        helper.assertTrue(report.aw().entrySet().stream().filter(entry -> entry.getKey().contains("coin_stack")).mapToInt(Map.Entry::getValue).sum() == 8, "all eight coin stacks made real: " + report.aw());
         helper.succeed();
     }
 
