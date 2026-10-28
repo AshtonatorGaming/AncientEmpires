@@ -72,7 +72,10 @@ instead of reflecting per call), Skirmisher thresholds (about 4.5 to 28 blocks).
   large `misc` group). `NpcRoster` maps old AW NPC types to equipment/skins.
   `NpcSkinSelector` is the three-level selector screen (faction, class, skin).
 - Client: `NpcRenderer`, `NpcSkinLayers` (outer layers, optional 3D Skin Layers),
-  `NpcBetterCombatDriver` (per-NPC animation session), ModularUI inventory screen.
+  `NpcBetterCombatDriver` (per-NPC animation session), vanilla inventory screen (`NpcScreen`;
+  path chooser, stats sheet, and skin selector are Forge gui layers over it, `NpcPopupScreen`).
+  ModularUI was dropped: its EMI mixin targets `RecipeScreen.mouseScrolled` with `remap=false`,
+  which only exists in dev, so it crashed production games with EMI. Its jar in `libs/` is unused.
 - Player Animation Lib only animates real players. For NPCs the driver does by hand what
   its player hooks do: part rotations and bends (`updatePart`), the `body` channel on the
   render matrix (`NpcRenderer.setupRotations`), the waist bend (filling the model's
@@ -89,7 +92,7 @@ instead of reflecting per call), Skirmisher thresholds (about 4.5 to 28 blocks).
   reach 3.5 and one hand. The user's pack has Malfu's Combat Animation datapack, which gives the trident
   an 11-step combo of stabs and sweeps; without it the spear gets Better Combat's plain trident stab.
 - Libs in `libs/` are jars wired through `fg.deobf` in `build.gradle`. Soft deps are
-  `compileOnly`; ModularUI is `implementation`.
+  `compileOnly`.
 - Structures (`structure/`, plan in STRUCTURES.md; S1 done). AW's 1,471 templates (1.12 data, from
   `libs/ancientwarfare-1.12.2-2.10.2.jar`) are converted offline by `./gradlew convertAwsTemplates`
   (`AwsConvertTool`: `AwsTemplate` reads `.aws`, `AwsConverter` + `LegacyFixer` upgrade it through Mojang's
@@ -131,7 +134,7 @@ instead of reflecting per call), Skirmisher thresholds (about 4.5 to 28 blocks).
 
 ## Done
 
-ModularUI inventory (equipment cross, backpack, name field, skin button, command buttons);
+NPC inventory screen (equipment cross, backpack, name field, skin button, command buttons);
 unarmed dual-fist combo via the Better Combat fist preset; inventory persistence and repack
 (item keeps name, equipment, skin, owner, flags; not the home, so a placed NPC calls its new spot
 home; priest revival keeps it); faction/owned split with the mass AW
@@ -757,8 +760,7 @@ target-scan design.
   parsing and 1.12 position packing, `AeTemplate` round trips, chest pairing and door/leaf mending.
 - `./gradlew runGameTestServer` runs `StructureGameTests` on a headless server (arena
   `structures/gametest_arena.nbt`): real templates placed, blocks resolved, fences connected, timings logged
-  as `GAMETEST`. Dev runs need the mixin refmap remap properties and Curios at runtime (ModularUI touches
-  Curios outside production); both are in `build.gradle`.
+  as `GAMETEST`. Dev runs remap library mixin refmaps (`mixin.env.remapRefMap` in `build.gradle`).
 
 ## Building
 

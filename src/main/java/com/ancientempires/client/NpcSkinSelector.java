@@ -1,28 +1,16 @@
 package com.ancientempires.client;
 
-import brachy.modularui.api.IPanelHandler;
-import brachy.modularui.api.widget.IWidget;
-import brachy.modularui.api.drawable.IDrawable;
-import brachy.modularui.drawable.GuiTextures;
-import brachy.modularui.drawable.Icon;
-import brachy.modularui.drawable.Rectangle;
-import brachy.modularui.screen.ModularPanel;
-import brachy.modularui.screen.viewport.GuiContext;
-import brachy.modularui.theme.WidgetTheme;
-import brachy.modularui.utils.Alignment;
-import brachy.modularui.value.StringValue;
-import brachy.modularui.widget.ParentWidget;
-import brachy.modularui.widget.scroll.VerticalScrollData;
-import brachy.modularui.widgets.ButtonWidget;
-import brachy.modularui.widgets.ListWidget;
-import brachy.modularui.widgets.TextWidget;
-import brachy.modularui.widgets.textfield.TextFieldWidget;
 import com.ancientempires.entity.npc.NpcEntity;
 import com.ancientempires.entity.npc.NpcSkins;
 import com.ancientempires.network.ModNetwork;
 import com.ancientempires.registry.ModEntities;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -30,7 +18,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.function.Supplier;
 
 /**
  * Skin button page. Faction pages, then that faction's classes, then the skins
@@ -38,7 +25,7 @@ import java.util.function.Supplier;
  * the world model already reads.
  */
 @OnlyIn(Dist.CLIENT)
-public final class NpcSkinSelector
+public final class NpcSkinSelector extends NpcPopupScreen
 {
     private static final int PANEL_W = 360;
     private static final int PANEL_H = 222;
@@ -57,31 +44,74 @@ public final class NpcSkinSelector
     private static final int LIST_W = PREVIEW_X - MARGIN - 4;
     private static final int LIST_H = PANEL_H - BODY_Y - MARGIN;
     private static final int ROW_H = 14;
-    private static final int WINDOW = (LIST_H / ROW_H) + 2;
+    /** Rows leave room on the right for the scroll bar. */
+    private static final int ROW_W = LIST_W - 10;
     private static final int FACTION_SLOTS = 4;
     private static final int CLASS_SLOTS = 3;
     private static final int CHIP_LEFT = MARGIN + ARROW + 2;
     private static final int CHIP_RIGHT = PANEL_W - MARGIN - ARROW - COUNTER_W - 4;
     private static final int FACTION_CHIP_W = (CHIP_RIGHT - CHIP_LEFT - (FACTION_SLOTS - 1) * 2) / FACTION_SLOTS;
     private static final int CLASS_CHIP_W = (CHIP_RIGHT - CHIP_LEFT - (CLASS_SLOTS - 1) * 2) / CLASS_SLOTS;
+    private static final int SCROLL_BAR_W = 4;
 
-    private static final int PARCHMENT = 0xFF4A3B2A;
-    private static final int INK = 0xFF120E0C;
-    private static final int BUTTON = 0xFF3A2E24;
-    private static final int BUTTON_ON = 0xFF6A5430;
-    private static final int BUTTON_HOVER = 0xFF8A6A3C;
-    private static final int BUTTON_OFF = 0xFF2A221C;
-    private static final int NAME_INK = 0xFFE6D2A2;
-    private static final int NAME_HINT = 0xFF8A7050;
+    private final NpcEntity npc;
+    private final NpcEntity preview;
+    private final NpcEntityPreview previewRenderer;
+    private String factionId = "";
+    private String classId = "";
+    private int factionPage;
+    private int classPage;
+    private String query = "";
+    private String listKey = "";
+    private String selected = "";
+    private int scroll;
+    private final List<NpcSkins.Entry> shown = new ArrayList<>();
+    private final List<Chip> factionChips = new ArrayList<>();
+    private final List<Chip> classChips = new ArrayList<>();
 
-    private NpcSkinSelector()
+    private NpcSkinSelector(NpcEntity npc)
     {
+        super(Component.translatable("gui.ancientempires.skin.title"), PANEL_W, PANEL_H);
+        this.npc = npc;
+        Minecraft minecraft = Minecraft.getInstance();
+        this.preview = new NpcEntity(ModEntities.NPC.get(), minecraft.level);
+        this.preview.setBodyScale(npc.getBodyScale());
+        for (EquipmentSlot slot : EquipmentSlot.values())
+        {
+            this.preview.setItemSlot(slot, npc.getItemBySlot(slot).copy());
+        }
+        this.previewRenderer = new NpcEntityPreview(this.preview);
+        NpcSkins.Entry current = NpcSkins.byId(npc.getSkinId());
+        if (current != null)
+        {
+            this.factionId = current.factionId();
+            this.classId = current.classId();
+            this.selected = current.id();
+            this.preview.assignSkin(current.id());
+            this.factionPage = NpcSkins.indexOfFaction(current.factionId()) / FACTION_SLOTS;
+            NpcSkins.Faction faction = NpcSkins.faction(current.factionId());
+            int classIndex = faction == null ? 0 : faction.indexOfClass(current.classId());
+            this.classPage = classIndex / CLASS_SLOTS;
+        }
+        else
+        {
+            this.preview.assignSkin(npc.getSkinId());
+            if (!NpcSkins.factions().isEmpty())
+            {
+                NpcSkins.Faction faction = NpcSkins.factions().get(0);
+                this.factionId = faction.id();
+                if (!faction.classes().isEmpty())
+                {
+                    this.classId = faction.classes().get(0).id();
+                }
+            }
+        }
     }
 
     public static void open(NpcEntity npc)
     {
         Minecraft minecraft = Minecraft.getInstance();
-        if (!(minecraft.screen instanceof NpcScreen npcScreen) || minecraft.level == null || npc == null)
+        if (!(minecraft.screen instanceof NpcScreen) || minecraft.level == null || npc == null)
         {
             if (minecraft.player != null)
             {
@@ -89,365 +119,221 @@ public final class NpcSkinSelector
             }
             return;
         }
-        ModularPanel<?> parent = npcScreen.screen().getMainPanel();
-        IPanelHandler.simple(parent, (ignored, player) -> build(npc), true).openPanel();
+        NpcPopupScreen.open(new NpcSkinSelector(npc));
     }
 
-    private static ModularPanel<?> build(NpcEntity npc)
+    @Override
+    protected void init()
     {
-        Minecraft minecraft = Minecraft.getInstance();
-        NpcEntity preview = new NpcEntity(ModEntities.NPC.get(), minecraft.level);
-        preview.setBodyScale(npc.getBodyScale());
-        for (EquipmentSlot slot : EquipmentSlot.values())
-        {
-            preview.setItemSlot(slot, npc.getItemBySlot(slot).copy());
-        }
-        State state = new State(preview);
-        NpcSkins.Entry current = NpcSkins.byId(npc.getSkinId());
-        if (current != null)
-        {
-            state.factionId = current.factionId();
-            state.classId = current.classId();
-            state.selected = current.id();
-            preview.assignSkin(current.id());
-            state.factionPage = NpcSkins.indexOfFaction(current.factionId()) / FACTION_SLOTS;
-            NpcSkins.Faction faction = NpcSkins.faction(current.factionId());
-            int classIndex = faction == null ? 0 : faction.indexOfClass(current.classId());
-            state.classPage = classIndex / CLASS_SLOTS;
-        }
-        else
-        {
-            preview.assignSkin(npc.getSkinId());
-            if (!NpcSkins.factions().isEmpty())
-            {
-                NpcSkins.Faction faction = NpcSkins.factions().get(0);
-                state.factionId = faction.id();
-                if (!faction.classes().isEmpty())
+        super.init();
+        this.factionChips.clear();
+        this.classChips.clear();
+        this.addRenderableWidget(new NpcButton(this.left + PANEL_W - 18, this.top + 4, 12, 12, Component.translatable("gui.cancel"),
+                (graphics, x, y, width, height) -> NpcGui.iconCentered(graphics, NpcGui.Icon.CLOSE, x, y, width, height, 8, 8),
+                pressed ->
                 {
-                    state.classId = faction.classes().get(0).id();
-                }
-            }
-        }
+                    if (pressed != 0)
+                    {
+                        return false;
+                    }
+                    this.onClose();
+                    return true;
+                }));
 
-        ModularPanel<?> panel = ModularPanel.defaultPanel("npc_skin", PANEL_W, PANEL_H)
-                .background(new Rectangle().color(PARCHMENT))
-                .hoverBackground(new Rectangle().color(PARCHMENT))
-                .disablePanelsBelow(true)
-                .closeOnOutOfBoundsClick(true)
-                .onCloseAction(preview::discard);
-
-        panel.child(new TextWidget<>(Component.translatable("gui.ancientempires.skin.title"))
-                .pos(MARGIN, 4)
-                .size(PANEL_W - 28, 12)
-                .color(NAME_INK)
-                .shadow(Boolean.TRUE)
-                .textAlign(Alignment.CenterLeft));
-        panel.child(new ButtonWidget<>()
-                .pos(PANEL_W - 18, 4)
-                .size(12, 12)
-                .background(new Rectangle().color(BUTTON))
-                .hoverBackground(new Rectangle().color(BUTTON_HOVER))
-                .overlay(new Icon(GuiTextures.CROSS).size(8).center().margin(2))
-                .onMousePressed((context, button) -> close(panel, button)));
-
-        state.factionPrev = arrow(MARGIN, ROW_Y, "<");
-        state.factionNext = arrow(PANEL_W - MARGIN - ARROW, ROW_Y, ">");
-        state.factionPrev.onMousePressed((context, button) -> changePage(state, true, -1, button));
-        state.factionNext.onMousePressed((context, button) -> changePage(state, true, 1, button));
-        panel.child(state.factionPrev);
-        panel.child(state.factionNext);
+        this.arrow(MARGIN, ROW_Y, "<", true, -1);
+        this.arrow(PANEL_W - MARGIN - ARROW, ROW_Y, ">", true, 1);
         for (int index = 0; index < FACTION_SLOTS; index++)
         {
-            Chip chip = new Chip();
-            chip.button = chipButton(CHIP_LEFT + index * (FACTION_CHIP_W + 2), ROW_Y, FACTION_CHIP_W, chip);
-            chip.button.onMousePressed((context, button) -> chooseFaction(state, chip, button));
-            state.factionChips.add(chip);
-            panel.child(chip.button);
+            this.factionChips.add(this.chip(CHIP_LEFT + index * (FACTION_CHIP_W + 2), ROW_Y, FACTION_CHIP_W, true));
         }
-        panel.child(new TextWidget<>(() -> Component.literal(pageLabel(state.factionPage, NpcSkins.factions().size(), FACTION_SLOTS)))
-                .pos(CHIP_RIGHT + 2, ROW_Y)
-                .size(COUNTER_W, CHIP_H)
-                .color(NAME_HINT)
-                .shadow(Boolean.FALSE)
-                .textAlign(Alignment.Center));
-
-        state.classPrev = arrow(MARGIN, CLASS_Y, "<");
-        state.classNext = arrow(PANEL_W - MARGIN - ARROW, CLASS_Y, ">");
-        state.classPrev.onMousePressed((context, button) -> changePage(state, false, -1, button));
-        state.classNext.onMousePressed((context, button) -> changePage(state, false, 1, button));
-        panel.child(state.classPrev);
-        panel.child(state.classNext);
+        this.arrow(MARGIN, CLASS_Y, "<", false, -1);
+        this.arrow(PANEL_W - MARGIN - ARROW, CLASS_Y, ">", false, 1);
         for (int index = 0; index < CLASS_SLOTS; index++)
         {
-            Chip chip = new Chip();
-            chip.button = chipButton(CHIP_LEFT + index * (CLASS_CHIP_W + 2), CLASS_Y, CLASS_CHIP_W, chip);
-            chip.button.onMousePressed((context, button) -> chooseClass(state, chip, button));
-            state.classChips.add(chip);
-            panel.child(chip.button);
+            this.classChips.add(this.chip(CHIP_LEFT + index * (CLASS_CHIP_W + 2), CLASS_Y, CLASS_CHIP_W, false));
         }
-        panel.child(new TextWidget<>(() -> Component.literal(classPageLabel(state)))
-                .pos(CHIP_RIGHT + 2, CLASS_Y)
-                .size(COUNTER_W, CHIP_H)
-                .color(NAME_HINT)
-                .shadow(Boolean.FALSE)
-                .textAlign(Alignment.Center));
 
-        SkinList list = new SkinList()
-                .scrollDirection(new VerticalScrollData())
-                .collapseDisabledChildren()
-                .pos(MARGIN, BODY_Y)
-                .size(LIST_W, LIST_H)
-                .background(new Rectangle().color(INK));
-        TextWidget<?> empty = new TextWidget<>(Component.translatable("gui.ancientempires.skin.empty"))
-                .size(LIST_W - 16, ROW_H)
-                .color(NAME_HINT)
-                .shadow(Boolean.FALSE)
-                .textAlign(Alignment.CenterLeft);
-        empty.setEnabled(false);
-        list.child(empty);
-        list.setRebind(() -> bindWindow(state));
-        for (int index = 0; index < WINDOW; index++)
+        // Unbordered, the text sits at the box's top, so the box starts 3 px down to center it.
+        EditBox search = new EditBox(this.font, this.left + MARGIN + 4, this.top + SEARCH_Y + 3, PANEL_W - MARGIN * 2 - 8, SEARCH_H - 3,
+                Component.translatable("gui.ancientempires.skin.search"));
+        search.setBordered(false);
+        search.setMaxLength(64);
+        search.setTextColor(NpcGui.NAME_INK);
+        search.setHint(Component.translatable("gui.ancientempires.skin.search").withStyle(style -> style.withColor(NpcGui.NAME_HINT & 0xFFFFFF)));
+        search.setValue(this.query);
+        search.setResponder(this::queryChanged);
+        this.addRenderableWidget(search);
+
+        this.addRenderableWidget(new SkinList(this.left + MARGIN, this.top + BODY_Y));
+        this.addRenderableWidget(new NpcButton(this.left + PREVIEW_X, this.top + PANEL_H - MARGIN - 16, PREVIEW_W, 16,
+                Component.translatable("gui.ancientempires.skin.apply"),
+                (graphics, x, y, width, height) -> FitText.draw(graphics, this.font, Component.translatable("gui.ancientempires.skin.apply").getString(),
+                        x + 2, y, width - 4, height, NpcGui.NAME_INK, true, false),
+                this::apply));
+        this.layout();
+    }
+
+    private void arrow(int x, int y, String label, boolean faction, int delta)
+    {
+        this.addRenderableWidget(new NpcButton(this.left + x, this.top + y, ARROW, CHIP_H, Component.literal(label),
+                (graphics, left, top, width, height) -> FitText.draw(graphics, this.font, label, left + 2, top, width - 4, height, NpcGui.NAME_INK, true, false),
+                pressed -> this.changePage(faction, delta, pressed))
+                // A dead page stays visible and does not take a hover color.
+                .live(() -> this.canTurn(faction, delta))
+                .fill(() -> this.canTurn(faction, delta) ? NpcGui.BUTTON : NpcGui.BUTTON_OFF));
+    }
+
+    private Chip chip(int x, int y, int width, boolean faction)
+    {
+        Chip chip = new Chip();
+        chip.button = new NpcButton(this.left + x, this.top + y, width, CHIP_H, Component.empty(),
+                (graphics, left, top, w, h) -> FitText.draw(graphics, this.font, chip.label, left + 2, top, w - 4, h, NpcGui.NAME_INK, true, false),
+                pressed -> faction ? this.chooseFaction(chip, pressed) : this.chooseClass(chip, pressed))
+                .fill(() -> chip.id.equals(faction ? this.factionId : this.classId) ? NpcGui.BUTTON_ON : NpcGui.BUTTON);
+        this.addRenderableWidget(chip.button);
+        return chip;
+    }
+
+    @Override
+    protected void renderPanel(GuiGraphics graphics, int mouseX, int mouseY, float partialTick)
+    {
+        int left = this.left;
+        int top = this.top;
+        FitText.draw(graphics, this.font, this.title.getString(), left + MARGIN, top + 4, PANEL_W - 28, 12, NpcGui.NAME_INK, false, true);
+        FitText.draw(graphics, this.font, pageLabel(this.factionPage, NpcSkins.factions().size(), FACTION_SLOTS),
+                left + CHIP_RIGHT + 2, top + ROW_Y, COUNTER_W, CHIP_H, NpcGui.NAME_HINT, true, false);
+        FitText.draw(graphics, this.font, this.classPageLabel(), left + CHIP_RIGHT + 2, top + CLASS_Y, COUNTER_W, CHIP_H, NpcGui.NAME_HINT, true, false);
+        graphics.fill(left + MARGIN, top + SEARCH_Y, left + PANEL_W - MARGIN, top + SEARCH_Y + SEARCH_H, NpcGui.INK);
+        graphics.fill(left + PREVIEW_X, top + BODY_Y, left + PREVIEW_X + PREVIEW_W, top + BODY_Y + PREVIEW_H, NpcGui.INK);
+        this.previewRenderer.render(graphics, left + PREVIEW_X + 2, top + BODY_Y + 2, PREVIEW_W - 4, PREVIEW_H - 4, mouseX, mouseY);
+        NpcSkins.Entry entry = NpcSkins.byId(this.selected);
+        if (entry != null)
         {
-            SkinSlot slot = new SkinSlot();
-            ButtonWidget<?> button = new ButtonWidget<>()
-                    .size(LIST_W - 10, ROW_H)
-                    .background(new Rectangle().color(BUTTON))
-                    .hoverBackground(new Rectangle().color(BUTTON_HOVER))
-                    .overlay(new SkinLabel(() -> Component.literal(slot.label), false))
-                    // Names drawn shrunk (or cut) read in full on hover.
-                    .tooltipDynamic(tooltip ->
-                    {
-                        if (!FitText.fits(Minecraft.getInstance().font, slot.label, LIST_W - 14))
-                        {
-                            tooltip.addLine(slot.label);
-                        }
-                    })
-                    .tooltipAutoUpdate(true)
-                    .onMousePressed((context, click) -> select(state, slot, click));
-            button.setEnabled(false);
-            slot.button = button;
-            state.slots.add(slot);
-            list.child(button);
+            FitText.draw(graphics, this.font, entry.name(), left + PREVIEW_X, top + BODY_Y + PREVIEW_H + 2, PREVIEW_W, 12, NpcGui.NAME_INK, true, false);
         }
-        panel.child(list);
-        state.list = list;
-        state.empty = empty;
-
-        ParentWidget<?> frame = new ParentWidget<>()
-                .pos(PREVIEW_X, BODY_Y)
-                .size(PREVIEW_W, PREVIEW_H)
-                .background(new Rectangle().color(INK));
-        frame.child(new NpcEntityPreview(preview)
-                .asWidget()
-                .pos(2, 2)
-                .size(PREVIEW_W - 4, PREVIEW_H - 4));
-        panel.child(frame);
-        panel.child(new TextWidget<>(() -> selectedName(state))
-                .pos(PREVIEW_X, BODY_Y + PREVIEW_H + 2)
-                .size(PREVIEW_W, 12)
-                .maxWidth(PREVIEW_W)
-                .color(NAME_INK)
-                .shadow(Boolean.FALSE)
-                .textAlign(Alignment.Center));
-        panel.child(new ButtonWidget<>()
-                .pos(PREVIEW_X, PANEL_H - MARGIN - 16)
-                .size(PREVIEW_W, 16)
-                .background(new Rectangle().color(BUTTON))
-                .hoverBackground(new Rectangle().color(BUTTON_HOVER))
-                .overlay(new SkinLabel(() -> Component.translatable("gui.ancientempires.skin.apply"), true))
-                .onMousePressed((context, button) -> apply(panel, npc, state, button)));
-
-        TextFieldWidget search = new TextFieldWidget()
-                .pos(MARGIN, SEARCH_Y)
-                .size(PANEL_W - MARGIN * 2, SEARCH_H)
-                .background(new Rectangle().color(INK))
-                .setTextColor(NAME_INK)
-                .hintText(Component.translatable("gui.ancientempires.skin.search"))
-                .hintColor(NAME_HINT)
-                .setMaxLength(64)
-                .acceptsExpressions(false)
-                .autoUpdateOnChange(true)
-                .value(new StringValue.Dynamic(() -> state.query, value -> queryChanged(state, value)))
-                .onUpdateListener(widget ->
-                {
-                    if (state.dirty)
-                    {
-                        state.dirty = false;
-                        layout(state);
-                        return;
-                    }
-                    bindWindow(state);
-                }, true);
-        panel.child(search);
-        layout(state);
-        state.dirty = false;
-        return panel;
     }
 
-    private static ButtonWidget<?> arrow(int x, int y, String label)
+    @Override
+    public void removed()
     {
-        return new ButtonWidget<>()
-                .pos(x, y)
-                .size(ARROW, CHIP_H)
-                .background(new Rectangle().color(BUTTON))
-                .hoverBackground(new Rectangle().color(BUTTON_HOVER))
-                .disableHoverThemeBackground(true)
-                .overlay(new SkinLabel(() -> Component.literal(label), true));
+        this.preview.discard();
+        super.removed();
     }
 
-    /**
-     * A dead page stays visible and does not take a hover color.
-     */
-    private static void setArrow(ButtonWidget<?> arrow, boolean enabled)
+    private boolean canTurn(boolean faction, int delta)
     {
-        arrow.setEnabled(enabled);
-        int color = enabled ? BUTTON : BUTTON_OFF;
-        arrow.background(new Rectangle().color(color));
-        arrow.hoverBackground(new Rectangle().color(enabled ? BUTTON_HOVER : color));
+        int page = faction ? this.factionPage : this.classPage;
+        int next = page + delta;
+        return next >= 0 && next < this.pages(faction);
     }
 
-    private static ButtonWidget<?> chipButton(int x, int y, int width, Chip chip)
+    private int pages(boolean faction)
     {
-        return new ButtonWidget<>()
-                .pos(x, y)
-                .size(width, CHIP_H)
-                .background(new Rectangle().color(BUTTON))
-                .hoverBackground(new Rectangle().color(BUTTON_HOVER))
-                .overlay(new SkinLabel(() -> Component.literal(chip.label), true));
+        if (faction)
+        {
+            return pageCount(NpcSkins.factions().size(), FACTION_SLOTS);
+        }
+        NpcSkins.Faction group = NpcSkins.faction(this.factionId);
+        int count = group == null || group.flat() ? 0 : group.classes().size();
+        return pageCount(count, CLASS_SLOTS);
     }
 
-    private static boolean close(ModularPanel<?> panel, int button)
+    private boolean changePage(boolean faction, int delta, int button)
     {
         if (button != 0)
         {
             return false;
         }
-        panel.closeIfOpen();
-        return true;
-    }
-
-    private static boolean changePage(State state, boolean faction, int delta, int button)
-    {
-        if (button != 0)
+        if (!this.canTurn(faction, delta))
         {
-            return false;
+            return true;
         }
         if (faction)
         {
-            int pages = pageCount(NpcSkins.factions().size(), FACTION_SLOTS);
-            int next = state.factionPage + delta;
-            if (next < 0 || next >= pages)
-            {
-                return true;
-            }
-            state.factionPage = next;
+            this.factionPage += delta;
         }
         else
         {
-            NpcSkins.Faction group = NpcSkins.faction(state.factionId);
-            int count = group == null ? 0 : group.classes().size();
-            int pages = pageCount(count, CLASS_SLOTS);
-            int next = state.classPage + delta;
-            if (next < 0 || next >= pages)
-            {
-                return true;
-            }
-            state.classPage = next;
+            this.classPage += delta;
         }
-        state.dirty = true;
+        this.layout();
         return true;
     }
 
-    private static boolean chooseFaction(State state, Chip chip, int button)
+    private boolean chooseFaction(Chip chip, int button)
     {
-        if (button != 0 || chip.id.isEmpty() || chip.id.equals(state.factionId))
+        if (button != 0 || chip.id.isEmpty() || chip.id.equals(this.factionId))
         {
             return button == 0;
         }
-        state.factionId = chip.id;
-        state.classPage = 0;
-        NpcSkins.Faction faction = NpcSkins.faction(state.factionId);
-        state.classId = "";
+        this.factionId = chip.id;
+        this.classPage = 0;
+        NpcSkins.Faction faction = NpcSkins.faction(this.factionId);
+        this.classId = "";
         if (faction != null && !faction.classes().isEmpty())
         {
-            state.classId = faction.classes().get(0).id();
+            this.classId = faction.classes().get(0).id();
         }
-        focusFirstSkin(state);
-        state.dirty = true;
+        this.focusFirstSkin();
+        this.layout();
         return true;
     }
 
-    private static boolean chooseClass(State state, Chip chip, int button)
+    private boolean chooseClass(Chip chip, int button)
     {
-        if (button != 0 || chip.id.isEmpty() || chip.id.equals(state.classId))
+        if (button != 0 || chip.id.isEmpty() || chip.id.equals(this.classId))
         {
             return button == 0;
         }
-        state.classId = chip.id;
-        focusFirstSkin(state);
-        state.dirty = true;
+        this.classId = chip.id;
+        this.focusFirstSkin();
+        this.layout();
         return true;
     }
 
-    private static void focusFirstSkin(State state)
+    private void focusFirstSkin()
     {
-        NpcSkins.NpcClass npcClass = NpcSkins.npcClass(state.factionId, state.classId);
+        NpcSkins.NpcClass npcClass = NpcSkins.npcClass(this.factionId, this.classId);
         if (npcClass == null || npcClass.skins().isEmpty())
         {
             return;
         }
         NpcSkins.Entry entry = npcClass.skins().get(0);
-        state.selected = entry.id();
-        state.preview.assignSkin(entry.id());
+        this.selected = entry.id();
+        this.preview.assignSkin(entry.id());
     }
 
-    private static boolean select(State state, SkinSlot slot, int button)
+    private void select(NpcSkins.Entry entry)
     {
-        if (button != 0 || slot.entry == null)
-        {
-            return button == 0;
-        }
-        state.selected = slot.entry.id();
-        state.preview.assignSkin(slot.entry.id());
-        state.dirty = true;
-        return true;
+        this.selected = entry.id();
+        this.preview.assignSkin(entry.id());
     }
 
-    private static boolean apply(ModularPanel<?> panel, NpcEntity npc, State state, int button)
+    private boolean apply(int button)
     {
         if (button != 0)
         {
             return false;
         }
-        if (NpcSkins.byId(state.selected) == null)
+        if (NpcSkins.byId(this.selected) == null)
         {
             return true;
         }
-        npc.assignSkin(state.selected);
-        ModNetwork.sendSkin(npc.getId(), state.selected);
-        panel.closeIfOpen();
+        this.npc.assignSkin(this.selected);
+        ModNetwork.sendSkin(this.npc.getId(), this.selected);
+        this.onClose();
         return true;
     }
 
-    private static void queryChanged(State state, String value)
+    private void queryChanged(String value)
     {
         String next = value == null ? "" : value;
-        if (next.equals(state.query))
+        if (next.equals(this.query))
         {
             return;
         }
-        state.query = next;
-        state.dirty = true;
-    }
-
-    private static Component selectedName(State state)
-    {
-        NpcSkins.Entry entry = NpcSkins.byId(state.selected);
-        if (entry == null)
-        {
-            return Component.empty();
-        }
-        return Component.literal(entry.name());
+        this.query = next;
+        this.layout();
     }
 
     private static String pageLabel(int page, int count, int slots)
@@ -459,14 +345,14 @@ public final class NpcSkinSelector
         return (page + 1) + "/" + pageCount(count, slots);
     }
 
-    private static String classPageLabel(State state)
+    private String classPageLabel()
     {
-        NpcSkins.Faction faction = NpcSkins.faction(state.factionId);
+        NpcSkins.Faction faction = NpcSkins.faction(this.factionId);
         if (faction == null || faction.flat())
         {
             return "";
         }
-        return pageLabel(state.classPage, faction.classes().size(), CLASS_SLOTS);
+        return pageLabel(this.classPage, faction.classes().size(), CLASS_SLOTS);
     }
 
     private static int pageCount(int count, int slots)
@@ -478,7 +364,8 @@ public final class NpcSkinSelector
         return (count + slots - 1) / slots;
     }
 
-    private static void layout(State state)
+    /** Binds the chips to the pages and filters the list; run after any change of page, faction, class, or search. */
+    private void layout()
     {
         List<NpcSkins.Faction> factions = NpcSkins.factions();
         List<String> factionIds = new ArrayList<>();
@@ -488,21 +375,18 @@ public final class NpcSkinSelector
             factionIds.add(faction.id());
             factionNames.add(faction.name());
         }
-        bindChips(state.factionChips, factionIds, factionNames, state.factionPage, state.factionId, FACTION_CHIP_W, ROW_Y);
-        int factionPages = pageCount(factions.size(), FACTION_SLOTS);
-        setArrow(state.factionPrev, state.factionPage > 0);
-        setArrow(state.factionNext, state.factionPage + 1 < factionPages);
+        bindChips(this.factionChips, factionIds, factionNames, this.factionPage);
 
-        NpcSkins.Faction faction = NpcSkins.faction(state.factionId);
+        NpcSkins.Faction faction = NpcSkins.faction(this.factionId);
         boolean flat = faction != null && faction.flat();
         List<String> classIds = new ArrayList<>();
         List<String> classNames = new ArrayList<>();
         if (faction != null && !flat)
         {
             int classPages = pageCount(faction.classes().size(), CLASS_SLOTS);
-            if (state.classPage >= classPages)
+            if (this.classPage >= classPages)
             {
-                state.classPage = classPages - 1;
+                this.classPage = classPages - 1;
             }
             for (NpcSkins.NpcClass npcClass : faction.classes())
             {
@@ -510,122 +394,51 @@ public final class NpcSkinSelector
                 classNames.add(npcClass.name());
             }
         }
-        else if (flat && !faction.classes().isEmpty() && faction.npcClass(state.classId) == null)
+        else if (flat && !faction.classes().isEmpty() && faction.npcClass(this.classId) == null)
         {
-            state.classId = faction.classes().get(0).id();
+            this.classId = faction.classes().get(0).id();
         }
-        bindChips(state.classChips, classIds, classNames, state.classPage, state.classId, CLASS_CHIP_W, CLASS_Y);
-        int classPages = pageCount(classIds.size(), CLASS_SLOTS);
-        setArrow(state.classPrev, state.classPage > 0);
-        setArrow(state.classNext, state.classPage + 1 < classPages);
+        bindChips(this.classChips, classIds, classNames, this.classPage);
 
-        String needle = state.query.toLowerCase(Locale.ROOT).trim();
-        NpcSkins.NpcClass npcClass = NpcSkins.npcClass(state.factionId, state.classId);
-        state.shown.clear();
+        String needle = this.query.toLowerCase(Locale.ROOT).trim();
+        NpcSkins.NpcClass npcClass = NpcSkins.npcClass(this.factionId, this.classId);
+        this.shown.clear();
         if (npcClass != null)
         {
             for (NpcSkins.Entry entry : npcClass.skins())
             {
                 if (matches(entry, needle))
                 {
-                    state.shown.add(entry);
+                    this.shown.add(entry);
                 }
             }
         }
-        state.list.setContentHeight(state.shown.isEmpty() ? 0 : state.shown.size() * ROW_H);
-        String listKey = state.factionId + "\n" + state.classId + "\n" + needle;
-        if (!listKey.equals(state.listKey))
+        String key = this.factionId + "\n" + this.classId + "\n" + needle;
+        if (!key.equals(this.listKey))
         {
-            state.listKey = listKey;
-            if (state.list.getScrollData() != null && state.list.getScrollArea() != null)
-            {
-                state.list.getScrollData().scrollTo(state.list.getScrollArea(), 0);
-            }
+            this.listKey = key;
+            this.scroll = 0;
         }
-        state.windowStart = -1;
-        bindWindow(state);
-        state.list.scheduleResize();
+        this.scroll = Mth.clamp(this.scroll, 0, this.maxScroll());
     }
 
-    /**
-     * The list keeps a window of rows and a content height for every match,
-     * so the custom catalog can scroll without a button per skin.
-     */
-    private static void bindWindow(State state)
-    {
-        if (state.list == null)
-        {
-            return;
-        }
-        int scroll = 0;
-        if (state.list.getScrollArea() != null)
-        {
-            scroll = Math.max(0, state.list.getScrollY());
-        }
-        int count = state.shown.size();
-        int first = count == 0 || ROW_H <= 0 ? 0 : scroll / ROW_H;
-        if (count > 0 && first >= count)
-        {
-            first = count - 1;
-        }
-        if (first == state.windowStart)
-        {
-            return;
-        }
-        state.windowStart = first;
-        boolean none = count == 0;
-        state.empty.setEnabled(none);
-        if (none)
-        {
-            state.empty.pos(0, 0).size(LIST_W - 16, ROW_H);
-        }
-        else
-        {
-            state.empty.pos(0, 0).size(0, 0);
-        }
-        for (int index = 0; index < state.slots.size(); index++)
-        {
-            SkinSlot slot = state.slots.get(index);
-            int row = first + index;
-            if (none || row >= count)
-            {
-                slot.entry = null;
-                slot.label = "";
-                slot.button.setEnabled(false);
-                slot.button.pos(0, 0).size(0, 0);
-                continue;
-            }
-            NpcSkins.Entry entry = state.shown.get(row);
-            slot.entry = entry;
-            slot.label = entry.name();
-            slot.button.setEnabled(true);
-            int color = entry.id().equals(state.selected) ? BUTTON_ON : BUTTON;
-            slot.button.background(new Rectangle().color(color)).pos(0, row * ROW_H).size(LIST_W - 10, ROW_H);
-        }
-    }
-
-    private static void bindChips(List<Chip> chips, List<String> ids, List<String> labels, int page, String selected, int chipW, int y)
+    private static void bindChips(List<Chip> chips, List<String> ids, List<String> labels, int page)
     {
         int start = page * chips.size();
         for (int index = 0; index < chips.size(); index++)
         {
             Chip chip = chips.get(index);
             int source = start + index;
-            if (source >= ids.size())
-            {
-                chip.id = "";
-                chip.label = "";
-                chip.button.setEnabled(false);
-                chip.button.pos(0, 0).size(0, 0).scheduleResize();
-                continue;
-            }
-            chip.id = ids.get(source);
-            chip.label = labels.get(source);
-            chip.button.setEnabled(true);
-            int color = chip.id.equals(selected) ? BUTTON_ON : BUTTON;
-            int x = CHIP_LEFT + index * (chipW + 2);
-            chip.button.pos(x, y).size(chipW, CHIP_H).background(new Rectangle().color(color)).scheduleResize();
+            boolean used = source < ids.size();
+            chip.id = used ? ids.get(source) : "";
+            chip.label = used ? labels.get(source) : "";
+            chip.button.visible = used;
         }
+    }
+
+    private int maxScroll()
+    {
+        return Math.max(0, this.shown.size() * ROW_H - LIST_H);
     }
 
     private static boolean matches(NpcSkins.Entry entry, String needle)
@@ -675,120 +488,149 @@ public final class NpcSkinSelector
         return false;
     }
 
-    private static final class State
-    {
-        private String factionId = "";
-        private String classId = "";
-        private int factionPage;
-        private int classPage;
-        private String query = "";
-        private String listKey = "";
-        private String selected = "";
-        private boolean dirty = true;
-        private int windowStart = -1;
-        private final NpcEntity preview;
-        private final List<NpcSkins.Entry> shown = new ArrayList<>();
-        private final List<Chip> factionChips = new ArrayList<>();
-        private final List<Chip> classChips = new ArrayList<>();
-        private final List<SkinSlot> slots = new ArrayList<>();
-        private ButtonWidget<?> factionPrev;
-        private ButtonWidget<?> factionNext;
-        private ButtonWidget<?> classPrev;
-        private ButtonWidget<?> classNext;
-        private SkinList list;
-        private TextWidget<?> empty;
-
-        private State(NpcEntity preview)
-        {
-            this.preview = preview;
-        }
-    }
-
     private static final class Chip
     {
         private String id = "";
         private String label = "";
-        private ButtonWidget<?> button;
+        private NpcButton button;
     }
 
-    private static final class SkinList extends ListWidget<IWidget, SkinList>
+    /**
+     * The skins of the chosen class (or the search's matches), one row each,
+     * drawn only where they show, so the custom catalog scrolls without a widget
+     * per skin. Wheel or drag the bar to scroll.
+     */
+    private final class SkinList extends AbstractWidget
     {
-        private int contentHeight;
-        private Runnable rebind;
-        private boolean applying;
+        private boolean draggingBar;
 
-        private void setContentHeight(int contentHeight)
+        private SkinList(int x, int y)
         {
-            this.contentHeight = contentHeight;
-        }
-
-        private void setRebind(Runnable rebind)
-        {
-            this.rebind = rebind;
+            super(x, y, LIST_W, LIST_H, Component.translatable("gui.ancientempires.skin.title"));
         }
 
         @Override
-        public void onUpdate()
+        protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick)
         {
-            super.onUpdate();
-            if (this.applying || this.rebind == null)
+            NpcSkinSelector screen = NpcSkinSelector.this;
+            int x = this.getX();
+            int y = this.getY();
+            graphics.fill(x, y, x + this.width, y + this.height, NpcGui.INK);
+            if (screen.shown.isEmpty())
             {
+                FitText.draw(graphics, screen.font, Component.translatable("gui.ancientempires.skin.empty").getString(), x + 2, y, LIST_W - 16, ROW_H,
+                        NpcGui.NAME_HINT, false, false);
                 return;
             }
-            this.applying = true;
-            this.rebind.run();
-            this.applying = false;
+            graphics.enableScissor(x, y, x + this.width, y + this.height);
+            int first = screen.scroll / ROW_H;
+            int last = Math.min(screen.shown.size() - 1, (screen.scroll + this.height) / ROW_H);
+            NpcSkins.Entry hovered = this.rowAt(mouseX, mouseY);
+            for (int row = first; row <= last; row++)
+            {
+                NpcSkins.Entry entry = screen.shown.get(row);
+                int rowY = y + row * ROW_H - screen.scroll;
+                int fill = entry == hovered ? NpcGui.BUTTON_HOVER : entry.id().equals(screen.selected) ? NpcGui.BUTTON_ON : NpcGui.BUTTON;
+                graphics.fill(x, rowY, x + ROW_W, rowY + ROW_H, fill);
+                FitText.draw(graphics, screen.font, entry.name(), x + 2, rowY, ROW_W - 4, ROW_H, NpcGui.NAME_INK, false, false);
+            }
+            graphics.disableScissor();
+            int max = screen.maxScroll();
+            if (max > 0)
+            {
+                int barX = x + this.width - SCROLL_BAR_W - 2;
+                int thumbH = this.thumbHeight();
+                int thumbY = y + (this.height - thumbH) * screen.scroll / max;
+                graphics.fill(barX, y, barX + SCROLL_BAR_W, y + this.height, NpcGui.BUTTON_OFF);
+                graphics.fill(barX, thumbY, barX + SCROLL_BAR_W, thumbY + thumbH, this.draggingBar ? NpcGui.BUTTON_HOVER : NpcGui.BUTTON_ON);
+            }
+            // Names drawn shrunk (or cut) read in full on hover.
+            if (hovered != null && !FitText.fits(screen.font, hovered.name(), ROW_W - 4))
+            {
+                screen.setTooltipForNextRenderPass(Component.literal(hovered.name()));
+            }
+        }
+
+        private int thumbHeight()
+        {
+            int content = NpcSkinSelector.this.shown.size() * ROW_H;
+            return Math.max(12, this.height * this.height / Math.max(1, content));
+        }
+
+        private NpcSkins.Entry rowAt(double mouseX, double mouseY)
+        {
+            if (mouseX < this.getX() || mouseX >= this.getX() + ROW_W || mouseY < this.getY() || mouseY >= this.getY() + this.height)
+            {
+                return null;
+            }
+            int row = (int) (mouseY - this.getY() + NpcSkinSelector.this.scroll) / ROW_H;
+            List<NpcSkins.Entry> shown = NpcSkinSelector.this.shown;
+            return row >= 0 && row < shown.size() ? shown.get(row) : null;
         }
 
         @Override
-        public boolean layoutWidgets()
+        public boolean mouseClicked(double mouseX, double mouseY, int button)
         {
-            if (this.applying)
+            // A release outside the list never reaches it.
+            this.draggingBar = false;
+            if (button != 0 || !this.isMouseOver(mouseX, mouseY))
             {
                 return false;
             }
-            this.applying = true;
-            boolean changed = super.layoutWidgets();
-            if (this.getScrollData() != null)
+            if (NpcSkinSelector.this.maxScroll() > 0 && mouseX >= this.getX() + this.width - SCROLL_BAR_W - 3)
             {
-                this.getScrollData().setScrollSize(this.contentHeight);
-                if (this.getScrollArea() != null)
-                {
-                    this.getScrollData().clamp(this.getScrollArea());
-                }
+                this.draggingBar = true;
+                this.scrollToMouse(mouseY);
+                return true;
             }
-            if (this.rebind != null)
+            NpcSkins.Entry entry = this.rowAt(mouseX, mouseY);
+            if (entry != null)
             {
-                this.rebind.run();
+                NpcSkinSelector.this.select(entry);
+                this.playDownSound(Minecraft.getInstance().getSoundManager());
             }
-            this.applying = false;
-            return changed;
-        }
-    }
-
-    private static final class SkinSlot
-    {
-        private NpcSkins.Entry entry;
-        private String label = "";
-        private ButtonWidget<?> button;
-    }
-
-    private static final class SkinLabel implements IDrawable
-    {
-        private final Supplier<Component> text;
-        private final boolean center;
-
-        private SkinLabel(Supplier<Component> text, boolean center)
-        {
-            this.text = text;
-            this.center = center;
+            return true;
         }
 
         @Override
-        public void draw(GuiContext context, int x, int y, int width, int height, WidgetTheme widgetTheme)
+        public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY)
         {
-            FitText.draw(context.getGraphics(), Minecraft.getInstance().font, this.text.get().getString(), x + 2, y, width - 4, height,
-                    NAME_INK, this.center, false);
+            if (!this.draggingBar)
+            {
+                return false;
+            }
+            this.scrollToMouse(mouseY);
+            return true;
+        }
+
+        @Override
+        public boolean mouseReleased(double mouseX, double mouseY, int button)
+        {
+            this.draggingBar = false;
+            return false;
+        }
+
+        private void scrollToMouse(double mouseY)
+        {
+            int thumbH = this.thumbHeight();
+            double track = Math.max(1, this.height - thumbH);
+            double fraction = (mouseY - this.getY() - thumbH / 2.0D) / track;
+            NpcSkinSelector screen = NpcSkinSelector.this;
+            screen.scroll = Mth.clamp((int) Math.round(fraction * screen.maxScroll()), 0, screen.maxScroll());
+        }
+
+        @Override
+        public boolean mouseScrolled(double mouseX, double mouseY, double delta)
+        {
+            NpcSkinSelector screen = NpcSkinSelector.this;
+            screen.scroll = Mth.clamp(screen.scroll - (int) Math.round(delta * ROW_H), 0, screen.maxScroll());
+            return true;
+        }
+
+        @Override
+        protected void updateWidgetNarration(NarrationElementOutput output)
+        {
+            this.defaultButtonNarrationText(output);
         }
     }
 }

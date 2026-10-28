@@ -1,14 +1,10 @@
 package com.ancientempires.client;
 
-import brachy.modularui.api.drawable.IDrawable;
-import brachy.modularui.screen.viewport.GuiContext;
-import brachy.modularui.theme.WidgetTheme;
 import com.ancientempires.config.AncientEmpiresConfig;
 import com.ancientempires.entity.npc.NpcEntity;
 import com.ancientempires.entity.npc.NpcMorale;
 import com.ancientempires.entity.npc.NpcRank;
 import com.ancientempires.inventory.NpcMenu;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
@@ -21,10 +17,11 @@ import java.util.Locale;
  * The NPC's stats panel, drawn in one pass each frame from synced values: rank
  * and level with an XP bar, then for soldiers morale (a bar, its state, and up
  * to three reasons) and guard, then upkeep. Everything a player needs to see
- * why an NPC did what it did, in one place.
+ * why an NPC did what it did, in one place. A popup over the inventory, whose
+ * menu keeps syncing the stats beneath it.
  */
 @OnlyIn(Dist.CLIENT)
-final class NpcStatsSheet implements IDrawable
+final class NpcStatsSheet extends NpcPopupScreen
 {
     static final int WIDTH = 188;
     static final int HEIGHT = 132;
@@ -42,18 +39,18 @@ final class NpcStatsSheet implements IDrawable
 
     NpcStatsSheet(NpcMenu menu, NpcEntity npc)
     {
+        super(npc.getDisplayName(), WIDTH, HEIGHT);
         this.menu = menu;
         this.npc = npc;
     }
 
     @Override
-    public void draw(GuiContext context, int x, int y, int width, int height, WidgetTheme widgetTheme)
+    protected void renderPanel(GuiGraphics graphics, int mouseX, int mouseY, float partialTick)
     {
-        GuiGraphics graphics = context.getGraphics();
-        Font font = Minecraft.getInstance().font;
-        int left = x + 6;
-        int inner = width - 12;
-        int line = y + 6;
+        Font font = this.font;
+        int left = this.left + 6;
+        int inner = WIDTH - 12;
+        int line = this.top + 6;
         Component title = this.npc.getRank() != NpcRank.SOLDIER
                 ? Component.translatable("gui.ancientempires.stats.title_rank", this.npc.getDisplayName(), this.npc.getRankName())
                 : this.npc.getDisplayName();
