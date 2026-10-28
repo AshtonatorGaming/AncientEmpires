@@ -1,14 +1,12 @@
 package com.ancientempires.client;
 
-import brachy.modularui.api.drawable.IDrawable;
-import brachy.modularui.screen.viewport.GuiContext;
-import brachy.modularui.theme.WidgetTheme;
 import com.ancientempires.entity.npc.NpcEntity;
 import com.ancientempires.inventory.NpcLayout;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -18,10 +16,10 @@ import org.joml.Quaternionf;
 /**
  * Inventory paperdoll. The draw uses the same lights as the player inventory
  * screen, and the scale comes from the hitbox so a short body and a giant both
- * land inside the frame with the feet near the bottom.
+ * land inside the frame with the feet near the bottom. Clipped to its box.
  */
 @OnlyIn(Dist.CLIENT)
-public final class NpcEntityPreview implements IDrawable
+public final class NpcEntityPreview
 {
     /** Steve is 32px tall. The standing hitbox is 1.8 blocks, which is 28.8px. */
     private static final float VISUAL_HEIGHT_RATIO = 32.0F / 28.8F;
@@ -36,9 +34,12 @@ public final class NpcEntityPreview implements IDrawable
         this.entity = entity;
     }
 
-    @Override
+    /**
+     * Draws the NPC in the box, facing the mouse. A screen drawn under a popup gets
+     * {@link Integer#MAX_VALUE} for the mouse; the NPC then looks straight ahead.
+     */
     @SuppressWarnings("deprecation") // runAsFancy is what the vanilla inventory paperdoll still calls
-    public void draw(GuiContext context, int x, int y, int width, int height, WidgetTheme widgetTheme)
+    public void render(GuiGraphics graphics, int x, int y, int width, int height, int mouseX, int mouseY)
     {
         float bbHeight = Math.max(0.25F, this.entity.getBbHeight());
         float bbWidth = Math.max(0.25F, this.entity.getBbWidth());
@@ -55,8 +56,9 @@ public final class NpcEntityPreview implements IDrawable
         float centerX = x + width / 2.0F;
         float centerY = feetY - scale * visualHeight / 2.0F;
 
-        float lookX = (float) Math.atan((centerX - context.getMouseX()) / 40.0D);
-        float lookY = (float) Math.atan((centerY - context.getMouseY()) / 40.0D);
+        boolean mouse = mouseX != Integer.MAX_VALUE && mouseY != Integer.MAX_VALUE;
+        float lookX = mouse ? (float) Math.atan((centerX - mouseX) / 40.0D) : 0.0F;
+        float lookY = mouse ? (float) Math.atan((centerY - mouseY) / 40.0D) : 0.0F;
         Quaternionf poseRotation = new Quaternionf().rotateZ((float) Math.PI);
         Quaternionf camera = new Quaternionf().rotateX(lookY * 20.0F * ((float) Math.PI / 180.0F));
         poseRotation.mul(camera);
@@ -70,7 +72,8 @@ public final class NpcEntityPreview implements IDrawable
         float head = this.entity.yHeadRot;
         float headO = this.entity.yHeadRotO;
 
-        PoseStack pose = context.getGraphics().pose();
+        PoseStack pose = graphics.pose();
+        graphics.enableScissor(x, y, x + width, y + height);
         pose.pushPose();
         EntityRenderDispatcher dispatcher = Minecraft.getInstance().getEntityRenderDispatcher();
         boolean shadow = true;
@@ -101,8 +104,8 @@ public final class NpcEntityPreview implements IDrawable
             shadow = false;
             float partialTick = Minecraft.getInstance().getPartialTick();
             RenderSystem.runAsFancy(() -> dispatcher.render(this.entity, 0.0D, 0.0D, 0.0D, 0.0F, partialTick,
-                    pose, context.getGraphics().bufferSource(), FULL_BRIGHT));
-            context.getGraphics().flush();
+                    pose, graphics.bufferSource(), FULL_BRIGHT));
+            graphics.flush();
         }
         finally
         {
@@ -121,6 +124,7 @@ public final class NpcEntityPreview implements IDrawable
                 dispatcher.setRenderShadow(true);
             }
             pose.popPose();
+            graphics.disableScissor();
             Lighting.setupFor3DItems();
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         }
