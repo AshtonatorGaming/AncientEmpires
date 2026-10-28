@@ -108,6 +108,47 @@ All 35,355 `advanced_spawner` entries were counted:
 - Not ported yet, noted: AW's shields (port them, the look was fine); AW's weapons (not wanted, at least not
   with their old look).
 
+### Source, format, scale, towns, mods (2026-10-28, pending the user's lock)
+
+- Source: AW 1.12.2-2.10.2 (`libs/ancientwarfare-1.12.2-2.10.2.jar`, `MohawkyPackTweaked1.12.2V75`, 1,471
+  templates). The 1.20.1 port's copies are the same data; its only real change is a list of entity renames
+  (`vindication_illager` to `vindicator`, Ice and Fire's `if_troll` to `troll`, `seaserpent` to `sea_serpent`,
+  pixie to allay, ...), which seeds our rename table.
+- Proposed format: gzipped vanilla structure `.nbt` per template plus a JSON sidecar (header and validation:
+  biomes, dimensions, weight, cluster, territory, unique, min distance, leveling, fill, border, type, author,
+  required mods). Vanilla rotation and mirroring then cover every block. Rule 0 (keep the terrain) becomes
+  structure void. A readable `.snbt` copy is written in dev for diffs.
+- No vanilla flood: the library is not registered as 1,471 vanilla structures. A handful of our own structures
+  (a faction site, a town, perhaps per size) each pick a template from our index by AW's rules. Sidecars load
+  at startup, block data only when placed. `/locate` gets a few ids (and tags, such as one per faction); a
+  `/ancientempires structure locate <template>` can search our record of generated starts.
+- Scale: 338 of 1,017 standalone templates are wider than 48 blocks, 153 wider than 96, 62 wider than 160,
+  the largest 382. Vanilla places a structure's pieces one chunk at a time as chunks generate, as for ancient
+  cities and strongholds, so size is not a problem; AW placed everything at once. Ground height for a start is
+  read from the noise (`ChunkGenerator.getBaseHeight`), as villages do, so no neighbour chunk is loaded.
+  Leveling, fill, and border are done per chunk while placing. Types: ground 1,269, island 158, water 38,
+  lava 6.
+- Uniqueness and AW's minimum duplicate distance need global knowledge, but structure starts are computed in
+  parallel and should be deterministic. Plan: our structure sets' spacing keeps sites apart; uniqueness and
+  duplicate distance come from a thread-safe record of starts, checked when a start is made. Like AW, a
+  regenerated chunk may then pick differently. Open.
+- Towns (`towns/town_templates/*.awt`, 10: walled and unwalled Empire, Nogg, Norska, Sarkonid, and Undead
+  graveyards; 454 town pieces): a town is a layout, not a template. Size in town blocks (`minSize`, `maxSize`
+  up to 20 chunks, about 320 blocks for the Empire walled city), `townBlockSize` plots, a road block, lamp
+  posts, `uniqueStructures` (the town hall), `mainStructures`, weighted `houseStructures` and
+  `cosmeticStructures`, and walls: corner, wall, gate, and side-gate templates laid by `wallPatterns` per side
+  length. Port as our town structure: its start lays out the grid, roads, walls, and plots (pure math, no
+  world access), then each building is a template piece; vanilla places them chunk by chunk. `.awt` becomes a
+  JSON town definition.
+- Mods (namespaces in the templates, by templates touched): vampirism 346 (almost all of it is Vampirism's
+  saved data on vanilla mobs inside spawner tags, stripped; about 90 real vampire spawns), primitivemobs 285,
+  ebwizardry 237, grimoireofgaia 179, rustic 164, mocreatures 122, iceandfire 117, harvestcraft 90,
+  dungeonmobs 81, dungeontactics 67, thesummoner 66, eplus 56, mod_lavacow 52, zawa 50, betteranimalsplus 47,
+  xreliquary 42, mowziesmobs 42, then a long tail (exoticbirds, explorercraft, twilightforest, charm,
+  spartanweaponry, comforts, waystones, quark, ...). Each mod still alive on 1.20.1 gets a rename table
+  (blocks, items, entities, biomes) written from its current registry; dead ones get fallback tables
+  (to vanilla, to our own content, or to another 1.20.1 mod). Which are alive is to be checked, not assumed.
+
 ### Build order (locked 2026-10-28)
 
 - S1: offline converter (1.12 → 1.20.1 through vanilla's DataFixer, AW blocks through our table), our template
