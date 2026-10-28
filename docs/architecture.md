@@ -31,9 +31,11 @@ AncientEmpires (entry point)
  ├─ entity/npc/    NpcEntity + its goals and helpers ──┐
  ├─ combat/        melee, bow, thrown swings; Parry    │ uses
  ├─ block/         worksites, Town Hall, spawner, flags ◄┘
+ │   └─ decor/     AW decor blocks, coffins, statues, sound blocks
  ├─ structure/     AW templates: convert, load, place, records, claims
  ├─ gate/          AW gates
- ├─ worldgen/      structures in new chunks (in progress)
+ ├─ worldgen/      structures in new chunks, territories
+ ├─ siege/         AW siege engines (placeholders)
  ├─ item/, inventory/, network/, command/, config/
  └─ client/        renderer, animation bridges, screens
 ```
@@ -195,7 +197,9 @@ data/ancientempires/loot_tables/aw/...       (AwsLootConverter)
 4. Ancient Warfare's pieces become real: advanced spawners become `NpcSpawnerBlock`s (`AwSpawnerImport`), loot chests, baskets, and urns become vanilla containers with the converted tables plus `AeLoot` extras (`AwLoot`), gates become `GateEntity`s, flags become `FlagBlock`s.
 5. A whole placement is recorded in `StructureRecords` (below).
 
-World generation (`worldgen/`) is being built: territories per faction, sites chosen from sidecar `validation` data, and placement chunk by chunk through `AePlacer`.
+World generation (`worldgen/`): one vanilla structure type (`AwSiteStructure`, land and sea) in a structure set that makes every chunk a candidate. `findGenerationPoint` rolls the chance, finds the chunk's territory (`Territories`, from `AwSiteIndex` and `TerritorySettings`), picks a template by Ancient Warfare's rules, and checks the ground; it claims nothing, so `/locate` is free. The pieces builder, which runs only for real generation, takes the site through `AwSites.claim` (one step per dimension, as generation is threaded) and adds an `AwSitePiece`, which places its template a chunk at a time through `AePlacer.placeInChunk`. Records follow on the main thread.
+
+Decor (`block/decor/`) and siege engines (`siege/`): Ancient Warfare's decor blocks, coffins, statues, stakes, and sound blocks, made real by `AePlacer` from the template's `aeRule`, and templates' `AWVehicle` entries become `SiegeEngineEntity` placeholders. Their models and the data tables behind them (`aw_decor/blocks.json`, `aw_vehicles/models.json`) are generated from Ancient Warfare's jar by `tools/aw-assets`. The Structure Scanner (`structure/StructureScanner`) saves templates into the game folder pack `ancientempires/scanned`.
 
 ## Garrisons: the NPC spawner
 

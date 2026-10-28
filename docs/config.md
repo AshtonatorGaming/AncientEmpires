@@ -424,7 +424,7 @@ Governor (DESIGN Tier 1): an owned Worker-path NPC holding a map goes to its own
 
 ### `[structures]`
 
-Structure templates (Ancient Warfare's library, converted), placed by `/ancientempires structure place` and by world generation. This section also holds the settings for claiming a faction structure, its block protection and loot lock, and gates. The world-generation settings that live here are listed separately under [World generation](#world-generation-in-progress) below, because they are still changing.
+Structure templates (Ancient Warfare's library, converted), placed by `/ancientempires structure place` and by world generation. This section also holds the settings for claiming a faction structure, its block protection and loot lock, and gates. The world-generation settings that live here are listed separately under [World generation](#world-generation) below.
 
 | Setting | Default | Allowed | What it does |
 |---|---|---|---|
@@ -613,6 +613,38 @@ How NPCs pick who to fight. The defaults are tuned for big battles; `debugStats`
 | `pursuitTicks` | `600` | 20 to 6000 | Most ticks an NPC chases a target it cannot see, counted from the last sighting, travel included. |
 
 
-## World generation (in progress)
+## World generation
 
-Ancient Warfare's structures generating in new chunks is being built right now (stage S4 in `STRUCTURES.md`). Its settings sit in the `[structures]` section of the server config, but their names, defaults, and meaning may still change, so they are not documented here yet. Check the comments in the config file itself, which Forge writes next to every setting.
+Ancient Warfare's structures generate in new chunks, **on by default**. These settings sit in the `[structures]` section of the server config (per world). They only affect chunks generated after a change; structures already standing stay.
+
+| Setting | Default | Allowed | What it does |
+|---|---|---|---|
+| `worldGen` | `true` | true / false | Master switch (Ancient Warfare's `enable_structure_generation`). Off: no faction structures in new chunks. Placing by command still works. |
+| `generationChance` | `0.075` | 0.0 to 1.0 | Chance per chunk of trying for a structure (Ancient Warfare's `random_generation_chance`). Each territory multiplies it by its own `structure_generation_chance_multiplier`, and the budget and spacing below thin it further. |
+| `spawnProtectionRadius` | `400` | 0 to 100000 | No structures within this many blocks of the world spawn (overworld only). |
+| `chunkClusterValue` | `1.0` | 0.0 to 100.0 | Each chunk of a territory adds this much to the territory's structure budget, times the territory's own multiplier. Every structure spends its `clusterValue` (a village about 100, a small ruin 10 or less). Raise it for denser regions. |
+| `territoryCellChunks` | `20` | 2 to 128 | How wide a territory (one faction's region) is, in chunks. Changing it moves the territories of chunks not yet generated. |
+| `siteMargin` | `4` | 0 to 64 | Blocks kept clear between generated structures. |
+| `maxSlope` | `8` | 1 to 64 | A land structure is skipped where the ground around it rises or falls more than this many blocks from where it would stand (or its template's own `leveling` / `fill`, if more). Terrain blending smooths the rest. |
+
+**How a spot is chosen** (as Ancient Warfare chose it):
+
+1. The chunk rolls `generationChance` times its territory's multiplier.
+2. Its **territory** is the region it lies in. Each region holds one territory, picked from those with a template for the biome at the region's centre, weighted by how many templates they have (plus the generic ones) times their `territory_weight_multiplier`.
+3. A template is picked from the territory's own and the generic ones that list this biome and dimension, still fit the territory's remaining budget, are not a unique one already placed or a copy within its `minDuplicateDistance`, and suit the spot (an island needs water of its depth). Weighted by `selectionWeight`; big ones (`clusterValue` over 50) are less likely away from the territory's centre.
+4. The ground around it is checked (dry land within `maxSlope`; water deep enough; an island's sea floor at its depths), and it must stay `siteMargin` clear of every other structure.
+
+**Per-territory tuning** is Ancient Warfare's own `territory_settings.json`, shipped as `data/ancientempires/ae_territories/ancientwarfare.json`. A data pack can add its own file in `data/<namespace>/ae_territories/` to retune a territory; later files win per setting. Each territory takes:
+
+| Key | What it does |
+|---|---|
+| `max_radius_in_chunks` | How far the territory reaches: caps its budget, and how fast big structures fall off from its centre. |
+| `per_chunk_cluster_value_multiplier` | Its budget per chunk, times `chunkClusterValue`. Higher: more structures in it. |
+| `structure_generation_chance_multiplier` | Times `generationChance`. |
+| `territory_weight_multiplier` | How often it is picked where it may stand. This is the knob for, say, more Empire towns and fewer ocean islands. |
+
+A `defaults` block sets values for every territory not listed. Which templates may generate at all is each template's sidecar `validation` (see [data formats](data-formats.md)).
+
+**Finding them**: `/locate structure ancientempires:aw_site` finds land structures, `ancientempires:aw_sea_site` water and island ones.
+
+**Not generated yet**: Ancient Warfare's 28 islands wider than 256 blocks (Minecraft links a structure only to chunks within 8 of where it starts), and its sky, underground, harbor, and lava kinds. Towns are a later stage.

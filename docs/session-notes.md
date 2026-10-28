@@ -12,8 +12,8 @@ VISION.md (vision). Update at the end of each chunk of work.
   claiming, protection, loot lock; S3 gates (AW's own models) and Gate Spawners; NPC gate use (off by default);
   S4 world generation (on by default, `structures.worldGen`), AW territories and their settings, the overlap registry;
   S5 decor blocks, coffins, sound blocks, stakes and statues, siege engine placeholders, the Structure Scanner.
-- The documentation pass is committed (0e0fa0b): docs/ for pack makers, package-info, architecture. Its world generation
-  config page is a placeholder; S4/S5 packages (worldgen, block/decor, siege) have no package-info yet.
+- The documentation pass is committed (0e0fa0b): docs/ for pack makers, package-info, architecture; world generation,
+  decor, and siege are documented since. Keep docs/ current with each stage.
 - Test instance: `C:\Users\coolg\AppData\Roaming\.sklauncher\instances\final-testing\mods`. Copy
   `build/libs/ancientempires-0.1.0.jar` there after a build, only when no game is running (`tasklist` for java).
   It holds 27 compat mods plus libraries; EMI on, ModularUI disabled.

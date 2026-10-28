@@ -191,7 +191,11 @@ The sidecars are read at every `/reload`; a template's blocks are only loaded wh
 | `validation` | Ancient Warfare's own placement rules, kept as written (strings): `type` (ground, water, island, underground...), `biomeList` (biomes upgraded to modern ids) and `biomeWhiteList`, `territoryName`, `selectionWeight`, `clusterValue`, `minDuplicateDistance`, `unique`, `border`, `leveling`, `fill`, `survival`, `worldGenEnabled`, and others. World generation reads these; see the note below. |
 | `header` | The original file's header. |
 
-World generation is being built now. Which `validation` fields it honors, and how, may still change.
+World generation honors `worldGenEnabled`, `type` (`ground`, `water`, `island`; others are not generated yet), `biomeList` / `biomeWhiteList`, `dimensionList` / `dimensionWhiteList` (empty: overworld only), `territoryName`, `selectionWeight`, `clusterValue`, `unique`, `minDuplicateDistance`, `leveling`, `fill`, `border`, `minWaterDepth` / `maxWaterDepth` (islands), `minGenerationHeight` / `maxGenerationHeight` (land), and `requiredMods`. See [World generation](config.md#world-generation). Templates saved with the Structure Scanner (in the game folder's `ancientempires/scanned` pack) start with `worldGenEnabled` false; edit their sidecar to let them generate.
+
+### Territory settings
+
+`data/<namespace>/ae_territories/*.json`: Ancient Warfare's per-territory tuning in its own format (`defaults` plus a `territories` map). See [World generation](config.md#world-generation).
 
 ### Loot tables
 
