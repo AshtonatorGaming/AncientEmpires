@@ -258,6 +258,8 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.ConfigValue<String> STRUCTURES_MISSING_ENTITY;
     private static final ForgeConfigSpec.BooleanValue STRUCTURES_WORLDGEN;
     private static final ForgeConfigSpec.DoubleValue STRUCTURES_CHANCE;
+    private static final ForgeConfigSpec.DoubleValue STRUCTURES_CLUSTER_BOOST;
+    private static final ForgeConfigSpec.IntValue STRUCTURES_CLUSTER_RANGE;
     private static final ForgeConfigSpec.IntValue STRUCTURES_SPAWN_PROTECTION;
     private static final ForgeConfigSpec.DoubleValue STRUCTURES_CLUSTER_VALUE;
     private static final ForgeConfigSpec.IntValue STRUCTURES_TERRITORY_CHUNKS;
@@ -1079,6 +1081,8 @@ public final class AncientEmpiresConfig
         STRUCTURES_MISSING_ENTITY = builder.comment("What a spawner's mob becomes when neither this game nor the ae_remap tables know it (a mod that is not installed). Empty: nothing spawns.").define("missingEntity", "minecraft:zombie");
         STRUCTURES_WORLDGEN = builder.comment("AW's structures generate in new chunks (AW's enable_structure_generation). Off for worlds that want no faction structures.").define("worldGen", true);
         STRUCTURES_CHANCE = builder.comment("Chance per chunk of a structure (AW's random_generation_chance, 0.075). Territories' budgets and spacing thin it further.").defineInRange("generationChance", 0.075D, 0.0D, 1.0D);
+        STRUCTURES_CLUSTER_BOOST = builder.comment("Structures gather: a chunk within clusterRange of a standing structure rolls generationChance times this. 1 turns clustering off.").defineInRange("clusterChanceBoost", 4.0D, 1.0D, 20.0D);
+        STRUCTURES_CLUSTER_RANGE = builder.comment("How near (blocks, centre to centre) a standing structure must be for clusterChanceBoost.").defineInRange("clusterRange", 96, 16, 512);
         STRUCTURES_SPAWN_PROTECTION = builder.comment("No structures within this many blocks of the world spawn (AW's spawn_protection_radius).").defineInRange("spawnProtectionRadius", 400, 0, 100000);
         STRUCTURES_CLUSTER_VALUE = builder.comment("Each chunk of a territory adds this much to its structure budget, which each structure spends by its clusterValue (AW's chunk_cluster_value).").defineInRange("chunkClusterValue", 1.0D, 0.0D, 100.0D);
         STRUCTURES_TERRITORY_CHUNKS = builder.comment("Size of a territory (one faction's region), in chunks across. AW grew territories through matching biomes up to each one's max_radius_in_chunks (ae_territories data; 11 by default); here they are cells around seeded centres. Changing it moves territories in chunks not yet generated.").defineInRange("territoryCellChunks", 20, 2, 128);
@@ -1561,6 +1565,8 @@ public final class AncientEmpiresConfig
     public static String structuresMissingEntity = "minecraft:zombie";
     public static boolean structuresWorldGen = true;
     public static double structuresChance = 0.075D;
+    public static double structuresClusterBoost = 4.0D;
+    public static int structuresClusterRange = 96;
     public static int structuresSpawnProtection = 400;
     public static double structuresChunkClusterValue = 1.0D;
     public static int territoryCellChunks = 20;
@@ -1963,6 +1969,8 @@ public final class AncientEmpiresConfig
         structuresMissingEntity = STRUCTURES_MISSING_ENTITY.get();
         structuresWorldGen = STRUCTURES_WORLDGEN.get();
         structuresChance = STRUCTURES_CHANCE.get();
+        structuresClusterBoost = STRUCTURES_CLUSTER_BOOST.get();
+        structuresClusterRange = STRUCTURES_CLUSTER_RANGE.get();
         structuresSpawnProtection = STRUCTURES_SPAWN_PROTECTION.get();
         structuresChunkClusterValue = STRUCTURES_CLUSTER_VALUE.get();
         territoryCellChunks = STRUCTURES_TERRITORY_CHUNKS.get();

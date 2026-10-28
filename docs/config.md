@@ -621,6 +621,8 @@ Ancient Warfare's structures generate in new chunks, **on by default**. These se
 |---|---|---|---|
 | `worldGen` | `true` | true / false | Master switch (Ancient Warfare's `enable_structure_generation`). Off: no faction structures in new chunks. Placing by command still works. |
 | `generationChance` | `0.075` | 0.0 to 1.0 | Chance per chunk of trying for a structure (Ancient Warfare's `random_generation_chance`). Each territory multiplies it by its own `structure_generation_chance_multiplier`, and the budget and spacing below thin it further. |
+| `clusterChanceBoost` | `4.0` | 1.0 to 20.0 | Structures gather: a chunk within `clusterRange` of a standing structure rolls `generationChance` times this. 1 turns clustering off. |
+| `clusterRange` | `96` | 16 to 512 | How near (blocks, centre to centre) a standing structure must be for the boost. |
 | `spawnProtectionRadius` | `400` | 0 to 100000 | No structures within this many blocks of the world spawn (overworld only). |
 | `chunkClusterValue` | `1.0` | 0.0 to 100.0 | Each chunk of a territory adds this much to the territory's structure budget, times the territory's own multiplier. Every structure spends its `clusterValue` (a village about 100, a small ruin 10 or less). Raise it for denser regions. |
 | `territoryCellChunks` | `20` | 2 to 128 | How wide a territory (one faction's region) is, in chunks. Changing it moves the territories of chunks not yet generated. |
@@ -629,7 +631,7 @@ Ancient Warfare's structures generate in new chunks, **on by default**. These se
 
 **How a spot is chosen** (as Ancient Warfare chose it):
 
-1. The chunk rolls `generationChance` times its territory's multiplier.
+1. The chunk rolls `generationChance` times its territory's multiplier (times `clusterChanceBoost` near a standing structure).
 2. Its **territory** is the region it lies in. Each region holds one territory, picked from those with a template for the biome at the region's centre, weighted by how many templates they have (plus the generic ones) times their `territory_weight_multiplier`.
 3. A template is picked from the territory's own and the generic ones that list this biome and dimension, still fit the territory's remaining budget, are not a unique one already placed or a copy within its `minDuplicateDistance`, and suit the spot (an island needs water of its depth). Weighted by `selectionWeight`; big ones (`clusterValue` over 50) are less likely away from the territory's centre.
 4. The ground around it is checked (dry land within `maxSlope`; water deep enough; an island's sea floor at its depths), and it must stay `siteMargin` clear of every other structure.

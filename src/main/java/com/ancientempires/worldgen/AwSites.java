@@ -88,6 +88,24 @@ public final class AwSites
             return false;
         }
 
+        boolean anyNear(int x, int z, int distance)
+        {
+            long limit = (long) distance * distance;
+            for (long region : regions(new BoundingBox(x, 0, z, x, 0, z), distance))
+            {
+                for (Placed site : this.byRegion.getOrDefault(region, List.of()))
+                {
+                    long dx = site.bounds().getCenter().getX() - x;
+                    long dz = site.bounds().getCenter().getZ() - z;
+                    if (dx * dx + dz * dz < limit)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
         boolean nearby(String template, BoundingBox bounds, int distance)
         {
             if (!this.templates.contains(template))
@@ -158,6 +176,16 @@ public final class AwSites
         synchronized (sites)
         {
             return sites.overlaps(bounds, margin);
+        }
+    }
+
+    /** Whether any structure stands within {@code distance} blocks (centre to centre) of a point. */
+    public static boolean anyNear(ResourceKey<Level> dimension, int x, int z, int distance)
+    {
+        Sites sites = sites(dimension);
+        synchronized (sites)
+        {
+            return sites.anyNear(x, z, distance);
         }
     }
 

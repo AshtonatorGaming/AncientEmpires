@@ -126,8 +126,15 @@ public class AwDecorBlockEntity extends BlockEntity
         tag.putString("Mob", this.mob);
         tag.putBoolean("Burning", this.burning);
         tag.putFloat("Yaw", this.yaw);
-        tag.putInt("Color", this.color);
-        tag.putInt("FlameColor", this.flameColor);
+        // Only when set, so a picked-up white candle (the loot table copies these) stacks with a new one.
+        if (this.color >= 0)
+        {
+            tag.putInt("Color", this.color);
+        }
+        if (this.flameColor >= 0)
+        {
+            tag.putInt("FlameColor", this.flameColor);
+        }
     }
 
     @Override

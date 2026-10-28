@@ -175,7 +175,7 @@ instead of reflecting per call), Skirmisher thresholds (about 4.5 to 28 blocks).
   placed and broken together; part 0 drops. Seats (`SeatEntity`), braziers and fire pits (flint and steel or a torch,
   water bucket), chairs' facing from AW's tile data. Coffins (`CoffinBlock`, `CoffinBlockEntity`, `CoffinRenderer`: AW's
   models part for part, eight ways, lid, loot through `AwLoot.trigger`), gravestones 6 to 8 and stakes and statues
-  (`AwDecorBlockEntity`; the mob drawn frozen, statue poses dropped), sound blocks (`AwSoundBlock`: disguise drawn by
+  (`AwDecorBlockEntity`; the mob drawn frozen, statue poses dropped), sound blocks (`AwSoundBlock`: a held block sets the disguise, an empty hand opens AW's tune editor, `SoundBlockPacket`; disguise drawn by
   its renderer, AW's tune, sounds in `sounds/structures`). Siege engines (`siege/`): `SiegeEngineEntity` placeholders from
   templates' `AWVehicle` entries, drawn from `aw_vehicles/models.json` (AW's model classes converted by a scratch script:
   part trees, turret formulas, rough sizes) on AW's textures by material level. Scanner (`StructureScanner`,
@@ -185,7 +185,8 @@ instead of reflecting per call), Skirmisher thresholds (about 4.5 to 28 blocks).
   `WorldStructureGenerator`, `TerritoryManager`, `WorldGenStructureManager`, and validators). One vanilla structure type,
   `ancientempires:aw_site`, as two structures (`aw_site` land with `beard_thin`, `aw_sea_site` water and island types)
   in one structure set spaced one chunk apart, so every chunk is a candidate and /locate works. `AwSiteStructure`
-  does AW's steps: roll `generationChance` (AW 0.075) times the territory's multiplier; the chunk's territory
+  does AW's steps: roll `generationChance` (AW 0.075) times the territory's multiplier (times `clusterChanceBoost`
+  within `clusterRange` of a standing structure, so they gather as AW's did); the chunk's territory
   (`Territories`: jittered Voronoi cells of `territoryCellChunks`, each picked from the biome at its centre with AW's
   weight, its templates plus the generic ones times `territory_weight_multiplier`); templates of that territory or
   generic that list the biome and dimension, fit the cell's cluster budget (`chunkClusterValue` times the territory's

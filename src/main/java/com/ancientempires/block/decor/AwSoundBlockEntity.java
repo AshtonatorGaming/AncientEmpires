@@ -18,6 +18,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -35,6 +36,10 @@ import java.util.List;
  */
 public class AwSoundBlockEntity extends BlockEntity
 {
+    public static final int MAX_RANGE = 64;
+    public static final int MAX_DELAY = 3600;
+    public static final int MAX_SOUNDS = 32;
+
     private BlockState disguise = Blocks.STONE_BRICKS.defaultBlockState();
     private final List<String> sounds = new ArrayList<>();
     private int playerRange = 16;
@@ -55,6 +60,47 @@ public class AwSoundBlockEntity extends BlockEntity
     public BlockState disguise()
     {
         return this.disguise;
+    }
+
+    /** A held block's look becomes the disguise, as in AW. */
+    public void setDisguise(BlockState disguise)
+    {
+        this.disguise = disguise;
+        this.setChanged();
+        if (this.level != null)
+        {
+            this.level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), Block.UPDATE_CLIENTS);
+        }
+    }
+
+    /** The tune as the editor shows it (the saved keys without the disguise). */
+    public CompoundTag tune()
+    {
+        CompoundTag tag = new CompoundTag();
+        this.writeTune(tag);
+        return tag;
+    }
+
+    /** A tune from the editor, kept within sane bounds. */
+    public void setTune(CompoundTag tag)
+    {
+        this.readTune(tag);
+        this.playerRange = Math.min(this.playerRange, MAX_RANGE);
+        this.soundRange = Math.min(this.soundRange, MAX_RANGE);
+        this.minDelay = Math.max(0, Math.min(this.minDelay, MAX_DELAY));
+        this.maxDelay = Math.max(this.minDelay, Math.min(this.maxDelay, MAX_DELAY));
+        while (this.sounds.size() > MAX_SOUNDS)
+        {
+            this.sounds.remove(this.sounds.size() - 1);
+        }
+        this.sounds.removeIf(sound -> ResourceLocation.tryParse(sound) == null);
+        this.next = 0;
+        this.cooldown = 0;
+        this.setChanged();
+        if (this.level != null)
+        {
+            this.level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), Block.UPDATE_CLIENTS);
+        }
     }
 
     /** Takes AW's saved sound block: its disguise ({@code block}, {@code meta}, 1.12 names) and its tune. */
@@ -114,6 +160,11 @@ public class AwSoundBlockEntity extends BlockEntity
     {
         super.saveAdditional(tag);
         tag.put("Disguise", NbtUtils.writeBlockState(this.disguise));
+        this.writeTune(tag);
+    }
+
+    private void writeTune(CompoundTag tag)
+    {
         ListTag list = new ListTag();
         this.sounds.forEach(sound -> list.add(StringTag.valueOf(sound)));
         tag.put("Sounds", list);
@@ -133,6 +184,11 @@ public class AwSoundBlockEntity extends BlockEntity
         {
             this.disguise = NbtUtils.readBlockState(BuiltInRegistries.BLOCK.asLookup(), tag.getCompound("Disguise"));
         }
+        this.readTune(tag);
+    }
+
+    private void readTune(CompoundTag tag)
+    {
         this.sounds.clear();
         tag.getList("Sounds", Tag.TAG_STRING).forEach(sound -> this.sounds.add(sound.getAsString()));
         this.playerRange = Math.max(1, tag.getInt("PlayerRange"));
@@ -146,9 +202,8 @@ public class AwSoundBlockEntity extends BlockEntity
     @Override
     public CompoundTag getUpdateTag()
     {
-        CompoundTag tag = super.getUpdateTag();
-        tag.put("Disguise", NbtUtils.writeBlockState(this.disguise));
-        return tag;
+        // The tune too, so the editor opens on what the block plays.
+        return this.saveWithoutMetadata();
     }
 
     @Override

@@ -61,6 +61,16 @@
      ],
      "rotation": 270,
      "texture": "#0"
+    },
+    "up": {
+     "uv": [
+      0,
+      0,
+      6,
+      1
+     ],
+     "rotation": 270,
+     "texture": "#0"
     }
    }
   }

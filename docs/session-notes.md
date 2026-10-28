@@ -50,6 +50,13 @@ Still to check by eye: whether structures now appear often enough, siege engine 
 height, sound blocks, the Scanner. Not done: coloured candle flames, statue poses, totem multi-block hand placement,
 coffins' hidden parts on hand placement, item icons leave out turned submodels (table shows one leg).
 
+Second play test (2026-10-28): decor icons now turn every piece to show its front (AW's models face north or south
+unturned), draw turned parts, and stack tall pieces' tops (shrunk into one block's space: vanilla refuses elements
+past -16..32); missing faces in AW's Blockbench models are filled from the opposite face (the stake's see-through
+post); altar candles and cloths keep their colour when broken (copy_nbt); the sound block is usable (held block =
+disguise, empty hand = tune editor); structures cluster (`clusterChanceBoost` 4 within `clusterRange` 96).
+Still unseen: whether the icons look right in game, whether the rate now feels right.
+
 ## Next, in order
 
 1. Finish the play test above; fix what the user finds.

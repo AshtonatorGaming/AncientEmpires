@@ -105,12 +105,18 @@ public final class AwSiteStructure extends Structure
         }
         TerritorySettings.Settings settings = TerritorySettings.of(territory);
         WorldgenRandom random = context.random();
-        if (random.nextDouble() >= AncientEmpiresConfig.structuresChance * settings.chanceMultiplier())
+        int x = chunk.getMiddleBlockX();
+        int z = chunk.getMiddleBlockZ();
+        // Structures gather, as AW's did around what had already spawned: near one, the roll is easier.
+        double chance = AncientEmpiresConfig.structuresChance * settings.chanceMultiplier();
+        if (AncientEmpiresConfig.structuresClusterBoost > 1.0D && AwSites.anyNear(level.dimension(), x, z, AncientEmpiresConfig.structuresClusterRange))
+        {
+            chance *= AncientEmpiresConfig.structuresClusterBoost;
+        }
+        if (random.nextDouble() >= chance)
         {
             return reject("chance roll");
         }
-        int x = chunk.getMiddleBlockX();
-        int z = chunk.getMiddleBlockZ();
         if (level.dimension() == Level.OVERWORLD && nearSpawn(level, x, z))
         {
             return reject("near spawn");

@@ -11,6 +11,8 @@ const VANILLA = { cobblestone: "cobblestone", fire_layer_0: "fire_0", log_oak: "
   planks_spruce: "spruce_planks", planks_birch: "birch_planks", planks_jungle: "jungle_planks", planks_acacia: "acacia_planks",
   planks_big_oak: "dark_oak_planks", wool_colored_red: "red_wool", stone: "stone", gold_block: "gold_block", iron_bars: "iron_bars",
   planks_mangrove: "mangrove_planks", planks_cherry: "cherry_planks", planks_bamboo: "bamboo_planks", planks_crimson: "crimson_planks", planks_warped: "warped_planks" };
+/** Tall pieces whose upper part is a model of its own: how many pixels up the visible top sits (AwDecorBlock.LAYOUTS). */
+const TOPS = { stake: 16, wooden_post: 32, iron_cage: 32, gibbet: 32, golden_throne: 16 };
 /** Woods 1.20 added, offered wherever AW offered its six. */
 const NEW_WOODS = ["mangrove", "cherry", "bamboo", "crimson", "warped"];
 const usedTextures = new Set(); const problems = [];
@@ -30,10 +32,47 @@ function modelRef(m) { // a forge blockstate model name -> [file, our id]
   problems.push("model " + m); return { file: null, id: m };
 }
 const models = new Map(); // our id -> json written
+const OPPOSITE = { north: "south", south: "north", east: "west", west: "east", up: "down", down: "up" };
+/**
+ * AW's Blockbench exports left faces out, which showed as see-through holes (the stake's post
+ * had no south side). A missing face takes its opposite's texture; one missing on both sides
+ * (a flat plane's edges) stays missing.
+ */
+function fillFaces(elements) {
+  for (const el of elements) {
+    if (!el.faces) continue;
+    for (const [face, other] of Object.entries(OPPOSITE)) {
+      if (el.faces[face] || !el.faces[other]) continue;
+      const copy = { ...el.faces[other] }; delete copy.cullface; el.faces[face] = copy;
+    }
+  }
+}
+const TURN = { north: "east", east: "south", south: "west", west: "north" };
+/** One element turned a quarter clockwise seen from above, as a blockstate's y: 90 turns it. */
+function turnElement(el) {
+  const p = ([x, y, z]) => [16 - z, y, x];
+  const a = p(el.from), b = p(el.to);
+  el.from = [Math.min(a[0], b[0]), a[1], Math.min(a[2], b[2])]; el.to = [Math.max(a[0], b[0]), b[1], Math.max(a[2], b[2])];
+  if (el.rotation) {
+    el.rotation.origin = p(el.rotation.origin);
+    if (el.rotation.axis === "x") el.rotation.axis = "z";
+    else if (el.rotation.axis === "z") { el.rotation.axis = "x"; el.rotation.angle = -el.rotation.angle; }
+  }
+  const faces = {};
+  for (const [face, f] of Object.entries(el.faces || {})) {
+    const g = { ...f }; if (g.cullface) g.cullface = TURN[g.cullface] ?? g.cullface;
+    if (face === "up") g.rotation = ((g.rotation ?? 0) + 90) % 360;
+    if (face === "down") g.rotation = ((g.rotation ?? 0) + 270) % 360;
+    if (!g.rotation) delete g.rotation;
+    faces[TURN[face] ?? face] = g;
+  }
+  el.faces = faces;
+}
 function copyModel(ref) {
   if (!ref.file || models.has(ref.id)) return;
   const json = JSON.parse(fs.readFileSync(ref.file, "utf8"));
   delete json.credit; delete json.__comment;
+  if (json.elements) fillFaces(json.elements);
   if (json.parent) { if (json.parent.startsWith("ancientwarfare:")) { const p = modelRef(json.parent.replace(/^ancientwarfare:block\//, "ancientwarfare:")); copyModel(p); json.parent = p.id; } else json.parent = "minecraft:" + json.parent.replace(/^minecraft:/, ""); }
   if (json.textures) for (const k of Object.keys(json.textures)) json.textures[k] = tex(json.textures[k]);
   json.render_type = "minecraft:cutout";
@@ -80,17 +119,21 @@ function resolveTexture(textures, ref, depth = 0) {
   return resolveTexture(textures, textures[ref.slice(1)], depth + 1);
 }
 /**
- * One item model from a piece's parts: their elements merged (only parts not turned; turned
- * submodels such as three of a table's legs are left out), textures resolved per part, and the
- * display of a vanilla block scaled to fit the piece's size.
+ * One item model from a piece's parts: their elements merged, each part turned as its blockstate
+ * turns it and the whole by `turn` more, so the piece's front faces where a vanilla block item
+ * shows its front (north); parts tipped over on x are left out. Textures are resolved per part,
+ * and the display is a vanilla block's, scaled to fit the piece's size.
  */
-function itemModel(parts) {
+function itemModel(parts, turn = 0) {
   const elements = []; const textures = {}; let index = 0;
   for (const part of parts) {
-    if (((part.x % 360) + 360) % 360 || ((part.y % 360) + 360) % 360) continue;
+    if (((part.x % 360) + 360) % 360) continue;
+    const quarters = ((((part.y + turn) % 360) + 360) % 360) / 90;
     const own = texturesOf(part.id);
     for (const el of elementsOf(part.id)) {
       const copy = JSON.parse(JSON.stringify(el));
+      for (let i = 0; i < quarters; i++) turnElement(copy);
+      if (part.up) { copy.from[1] += part.up; copy.to[1] += part.up; if (copy.rotation) copy.rotation.origin[1] += part.up; }
       for (const face of Object.values(copy.faces || {})) {
         const real = resolveTexture(own, face.texture);
         if (!real) continue;
@@ -106,9 +149,12 @@ function itemModel(parts) {
   let lo = [16, 16, 16], hi = [0, 0, 0];
   for (const el of elements) for (let i = 0; i < 3; i++) { lo[i] = Math.min(lo[i], el.from[i], el.to[i]); hi[i] = Math.max(hi[i], el.from[i], el.to[i]); }
   const span = Math.max(16, hi[0] - lo[0], hi[1] - lo[1], hi[2] - lo[2]); const k = 16 / span;
-  const round = v => Math.round(v * 1000) / 1000;
-  const centre = [8 - (lo[0] + hi[0]) / 2, 8 - (lo[1] + hi[1]) / 2, 8 - (lo[2] + hi[2]) / 2];
-  const view = (rotation, scale, lift = 0) => ({ rotation, translation: centre.map((c, i) => round(c * scale * k + (i === 1 ? lift : 0))), scale: [round(scale * k), round(scale * k), round(scale * k)] });
+  const round = v => Math.round(v * 10000) / 10000;
+  // Shrunk into one block's space in the model itself: vanilla refuses elements past -16 to 32 (a stacked stake reaches 48).
+  const mid = [(lo[0] + hi[0]) / 2, (lo[1] + hi[1]) / 2, (lo[2] + hi[2]) / 2];
+  const fit = p => p.map((v, i) => round((v - mid[i]) * k + 8));
+  for (const el of elements) { el.from = fit(el.from); el.to = fit(el.to); if (el.rotation) el.rotation.origin = fit(el.rotation.origin); }
+  const view = (rotation, scale, lift = 0) => ({ rotation, translation: [0, lift, 0], scale: [scale, scale, scale] });
   return { parent: "minecraft:block/block", textures, elements, display: {
     gui: view([30, 225, 0], 0.625), ground: view([0, 0, 0], 0.25, 3), fixed: view([0, 0, 0], 0.5),
     thirdperson_righthand: view([75, 45, 0], 0.375, 2.5), thirdperson_lefthand: view([75, 45, 0], 0.375, 2.5),
@@ -177,14 +223,20 @@ for (const name of BLOCKS) {
   fs.writeFileSync(path.join(OUT, "blockstates", name + ".json"), JSON.stringify({ multipart }, null, 1) + "\n");
   // Items: the piece as a block would show it (diagonal, scaled to fit), one model per wood or stone variant.
   const key = c => names.map(p => p + "=" + c[p]).join(",");
-  const unturned = c => (partsByKey[key(c)] ?? []).some(p => !(((p.x % 360) + 360) % 360) && !(((p.y % 360) + 360) % 360));
   const pick = (variant) => combos.filter(c => (c.visible ?? "true") === "true" && (c.invisible ?? "false") === "false"
       && (c.bottom_part ?? "true") === "true" && (!props.part || c.part === (props.part.has("bottom") ? "bottom" : "south"))
-      && (variant === undefined || c.variant === variant)).sort((a, b) => (unturned(b) ? 1 : 0) - (unturned(a) ? 1 : 0) || ((a.facing ?? "south") === "south" ? -1 : 0))[0] ?? combos[0];
+      && (variant === undefined || c.variant === variant)).sort((a, b) => ((a.facing ?? "north") === "north" ? -1 : 0) - ((b.facing ?? "north") === "north" ? -1 : 0))[0] ?? combos[0];
+  // A piece faces its facing (toward whoever placed it); turn that to the north, the side a block item shows.
+  const turnOf = c => ({ north: 0, east: 270, south: 180, west: 90 })[c.facing] ?? 0;
   fs.mkdirSync(path.join(OUT, "models/item/aw"), { recursive: true });
   const variants = props.variant ? [...props.variant] : [undefined];
   // A piece built on a vanilla shape (a totem on block/cube) has no elements of its own: its block model already has the block view.
-  const itemModels = variants.map(v => { const parts = partsByKey[key(pick(v))] ?? []; const m = itemModel(parts); return m.elements.length || !parts.length ? m : { parent: parts[0].id }; });
+  const itemModels = variants.map(v => { const parts = [...(partsByKey[key(pick(v))] ?? [])]; const c = pick(v);
+    if (TOPS[name]) {
+      const top = combos.find(t => names.every(p => p === "part" ? t.part === "top" : p === "visible" ? t.visible === "true" : t[p] === c[p]));
+      if (top) parts.push(...(partsByKey[key(top)] ?? []).map(p => ({ ...p, up: TOPS[name] })));
+    }
+    const m = itemModel(parts, turnOf(c)); return m.elements.length || !parts.length ? m : { parent: parts[0].id }; });
   const base = { ...itemModels[0] };
   if (variants.length > 1) {
     base.overrides = variants.slice(1).map((v, i) => {

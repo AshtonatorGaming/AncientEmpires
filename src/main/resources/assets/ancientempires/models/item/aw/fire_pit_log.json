@@ -3,6 +3,7 @@
  "textures": {
   "t0_0": "minecraft:block/oak_log_top",
   "t0_1": "minecraft:block/oak_log",
+  "t0_2": "minecraft:block/fire_0",
   "t0_4": "ancientempires:block/aw/structure/ash",
   "particle": "minecraft:block/oak_log_top"
  },
@@ -11,12 +12,12 @@
    "name": "log1",
    "from": [
     4,
-    0,
+    2,
     3
    ],
    "to": [
     6,
-    2,
+    4,
     13
    ],
    "faces": {
@@ -80,12 +81,12 @@
    "name": "log2",
    "from": [
     10,
-    0,
+    2,
     3
    ],
    "to": [
     12,
-    2,
+    4,
     13
    ],
    "faces": {
@@ -149,12 +150,12 @@
    "name": "log3",
    "from": [
     3,
-    2,
+    4,
     9
    ],
    "to": [
     13,
-    4,
+    6,
     11
    ],
    "faces": {
@@ -220,12 +221,12 @@
    "name": "log4",
    "from": [
     3,
-    2,
+    4,
     5
    ],
    "to": [
     13,
-    4,
+    6,
     7
    ],
    "faces": {
@@ -288,15 +289,171 @@
    }
   },
   {
+   "name": "fire1",
+   "from": [
+    8,
+    2,
+    2
+   ],
+   "to": [
+    8,
+    14,
+    14
+   ],
+   "rotation": {
+    "angle": -45,
+    "axis": "y",
+    "origin": [
+     8,
+     8,
+     8
+    ]
+   },
+   "faces": {
+    "north": {
+     "uv": [
+      0,
+      0,
+      0,
+      12
+     ],
+     "texture": "#t0_2"
+    },
+    "east": {
+     "uv": [
+      2,
+      1,
+      14,
+      13
+     ],
+     "texture": "#t0_2"
+    },
+    "south": {
+     "uv": [
+      0,
+      0,
+      0,
+      12
+     ],
+     "texture": "#t0_2"
+    },
+    "west": {
+     "uv": [
+      2,
+      1,
+      14,
+      13
+     ],
+     "texture": "#t0_2"
+    },
+    "up": {
+     "uv": [
+      0,
+      0,
+      0,
+      12
+     ],
+     "texture": "#t0_2"
+    },
+    "down": {
+     "uv": [
+      0,
+      0,
+      0,
+      12
+     ],
+     "texture": "#t0_2"
+    }
+   }
+  },
+  {
+   "name": "fire2",
+   "from": [
+    8,
+    2,
+    2
+   ],
+   "to": [
+    8,
+    14,
+    14
+   ],
+   "rotation": {
+    "angle": 45,
+    "axis": "y",
+    "origin": [
+     8,
+     8,
+     8
+    ]
+   },
+   "faces": {
+    "north": {
+     "uv": [
+      0,
+      0,
+      0,
+      12
+     ],
+     "texture": "#t0_2"
+    },
+    "east": {
+     "uv": [
+      2,
+      1,
+      14,
+      13
+     ],
+     "texture": "#t0_2"
+    },
+    "south": {
+     "uv": [
+      0,
+      0,
+      0,
+      12
+     ],
+     "texture": "#t0_2"
+    },
+    "west": {
+     "uv": [
+      2,
+      1,
+      14,
+      13
+     ],
+     "texture": "#t0_2"
+    },
+    "up": {
+     "uv": [
+      0,
+      0,
+      0,
+      12
+     ],
+     "texture": "#t0_2"
+    },
+    "down": {
+     "uv": [
+      0,
+      0,
+      0,
+      12
+     ],
+     "texture": "#t0_2"
+    }
+   }
+  },
+  {
    "name": "ash",
    "from": [
     1,
-    0.05,
+    2.05,
     1
    ],
    "to": [
     15,
-    0.05,
+    2.05,
     15
    ],
    "faces": {
@@ -366,7 +523,7 @@
    ],
    "translation": [
     0,
-    3.75,
+    0,
     0
    ],
    "scale": [
@@ -383,7 +540,7 @@
    ],
    "translation": [
     0,
-    4.5,
+    3,
     0
    ],
    "scale": [
@@ -400,7 +557,7 @@
    ],
    "translation": [
     0,
-    3,
+    0,
     0
    ],
    "scale": [
@@ -417,7 +574,7 @@
    ],
    "translation": [
     0,
-    4.75,
+    2.5,
     0
    ],
    "scale": [
@@ -434,7 +591,7 @@
    ],
    "translation": [
     0,
-    4.75,
+    2.5,
     0
    ],
    "scale": [
@@ -451,7 +608,7 @@
    ],
    "translation": [
     0,
-    2.4,
+    0,
     0
    ],
    "scale": [
@@ -468,7 +625,7 @@
    ],
    "translation": [
     0,
-    2.4,
+    0,
     0
    ],
    "scale": [

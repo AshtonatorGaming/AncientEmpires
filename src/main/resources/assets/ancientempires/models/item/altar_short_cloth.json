@@ -83,6 +83,10 @@
      "texture": "#t0_side_overlay",
      "cullface": "east",
      "tintindex": 0
+    },
+    "down": {
+     "texture": "#t0_top_overlay",
+     "tintindex": 0
     }
    }
   }
