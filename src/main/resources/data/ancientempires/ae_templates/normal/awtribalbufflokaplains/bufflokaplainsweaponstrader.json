@@ -1,0 +1,60 @@
+{
+  "name": "BufflokaPlainsWeaponsTrader",
+  "source": "normal/AWTribalBufflokaPlains/BufflokaPlainsWeaponsTrader.aws",
+  "size": [
+    16,
+    21,
+    20
+  ],
+  "offset": [
+    7,
+    7,
+    19
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:prairie",
+      "minecraft:plains",
+      "traverse:lush_hills",
+      "nt:maple_forest",
+      "nt:maple_forest_hills",
+      "byg:bmapleforest",
+      "byg:bprairie"
+    ],
+    "leveling": "12",
+    "fill": "12",
+    "border": "5",
+    "blockSwap": "false",
+    "territoryName": "bufflokaplains",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "BufflokaPlainsWeaponsTrader",
+    "mods": "",
+    "size": "16,21,20",
+    "offset": "7,7,19"
+  }
+}

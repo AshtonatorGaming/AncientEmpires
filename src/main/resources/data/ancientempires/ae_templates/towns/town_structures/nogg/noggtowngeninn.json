@@ -1,0 +1,47 @@
+{
+  "name": "NoggTownGenInn",
+  "source": "towns/town structures/Nogg/NoggTownGenInn.aws",
+  "size": [
+    21,
+    15,
+    26
+  ],
+  "offset": [
+    8,
+    5,
+    25
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "0",
+    "clusterValue": "0",
+    "minDuplicateDistance": "0",
+    "dimensionWhiteList": "false",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "false",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "NoggTownGenInn",
+    "mods": "",
+    "size": "21,15,26",
+    "offset": "8,5,25"
+  }
+}

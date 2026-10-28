@@ -1,0 +1,56 @@
+{
+  "name": "SarkonidHerpetologistZAWA",
+  "source": "normal/AWNationSarkonid/SarkonidHerpetologistZAWA.aws",
+  "size": [
+    20,
+    16,
+    35
+  ],
+  "offset": [
+    9,
+    5,
+    34
+  ],
+  "requiredMods": [
+    "zawa"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "zawa"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "40",
+    "clusterValue": "50",
+    "minDuplicateDistance": "500",
+    "dimensionWhiteList": "false",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "environs:sandstone_ranges",
+      "nt:sahel",
+      "minecraft:desert",
+      "traverse:desert_shrubland",
+      "nt:tropical_desert",
+      "byg:bsonorandesert"
+    ],
+    "leveling": "6",
+    "fill": "6",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "sarkonid",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "SarkonidHerpetologistZAWA",
+    "mods": "zawa",
+    "size": "20,16,35",
+    "offset": "9,5,34"
+  }
+}

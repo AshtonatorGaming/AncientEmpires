@@ -1,0 +1,56 @@
+{
+  "name": "NoggBesiegedCastle",
+  "source": "normal/AWNationNoggMod/NoggBesiegedCastle.aws",
+  "size": [
+    56,
+    37,
+    92
+  ],
+  "offset": [
+    26,
+    1,
+    0
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfare",
+    "ancientwarfarestructure",
+    "ancientwarfarevehicle",
+    "ebwizardry"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "200",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:grove"
+    ],
+    "leveling": "20",
+    "fill": "20",
+    "border": "20",
+    "blockSwap": "false",
+    "territoryName": "nogg",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "NoggBesiegedCastle",
+    "mods": "",
+    "size": "56,37,92",
+    "offset": "26,1,0"
+  }
+}

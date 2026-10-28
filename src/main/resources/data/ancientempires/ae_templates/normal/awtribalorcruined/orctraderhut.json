@@ -1,0 +1,57 @@
+{
+  "name": "OrcTraderHut",
+  "source": "normal/AWTribalOrcRuined/OrcTraderHut.aws",
+  "size": [
+    17,
+    13,
+    17
+  ],
+  "offset": [
+    8,
+    4,
+    16
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:swamp",
+      "biomesoplenty:dead_swamp",
+      "biomesoplenty:bayou",
+      "biomesoplenty:dead_forest",
+      "traverse:woodlands",
+      "traverse:badlands",
+      "biomesoplenty:moor",
+      "traverse:rocky_plateau"
+    ],
+    "leveling": "25",
+    "fill": "25",
+    "border": "5",
+    "blockSwap": "false",
+    "territoryName": "orcruined",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "OrcTraderHut",
+    "mods": "",
+    "size": "17,13,17",
+    "offset": "8,4,16"
+  }
+}

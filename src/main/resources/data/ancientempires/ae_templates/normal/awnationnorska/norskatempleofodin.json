@@ -1,0 +1,58 @@
+{
+  "name": "NorskaTempleOfOdin",
+  "source": "normal/AWNationNorska/NorskaTempleOfOdin.aws",
+  "size": [
+    36,
+    55,
+    27
+  ],
+  "offset": [
+    19,
+    12,
+    26
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "60",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:snowy_taiga",
+      "traverse:snowy_coniferous_forest",
+      "biomesoplenty:alps",
+      "biomesoplenty:cold_desert",
+      "minecraft:snowy_plains"
+    ],
+    "leveling": "35",
+    "fill": "35",
+    "border": "12",
+    "blockSwap": "false",
+    "territoryName": "norska",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "NorskaTempleOfOdin",
+    "mods": "",
+    "size": "36,55,27",
+    "offset": "19,12,26"
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "name": "wall_bandit_corner",
+  "source": "towns/wall/old/wall_bandit_corner.aws",
+  "size": [
+    16,
+    6,
+    16
+  ],
+  "offset": [
+    15,
+    1,
+    15
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "0",
+    "clusterValue": "0",
+    "minDuplicateDistance": "0",
+    "dimensionWhiteList": "false",
+    "dimensionList": [],
+    "biomeWhiteList": "false",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false"
+  },
+  "header": {
+    "version": "2.6",
+    "name": "wall_bandit_corner",
+    "size": "16,6,16",
+    "offset": "15,1,15"
+  }
+}

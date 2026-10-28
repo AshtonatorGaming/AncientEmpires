@@ -1,0 +1,60 @@
+{
+  "name": "ELBPyroWizardGoodSpire",
+  "source": "normal/ModElectroblobsTowers/ELBPyroWizardGoodSpire.aws",
+  "size": [
+    46,
+    95,
+    36
+  ],
+  "offset": [
+    22,
+    11,
+    35
+  ],
+  "requiredMods": [
+    "ebwizardry"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "harvestcraft"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "20",
+    "clusterValue": "400",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "traverse:mountainous_desert",
+      "biomesoplenty:chaparral",
+      "traverse:badlands",
+      "minecraft:desert"
+    ],
+    "leveling": "8",
+    "fill": "8",
+    "border": "8",
+    "blockSwap": "false",
+    "territoryName": "desertruins",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "ELBPyroWizardGoodSpire",
+    "mods": "ebwizardry",
+    "size": "46,95,36",
+    "offset": "22,11,35"
+  }
+}

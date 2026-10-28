@@ -1,0 +1,59 @@
+{
+  "name": "NorskaTempleOfTyr",
+  "source": "normal/AWNationNorska/NorskaTempleOfTyr.aws",
+  "size": [
+    39,
+    55,
+    39
+  ],
+  "offset": [
+    19,
+    8,
+    38
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "grimoireofgaia"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "60",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:snowy_taiga",
+      "traverse:snowy_coniferous_forest",
+      "biomesoplenty:alps",
+      "biomesoplenty:cold_desert",
+      "minecraft:snowy_plains"
+    ],
+    "leveling": "35",
+    "fill": "35",
+    "border": "16",
+    "blockSwap": "false",
+    "territoryName": "norska",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "NorskaTempleOfTyr",
+    "mods": "",
+    "size": "39,55,39",
+    "offset": "19,8,38"
+  }
+}

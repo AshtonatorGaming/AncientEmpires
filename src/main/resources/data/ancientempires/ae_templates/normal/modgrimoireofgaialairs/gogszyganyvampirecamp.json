@@ -1,0 +1,58 @@
+{
+  "name": "GOGSzyganyVampireCamp",
+  "source": "normal/ModGrimoireOfGaiaLairs/GOGSzyganyVampireCamp.aws",
+  "size": [
+    37,
+    36,
+    27
+  ],
+  "offset": [
+    19,
+    6,
+    26
+  ],
+  "requiredMods": [
+    "grimoireofgaia"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "eplus"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:taiga",
+      "minecraft:dark_forest",
+      "minecraft:plains",
+      "minecraft:birch_forest"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "8",
+    "blockSwap": "false",
+    "territoryName": "",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "GOGSzyganyVampireCamp",
+    "mods": "grimoireofgaia",
+    "size": "37,36,27",
+    "offset": "19,6,26"
+  }
+}

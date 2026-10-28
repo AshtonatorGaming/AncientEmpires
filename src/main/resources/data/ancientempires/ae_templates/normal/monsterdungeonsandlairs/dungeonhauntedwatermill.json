@@ -1,0 +1,55 @@
+{
+  "name": "DungeonHauntedWatermill",
+  "source": "normal/MonsterDungeonsAndLairs/DungeonHauntedWatermill.aws",
+  "size": [
+    39,
+    33,
+    42
+  ],
+  "offset": [
+    19,
+    10,
+    41
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ebwizardry",
+    "minecraftfuture"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:forest",
+      "minecraft:birch_forest"
+    ],
+    "leveling": "7",
+    "fill": "7",
+    "border": "7",
+    "blockSwap": "false",
+    "territoryName": "dungeon",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "DungeonHauntedWatermill",
+    "mods": "",
+    "size": "39,33,42",
+    "offset": "19,10,41"
+  }
+}

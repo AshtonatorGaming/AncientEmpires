@@ -1,0 +1,58 @@
+{
+  "name": "CovenWickermanPlains",
+  "source": "normal/AWNationCoven/CovenWickermanPlains.aws",
+  "size": [
+    13,
+    12,
+    20
+  ],
+  "offset": [
+    6,
+    6,
+    19
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "999",
+    "dimensionWhiteList": "false",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "nt:moorland",
+      "nt:heath",
+      "nt:fungal_jungle",
+      "nt:fungal_jungle_hills",
+      "nt:fen",
+      "minecraft:swamp",
+      "minecraft:dark_forest",
+      "environs:silkglades",
+      "environs:moor",
+      "minecraft:sunflower_plains",
+      "environs:dead_oak_forest"
+    ],
+    "leveling": "10",
+    "fill": "10",
+    "border": "5",
+    "blockSwap": "false",
+    "territoryName": "generic",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "CovenWickermanPlains",
+    "mods": "",
+    "size": "13,12,20",
+    "offset": "6,6,19"
+  }
+}

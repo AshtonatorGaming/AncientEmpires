@@ -1,0 +1,57 @@
+{
+  "name": "GOGYetiSpireCave",
+  "source": "normal/ModGrimoireOfGaiaLairs/GOGYetiSpireCave.aws",
+  "size": [
+    13,
+    74,
+    12
+  ],
+  "offset": [
+    5,
+    7,
+    11
+  ],
+  "requiredMods": [
+    "grimoireofgaia"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "harvestcraft"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:snowy_taiga",
+      "minecraft:ice_spikes",
+      "minecraft:snowy_plains",
+      "minecraft:snowy_beach"
+    ],
+    "leveling": "4",
+    "fill": "4",
+    "border": "4",
+    "blockSwap": "false",
+    "territoryName": "generic",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "GOGYetiSpireCave",
+    "mods": "grimoireofgaia",
+    "size": "13,74,12",
+    "offset": "5,7,11"
+  }
+}

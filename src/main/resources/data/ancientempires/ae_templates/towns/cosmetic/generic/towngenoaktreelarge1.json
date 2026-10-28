@@ -1,0 +1,41 @@
+{
+  "name": "TownGenOakTreeLarge1",
+  "source": "towns/cosmetic/Generic/TownGenOakTreeLarge1.aws",
+  "size": [
+    21,
+    27,
+    21
+  ],
+  "offset": [
+    11,
+    3,
+    20
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "0",
+    "clusterValue": "0",
+    "minDuplicateDistance": "0",
+    "dimensionWhiteList": "false",
+    "dimensionList": [],
+    "biomeWhiteList": "false",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false"
+  },
+  "header": {
+    "version": "2.8",
+    "name": "TownGenOakTreeLarge1",
+    "mods": "",
+    "size": "21,27,21",
+    "offset": "11,3,20"
+  }
+}

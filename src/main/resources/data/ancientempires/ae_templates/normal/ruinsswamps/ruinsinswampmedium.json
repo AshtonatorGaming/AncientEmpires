@@ -1,0 +1,57 @@
+{
+  "name": "RuinsInSwampMedium",
+  "source": "normal/RuinsSwamps/RuinsInSwampMedium.aws",
+  "size": [
+    62,
+    38,
+    35
+  ],
+  "offset": [
+    20,
+    3,
+    33
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "true",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "250",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:swamp",
+      "minecraft:sparse_jungle",
+      "biomesoplenty:bayou",
+      "biomesoplenty:dead_swamp",
+      "biomesoplenty:dead_forest",
+      "biomesoplenty:wasteland",
+      "biomesoplenty:ominous_woods",
+      "auxbiomes:marsh"
+    ],
+    "leveling": "24",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "ruins",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "RuinsInSwampMedium",
+    "mods": "",
+    "size": "62,38,35",
+    "offset": "20,3,33"
+  }
+}

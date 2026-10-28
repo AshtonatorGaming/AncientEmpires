@@ -1,0 +1,52 @@
+{
+  "name": "HobbitLoneFarm",
+  "source": "normal/AWTribalHobbit/HobbitLoneFarm.aws",
+  "size": [
+    41,
+    22,
+    40
+  ],
+  "offset": [
+    21,
+    2,
+    39
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:birch_forest",
+      "minecraft:old_growth_birch_forest"
+    ],
+    "leveling": "12",
+    "fill": "12",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "hobbit",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "HobbitLoneFarm",
+    "mods": "",
+    "size": "41,22,40",
+    "offset": "21,2,39"
+  }
+}

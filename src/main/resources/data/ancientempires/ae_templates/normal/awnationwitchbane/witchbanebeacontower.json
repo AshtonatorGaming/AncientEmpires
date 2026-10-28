@@ -1,0 +1,57 @@
+{
+  "name": "WitchbaneBeaconTower",
+  "source": "normal/AWNationWitchbane/WitchbaneBeaconTower.aws",
+  "size": [
+    15,
+    42,
+    15
+  ],
+  "offset": [
+    7,
+    12,
+    14
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "50",
+    "minDuplicateDistance": "500",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:mountains",
+      "environs:tall_oak_forest_hills",
+      "minecraft:windswept_hills",
+      "environs:stone_hills",
+      "traverse:cliffs",
+      "environs:emerald_cliffs"
+    ],
+    "leveling": "36",
+    "fill": "36",
+    "border": "8",
+    "blockSwap": "false",
+    "territoryName": "empire",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "150",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "WitchbaneBeaconTower",
+    "mods": "",
+    "size": "15,42,15",
+    "offset": "7,12,14"
+  }
+}

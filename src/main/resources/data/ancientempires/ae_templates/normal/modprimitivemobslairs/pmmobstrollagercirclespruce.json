@@ -1,0 +1,58 @@
+{
+  "name": "PMMOBSTrollagerCircleSpruce",
+  "source": "normal/ModPrimitiveMobsLairs/PMMOBSTrollagerCircleSpruce.aws",
+  "size": [
+    67,
+    22,
+    60
+  ],
+  "offset": [
+    34,
+    10,
+    59
+  ],
+  "requiredMods": [
+    "primitivemobs"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ebwizardry"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "70",
+    "clusterValue": "150",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:snowy_taiga",
+      "minecraft:taiga"
+    ],
+    "leveling": "12",
+    "fill": "12",
+    "border": "10",
+    "blockSwap": "false",
+    "territoryName": "ruins",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "PMMOBSTrollagerCircleSpruce",
+    "mods": "primitivemobs",
+    "size": "67,22,60",
+    "offset": "34,10,59"
+  }
+}

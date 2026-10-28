@@ -1,0 +1,56 @@
+{
+  "name": "TumulusPlains",
+  "source": "normal/MonsterNaturalLairs/TumulusPlains.aws",
+  "size": [
+    29,
+    56,
+    31
+  ],
+  "offset": [
+    15,
+    3,
+    30
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "environs:wasteland_spikes",
+      "biomesoplenty:dead_swamp",
+      "biomesoplenty:dead_forest",
+      "environs:moor",
+      "environs:wasteland_eroded",
+      "minecraft:plains",
+      "environs:dead_oak_forest"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "5",
+    "blockSwap": "false",
+    "territoryName": "ruins",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "TumulusPlains",
+    "mods": "",
+    "size": "29,56,31",
+    "offset": "15,3,30"
+  }
+}

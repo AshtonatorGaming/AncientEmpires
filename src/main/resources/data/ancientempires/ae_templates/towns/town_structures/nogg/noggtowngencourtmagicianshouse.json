@@ -1,0 +1,50 @@
+{
+  "name": "NoggTownGenCourtMagiciansHouse",
+  "source": "towns/town structures/Nogg/NoggTownGenCourtMagiciansHouse.aws",
+  "size": [
+    32,
+    37,
+    23
+  ],
+  "offset": [
+    16,
+    7,
+    22
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarenpc",
+    "ancientwarfarestructure",
+    "ebwizardry",
+    "eplus"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "0",
+    "clusterValue": "0",
+    "minDuplicateDistance": "0",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "false",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "NoggTownGenCourtMagiciansHouse",
+    "mods": "",
+    "size": "32,37,23",
+    "offset": "16,7,22"
+  }
+}

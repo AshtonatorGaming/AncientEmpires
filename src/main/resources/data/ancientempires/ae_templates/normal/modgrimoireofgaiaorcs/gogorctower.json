@@ -1,0 +1,71 @@
+{
+  "name": "GOGOrcTower",
+  "source": "normal/ModGrimoireOfGaiaOrcs/GOGOrcTower.aws",
+  "size": [
+    11,
+    34,
+    11
+  ],
+  "offset": [
+    0,
+    12,
+    0
+  ],
+  "requiredMods": [
+    "grimoireofgaia"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "true",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:swamp",
+      "nt:cold_roofed_forest_hills",
+      "biomesoplenty:shrubland",
+      "nt:highland",
+      "biomesoplenty:dead_forest",
+      "traverse:woodlands",
+      "nt:moorland",
+      "traverse:badlands",
+      "biomesoplenty:ominous_woods",
+      "nt:heath",
+      "biomesoplenty:dead_swamp",
+      "nt:scrubland",
+      "nt:shrubland",
+      "environs:silkglades",
+      "environs:silk_wetland",
+      "environs:dead_oak_forest_hills",
+      "environs:moor",
+      "nt:cold_roofed_forest",
+      "biomesoplenty:scrubland",
+      "environs:dead_oak_forest"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "ruins",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "GOGOrcTower",
+    "mods": "grimoireofgaia",
+    "size": "11,34,11",
+    "offset": "0,12,0"
+  }
+}

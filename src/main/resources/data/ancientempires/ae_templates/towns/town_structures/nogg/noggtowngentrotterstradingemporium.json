@@ -1,0 +1,51 @@
+{
+  "name": "NoggTownGenTrottersTradingEmporium",
+  "source": "towns/town structures/Nogg/NoggTownGenTrottersTradingEmporium.aws",
+  "size": [
+    27,
+    17,
+    23
+  ],
+  "offset": [
+    12,
+    5,
+    22
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarenpc",
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "1",
+    "clusterValue": "1",
+    "minDuplicateDistance": "1",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "NoggTownGenTrottersTradingEmporium",
+    "mods": "",
+    "size": "27,17,23",
+    "offset": "12,5,22"
+  }
+}

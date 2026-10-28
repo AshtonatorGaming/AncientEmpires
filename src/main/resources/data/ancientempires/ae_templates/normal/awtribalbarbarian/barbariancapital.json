@@ -1,0 +1,59 @@
+{
+  "name": "BarbarianCapital",
+  "source": "normal/AWTribalBarbarian/BarbarianCapital.aws",
+  "size": [
+    99,
+    45,
+    75
+  ],
+  "offset": [
+    58,
+    21,
+    74
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ebwizardry"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "50",
+    "clusterValue": "200",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:taiga",
+      "traverse:rocky_plains",
+      "traverse:cliffs",
+      "traverse:rocky_plateau",
+      "traverse:crag_cliffs"
+    ],
+    "leveling": "10",
+    "fill": "10",
+    "border": "10",
+    "blockSwap": "false",
+    "territoryName": "barbarian",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "BarbarianCapital",
+    "mods": "",
+    "size": "99,45,75",
+    "offset": "58,21,74"
+  }
+}

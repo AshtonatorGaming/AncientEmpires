@@ -1,0 +1,54 @@
+{
+  "name": "IslandsMinossianTemple1",
+  "source": "normal/OceanIslands/IslandsMinossianTemple1.aws",
+  "size": [
+    69,
+    98,
+    79
+  ],
+  "offset": [
+    36,
+    51,
+    79
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "island",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "true",
+    "selectionWeight": "50",
+    "clusterValue": "50",
+    "minDuplicateDistance": "2000",
+    "dimensionWhiteList": "false",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:kelp_forest",
+      "biomesoplenty:coral_reef",
+      "climaticbiomesjbg:coastal_waters",
+      "minecraft:ocean",
+      "minecraft:deep_ocean"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "oceanforestandplains",
+    "biomeReplacement": "minecraft:",
+    "minWaterDepth": "10",
+    "maxWaterDepth": "50"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "IslandsMinossianTemple1",
+    "mods": "",
+    "size": "69,98,79",
+    "offset": "36,51,79"
+  }
+}

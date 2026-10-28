@@ -1,0 +1,58 @@
+{
+  "name": "SarkonidSerisoCannonFactory",
+  "source": "normal/AWNationSarkonid/SarkonidSerisoCannonFactory.aws",
+  "size": [
+    23,
+    21,
+    24
+  ],
+  "offset": [
+    11,
+    5,
+    19
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ancientwarfarevehicle"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "TheOddlySeagull",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "50",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [
+      "sarkonid"
+    ],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "environs:sandstone_ranges",
+      "minecraft:desert"
+    ],
+    "leveling": "12",
+    "fill": "12",
+    "border": "12",
+    "blockSwap": "false",
+    "territoryName": "sarkonid",
+    "biomeReplacement": "minecraft:desert",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "SarkonidSerisoCannonFactory",
+    "mods": "",
+    "size": "23,21,24",
+    "offset": "11,5,19"
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "name": "PMMOBSShriekerCircle",
+  "source": "normal/ModPrimitiveMobsLairs/PMMOBSShriekerCircle.aws",
+  "size": [
+    12,
+    9,
+    13
+  ],
+  "offset": [
+    6,
+    3,
+    12
+  ],
+  "requiredMods": [
+    "primitivemobs"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "30",
+    "clusterValue": "50",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:dark_forest",
+      "minecraft:windswept_hills",
+      "minecraft:snowy_plains",
+      "minecraft:plains"
+    ],
+    "leveling": "10",
+    "fill": "10",
+    "border": "10",
+    "blockSwap": "true",
+    "territoryName": "",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "PMMOBSShriekerCircle",
+    "mods": "primitivemobs",
+    "size": "12,9,13",
+    "offset": "6,3,12"
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "name": "UndeadCemetaryFillTree5",
+  "source": "towns/cosmetic/Undead/UndeadCemetaryFillTree5.aws",
+  "size": [
+    9,
+    17,
+    9
+  ],
+  "offset": [
+    4,
+    5,
+    8
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "0",
+    "clusterValue": "0",
+    "minDuplicateDistance": "0",
+    "dimensionWhiteList": "false",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "false",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "UndeadCemetaryFillTree5",
+    "mods": "",
+    "size": "9,17,9",
+    "offset": "4,5,8"
+  }
+}

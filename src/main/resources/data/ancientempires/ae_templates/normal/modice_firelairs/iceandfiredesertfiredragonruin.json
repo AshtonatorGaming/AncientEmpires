@@ -1,0 +1,55 @@
+{
+  "name": "IceAndFireDesertFireDragonRuin",
+  "source": "normal/ModIce&FireLairs/IceAndFireDesertFireDragonRuin.aws",
+  "size": [
+    125,
+    87,
+    132
+  ],
+  "offset": [
+    58,
+    16,
+    131
+  ],
+  "requiredMods": [
+    "iceandfire"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "iceandfire",
+    "primitivemobs",
+    "thesummoner"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "50",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:desert"
+    ],
+    "leveling": "12",
+    "fill": "12",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "ruins",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "IceAndFireDesertFireDragonRuin",
+    "mods": "iceandfire",
+    "size": "125,87,132",
+    "offset": "58,16,131"
+  }
+}

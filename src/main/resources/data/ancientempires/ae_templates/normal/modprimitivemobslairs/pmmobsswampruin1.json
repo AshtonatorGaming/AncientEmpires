@@ -1,0 +1,56 @@
+{
+  "name": "PMMOBSSwampRuin1",
+  "source": "normal/ModPrimitiveMobsLairs/PMMOBSSwampRuin1.aws",
+  "size": [
+    15,
+    53,
+    21
+  ],
+  "offset": [
+    6,
+    4,
+    20
+  ],
+  "requiredMods": [
+    "primitivemobs"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "true",
+    "selectionWeight": "30",
+    "clusterValue": "50",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:swamp",
+      "biomesoplenty:dead_swamp",
+      "biomesoplenty:bayou",
+      "biomesoplenty:marsh",
+      "auxbiomes:marsh"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "swampruins",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "PMMOBSSwampRuin1",
+    "mods": "primitivemobs",
+    "size": "15,53,21",
+    "offset": "6,4,20"
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "name": "NoggTravellingKnight",
+  "source": "normal/AWNationNogg/NoggTravellingKnight.aws",
+  "size": [
+    16,
+    11,
+    16
+  ],
+  "offset": [
+    7,
+    4,
+    15
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "astikorcarts"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "150",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:dead_forest",
+      "traverse:woodlands",
+      "minecraft:forest",
+      "minecraft:windswept_hills",
+      "traverse:thicket",
+      "biomesoplenty:highland",
+      "biomesoplenty:moor",
+      "traverse:meadow",
+      "biomesoplenty:lavender_fields",
+      "traverse:forested_hills",
+      "biomesoplenty:dead_swamp",
+      "biomesoplenty:steppe",
+      "biomesoplenty:orchard"
+    ],
+    "leveling": "10",
+    "fill": "10",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "NoggTravellingKnight",
+    "mods": "",
+    "size": "16,11,16",
+    "offset": "7,4,15"
+  }
+}

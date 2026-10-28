@@ -1,0 +1,61 @@
+{
+  "name": "NoggCoastalMarketVillage",
+  "source": "normal/AWNationNoggCoastal/NoggCoastalMarketVillage.aws",
+  "size": [
+    56,
+    37,
+    39
+  ],
+  "offset": [
+    28,
+    6,
+    38
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarenpc",
+    "ancientwarfarestructure",
+    "astikorcarts",
+    "ebwizardry",
+    "rustic"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "70",
+    "clusterValue": "150",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:beach",
+      "minecraft:stony_shore",
+      "biomesoplenty:gravel_beach",
+      "biomesoplenty:origin_beach"
+    ],
+    "leveling": "35",
+    "fill": "35",
+    "border": "8",
+    "blockSwap": "false",
+    "territoryName": "noggcoastal",
+    "biomeReplacement": "",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "NoggCoastalMarketVillage",
+    "mods": "",
+    "size": "56,37,39",
+    "offset": "28,6,38"
+  }
+}

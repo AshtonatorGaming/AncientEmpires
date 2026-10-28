@@ -1,0 +1,50 @@
+{
+  "name": "EmpireCityGenPoorHouse2",
+  "source": "towns/house/Empire/EmpireCityGenPoorHouse2.aws",
+  "size": [
+    12,
+    16,
+    15
+  ],
+  "offset": [
+    5,
+    4,
+    14
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "",
+    "survival": "false",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "1",
+    "clusterValue": "1",
+    "minDuplicateDistance": "1",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "EmpireCityGenPoorHouse2",
+    "mods": "",
+    "size": "12,16,15",
+    "offset": "5,4,14"
+  }
+}

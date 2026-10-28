@@ -1,0 +1,78 @@
+{
+  "name": "BrigandLairStoneCircleDungeon",
+  "source": "normal/AWTribalBrigand/BrigandLairStoneCircleDungeon.aws",
+  "size": [
+    27,
+    15,
+    27
+  ],
+  "offset": [
+    16,
+    9,
+    26
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "grimoireofgaia",
+    "mod_lavacow",
+    "primitivemobs"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "30",
+    "clusterValue": "150",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "nt:scrubland",
+      "nt:shrubland",
+      "nt:stone_fields",
+      "nt:rock_land",
+      "nt:rocky_taiga",
+      "minecraft:windswept_forest",
+      "biomesoplenty:shrubland",
+      "nt:highland",
+      "traverse:woodlands",
+      "minecraft:windswept_hills",
+      "traverse:badlands",
+      "minecraft:swamp",
+      "nt:rockland",
+      "traverse:meadow",
+      "biomesoplenty:lavender_fields",
+      "nt:heath",
+      "traverse:rocky_plains",
+      "environs:dead_oak_forest_hills",
+      "environs:moor",
+      "minecraft:plains",
+      "environs:dead_oak_forest",
+      "biomesoplenty:orchard"
+    ],
+    "leveling": "6",
+    "fill": "6",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "ruins",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "BrigandLairStoneCircleDungeon",
+    "mods": "",
+    "size": "27,15,27",
+    "offset": "16,9,26"
+  }
+}

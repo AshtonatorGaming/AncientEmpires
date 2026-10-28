@@ -1,0 +1,63 @@
+{
+  "name": "EmpireBishopsChurch",
+  "source": "normal/AWNationEmpire/EmpireBishopsChurch.aws",
+  "size": [
+    40,
+    36,
+    27
+  ],
+  "offset": [
+    24,
+    2,
+    26
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "30",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "nt:oak_forest",
+      "nt:oak_forest_hills",
+      "nt:tall_oak_forest",
+      "nt:tall_oak_forest_hills",
+      "minecraft:forest",
+      "traverse:meadow",
+      "nt:cold_forest_hill",
+      "traverse:forested_hills",
+      "environs:tall_oak_forest",
+      "environs:tall_oak_forest_hills"
+    ],
+    "leveling": "25",
+    "fill": "25",
+    "border": "10",
+    "blockSwap": "false",
+    "territoryName": "empire",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "EmpireBishopsChurch",
+    "mods": "",
+    "size": "40,36,27",
+    "offset": "24,2,26"
+  }
+}

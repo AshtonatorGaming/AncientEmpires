@@ -1,0 +1,69 @@
+{
+  "name": "ELBNecromancersTower",
+  "source": "normal/ModElectroblobsTowers/ELBNecromancersTower.aws",
+  "size": [
+    41,
+    94,
+    43
+  ],
+  "offset": [
+    18,
+    8,
+    42
+  ],
+  "requiredMods": [
+    "ebwizardry"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ebwizardry",
+    "eplus",
+    "harvestcraft"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "50",
+    "clusterValue": "350",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:swamp",
+      "minecraft:dark_forest",
+      "biomesoplenty:grove",
+      "biomesoplenty:bayou",
+      "biomesoplenty:dead_swamp",
+      "biomesoplenty:dead_forest",
+      "biomesoplenty:moor",
+      "biomesoplenty:ominous_woods",
+      "biomesoplenty:gravel_beach",
+      "minecraft:windswept_hills",
+      "biomesoplenty:mangrove"
+    ],
+    "leveling": "12",
+    "fill": "12",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "undead",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "ELBNecromancersTower",
+    "mods": "ebwizardry",
+    "size": "41,94,43",
+    "offset": "18,8,42"
+  }
+}

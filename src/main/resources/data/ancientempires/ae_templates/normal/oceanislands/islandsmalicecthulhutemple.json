@@ -1,0 +1,55 @@
+{
+  "name": "IslandsMaliceCthulhuTemple",
+  "source": "normal/OceanIslands/IslandsMaliceCthulhuTemple.aws",
+  "size": [
+    44,
+    90,
+    48
+  ],
+  "offset": [
+    23,
+    50,
+    47
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "primitivemobs",
+    "rustic"
+  ],
+  "validation": {
+    "type": "island",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "true",
+    "preserveBlocks": "true",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "50",
+    "clusterValue": "50",
+    "minDuplicateDistance": "2000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:deep_ocean"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "oceanmountain",
+    "biomeReplacement": "minecraft:",
+    "minWaterDepth": "10",
+    "maxWaterDepth": "50"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "IslandsMaliceCthulhuTemple",
+    "mods": "",
+    "size": "44,90,48",
+    "offset": "23,50,47"
+  }
+}

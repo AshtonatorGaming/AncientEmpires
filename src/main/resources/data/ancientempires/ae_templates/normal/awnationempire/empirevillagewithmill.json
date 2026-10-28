@@ -1,0 +1,64 @@
+{
+  "name": "EmpireVillageWithMill",
+  "source": "normal/AWNationEmpire/EmpireVillageWithMill.aws",
+  "size": [
+    57,
+    40,
+    72
+  ],
+  "offset": [
+    28,
+    12,
+    71
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ebwizardry"
+  ],
+  "validation": {
+    "type": "island",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "50",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "nt:oak_forest",
+      "nt:oak_forest_hills",
+      "nt:tall_oak_forest",
+      "nt:tall_oak_forest_hills",
+      "minecraft:forest",
+      "traverse:meadow",
+      "nt:cold_forest_hill",
+      "traverse:forested_hills",
+      "environs:tall_oak_forest",
+      "environs:tall_oak_forest_hills"
+    ],
+    "leveling": "25",
+    "fill": "25",
+    "border": "12",
+    "blockSwap": "false",
+    "territoryName": "empire",
+    "biomeReplacement": "minecraft:",
+    "minWaterDepth": "0",
+    "maxWaterDepth": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "EmpireVillageWithMill",
+    "mods": "",
+    "size": "57,40,72",
+    "offset": "28,12,71"
+  }
+}

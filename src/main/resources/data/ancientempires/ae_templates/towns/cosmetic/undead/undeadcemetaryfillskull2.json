@@ -1,0 +1,45 @@
+{
+  "name": "UndeadCemetaryFillSkull2",
+  "source": "towns/cosmetic/Undead/UndeadCemetaryFillSkull2.aws",
+  "size": [
+    1,
+    2,
+    1
+  ],
+  "offset": [
+    0,
+    0,
+    0
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "0",
+    "clusterValue": "0",
+    "minDuplicateDistance": "0",
+    "dimensionWhiteList": "false",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "false",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "UndeadCemetaryFillSkull2",
+    "mods": "",
+    "size": "1,2,1",
+    "offset": "0,0,0"
+  }
+}

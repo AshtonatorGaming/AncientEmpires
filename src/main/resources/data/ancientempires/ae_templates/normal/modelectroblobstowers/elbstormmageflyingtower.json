@@ -1,0 +1,58 @@
+{
+  "name": "ELBStormMageFlyingTower",
+  "source": "normal/ModElectroblobsTowers/ELBStormMageFlyingTower.aws",
+  "size": [
+    17,
+    104,
+    16
+  ],
+  "offset": [
+    7,
+    0,
+    15
+  ],
+  "requiredMods": [
+    "ebwizardry"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "true",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "50",
+    "clusterValue": "4000",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:frozen_ocean",
+      "minecraft:ocean",
+      "minecraft:deep_ocean"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "oceansearocks",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "ELBStormMageFlyingTower",
+    "mods": "ebwizardry",
+    "size": "17,104,16",
+    "offset": "7,0,15"
+  }
+}

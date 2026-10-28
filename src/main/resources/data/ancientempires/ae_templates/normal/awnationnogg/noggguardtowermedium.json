@@ -1,0 +1,58 @@
+{
+  "name": "NoggGuardTowerMedium",
+  "source": "normal/AWNationNogg/NoggGuardTowerMedium.aws",
+  "size": [
+    11,
+    31,
+    11
+  ],
+  "offset": [
+    5,
+    5,
+    9
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ancientwarfarevehicle"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "30",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:grove",
+      "minecraft:old_growth_birch_forest",
+      "nt:cold_birch_forest_hills",
+      "nt:cold_birch_forest",
+      "minecraft:birch_forest",
+      "traverse:birch_forested_hills",
+      "nt:birch_hills"
+    ],
+    "leveling": "10",
+    "fill": "10",
+    "border": "5",
+    "blockSwap": "false",
+    "territoryName": "nogg",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "NoggGuardTowerMedium",
+    "mods": "",
+    "size": "11,31,11",
+    "offset": "5,5,9"
+  }
+}

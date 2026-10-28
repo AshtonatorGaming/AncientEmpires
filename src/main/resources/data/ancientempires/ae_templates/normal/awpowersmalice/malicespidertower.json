@@ -1,0 +1,70 @@
+{
+  "name": "MaliceSpiderTower",
+  "source": "normal/AWPowersMalice/MaliceSpiderTower.aws",
+  "size": [
+    10,
+    40,
+    10
+  ],
+  "offset": [
+    5,
+    14,
+    9
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "40",
+    "clusterValue": "150",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "nt:moorland",
+      "nt:heath",
+      "nt:fen",
+      "spookybiomes:bloodied_hills",
+      "spookybiomes:seeping_forest",
+      "biomesoplenty:shrubland",
+      "biomesoplenty:woodland",
+      "biomesoplenty:dead_forest",
+      "traverse:woodlands",
+      "minecraft:windswept_hills",
+      "traverse:badlands",
+      "biomesoplenty:highland",
+      "biomesoplenty:moor",
+      "biomesoplenty:ominous_woods",
+      "traverse:rocky_plateau",
+      "traverse:rocky_plains",
+      "biomesoplenty:grassland"
+    ],
+    "leveling": "12",
+    "fill": "12",
+    "border": "12",
+    "blockSwap": "false",
+    "territoryName": "ruins",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "MaliceSpiderTower",
+    "mods": "",
+    "size": "10,40,10",
+    "offset": "5,14,9"
+  }
+}

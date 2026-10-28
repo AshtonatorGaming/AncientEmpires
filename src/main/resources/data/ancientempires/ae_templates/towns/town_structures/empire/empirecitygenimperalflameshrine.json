@@ -1,0 +1,52 @@
+{
+  "name": "EmpireCityGenImperalFlameShrine",
+  "source": "towns/town structures/Empire/EmpireCityGenImperalFlameShrine.aws",
+  "size": [
+    23,
+    33,
+    23
+  ],
+  "offset": [
+    10,
+    5,
+    22
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "1",
+    "clusterValue": "1",
+    "minDuplicateDistance": "1",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "EmpireCityGenImperalFlameShrine",
+    "mods": "",
+    "size": "23,33,23",
+    "offset": "10,5,22"
+  }
+}

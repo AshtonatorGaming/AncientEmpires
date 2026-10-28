@@ -1,0 +1,56 @@
+{
+  "name": "GOGAbandonedWizardsTowerFloating",
+  "source": "normal/ModGrimoireOfGaiaLairs/GOGAbandonedWizardsTowerFloating.aws",
+  "size": [
+    34,
+    169,
+    36
+  ],
+  "offset": [
+    16,
+    0,
+    35
+  ],
+  "requiredMods": [
+    "grimoireofgaia"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "true",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:mystic_grove"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "magical",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "GOGAbandonedWizardsTowerFloating",
+    "mods": "grimoireofgaia",
+    "size": "34,169,36",
+    "offset": "16,0,35"
+  }
+}

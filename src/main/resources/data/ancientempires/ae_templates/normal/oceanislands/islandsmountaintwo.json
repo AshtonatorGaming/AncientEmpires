@@ -1,0 +1,51 @@
+{
+  "name": "IslandsMountainTwo",
+  "source": "normal/OceanIslands/IslandsMountainTwo.aws",
+  "size": [
+    215,
+    232,
+    221
+  ],
+  "offset": [
+    40,
+    52,
+    0
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [],
+  "validation": {
+    "type": "island",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "true",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "50",
+    "clusterValue": "50",
+    "minDuplicateDistance": "2000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:deep_ocean"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "oceanmountain",
+    "biomeReplacement": "minecraft:extreme_hills",
+    "minWaterDepth": "10",
+    "maxWaterDepth": "50"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "IslandsMountainTwo",
+    "mods": "",
+    "size": "215,232,221",
+    "offset": "40,52,0"
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "name": "VyncanChieftainHouse1",
+  "source": "normal/AWTribalVyncanJungle/VyncanChieftainHouse1.aws",
+  "size": [
+    19,
+    21,
+    17
+  ],
+  "offset": [
+    9,
+    5,
+    16
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "60",
+    "clusterValue": "15",
+    "minDuplicateDistance": "500",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:jungle",
+      "environs:overgrown_plains",
+      "nt:monsoon_forest",
+      "explorercraft:bamboo_forest"
+    ],
+    "leveling": "10",
+    "fill": "10",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "vyncanjungle",
+    "biomeReplacement": ""
+  },
+  "header": {
+    "version": "2.10",
+    "name": "VyncanChieftainHouse1",
+    "mods": "",
+    "size": "19,21,17",
+    "offset": "9,5,16"
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "name": "VampireCryptSpruceForest",
+  "source": "normal/AWPowersVampire/VampireCryptSpruceForest.aws",
+  "size": [
+    71,
+    43,
+    68
+  ],
+  "offset": [
+    37,
+    33,
+    67
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "mocreatures",
+    "primitivemobs",
+    "thesummoner"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "40",
+    "clusterValue": "60",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:snowy_taiga",
+      "minecraft:taiga",
+      "minecraft:snowy_plains"
+    ],
+    "leveling": "12",
+    "fill": "12",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "VampireCryptSpruceForest",
+    "mods": "",
+    "size": "71,43,68",
+    "offset": "37,33,67"
+  }
+}

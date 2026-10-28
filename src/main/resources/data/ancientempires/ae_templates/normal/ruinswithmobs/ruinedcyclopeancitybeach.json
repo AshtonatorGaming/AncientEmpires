@@ -1,0 +1,52 @@
+{
+  "name": "RuinedCyclopeanCityBeach",
+  "source": "normal/RuinsWithMobs/RuinedCyclopeanCityBeach.aws",
+  "size": [
+    172,
+    59,
+    163
+  ],
+  "offset": [
+    64,
+    27,
+    162
+  ],
+  "requiredMods": [
+    "primitivemobs"
+  ],
+  "usesNamespaces": [
+    "primitivemobs"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "true",
+    "preserveBlocks": "true",
+    "selectionWeight": "40",
+    "clusterValue": "350",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:beach"
+    ],
+    "leveling": "50",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "beachruins",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "RuinedCyclopeanCityBeach",
+    "mods": "primitivemobs",
+    "size": "172,59,163",
+    "offset": "64,27,162"
+  }
+}

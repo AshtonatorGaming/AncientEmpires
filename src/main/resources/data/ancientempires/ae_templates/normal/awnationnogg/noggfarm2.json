@@ -1,0 +1,57 @@
+{
+  "name": "NoggFarm2",
+  "source": "normal/AWNationNogg/NoggFarm2.aws",
+  "size": [
+    25,
+    15,
+    16
+  ],
+  "offset": [
+    18,
+    5,
+    15
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "60",
+    "clusterValue": "60",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:grove",
+      "minecraft:old_growth_birch_forest",
+      "nt:cold_birch_forest_hills",
+      "nt:cold_birch_forest",
+      "minecraft:birch_forest",
+      "traverse:birch_forested_hills",
+      "nt:birch_hills"
+    ],
+    "leveling": "30",
+    "fill": "30",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "nogg",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "NoggFarm2",
+    "mods": "",
+    "size": "25,15,16",
+    "offset": "18,5,15"
+  }
+}

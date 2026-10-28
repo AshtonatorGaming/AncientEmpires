@@ -1,0 +1,58 @@
+{
+  "name": "BarbarianBroch3",
+  "source": "normal/AWTribalBarbarian/BarbarianBroch3.aws",
+  "size": [
+    23,
+    19,
+    26
+  ],
+  "offset": [
+    9,
+    5,
+    25
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "50",
+    "clusterValue": "125",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:taiga",
+      "traverse:rocky_plains",
+      "traverse:cliffs",
+      "traverse:rocky_plateau",
+      "traverse:crag_cliffs"
+    ],
+    "leveling": "35",
+    "fill": "35",
+    "border": "10",
+    "blockSwap": "false",
+    "territoryName": "barbarian",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "BarbarianBroch3",
+    "mods": "",
+    "size": "23,19,26",
+    "offset": "9,5,25"
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "name": "PMMOBSShriekerSpirePlains",
+  "source": "normal/ModPrimitiveMobsLairs/PMMOBSShriekerSpirePlains.aws",
+  "size": [
+    29,
+    77,
+    23
+  ],
+  "offset": [
+    13,
+    7,
+    22
+  ],
+  "requiredMods": [
+    "primitivemobs"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "harvestcraft"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:dead_forest",
+      "biomesoplenty:moor"
+    ],
+    "leveling": "4",
+    "fill": "4",
+    "border": "4",
+    "blockSwap": "false",
+    "territoryName": "dungeon",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "PMMOBSShriekerSpirePlains",
+    "mods": "primitivemobs",
+    "size": "29,77,23",
+    "offset": "13,7,22"
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "name": "BridgeEmpireFortified50blockspan",
+  "source": "normal/SurvivalBridges/BridgeEmpireFortified50blockspan.aws",
+  "size": [
+    9,
+    23,
+    50
+  ],
+  "offset": [
+    3,
+    7,
+    49
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "primitivemobs"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "true",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "true",
+    "selectionWeight": "0",
+    "clusterValue": "0",
+    "minDuplicateDistance": "0",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "false",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "BridgeEmpireFortified50blockspan",
+    "mods": "",
+    "size": "9,23,50",
+    "offset": "3,7,49"
+  }
+}

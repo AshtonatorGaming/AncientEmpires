@@ -1,0 +1,75 @@
+{
+  "name": "BrigandHidePlains",
+  "source": "normal/AWTribalBrigand/BrigandHidePlains.aws",
+  "size": [
+    18,
+    20,
+    21
+  ],
+  "offset": [
+    9,
+    4,
+    20
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "nt:scrubland",
+      "nt:shrubland",
+      "nt:stone_fields",
+      "nt:rock_land",
+      "nt:rocky_taiga",
+      "minecraft:windswept_forest",
+      "biomesoplenty:shrubland",
+      "nt:highland",
+      "traverse:woodlands",
+      "minecraft:windswept_hills",
+      "traverse:badlands",
+      "minecraft:swamp",
+      "nt:rockland",
+      "traverse:meadow",
+      "biomesoplenty:lavender_fields",
+      "nt:heath",
+      "traverse:rocky_plains",
+      "environs:dead_oak_forest_hills",
+      "environs:moor",
+      "minecraft:plains",
+      "environs:dead_oak_forest",
+      "biomesoplenty:orchard"
+    ],
+    "leveling": "3",
+    "fill": "3",
+    "border": "3",
+    "blockSwap": "false",
+    "territoryName": "brigand",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "BrigandHidePlains",
+    "mods": "",
+    "size": "18,20,21",
+    "offset": "9,4,20"
+  }
+}

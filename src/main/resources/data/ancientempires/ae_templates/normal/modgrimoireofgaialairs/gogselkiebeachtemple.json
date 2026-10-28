@@ -1,0 +1,57 @@
+{
+  "name": "GOGSelkieBeachTemple",
+  "source": "normal/ModGrimoireOfGaiaLairs/GOGSelkieBeachTemple.aws",
+  "size": [
+    13,
+    20,
+    14
+  ],
+  "offset": [
+    4,
+    6,
+    13
+  ],
+  "requiredMods": [
+    "grimoireofgaia"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:beach",
+      "nt:aegean_archipelago"
+    ],
+    "leveling": "12",
+    "fill": "12",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "minossian",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "GOGSelkieBeachTemple",
+    "mods": "grimoireofgaia",
+    "size": "13,20,14",
+    "offset": "4,6,13"
+  }
+}

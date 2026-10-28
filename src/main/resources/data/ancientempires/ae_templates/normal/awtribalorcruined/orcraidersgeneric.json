@@ -1,0 +1,67 @@
+{
+  "name": "OrcRaidersGeneric",
+  "source": "normal/AWTribalOrcRuined/OrcRaidersGeneric.aws",
+  "size": [
+    7,
+    41,
+    7
+  ],
+  "offset": [
+    3,
+    5,
+    6
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "30",
+    "clusterValue": "20",
+    "minDuplicateDistance": "500",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:shrubland",
+      "biomesoplenty:woodland",
+      "minecraft:dark_forest",
+      "biomesoplenty:bayou",
+      "biomesoplenty:dead_forest",
+      "traverse:woodlands",
+      "minecraft:forest",
+      "minecraft:windswept_hills",
+      "minecraft:taiga",
+      "traverse:badlands",
+      "biomesoplenty:highland",
+      "biomesoplenty:moor",
+      "biomesoplenty:dead_swamp",
+      "traverse:rocky_plains",
+      "minecraft:old_growth_pine_taiga",
+      "minecraft:snowy_plains",
+      "biomesoplenty:steppe",
+      "minecraft:plains"
+    ],
+    "leveling": "4",
+    "fill": "3",
+    "border": "4",
+    "blockSwap": "false",
+    "territoryName": "ruins",
+    "biomeReplacement": "minecraft:minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "OrcRaidersGeneric",
+    "mods": "",
+    "size": "7,41,7",
+    "offset": "3,5,6"
+  }
+}

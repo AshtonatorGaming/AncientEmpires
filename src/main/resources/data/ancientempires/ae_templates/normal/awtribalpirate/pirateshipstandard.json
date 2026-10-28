@@ -1,0 +1,53 @@
+{
+  "name": "PirateShipStandard",
+  "source": "normal/AWTribalPirate/PirateShipStandard.aws",
+  "size": [
+    90,
+    52,
+    32
+  ],
+  "offset": [
+    33,
+    9,
+    30
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "water",
+    "structureAuthor": "",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "10",
+    "clusterValue": "251",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:ocean",
+      "minecraft:deep_ocean"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "",
+    "biomeReplacement": ""
+  },
+  "header": {
+    "version": "2.11",
+    "name": "PirateShipStandard",
+    "mods": "",
+    "size": "90,52,32",
+    "offset": "33,9,30"
+  }
+}

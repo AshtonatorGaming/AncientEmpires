@@ -1,0 +1,41 @@
+{
+  "name": "SurvivalBuildGrainStore",
+  "source": "normal/SurvivalStructures/SurvivalBuildGrainStore.aws",
+  "size": [
+    21,
+    18,
+    15
+  ],
+  "offset": [
+    11,
+    5,
+    14
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [],
+  "validation": {
+    "type": "ground",
+    "survival": "true",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "0",
+    "clusterValue": "0",
+    "minDuplicateDistance": "0",
+    "dimensionWhiteList": "false",
+    "dimensionList": [],
+    "biomeWhiteList": "false",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false"
+  },
+  "header": {
+    "version": "2.8",
+    "name": "SurvivalBuildGrainStore",
+    "mods": "",
+    "size": "21,18,15",
+    "offset": "11,5,14"
+  }
+}

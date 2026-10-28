@@ -1,0 +1,60 @@
+{
+  "name": "BrigandCampOakSmall",
+  "source": "normal/AWTribalBrigand/BrigandCampOakSmall.aws",
+  "size": [
+    27,
+    24,
+    27
+  ],
+  "offset": [
+    15,
+    9,
+    26
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ancientwarfarevehicle"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:shrubland",
+      "biomesoplenty:woodland",
+      "biomesoplenty:marsh",
+      "traverse:woodlands",
+      "minecraft:forest",
+      "biomesoplenty:highland"
+    ],
+    "leveling": "3",
+    "fill": "0",
+    "border": "3",
+    "blockSwap": "false",
+    "territoryName": "brigand",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "BrigandCampOakSmall",
+    "mods": "",
+    "size": "27,24,27",
+    "offset": "15,9,26"
+  }
+}

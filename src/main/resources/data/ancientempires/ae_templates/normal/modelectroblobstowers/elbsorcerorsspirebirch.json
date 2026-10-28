@@ -1,0 +1,58 @@
+{
+  "name": "ELBSorcerorsSpireBirch",
+  "source": "normal/ModElectroblobsTowers/ELBSorcerorsSpireBirch.aws",
+  "size": [
+    40,
+    74,
+    35
+  ],
+  "offset": [
+    21,
+    6,
+    34
+  ],
+  "requiredMods": [
+    "ebwizardry"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ebwizardry",
+    "eplus"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "10",
+    "clusterValue": "400",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:birch_forest"
+    ],
+    "leveling": "8",
+    "fill": "8",
+    "border": "8",
+    "blockSwap": "false",
+    "territoryName": "magical",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "ELBSorcerorsSpireBirch",
+    "mods": "ebwizardry",
+    "size": "40,74,35",
+    "offset": "21,6,34"
+  }
+}

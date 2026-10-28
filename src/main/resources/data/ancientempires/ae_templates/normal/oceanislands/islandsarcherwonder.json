@@ -1,0 +1,52 @@
+{
+  "name": "IslandsArcherWonder",
+  "source": "normal/OceanIslands/IslandsArcherWonder.aws",
+  "size": [
+    44,
+    166,
+    41
+  ],
+  "offset": [
+    25,
+    49,
+    40
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [],
+  "validation": {
+    "type": "island",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "true",
+    "preserveBlocks": "true",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "50",
+    "clusterValue": "50",
+    "minDuplicateDistance": "0",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:frozen_ocean",
+      "minecraft:deep_ocean"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "oceancold",
+    "biomeReplacement": "minecraft:frozen_ocean",
+    "minWaterDepth": "10",
+    "maxWaterDepth": "50"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "IslandsArcherWonder",
+    "mods": "",
+    "size": "44,166,41",
+    "offset": "25,49,40"
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "name": "BarbarianWarParty",
+  "source": "normal/AWTribalBarbarian/BarbarianWarParty.aws",
+  "size": [
+    5,
+    7,
+    4
+  ],
+  "offset": [
+    1,
+    6,
+    3
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:taiga",
+      "minecraft:windswept_hills",
+      "minecraft:birch_forest",
+      "minecraft:old_growth_pine_taiga",
+      "biomesoplenty:highland",
+      "biomesoplenty:moor",
+      "biomesoplenty:mountains",
+      "biomesoplenty:grassland"
+    ],
+    "leveling": "20",
+    "fill": "20",
+    "border": "5",
+    "blockSwap": "true",
+    "territoryName": "barbarian",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "150",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "BarbarianWarParty",
+    "mods": "",
+    "size": "5,7,4",
+    "offset": "1,6,3"
+  }
+}

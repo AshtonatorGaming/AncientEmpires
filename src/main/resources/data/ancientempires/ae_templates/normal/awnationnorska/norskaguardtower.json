@@ -1,0 +1,58 @@
+{
+  "name": "NorskaGuardTower",
+  "source": "normal/AWNationNorska/NorskaGuardTower.aws",
+  "size": [
+    15,
+    39,
+    16
+  ],
+  "offset": [
+    7,
+    7,
+    15
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "80",
+    "clusterValue": "50",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:snowy_taiga",
+      "traverse:snowy_coniferous_forest",
+      "biomesoplenty:alps",
+      "biomesoplenty:cold_desert",
+      "minecraft:snowy_plains"
+    ],
+    "leveling": "45",
+    "fill": "45",
+    "border": "12",
+    "blockSwap": "false",
+    "territoryName": "norska",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "NorskaGuardTower",
+    "mods": "",
+    "size": "15,39,16",
+    "offset": "7,7,15"
+  }
+}

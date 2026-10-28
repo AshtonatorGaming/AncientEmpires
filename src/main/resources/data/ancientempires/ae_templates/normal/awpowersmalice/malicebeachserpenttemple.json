@@ -1,0 +1,62 @@
+{
+  "name": "MaliceBeachSerpentTemple",
+  "source": "normal/AWPowersMalice/MaliceBeachSerpentTemple.aws",
+  "size": [
+    52,
+    66,
+    52
+  ],
+  "offset": [
+    25,
+    17,
+    51
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ancientwarfarevehicle"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "350",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:gravel_beach",
+      "auxbiomes:forested_island",
+      "minecraft:beach",
+      "nt:black_beach",
+      "nt:iron_beach",
+      "nt:orange_beach",
+      "nt:purple_beach",
+      "nt:aegean_archipelago"
+    ],
+    "leveling": "12",
+    "fill": "12",
+    "border": "12",
+    "blockSwap": "false",
+    "territoryName": "malice",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "MaliceBeachSerpentTemple",
+    "mods": "",
+    "size": "52,66,52",
+    "offset": "25,17,51"
+  }
+}

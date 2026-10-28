@@ -1,0 +1,75 @@
+{
+  "name": "GnomeVillageBrownMushrooms",
+  "source": "normal/AWTribalGnome/GnomeVillageBrownMushrooms.aws",
+  "size": [
+    19,
+    21,
+    19
+  ],
+  "offset": [
+    8,
+    9,
+    18
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarenpc",
+    "ancientwarfarestructure",
+    "grimoireofgaia"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "nt:fungal_jungle",
+      "nt:fungal_jungle_hills",
+      "nt:blossom_forest",
+      "nt:blossom_forest_hills",
+      "nt:poppy_meadow",
+      "auxbiomes:forested_island",
+      "byg:bseasonalforest",
+      "traverse:autumnal_wooded_hills",
+      "minecraft:flower_forest",
+      "byg:bjacarandaforest",
+      "minecraft:mushroom_fields",
+      "byg:bzelkovaforest",
+      "byg:bfungaljungle",
+      "auxbiomes:marsh",
+      "byg:bskyrishighlands",
+      "minecraft:taiga",
+      "minecraft:old_growth_pine_taiga",
+      "environs:silkglades",
+      "byg:bcikaforest",
+      "byg:bglowshroombayou",
+      "byg:bborealforest",
+      "minecraft:sunflower_plains",
+      "byg:bseasonaltaiga",
+      "byg:bmarshlands"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "gnome",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "GnomeVillageBrownMushrooms",
+    "mods": "",
+    "size": "19,21,19",
+    "offset": "8,9,18"
+  }
+}

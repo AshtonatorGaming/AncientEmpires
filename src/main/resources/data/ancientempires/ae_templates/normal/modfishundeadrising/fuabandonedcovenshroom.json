@@ -1,0 +1,59 @@
+{
+  "name": "FUAbandonedCovenShroom",
+  "source": "normal/ModFishUndeadRising/FUAbandonedCovenShroom.aws",
+  "size": [
+    26,
+    25,
+    32
+  ],
+  "offset": [
+    14,
+    5,
+    31
+  ],
+  "requiredMods": [
+    "mod_lavacow"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "primitivemobs"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:swamp",
+      "minecraft:jungle",
+      "minecraft:mushroom_fields",
+      "minecraft:savanna",
+      "explorercraft:bamboo_forest"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "coven",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "FUAbandonedCovenShroom",
+    "mods": "mod_lavacow",
+    "size": "26,25,32",
+    "offset": "14,5,31"
+  }
+}

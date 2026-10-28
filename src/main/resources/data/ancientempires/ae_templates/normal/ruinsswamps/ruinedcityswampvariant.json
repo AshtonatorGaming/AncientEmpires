@@ -1,0 +1,59 @@
+{
+  "name": "RuinedCitySwampVariant",
+  "source": "normal/RuinsSwamps/RuinedCitySwampVariant.aws",
+  "size": [
+    129,
+    46,
+    178
+  ],
+  "offset": [
+    45,
+    21,
+    175
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "mocreatures",
+    "primitivemobs"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "true",
+    "preserveBlocks": "true",
+    "selectionWeight": "60",
+    "clusterValue": "120",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:swamp",
+      "biomesoplenty:bayou",
+      "biomesoplenty:dead_swamp",
+      "nt:estuary",
+      "byg:bcypress_swamplands",
+      "environs:sludgepit",
+      "byg:bbayou",
+      "biomesoplenty:mangrove"
+    ],
+    "leveling": "24",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "ruin",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "RuinedCitySwampVariant",
+    "mods": "",
+    "size": "129,46,178",
+    "offset": "45,21,175"
+  }
+}

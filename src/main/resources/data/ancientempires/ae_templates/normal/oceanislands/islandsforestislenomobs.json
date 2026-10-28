@@ -1,0 +1,58 @@
+{
+  "name": "IslandsForestisleNoMobs",
+  "source": "normal/OceanIslands/IslandsForestisleNoMobs.aws",
+  "size": [
+    172,
+    106,
+    145
+  ],
+  "offset": [
+    29,
+    50,
+    144
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "primitivemobs",
+    "vampirism"
+  ],
+  "validation": {
+    "type": "island",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "true",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "50",
+    "clusterValue": "50",
+    "minDuplicateDistance": "2000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:kelp_forest",
+      "biomesoplenty:coral_reef",
+      "climaticbiomesjbg:coastal_waters",
+      "minecraft:ocean",
+      "minecraft:deep_ocean"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "oceanforest",
+    "biomeReplacement": "minecraft:forest_hills",
+    "minWaterDepth": "10",
+    "maxWaterDepth": "50"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "IslandsForestisleNoMobs",
+    "mods": "",
+    "size": "172,106,145",
+    "offset": "29,50,144"
+  }
+}

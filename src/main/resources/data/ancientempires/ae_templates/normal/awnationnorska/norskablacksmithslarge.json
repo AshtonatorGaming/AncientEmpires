@@ -1,0 +1,58 @@
+{
+  "name": "NorskaBlacksmithsLarge",
+  "source": "normal/AWNationNorska/NorskaBlacksmithsLarge.aws",
+  "size": [
+    22,
+    18,
+    23
+  ],
+  "offset": [
+    9,
+    4,
+    22
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "50",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:snowy_taiga",
+      "traverse:snowy_coniferous_forest",
+      "biomesoplenty:alps",
+      "biomesoplenty:cold_desert",
+      "minecraft:snowy_plains"
+    ],
+    "leveling": "12",
+    "fill": "12",
+    "border": "10",
+    "blockSwap": "false",
+    "territoryName": "norska",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "NorskaBlacksmithsLarge",
+    "mods": "",
+    "size": "22,18,23",
+    "offset": "9,4,22"
+  }
+}

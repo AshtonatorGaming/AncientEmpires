@@ -1,0 +1,61 @@
+{
+  "name": "IceAndFireUndeadScuttlerTower",
+  "source": "normal/ModIce&FireLairs/IceAndFireUndeadScuttlerTower.aws",
+  "size": [
+    24,
+    21,
+    23
+  ],
+  "offset": [
+    11,
+    3,
+    22
+  ],
+  "requiredMods": [
+    "iceandfire"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "50",
+    "clusterValue": "200",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "spookybiomes:seeping_forest",
+      "environs:wasteland_spikes",
+      "biomesoplenty:dead_swamp",
+      "biomesoplenty:dead_forest",
+      "spookybiomes:ghostly_forest",
+      "environs:wasteland_eroded",
+      "environs:dead_oak_forest",
+      "auxbiomes:wasteland"
+    ],
+    "leveling": "5",
+    "fill": "5",
+    "border": "5",
+    "blockSwap": "false",
+    "territoryName": "ruins",
+    "biomeReplacement": "spookybiomes:ghostly_forest",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "IceAndFireUndeadScuttlerTower",
+    "mods": "iceandfire",
+    "size": "24,21,23",
+    "offset": "11,3,22"
+  }
+}

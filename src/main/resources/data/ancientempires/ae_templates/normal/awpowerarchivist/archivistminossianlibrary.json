@@ -1,0 +1,58 @@
+{
+  "name": "ArchivistMinossianLibrary",
+  "source": "normal/AWPowerArchivist/ArchivistMinossianLibrary.aws",
+  "size": [
+    33,
+    31,
+    51
+  ],
+  "offset": [
+    16,
+    3,
+    0
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfare",
+    "ancientwarfareautomation",
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "true",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "200",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:beach",
+      "nt:black_beach",
+      "nt:iron_beach",
+      "nt:orange_beach",
+      "nt:purple_beach",
+      "nt:aegean_archipelago"
+    ],
+    "leveling": "12",
+    "fill": "12",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "minossian",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "ArchivistMinossianLibrary",
+    "mods": "",
+    "size": "33,31,51",
+    "offset": "16,3,0"
+  }
+}

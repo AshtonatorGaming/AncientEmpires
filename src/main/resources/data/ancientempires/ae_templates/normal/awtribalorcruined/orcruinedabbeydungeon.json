@@ -1,0 +1,66 @@
+{
+  "name": "OrcRuinedAbbeyDungeon",
+  "source": "normal/AWTribalOrcRuined/OrcRuinedAbbeyDungeon.aws",
+  "size": [
+    74,
+    70,
+    78
+  ],
+  "offset": [
+    35,
+    27,
+    77
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ebwizardry",
+    "mocreatures",
+    "primitivemobs",
+    "thesummoner"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "60",
+    "clusterValue": "60",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "nt:cold_roofed_forest_hills",
+      "minecraft:swamp",
+      "minecraft:dark_forest",
+      "byg:bwoodlands",
+      "minecraft:windswept_hills",
+      "byg:borchard",
+      "nt:cold_roofed_forest",
+      "minecraft:forest",
+      "environs:stone_hills",
+      "byg:bgreatoaklowlands",
+      "minecraft:birch_forest",
+      "byg:bbayou"
+    ],
+    "leveling": "25",
+    "fill": "0",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "orcruined",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "OrcRuinedAbbeyDungeon",
+    "mods": "",
+    "size": "74,70,78",
+    "offset": "35,27,77"
+  }
+}

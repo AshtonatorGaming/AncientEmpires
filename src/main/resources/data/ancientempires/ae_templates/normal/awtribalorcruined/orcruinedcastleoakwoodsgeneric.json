@@ -1,0 +1,55 @@
+{
+  "name": "OrcRuinedCastleOakWoodsGeneric",
+  "source": "normal/AWTribalOrcRuined/OrcRuinedCastleOakWoodsGeneric.aws",
+  "size": [
+    46,
+    50,
+    41
+  ],
+  "offset": [
+    25,
+    15,
+    40
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarenpc",
+    "ancientwarfarestructure",
+    "ebwizardry",
+    "eplus",
+    "primitivemobs"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "40",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:swamp",
+      "biomesoplenty:dead_swamp"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "orcruined",
+    "biomeReplacement": "minecraft:minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "OrcRuinedCastleOakWoodsGeneric",
+    "mods": "",
+    "size": "46,50,41",
+    "offset": "25,15,40"
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "name": "NorskaFarmGoose",
+  "source": "towns/town structures/Norska/NorskaFarmGoose.aws",
+  "size": [
+    19,
+    15,
+    27
+  ],
+  "offset": [
+    6,
+    5,
+    12
+  ],
+  "requiredMods": [
+    "betteranimalsplus"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "rustic"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "",
+    "survival": "false",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "1",
+    "clusterValue": "1",
+    "minDuplicateDistance": "1",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "NorskaFarmGoose",
+    "mods": "betteranimalsplus",
+    "size": "19,15,27",
+    "offset": "6,5,12"
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "name": "GOGWitchSpirePlains",
+  "source": "normal/ModGrimoireOfGaiaLairs/GOGWitchSpirePlains.aws",
+  "size": [
+    34,
+    87,
+    43
+  ],
+  "offset": [
+    21,
+    9,
+    42
+  ],
+  "requiredMods": [
+    "grimoireofgaia"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ebwizardry"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:orchard",
+      "biomesoplenty:mystic_grove"
+    ],
+    "leveling": "6",
+    "fill": "6",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "ruins",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "GOGWitchSpirePlains",
+    "mods": "grimoireofgaia",
+    "size": "34,87,43",
+    "offset": "21,9,42"
+  }
+}

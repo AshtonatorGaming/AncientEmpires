@@ -1,0 +1,51 @@
+{
+  "name": "EmpireCityGenHousing2",
+  "source": "towns/house/Empire/EmpireCityGenHousing2.aws",
+  "size": [
+    30,
+    24,
+    31
+  ],
+  "offset": [
+    16,
+    3,
+    30
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfare",
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "",
+    "survival": "false",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "1",
+    "clusterValue": "1",
+    "minDuplicateDistance": "1",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "EmpireCityGenHousing2",
+    "mods": "",
+    "size": "30,24,31",
+    "offset": "16,3,30"
+  }
+}

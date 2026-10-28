@@ -1,0 +1,56 @@
+{
+  "name": "SarkonidPashaCastle",
+  "source": "normal/AWNationSarkonid/SarkonidPashaCastle.aws",
+  "size": [
+    41,
+    37,
+    31
+  ],
+  "offset": [
+    20,
+    5,
+    30
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ancientwarfarevehicle"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "50",
+    "clusterValue": "90",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "environs:sandstone_ranges",
+      "nt:sahel",
+      "minecraft:desert",
+      "traverse:desert_shrubland",
+      "nt:tropical_desert",
+      "byg:bsonorandesert"
+    ],
+    "leveling": "35",
+    "fill": "35",
+    "border": "12",
+    "blockSwap": "false",
+    "territoryName": "sarkonid",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "SarkonidPashaCastle",
+    "mods": "",
+    "size": "41,37,31",
+    "offset": "20,5,30"
+  }
+}

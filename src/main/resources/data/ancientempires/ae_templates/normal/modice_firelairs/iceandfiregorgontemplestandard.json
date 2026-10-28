@@ -1,0 +1,56 @@
+{
+  "name": "IceAndFireGorgonTempleStandard",
+  "source": "normal/ModIce&FireLairs/IceAndFireGorgonTempleStandard.aws",
+  "size": [
+    33,
+    29,
+    32
+  ],
+  "offset": [
+    17,
+    14,
+    31
+  ],
+  "requiredMods": [
+    "iceandfire"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "familiarfauna",
+    "gravestone-extended",
+    "primitivemobs",
+    "thesummoner"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "50",
+    "clusterValue": "150",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:beach"
+    ],
+    "leveling": "26",
+    "fill": "12",
+    "border": "8",
+    "blockSwap": "false",
+    "territoryName": "beachruins",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "IceAndFireGorgonTempleStandard",
+    "mods": "iceandfire",
+    "size": "33,29,32",
+    "offset": "17,14,31"
+  }
+}

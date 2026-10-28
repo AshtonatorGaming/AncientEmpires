@@ -1,0 +1,57 @@
+{
+  "name": "IceAndFireDragonMoundIceDragon",
+  "source": "normal/ModIce&FireLairs/IceAndFireDragonMoundIceDragon.aws",
+  "size": [
+    43,
+    45,
+    42
+  ],
+  "offset": [
+    21,
+    35,
+    41
+  ],
+  "requiredMods": [
+    "iceandfire"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ebwizardry",
+    "iceandfire"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "20",
+    "clusterValue": "300",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:snowy_taiga",
+      "minecraft:snowy_plains"
+    ],
+    "leveling": "6",
+    "fill": "6",
+    "border": "12",
+    "blockSwap": "false",
+    "territoryName": "icelord",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "IceAndFireDragonMoundIceDragon",
+    "mods": "iceandfire",
+    "size": "43,45,42",
+    "offset": "21,35,41"
+  }
+}

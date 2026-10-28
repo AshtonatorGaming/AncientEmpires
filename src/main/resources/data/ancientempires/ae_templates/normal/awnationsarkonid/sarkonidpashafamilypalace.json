@@ -1,0 +1,56 @@
+{
+  "name": "SarkonidPashaFamilyPalace",
+  "source": "normal/AWNationSarkonid/SarkonidPashaFamilyPalace.aws",
+  "size": [
+    53,
+    38,
+    48
+  ],
+  "offset": [
+    26,
+    5,
+    37
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ancientwarfarevehicle"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "50",
+    "clusterValue": "90",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "environs:sandstone_ranges",
+      "nt:sahel",
+      "minecraft:desert",
+      "traverse:desert_shrubland",
+      "nt:tropical_desert",
+      "byg:bsonorandesert"
+    ],
+    "leveling": "35",
+    "fill": "35",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "sarkonid",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "SarkonidPashaFamilyPalace",
+    "mods": "",
+    "size": "53,38,48",
+    "offset": "26,5,37"
+  }
+}

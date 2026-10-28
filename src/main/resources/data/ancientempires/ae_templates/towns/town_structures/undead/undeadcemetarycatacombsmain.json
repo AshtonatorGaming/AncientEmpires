@@ -1,0 +1,48 @@
+{
+  "name": "UndeadCemetaryCatacombsMain",
+  "source": "towns/town structures/Undead/UndeadCemetaryCatacombsMain.aws",
+  "size": [
+    24,
+    28,
+    30
+  ],
+  "offset": [
+    11,
+    12,
+    29
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "betteranimalsplus"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "0",
+    "clusterValue": "0",
+    "minDuplicateDistance": "0",
+    "dimensionWhiteList": "false",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "false",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "UndeadCemetaryCatacombsMain",
+    "mods": "",
+    "size": "24,28,30",
+    "offset": "11,12,29"
+  }
+}

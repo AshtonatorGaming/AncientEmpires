@@ -1,0 +1,52 @@
+{
+  "name": "NoggFishingBoat",
+  "source": "normal/AWNationNoggCoastal/NoggFishingBoat.aws",
+  "size": [
+    32,
+    26,
+    14
+  ],
+  "offset": [
+    16,
+    12,
+    13
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "water",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "50",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:ocean"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "noggcoastal",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "NoggFishingBoat",
+    "mods": "",
+    "size": "32,26,14",
+    "offset": "16,12,13"
+  }
+}

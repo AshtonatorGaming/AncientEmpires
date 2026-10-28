@@ -1,0 +1,60 @@
+{
+  "name": "TempleofTheChickenGod",
+  "source": "normal/MonsterNaturalLairs/TempleofTheChickenGod.aws",
+  "size": [
+    15,
+    20,
+    15
+  ],
+  "offset": [
+    7,
+    7,
+    14
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "byg:bprairie",
+      "pvj:prairie",
+      "nt:alium_meadow",
+      "nt:maple_forest",
+      "nt:maple_forest_hills",
+      "nt:mega_maple_forest",
+      "nt:mega_maple_forest_hills",
+      "biomesoplenty:prairie",
+      "minecraft:plains",
+      "traverse:lush_hills"
+    ],
+    "leveling": "12",
+    "fill": "12",
+    "border": "5",
+    "blockSwap": "false",
+    "territoryName": "buffloka",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "TempleofTheChickenGod",
+    "mods": "",
+    "size": "15,20,15",
+    "offset": "7,7,14"
+  }
+}

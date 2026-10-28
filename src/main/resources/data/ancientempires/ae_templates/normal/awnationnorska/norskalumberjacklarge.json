@@ -1,0 +1,59 @@
+{
+  "name": "NorskaLumberjackLarge",
+  "source": "normal/AWNationNorska/NorskaLumberjackLarge.aws",
+  "size": [
+    22,
+    16,
+    22
+  ],
+  "offset": [
+    7,
+    7,
+    21
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "mocreatures"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "30",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:snowy_taiga",
+      "traverse:snowy_coniferous_forest",
+      "biomesoplenty:alps",
+      "biomesoplenty:cold_desert",
+      "minecraft:snowy_plains"
+    ],
+    "leveling": "15",
+    "fill": "15",
+    "border": "8",
+    "blockSwap": "false",
+    "territoryName": "norska",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "NorskaLumberjackLarge",
+    "mods": "",
+    "size": "22,16,22",
+    "offset": "7,7,21"
+  }
+}

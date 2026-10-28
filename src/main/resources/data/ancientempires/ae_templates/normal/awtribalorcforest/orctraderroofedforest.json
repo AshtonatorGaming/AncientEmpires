@@ -1,0 +1,53 @@
+{
+  "name": "OrcTraderRoofedForest",
+  "source": "normal/AWTribalOrcForest/OrcTraderRoofedForest.aws",
+  "size": [
+    15,
+    18,
+    13
+  ],
+  "offset": [
+    7,
+    3,
+    12
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "nt:cold_roofed_forest",
+      "nt:cold_roofed_forest_hills",
+      "minecraft:dark_forest",
+      "environs:roofed_swamp"
+    ],
+    "leveling": "12",
+    "fill": "12",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "orcforest",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "OrcTraderRoofedForest",
+    "mods": "",
+    "size": "15,18,13",
+    "offset": "7,3,12"
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "name": "KongJungleWizardsTower",
+  "source": "normal/AWTribalKong/KongJungleWizardsTower.aws",
+  "size": [
+    26,
+    59,
+    39
+  ],
+  "offset": [
+    13,
+    5,
+    38
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ebwizardry"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "20",
+    "clusterValue": "260",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:sparse_jungle",
+      "nt:fungal_jungle",
+      "minecraft:jungle",
+      "nt:fungal_jungle_hills"
+    ],
+    "leveling": "12",
+    "fill": "12",
+    "border": "5",
+    "blockSwap": "false",
+    "territoryName": "kong",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "KongJungleWizardsTower",
+    "mods": "",
+    "size": "26,59,39",
+    "offset": "13,5,38"
+  }
+}

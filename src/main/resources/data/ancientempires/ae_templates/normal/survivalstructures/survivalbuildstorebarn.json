@@ -1,0 +1,41 @@
+{
+  "name": "SurvivalBuildStoreBarn",
+  "source": "normal/SurvivalStructures/SurvivalBuildStoreBarn.aws",
+  "size": [
+    19,
+    15,
+    19
+  ],
+  "offset": [
+    10,
+    4,
+    18
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [],
+  "validation": {
+    "type": "ground",
+    "survival": "true",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "0",
+    "clusterValue": "0",
+    "minDuplicateDistance": "0",
+    "dimensionWhiteList": "false",
+    "dimensionList": [],
+    "biomeWhiteList": "false",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false"
+  },
+  "header": {
+    "version": "2.8",
+    "name": "SurvivalBuildStoreBarn",
+    "mods": "",
+    "size": "19,15,19",
+    "offset": "10,4,18"
+  }
+}

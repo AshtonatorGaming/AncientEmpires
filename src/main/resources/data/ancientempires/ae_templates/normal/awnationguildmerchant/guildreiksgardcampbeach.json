@@ -1,0 +1,53 @@
+{
+  "name": "GuildReiksgardCampBeach",
+  "source": "normal/AWNationGuildMerchant/GuildReiksgardCampBeach.aws",
+  "size": [
+    32,
+    14,
+    26
+  ],
+  "offset": [
+    13,
+    3,
+    0
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfare",
+    "ancientwarfarestructure",
+    "ancientwarfarevehicle"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:beach"
+    ],
+    "leveling": "12",
+    "fill": "12",
+    "border": "3",
+    "blockSwap": "false",
+    "territoryName": "beachruins",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "GuildReiksgardCampBeach",
+    "mods": "",
+    "size": "32,14,26",
+    "offset": "13,3,0"
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "name": "NoggTownGenWatchtowerSmall",
+  "source": "towns/town structures/Nogg/NoggTownGenWatchtowerSmall.aws",
+  "size": [
+    16,
+    43,
+    15
+  ],
+  "offset": [
+    9,
+    5,
+    14
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ancientwarfarevehicle"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "1",
+    "clusterValue": "1",
+    "minDuplicateDistance": "1",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "NoggTownGenWatchtowerSmall",
+    "mods": "",
+    "size": "16,43,15",
+    "offset": "9,5,14"
+  }
+}

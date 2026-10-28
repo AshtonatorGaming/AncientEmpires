@@ -1,0 +1,46 @@
+{
+  "name": "SarkonidTownGenHouse1",
+  "source": "towns/house/Sarkonid/SarkonidTownGenHouse1.aws",
+  "size": [
+    9,
+    11,
+    9
+  ],
+  "offset": [
+    6,
+    5,
+    8
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "1",
+    "clusterValue": "1",
+    "minDuplicateDistance": "1",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "SarkonidTownGenHouse1",
+    "mods": "",
+    "size": "9,11,9",
+    "offset": "6,5,8"
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "name": "NoggCoastalTown",
+  "source": "normal/AWNationNoggCoastal/NoggCoastalTown.aws",
+  "size": [
+    111,
+    45,
+    82
+  ],
+  "offset": [
+    52,
+    9,
+    81
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ancientwarfarevehicle",
+    "astikorcarts",
+    "ebwizardry",
+    "primitivemobs",
+    "rustic",
+    "vampirism"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "90",
+    "clusterValue": "250",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:beach",
+      "minecraft:stony_shore",
+      "biomesoplenty:gravel_beach",
+      "biomesoplenty:origin_beach"
+    ],
+    "leveling": "16",
+    "fill": "16",
+    "border": "16",
+    "blockSwap": "false",
+    "territoryName": "noggcoastal",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "NoggCoastalTown",
+    "mods": "",
+    "size": "111,45,82",
+    "offset": "52,9,81"
+  }
+}

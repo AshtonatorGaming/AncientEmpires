@@ -1,0 +1,67 @@
+{
+  "name": "MaliceTravellingKnightPavilion",
+  "source": "normal/AWPowersMalice/MaliceTravellingKnightPavilion.aws",
+  "size": [
+    24,
+    20,
+    24
+  ],
+  "offset": [
+    12,
+    6,
+    23
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "150",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:dead_forest",
+      "traverse:woodlands",
+      "spookybiomes:ghostly_forest",
+      "minecraft:forest",
+      "minecraft:windswept_hills",
+      "traverse:badlands",
+      "biomesoplenty:moor",
+      "biomesoplenty:ominous_woods",
+      "traverse:meadow",
+      "spookybiomes:witchwood_forest",
+      "biomesoplenty:lavender_fields",
+      "traverse:rocky_plains",
+      "minecraft:plains",
+      "biomesoplenty:seasonal_forest"
+    ],
+    "leveling": "24",
+    "fill": "24",
+    "border": "6",
+    "blockSwap": "true",
+    "territoryName": "ruins",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "MaliceTravellingKnightPavilion",
+    "mods": "",
+    "size": "24,20,24",
+    "offset": "12,6,23"
+  }
+}

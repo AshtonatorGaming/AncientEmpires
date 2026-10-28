@@ -1,0 +1,47 @@
+{
+  "name": "SarkonidTownGenInn",
+  "source": "towns/town structures/Sarkonid/SarkonidTownGenInn.aws",
+  "size": [
+    26,
+    17,
+    33
+  ],
+  "offset": [
+    14,
+    5,
+    31
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "1",
+    "clusterValue": "1",
+    "minDuplicateDistance": "1",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "SarkonidTownGenInn",
+    "mods": "",
+    "size": "26,17,33",
+    "offset": "14,5,31"
+  }
+}

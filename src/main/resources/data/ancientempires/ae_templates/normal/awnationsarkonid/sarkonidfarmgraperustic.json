@@ -1,0 +1,59 @@
+{
+  "name": "SarkonidFarmGrapeRustic",
+  "source": "normal/AWNationSarkonid/SarkonidFarmGrapeRustic.aws",
+  "size": [
+    33,
+    17,
+    17
+  ],
+  "offset": [
+    15,
+    5,
+    16
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "rustic"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "TheOddlySeagull",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "50",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [
+      "sarkonid"
+    ],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "environs:sandstone_ranges",
+      "nt:sahel",
+      "minecraft:desert"
+    ],
+    "leveling": "10",
+    "fill": "10",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "sarkonid",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "SarkonidFarmGrapeRustic",
+    "mods": "",
+    "size": "33,17,17",
+    "offset": "15,5,16"
+  }
+}

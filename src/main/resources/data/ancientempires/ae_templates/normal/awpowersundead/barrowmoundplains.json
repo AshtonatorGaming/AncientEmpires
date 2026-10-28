@@ -1,0 +1,64 @@
+{
+  "name": "BarrowMoundPlains",
+  "source": "normal/AWPowersUndead/BarrowMoundPlains.aws",
+  "size": [
+    44,
+    48,
+    21
+  ],
+  "offset": [
+    24,
+    5,
+    20
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "30",
+    "clusterValue": "30",
+    "minDuplicateDistance": "994",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "environs:dry_oak_forest",
+      "environs:dry_oak_forest_m",
+      "environs:silk_wetland",
+      "nt:scrubland",
+      "nt:shrubland",
+      "nt:stone_fields",
+      "nt:rock_land",
+      "nt:rocky_taiga",
+      "biomesoplenty:shrubland",
+      "spookybiomes:ghostly_forest",
+      "spookybiomes:seeping_forest",
+      "biomesoplenty:dead_forest",
+      "environs:wasteland_spikes",
+      "biomesoplenty:dead_swamp",
+      "environs:wasteland_eroded",
+      "environs:dead_oak_forest",
+      "auxbiomes:wasteland"
+    ],
+    "leveling": "3",
+    "fill": "3",
+    "border": "3",
+    "blockSwap": "true",
+    "territoryName": "undead",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "BarrowMoundPlains",
+    "mods": "",
+    "size": "44,48,21",
+    "offset": "24,5,20"
+  }
+}

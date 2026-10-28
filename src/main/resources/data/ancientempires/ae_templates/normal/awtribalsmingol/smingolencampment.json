@@ -1,0 +1,59 @@
+{
+  "name": "SmingolEncampment",
+  "source": "normal/AWTribalSmingol/SmingolEncampment.aws",
+  "size": [
+    51,
+    13,
+    45
+  ],
+  "offset": [
+    25,
+    3,
+    45
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfare",
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "Gungnir",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "50",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [
+      "smingol"
+    ],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "nt:tundra",
+      "nt:icy_tundra",
+      "biomesoplenty:snowy_tundra",
+      "biomesoplenty:tundra",
+      "biomesoplenty:steppe"
+    ],
+    "leveling": "16",
+    "fill": "16",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "smingol",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "SmingolEncampment",
+    "mods": "",
+    "size": "51,13,45",
+    "offset": "25,3,45"
+  }
+}

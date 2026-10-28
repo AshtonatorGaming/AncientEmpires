@@ -1,0 +1,53 @@
+{
+  "name": "NoggFarmSunflower",
+  "source": "normal/AWNationNoggMod/NoggFarmSunflower.aws",
+  "size": [
+    25,
+    13,
+    16
+  ],
+  "offset": [
+    14,
+    5,
+    8
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "OddlySeagull",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:grove"
+    ],
+    "leveling": "10",
+    "fill": "10",
+    "border": "5",
+    "blockSwap": "false",
+    "territoryName": "nogg",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "NoggFarmSunflower",
+    "mods": "",
+    "size": "25,13,16",
+    "offset": "14,5,8"
+  }
+}

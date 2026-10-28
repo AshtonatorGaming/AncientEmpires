@@ -1,0 +1,61 @@
+{
+  "name": "GOGFairyCircle",
+  "source": "normal/ModGrimoireOfGaiaLairs/GOGFairyCircle.aws",
+  "size": [
+    43,
+    32,
+    47
+  ],
+  "offset": [
+    22,
+    21,
+    46
+  ],
+  "requiredMods": [
+    "grimoireofgaia"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "30",
+    "clusterValue": "60",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:woodland",
+      "traverse:woodlands",
+      "biomesoplenty:mystic_grove",
+      "byg:bmeadow",
+      "explorercraft:snowdonia",
+      "byg:bfloweringplains",
+      "byg:bamaranth_fields",
+      "minecraft_roofed_forest"
+    ],
+    "leveling": "5",
+    "fill": "5",
+    "border": "6",
+    "blockSwap": "true",
+    "territoryName": "ruins",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "GOGFairyCircle",
+    "mods": "grimoireofgaia",
+    "size": "43,32,47",
+    "offset": "22,21,46"
+  }
+}

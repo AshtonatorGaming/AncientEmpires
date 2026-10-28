@@ -1,0 +1,82 @@
+{
+  "name": "GOGGoblinGodsTemple",
+  "source": "normal/ModGrimoireOfGaiaGoblins/GOGGoblinGodsTemple.aws",
+  "size": [
+    78,
+    49,
+    40
+  ],
+  "offset": [
+    39,
+    9,
+    39
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "30",
+    "clusterValue": "200",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "environs:dry_oak_forest",
+      "environs:dry_oak_forest_m",
+      "environs:silk_wetland",
+      "environs:dead_oak_forest",
+      "environs:dead_oak_forest_hills",
+      "minecraft:swamp",
+      "minecraft:windswept_hills",
+      "minecraft:ice_spikes",
+      "traverse:badlands",
+      "traverse:woodlands",
+      "traverse:thicket",
+      "traverse:green_swamp",
+      "nt:shrubland",
+      "nt:scrubland",
+      "nt:heath",
+      "nt:highland",
+      "nt:fen",
+      "nt:mixed_forest",
+      "nt:hotspring",
+      "nt:rockland",
+      "nt:mixed_forest_hills",
+      "biomesoplenty:shrubland",
+      "biomesoplenty:scrubland",
+      "biomesoplenty:woodland",
+      "biomesoplenty:grove",
+      "biomesoplenty:bayou",
+      "biomesoplenty:mangrove",
+      "biomesoplenty:marsh",
+      "byg:bquagmire",
+      "byg:bbayou",
+      "byg:bglowshroombayou",
+      "byg:bwhisperingwoods",
+      "byg:bweepingwitchforest"
+    ],
+    "leveling": "12",
+    "fill": "12",
+    "border": "8",
+    "blockSwap": "true",
+    "territoryName": "goblin",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "GOGGoblinGodsTemple",
+    "mods": "",
+    "size": "78,49,40",
+    "offset": "39,9,39"
+  }
+}

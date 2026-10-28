@@ -1,0 +1,41 @@
+{
+  "name": "SurvivalBuildWatchtowerSmall",
+  "source": "normal/SurvivalStructures/SurvivalBuildWatchtowerSmall.aws",
+  "size": [
+    20,
+    32,
+    17
+  ],
+  "offset": [
+    10,
+    6,
+    16
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [],
+  "validation": {
+    "type": "ground",
+    "survival": "true",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "0",
+    "clusterValue": "0",
+    "minDuplicateDistance": "0",
+    "dimensionWhiteList": "false",
+    "dimensionList": [],
+    "biomeWhiteList": "false",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false"
+  },
+  "header": {
+    "version": "2.8",
+    "name": "SurvivalBuildWatchtowerSmall",
+    "mods": "",
+    "size": "20,32,17",
+    "offset": "10,6,16"
+  }
+}

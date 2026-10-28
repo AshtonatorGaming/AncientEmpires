@@ -1,0 +1,46 @@
+{
+  "name": "EmpireTownGenFarmWheatPeasantSmall",
+  "source": "towns/town structures/Empire/EmpireTownGenFarmWheatPeasantSmall.aws",
+  "size": [
+    18,
+    22,
+    19
+  ],
+  "offset": [
+    9,
+    3,
+    18
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "1",
+    "clusterValue": "1",
+    "minDuplicateDistance": "1",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "EmpireTownGenFarmWheatPeasantSmall",
+    "mods": "",
+    "size": "18,22,19",
+    "offset": "9,3,18"
+  }
+}

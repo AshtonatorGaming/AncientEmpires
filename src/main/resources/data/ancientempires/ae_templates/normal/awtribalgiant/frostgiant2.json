@@ -1,0 +1,56 @@
+{
+  "name": "FrostGiant2",
+  "source": "normal/AWTribalGiant/FrostGiant2.aws",
+  "size": [
+    5,
+    6,
+    5
+  ],
+  "offset": [
+    2,
+    5,
+    4
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:ice_spikes",
+      "traverse:glacier_spikes",
+      "environs:icy_hills",
+      "traverse:glacier",
+      "minecraft:snowy_beach"
+    ],
+    "leveling": "6",
+    "fill": "6",
+    "border": "6",
+    "blockSwap": "true",
+    "territoryName": "",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "60",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "FrostGiant2",
+    "mods": "",
+    "size": "5,6,5",
+    "offset": "2,5,4"
+  }
+}

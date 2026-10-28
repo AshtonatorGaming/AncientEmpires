@@ -1,0 +1,61 @@
+{
+  "name": "CovenMushroomVillage",
+  "source": "normal/AWNationCoven/CovenMushroomVillage.aws",
+  "size": [
+    43,
+    24,
+    44
+  ],
+  "offset": [
+    22,
+    3,
+    43
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ebwizardry",
+    "primitivemobs"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:swamp",
+      "byg:bweepingwitchforest",
+      "environs:dead_oak_forest_hills",
+      "minecraft:mushroom_fields",
+      "minecraft:plains",
+      "environs:emerald_cliffs",
+      "byg:bbayou",
+      "environs:dead_oak_forest"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "10",
+    "blockSwap": "false",
+    "territoryName": "coven",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "CovenMushroomVillage",
+    "mods": "",
+    "size": "43,24,44",
+    "offset": "22,3,43"
+  }
+}

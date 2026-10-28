@@ -1,0 +1,56 @@
+{
+  "name": "IceAndFireHydraLairSavannaMalice",
+  "source": "normal/ModIce&FireLairs/IceAndFireHydraLairSavannaMalice.aws",
+  "size": [
+    48,
+    45,
+    48
+  ],
+  "offset": [
+    27,
+    12,
+    47
+  ],
+  "requiredMods": [
+    "iceandfire"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ebwizardry",
+    "mocreatures",
+    "primitivemobs"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "50",
+    "clusterValue": "200",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:savanna_plateau"
+    ],
+    "leveling": "12",
+    "fill": "12",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "ruins",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "IceAndFireHydraLairSavannaMalice",
+    "mods": "iceandfire",
+    "size": "48,45,48",
+    "offset": "27,12,47"
+  }
+}

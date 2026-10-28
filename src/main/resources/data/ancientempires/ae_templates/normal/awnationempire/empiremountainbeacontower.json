@@ -1,0 +1,57 @@
+{
+  "name": "EmpireMountainBeaconTower",
+  "source": "normal/AWNationEmpire/EmpireMountainBeaconTower.aws",
+  "size": [
+    35,
+    55,
+    45
+  ],
+  "offset": [
+    18,
+    0,
+    44
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "true",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "40",
+    "clusterValue": "150",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:mountain",
+      "minecraft:windswept_hills",
+      "nt:stone_mountains",
+      "explorercraft:forested_mountain",
+      "traverse:cliffs",
+      "nt:mountains"
+    ],
+    "leveling": "15",
+    "fill": "15",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "empire",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "160",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "EmpireMountainBeaconTower",
+    "mods": "",
+    "size": "35,55,45",
+    "offset": "18,0,44"
+  }
+}

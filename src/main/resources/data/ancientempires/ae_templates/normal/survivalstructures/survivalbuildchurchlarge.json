@@ -1,0 +1,43 @@
+{
+  "name": "SurvivalBuildChurchLarge",
+  "source": "normal/SurvivalStructures/SurvivalBuildChurchLarge.aws",
+  "size": [
+    41,
+    35,
+    30
+  ],
+  "offset": [
+    20,
+    10,
+    29
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "mocreatures"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "true",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "0",
+    "clusterValue": "0",
+    "minDuplicateDistance": "0",
+    "dimensionWhiteList": "false",
+    "dimensionList": [],
+    "biomeWhiteList": "false",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false"
+  },
+  "header": {
+    "version": "2.8",
+    "name": "SurvivalBuildChurchLarge",
+    "mods": "",
+    "size": "41,35,30",
+    "offset": "20,10,29"
+  }
+}

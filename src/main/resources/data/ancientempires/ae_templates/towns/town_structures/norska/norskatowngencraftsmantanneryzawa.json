@@ -1,0 +1,52 @@
+{
+  "name": "NorskaTownGenCraftsmanTanneryZawa",
+  "source": "towns/town structures/Norska/NorskaTownGenCraftsmanTanneryZawa.aws",
+  "size": [
+    26,
+    15,
+    12
+  ],
+  "offset": [
+    14,
+    5,
+    11
+  ],
+  "requiredMods": [
+    "zawa"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "",
+    "survival": "false",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "1",
+    "clusterValue": "1",
+    "minDuplicateDistance": "1",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "NorskaTownGenCraftsmanTanneryZawa",
+    "mods": "zawa",
+    "size": "26,15,12",
+    "offset": "14,5,11"
+  }
+}

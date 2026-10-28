@@ -1,0 +1,57 @@
+{
+  "name": "IceAndFireBarbarianDragonWorshippers",
+  "source": "normal/ModIce&FireLairs/IceAndFireBarbarianDragonWorshippers.aws",
+  "size": [
+    90,
+    86,
+    75
+  ],
+  "offset": [
+    32,
+    13,
+    74
+  ],
+  "requiredMods": [
+    "iceandfire"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "iceandfire",
+    "mod_lavacow"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "40",
+    "clusterValue": "200",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:snowy_taiga",
+      "minecraft:taiga"
+    ],
+    "leveling": "12",
+    "fill": "12",
+    "border": "12",
+    "blockSwap": "false",
+    "territoryName": "dungeon",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "IceAndFireBarbarianDragonWorshippers",
+    "mods": "iceandfire",
+    "size": "90,86,75",
+    "offset": "32,13,74"
+  }
+}

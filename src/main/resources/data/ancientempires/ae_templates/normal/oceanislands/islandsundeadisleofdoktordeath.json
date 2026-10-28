@@ -1,0 +1,57 @@
+{
+  "name": "IslandsUndeadIsleOfDoktorDeath",
+  "source": "normal/OceanIslands/IslandsUndeadIsleOfDoktorDeath.aws",
+  "size": [
+    151,
+    118,
+    153
+  ],
+  "offset": [
+    78,
+    50,
+    152
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ebwizardry",
+    "mocreatures",
+    "mod_lavacow",
+    "rustic",
+    "vampirism"
+  ],
+  "validation": {
+    "type": "island",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "true",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "50",
+    "clusterValue": "250",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:ocean"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "oceanplains",
+    "biomeReplacement": "minecraft:",
+    "minWaterDepth": "10",
+    "maxWaterDepth": "50"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "IslandsUndeadIsleOfDoktorDeath",
+    "mods": "",
+    "size": "151,118,153",
+    "offset": "78,50,152"
+  }
+}

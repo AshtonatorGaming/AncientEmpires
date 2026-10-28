@@ -1,0 +1,56 @@
+{
+  "name": "IslandsIceAndFireFireDragon1",
+  "source": "normal/OceanIslands/IslandsIceAndFireFireDragon1.aws",
+  "size": [
+    108,
+    93,
+    57
+  ],
+  "offset": [
+    63,
+    50,
+    56
+  ],
+  "requiredMods": [
+    "iceandfire"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "mocreatures"
+  ],
+  "validation": {
+    "type": "island",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "true",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "50",
+    "clusterValue": "50",
+    "minDuplicateDistance": "2000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:deep_ocean"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "oceanrocky",
+    "biomeReplacement": "minecraft:extreme_hills",
+    "minWaterDepth": "10",
+    "maxWaterDepth": "50"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "IslandsIceAndFireFireDragon1",
+    "mods": "iceandfire",
+    "size": "108,93,57",
+    "offset": "63,50,56"
+  }
+}

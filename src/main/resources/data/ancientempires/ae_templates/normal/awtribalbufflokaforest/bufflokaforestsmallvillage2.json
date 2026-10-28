@@ -1,0 +1,55 @@
+{
+  "name": "BufflokaForestSmallVillage2",
+  "source": "normal/AWTribalBufflokaForest/BufflokaForestSmallVillage2.aws",
+  "size": [
+    34,
+    33,
+    38
+  ],
+  "offset": [
+    17,
+    6,
+    37
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "comforts"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:old_growth_pine_taiga"
+    ],
+    "leveling": "10",
+    "fill": "10",
+    "border": "5",
+    "blockSwap": "false",
+    "territoryName": "bufflokaforest",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "BufflokaForestSmallVillage2",
+    "mods": "",
+    "size": "34,33,38",
+    "offset": "17,6,37"
+  }
+}

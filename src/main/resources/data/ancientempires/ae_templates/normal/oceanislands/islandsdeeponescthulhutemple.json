@@ -1,0 +1,50 @@
+{
+  "name": "IslandsDeepOnesCthulhuTemple",
+  "source": "normal/OceanIslands/IslandsDeepOnesCthulhuTemple.aws",
+  "size": [
+    144,
+    82,
+    113
+  ],
+  "offset": [
+    69,
+    50,
+    112
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "island",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "true",
+    "preserveBlocks": "true",
+    "selectionWeight": "60",
+    "clusterValue": "250",
+    "minDuplicateDistance": "1",
+    "dimensionWhiteList": "false",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:deep_ocean"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "oceanrocky",
+    "biomeReplacement": "minecraft:hell",
+    "minWaterDepth": "10",
+    "maxWaterDepth": "50"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "IslandsDeepOnesCthulhuTemple",
+    "mods": "",
+    "size": "144,82,113",
+    "offset": "69,50,112"
+  }
+}

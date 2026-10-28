@@ -1,0 +1,64 @@
+{
+  "name": "ELBGoodWizardSpirePlains",
+  "source": "normal/ModElectroblobsTowers/ELBGoodWizardSpirePlains.aws",
+  "size": [
+    52,
+    74,
+    23
+  ],
+  "offset": [
+    24,
+    8,
+    22
+  ],
+  "requiredMods": [
+    "ebwizardry"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ebwizardry",
+    "eplus",
+    "harvestcraft"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "50",
+    "clusterValue": "150",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:woodland",
+      "auxbiomes:forested_island",
+      "traverse:autumnal_woods",
+      "minecraft:flower_forest",
+      "minecraft:sunflower_plains",
+      "minecraft:plains"
+    ],
+    "leveling": "7",
+    "fill": "7",
+    "border": "7",
+    "blockSwap": "false",
+    "territoryName": "magical",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "ELBGoodWizardSpirePlains",
+    "mods": "ebwizardry",
+    "size": "52,74,23",
+    "offset": "24,8,22"
+  }
+}

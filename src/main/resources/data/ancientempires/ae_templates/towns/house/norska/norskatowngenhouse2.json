@@ -1,0 +1,50 @@
+{
+  "name": "NorskaTownGenHouse2",
+  "source": "towns/house/Norska/NorskaTownGenHouse2.aws",
+  "size": [
+    11,
+    55,
+    15
+  ],
+  "offset": [
+    6,
+    6,
+    14
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "1",
+    "clusterValue": "1",
+    "minDuplicateDistance": "1",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "NorskaTownGenHouse2",
+    "mods": "",
+    "size": "11,55,15",
+    "offset": "6,6,14"
+  }
+}

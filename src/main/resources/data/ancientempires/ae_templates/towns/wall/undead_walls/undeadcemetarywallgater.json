@@ -1,0 +1,47 @@
+{
+  "name": "UndeadCemetaryWallGateR",
+  "source": "towns/wall/Undead Walls/UndeadCemetaryWallGateR.aws",
+  "size": [
+    16,
+    10,
+    8
+  ],
+  "offset": [
+    15,
+    5,
+    7
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "rustic"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "0",
+    "clusterValue": "0",
+    "minDuplicateDistance": "0",
+    "dimensionWhiteList": "false",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "false",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "UndeadCemetaryWallGateR",
+    "mods": "",
+    "size": "16,10,8",
+    "offset": "15,5,7"
+  }
+}

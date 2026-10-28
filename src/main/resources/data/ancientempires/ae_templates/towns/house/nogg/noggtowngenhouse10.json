@@ -1,0 +1,46 @@
+{
+  "name": "NoggTownGenHouse10",
+  "source": "towns/house/Nogg/NoggTownGenHouse10.aws",
+  "size": [
+    17,
+    15,
+    16
+  ],
+  "offset": [
+    7,
+    5,
+    15
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "0",
+    "clusterValue": "0",
+    "minDuplicateDistance": "0",
+    "dimensionWhiteList": "false",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "false",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "NoggTownGenHouse10",
+    "mods": "",
+    "size": "17,15,16",
+    "offset": "7,5,15"
+  }
+}

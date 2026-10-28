@@ -1,0 +1,63 @@
+{
+  "name": "GOGOrcWarCamp",
+  "source": "normal/ModGrimoireOfGaiaOrcs/GOGOrcWarCamp.aws",
+  "size": [
+    69,
+    19,
+    63
+  ],
+  "offset": [
+    31,
+    9,
+    62
+  ],
+  "requiredMods": [
+    "grimoireofgaia"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ancientwarfarevehicle"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "false",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:swamp",
+      "biomesoplenty:bayou",
+      "biomesoplenty:dead_forest",
+      "traverse:woodlands",
+      "minecraft:windswept_hills",
+      "traverse:badlands",
+      "traverse:thicket",
+      "environs:stone_flats",
+      "biomesoplenty:ominous_woods",
+      "byg:bbayou",
+      "biomesoplenty:dead_swamp",
+      "traverse:rocky_plains",
+      "byg:bglowshroombayou"
+    ],
+    "leveling": "25",
+    "fill": "25",
+    "border": "6",
+    "blockSwap": "true",
+    "territoryName": "ruins",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "GOGOrcWarCamp",
+    "mods": "grimoireofgaia",
+    "size": "69,19,63",
+    "offset": "31,9,62"
+  }
+}

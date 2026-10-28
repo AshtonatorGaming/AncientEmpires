@@ -1,0 +1,62 @@
+{
+  "name": "GiantMushroomLairSwamp",
+  "source": "normal/MonsterNaturalLairs/GiantMushroomLairSwamp.aws",
+  "size": [
+    34,
+    36,
+    34
+  ],
+  "offset": [
+    14,
+    9,
+    33
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ebwizardry",
+    "eplus",
+    "primitivemobs"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "40",
+    "clusterValue": "90",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "byg:bglowshroombayou",
+      "byg:bwhisperingwoods",
+      "byg:bweepingwitchforest",
+      "minecraft:swamp",
+      "minecraft:mushroom_fields",
+      "biomesoplenty:bayou",
+      "biomesoplenty:dead_swamp",
+      "biomesoplenty:marsh",
+      "biomesoplenty:mangrove"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "swampruins",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "GiantMushroomLairSwamp",
+    "mods": "",
+    "size": "34,36,34",
+    "offset": "14,9,33"
+  }
+}

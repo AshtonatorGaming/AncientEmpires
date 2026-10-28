@@ -1,0 +1,61 @@
+{
+  "name": "NorskaTempleOfThor",
+  "source": "normal/AWNationNorska/NorskaTempleOfThor.aws",
+  "size": [
+    40,
+    53,
+    30
+  ],
+  "offset": [
+    23,
+    7,
+    29
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "dungeontactics",
+    "ebwizardry",
+    "eplus"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "60",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:snowy_taiga",
+      "traverse:snowy_coniferous_forest",
+      "biomesoplenty:alps",
+      "biomesoplenty:cold_desert",
+      "minecraft:snowy_plains"
+    ],
+    "leveling": "35",
+    "fill": "35",
+    "border": "12",
+    "blockSwap": "false",
+    "territoryName": "norska",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "NorskaTempleOfThor",
+    "mods": "",
+    "size": "40,53,30",
+    "offset": "23,7,29"
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "name": "IcelordCastleRuins",
+  "source": "normal/AWPowersIcelord/IcelordCastleRuins.aws",
+  "size": [
+    31,
+    23,
+    31
+  ],
+  "offset": [
+    14,
+    4,
+    31
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "Gungnir",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "30",
+    "clusterValue": "60",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [
+      "icelord"
+    ],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "nt:cold_desert",
+      "minecraft:snowy_taiga",
+      "byg:bfrostyforest",
+      "minecraft:snowy_plains",
+      "environs:cold_savanna",
+      "environs:cold_pine_forest",
+      "environs:cold_savanna_rock"
+    ],
+    "leveling": "16",
+    "fill": "16",
+    "border": "3",
+    "blockSwap": "false",
+    "territoryName": "icelord",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "IcelordCastleRuins",
+    "mods": "",
+    "size": "31,23,31",
+    "offset": "14,4,31"
+  }
+}

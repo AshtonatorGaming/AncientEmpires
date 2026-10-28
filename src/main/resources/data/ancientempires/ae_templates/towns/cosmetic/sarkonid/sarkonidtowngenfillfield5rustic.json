@@ -1,0 +1,48 @@
+{
+  "name": "SarkonidTownGenFillField5RUSTIC",
+  "source": "towns/cosmetic/Sarkonid/SarkonidTownGenFillField5RUSTIC.aws",
+  "size": [
+    11,
+    8,
+    18
+  ],
+  "offset": [
+    5,
+    5,
+    17
+  ],
+  "requiredMods": [
+    "rustic"
+  ],
+  "usesNamespaces": [
+    "rustic"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "1",
+    "clusterValue": "1",
+    "minDuplicateDistance": "1",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "SarkonidTownGenFillField5RUSTIC",
+    "mods": "rustic",
+    "size": "11,8,18",
+    "offset": "5,5,17"
+  }
+}

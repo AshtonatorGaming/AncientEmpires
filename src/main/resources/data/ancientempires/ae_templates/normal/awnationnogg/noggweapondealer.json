@@ -1,0 +1,60 @@
+{
+  "name": "NoggWeaponDealer",
+  "source": "normal/AWNationNogg/NoggWeaponDealer.aws",
+  "size": [
+    19,
+    21,
+    26
+  ],
+  "offset": [
+    8,
+    8,
+    25
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "60",
+    "clusterValue": "50",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:grove",
+      "minecraft:old_growth_birch_forest",
+      "nt:cold_birch_forest_hills",
+      "nt:cold_birch_forest",
+      "minecraft:birch_forest",
+      "traverse:birch_forested_hills",
+      "nt:birch_hills"
+    ],
+    "leveling": "35",
+    "fill": "35",
+    "border": "8",
+    "blockSwap": "false",
+    "territoryName": "nogg",
+    "biomeReplacement": "minecraft:birch_forest",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "NoggWeaponDealer",
+    "mods": "",
+    "size": "19,21,26",
+    "offset": "8,8,25"
+  }
+}

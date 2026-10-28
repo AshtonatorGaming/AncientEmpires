@@ -1,0 +1,54 @@
+{
+  "name": "GOGMineAbandonedBrigandAndOrcs",
+  "source": "normal/ModGrimoireOfGaiaLairs/GOGMineAbandonedBrigandAndOrcs.aws",
+  "size": [
+    47,
+    102,
+    37
+  ],
+  "offset": [
+    20,
+    37,
+    36
+  ],
+  "requiredMods": [
+    "grimoireofgaia"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "primitivemobs"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "50",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:birch_forest"
+    ],
+    "leveling": "20",
+    "fill": "10",
+    "border": "10",
+    "blockSwap": "false",
+    "territoryName": "generic",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "GOGMineAbandonedBrigandAndOrcs",
+    "mods": "grimoireofgaia",
+    "size": "47,102,37",
+    "offset": "20,37,36"
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "name": "TownGenBirchTreeSmall1",
+  "source": "towns/cosmetic/Generic/TownGenBirchTreeSmall1.aws",
+  "size": [
+    7,
+    14,
+    8
+  ],
+  "offset": [
+    3,
+    3,
+    7
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "0",
+    "clusterValue": "0",
+    "minDuplicateDistance": "0",
+    "dimensionWhiteList": "false",
+    "dimensionList": [],
+    "biomeWhiteList": "false",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false"
+  },
+  "header": {
+    "version": "2.8",
+    "name": "TownGenBirchTreeSmall1",
+    "mods": "",
+    "size": "7,14,8",
+    "offset": "3,3,7"
+  }
+}

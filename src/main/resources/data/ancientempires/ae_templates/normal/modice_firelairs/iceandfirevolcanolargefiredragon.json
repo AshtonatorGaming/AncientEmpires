@@ -1,0 +1,71 @@
+{
+  "name": "IceAndFireVolcanoLargeFireDragon",
+  "source": "normal/ModIce&FireLairs/IceAndFireVolcanoLargeFireDragon.aws",
+  "size": [
+    103,
+    89,
+    104
+  ],
+  "offset": [
+    54,
+    39,
+    103
+  ],
+  "requiredMods": [
+    "iceandfire"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ebwizardry",
+    "iceandfire",
+    "mod_lavacow",
+    "primitivemobs"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "50",
+    "clusterValue": "300",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:wasteland",
+      "minecraft:sparse_jungle",
+      "minecraft:windswept_hills",
+      "minecraft:snowy_plains",
+      "biomesoplenty:bamboo_forest",
+      "biomesoplenty:dead_forest",
+      "biomesoplenty:dead_swamp",
+      "biomesoplenty:tropical_island",
+      "auxbiomes:forested_island",
+      "minecraft:sunflower_plains",
+      "traverse:badlands",
+      "spookybiomes:sorbus_forest"
+    ],
+    "leveling": "10",
+    "fill": "10",
+    "border": "10",
+    "blockSwap": "true",
+    "territoryName": "ruins",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "IceAndFireVolcanoLargeFireDragon",
+    "mods": "iceandfire",
+    "size": "103,89,104",
+    "offset": "54,39,103"
+  }
+}

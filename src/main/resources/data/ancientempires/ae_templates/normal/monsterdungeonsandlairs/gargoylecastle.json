@@ -1,0 +1,64 @@
+{
+  "name": "GargoyleCastle",
+  "source": "normal/MonsterDungeonsAndLairs/GargoyleCastle.aws",
+  "size": [
+    66,
+    59,
+    66
+  ],
+  "offset": [
+    29,
+    12,
+    65
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "primitivemobs"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "50",
+    "clusterValue": "200",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:dark_forest",
+      "byg:bbog",
+      "traverse:rocky_plains",
+      "environs:silkglades",
+      "environs:silk_wetland",
+      "environs:moor",
+      "vampirism:vampireforest",
+      "environs:sludgepit",
+      "byg:bfungaljungle",
+      "byg:bmarshlands"
+    ],
+    "leveling": "30",
+    "fill": "30",
+    "border": "15",
+    "blockSwap": "false",
+    "territoryName": "dungeon",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "GargoyleCastle",
+    "mods": "",
+    "size": "66,59,66",
+    "offset": "29,12,65"
+  }
+}

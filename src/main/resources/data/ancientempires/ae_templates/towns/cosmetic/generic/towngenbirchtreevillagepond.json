@@ -1,0 +1,41 @@
+{
+  "name": "TownGenBirchTreeVillagePond",
+  "source": "towns/cosmetic/Generic/TownGenBirchTreeVillagePond.aws",
+  "size": [
+    18,
+    27,
+    19
+  ],
+  "offset": [
+    9,
+    3,
+    17
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "0",
+    "clusterValue": "0",
+    "minDuplicateDistance": "0",
+    "dimensionWhiteList": "false",
+    "dimensionList": [],
+    "biomeWhiteList": "false",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false"
+  },
+  "header": {
+    "version": "2.8",
+    "name": "TownGenBirchTreeVillagePond",
+    "mods": "",
+    "size": "18,27,19",
+    "offset": "9,3,17"
+  }
+}

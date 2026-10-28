@@ -1,0 +1,62 @@
+{
+  "name": "IceAndFireFireDragonRoostSpire",
+  "source": "normal/ModIce&FireLairs/IceAndFireFireDragonRoostSpire.aws",
+  "size": [
+    26,
+    79,
+    47
+  ],
+  "offset": [
+    14,
+    8,
+    46
+  ],
+  "requiredMods": [
+    "iceandfire"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "harvestcraft",
+    "iceandfire",
+    "mod_lavacow"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "10",
+    "clusterValue": "250",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "auxbiomes:forested_island",
+      "spookybiomes:seeping_forest",
+      "environs:wasteland_spikes",
+      "minecraft:windswept_hills",
+      "minecraft:old_growth_pine_taiga",
+      "environs:wasteland_eroded",
+      "minecraft:plains",
+      "environs:emerald_cliffs",
+      "minecraft:stony_shore"
+    ],
+    "leveling": "12",
+    "fill": "12",
+    "border": "12",
+    "blockSwap": "false",
+    "territoryName": "ruins",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "IceAndFireFireDragonRoostSpire",
+    "mods": "iceandfire",
+    "size": "26,79,47",
+    "offset": "14,8,46"
+  }
+}

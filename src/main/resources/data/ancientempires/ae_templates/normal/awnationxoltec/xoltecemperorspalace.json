@@ -1,0 +1,53 @@
+{
+  "name": "XoltecEmperorsPalace",
+  "source": "normal/AWNationXoltec/XoltecEmperorsPalace.aws",
+  "size": [
+    92,
+    51,
+    96
+  ],
+  "offset": [
+    45,
+    11,
+    95
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ebwizardry",
+    "eplus"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "80",
+    "clusterValue": "50",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "false",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "nt:lush_desert",
+      "minecraft:badlands",
+      "minecraft:wooded_badlands",
+      "minecraft:eroded_badlands"
+    ],
+    "leveling": "52",
+    "fill": "52",
+    "border": "25",
+    "blockSwap": "false",
+    "territoryName": "xoltec",
+    "biomeReplacement": "minecraft:mesa"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "XoltecEmperorsPalace",
+    "mods": "",
+    "size": "92,51,96",
+    "offset": "45,11,95"
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "name": "GOGFleshLichLair",
+  "source": "normal/ModGrimoireOfGaiaLairs/GOGFleshLichLair.aws",
+  "size": [
+    38,
+    57,
+    60
+  ],
+  "offset": [
+    19,
+    24,
+    59
+  ],
+  "requiredMods": [
+    "grimoireofgaia"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "mowziesmobs"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "50",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:snowy_taiga",
+      "minecraft:taiga",
+      "minecraft:old_growth_pine_taiga",
+      "redwoods:lush_redwood_forest",
+      "minecraft:old_growth_spruce_taiga",
+      "redwoods:redwood_forest"
+    ],
+    "leveling": "12",
+    "fill": "12",
+    "border": "8",
+    "blockSwap": "false",
+    "territoryName": "undead",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "GOGFleshLichLair",
+    "mods": "grimoireofgaia",
+    "size": "38,57,60",
+    "offset": "19,24,59"
+  }
+}

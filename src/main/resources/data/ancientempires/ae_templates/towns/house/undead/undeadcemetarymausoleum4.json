@@ -1,0 +1,48 @@
+{
+  "name": "UndeadCemetaryMausoleum4",
+  "source": "towns/house/Undead/UndeadCemetaryMausoleum4.aws",
+  "size": [
+    7,
+    12,
+    13
+  ],
+  "offset": [
+    3,
+    5,
+    11
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "rustic"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "0",
+    "clusterValue": "0",
+    "minDuplicateDistance": "0",
+    "dimensionWhiteList": "false",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "false",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "UndeadCemetaryMausoleum4",
+    "mods": "",
+    "size": "7,12,13",
+    "offset": "3,5,11"
+  }
+}

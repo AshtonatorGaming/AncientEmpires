@@ -1,0 +1,64 @@
+{
+  "name": "RuinsOfThePlagueMaker",
+  "source": "normal/MonsterDungeonsAndLairs/RuinsOfThePlagueMaker.aws",
+  "size": [
+    45,
+    32,
+    45
+  ],
+  "offset": [
+    22,
+    10,
+    44
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarenpc",
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "40",
+    "clusterValue": "200",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:wetland",
+      "minecraft:swamp",
+      "minecraft:dark_forest",
+      "byg:bbog",
+      "traverse:rocky_plains",
+      "environs:silkglades",
+      "environs:silk_wetland",
+      "environs:moor",
+      "vampirism:vampireforest",
+      "environs:sludgepit",
+      "byg:bfungaljungle",
+      "byg:bmarshlands"
+    ],
+    "leveling": "10",
+    "fill": "10",
+    "border": "10",
+    "blockSwap": "false",
+    "territoryName": "dungeon",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "RuinsOfThePlagueMaker",
+    "mods": "",
+    "size": "45,32,45",
+    "offset": "22,10,44"
+  }
+}

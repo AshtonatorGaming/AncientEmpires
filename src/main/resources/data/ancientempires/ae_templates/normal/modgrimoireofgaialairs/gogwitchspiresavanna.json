@@ -1,0 +1,59 @@
+{
+  "name": "GOGWitchSpireSavanna",
+  "source": "normal/ModGrimoireOfGaiaLairs/GOGWitchSpireSavanna.aws",
+  "size": [
+    43,
+    91,
+    43
+  ],
+  "offset": [
+    22,
+    9,
+    42
+  ],
+  "requiredMods": [
+    "grimoireofgaia"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ebwizardry",
+    "eplus",
+    "harvestcraft"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:savanna"
+    ],
+    "leveling": "4",
+    "fill": "4",
+    "border": "4",
+    "blockSwap": "false",
+    "territoryName": "zimba",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "GOGWitchSpireSavanna",
+    "mods": "grimoireofgaia",
+    "size": "43,91,43",
+    "offset": "22,9,42"
+  }
+}

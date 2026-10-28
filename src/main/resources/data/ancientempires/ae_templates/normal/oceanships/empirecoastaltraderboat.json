@@ -1,0 +1,52 @@
+{
+  "name": "EmpireCoastalTraderBoat",
+  "source": "normal/OceanShips/EmpireCoastalTraderBoat.aws",
+  "size": [
+    36,
+    19,
+    17
+  ],
+  "offset": [
+    18,
+    5,
+    17
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "water",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "250",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:ocean"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "empirecoastal",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "EmpireCoastalTraderBoat",
+    "mods": "",
+    "size": "36,19,17",
+    "offset": "18,5,17"
+  }
+}

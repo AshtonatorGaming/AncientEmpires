@@ -1,0 +1,55 @@
+{
+  "name": "IslandsIceDragonSmallDouble",
+  "source": "normal/OceanIslands/IslandsIceDragonSmallDouble.aws",
+  "size": [
+    129,
+    118,
+    51
+  ],
+  "offset": [
+    59,
+    50,
+    50
+  ],
+  "requiredMods": [
+    "iceandfire"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "true",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "50",
+    "clusterValue": "100",
+    "minDuplicateDistance": "2000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:ocean",
+      "minecraft:frozen_ocean",
+      "minecraft:deep_ocean"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "oceancold",
+    "biomeReplacement": "minecraft:frozen_ocean"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "IslandsIceDragonSmallDouble",
+    "mods": "iceandfire",
+    "size": "129,118,51",
+    "offset": "59,50,50"
+  }
+}

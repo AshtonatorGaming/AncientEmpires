@@ -1,0 +1,59 @@
+{
+  "name": "OrcRuinCircleMediumGeneric",
+  "source": "normal/AWTribalOrcRuined/OrcRuinCircleMediumGeneric.aws",
+  "size": [
+    29,
+    19,
+    29
+  ],
+  "offset": [
+    14,
+    8,
+    28
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "30",
+    "clusterValue": "60",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:shrubland",
+      "biomesoplenty:woodland",
+      "biomesoplenty:dead_swamp",
+      "biomesoplenty:dead_forest",
+      "traverse:woodlands",
+      "minecraft:windswept_hills",
+      "minecraft:old_growth_pine_taiga",
+      "traverse:badlands",
+      "biomesoplenty:moor",
+      "traverse:rocky_plateau"
+    ],
+    "leveling": "4",
+    "fill": "4",
+    "border": "4",
+    "blockSwap": "false",
+    "territoryName": "orcruined",
+    "biomeReplacement": "minecraft:minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "OrcRuinCircleMediumGeneric",
+    "mods": "",
+    "size": "29,19,29",
+    "offset": "14,8,28"
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "name": "UndeadHauntedMansion",
+  "source": "normal/AWPowersUndead/UndeadHauntedMansion.aws",
+  "size": [
+    38,
+    48,
+    23
+  ],
+  "offset": [
+    16,
+    5,
+    22
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "environs:dry_oak_forest",
+      "environs:dry_oak_forest_m",
+      "environs:silk_wetland",
+      "spookybiomes:ghostly_forest",
+      "spookybiomes:seeping_forest",
+      "biomesoplenty:dead_forest",
+      "environs:wasteland_spikes",
+      "biomesoplenty:dead_swamp",
+      "environs:wasteland_eroded",
+      "environs:dead_oak_forest",
+      "auxbiomes:wasteland"
+    ],
+    "leveling": "20",
+    "fill": "20",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "undead",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "UndeadHauntedMansion",
+    "mods": "",
+    "size": "38,48,23",
+    "offset": "16,5,22"
+  }
+}

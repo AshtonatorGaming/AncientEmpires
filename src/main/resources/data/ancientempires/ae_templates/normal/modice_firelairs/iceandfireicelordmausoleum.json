@@ -1,0 +1,59 @@
+{
+  "name": "IceAndFireIcelordMausoleum",
+  "source": "normal/ModIce&FireLairs/IceAndFireIcelordMausoleum.aws",
+  "size": [
+    47,
+    43,
+    47
+  ],
+  "offset": [
+    22,
+    13,
+    46
+  ],
+  "requiredMods": [
+    "iceandfire"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "iceandfire",
+    "primitivemobs"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "200",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:snowy_taiga",
+      "byg:bsnowyevergeentaiga",
+      "minecraft:snowy_plains",
+      "environs:cold_savanna_rock"
+    ],
+    "leveling": "26",
+    "fill": "26",
+    "border": "12",
+    "blockSwap": "false",
+    "territoryName": "icelord",
+    "biomeReplacement": "minecraft:ice_flats",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "IceAndFireIcelordMausoleum",
+    "mods": "iceandfire",
+    "size": "47,43,47",
+    "offset": "22,13,46"
+  }
+}

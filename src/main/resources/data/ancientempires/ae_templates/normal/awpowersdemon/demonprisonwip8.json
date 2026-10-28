@@ -1,0 +1,50 @@
+{
+  "name": "DemonPrisonWIP8",
+  "source": "normal/AWPowersDemon/DemonPrisonWIP8.aws",
+  "size": [
+    59,
+    59,
+    59
+  ],
+  "offset": [
+    29,
+    8,
+    52
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "lava",
+    "structureAuthor": "lumberjacksparrow",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "100",
+    "clusterValue": "2",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:the_nether"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "false",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "DemonPrisonWIP8",
+    "mods": "",
+    "size": "59,59,59",
+    "offset": "29,8,52"
+  }
+}

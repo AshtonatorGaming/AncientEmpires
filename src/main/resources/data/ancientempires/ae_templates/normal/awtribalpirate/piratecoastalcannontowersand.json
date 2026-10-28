@@ -1,0 +1,55 @@
+{
+  "name": "PirateCoastalCannonTowerSand",
+  "source": "normal/AWTribalPirate/PirateCoastalCannonTowerSand.aws",
+  "size": [
+    11,
+    32,
+    11
+  ],
+  "offset": [
+    5,
+    7,
+    10
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ancientwarfarevehicle"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "50",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:beach"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "true",
+    "territoryName": "piratecoastal",
+    "biomeReplacement": "minecraft:beaches",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "PirateCoastalCannonTowerSand",
+    "mods": "",
+    "size": "11,32,11",
+    "offset": "5,7,10"
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "name": "CovenWitchHouseSmallPumpkin",
+  "source": "normal/AWNationCoven/CovenWitchHouseSmallPumpkin.aws",
+  "size": [
+    15,
+    20,
+    15
+  ],
+  "offset": [
+    7,
+    9,
+    14
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "20",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:mystic_grove",
+      "thaumcraft:magical_forest",
+      "biomesoplenty:wetland",
+      "nt:moorland",
+      "nt:heath",
+      "nt:fungal_jungle",
+      "nt:fungal_jungle_hills",
+      "nt:fen",
+      "minecraft:swamp",
+      "minecraft:mushroom_fields",
+      "minecraft:dark_forest",
+      "traverse:woodlands",
+      "minecraft:windswept_hills",
+      "minecraft:taiga",
+      "traverse:badlands",
+      "traverse:thicket",
+      "traverse:cliffs",
+      "traverse:rocky_plateau",
+      "auxbiomes:marsh",
+      "redwoods:alpine",
+      "environs:silkglades",
+      "environs:silk_wetland",
+      "environs:tall_oak_wetland",
+      "environs:moor",
+      "environs:dead_oak_forest_hills",
+      "environs:wasteland_eroded",
+      "environs:dead_oak_forest",
+      "bglowshroombayou",
+      "byg:bwhisperingwoods",
+      "byg:bweepingwitchforest"
+    ],
+    "leveling": "25",
+    "fill": "25",
+    "border": "12",
+    "blockSwap": "false",
+    "territoryName": "coven",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "CovenWitchHouseSmallPumpkin",
+    "mods": "",
+    "size": "15,20,15",
+    "offset": "7,9,14"
+  }
+}

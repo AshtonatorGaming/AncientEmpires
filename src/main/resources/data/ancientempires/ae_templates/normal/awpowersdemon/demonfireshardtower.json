@@ -1,0 +1,53 @@
+{
+  "name": "DemonFireshardTower",
+  "source": "normal/AWPowersDemon/DemonFireshardTower.aws",
+  "size": [
+    13,
+    43,
+    16
+  ],
+  "offset": [
+    6,
+    6,
+    15
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "quark"
+  ],
+  "validation": {
+    "type": "lava",
+    "structureAuthor": "TheOddlySeagull",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "100",
+    "clusterValue": "1",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:the_nether"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "false",
+    "biomeList": [],
+    "leveling": "5",
+    "fill": "10",
+    "border": "3",
+    "blockSwap": "false",
+    "territoryName": "Demon",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "100"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "DemonFireshardTower",
+    "mods": "",
+    "size": "13,43,16",
+    "offset": "6,6,15"
+  }
+}

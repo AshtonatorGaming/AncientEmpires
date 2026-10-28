@@ -1,0 +1,69 @@
+{
+  "name": "GOGOrcSiegeCamp",
+  "source": "normal/ModGrimoireOfGaiaOrcs/GOGOrcSiegeCamp.aws",
+  "size": [
+    41,
+    12,
+    46
+  ],
+  "offset": [
+    22,
+    6,
+    45
+  ],
+  "requiredMods": [
+    "grimoireofgaia"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ancientwarfarevehicle"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "50",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "nt:cold_roofed_forest_hills",
+      "biomesoplenty:shrubland",
+      "nt:highland",
+      "biomesoplenty:dead_forest",
+      "traverse:woodlands",
+      "nt:moorland",
+      "traverse:badlands",
+      "nt:heath",
+      "biomesoplenty:dead_swamp",
+      "nt:scrubland",
+      "nt:shrubland",
+      "environs:silk_wetland",
+      "environs:dead_oak_forest_hills",
+      "environs:moor",
+      "nt:cold_roofed_forest",
+      "biomesoplenty:scrubland",
+      "environs:dead_oak_forest"
+    ],
+    "leveling": "6",
+    "fill": "6",
+    "border": "6",
+    "blockSwap": "true",
+    "territoryName": "ruins",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "GOGOrcSiegeCamp",
+    "mods": "grimoireofgaia",
+    "size": "41,12,46",
+    "offset": "22,6,45"
+  }
+}

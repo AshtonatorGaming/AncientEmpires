@@ -1,0 +1,57 @@
+{
+  "name": "NoggRuinedHouseHillGiantAttack",
+  "source": "normal/AWNationNogg/NoggRuinedHouseHillGiantAttack.aws",
+  "size": [
+    21,
+    19,
+    24
+  ],
+  "offset": [
+    10,
+    6,
+    23
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "60",
+    "clusterValue": "10",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:grove",
+      "minecraft:old_growth_birch_forest",
+      "nt:cold_birch_forest_hills",
+      "nt:cold_birch_forest",
+      "minecraft:birch_forest",
+      "traverse:birch_forested_hills",
+      "nt:birch_hills"
+    ],
+    "leveling": "35",
+    "fill": "35",
+    "border": "8",
+    "blockSwap": "false",
+    "territoryName": "nogg",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "NoggRuinedHouseHillGiantAttack",
+    "mods": "",
+    "size": "21,19,24",
+    "offset": "10,6,23"
+  }
+}

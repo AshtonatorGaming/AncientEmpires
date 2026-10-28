@@ -1,0 +1,54 @@
+{
+  "name": "BufflokaForestLargeVillage",
+  "source": "normal/AWTribalBufflokaForest/BufflokaForestLargeVillage.aws",
+  "size": [
+    76,
+    38,
+    59
+  ],
+  "offset": [
+    34,
+    6,
+    58
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "60",
+    "clusterValue": "60",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:old_growth_pine_taiga"
+    ],
+    "leveling": "5",
+    "fill": "5",
+    "border": "5",
+    "blockSwap": "false",
+    "territoryName": "bufflokaforest",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "BufflokaForestLargeVillage",
+    "mods": "",
+    "size": "76,38,59",
+    "offset": "34,6,58"
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "name": "IshtariTombSmallSphynx",
+  "source": "normal/AWPowersIshtari/IshtariTombSmallSphynx.aws",
+  "size": [
+    15,
+    14,
+    15
+  ],
+  "offset": [
+    7,
+    5,
+    14
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "50",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:desert"
+    ],
+    "leveling": "10",
+    "fill": "10",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "desertruins",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "IshtariTombSmallSphynx",
+    "mods": "",
+    "size": "15,14,15",
+    "offset": "7,5,14"
+  }
+}

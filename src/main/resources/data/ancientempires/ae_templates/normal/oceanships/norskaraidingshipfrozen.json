@@ -1,0 +1,51 @@
+{
+  "name": "NorskaRaidingShipFrozen",
+  "source": "normal/OceanShips/NorskaRaidingShipFrozen.aws",
+  "size": [
+    27,
+    63,
+    58
+  ],
+  "offset": [
+    10,
+    5,
+    57
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "water",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "true",
+    "selectionWeight": "20",
+    "clusterValue": "300",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:frozen_river",
+      "minecraft:frozen_ocean"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "oceancold",
+    "biomeReplacement": ""
+  },
+  "header": {
+    "version": "2.10",
+    "name": "NorskaRaidingShipFrozen",
+    "mods": "",
+    "size": "27,63,58",
+    "offset": "10,5,57"
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "name": "MountainGiant",
+  "source": "normal/AWTribalGiant/MountainGiant.aws",
+  "size": [
+    5,
+    7,
+    5
+  ],
+  "offset": [
+    2,
+    6,
+    4
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "400",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "explorercraft:forested_mountain",
+      "minecraft:windswept_gravelly_hills"
+    ],
+    "leveling": "6",
+    "fill": "6",
+    "border": "6",
+    "blockSwap": "true",
+    "territoryName": "",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "150",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "MountainGiant",
+    "mods": "",
+    "size": "5,7,5",
+    "offset": "2,6,4"
+  }
+}

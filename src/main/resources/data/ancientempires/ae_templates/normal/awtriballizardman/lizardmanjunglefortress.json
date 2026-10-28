@@ -1,0 +1,54 @@
+{
+  "name": "LizardmanJungleFortress",
+  "source": "normal/AWTribalLizardman/LizardmanJungleFortress.aws",
+  "size": [
+    56,
+    49,
+    63
+  ],
+  "offset": [
+    31,
+    15,
+    62
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ebwizardry",
+    "primitivemobs"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "50",
+    "clusterValue": "200",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:jungle"
+    ],
+    "leveling": "20",
+    "fill": "20",
+    "border": "12",
+    "blockSwap": "false",
+    "territoryName": "jungleruins",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "LizardmanJungleFortress",
+    "mods": "",
+    "size": "56,49,63",
+    "offset": "31,15,62"
+  }
+}

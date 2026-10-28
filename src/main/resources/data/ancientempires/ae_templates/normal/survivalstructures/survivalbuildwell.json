@@ -1,0 +1,41 @@
+{
+  "name": "SurvivalBuildWell",
+  "source": "normal/SurvivalStructures/SurvivalBuildWell.aws",
+  "size": [
+    12,
+    15,
+    12
+  ],
+  "offset": [
+    6,
+    7,
+    11
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [],
+  "validation": {
+    "type": "ground",
+    "survival": "true",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "0",
+    "clusterValue": "0",
+    "minDuplicateDistance": "0",
+    "dimensionWhiteList": "false",
+    "dimensionList": [],
+    "biomeWhiteList": "false",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false"
+  },
+  "header": {
+    "version": "2.8",
+    "name": "SurvivalBuildWell",
+    "mods": "",
+    "size": "12,15,12",
+    "offset": "6,7,11"
+  }
+}

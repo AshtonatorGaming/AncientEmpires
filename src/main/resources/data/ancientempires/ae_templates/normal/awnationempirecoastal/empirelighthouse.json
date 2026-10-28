@@ -1,0 +1,60 @@
+{
+  "name": "EmpireLighthouse",
+  "source": "normal/AWNationEmpireCoastal/EmpireLighthouse.aws",
+  "size": [
+    10,
+    43,
+    15
+  ],
+  "offset": [
+    7,
+    14,
+    14
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "50",
+    "clusterValue": "150",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:gravel_beach",
+      "auxbiomes:forested_island",
+      "minecraft:beach",
+      "nt:iron_beach",
+      "nt:brown_beach",
+      "nt:olivine_beach",
+      "nt:pink_beach"
+    ],
+    "leveling": "6",
+    "fill": "6",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "empirecoastal",
+    "biomeReplacement": "minecraft:beaches",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "EmpireLighthouse",
+    "mods": "",
+    "size": "10,43,15",
+    "offset": "7,14,14"
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "name": "MountainGiantSnowdonia",
+  "source": "normal/AWTribalGiant/MountainGiantSnowdonia.aws",
+  "size": [
+    16,
+    13,
+    16
+  ],
+  "offset": [
+    8,
+    4,
+    15
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "grimoireofgaia"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:windswept_hills",
+      "nt:mountains",
+      "nt:stone_mountains",
+      "byg:bnorthernforest",
+      "byg:bdovermoutains",
+      "explorercraft:snowdonia",
+      "explorercraft:forested_mountain",
+      "environs:emerald_cliffs"
+    ],
+    "leveling": "55",
+    "fill": "55",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "generic",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "MountainGiantSnowdonia",
+    "mods": "",
+    "size": "16,13,16",
+    "offset": "8,4,15"
+  }
+}

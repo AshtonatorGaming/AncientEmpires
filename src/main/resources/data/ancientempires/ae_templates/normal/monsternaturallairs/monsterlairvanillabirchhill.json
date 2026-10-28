@@ -1,0 +1,55 @@
+{
+  "name": "MonsterLairVanillaBirchhill",
+  "source": "normal/MonsterNaturalLairs/MonsterLairVanillaBirchhill.aws",
+  "size": [
+    41,
+    53,
+    42
+  ],
+  "offset": [
+    22,
+    5,
+    41
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "gravestone-extended",
+    "primitivemobs"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:pasture",
+      "minecraft:birch_forest",
+      "minecraft:old_growth_birch_forest"
+    ],
+    "leveling": "6",
+    "fill": "2",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "generic",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "MonsterLairVanillaBirchhill",
+    "mods": "",
+    "size": "41,53,42",
+    "offset": "22,5,41"
+  }
+}

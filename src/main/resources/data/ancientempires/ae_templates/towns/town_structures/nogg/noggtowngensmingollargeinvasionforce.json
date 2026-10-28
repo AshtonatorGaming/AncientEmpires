@@ -1,0 +1,50 @@
+{
+  "name": "NoggTownGenSmingolLargeInvasionForce",
+  "source": "towns/town structures/Nogg/NoggTownGenSmingolLargeInvasionForce.aws",
+  "size": [
+    21,
+    6,
+    24
+  ],
+  "offset": [
+    11,
+    4,
+    23
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "1",
+    "clusterValue": "1",
+    "minDuplicateDistance": "1",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "false",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "NoggTownGenSmingolLargeInvasionForce",
+    "mods": "",
+    "size": "21,6,24",
+    "offset": "11,4,23"
+  }
+}

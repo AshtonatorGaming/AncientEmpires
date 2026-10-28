@@ -1,0 +1,54 @@
+{
+  "name": "SarkonidInnLarge",
+  "source": "normal/AWNationSarkonid/SarkonidInnLarge.aws",
+  "size": [
+    44,
+    21,
+    36
+  ],
+  "offset": [
+    17,
+    5,
+    31
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "40",
+    "clusterValue": "30",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "false",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "environs:sandstone_ranges",
+      "nt:sahel",
+      "minecraft:desert",
+      "traverse:desert_shrubland",
+      "nt:tropical_desert",
+      "byg:bsonorandesert"
+    ],
+    "leveling": "35",
+    "fill": "35",
+    "border": "10",
+    "blockSwap": "false",
+    "territoryName": "sarkonid",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "SarkonidInnLarge",
+    "mods": "",
+    "size": "44,21,36",
+    "offset": "17,5,31"
+  }
+}

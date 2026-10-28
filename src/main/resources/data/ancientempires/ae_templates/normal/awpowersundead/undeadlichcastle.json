@@ -1,0 +1,59 @@
+{
+  "name": "UndeadLichCastle",
+  "source": "normal/AWPowersUndead/UndeadLichCastle.aws",
+  "size": [
+    40,
+    46,
+    65
+  ],
+  "offset": [
+    27,
+    5,
+    62
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfare",
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "Gungnir",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "30",
+    "clusterValue": "160",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [
+      "undead"
+    ],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "environs:dry_oak_forest",
+      "environs:dry_oak_forest_m",
+      "environs:silk_wetland",
+      "minecraft:swamp",
+      "biomesoplenty:dead_swamp",
+      "biomesoplenty:dead_forest",
+      "biomesoplenty:ominous_woods"
+    ],
+    "leveling": "16",
+    "fill": "16",
+    "border": "3",
+    "blockSwap": "false",
+    "territoryName": "undead",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "UndeadLichCastle",
+    "mods": "",
+    "size": "40,46,65",
+    "offset": "27,5,62"
+  }
+}

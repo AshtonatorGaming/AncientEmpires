@@ -1,0 +1,65 @@
+{
+  "name": "IslandsNoggCityIsle",
+  "source": "normal/OceanIslands/IslandsNoggCityIsle.aws",
+  "size": [
+    231,
+    94,
+    231
+  ],
+  "offset": [
+    109,
+    50,
+    230
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarenpc",
+    "ancientwarfarestructure",
+    "ancientwarfarevehicle",
+    "ebwizardry",
+    "mocreatures",
+    "primitivemobs",
+    "rustic",
+    "vampirism",
+    "waystones"
+  ],
+  "validation": {
+    "type": "island",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "true",
+    "preserveBlocks": "true",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "50",
+    "clusterValue": "50",
+    "minDuplicateDistance": "2000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:kelp_forest",
+      "biomesoplenty:coral_reef",
+      "climaticbiomesjbg:coastal_waters",
+      "minecraft:ocean",
+      "minecraft:deep_ocean"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "oceanfalse",
+    "territoryName": "birchforest",
+    "biomeReplacement": "minecraft:birch_forest",
+    "minWaterDepth": "10",
+    "maxWaterDepth": "50"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "IslandsNoggCityIsle",
+    "mods": "",
+    "size": "231,94,231",
+    "offset": "109,50,230"
+  }
+}

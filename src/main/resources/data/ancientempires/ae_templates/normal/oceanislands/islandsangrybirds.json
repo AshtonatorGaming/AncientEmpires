@@ -1,0 +1,58 @@
+{
+  "name": "IslandsAngryBirds",
+  "source": "normal/OceanIslands/IslandsAngryBirds.aws",
+  "size": [
+    151,
+    94,
+    146
+  ],
+  "offset": [
+    53,
+    52,
+    145
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "primitivemobs"
+  ],
+  "validation": {
+    "type": "island",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "true",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "50",
+    "clusterValue": "50",
+    "minDuplicateDistance": "2000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:kelp_forest",
+      "biomesoplenty:coral_reef",
+      "climaticbiomesjbg:coastal_waters",
+      "minecraft:ocean",
+      "minecraft:deep_ocean"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "oceansjungleflat",
+    "biomeReplacement": "minecraft:jungle",
+    "minWaterDepth": "10",
+    "maxWaterDepth": "50"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "IslandsAngryBirds",
+    "mods": "",
+    "size": "151,94,146",
+    "offset": "53,52,145"
+  }
+}

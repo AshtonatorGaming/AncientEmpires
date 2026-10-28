@@ -1,0 +1,64 @@
+{
+  "name": "IceAndFireDragonMoundPlainsFireDragon",
+  "source": "normal/ModIce&FireLairs/IceAndFireDragonMoundPlainsFireDragon.aws",
+  "size": [
+    43,
+    44,
+    42
+  ],
+  "offset": [
+    21,
+    35,
+    41
+  ],
+  "requiredMods": [
+    "iceandfire"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ebwizardry",
+    "iceandfire",
+    "mod_lavacow",
+    "primitivemobs"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "300",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:plains",
+      "biomesoplenty:grassland",
+      "biomesoplenty:wetland",
+      "environs:silkglades",
+      "environs:silk_wetland",
+      "traverse:woodlands",
+      "explorercraft:snowdonia"
+    ],
+    "leveling": "6",
+    "fill": "6",
+    "border": "7",
+    "blockSwap": "false",
+    "territoryName": "ruins",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "IceAndFireDragonMoundPlainsFireDragon",
+    "mods": "iceandfire",
+    "size": "43,44,42",
+    "offset": "21,35,41"
+  }
+}

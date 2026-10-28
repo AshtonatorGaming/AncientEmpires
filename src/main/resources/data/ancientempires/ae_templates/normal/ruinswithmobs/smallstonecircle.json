@@ -1,0 +1,63 @@
+{
+  "name": "SmallStoneCircle",
+  "source": "normal/RuinsWithMobs/SmallStoneCircle.aws",
+  "size": [
+    13,
+    7,
+    13
+  ],
+  "offset": [
+    6,
+    3,
+    12
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "30",
+    "clusterValue": "40",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:meadow",
+      "biomesoplenty:shrubland",
+      "biomesoplenty:woodland",
+      "biomesoplenty:pasture",
+      "spookybiomes:ghostly_forest",
+      "traverse:rocky_plains",
+      "traverse:badlands",
+      "biomesoplenty:land_of_lakes",
+      "minecraft:plains",
+      "biomesoplenty:lavender_fields"
+    ],
+    "leveling": "12",
+    "fill": "12",
+    "border": "5",
+    "blockSwap": "false",
+    "territoryName": "ruins",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "SmallStoneCircle",
+    "mods": "",
+    "size": "13,7,13",
+    "offset": "6,3,12"
+  }
+}

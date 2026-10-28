@@ -1,0 +1,52 @@
+{
+  "name": "EmpireCityGenWizardsTowerSmall",
+  "source": "towns/town structures/Empire/EmpireCityGenWizardsTowerSmall.aws",
+  "size": [
+    19,
+    74,
+    19
+  ],
+  "offset": [
+    9,
+    11,
+    18
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ebwizardry",
+    "eplus"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "1",
+    "clusterValue": "1",
+    "minDuplicateDistance": "1",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "EmpireCityGenWizardsTowerSmall",
+    "mods": "",
+    "size": "19,74,19",
+    "offset": "9,11,18"
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "name": "NoggTownGenWorkShed",
+  "source": "towns/cosmetic/Nogg/NoggTownGenWorkShed.aws",
+  "size": [
+    8,
+    7,
+    9
+  ],
+  "offset": [
+    4,
+    2,
+    8
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "1",
+    "clusterValue": "1",
+    "minDuplicateDistance": "1",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "false",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "NoggTownGenWorkShed",
+    "mods": "",
+    "size": "8,7,9",
+    "offset": "4,2,8"
+  }
+}

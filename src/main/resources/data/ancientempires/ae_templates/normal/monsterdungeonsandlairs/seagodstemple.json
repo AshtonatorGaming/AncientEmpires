@@ -1,0 +1,51 @@
+{
+  "name": "SeaGodsTemple",
+  "source": "normal/MonsterDungeonsAndLairs/SeaGodsTemple.aws",
+  "size": [
+    21,
+    23,
+    20
+  ],
+  "offset": [
+    10,
+    7,
+    19
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "true",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:beach"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "5",
+    "blockSwap": "false",
+    "territoryName": "minossian",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "SeaGodsTemple",
+    "mods": "",
+    "size": "21,23,20",
+    "offset": "10,7,19"
+  }
+}

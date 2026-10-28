@@ -1,0 +1,59 @@
+{
+  "name": "ZimbaBoababTree2",
+  "source": "normal/AWTribalZimba/ZimbaBoababTree2.aws",
+  "size": [
+    15,
+    36,
+    12
+  ],
+  "offset": [
+    6,
+    4,
+    11
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "byg:bsavannacanopy",
+      "byg:bbaobabsavanna",
+      "minecraft:savanna_plateau",
+      "biomesoplenty:savanna_plateau_extension",
+      "minecraft:savanna",
+      "biomesoplenty:savanna_extension"
+    ],
+    "leveling": "10",
+    "fill": "10",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "zimba",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "ZimbaBoababTree2",
+    "mods": "",
+    "size": "15,36,12",
+    "offset": "6,4,11"
+  }
+}

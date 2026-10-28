@@ -1,0 +1,53 @@
+{
+  "name": "NoggFarmMelon",
+  "source": "normal/AWNationNoggMod/NoggFarmMelon.aws",
+  "size": [
+    29,
+    15,
+    21
+  ],
+  "offset": [
+    14,
+    5,
+    11
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "OddlySeagull",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:grove"
+    ],
+    "leveling": "10",
+    "fill": "10",
+    "border": "5",
+    "blockSwap": "false",
+    "territoryName": "nogg",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "NoggFarmMelon",
+    "mods": "",
+    "size": "29,15,21",
+    "offset": "14,5,11"
+  }
+}

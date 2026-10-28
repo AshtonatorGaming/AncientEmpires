@@ -1,0 +1,59 @@
+{
+  "name": "CreatureOfTheBlackLagoon",
+  "source": "normal/MonsterNaturalLairs/CreatureOfTheBlackLagoon.aws",
+  "size": [
+    18,
+    20,
+    18
+  ],
+  "offset": [
+    8,
+    7,
+    17
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "90",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:taiga",
+      "traverse:rocky_plains",
+      "minecraft:windswept_hills",
+      "byg:btropicalrainforest",
+      "byg:blushdesert",
+      "explorercraft:bamboo_forest",
+      "minecraft:plains",
+      "byg:bfungaljungle",
+      "byg:bbayou"
+    ],
+    "leveling": "6",
+    "fill": "6",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "generic",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "CreatureOfTheBlackLagoon",
+    "mods": "",
+    "size": "18,20,18",
+    "offset": "8,7,17"
+  }
+}

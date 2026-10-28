@@ -1,0 +1,62 @@
+{
+  "name": "ELBMaliceLibraryOfEvil",
+  "source": "normal/ModElectroblobsTowers/ELBMaliceLibraryOfEvil.aws",
+  "size": [
+    49,
+    82,
+    71
+  ],
+  "offset": [
+    14,
+    1,
+    58
+  ],
+  "requiredMods": [
+    "ebwizardry"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "charm",
+    "ebwizardry",
+    "eplus",
+    "grimoireofgaia",
+    "iceandfire",
+    "rustic"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "300",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:dark_forest"
+    ],
+    "leveling": "7",
+    "fill": "7",
+    "border": "7",
+    "blockSwap": "false",
+    "territoryName": "malice",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "ELBMaliceLibraryOfEvil",
+    "mods": "ebwizardry",
+    "size": "49,82,71",
+    "offset": "14,1,58"
+  }
+}

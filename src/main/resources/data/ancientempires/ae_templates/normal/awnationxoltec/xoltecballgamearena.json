@@ -1,0 +1,51 @@
+{
+  "name": "XoltecBallGameArena",
+  "source": "normal/AWNationXoltec/XoltecBallGameArena.aws",
+  "size": [
+    55,
+    18,
+    38
+  ],
+  "offset": [
+    29,
+    8,
+    37
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "60",
+    "clusterValue": "50",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "false",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "nt:lush_desert",
+      "minecraft:badlands",
+      "minecraft:wooded_badlands",
+      "minecraft:eroded_badlands"
+    ],
+    "leveling": "52",
+    "fill": "52",
+    "border": "12",
+    "blockSwap": "false",
+    "territoryName": "xoltec",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "XoltecBallGameArena",
+    "mods": "",
+    "size": "55,18,38",
+    "offset": "29,8,37"
+  }
+}

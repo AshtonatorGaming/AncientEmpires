@@ -1,0 +1,68 @@
+{
+  "name": "EmpireVillageAndLordsCastle",
+  "source": "normal/AWNationEmpire/EmpireVillageAndLordsCastle.aws",
+  "size": [
+    100,
+    46,
+    65
+  ],
+  "offset": [
+    53,
+    12,
+    64
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ancientwarfarevehicle",
+    "ebwizardry",
+    "vampirism"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "70",
+    "clusterValue": "250",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [
+      "empire"
+    ],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "nt:oak_forest",
+      "nt:oak_forest_hills",
+      "nt:tall_oak_forest",
+      "nt:tall_oak_forest_hills",
+      "minecraft:forest",
+      "traverse:meadow",
+      "nt:cold_forest_hill",
+      "traverse:forested_hills",
+      "environs:tall_oak_forest",
+      "environs:tall_oak_forest_hills"
+    ],
+    "leveling": "25",
+    "fill": "25",
+    "border": "12",
+    "blockSwap": "false",
+    "territoryName": "empire",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "EmpireVillageAndLordsCastle",
+    "mods": "",
+    "size": "100,46,65",
+    "offset": "53,12,64"
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "name": "XoltecLavaTemple",
+  "source": "normal/AWNationXoltec/XoltecLavaTemple.aws",
+  "size": [
+    33,
+    25,
+    48
+  ],
+  "offset": [
+    16,
+    7,
+    47
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "primitivemobs"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "70",
+    "clusterValue": "60",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "false",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "nt:lush_desert",
+      "minecraft:badlands",
+      "minecraft:wooded_badlands",
+      "minecraft:eroded_badlands"
+    ],
+    "leveling": "52",
+    "fill": "52",
+    "border": "10",
+    "blockSwap": "false",
+    "territoryName": "xoltec",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "XoltecLavaTemple",
+    "mods": "",
+    "size": "33,25,48",
+    "offset": "16,7,47"
+  }
+}

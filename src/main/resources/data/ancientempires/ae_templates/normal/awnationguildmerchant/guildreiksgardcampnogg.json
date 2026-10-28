@@ -1,0 +1,59 @@
+{
+  "name": "GuildReiksgardCampNogg",
+  "source": "normal/AWNationGuildMerchant/GuildReiksgardCampNogg.aws",
+  "size": [
+    32,
+    14,
+    26
+  ],
+  "offset": [
+    13,
+    3,
+    0
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfare",
+    "ancientwarfarestructure",
+    "ancientwarfarevehicle"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:grove",
+      "minecraft:old_growth_birch_forest",
+      "nt:cold_birch_forest_hills",
+      "nt:cold_birch_forest",
+      "minecraft:birch_forest",
+      "traverse:birch_forested_hills",
+      "nt:birch_hills"
+    ],
+    "leveling": "12",
+    "fill": "12",
+    "border": "3",
+    "blockSwap": "false",
+    "territoryName": "nogg",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "GuildReiksgardCampNogg",
+    "mods": "",
+    "size": "32,14,26",
+    "offset": "13,3,0"
+  }
+}

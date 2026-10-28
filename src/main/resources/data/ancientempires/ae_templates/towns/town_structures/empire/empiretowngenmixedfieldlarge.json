@@ -1,0 +1,46 @@
+{
+  "name": "EmpireTownGenMixedFieldLarge",
+  "source": "towns/town structures/Empire/EmpireTownGenMixedFieldLarge.aws",
+  "size": [
+    29,
+    26,
+    25
+  ],
+  "offset": [
+    14,
+    2,
+    24
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "0",
+    "clusterValue": "0",
+    "minDuplicateDistance": "0",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "false",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "EmpireTownGenMixedFieldLarge",
+    "mods": "",
+    "size": "29,26,25",
+    "offset": "14,2,24"
+  }
+}

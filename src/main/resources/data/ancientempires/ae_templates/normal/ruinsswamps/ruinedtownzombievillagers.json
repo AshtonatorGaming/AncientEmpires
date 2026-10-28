@@ -1,0 +1,53 @@
+{
+  "name": "RuinedTownZombieVillagers",
+  "source": "normal/RuinsSwamps/RuinedTownZombieVillagers.aws",
+  "size": [
+    60,
+    45,
+    70
+  ],
+  "offset": [
+    21,
+    32,
+    69
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "true",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "50",
+    "clusterValue": "200",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:beach",
+      "minecraft:stony_shore"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "beachruins",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "RuinedTownZombieVillagers",
+    "mods": "",
+    "size": "60,45,70",
+    "offset": "21,32,69"
+  }
+}

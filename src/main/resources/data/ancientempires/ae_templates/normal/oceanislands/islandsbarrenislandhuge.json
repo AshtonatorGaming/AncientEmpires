@@ -1,0 +1,49 @@
+{
+  "name": "IslandsBarrenIslandHuge",
+  "source": "normal/OceanIslands/IslandsBarrenIslandHuge.aws",
+  "size": [
+    218,
+    156,
+    244
+  ],
+  "offset": [
+    89,
+    50,
+    243
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [],
+  "validation": {
+    "type": "island",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "true",
+    "selectionWeight": "120",
+    "clusterValue": "1",
+    "minDuplicateDistance": "2000",
+    "dimensionWhiteList": "false",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:ocean",
+      "minecraft:deep_ocean"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "oceanforestandplains",
+    "biomeReplacement": "minecraft:ice_mountains",
+    "minWaterDepth": "10",
+    "maxWaterDepth": "50"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "IslandsBarrenIslandHuge",
+    "mods": "",
+    "size": "218,156,244",
+    "offset": "89,50,243"
+  }
+}

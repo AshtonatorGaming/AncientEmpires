@@ -1,0 +1,57 @@
+{
+  "name": "CovenNoggBurningBirch",
+  "source": "normal/AWNationCoven/CovenNoggBurningBirch.aws",
+  "size": [
+    17,
+    20,
+    11
+  ],
+  "offset": [
+    9,
+    5,
+    10
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarenpc",
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:grove",
+      "traverse:birch_forested_hills",
+      "minecraft:birch_forest"
+    ],
+    "leveling": "10",
+    "fill": "10",
+    "border": "5",
+    "blockSwap": "false",
+    "territoryName": "nogg",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "CovenNoggBurningBirch",
+    "mods": "",
+    "size": "17,20,11",
+    "offset": "9,5,10"
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "name": "UndeadChurchOfTheLiche",
+  "source": "normal/AWPowersUndead/UndeadChurchOfTheLiche.aws",
+  "size": [
+    25,
+    36,
+    38
+  ],
+  "offset": [
+    12,
+    8,
+    37
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "primitivemobs"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "30",
+    "clusterValue": "50",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "spookybiomes:seeping_forest",
+      "environs:wasteland_spikes",
+      "biomesoplenty:dead_swamp",
+      "biomesoplenty:dead_forest",
+      "spookybiomes:ghostly_forest",
+      "environs:wasteland_eroded",
+      "environs:dead_oak_forest",
+      "auxbiomes:wasteland"
+    ],
+    "leveling": "5",
+    "fill": "5",
+    "border": "5",
+    "blockSwap": "false",
+    "territoryName": "ruins",
+    "biomeReplacement": "spookybiomes:ghostly_forest",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "UndeadChurchOfTheLiche",
+    "mods": "",
+    "size": "25,36,38",
+    "offset": "12,8,37"
+  }
+}

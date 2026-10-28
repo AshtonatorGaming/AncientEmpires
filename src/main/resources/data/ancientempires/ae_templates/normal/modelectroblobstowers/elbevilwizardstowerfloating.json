@@ -1,0 +1,67 @@
+{
+  "name": "ELBEvilWizardsTowerFloating",
+  "source": "normal/ModElectroblobsTowers/ELBEvilWizardsTowerFloating.aws",
+  "size": [
+    32,
+    143,
+    31
+  ],
+  "offset": [
+    16,
+    0,
+    30
+  ],
+  "requiredMods": [
+    "ebwizardry"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "primitivemobs"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "true",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "250",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:swamp",
+      "biomesoplenty:shrubland",
+      "biomesoplenty:grove",
+      "biomesoplenty:bayou",
+      "biomesoplenty:dead_forest",
+      "biomesoplenty:ominous_woods",
+      "biomesoplenty:bamboo_forest",
+      "biomesoplenty:mangrove",
+      "biomesoplenty:dead_swamp",
+      "biomesoplenty:marsh",
+      "minecraft:old_growth_pine_taiga"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "swampruins",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "ELBEvilWizardsTowerFloating",
+    "mods": "ebwizardry",
+    "size": "32,143,31",
+    "offset": "16,0,30"
+  }
+}

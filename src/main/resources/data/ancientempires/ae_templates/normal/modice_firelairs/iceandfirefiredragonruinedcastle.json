@@ -1,0 +1,56 @@
+{
+  "name": "IceAndFireFireDragonRuinedCastle",
+  "source": "normal/ModIce&FireLairs/IceAndFireFireDragonRuinedCastle.aws",
+  "size": [
+    75,
+    84,
+    81
+  ],
+  "offset": [
+    41,
+    7,
+    80
+  ],
+  "requiredMods": [
+    "iceandfire"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ebwizardry",
+    "iceandfire"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "50",
+    "clusterValue": "250",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:windswept_hills",
+      "minecraft:plains"
+    ],
+    "leveling": "12",
+    "fill": "12",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "ruins",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "IceAndFireFireDragonRuinedCastle",
+    "mods": "iceandfire",
+    "size": "75,84,81",
+    "offset": "41,7,80"
+  }
+}

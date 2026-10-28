@@ -1,0 +1,57 @@
+{
+  "name": "NoggCoastalFarmFish",
+  "source": "normal/AWNationNoggCoastal/NoggCoastalFarmFish.aws",
+  "size": [
+    20,
+    16,
+    34
+  ],
+  "offset": [
+    15,
+    5,
+    12
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "OddlySeagull",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "50",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:beach",
+      "minecraft:stony_shore",
+      "biomesoplenty:gravel_beach",
+      "biomesoplenty:origin_beach"
+    ],
+    "leveling": "35",
+    "fill": "35",
+    "border": "8",
+    "blockSwap": "false",
+    "territoryName": "noggcoastal",
+    "biomeReplacement": "",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "NoggCoastalFarmFish",
+    "mods": "",
+    "size": "20,16,34",
+    "offset": "15,5,12"
+  }
+}

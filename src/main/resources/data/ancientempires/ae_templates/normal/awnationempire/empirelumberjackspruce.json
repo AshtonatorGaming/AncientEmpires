@@ -1,0 +1,52 @@
+{
+  "name": "EmpireLumberjackSpruce",
+  "source": "normal/AWNationEmpire/EmpireLumberjackSpruce.aws",
+  "size": [
+    22,
+    16,
+    22
+  ],
+  "offset": [
+    9,
+    7,
+    21
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "40",
+    "clusterValue": "20",
+    "minDuplicateDistance": "999",
+    "dimensionWhiteList": "false",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:taiga"
+    ],
+    "leveling": "5",
+    "fill": "5",
+    "border": "5",
+    "blockSwap": "false",
+    "territoryName": "",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "0"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "EmpireLumberjackSpruce",
+    "mods": "",
+    "size": "22,16,22",
+    "offset": "9,7,21"
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "name": "IceAndFireDragonMoundDesertFireDragon",
+  "source": "normal/ModIce&FireLairs/IceAndFireDragonMoundDesertFireDragon.aws",
+  "size": [
+    43,
+    43,
+    42
+  ],
+  "offset": [
+    20,
+    34,
+    41
+  ],
+  "requiredMods": [
+    "iceandfire"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ebwizardry",
+    "iceandfire",
+    "mod_lavacow",
+    "primitivemobs",
+    "thesummoner"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "300",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:desert"
+    ],
+    "leveling": "6",
+    "fill": "6",
+    "border": "7",
+    "blockSwap": "false",
+    "territoryName": "desertruins",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "IceAndFireDragonMoundDesertFireDragon",
+    "mods": "iceandfire",
+    "size": "43,43,42",
+    "offset": "20,34,41"
+  }
+}

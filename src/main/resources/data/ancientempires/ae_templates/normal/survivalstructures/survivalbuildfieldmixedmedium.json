@@ -1,0 +1,46 @@
+{
+  "name": "SurvivalBuildFieldMixedMedium",
+  "source": "normal/SurvivalStructures/SurvivalBuildFieldMixedMedium.aws",
+  "size": [
+    17,
+    4,
+    13
+  ],
+  "offset": [
+    7,
+    2,
+    12
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "true",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "0",
+    "clusterValue": "0",
+    "minDuplicateDistance": "0",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "false",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "SurvivalBuildFieldMixedMedium",
+    "mods": "",
+    "size": "17,4,13",
+    "offset": "7,2,12"
+  }
+}

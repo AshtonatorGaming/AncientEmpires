@@ -1,0 +1,54 @@
+{
+  "name": "LizardmanVillageLargeJungle",
+  "source": "normal/AWTribalLizardman/LizardmanVillageLargeJungle.aws",
+  "size": [
+    98,
+    25,
+    55
+  ],
+  "offset": [
+    52,
+    10,
+    54
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ebwizardry",
+    "primitivemobs"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "50",
+    "clusterValue": "80",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:jungle"
+    ],
+    "leveling": "15",
+    "fill": "15",
+    "border": "10",
+    "blockSwap": "false",
+    "territoryName": "jungleruins",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "LizardmanVillageLargeJungle",
+    "mods": "",
+    "size": "98,25,55",
+    "offset": "52,10,54"
+  }
+}

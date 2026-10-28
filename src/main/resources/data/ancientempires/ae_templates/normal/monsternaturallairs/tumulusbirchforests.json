@@ -1,0 +1,51 @@
+{
+  "name": "TumulusBirchForests",
+  "source": "normal/MonsterNaturalLairs/TumulusBirchForests.aws",
+  "size": [
+    29,
+    58,
+    31
+  ],
+  "offset": [
+    13,
+    3,
+    30
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:birch_forest"
+    ],
+    "leveling": "15",
+    "fill": "15",
+    "border": "5",
+    "blockSwap": "false",
+    "territoryName": "ruins",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "TumulusBirchForests",
+    "mods": "",
+    "size": "29,58,31",
+    "offset": "13,3,30"
+  }
+}

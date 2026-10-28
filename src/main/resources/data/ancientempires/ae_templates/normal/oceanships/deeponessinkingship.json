@@ -1,0 +1,53 @@
+{
+  "name": "DeepOnesSinkingShip",
+  "source": "normal/OceanShips/DeepOnesSinkingShip.aws",
+  "size": [
+    113,
+    89,
+    35
+  ],
+  "offset": [
+    62,
+    40,
+    34
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "primitivemobs"
+  ],
+  "validation": {
+    "type": "island",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "true",
+    "selectionWeight": "50",
+    "clusterValue": "60",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:deep_ocean"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "oceanrocky",
+    "biomeReplacement": "",
+    "minWaterDepth": "18",
+    "maxWaterDepth": "50"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "DeepOnesSinkingShip",
+    "mods": "",
+    "size": "113,89,35",
+    "offset": "62,40,34"
+  }
+}

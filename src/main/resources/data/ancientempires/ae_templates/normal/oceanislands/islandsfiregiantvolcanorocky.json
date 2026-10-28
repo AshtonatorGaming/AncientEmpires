@@ -1,0 +1,57 @@
+{
+  "name": "IslandsFireGiantVolcanoRocky",
+  "source": "normal/OceanIslands/IslandsFireGiantVolcanoRocky.aws",
+  "size": [
+    249,
+    182,
+    262
+  ],
+  "offset": [
+    111,
+    50,
+    0
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "mocreatures",
+    "primitivemobs",
+    "thesummoner",
+    "vampirism"
+  ],
+  "validation": {
+    "type": "island",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "true",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "50",
+    "clusterValue": "50",
+    "minDuplicateDistance": "2000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:deep_ocean"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "oceanrocky",
+    "biomeReplacement": "minecraft:extreme_hills",
+    "minWaterDepth": "10",
+    "maxWaterDepth": "50"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "IslandsFireGiantVolcanoRocky",
+    "mods": "",
+    "size": "249,182,262",
+    "offset": "111,50,0"
+  }
+}

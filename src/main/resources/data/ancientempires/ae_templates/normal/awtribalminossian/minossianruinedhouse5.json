@@ -1,0 +1,63 @@
+{
+  "name": "MinossianRuinedHouse5",
+  "source": "normal/AWTribalMinossian/MinossianRuinedHouse5.aws",
+  "size": [
+    15,
+    13,
+    13
+  ],
+  "offset": [
+    7,
+    6,
+    12
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:tropical_island",
+      "biomesoplenty:mangrove",
+      "nt:iron_beach",
+      "nt:orange_beach",
+      "nt:purple_beach",
+      "nt:aegean_archipelago",
+      "minecraft:beach",
+      "nt:black_beach",
+      "biomesoplenty:white_beach",
+      "biomesoplenty:origin_beach"
+    ],
+    "leveling": "12",
+    "fill": "12",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "minossian",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "MinossianRuinedHouse5",
+    "mods": "",
+    "size": "15,13,13",
+    "offset": "7,6,12"
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "name": "IceAndFireTrollCavePlainsBirch",
+  "source": "normal/ModIce&FireLairs/IceAndFireTrollCavePlainsBirch.aws",
+  "size": [
+    50,
+    39,
+    55
+  ],
+  "offset": [
+    26,
+    3,
+    54
+  ],
+  "requiredMods": [
+    "iceandfire"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ebwizardry",
+    "primitivemobs"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "30",
+    "clusterValue": "150",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:birch_forest"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "ruins",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "IceAndFireTrollCavePlainsBirch",
+    "mods": "iceandfire",
+    "size": "50,39,55",
+    "offset": "26,3,54"
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "name": "RuinedTownLarge",
+  "source": "normal/RuinsSwamps/RuinedTownLarge.aws",
+  "size": [
+    60,
+    17,
+    70
+  ],
+  "offset": [
+    21,
+    4,
+    69
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "true",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:swamp",
+      "biomesoplenty:bayou",
+      "biomesoplenty:dead_swamp",
+      "minecraft:beach",
+      "biomesoplenty:gravel_beach",
+      "minecraft:stony_shore"
+    ],
+    "leveling": "24",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "ruin",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "RuinedTownLarge",
+    "mods": "",
+    "size": "60,17,70",
+    "offset": "21,4,69"
+  }
+}

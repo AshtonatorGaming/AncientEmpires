@@ -1,0 +1,48 @@
+{
+  "name": "WaypointShrineCity",
+  "source": "towns/cosmetic/Generic/WaypointShrineCity.aws",
+  "size": [
+    17,
+    20,
+    19
+  ],
+  "offset": [
+    8,
+    4,
+    18
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "waystones"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "0",
+    "clusterValue": "0",
+    "minDuplicateDistance": "0",
+    "dimensionWhiteList": "false",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "false",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "WaypointShrineCity",
+    "mods": "",
+    "size": "17,20,19",
+    "offset": "8,4,18"
+  }
+}

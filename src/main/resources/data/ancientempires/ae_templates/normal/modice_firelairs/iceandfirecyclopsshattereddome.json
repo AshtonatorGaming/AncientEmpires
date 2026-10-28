@@ -1,0 +1,62 @@
+{
+  "name": "IceAndFireCyclopsShatteredDome",
+  "source": "normal/ModIce&FireLairs/IceAndFireCyclopsShatteredDome.aws",
+  "size": [
+    58,
+    32,
+    59
+  ],
+  "offset": [
+    29,
+    6,
+    58
+  ],
+  "requiredMods": [
+    "iceandfire"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "false",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "nt:cold_desert",
+      "minecraft:snowy_taiga",
+      "byg:bfrostyforest",
+      "minecraft:snowy_plains",
+      "environs:cold_savanna",
+      "environs:cold_pine_forest",
+      "environs:cold_savanna_rock"
+    ],
+    "leveling": "24",
+    "fill": "24",
+    "border": "10",
+    "blockSwap": "true",
+    "territoryName": "icelord",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "IceAndFireCyclopsShatteredDome",
+    "mods": "iceandfire",
+    "size": "58,32,59",
+    "offset": "29,6,58"
+  }
+}

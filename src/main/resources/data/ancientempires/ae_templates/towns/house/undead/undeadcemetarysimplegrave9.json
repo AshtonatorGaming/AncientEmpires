@@ -1,0 +1,47 @@
+{
+  "name": "UndeadCemetarySimpleGrave9",
+  "source": "towns/house/Undead/UndeadCemetarySimpleGrave9.aws",
+  "size": [
+    4,
+    7,
+    5
+  ],
+  "offset": [
+    1,
+    5,
+    4
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "0",
+    "clusterValue": "0",
+    "minDuplicateDistance": "0",
+    "dimensionWhiteList": "false",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "false",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "UndeadCemetarySimpleGrave9",
+    "mods": "",
+    "size": "4,7,5",
+    "offset": "1,5,4"
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "name": "SmugglerNaughtyParrotInn",
+  "source": "normal/AWTribalPirate/SmugglerNaughtyParrotInn.aws",
+  "size": [
+    17,
+    17,
+    19
+  ],
+  "offset": [
+    8,
+    4,
+    18
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:beach"
+    ],
+    "leveling": "5",
+    "fill": "5",
+    "border": "5",
+    "blockSwap": "false",
+    "territoryName": "piratecoastal",
+    "biomeReplacement": "minecraft:beaches",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "SmugglerNaughtyParrotInn",
+    "mods": "",
+    "size": "17,17,19",
+    "offset": "8,4,18"
+  }
+}

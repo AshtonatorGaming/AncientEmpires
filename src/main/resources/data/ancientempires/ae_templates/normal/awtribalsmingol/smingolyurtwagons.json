@@ -1,0 +1,58 @@
+{
+  "name": "SmingolYurtWagons",
+  "source": "normal/AWTribalSmingol/SmingolYurtWagons.aws",
+  "size": [
+    46,
+    14,
+    37
+  ],
+  "offset": [
+    22,
+    1,
+    33
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "gungnir",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "50",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [
+      "smingol"
+    ],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "nt:tundra",
+      "nt:icy_tundra",
+      "biomesoplenty:snowy_tundra",
+      "biomesoplenty:tundra",
+      "biomesoplenty:steppe"
+    ],
+    "leveling": "16",
+    "fill": "16",
+    "border": "6",
+    "blockSwap": "true",
+    "territoryName": "smingol",
+    "biomeReplacement": "biomesoplenty:steppe",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "SmingolYurtWagons",
+    "mods": "",
+    "size": "46,14,37",
+    "offset": "22,1,33"
+  }
+}

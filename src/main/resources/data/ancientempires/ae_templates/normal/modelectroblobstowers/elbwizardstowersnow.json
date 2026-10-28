@@ -1,0 +1,54 @@
+{
+  "name": "ELBWizardsTowerSnow",
+  "source": "normal/ModElectroblobsTowers/ELBWizardsTowerSnow.aws",
+  "size": [
+    41,
+    67,
+    39
+  ],
+  "offset": [
+    19,
+    15,
+    38
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ebwizardry",
+    "primitivemobs"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "400",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:snowy_plains"
+    ],
+    "leveling": "10",
+    "fill": "10",
+    "border": "10",
+    "blockSwap": "magical",
+    "territoryName": "ruins",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "ELBWizardsTowerSnow",
+    "mods": "",
+    "size": "41,67,39",
+    "offset": "19,15,38"
+  }
+}

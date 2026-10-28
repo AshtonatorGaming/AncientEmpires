@@ -1,0 +1,60 @@
+{
+  "name": "EmpireColonyCityLarge",
+  "source": "normal/AWNationEmpireCoastal/EmpireColonyCityLarge.aws",
+  "size": [
+    108,
+    44,
+    105
+  ],
+  "offset": [
+    66,
+    15,
+    104
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarenpc",
+    "ancientwarfarestructure",
+    "ancientwarfarevehicle",
+    "mocreatures",
+    "mod_lavacow",
+    "primitivemobs",
+    "thesummoner"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "90",
+    "clusterValue": "200",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:beach"
+    ],
+    "leveling": "25",
+    "fill": "25",
+    "border": "12",
+    "blockSwap": "false",
+    "territoryName": "empirecoastal",
+    "biomeReplacement": "minecraft:beaches",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "EmpireColonyCityLarge",
+    "mods": "",
+    "size": "108,44,105",
+    "offset": "66,15,104"
+  }
+}

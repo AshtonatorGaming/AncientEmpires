@@ -1,0 +1,46 @@
+{
+  "name": "EmpireTownGenFarmPigLarge",
+  "source": "towns/town structures/Empire/EmpireTownGenFarmPigLarge.aws",
+  "size": [
+    23,
+    35,
+    23
+  ],
+  "offset": [
+    10,
+    2,
+    22
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "0",
+    "clusterValue": "0",
+    "minDuplicateDistance": "0",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "false",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "EmpireTownGenFarmPigLarge",
+    "mods": "",
+    "size": "23,35,23",
+    "offset": "10,2,22"
+  }
+}

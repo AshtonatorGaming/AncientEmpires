@@ -1,0 +1,46 @@
+{
+  "name": "EmpireTownGenTavernSlaughteredLamb",
+  "source": "towns/town structures/Empire/EmpireTownGenTavernSlaughteredLamb.aws",
+  "size": [
+    19,
+    34,
+    24
+  ],
+  "offset": [
+    8,
+    2,
+    23
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "0",
+    "clusterValue": "0",
+    "minDuplicateDistance": "0",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "false",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "EmpireTownGenTavernSlaughteredLamb",
+    "mods": "",
+    "size": "19,34,24",
+    "offset": "8,2,23"
+  }
+}

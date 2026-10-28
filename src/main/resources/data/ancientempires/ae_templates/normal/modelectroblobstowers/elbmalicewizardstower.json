@@ -1,0 +1,71 @@
+{
+  "name": "ELBMaliceWizardsTower",
+  "source": "normal/ModElectroblobsTowers/ELBMaliceWizardsTower.aws",
+  "size": [
+    54,
+    129,
+    37
+  ],
+  "offset": [
+    23,
+    6,
+    36
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ancientwarfarevehicle",
+    "eplus",
+    "primitivemobs"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "70",
+    "clusterValue": "200",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:mountains",
+      "biomesoplenty:shrubland",
+      "biomesoplenty:woodland",
+      "minecraft:dark_forest",
+      "biomesoplenty:bayou",
+      "biomesoplenty:dead_forest",
+      "minecraft:forest",
+      "biomesoplenty:ominous_woods",
+      "biomesoplenty:dead_swamp",
+      "biomesoplenty:wasteland",
+      "minecraft:old_growth_pine_taiga",
+      "minecraft:birch_forest",
+      "minecraft:snowy_plains",
+      "biomesoplenty:steppe",
+      "minecraft:plains"
+    ],
+    "leveling": "25",
+    "fill": "25",
+    "border": "12",
+    "blockSwap": "true",
+    "territoryName": "malice",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "30",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "ELBMaliceWizardsTower",
+    "mods": "",
+    "size": "54,129,37",
+    "offset": "23,6,36"
+  }
+}

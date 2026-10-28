@@ -1,0 +1,58 @@
+{
+  "name": "GOGTombOfDikkusVampireLair",
+  "source": "normal/ModGrimoireOfGaiaLairs/GOGTombOfDikkusVampireLair.aws",
+  "size": [
+    21,
+    22,
+    22
+  ],
+  "offset": [
+    10,
+    6,
+    21
+  ],
+  "requiredMods": [
+    "grimoireofgaia"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:dead_forest",
+      "spookybiomes:ghostly_forest",
+      "biomesoplenty:ominous_woods",
+      "biomesoplenty:bayou",
+      "biomesoplenty:dead_swamp",
+      "biomesoplenty:marsh"
+    ],
+    "leveling": "24",
+    "fill": "24",
+    "border": "5",
+    "blockSwap": "false",
+    "territoryName": "vampire",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "GOGTombOfDikkusVampireLair",
+    "mods": "grimoireofgaia",
+    "size": "21,22,22",
+    "offset": "10,6,21"
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "name": "OrcWarrenTinyGeneric",
+  "source": "normal/AWTribalOrcRuined/OrcWarrenTinyGeneric.aws",
+  "size": [
+    18,
+    29,
+    18
+  ],
+  "offset": [
+    8,
+    9,
+    17
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:shrubland",
+      "biomesoplenty:dead_forest",
+      "traverse:woodlands",
+      "minecraft:windswept_hills",
+      "minecraft:swamp",
+      "traverse:badlands",
+      "traverse:rocky_plateau",
+      "environs:wasteland_spikes",
+      "biomesoplenty:dead_swamp",
+      "minecraft:old_growth_pine_taiga",
+      "environs:moor",
+      "environs:wasteland_eroded",
+      "environs:dead_oak_forest"
+    ],
+    "leveling": "12",
+    "fill": "12",
+    "border": "3",
+    "blockSwap": "false",
+    "territoryName": "orcruined,ruins",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "OrcWarrenTinyGeneric",
+    "mods": "",
+    "size": "18,29,18",
+    "offset": "8,9,17"
+  }
+}

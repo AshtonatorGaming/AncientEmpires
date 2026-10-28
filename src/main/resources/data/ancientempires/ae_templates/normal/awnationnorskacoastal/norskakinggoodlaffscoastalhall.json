@@ -1,0 +1,56 @@
+{
+  "name": "NorskaKingGoodlaffsCoastalHall",
+  "source": "normal/AWNationNorskaCoastal/NorskaKingGoodlaffsCoastalHall.aws",
+  "size": [
+    75,
+    35,
+    50
+  ],
+  "offset": [
+    38,
+    6,
+    49
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfareautomation",
+    "ancientwarfarestructure",
+    "primitivemobs"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "50",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:snowy_beach"
+    ],
+    "leveling": "25",
+    "fill": "25",
+    "border": "12",
+    "blockSwap": "false",
+    "territoryName": "norskacoastal",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "NorskaKingGoodlaffsCoastalHall",
+    "mods": "",
+    "size": "75,35,50",
+    "offset": "38,6,49"
+  }
+}

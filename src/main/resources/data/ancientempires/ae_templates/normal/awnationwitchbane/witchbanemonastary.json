@@ -1,0 +1,58 @@
+{
+  "name": "WitchbaneMonastary",
+  "source": "normal/AWNationWitchbane/WitchbaneMonastary.aws",
+  "size": [
+    63,
+    29,
+    48
+  ],
+  "offset": [
+    38,
+    8,
+    47
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ebwizardry",
+    "eplus"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "50",
+    "clusterValue": "70",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:mountains",
+      "environs:tall_oak_forest_hills",
+      "minecraft:windswept_hills",
+      "environs:stone_hills",
+      "traverse:cliffs",
+      "environs:emerald_cliffs"
+    ],
+    "leveling": "25",
+    "fill": "25",
+    "border": "12",
+    "blockSwap": "false",
+    "territoryName": "empire",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "WitchbaneMonastary",
+    "mods": "",
+    "size": "63,29,48",
+    "offset": "38,8,47"
+  }
+}

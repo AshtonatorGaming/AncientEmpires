@@ -1,0 +1,54 @@
+{
+  "name": "NorskaBloodJarlsSteadingHouse",
+  "source": "normal/AWNationNorskaCoastal/NorskaBloodJarlsSteadingHouse.aws",
+  "size": [
+    17,
+    22,
+    17
+  ],
+  "offset": [
+    8,
+    7,
+    16
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "50",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:snowy_beach"
+    ],
+    "leveling": "25",
+    "fill": "25",
+    "border": "12",
+    "blockSwap": "false",
+    "territoryName": "norskacoastal",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "NorskaBloodJarlsSteadingHouse",
+    "mods": "",
+    "size": "17,22,17",
+    "offset": "8,7,16"
+  }
+}

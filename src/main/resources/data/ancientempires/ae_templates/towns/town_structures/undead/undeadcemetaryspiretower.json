@@ -1,0 +1,50 @@
+{
+  "name": "UndeadCemetarySpireTower",
+  "source": "towns/town structures/Undead/UndeadCemetarySpireTower.aws",
+  "size": [
+    6,
+    38,
+    6
+  ],
+  "offset": [
+    2,
+    10,
+    5
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "",
+    "survival": "false",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "1",
+    "clusterValue": "1",
+    "minDuplicateDistance": "1",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "UndeadCemetarySpireTower",
+    "mods": "",
+    "size": "6,38,6",
+    "offset": "2,10,5"
+  }
+}

@@ -64,6 +64,7 @@ public final class AeCommands
         dispatcher.register(Commands.literal(AncientEmpires.MOD_ID)
                 .then(Commands.literal("work")
                         .executes(AeCommands::work))
+                .then(StructureCommands.build())
                 .then(Commands.literal("morale")
                         .requires(source -> source.hasPermission(2))
                         .then(Commands.argument("state", StringArgumentType.word())

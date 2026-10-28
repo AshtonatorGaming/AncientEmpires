@@ -1,0 +1,57 @@
+{
+  "name": "IslandsIceAndFireTwoSirens",
+  "source": "normal/OceanIslands/IslandsIceAndFireTwoSirens.aws",
+  "size": [
+    43,
+    86,
+    46
+  ],
+  "offset": [
+    7,
+    50,
+    45
+  ],
+  "requiredMods": [
+    "iceandfire"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "primitivemobs"
+  ],
+  "validation": {
+    "type": "island",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "true",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "50",
+    "clusterValue": "50",
+    "minDuplicateDistance": "2000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:ocean",
+      "minecraft:deep_ocean"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "oceanjungle",
+    "biomeReplacement": "minecraft:",
+    "minWaterDepth": "100",
+    "maxWaterDepth": "50"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "IslandsIceAndFireTwoSirens",
+    "mods": "iceandfire",
+    "size": "43,86,46",
+    "offset": "7,50,45"
+  }
+}

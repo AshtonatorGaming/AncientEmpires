@@ -1,0 +1,55 @@
+{
+  "name": "BufflokaForestMediumVillage",
+  "source": "normal/AWTribalBufflokaForest/BufflokaForestMediumVillage.aws",
+  "size": [
+    49,
+    33,
+    59
+  ],
+  "offset": [
+    24,
+    6,
+    58
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "mocreatures"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "40",
+    "clusterValue": "50",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:old_growth_pine_taiga"
+    ],
+    "leveling": "8",
+    "fill": "8",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "bufflokaforest",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "BufflokaForestMediumVillage",
+    "mods": "",
+    "size": "49,33,59",
+    "offset": "24,6,58"
+  }
+}

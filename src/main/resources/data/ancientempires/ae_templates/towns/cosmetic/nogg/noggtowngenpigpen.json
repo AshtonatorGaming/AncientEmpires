@@ -1,0 +1,46 @@
+{
+  "name": "NoggTownGenPigPen",
+  "source": "towns/cosmetic/Nogg/NoggTownGenPigPen.aws",
+  "size": [
+    7,
+    6,
+    10
+  ],
+  "offset": [
+    3,
+    2,
+    9
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "1",
+    "clusterValue": "1",
+    "minDuplicateDistance": "1",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "false",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "NoggTownGenPigPen",
+    "mods": "",
+    "size": "7,6,10",
+    "offset": "3,2,9"
+  }
+}

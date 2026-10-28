@@ -1,0 +1,51 @@
+{
+  "name": "NoggTownGenMythBusters",
+  "source": "towns/town structures/Nogg/NoggTownGenMythBusters.aws",
+  "size": [
+    29,
+    20,
+    28
+  ],
+  "offset": [
+    12,
+    7,
+    27
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "astikorcarts"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "0",
+    "clusterValue": "0",
+    "minDuplicateDistance": "0",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "false",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "0"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "NoggTownGenMythBusters",
+    "mods": "",
+    "size": "29,20,28",
+    "offset": "12,7,27"
+  }
+}

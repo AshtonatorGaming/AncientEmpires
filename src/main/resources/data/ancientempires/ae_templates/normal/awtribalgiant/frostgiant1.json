@@ -1,0 +1,64 @@
+{
+  "name": "FrostGiant1",
+  "source": "normal/AWTribalGiant/FrostGiant1.aws",
+  "size": [
+    15,
+    8,
+    15
+  ],
+  "offset": [
+    7,
+    3,
+    14
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "nt:alps",
+      "nt:cold_forest",
+      "nt:cold_forest_hills",
+      "nt:cold_flower_forest",
+      "nt:cold_flower_forest_hills",
+      "redwoods:snowy_rainforest",
+      "minecraft:snowy_taiga",
+      "environs:cold_savanna",
+      "environs:cold_pine_forest",
+      "environs:cold_savanna_rock",
+      "environs:cold_pine_forest_hills",
+      "byg:bfrostyforest",
+      "minecraft:snowy_plains",
+      "environs:icy_hills",
+      "auxbiomes:ice_wasteland"
+    ],
+    "leveling": "6",
+    "fill": "6",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "generic",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "FrostGiant1",
+    "mods": "",
+    "size": "15,8,15",
+    "offset": "7,3,14"
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "name": "EmpireCityGenWizardsTower1",
+  "source": "towns/town structures/Empire/EmpireCityGenWizardsTower1.aws",
+  "size": [
+    19,
+    105,
+    23
+  ],
+  "offset": [
+    9,
+    28,
+    22
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ebwizardry",
+    "eplus",
+    "mod_lavacow",
+    "xreliquary"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "",
+    "survival": "false",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "1",
+    "clusterValue": "1",
+    "minDuplicateDistance": "1",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "EmpireCityGenWizardsTower1",
+    "mods": "",
+    "size": "19,105,23",
+    "offset": "9,28,22"
+  }
+}

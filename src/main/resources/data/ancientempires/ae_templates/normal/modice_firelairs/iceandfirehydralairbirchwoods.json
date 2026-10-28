@@ -1,0 +1,54 @@
+{
+  "name": "IceAndFireHydraLairBirchWoods",
+  "source": "normal/ModIce&FireLairs/IceAndFireHydraLairBirchWoods.aws",
+  "size": [
+    74,
+    39,
+    58
+  ],
+  "offset": [
+    34,
+    26,
+    57
+  ],
+  "requiredMods": [
+    "iceandfire"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ebwizardry",
+    "mocreatures",
+    "vampirism"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "40",
+    "clusterValue": "200",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:birch_forest"
+    ],
+    "leveling": "12",
+    "fill": "12",
+    "border": "10",
+    "blockSwap": "false",
+    "territoryName": "ruins",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "IceAndFireHydraLairBirchWoods",
+    "mods": "iceandfire",
+    "size": "74,39,58",
+    "offset": "34,26,57"
+  }
+}

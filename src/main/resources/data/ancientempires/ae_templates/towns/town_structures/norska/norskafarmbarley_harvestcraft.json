@@ -1,0 +1,56 @@
+{
+  "name": "NorskaFarmBarley_harvestcraft",
+  "source": "towns/town structures/Norska/NorskaFarmBarley_harvestcraft.aws",
+  "size": [
+    23,
+    13,
+    14
+  ],
+  "offset": [
+    12,
+    5,
+    6
+  ],
+  "requiredMods": [
+    "harvestcraft"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "harvestcraft",
+    "rustic"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "",
+    "survival": "false",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "1",
+    "clusterValue": "1",
+    "minDuplicateDistance": "1",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "NorskaFarmBarley_harvestcraft",
+    "mods": "harvestcraft",
+    "size": "23,13,14",
+    "offset": "12,5,6"
+  }
+}

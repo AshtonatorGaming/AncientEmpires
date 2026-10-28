@@ -1,0 +1,64 @@
+{
+  "name": "ELBPyromancersHouse",
+  "source": "normal/ModElectroblobsTowers/ELBPyromancersHouse.aws",
+  "size": [
+    19,
+    38,
+    21
+  ],
+  "offset": [
+    9,
+    10,
+    20
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ebwizardry",
+    "eplus",
+    "iceandfire"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "400",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "thaumcraft:magical_forest",
+      "minecraft:windswept_hills",
+      "minecraft:taiga",
+      "biomesoplenty:mountain_foothills",
+      "biomesoplenty:mystic_grove",
+      "minecraft:old_growth_pine_taiga",
+      "biomesoplenty:moor",
+      "biomesoplenty:alps_foothills"
+    ],
+    "leveling": "10",
+    "fill": "10",
+    "border": "10",
+    "blockSwap": "false",
+    "territoryName": "magical",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "ELBPyromancersHouse",
+    "mods": "",
+    "size": "19,38,21",
+    "offset": "9,10,20"
+  }
+}

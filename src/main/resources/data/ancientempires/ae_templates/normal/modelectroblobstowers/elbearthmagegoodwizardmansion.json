@@ -1,0 +1,70 @@
+{
+  "name": "ELBEarthMageGoodWizardMansion",
+  "source": "normal/ModElectroblobsTowers/ELBEarthMageGoodWizardMansion.aws",
+  "size": [
+    32,
+    59,
+    23
+  ],
+  "offset": [
+    15,
+    13,
+    22
+  ],
+  "requiredMods": [
+    "ebwizardry"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ebwizardry",
+    "eplus",
+    "mocreatures"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "150",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:meadow",
+      "biomesoplenty:shrubland",
+      "biomesoplenty:grove",
+      "minecraft:taiga",
+      "biomesoplenty:moor",
+      "biomesoplenty:cherry_blossom_grove",
+      "biomesoplenty:lavender_fields",
+      "minecraft:old_growth_pine_taiga",
+      "biomesoplenty:orchard",
+      "biomesoplenty:seasonal_forest",
+      "biomesoplenty:mystic_grove",
+      "thaumcraft:magical_forest"
+    ],
+    "leveling": "12",
+    "fill": "12",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "magical",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "ELBEarthMageGoodWizardMansion",
+    "mods": "ebwizardry",
+    "size": "32,59,23",
+    "offset": "15,13,22"
+  }
+}

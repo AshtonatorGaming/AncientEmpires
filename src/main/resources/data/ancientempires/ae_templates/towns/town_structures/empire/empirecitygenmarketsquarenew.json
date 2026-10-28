@@ -1,0 +1,51 @@
+{
+  "name": "EmpireCityGenMarketSquareNew",
+  "source": "towns/town structures/Empire/EmpireCityGenMarketSquareNew.aws",
+  "size": [
+    28,
+    13,
+    23
+  ],
+  "offset": [
+    12,
+    6,
+    22
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "thesummoner"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "",
+    "survival": "false",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "1",
+    "clusterValue": "1",
+    "minDuplicateDistance": "1",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "EmpireCityGenMarketSquareNew",
+    "mods": "",
+    "size": "28,13,23",
+    "offset": "12,6,22"
+  }
+}

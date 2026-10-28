@@ -1,0 +1,54 @@
+{
+  "name": "IceAndFireHydraLairPlainsRuin",
+  "source": "normal/ModIce&FireLairs/IceAndFireHydraLairPlainsRuin.aws",
+  "size": [
+    49,
+    29,
+    35
+  ],
+  "offset": [
+    24,
+    7,
+    34
+  ],
+  "requiredMods": [
+    "iceandfire"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ebwizardry"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "50",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:plains"
+    ],
+    "leveling": "10",
+    "fill": "10",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "ruins",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "IceAndFireHydraLairPlainsRuin",
+    "mods": "iceandfire",
+    "size": "49,29,35",
+    "offset": "24,7,34"
+  }
+}

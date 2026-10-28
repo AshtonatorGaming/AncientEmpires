@@ -1,0 +1,59 @@
+{
+  "name": "GOGGryphonNest",
+  "source": "normal/ModGrimoireOfGaiaLairs/GOGGryphonNest.aws",
+  "size": [
+    38,
+    47,
+    42
+  ],
+  "offset": [
+    19,
+    5,
+    41
+  ],
+  "requiredMods": [
+    "grimoireofgaia"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "primitivemobs"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "traverse:woodlands",
+      "traverse:rocky_plains",
+      "minecraft:windswept_hills"
+    ],
+    "leveling": "5",
+    "fill": "5",
+    "border": "5",
+    "blockSwap": "true",
+    "territoryName": "ruins",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "GOGGryphonNest",
+    "mods": "grimoireofgaia",
+    "size": "38,47,42",
+    "offset": "19,5,41"
+  }
+}

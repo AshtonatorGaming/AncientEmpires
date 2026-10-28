@@ -1,0 +1,66 @@
+{
+  "name": "IceAndFireUndeadMausoleum",
+  "source": "normal/ModIce&FireLairs/IceAndFireUndeadMausoleum.aws",
+  "size": [
+    39,
+    58,
+    34
+  ],
+  "offset": [
+    19,
+    29,
+    33
+  ],
+  "requiredMods": [
+    "iceandfire"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "dungeonmobs",
+    "iceandfire",
+    "mocreatures",
+    "primitivemobs",
+    "rustic",
+    "thesummoner"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "environs:dry_oak_forest",
+      "environs:dry_oak_forest_m",
+      "environs:silk_wetland",
+      "minecraft:swamp",
+      "biomesoplenty:dead_swamp",
+      "biomesoplenty:dead_forest",
+      "biomesoplenty:ominous_woods"
+    ],
+    "leveling": "10",
+    "fill": "10",
+    "border": "10",
+    "blockSwap": "false",
+    "territoryName": "ruins",
+    "biomeReplacement": "spookybiomes:ghostly_forest",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "IceAndFireUndeadMausoleum",
+    "mods": "iceandfire",
+    "size": "39,58,34",
+    "offset": "19,29,33"
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "name": "DMOBSIlithidJungleSpire",
+  "source": "normal/ModDungeonMobsLairs/DMOBSIlithidJungleSpire.aws",
+  "size": [
+    21,
+    71,
+    21
+  ],
+  "offset": [
+    9,
+    5,
+    20
+  ],
+  "requiredMods": [
+    "primitivemobs"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "150",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "traverse:mini_jungle",
+      "minecraft:jungle",
+      "biomesoplenty:rainforest"
+    ],
+    "leveling": "4",
+    "fill": "2",
+    "border": "2",
+    "blockSwap": "false",
+    "territoryName": "jungleruins",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "DMOBSIlithidJungleSpire",
+    "mods": "primitivemobs",
+    "size": "21,71,21",
+    "offset": "9,5,20"
+  }
+}

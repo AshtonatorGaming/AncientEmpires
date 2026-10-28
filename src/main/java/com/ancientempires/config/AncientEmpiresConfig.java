@@ -253,6 +253,8 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.DoubleValue GOVERNOR_BONUS;
     private static final ForgeConfigSpec.ConfigValue<String> GOVERNOR_TAX_ITEM;
     private static final ForgeConfigSpec.IntValue GOVERNOR_TAX_TICKS;
+    private static final ForgeConfigSpec.IntValue STRUCTURES_CACHE_MB;
+    private static final ForgeConfigSpec.ConfigValue<String> STRUCTURES_MISSING_BLOCK;
     private static final ForgeConfigSpec.BooleanValue MORALE_ENABLED;
     private static final ForgeConfigSpec.BooleanValue MORALE_OWNED;
     private static final ForgeConfigSpec.ConfigValue<List<? extends Double>> MORALE_BASE;
@@ -1046,6 +1048,11 @@ public final class AncientEmpiresConfig
         GOVERNOR_TAX_TICKS = builder.comment("Ticks of oversight per worker for one tax item (2400: one nugget per worker every two minutes). 0 turns tax off.").defineInRange("taxTicksPerWorker", 2400, 0, 240000);
         builder.pop();
 
+        builder.comment("Structure templates (STRUCTURES.md): Ancient Warfare's library, converted, placed by /ancientempires structure and later by world generation.").push("structures");
+        STRUCTURES_CACHE_MB = builder.comment("Memory for templates kept loaded, in MB; the least recently used are dropped past it. The largest AW island takes about 27.").defineInRange("templateCacheMb", 256, 16, 4096);
+        STRUCTURES_MISSING_BLOCK = builder.comment("What a block becomes when neither this game nor the ae_remap tables know it (a mod that is not installed).").define("missingBlock", "minecraft:air");
+        builder.pop();
+
         builder.comment("Morale, Total War style: soldiers waver, rout, and shatter. Each soldier's morale (0 to 100) drifts toward what its situation is worth: its rank's base, a commander's aura, the odds around it, its wounds, a recent hit from behind, hunger, and routing allies; deaths and kills nearby shock it. Below routBelow it runs (as civilians do, fighting only when cornered) and rallies once recovered; the third rout shatters it for good. Fearless factions (factions.json) never break.").push("morale");
         MORALE_ENABLED = builder.comment("Morale on. Off, soldiers fight to the death as before.").define("enabled", true);
         MORALE_OWNED = builder.comment("Players' own soldiers have morale too.").define("ownedNpcs", true);
@@ -1499,6 +1506,8 @@ public final class AncientEmpiresConfig
     public static double governorWorkBonus = 0.15D;
     public static String governorTaxItem = "minecraft:gold_nugget";
     public static int governorTaxTicksPerWorker = 2400;
+    public static int structuresTemplateCacheMb = 256;
+    public static String structuresMissingBlock = "minecraft:air";
     public static boolean moraleEnabled = true;
     public static boolean moraleOwnedNpcs = true;
     public static List<? extends Double> moraleBaseByTier = List.of(60.0D, 70.0D, 80.0D, 90.0D);
@@ -1874,6 +1883,8 @@ public final class AncientEmpiresConfig
         governorWorkBonus = GOVERNOR_BONUS.get();
         governorTaxItem = GOVERNOR_TAX_ITEM.get();
         governorTaxTicksPerWorker = GOVERNOR_TAX_TICKS.get();
+        structuresTemplateCacheMb = STRUCTURES_CACHE_MB.get();
+        structuresMissingBlock = STRUCTURES_MISSING_BLOCK.get();
         moraleEnabled = MORALE_ENABLED.get();
         moraleOwnedNpcs = MORALE_OWNED.get();
         moraleBaseByTier = MORALE_BASE.get();

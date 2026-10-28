@@ -1,0 +1,51 @@
+{
+  "name": "DemonCathedralWIP4",
+  "source": "normal/AWPowersDemon/DemonCathedralWIP4.aws",
+  "size": [
+    52,
+    46,
+    27
+  ],
+  "offset": [
+    28,
+    1,
+    24
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "bloodmagic"
+  ],
+  "validation": {
+    "type": "lava",
+    "structureAuthor": "lumberjacksparrow",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "100",
+    "clusterValue": "2",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:the_nether"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "false",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "DemonCathedralWIP4",
+    "mods": "",
+    "size": "52,46,27",
+    "offset": "28,1,24"
+  }
+}

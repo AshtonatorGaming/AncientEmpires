@@ -1,0 +1,50 @@
+{
+  "name": "DemonWatchTowerWIP5",
+  "source": "normal/AWPowersDemon/DemonWatchTowerWIP5.aws",
+  "size": [
+    26,
+    39,
+    26
+  ],
+  "offset": [
+    16,
+    0,
+    18
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "lava",
+    "structureAuthor": "lumberjacksparrow",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "100",
+    "clusterValue": "1",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:the_nether"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "false",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "DemonWatchTowerWIP5",
+    "mods": "",
+    "size": "26,39,26",
+    "offset": "16,0,18"
+  }
+}

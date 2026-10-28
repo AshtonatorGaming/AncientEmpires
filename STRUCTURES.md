@@ -170,8 +170,12 @@ Biome lists become biome tags per template or territory, with modded biomes as o
 
 ### Build order (locked 2026-10-28)
 
-- S1: offline converter (1.12 → 1.20.1 through vanilla's DataFixer, AW blocks through our table), our template
-  reader, commands, unit tests. Converted templates place, AW blocks as stand-ins.
+- S1 (done 2026-10-28): offline converter (1.12 → 1.20.1 through vanilla's DataFixer, AW blocks through our table), our template
+  reader, commands, unit tests. Converted templates place, AW blocks as stand-ins. Format changed from vanilla
+  `.nbt` to our compact `AeTemplate` (vanilla's would need about 2 GB for the largest island); the user agreed.
+  All 1,471 convert in about a minute (34 MB); the game test places the Empire church (56k blocks) in 1.7 s and
+  a 1.5M-cell island in 2.6 s, chunk generation included. Remap tables so far: AW stand-ins and the moved
+  namespaces and port renames; per-mod block and item tables are next, for the user to review.
 - S2: spawners as garrison spawners with roster scrolls and the capture wand; protection flag as the anchor with
   claiming, block protection, loot chest lock; coins and loot tables. Milestone: one Empire structure.
 - S3: gates as entities (the six AW types) and the Gate Spawner.

@@ -1,0 +1,52 @@
+{
+  "name": "SmugglerTraderSmallHouse",
+  "source": "normal/AWTribalPirate/SmugglerTraderSmallHouse.aws",
+  "size": [
+    15,
+    13,
+    11
+  ],
+  "offset": [
+    7,
+    1,
+    10
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "30",
+    "clusterValue": "80",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:beach",
+      "minecraft:stony_shore"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "piratecoastal",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "SmugglerTraderSmallHouse",
+    "mods": "",
+    "size": "15,13,11",
+    "offset": "7,1,10"
+  }
+}

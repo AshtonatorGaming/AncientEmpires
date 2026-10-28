@@ -1,0 +1,53 @@
+{
+  "name": "SwampTempleVanillaMobs",
+  "source": "normal/RuinsSwamps/SwampTempleVanillaMobs.aws",
+  "size": [
+    23,
+    30,
+    23
+  ],
+  "offset": [
+    10,
+    5,
+    23
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "true",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:swamp",
+      "biomesoplenty:dead_swamp",
+      "biomesoplenty:bayou",
+      "biomesoplenty:marsh"
+    ],
+    "leveling": "24",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "ruins",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "SwampTempleVanillaMobs",
+    "mods": "",
+    "size": "23,30,23",
+    "offset": "10,5,23"
+  }
+}

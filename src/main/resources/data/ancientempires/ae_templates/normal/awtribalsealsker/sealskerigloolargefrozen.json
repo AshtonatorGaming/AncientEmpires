@@ -1,0 +1,52 @@
+{
+  "name": "SealskerIglooLargeFrozen",
+  "source": "normal/AWTribalSealsker/SealskerIglooLargeFrozen.aws",
+  "size": [
+    24,
+    15,
+    25
+  ],
+  "offset": [
+    11,
+    4,
+    24
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "40",
+    "clusterValue": "40",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:frozen_ocean"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "sealsker",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "SealskerIglooLargeFrozen",
+    "mods": "",
+    "size": "24,15,25",
+    "offset": "11,4,24"
+  }
+}

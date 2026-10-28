@@ -90,6 +90,22 @@ instead of reflecting per call), Skirmisher thresholds (about 4.5 to 28 blocks).
   an 11-step combo of stabs and sweeps; without it the spear gets Better Combat's plain trident stab.
 - Libs in `libs/` are jars wired through `fg.deobf` in `build.gradle`. Soft deps are
   `compileOnly`; ModularUI is `implementation`.
+- Structures (`structure/`, plan in STRUCTURES.md; S1 done). AW's 1,471 templates (1.12 data, from
+  `libs/ancientwarfare-1.12.2-2.10.2.jar`) are converted offline by `./gradlew convertAwsTemplates`
+  (`AwsConvertTool`: `AwsTemplate` reads `.aws`, `AwsConverter` + `LegacyFixer` upgrade it through Mojang's
+  DataFixer, which runs without the game) into `data/ancientempires/ae_templates/<path>.nbt` plus a `.json`
+  sidecar (AW's header and validation, biomes upgraded), with a report in `build/aws-convert-report.txt`.
+  `AeTemplate` is our own format: vanilla palette and data version, blocks as packed palette indices in 16x16
+  column tiles (vanilla's `.nbt` would need about 2 GB for the 27M-cell islands); palette 0 is structure void.
+  The fixer's gaps are filled by hand: 1.12 block entity contents (items, spawners, skulls, banners, signs,
+  beds, flower pots) and door halves; AW saved states unconnected, so `AePlacer` recomputes every block's
+  shape from its neighbours after placing. Non-vanilla blocks and AW's own keep AW's rule in the block entity
+  (`aeRule`) and resolve when placed through `AeRemap` (registry, then `data/*/ae_remap/*.json` tables, then
+  namespace renames, then `structures.missingBlock`), so a mod added later just works. `AeTemplates` indexes
+  sidecars at datapack reload and caches loaded templates up to `structures.templateCacheMb`. AW's offset y is
+  the first layer above ground, so the build key goes at a player's feet. `/ancientempires structure list`,
+  `place <id> [rotation]`, `check <id>`, `export <id>` (vanilla `.nbt` in `generated/` for a Structure Block).
+  AW spawners, gates, NPCs, vehicles, and flags are kept but not placed yet (S2, S3, S5).
 
 ## Done
 
@@ -715,7 +731,12 @@ target-scan design.
   methods so no game is needed: `WorksiteArea`, `QuarryStair.columns`, `Parry.perfectWindow`,
   `NpcGuard.strikesFirst`. Put a new rule in such a method and test it there; the game code calls
   the same method. Also `NpcCommand.inherited` and the morale math (`NpcMorale.target`, `drift`,
-  `decay`, `fromBehind`), and the level curve and skill reading (`NpcLeveling`).
+  `decay`, `fromBehind`), and the level curve and skill reading (`NpcLeveling`). Structures: `AwsTemplate`
+  parsing and 1.12 position packing, `AeTemplate` round trips, chest pairing and door/leaf mending.
+- `./gradlew runGameTestServer` runs `StructureGameTests` on a headless server (arena
+  `structures/gametest_arena.nbt`): real templates placed, blocks resolved, fences connected, timings logged
+  as `GAMETEST`. Dev runs need the mixin refmap remap properties and Curios at runtime (ModularUI touches
+  Curios outside production); both are in `build.gradle`.
 
 ## Building
 

@@ -1,0 +1,75 @@
+{
+  "name": "GOGEvilLairPlainsOak",
+  "source": "normal/ModGrimoireOfGaiaLairs/GOGEvilLairPlainsOak.aws",
+  "size": [
+    54,
+    109,
+    53
+  ],
+  "offset": [
+    28,
+    9,
+    52
+  ],
+  "requiredMods": [
+    "grimoireofgaia"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ebwizardry",
+    "harvestcraft"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "nt:moorland",
+      "nt:heath",
+      "nt:fen",
+      "spookybiomes:bloodied_hills",
+      "spookybiomes:seeping_forest",
+      "biomesoplenty:shrubland",
+      "biomesoplenty:woodland",
+      "biomesoplenty:dead_forest",
+      "traverse:woodlands",
+      "minecraft:windswept_hills",
+      "traverse:badlands",
+      "biomesoplenty:highland",
+      "biomesoplenty:moor",
+      "biomesoplenty:ominous_woods",
+      "traverse:rocky_plateau",
+      "traverse:rocky_plains",
+      "biomesoplenty:chaparral",
+      "biomesoplenty:grassland"
+    ],
+    "leveling": "12",
+    "fill": "6",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "malice",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "GOGEvilLairPlainsOak",
+    "mods": "grimoireofgaia",
+    "size": "54,109,53",
+    "offset": "28,9,52"
+  }
+}

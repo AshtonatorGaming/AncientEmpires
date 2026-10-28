@@ -1,0 +1,56 @@
+{
+  "name": "WitchbaneNorthernCastle",
+  "source": "normal/AWNationWitchbane/WitchbaneNorthernCastle.aws",
+  "size": [
+    67,
+    52,
+    77
+  ],
+  "offset": [
+    41,
+    4,
+    0
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfare",
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "true",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:taiga",
+      "minecraft:old_growth_spruce_taiga"
+    ],
+    "leveling": "16",
+    "fill": "16",
+    "border": "3",
+    "blockSwap": "false",
+    "territoryName": "empire",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "WitchbaneNorthernCastle",
+    "mods": "",
+    "size": "67,52,77",
+    "offset": "41,4,0"
+  }
+}

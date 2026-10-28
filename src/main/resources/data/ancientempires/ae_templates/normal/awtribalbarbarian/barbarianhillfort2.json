@@ -1,0 +1,56 @@
+{
+  "name": "BarbarianHillfort2",
+  "source": "normal/AWTribalBarbarian/BarbarianHillfort2.aws",
+  "size": [
+    163,
+    36,
+    56
+  ],
+  "offset": [
+    82,
+    14,
+    55
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "primitivemobs"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "50",
+    "clusterValue": "150",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:taiga",
+      "traverse:rocky_plains"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "12",
+    "blockSwap": "false",
+    "territoryName": "barbarian",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "BarbarianHillfort2",
+    "mods": "",
+    "size": "163,36,56",
+    "offset": "82,14,55"
+  }
+}

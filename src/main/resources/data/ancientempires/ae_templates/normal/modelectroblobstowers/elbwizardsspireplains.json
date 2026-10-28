@@ -1,0 +1,65 @@
+{
+  "name": "ELBWizardsSpirePlains",
+  "source": "normal/ModElectroblobsTowers/ELBWizardsSpirePlains.aws",
+  "size": [
+    24,
+    100,
+    20
+  ],
+  "offset": [
+    14,
+    7,
+    19
+  ],
+  "requiredMods": [
+    "ebwizardry"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ebwizardry",
+    "eplus"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "50",
+    "clusterValue": "400",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:meadow",
+      "biomesoplenty:bayou",
+      "minecraft:windswept_hills",
+      "biomesoplenty:mountain_foothills",
+      "biomesoplenty:moor",
+      "minecraft:birch_forest",
+      "biomesoplenty:orchard",
+      "biomesoplenty:seasonal_forest"
+    ],
+    "leveling": "6",
+    "fill": "6",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "magical",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "ELBWizardsSpirePlains",
+    "mods": "ebwizardry",
+    "size": "24,100,20",
+    "offset": "14,7,19"
+  }
+}

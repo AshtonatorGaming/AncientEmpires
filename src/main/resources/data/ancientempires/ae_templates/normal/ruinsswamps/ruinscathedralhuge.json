@@ -1,0 +1,51 @@
+{
+  "name": "RuinsCathedralHuge",
+  "source": "normal/RuinsSwamps/RuinsCathedralHuge.aws",
+  "size": [
+    83,
+    61,
+    41
+  ],
+  "offset": [
+    46,
+    4,
+    43
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "true",
+    "preserveBlocks": "true",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:swamp",
+      "auxbiomes:marsh",
+      "biomesoplenty:bayou",
+      "biomesoplenty:dead_swamp",
+      "biomesoplenty:dead_forest"
+    ],
+    "leveling": "40",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "ruin",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.8",
+    "name": "RuinsCathedralHuge",
+    "mods": "",
+    "size": "83,61,41",
+    "offset": "46,4,43"
+  }
+}

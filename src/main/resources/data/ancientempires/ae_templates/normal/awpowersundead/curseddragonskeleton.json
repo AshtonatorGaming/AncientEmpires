@@ -1,0 +1,77 @@
+{
+  "name": "CursedDragonSkeleton",
+  "source": "normal/AWPowersUndead/CursedDragonSkeleton.aws",
+  "size": [
+    42,
+    15,
+    15
+  ],
+  "offset": [
+    21,
+    6,
+    14
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "30",
+    "clusterValue": "30",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [
+      "undead"
+    ],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "environs:dry_oak_forest",
+      "environs:dry_oak_forest_m",
+      "environs:silk_wetland",
+      "minecraft:swamp",
+      "environs:dead_oak_forest",
+      "environs:dead_oak_forest_hills",
+      "traverse:woodlands",
+      "traverse:badlands",
+      "environs:moor",
+      "environs:silkglades",
+      "thaumcraft:magical_forest",
+      "nt:shrubland",
+      "nt:scrubland",
+      "nt:heath",
+      "nt:highland",
+      "nt:moorland",
+      "biomesoplenty:shrubland",
+      "biomesoplenty:scrubland",
+      "biomesoplenty:dead_forest",
+      "biomesoplenty:dead_swamp",
+      "biomesoplenty:mystic_grove",
+      "biomesoplenty:swampland_extension",
+      "biomesoplenty:ominous_woods",
+      "spookybiomes:witchwood_forest",
+      "spookybiomes:ghostly_forest"
+    ],
+    "leveling": "12",
+    "fill": "12",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "undead",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "CursedDragonSkeleton",
+    "mods": "",
+    "size": "42,15,15",
+    "offset": "21,6,14"
+  }
+}

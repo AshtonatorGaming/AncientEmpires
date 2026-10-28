@@ -1,0 +1,56 @@
+{
+  "name": "IslandsGiantLandTaiga",
+  "source": "normal/OceanIslands/IslandsGiantLandTaiga.aws",
+  "size": [
+    336,
+    210,
+    371
+  ],
+  "offset": [
+    139,
+    50,
+    369
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "mocreatures",
+    "primitivemobs"
+  ],
+  "validation": {
+    "type": "island",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "true",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "50",
+    "clusterValue": "50",
+    "minDuplicateDistance": "2000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:deep_ocean",
+      "minecraft:frozen_ocean"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "oceancold",
+    "biomeReplacement": "minecraft:taiga_cold",
+    "minWaterDepth": "10",
+    "maxWaterDepth": "50"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "IslandsGiantLandTaiga",
+    "mods": "",
+    "size": "336,210,371",
+    "offset": "139,50,369"
+  }
+}

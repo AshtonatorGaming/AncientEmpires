@@ -1,0 +1,55 @@
+{
+  "name": "PirateInfestedLighthouse",
+  "source": "normal/AWTribalPirate/PirateInfestedLighthouse.aws",
+  "size": [
+    22,
+    85,
+    16
+  ],
+  "offset": [
+    21,
+    5,
+    15
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "30",
+    "clusterValue": "80",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:origin_beach",
+      "biomesoplenty:white_beach",
+      "minecraft:beach",
+      "biomesoplenty:gravel_beach",
+      "minecraft:stony_shore"
+    ],
+    "leveling": "2",
+    "fill": "2",
+    "border": "2",
+    "blockSwap": "false",
+    "territoryName": "piratecoastal",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "PirateInfestedLighthouse",
+    "mods": "",
+    "size": "22,85,16",
+    "offset": "21,5,15"
+  }
+}

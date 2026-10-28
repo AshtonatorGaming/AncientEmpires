@@ -1,0 +1,58 @@
+{
+  "name": "GOGWitchSpireSwamp",
+  "source": "normal/ModGrimoireOfGaiaLairs/GOGWitchSpireSwamp.aws",
+  "size": [
+    34,
+    88,
+    43
+  ],
+  "offset": [
+    19,
+    10,
+    43
+  ],
+  "requiredMods": [
+    "grimoireofgaia"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ebwizardry"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "true",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:swamp",
+      "biomesoplenty:mystic_grove"
+    ],
+    "leveling": "24",
+    "fill": "0",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "swampruins",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "GOGWitchSpireSwamp",
+    "mods": "grimoireofgaia",
+    "size": "34,88,43",
+    "offset": "19,10,43"
+  }
+}

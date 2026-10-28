@@ -1,0 +1,21 @@
+{
+  "_comment": "Other mods' renames from 1.12 to their 1.20.1 versions (STRUCTURES.md, mod status). Seeded with the namespaces that moved and the entity renames the AW 1.20.1 port found; per-mod block and item tables are still to be written.",
+  "namespaces": {
+    "xreliquary": "reliquary",
+    "byg": "biomeswevegone",
+    "astikorcarts": "astikorcartsredux",
+    "primitivemobs": "traveler"
+  },
+  "entities": {
+    "iceandfire:if_troll": "iceandfire:troll",
+    "iceandfire:seaserpent": "iceandfire:sea_serpent",
+    "iceandfire:firedragon": "iceandfire:fire_dragon",
+    "iceandfire:icedragon": "iceandfire:ice_dragon",
+    "iceandfire:if_hydra": "iceandfire:hydra",
+    "iceandfire:if_pixie": "iceandfire:pixie",
+    "iceandfire:if_mob_skull": "iceandfire:mob_skull",
+    "familiarfauna:familiarfauna.pixie": "minecraft:allay",
+    "betteranimalsplus:goat": "minecraft:goat",
+    "dungeonmobs:dmghost": "iceandfire:ghost"
+  }
+}

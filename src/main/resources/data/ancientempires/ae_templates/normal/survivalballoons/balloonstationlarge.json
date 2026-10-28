@@ -1,0 +1,51 @@
+{
+  "name": "BalloonStationLarge",
+  "source": "normal/SurvivalBalloons/BalloonStationLarge.aws",
+  "size": [
+    71,
+    36,
+    74
+  ],
+  "offset": [
+    30,
+    7,
+    73
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "primitivemobs",
+    "vampirism"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "",
+    "survival": "true",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "1",
+    "clusterValue": "1",
+    "minDuplicateDistance": "1",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "BalloonStationLarge",
+    "mods": "",
+    "size": "71,36,74",
+    "offset": "30,7,73"
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "name": "VampireKoboldTower",
+  "source": "normal/AWPowersVampire/VampireKoboldTower.aws",
+  "size": [
+    42,
+    31,
+    33
+  ],
+  "offset": [
+    17,
+    10,
+    32
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ebwizardry"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "40",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:swamp",
+      "biomesoplenty:bayou",
+      "spookybiomes:bloodied_hills",
+      "biomesoplenty:ominous_woods",
+      "environs:silkglades",
+      "environs:dead_oak_forest_hills",
+      "vampirism:vampireforest",
+      "environs:dead_oak_forest"
+    ],
+    "leveling": "12",
+    "fill": "12",
+    "border": "12",
+    "blockSwap": "false",
+    "territoryName": "vampire",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "VampireKoboldTower",
+    "mods": "",
+    "size": "42,31,33",
+    "offset": "17,10,32"
+  }
+}

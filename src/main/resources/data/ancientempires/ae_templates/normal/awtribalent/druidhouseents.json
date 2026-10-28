@@ -1,0 +1,54 @@
+{
+  "name": "DruidHouseEnts",
+  "source": "normal/AWTribalEnt/DruidHouseEnts.aws",
+  "size": [
+    19,
+    29,
+    20
+  ],
+  "offset": [
+    9,
+    8,
+    19
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "50",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:birch_forest"
+    ],
+    "leveling": "35",
+    "fill": "12",
+    "border": "8",
+    "blockSwap": "false",
+    "territoryName": "ent",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "DruidHouseEnts",
+    "mods": "",
+    "size": "19,29,20",
+    "offset": "9,8,19"
+  }
+}

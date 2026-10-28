@@ -1,0 +1,59 @@
+{
+  "name": "ZimbaSmallVillage",
+  "source": "normal/AWTribalZimba/ZimbaSmallVillage.aws",
+  "size": [
+    15,
+    10,
+    30
+  ],
+  "offset": [
+    7,
+    3,
+    29
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "60",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "byg:bsavannacanopy",
+      "byg:bbaobabsavanna",
+      "minecraft:savanna_plateau",
+      "biomesoplenty:savanna_plateau_extension",
+      "minecraft:savanna",
+      "biomesoplenty:savanna_extension"
+    ],
+    "leveling": "10",
+    "fill": "10",
+    "border": "10",
+    "blockSwap": "false",
+    "territoryName": "zimba",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "ZimbaSmallVillage",
+    "mods": "",
+    "size": "15,10,30",
+    "offset": "7,3,29"
+  }
+}

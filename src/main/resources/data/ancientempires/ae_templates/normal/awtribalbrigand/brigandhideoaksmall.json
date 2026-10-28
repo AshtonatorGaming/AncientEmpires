@@ -1,0 +1,57 @@
+{
+  "name": "BrigandHideOakSmall",
+  "source": "normal/AWTribalBrigand/BrigandHideOakSmall.aws",
+  "size": [
+    23,
+    19,
+    20
+  ],
+  "offset": [
+    13,
+    4,
+    19
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:shrubland",
+      "biomesoplenty:woodland",
+      "traverse:woodlands",
+      "minecraft:forest"
+    ],
+    "leveling": "3",
+    "fill": "3",
+    "border": "3",
+    "blockSwap": "false",
+    "territoryName": "brigand",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "BrigandHideOakSmall",
+    "mods": "",
+    "size": "23,19,20",
+    "offset": "13,4,19"
+  }
+}

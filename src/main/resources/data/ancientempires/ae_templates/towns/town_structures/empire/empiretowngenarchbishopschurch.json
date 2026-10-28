@@ -1,0 +1,47 @@
+{
+  "name": "EmpireTownGenArchbishopsChurch",
+  "source": "towns/town structures/Empire/EmpireTownGenArchbishopsChurch.aws",
+  "size": [
+    32,
+    44,
+    40
+  ],
+  "offset": [
+    17,
+    8,
+    39
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "gravestone-extended"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "0",
+    "clusterValue": "0",
+    "minDuplicateDistance": "0",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "false",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "EmpireTownGenArchbishopsChurch",
+    "mods": "",
+    "size": "32,44,40",
+    "offset": "17,8,39"
+  }
+}

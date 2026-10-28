@@ -1,0 +1,56 @@
+{
+  "name": "GiantMushroomBrownLair",
+  "source": "normal/MonsterNaturalLairs/GiantMushroomBrownLair.aws",
+  "size": [
+    33,
+    34,
+    33
+  ],
+  "offset": [
+    12,
+    9,
+    32
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "90",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "byg:minecraft:swampland",
+      "minecraft:mushroom_fields",
+      "biomesoplenty:bayou",
+      "biomesoplenty:dead_swamp",
+      "biomesoplenty:marsh",
+      "biomesoplenty:mangrove"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "swampruins",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "GiantMushroomBrownLair",
+    "mods": "",
+    "size": "33,34,33",
+    "offset": "12,9,32"
+  }
+}

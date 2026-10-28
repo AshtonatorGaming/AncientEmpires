@@ -1,0 +1,61 @@
+{
+  "name": "IslandsMinossianCaves",
+  "source": "normal/OceanIslands/IslandsMinossianCaves.aws",
+  "size": [
+    186,
+    122,
+    97
+  ],
+  "offset": [
+    121,
+    58,
+    96
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "mocreatures",
+    "primitivemobs",
+    "vampirism",
+    "waystones"
+  ],
+  "validation": {
+    "type": "island",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "true",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "50",
+    "clusterValue": "50",
+    "minDuplicateDistance": "2000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:kelp_forest",
+      "biomesoplenty:coral_reef",
+      "climaticbiomesjbg:coastal_waters",
+      "minecraft:ocean",
+      "minecraft:deep_ocean"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "oceanforestandplains",
+    "biomeReplacement": "minecraft:extreme_hills",
+    "minWaterDepth": "10",
+    "maxWaterDepth": "50"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "IslandsMinossianCaves",
+    "mods": "",
+    "size": "186,122,97",
+    "offset": "121,58,96"
+  }
+}

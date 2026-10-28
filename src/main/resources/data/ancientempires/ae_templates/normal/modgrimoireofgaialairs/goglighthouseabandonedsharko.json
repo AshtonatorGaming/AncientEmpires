@@ -1,0 +1,63 @@
+{
+  "name": "GOGLighthouseAbandonedSharko",
+  "source": "normal/ModGrimoireOfGaiaLairs/GOGLighthouseAbandonedSharko.aws",
+  "size": [
+    18,
+    65,
+    17
+  ],
+  "offset": [
+    2,
+    21,
+    16
+  ],
+  "requiredMods": [
+    "grimoireofgaia"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "primitivemobs",
+    "thesummoner"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "150",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:origin_beach",
+      "biomesoplenty:white_beach",
+      "minecraft:beach",
+      "biomesoplenty:gravel_beach",
+      "minecraft:stony_shore",
+      "nt:aegean_archipelago"
+    ],
+    "leveling": "16",
+    "fill": "12",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "beachruins",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "GOGLighthouseAbandonedSharko",
+    "mods": "grimoireofgaia",
+    "size": "18,65,17",
+    "offset": "2,21,16"
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "name": "GOGWitchSpireSpruceWoods",
+  "source": "normal/ModGrimoireOfGaiaLairs/GOGWitchSpireSpruceWoods.aws",
+  "size": [
+    31,
+    94,
+    38
+  ],
+  "offset": [
+    13,
+    7,
+    37
+  ],
+  "requiredMods": [
+    "grimoireofgaia"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "harvestcraft"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:snowy_taiga",
+      "minecraft:taiga",
+      "traverse:snowy_coniferous_forest",
+      "minecraft:old_growth_spruce_taiga"
+    ],
+    "leveling": "4",
+    "fill": "4",
+    "border": "4",
+    "blockSwap": "false",
+    "territoryName": "ruins",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "GOGWitchSpireSpruceWoods",
+    "mods": "grimoireofgaia",
+    "size": "31,94,38",
+    "offset": "13,7,37"
+  }
+}

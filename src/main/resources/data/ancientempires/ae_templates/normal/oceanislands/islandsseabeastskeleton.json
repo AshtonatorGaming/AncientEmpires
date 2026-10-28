@@ -1,0 +1,53 @@
+{
+  "name": "IslandsSeaBeastSkeleton",
+  "source": "normal/OceanIslands/IslandsSeaBeastSkeleton.aws",
+  "size": [
+    49,
+    31,
+    117
+  ],
+  "offset": [
+    20,
+    24,
+    116
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "mocreatures"
+  ],
+  "validation": {
+    "type": "island",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "true",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "50",
+    "clusterValue": "250",
+    "minDuplicateDistance": "2000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:deep_ocean"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "oceansearocks",
+    "biomeReplacement": "minecraft:",
+    "minWaterDepth": "8",
+    "maxWaterDepth": "22"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "IslandsSeaBeastSkeleton",
+    "mods": "",
+    "size": "49,31,117",
+    "offset": "20,24,116"
+  }
+}

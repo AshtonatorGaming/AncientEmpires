@@ -1,0 +1,61 @@
+{
+  "name": "MonsterLairVanillaOakhill",
+  "source": "normal/MonsterNaturalLairs/MonsterLairVanillaOakhill.aws",
+  "size": [
+    41,
+    67,
+    42
+  ],
+  "offset": [
+    21,
+    5,
+    41
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ebwizardry",
+    "gravestone-extended",
+    "primitivemobs"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:woodland",
+      "biomesoplenty:pasture",
+      "traverse:woodlands",
+      "minecraft:forest",
+      "traverse:rocky_plains",
+      "minecraft:swamp",
+      "traverse:meadow",
+      "minecraft:plains"
+    ],
+    "leveling": "6",
+    "fill": "2",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "generic",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "MonsterLairVanillaOakhill",
+    "mods": "",
+    "size": "41,67,42",
+    "offset": "21,5,41"
+  }
+}

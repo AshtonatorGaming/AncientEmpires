@@ -1,0 +1,55 @@
+{
+  "name": "SarkonidSmallTown",
+  "source": "normal/AWNationSarkonid/SarkonidSmallTown.aws",
+  "size": [
+    116,
+    63,
+    116
+  ],
+  "offset": [
+    58,
+    6,
+    0
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfare",
+    "ancientwarfarestructure",
+    "ancientwarfarevehicle"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "Gungnir",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [
+      "sarkonid"
+    ],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:oasis",
+      "minecraft:desert"
+    ],
+    "leveling": "50",
+    "fill": "16",
+    "border": "10",
+    "blockSwap": "false",
+    "territoryName": "sarkonid",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "SarkonidSmallTown",
+    "mods": "",
+    "size": "116,63,116",
+    "offset": "58,6,0"
+  }
+}

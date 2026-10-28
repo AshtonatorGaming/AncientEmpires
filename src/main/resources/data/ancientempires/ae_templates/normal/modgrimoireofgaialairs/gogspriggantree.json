@@ -1,0 +1,57 @@
+{
+  "name": "GOGSprigganTree",
+  "source": "normal/ModGrimoireOfGaiaLairs/GOGSprigganTree.aws",
+  "size": [
+    27,
+    22,
+    25
+  ],
+  "offset": [
+    14,
+    6,
+    24
+  ],
+  "requiredMods": [
+    "grimoireofgaia"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:forest",
+      "minecraft:plains",
+      "biomeoplenty:grove",
+      "biomesoplenty:bayou"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "dungeon",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "GOGSprigganTree",
+    "mods": "grimoireofgaia",
+    "size": "27,22,25",
+    "offset": "14,6,24"
+  }
+}

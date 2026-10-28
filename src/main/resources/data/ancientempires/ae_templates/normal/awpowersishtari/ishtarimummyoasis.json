@@ -1,0 +1,52 @@
+{
+  "name": "IshtariMummyOasis",
+  "source": "normal/AWPowersIshtari/IshtariMummyOasis.aws",
+  "size": [
+    50,
+    19,
+    50
+  ],
+  "offset": [
+    25,
+    9,
+    49
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "30",
+    "clusterValue": "120",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:desert"
+    ],
+    "leveling": "6",
+    "fill": "6",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "desertruins",
+    "biomeReplacement": "minecraft:desert",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "IshtariMummyOasis",
+    "mods": "",
+    "size": "50,19,50",
+    "offset": "25,9,49"
+  }
+}

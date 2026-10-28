@@ -1,0 +1,53 @@
+{
+  "name": "MonsterLairHillGiantOakWood",
+  "source": "normal/MonsterNaturalLairs/MonsterLairHillGiantOakWood.aws",
+  "size": [
+    16,
+    13,
+    16
+  ],
+  "offset": [
+    8,
+    4,
+    15
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "50",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:windswept_forest",
+      "minecraft:forest"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "dungeon",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "MonsterLairHillGiantOakWood",
+    "mods": "",
+    "size": "16,13,16",
+    "offset": "8,4,15"
+  }
+}

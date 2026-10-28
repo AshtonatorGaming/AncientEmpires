@@ -1,0 +1,53 @@
+{
+  "name": "BalloonGondolaRed",
+  "source": "normal/SurvivalBalloons/BalloonGondolaRed.aws",
+  "size": [
+    25,
+    81,
+    25
+  ],
+  "offset": [
+    14,
+    1,
+    24
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "mocreatures",
+    "mod_lavacow",
+    "primitivemobs",
+    "thesummoner"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "",
+    "survival": "true",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "1",
+    "clusterValue": "1",
+    "minDuplicateDistance": "1",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "BalloonGondolaRed",
+    "mods": "",
+    "size": "25,81,25",
+    "offset": "14,1,24"
+  }
+}

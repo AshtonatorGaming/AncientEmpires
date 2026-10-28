@@ -1,0 +1,55 @@
+{
+  "name": "OrcTraderTower",
+  "source": "normal/AWTribalOrcRuined/OrcTraderTower.aws",
+  "size": [
+    16,
+    23,
+    16
+  ],
+  "offset": [
+    7,
+    5,
+    15
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:dead_swamp",
+      "biomesoplenty:bayou",
+      "biomesoplenty:dead_forest",
+      "minecraft:taiga",
+      "traverse:thicket",
+      "biomesoplenty:moor"
+    ],
+    "leveling": "25",
+    "fill": "25",
+    "border": "8",
+    "blockSwap": "false",
+    "territoryName": "orcruined",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "OrcTraderTower",
+    "mods": "",
+    "size": "16,23,16",
+    "offset": "7,5,15"
+  }
+}

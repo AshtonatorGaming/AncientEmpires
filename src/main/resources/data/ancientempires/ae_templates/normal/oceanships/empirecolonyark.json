@@ -1,0 +1,53 @@
+{
+  "name": "EmpireColonyArk",
+  "source": "normal/OceanShips/EmpireColonyArk.aws",
+  "size": [
+    55,
+    36,
+    33
+  ],
+  "offset": [
+    27,
+    9,
+    32
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "astikorcarts"
+  ],
+  "validation": {
+    "type": "water",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "40",
+    "clusterValue": "250",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:ocean"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "empirecoastal",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "EmpireColonyArk",
+    "mods": "",
+    "size": "55,36,33",
+    "offset": "27,9,32"
+  }
+}

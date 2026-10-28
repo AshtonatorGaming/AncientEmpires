@@ -1,0 +1,52 @@
+{
+  "name": "EmpireCityGenWandasWorkshop",
+  "source": "towns/town structures/Empire/EmpireCityGenWandasWorkshop.aws",
+  "size": [
+    36,
+    23,
+    15
+  ],
+  "offset": [
+    19,
+    5,
+    14
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfareautomation",
+    "ancientwarfarenpc",
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "",
+    "survival": "false",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "1",
+    "clusterValue": "1",
+    "minDuplicateDistance": "1",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "EmpireCityGenWandasWorkshop",
+    "mods": "",
+    "size": "36,23,15",
+    "offset": "19,5,14"
+  }
+}

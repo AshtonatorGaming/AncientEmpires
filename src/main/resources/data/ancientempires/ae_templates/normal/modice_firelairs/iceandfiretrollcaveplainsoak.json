@@ -1,0 +1,53 @@
+{
+  "name": "IceAndFireTrollCavePlainsOak",
+  "source": "normal/ModIce&FireLairs/IceAndFireTrollCavePlainsOak.aws",
+  "size": [
+    40,
+    63,
+    46
+  ],
+  "offset": [
+    20,
+    5,
+    45
+  ],
+  "requiredMods": [
+    "iceandfire"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ebwizardry"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "50",
+    "clusterValue": "150",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:forest"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "10",
+    "blockSwap": "false",
+    "territoryName": "ruins",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "IceAndFireTrollCavePlainsOak",
+    "mods": "iceandfire",
+    "size": "40,63,46",
+    "offset": "20,5,45"
+  }
+}

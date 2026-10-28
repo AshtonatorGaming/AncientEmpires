@@ -1,0 +1,54 @@
+{
+  "name": "XoltecSunsetFleet",
+  "source": "normal/OceanShips/XoltecSunsetFleet.aws",
+  "size": [
+    62,
+    22,
+    48
+  ],
+  "offset": [
+    31,
+    5,
+    46
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ancientwarfarevehicle"
+  ],
+  "validation": {
+    "type": "water",
+    "structureAuthor": "Gungnir",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "true",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "40",
+    "clusterValue": "300",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:ocean",
+      "minecraft:deep_ocean"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "oceansavanna",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "XoltecSunsetFleet",
+    "mods": "",
+    "size": "62,22,48",
+    "offset": "31,5,46"
+  }
+}

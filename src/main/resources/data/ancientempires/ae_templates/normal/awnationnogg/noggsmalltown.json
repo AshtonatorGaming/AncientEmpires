@@ -1,0 +1,65 @@
+{
+  "name": "NoggSmallTown",
+  "source": "normal/AWNationNogg/NoggSmallTown.aws",
+  "size": [
+    114,
+    53,
+    114
+  ],
+  "offset": [
+    57,
+    5,
+    105
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfare",
+    "ancientwarfareautomation",
+    "ancientwarfarestructure",
+    "ancientwarfarevehicle"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "Gungnir",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "20",
+    "clusterValue": "300",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [
+      "nogg"
+    ],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:windswept_forest",
+      "nt:lowland",
+      "pvj:aspen_grove",
+      "explorercraft:forested_mountain",
+      "nt:poppy_meadow",
+      "biomesoplenty:lavender_fields",
+      "biomesoplenty:orchard"
+    ],
+    "leveling": "50",
+    "fill": "16",
+    "border": "12",
+    "blockSwap": "false",
+    "territoryName": "nogg",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "NoggSmallTown",
+    "mods": "",
+    "size": "114,53,114",
+    "offset": "57,5,105"
+  }
+}

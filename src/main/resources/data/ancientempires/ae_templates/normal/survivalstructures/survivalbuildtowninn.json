@@ -1,0 +1,47 @@
+{
+  "name": "SurvivalBuildTownInn",
+  "source": "normal/SurvivalStructures/SurvivalBuildTownInn.aws",
+  "size": [
+    24,
+    20,
+    20
+  ],
+  "offset": [
+    15,
+    2,
+    19
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "true",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "1",
+    "clusterValue": "1",
+    "minDuplicateDistance": "1",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "SurvivalBuildTownInn",
+    "mods": "",
+    "size": "24,20,20",
+    "offset": "15,2,19"
+  }
+}

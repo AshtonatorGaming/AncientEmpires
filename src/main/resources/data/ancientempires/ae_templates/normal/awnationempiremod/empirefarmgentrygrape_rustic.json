@@ -1,0 +1,63 @@
+{
+  "name": "EmpireFarmGentryGrape_rustic",
+  "source": "normal/AWNationEmpireMod/EmpireFarmGentryGrape_rustic.aws",
+  "size": [
+    54,
+    28,
+    68
+  ],
+  "offset": [
+    18,
+    5,
+    25
+  ],
+  "requiredMods": [
+    "rustic"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "rustic"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "30",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "nt:oak_forest",
+      "nt:oak_forest_hills",
+      "nt:tall_oak_forest",
+      "nt:tall_oak_forest_hills",
+      "minecraft:forest",
+      "traverse:meadow",
+      "nt:cold_forest_hill",
+      "traverse:forested_hills",
+      "environs:tall_oak_forest",
+      "environs:tall_oak_forest_hills"
+    ],
+    "leveling": "30",
+    "fill": "10",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "empire",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "EmpireFarmGentryGrape_rustic",
+    "mods": "rustic",
+    "size": "54,28,68",
+    "offset": "18,5,25"
+  }
+}

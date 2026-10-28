@@ -1,0 +1,48 @@
+{
+  "name": "UndeadCemetaryGraveUnderground6",
+  "source": "towns/house/Undead/UndeadCemetaryGraveUnderground6.aws",
+  "size": [
+    6,
+    8,
+    5
+  ],
+  "offset": [
+    5,
+    5,
+    2
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "betteranimalsplus"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "0",
+    "clusterValue": "0",
+    "minDuplicateDistance": "0",
+    "dimensionWhiteList": "false",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "false",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "UndeadCemetaryGraveUnderground6",
+    "mods": "",
+    "size": "6,8,5",
+    "offset": "5,5,2"
+  }
+}

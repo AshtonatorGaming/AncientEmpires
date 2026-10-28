@@ -1,0 +1,55 @@
+{
+  "name": "BrigandNoggHighwayMan",
+  "source": "normal/AWTribalBrigand/BrigandNoggHighwayMan.aws",
+  "size": [
+    4,
+    6,
+    4
+  ],
+  "offset": [
+    1,
+    5,
+    3
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "30",
+    "clusterValue": "50",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:birch_forest",
+      "minecraft_birch_forest"
+    ],
+    "leveling": "3",
+    "fill": "3",
+    "border": "3",
+    "blockSwap": "false",
+    "territoryName": "nogg",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "BrigandNoggHighwayMan",
+    "mods": "",
+    "size": "4,6,4",
+    "offset": "1,5,3"
+  }
+}

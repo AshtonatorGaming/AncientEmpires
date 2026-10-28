@@ -1,0 +1,62 @@
+{
+  "name": "IceAndFireNorskaDragonTemple",
+  "source": "normal/ModIce&FireLairs/IceAndFireNorskaDragonTemple.aws",
+  "size": [
+    35,
+    30,
+    43
+  ],
+  "offset": [
+    17,
+    5,
+    42
+  ],
+  "requiredMods": [
+    "iceandfire"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "primitivemobs",
+    "xreliquary"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "30",
+    "clusterValue": "30",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:snowy_taiga",
+      "biomesoplenty:snowy_tundra",
+      "biomesoplenty:snowy_coniferous_forest",
+      "minecraft:snowy_plains",
+      "biomesoplenty:snowy_forest"
+    ],
+    "leveling": "10",
+    "fill": "10",
+    "border": "5",
+    "blockSwap": "false",
+    "territoryName": "norska",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "IceAndFireNorskaDragonTemple",
+    "mods": "iceandfire",
+    "size": "35,30,43",
+    "offset": "17,5,42"
+  }
+}

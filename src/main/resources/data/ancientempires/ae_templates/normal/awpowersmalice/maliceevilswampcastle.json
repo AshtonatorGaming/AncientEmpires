@@ -1,0 +1,56 @@
+{
+  "name": "MaliceEvilSwampCastle",
+  "source": "normal/AWPowersMalice/MaliceEvilSwampCastle.aws",
+  "size": [
+    55,
+    71,
+    48
+  ],
+  "offset": [
+    23,
+    15,
+    47
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ancientwarfarevehicle",
+    "ebwizardry",
+    "eplus",
+    "primitivemobs"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "40",
+    "clusterValue": "350",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:swamp"
+    ],
+    "leveling": "12",
+    "fill": "12",
+    "border": "12",
+    "blockSwap": "false",
+    "territoryName": "ruins",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "MaliceEvilSwampCastle",
+    "mods": "",
+    "size": "55,71,48",
+    "offset": "23,15,47"
+  }
+}

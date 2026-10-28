@@ -1,0 +1,53 @@
+{
+  "name": "IcelordMountain",
+  "source": "normal/AWPowersIcelord/IcelordMountain.aws",
+  "size": [
+    69,
+    65,
+    64
+  ],
+  "offset": [
+    33,
+    1,
+    64
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:snowy_tundra",
+      "biomesoplenty:snowy_forest",
+      "minecraft:snowy_plains"
+    ],
+    "leveling": "12",
+    "fill": "12",
+    "border": "8",
+    "blockSwap": "false",
+    "territoryName": "icelord",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "IcelordMountain",
+    "mods": "",
+    "size": "69,65,64",
+    "offset": "33,1,64"
+  }
+}

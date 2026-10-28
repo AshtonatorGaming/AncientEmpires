@@ -1,0 +1,59 @@
+{
+  "name": "ZimbaGreatTemple",
+  "source": "normal/AWTribalZimba/ZimbaGreatTemple.aws",
+  "size": [
+    53,
+    39,
+    52
+  ],
+  "offset": [
+    25,
+    7,
+    51
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "60",
+    "clusterValue": "150",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "byg:bsavannacanopy",
+      "byg:bbaobabsavanna",
+      "minecraft:savanna_plateau",
+      "biomesoplenty:savanna_plateau_extension",
+      "minecraft:savanna",
+      "biomesoplenty:savanna_extension"
+    ],
+    "leveling": "25",
+    "fill": "25",
+    "border": "12",
+    "blockSwap": "false",
+    "territoryName": "zimba",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "ZimbaGreatTemple",
+    "mods": "",
+    "size": "53,39,52",
+    "offset": "25,7,51"
+  }
+}

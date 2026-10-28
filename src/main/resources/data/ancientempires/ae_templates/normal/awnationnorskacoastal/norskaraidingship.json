@@ -1,0 +1,52 @@
+{
+  "name": "NorskaRaidingShip",
+  "source": "normal/AWNationNorskaCoastal/NorskaRaidingShip.aws",
+  "size": [
+    27,
+    36,
+    58
+  ],
+  "offset": [
+    10,
+    5,
+    57
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "water",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "251",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:snowy_beach"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "norskacoastal",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "NorskaRaidingShip",
+    "mods": "",
+    "size": "27,36,58",
+    "offset": "10,5,57"
+  }
+}

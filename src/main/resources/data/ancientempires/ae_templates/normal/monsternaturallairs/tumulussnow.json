@@ -1,0 +1,52 @@
+{
+  "name": "TumulusSnow",
+  "source": "normal/MonsterNaturalLairs/TumulusSnow.aws",
+  "size": [
+    29,
+    50,
+    31
+  ],
+  "offset": [
+    15,
+    3,
+    30
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:snowy_taiga",
+      "minecraft:snowy_plains"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "5",
+    "blockSwap": "false",
+    "territoryName": "icelord",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "TumulusSnow",
+    "mods": "",
+    "size": "29,50,31",
+    "offset": "15,3,30"
+  }
+}

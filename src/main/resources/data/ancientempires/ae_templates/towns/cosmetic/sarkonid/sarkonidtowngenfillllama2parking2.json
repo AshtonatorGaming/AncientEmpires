@@ -1,0 +1,46 @@
+{
+  "name": "SarkonidTownGenFillLlama2Parking2",
+  "source": "towns/cosmetic/Sarkonid/SarkonidTownGenFillLlama2Parking2.aws",
+  "size": [
+    7,
+    10,
+    9
+  ],
+  "offset": [
+    3,
+    5,
+    8
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "1",
+    "clusterValue": "1",
+    "minDuplicateDistance": "1",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "SarkonidTownGenFillLlama2Parking2",
+    "mods": "",
+    "size": "7,10,9",
+    "offset": "3,5,8"
+  }
+}

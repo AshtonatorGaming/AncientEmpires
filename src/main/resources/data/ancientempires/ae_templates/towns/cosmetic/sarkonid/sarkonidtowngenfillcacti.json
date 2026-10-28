@@ -1,0 +1,44 @@
+{
+  "name": "SarkonidTownGenFillCacti",
+  "source": "towns/cosmetic/Sarkonid/SarkonidTownGenFillCacti.aws",
+  "size": [
+    3,
+    8,
+    3
+  ],
+  "offset": [
+    1,
+    5,
+    2
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "1",
+    "clusterValue": "1",
+    "minDuplicateDistance": "1",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "SarkonidTownGenFillCacti",
+    "mods": "",
+    "size": "3,8,3",
+    "offset": "1,5,2"
+  }
+}

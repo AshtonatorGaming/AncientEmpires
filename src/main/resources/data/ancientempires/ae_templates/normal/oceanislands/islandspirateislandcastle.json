@@ -1,0 +1,55 @@
+{
+  "name": "IslandsPirateIslandCastle",
+  "source": "normal/OceanIslands/IslandsPirateIslandCastle.aws",
+  "size": [
+    151,
+    138,
+    101
+  ],
+  "offset": [
+    29,
+    41,
+    100
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ancientwarfarevehicle",
+    "primitivemobs"
+  ],
+  "validation": {
+    "type": "island",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "true",
+    "preserveBlocks": "true",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "50",
+    "clusterValue": "250",
+    "minDuplicateDistance": "2000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:deep_ocean"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "oceanrocky",
+    "biomeReplacement": "minecraft:extreme_hills",
+    "minWaterDepth": "10",
+    "maxWaterDepth": "50"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "IslandsPirateIslandCastle",
+    "mods": "",
+    "size": "151,138,101",
+    "offset": "29,41,100"
+  }
+}

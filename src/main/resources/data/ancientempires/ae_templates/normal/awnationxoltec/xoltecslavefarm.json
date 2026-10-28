@@ -1,0 +1,51 @@
+{
+  "name": "XoltecSlaveFarm",
+  "source": "normal/AWNationXoltec/XoltecSlaveFarm.aws",
+  "size": [
+    55,
+    22,
+    55
+  ],
+  "offset": [
+    27,
+    6,
+    54
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "70",
+    "clusterValue": "50",
+    "minDuplicateDistance": "600",
+    "dimensionWhiteList": "false",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "nt:lush_desert",
+      "minecraft:badlands",
+      "minecraft:wooded_badlands",
+      "minecraft:eroded_badlands"
+    ],
+    "leveling": "52",
+    "fill": "52",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "xoltec",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "XoltecSlaveFarm",
+    "mods": "",
+    "size": "55,22,55",
+    "offset": "27,6,54"
+  }
+}

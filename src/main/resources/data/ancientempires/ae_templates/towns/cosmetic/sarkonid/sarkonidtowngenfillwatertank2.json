@@ -1,0 +1,44 @@
+{
+  "name": "SarkonidTownGenFillWaterTank2",
+  "source": "towns/cosmetic/Sarkonid/SarkonidTownGenFillWaterTank2.aws",
+  "size": [
+    5,
+    10,
+    5
+  ],
+  "offset": [
+    2,
+    5,
+    4
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "1",
+    "clusterValue": "1",
+    "minDuplicateDistance": "1",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "SarkonidTownGenFillWaterTank2",
+    "mods": "",
+    "size": "5,10,5",
+    "offset": "2,5,4"
+  }
+}

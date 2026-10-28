@@ -1,0 +1,60 @@
+{
+  "name": "BufflokaPlainsSmallVillage",
+  "source": "normal/AWTribalBufflokaPlains/BufflokaPlainsSmallVillage.aws",
+  "size": [
+    30,
+    17,
+    19
+  ],
+  "offset": [
+    14,
+    3,
+    18
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:prairie",
+      "minecraft:plains",
+      "traverse:lush_hills",
+      "nt:maple_forest",
+      "nt:maple_forest_hills",
+      "byg:bmapleforest",
+      "byg:bprairie"
+    ],
+    "leveling": "10",
+    "fill": "10",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "bufflokaplains",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "BufflokaPlainsSmallVillage",
+    "mods": "",
+    "size": "30,17,19",
+    "offset": "14,3,18"
+  }
+}

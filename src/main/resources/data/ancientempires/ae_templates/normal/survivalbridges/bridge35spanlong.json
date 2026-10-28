@@ -1,0 +1,41 @@
+{
+  "name": "Bridge35spanLong",
+  "source": "normal/SurvivalBridges/Bridge35spanLong.aws",
+  "size": [
+    5,
+    11,
+    35
+  ],
+  "offset": [
+    1,
+    6,
+    34
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [],
+  "validation": {
+    "type": "ground",
+    "survival": "true",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "0",
+    "clusterValue": "0",
+    "minDuplicateDistance": "0",
+    "dimensionWhiteList": "false",
+    "dimensionList": [],
+    "biomeWhiteList": "false",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false"
+  },
+  "header": {
+    "version": "2.8",
+    "name": "Bridge35spanLong",
+    "mods": "",
+    "size": "5,11,35",
+    "offset": "1,6,34"
+  }
+}

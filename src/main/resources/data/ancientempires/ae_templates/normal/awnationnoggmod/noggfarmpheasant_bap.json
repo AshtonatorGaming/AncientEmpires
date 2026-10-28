@@ -1,0 +1,55 @@
+{
+  "name": "NoggFarmPheasant_BAP",
+  "source": "normal/AWNationNoggMod/NoggFarmPheasant_BAP.aws",
+  "size": [
+    33,
+    17,
+    19
+  ],
+  "offset": [
+    10,
+    5,
+    7
+  ],
+  "requiredMods": [
+    "betteranimalsplus"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "OddlySeagull",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:grove"
+    ],
+    "leveling": "10",
+    "fill": "10",
+    "border": "5",
+    "blockSwap": "false",
+    "territoryName": "nogg",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "NoggFarmPheasant_BAP",
+    "mods": "betteranimalsplus",
+    "size": "33,17,19",
+    "offset": "10,5,7"
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "name": "UndeadCemetaryFamilyGraveLarge5",
+  "source": "towns/house/Undead/UndeadCemetaryFamilyGraveLarge5.aws",
+  "size": [
+    7,
+    14,
+    10
+  ],
+  "offset": [
+    3,
+    5,
+    9
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "0",
+    "clusterValue": "0",
+    "minDuplicateDistance": "0",
+    "dimensionWhiteList": "false",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "false",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "UndeadCemetaryFamilyGraveLarge5",
+    "mods": "",
+    "size": "7,14,10",
+    "offset": "3,5,9"
+  }
+}

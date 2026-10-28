@@ -1,0 +1,52 @@
+{
+  "name": "OrcFortressMesa",
+  "source": "normal/AWTribalOrcRuined/OrcFortressMesa.aws",
+  "size": [
+    23,
+    26,
+    24
+  ],
+  "offset": [
+    11,
+    7,
+    23
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "50",
+    "clusterValue": "50",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:badlands",
+      "minecraft:eroded_badlands",
+      "minecraft:wooded_badlands"
+    ],
+    "leveling": "52",
+    "fill": "52",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "mesaruins",
+    "biomeReplacement": "minecraft:minecraft:mutated_mesa"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "OrcFortressMesa",
+    "mods": "",
+    "size": "23,26,24",
+    "offset": "11,7,23"
+  }
+}

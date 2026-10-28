@@ -1,0 +1,54 @@
+{
+  "name": "BufflokaForestTrader",
+  "source": "normal/AWTribalBufflokaForest/BufflokaForestTrader.aws",
+  "size": [
+    33,
+    33,
+    25
+  ],
+  "offset": [
+    15,
+    6,
+    24
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "60",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:old_growth_pine_taiga"
+    ],
+    "leveling": "6",
+    "fill": "6",
+    "border": "5",
+    "blockSwap": "false",
+    "territoryName": "bufflokaforest",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "BufflokaForestTrader",
+    "mods": "",
+    "size": "33,33,25",
+    "offset": "15,6,24"
+  }
+}

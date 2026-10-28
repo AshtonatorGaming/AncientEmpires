@@ -1,0 +1,51 @@
+{
+  "name": "XoltecPyramidSmall",
+  "source": "normal/AWNationXoltec/XoltecPyramidSmall.aws",
+  "size": [
+    43,
+    39,
+    44
+  ],
+  "offset": [
+    22,
+    12,
+    43
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "80",
+    "clusterValue": "50",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "false",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "nt:lush_desert",
+      "minecraft:badlands",
+      "minecraft:wooded_badlands",
+      "minecraft:eroded_badlands"
+    ],
+    "leveling": "52",
+    "fill": "52",
+    "border": "10",
+    "blockSwap": "false",
+    "territoryName": "xoltec",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "XoltecPyramidSmall",
+    "mods": "",
+    "size": "43,39,44",
+    "offset": "22,12,43"
+  }
+}

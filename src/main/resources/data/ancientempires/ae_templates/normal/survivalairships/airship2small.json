@@ -1,0 +1,48 @@
+{
+  "name": "Airship2Small",
+  "source": "normal/SurvivalAirships/Airship2Small.aws",
+  "size": [
+    25,
+    12,
+    23
+  ],
+  "offset": [
+    14,
+    1,
+    22
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "",
+    "survival": "true",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "1",
+    "clusterValue": "1",
+    "minDuplicateDistance": "1",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "Airship2Small",
+    "mods": "",
+    "size": "25,12,23",
+    "offset": "14,1,22"
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "name": "LadyOfTheLake",
+  "source": "normal/MonsterNaturalLairs/LadyOfTheLake.aws",
+  "size": [
+    52,
+    31,
+    52
+  ],
+  "offset": [
+    24,
+    5,
+    51
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ebwizardry",
+    "iceandfire",
+    "rustic",
+    "vampirism"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "40",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:swamp",
+      "minecraft:sparse_jungle",
+      "minecraft:mushroom_fields",
+      "minecraft:savanna"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "8",
+    "blockSwap": "false",
+    "territoryName": "",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "LadyOfTheLake",
+    "mods": "",
+    "size": "52,31,52",
+    "offset": "24,5,51"
+  }
+}

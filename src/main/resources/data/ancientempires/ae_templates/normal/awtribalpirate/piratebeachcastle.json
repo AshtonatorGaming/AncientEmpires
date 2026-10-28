@@ -1,0 +1,57 @@
+{
+  "name": "PirateBeachCastle",
+  "source": "normal/AWTribalPirate/PirateBeachCastle.aws",
+  "size": [
+    52,
+    50,
+    66
+  ],
+  "offset": [
+    16,
+    9,
+    65
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ancientwarfarevehicle",
+    "primitivemobs",
+    "thesummoner"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "40",
+    "clusterValue": "150",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:beach"
+    ],
+    "leveling": "6",
+    "fill": "6",
+    "border": "15",
+    "blockSwap": "false",
+    "territoryName": "piratecoastal",
+    "biomeReplacement": "minecraft:beaches",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "PirateBeachCastle",
+    "mods": "",
+    "size": "52,50,66",
+    "offset": "16,9,65"
+  }
+}

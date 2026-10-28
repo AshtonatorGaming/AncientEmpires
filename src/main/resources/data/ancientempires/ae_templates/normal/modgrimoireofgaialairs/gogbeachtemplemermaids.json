@@ -1,0 +1,55 @@
+{
+  "name": "GOGBeachTempleMermaids",
+  "source": "normal/ModGrimoireOfGaiaLairs/GOGBeachTempleMermaids.aws",
+  "size": [
+    15,
+    36,
+    15
+  ],
+  "offset": [
+    7,
+    14,
+    14
+  ],
+  "requiredMods": [
+    "grimoireofgaia"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "primitivemobs"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:beach",
+      "nt:aegean_archipelago"
+    ],
+    "leveling": "12",
+    "fill": "12",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "minossian",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "GOGBeachTempleMermaids",
+    "mods": "grimoireofgaia",
+    "size": "15,36,15",
+    "offset": "7,14,14"
+  }
+}

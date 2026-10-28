@@ -1,0 +1,72 @@
+{
+  "name": "ELBArsMagicaLootTowerNew",
+  "source": "normal/ModElectroblobsTowers/ELBArsMagicaLootTowerNew.aws",
+  "size": [
+    19,
+    24,
+    16
+  ],
+  "offset": [
+    10,
+    8,
+    15
+  ],
+  "requiredMods": [
+    "ebwizardry"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ebwizardry",
+    "eplus",
+    "primitivemobs"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:swamp",
+      "biomesoplenty:woodland",
+      "biomesoplenty:bayou",
+      "biomesoplenty:dead_forest",
+      "minecraft:windswept_hills",
+      "biomesoplenty:ominous_woods",
+      "biomesoplenty:land_of_lakes",
+      "auxbiomes:marsh",
+      "minecraft:snowy_taiga",
+      "biomesoplenty:dead_swamp",
+      "biomesoplenty:marsh",
+      "minecraft:snowy_plains",
+      "biomesoplenty:mystic_grove",
+      "thaumcraft:magical_forest"
+    ],
+    "leveling": "6",
+    "fill": "6",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "ruins",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "ELBArsMagicaLootTowerNew",
+    "mods": "ebwizardry",
+    "size": "19,24,16",
+    "offset": "10,8,15"
+  }
+}

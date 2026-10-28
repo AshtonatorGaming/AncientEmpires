@@ -1,0 +1,41 @@
+{
+  "name": "BridgeEmpireMedium29blockspan",
+  "source": "normal/SurvivalBridges/BridgeEmpireMedium29blockspan.aws",
+  "size": [
+    5,
+    19,
+    29
+  ],
+  "offset": [
+    1,
+    6,
+    0
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [],
+  "validation": {
+    "type": "ground",
+    "survival": "true",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "true",
+    "selectionWeight": "0",
+    "clusterValue": "0",
+    "minDuplicateDistance": "0",
+    "dimensionWhiteList": "false",
+    "dimensionList": [],
+    "biomeWhiteList": "false",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false"
+  },
+  "header": {
+    "version": "2.8",
+    "name": "BridgeEmpireMedium29blockspan",
+    "mods": "",
+    "size": "5,19,29",
+    "offset": "1,6,0"
+  }
+}

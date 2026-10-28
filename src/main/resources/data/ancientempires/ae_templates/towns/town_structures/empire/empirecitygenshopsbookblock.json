@@ -1,0 +1,51 @@
+{
+  "name": "EmpireCityGenShopsBookBlock",
+  "source": "towns/town structures/Empire/EmpireCityGenShopsBookBlock.aws",
+  "size": [
+    39,
+    27,
+    21
+  ],
+  "offset": [
+    21,
+    7,
+    20
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "iceandfire"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "",
+    "survival": "false",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "1",
+    "clusterValue": "1",
+    "minDuplicateDistance": "1",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "EmpireCityGenShopsBookBlock",
+    "mods": "",
+    "size": "39,27,21",
+    "offset": "21,7,20"
+  }
+}

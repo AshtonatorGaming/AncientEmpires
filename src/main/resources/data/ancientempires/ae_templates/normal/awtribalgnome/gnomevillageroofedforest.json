@@ -1,0 +1,59 @@
+{
+  "name": "GnomeVillageRoofedForest",
+  "source": "normal/AWTribalGnome/GnomeVillageRoofedForest.aws",
+  "size": [
+    27,
+    25,
+    30
+  ],
+  "offset": [
+    12,
+    9,
+    29
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarenpc",
+    "ancientwarfarestructure",
+    "grimoireofgaia"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "nt:cold_roofed_forest",
+      "nt:cold_roofed_forest_hills",
+      "minecraft:dark_forest",
+      "explorercraft:snowdonia",
+      "minecraft:swamp",
+      "minecraft:sunflower_plains",
+      "byg:bfloweringplains",
+      "byg:bbayou"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "gnome",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "GnomeVillageRoofedForest",
+    "mods": "",
+    "size": "27,25,30",
+    "offset": "12,9,29"
+  }
+}

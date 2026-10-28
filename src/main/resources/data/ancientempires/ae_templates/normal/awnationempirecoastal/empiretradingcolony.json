@@ -1,0 +1,58 @@
+{
+  "name": "EmpireTradingColony",
+  "source": "normal/AWNationEmpireCoastal/EmpireTradingColony.aws",
+  "size": [
+    56,
+    32,
+    71
+  ],
+  "offset": [
+    28,
+    7,
+    70
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarenpc",
+    "ancientwarfarestructure",
+    "ancientwarfarevehicle"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "60",
+    "clusterValue": "250",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "auxbiomes:forested_island",
+      "minecraft:beach",
+      "nt:brown_beach",
+      "nt:olivine_beach",
+      "nt:pink_beach"
+    ],
+    "leveling": "12",
+    "fill": "12",
+    "border": "12",
+    "blockSwap": "false",
+    "territoryName": "empirecoastal",
+    "biomeReplacement": "minecraft:beaches",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "EmpireTradingColony",
+    "mods": "",
+    "size": "56,32,71",
+    "offset": "28,7,70"
+  }
+}

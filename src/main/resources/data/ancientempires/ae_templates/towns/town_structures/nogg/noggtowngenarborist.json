@@ -1,0 +1,48 @@
+{
+  "name": "NoggTownGenArborist",
+  "source": "towns/town structures/Nogg/NoggTownGenArborist.aws",
+  "size": [
+    46,
+    37,
+    39
+  ],
+  "offset": [
+    20,
+    6,
+    38
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarenpc",
+    "ancientwarfarestructure",
+    "ebwizardry",
+    "simplytea"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "0",
+    "clusterValue": "0",
+    "minDuplicateDistance": "0",
+    "dimensionWhiteList": "false",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "false",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "NoggTownGenArborist",
+    "mods": "",
+    "size": "46,37,39",
+    "offset": "20,6,38"
+  }
+}

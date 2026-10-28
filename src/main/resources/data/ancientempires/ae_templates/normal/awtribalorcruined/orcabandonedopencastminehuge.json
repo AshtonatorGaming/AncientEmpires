@@ -1,0 +1,55 @@
+{
+  "name": "OrcAbandonedOpenCastMineHuge",
+  "source": "normal/AWTribalOrcRuined/OrcAbandonedOpenCastMineHuge.aws",
+  "size": [
+    63,
+    84,
+    63
+  ],
+  "offset": [
+    26,
+    69,
+    62
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "primitivemobs"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "60",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "traverse:rocky_plains",
+      "minecraft:windswept_hills",
+      "traverse:badlands",
+      "minecraft:snowy_plains",
+      "minecraft:plains"
+    ],
+    "leveling": "25",
+    "fill": "12",
+    "border": "10",
+    "blockSwap": "false",
+    "territoryName": "orc",
+    "biomeReplacement": "minecraft:minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "OrcAbandonedOpenCastMineHuge",
+    "mods": "",
+    "size": "63,84,63",
+    "offset": "26,69,62"
+  }
+}

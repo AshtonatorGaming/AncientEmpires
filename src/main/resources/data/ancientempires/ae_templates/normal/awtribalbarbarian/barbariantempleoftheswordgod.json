@@ -1,0 +1,73 @@
+{
+  "name": "BarbarianTempleOfTheSwordGod",
+  "source": "normal/AWTribalBarbarian/BarbarianTempleOfTheSwordGod.aws",
+  "size": [
+    57,
+    124,
+    42
+  ],
+  "offset": [
+    28,
+    15,
+    41
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "mocreatures",
+    "mod_lavacow",
+    "primitivemobs"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "60",
+    "clusterValue": "150",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "nt:cold_mega_spruce_taiga",
+      "nt:cold_mega_spruce_taiga_hills",
+      "nt:cold_mega_taiga",
+      "nt:cold_mega_taiga_hills",
+      "nt:clay_land",
+      "minecraft:taiga",
+      "nt:moorland",
+      "environs:stone_flats",
+      "nt:cliffs",
+      "traverse:cliffs",
+      "traverse:rocky_plateau",
+      "nt:mega_autumn_taiga_hills",
+      "traverse:rocky_plains",
+      "environs:moor",
+      "environs:stone_hills",
+      "traverse:crag_cliffs",
+      "nt:mega_autumn_taiga"
+    ],
+    "leveling": "30",
+    "fill": "30",
+    "border": "20",
+    "blockSwap": "false",
+    "territoryName": "barbarian",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "BarbarianTempleOfTheSwordGod",
+    "mods": "",
+    "size": "57,124,42",
+    "offset": "28,15,41"
+  }
+}

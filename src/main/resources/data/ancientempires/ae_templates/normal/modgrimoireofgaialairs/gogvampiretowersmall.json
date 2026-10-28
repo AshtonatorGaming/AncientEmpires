@@ -1,0 +1,62 @@
+{
+  "name": "GOGVampireTowerSmall",
+  "source": "normal/ModGrimoireOfGaiaLairs/GOGVampireTowerSmall.aws",
+  "size": [
+    53,
+    70,
+    33
+  ],
+  "offset": [
+    23,
+    7,
+    32
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ebwizardry",
+    "primitivemobs"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "40",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:dead_forest",
+      "spookybiomes:ghostly_forest",
+      "biomesoplenty:mystic_grove",
+      "biomesoplenty:ominous_woods",
+      "biomesoplenty:bayou",
+      "biomesoplenty:dead_swamp",
+      "biomesoplenty:marsh"
+    ],
+    "leveling": "12",
+    "fill": "12",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "vampire",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "GOGVampireTowerSmall",
+    "mods": "",
+    "size": "53,70,33",
+    "offset": "23,7,32"
+  }
+}

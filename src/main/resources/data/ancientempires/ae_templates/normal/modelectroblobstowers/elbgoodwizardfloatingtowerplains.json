@@ -1,0 +1,63 @@
+{
+  "name": "ELBGoodWizardFloatingTowerPlains",
+  "source": "normal/ModElectroblobsTowers/ELBGoodWizardFloatingTowerPlains.aws",
+  "size": [
+    17,
+    58,
+    18
+  ],
+  "offset": [
+    9,
+    12,
+    17
+  ],
+  "requiredMods": [
+    "ebwizardry"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ebwizardry",
+    "eplus"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "true",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "250",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:meadow",
+      "biomesoplenty:woodland",
+      "biomesoplenty:pasture",
+      "minecraft:windswept_hills",
+      "minecraft:plains",
+      "biomesoplenty:orchard"
+    ],
+    "leveling": "6",
+    "fill": "6",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "magical",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "ELBGoodWizardFloatingTowerPlains",
+    "mods": "ebwizardry",
+    "size": "17,58,18",
+    "offset": "9,12,17"
+  }
+}

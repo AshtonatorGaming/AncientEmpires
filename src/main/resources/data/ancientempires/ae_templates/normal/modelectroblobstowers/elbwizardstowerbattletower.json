@@ -1,0 +1,69 @@
+{
+  "name": "ELBWizardsTowerBattleTower",
+  "source": "normal/ModElectroblobsTowers/ELBWizardsTowerBattleTower.aws",
+  "size": [
+    27,
+    88,
+    27
+  ],
+  "offset": [
+    13,
+    20,
+    26
+  ],
+  "requiredMods": [
+    "ebwizardry"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ebwizardry",
+    "iceandfire",
+    "rustic"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "Dan",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "30",
+    "clusterValue": "400",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:windswept_forest",
+      "biomesoplenty:dead_forest",
+      "minecraft:windswept_hills",
+      "biomesoplenty:mystic_grove",
+      "traverse:badlands",
+      "traverse:thicket",
+      "biomesoplenty:ominous_woods",
+      "biomesoplenty:moor",
+      "traverse:cliffs",
+      "traverse:rocky_plateau",
+      "auxbiomes:marsh",
+      "biomesoplenty:dead_swamp",
+      "traverse:crag_cliffs"
+    ],
+    "leveling": "35",
+    "fill": "35",
+    "border": "6",
+    "blockSwap": "true",
+    "territoryName": "dungeon",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "120",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "ELBWizardsTowerBattleTower",
+    "mods": "ebwizardry",
+    "size": "27,88,27",
+    "offset": "13,20,26"
+  }
+}

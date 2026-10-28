@@ -1,0 +1,67 @@
+{
+  "name": "EmpireTravellingNobleTent",
+  "source": "normal/AWNationEmpire/EmpireTravellingNobleTent.aws",
+  "size": [
+    24,
+    20,
+    24
+  ],
+  "offset": [
+    11,
+    6,
+    23
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:shrubland",
+      "biomesoplenty:woodland",
+      "traverse:woodlands",
+      "minecraft:forest",
+      "minecraft:windswept_hills",
+      "traverse:thicket",
+      "traverse:meadow",
+      "minecraft:birch_forest",
+      "biomesoplenty:lavender_fields",
+      "traverse:forested_hills",
+      "traverse:birch_forested_hills",
+      "minecraft:plains",
+      "biomesoplenty:orchard",
+      "biomesoplenty:shield"
+    ],
+    "leveling": "10",
+    "fill": "10",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "EmpireTravellingNobleTent",
+    "mods": "",
+    "size": "24,20,24",
+    "offset": "11,6,23"
+  }
+}

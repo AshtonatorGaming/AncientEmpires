@@ -1,0 +1,51 @@
+{
+  "name": "EmpireCityGenArkwrightsManufactory",
+  "source": "towns/town structures/Empire/EmpireCityGenArkwrightsManufactory.aws",
+  "size": [
+    25,
+    17,
+    28
+  ],
+  "offset": [
+    13,
+    5,
+    27
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfareautomation",
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "",
+    "survival": "false",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "1",
+    "clusterValue": "1",
+    "minDuplicateDistance": "1",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "EmpireCityGenArkwrightsManufactory",
+    "mods": "",
+    "size": "25,17,28",
+    "offset": "13,5,27"
+  }
+}

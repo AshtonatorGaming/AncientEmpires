@@ -1,0 +1,83 @@
+{
+  "name": "MaliceRuinedSwampCastle",
+  "source": "normal/AWPowersMalice/MaliceRuinedSwampCastle.aws",
+  "size": [
+    60,
+    49,
+    67
+  ],
+  "offset": [
+    28,
+    10,
+    65
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "primitivemobs"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "true",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "80",
+    "clusterValue": "200",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "false",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "traverse:rocky_plains",
+      "minecraft:windswept_hills",
+      "minecraft:snowy_plains",
+      "environs:stone_flats",
+      "environs:stone_hills",
+      "traverse:cliffs",
+      "traverse:rocky_plateau",
+      "minecraft:swamp",
+      "minecraft:dark_forest",
+      "environs:dead_oak_forest",
+      "environs:dead_oak_forest_hills",
+      "traverse:woodlands",
+      "traverse:badlands",
+      "environs:moor",
+      "environs:silkglades",
+      "environs:silk_wetland",
+      "thaumcraft:magical_forest",
+      "nt:shrubland",
+      "nt:scrubland",
+      "nt:heath",
+      "nt:highland",
+      "nt:moorland",
+      "biomesoplenty:shrubland",
+      "biomesoplenty:scrubland",
+      "biomesoplenty:dead_forest",
+      "biomesoplenty:dead_swamp",
+      "biomesoplenty:mystic_grove",
+      "biomesoplenty:swampland_extension",
+      "biomesoplenty:ominous_woods",
+      "spookybiomes:bloodied_forest",
+      "spookybiomes:ghostly_forest"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "true",
+    "territoryName": "swampruins",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "0"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "MaliceRuinedSwampCastle",
+    "mods": "",
+    "size": "60,49,67",
+    "offset": "28,10,65"
+  }
+}

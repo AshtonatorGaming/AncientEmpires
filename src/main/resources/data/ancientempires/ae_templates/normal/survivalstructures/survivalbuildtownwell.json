@@ -1,0 +1,45 @@
+{
+  "name": "SurvivalBuildTownWell",
+  "source": "normal/SurvivalStructures/SurvivalBuildTownWell.aws",
+  "size": [
+    13,
+    19,
+    13
+  ],
+  "offset": [
+    6,
+    11,
+    12
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [],
+  "validation": {
+    "type": "ground",
+    "survival": "true",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "1",
+    "clusterValue": "1",
+    "minDuplicateDistance": "1",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "SurvivalBuildTownWell",
+    "mods": "",
+    "size": "13,19,13",
+    "offset": "6,11,12"
+  }
+}

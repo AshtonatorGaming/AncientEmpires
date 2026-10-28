@@ -1,0 +1,55 @@
+{
+  "name": "OrcMineLargeRoofedForest",
+  "source": "normal/AWTribalOrcForest/OrcMineLargeRoofedForest.aws",
+  "size": [
+    31,
+    48,
+    44
+  ],
+  "offset": [
+    18,
+    34,
+    43
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ebwizardry",
+    "primitivemobs"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "50",
+    "clusterValue": "50",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "nt:cold_roofed_forest",
+      "nt:cold_roofed_forest_hills",
+      "minecraft:dark_forest",
+      "environs:roofed_swamp"
+    ],
+    "leveling": "12",
+    "fill": "12",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "orcforest",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "OrcMineLargeRoofedForest",
+    "mods": "",
+    "size": "31,48,44",
+    "offset": "18,34,43"
+  }
+}

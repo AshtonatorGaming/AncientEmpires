@@ -1,0 +1,53 @@
+{
+  "name": "IceAndFireHydraLairSwampRuin",
+  "source": "normal/ModIce&FireLairs/IceAndFireHydraLairSwampRuin.aws",
+  "size": [
+    40,
+    27,
+    44
+  ],
+  "offset": [
+    22,
+    11,
+    43
+  ],
+  "requiredMods": [
+    "iceandfire"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ebwizardry",
+    "iceandfire"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "50",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:swamp"
+    ],
+    "leveling": "6",
+    "fill": "6",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "swampruins",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "IceAndFireHydraLairSwampRuin",
+    "mods": "iceandfire",
+    "size": "40,27,44",
+    "offset": "22,11,43"
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "name": "XoltecGuardTower",
+  "source": "normal/AWNationXoltec/XoltecGuardTower.aws",
+  "size": [
+    11,
+    40,
+    11
+  ],
+  "offset": [
+    4,
+    11,
+    10
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarenpc",
+    "ancientwarfarestructure",
+    "ancientwarfarevehicle"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "60",
+    "clusterValue": "30",
+    "minDuplicateDistance": "500",
+    "dimensionWhiteList": "false",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "nt:lush_desert",
+      "minecraft:badlands",
+      "minecraft:wooded_badlands",
+      "minecraft:eroded_badlands"
+    ],
+    "leveling": "60",
+    "fill": "60",
+    "border": "5",
+    "blockSwap": "false",
+    "territoryName": "xoltec",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "XoltecGuardTower",
+    "mods": "",
+    "size": "11,40,11",
+    "offset": "4,11,10"
+  }
+}

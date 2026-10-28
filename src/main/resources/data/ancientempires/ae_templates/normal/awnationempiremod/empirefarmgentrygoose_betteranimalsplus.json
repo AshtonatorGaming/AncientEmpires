@@ -1,0 +1,62 @@
+{
+  "name": "EmpireFarmGentryGoose_betteranimalsplus",
+  "source": "normal/AWNationEmpireMod/EmpireFarmGentryGoose_betteranimalsplus.aws",
+  "size": [
+    37,
+    25,
+    38
+  ],
+  "offset": [
+    24,
+    5,
+    20
+  ],
+  "requiredMods": [
+    "betteranimalsplus"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "30",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "nt:oak_forest",
+      "nt:oak_forest_hills",
+      "nt:tall_oak_forest",
+      "nt:tall_oak_forest_hills",
+      "minecraft:forest",
+      "traverse:meadow",
+      "nt:cold_forest_hill",
+      "traverse:forested_hills",
+      "environs:tall_oak_forest",
+      "environs:tall_oak_forest_hills"
+    ],
+    "leveling": "30",
+    "fill": "10",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "empire",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "EmpireFarmGentryGoose_betteranimalsplus",
+    "mods": "betteranimalsplus",
+    "size": "37,25,38",
+    "offset": "24,5,20"
+  }
+}

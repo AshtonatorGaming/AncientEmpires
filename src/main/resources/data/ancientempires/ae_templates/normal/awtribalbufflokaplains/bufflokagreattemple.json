@@ -1,0 +1,60 @@
+{
+  "name": "BufflokaGreatTemple",
+  "source": "normal/AWTribalBufflokaPlains/BufflokaGreatTemple.aws",
+  "size": [
+    51,
+    64,
+    44
+  ],
+  "offset": [
+    28,
+    7,
+    43
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "60",
+    "clusterValue": "250",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:prairie",
+      "minecraft:plains",
+      "traverse:lush_hills",
+      "nt:maple_forest",
+      "nt:maple_forest_hills",
+      "byg:bmapleforest",
+      "byg:bprairie"
+    ],
+    "leveling": "10",
+    "fill": "10",
+    "border": "10",
+    "blockSwap": "false",
+    "territoryName": "bufflokaplains",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "BufflokaGreatTemple",
+    "mods": "",
+    "size": "51,64,44",
+    "offset": "28,7,43"
+  }
+}

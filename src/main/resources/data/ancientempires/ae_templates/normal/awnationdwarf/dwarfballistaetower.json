@@ -1,0 +1,66 @@
+{
+  "name": "DwarfBallistaeTower",
+  "source": "normal/AWNationDwarf/DwarfBallistaeTower.aws",
+  "size": [
+    13,
+    45,
+    13
+  ],
+  "offset": [
+    7,
+    12,
+    12
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ancientwarfarevehicle"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "50",
+    "clusterValue": "200",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "nt:stone_mountains",
+      "redwoods:alpine",
+      "minecraft:windswept_gravelly_hills",
+      "explorercraft:snowdonia",
+      "minecraft:windswept_hills",
+      "minecraft:snowy_plains",
+      "traverse:cliffs",
+      "nt:mountains",
+      "biomesoplenty:mountain",
+      "biomesoplenty:mountain_foothills",
+      "biomesoplenty:crag",
+      "biomesoplenty:alps"
+    ],
+    "leveling": "60",
+    "fill": "60",
+    "border": "10",
+    "blockSwap": "false",
+    "territoryName": "dwarf",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "150",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "DwarfBallistaeTower",
+    "mods": "",
+    "size": "13,45,13",
+    "offset": "7,12,12"
+  }
+}

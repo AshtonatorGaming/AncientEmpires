@@ -1,0 +1,55 @@
+{
+  "name": "DMOBSCockroacherUmbarHulkNest",
+  "source": "normal/ModDungeonMobsLairs/DMOBSCockroacherUmbarHulkNest.aws",
+  "size": [
+    15,
+    44,
+    16
+  ],
+  "offset": [
+    7,
+    9,
+    15
+  ],
+  "requiredMods": [
+    "dungeonmobs"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "30",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:sparse_jungle",
+      "minecraft:jungle"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "5",
+    "blockSwap": "false",
+    "territoryName": "dungeon",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "DMOBSCockroacherUmbarHulkNest",
+    "mods": "dungeonmobs",
+    "size": "15,44,16",
+    "offset": "7,9,15"
+  }
+}

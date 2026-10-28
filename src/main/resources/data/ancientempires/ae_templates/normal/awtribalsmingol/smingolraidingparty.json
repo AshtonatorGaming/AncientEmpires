@@ -1,0 +1,58 @@
+{
+  "name": "SmingolRaidingParty",
+  "source": "normal/AWTribalSmingol/SmingolRaidingParty.aws",
+  "size": [
+    17,
+    6,
+    14
+  ],
+  "offset": [
+    8,
+    4,
+    13
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [
+      "smingol"
+    ],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "nt:tundra",
+      "nt:icy_tundra",
+      "biomesoplenty:snowy_tundra",
+      "biomesoplenty:tundra",
+      "biomesoplenty:steppe"
+    ],
+    "leveling": "16",
+    "fill": "16",
+    "border": "6",
+    "blockSwap": "true",
+    "territoryName": "smingol",
+    "biomeReplacement": "biomesoplenty:steppe",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "SmingolRaidingParty",
+    "mods": "",
+    "size": "17,6,14",
+    "offset": "8,4,13"
+  }
+}

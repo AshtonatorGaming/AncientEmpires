@@ -1,0 +1,67 @@
+{
+  "name": "PMMOBSShriekerRuin",
+  "source": "normal/ModPrimitiveMobsLairs/PMMOBSShriekerRuin.aws",
+  "size": [
+    58,
+    24,
+    26
+  ],
+  "offset": [
+    57,
+    5,
+    12
+  ],
+  "requiredMods": [
+    "primitivemobs"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "primitivemobs"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:swamp",
+      "minecraft:sparse_jungle",
+      "biomesoplenty:bayou",
+      "biomesoplenty:dead_forest",
+      "minecraft:windswept_hills",
+      "biomesoplenty:ominous_woods",
+      "auxbiomes:marsh",
+      "environs:wasteland_spikes",
+      "biomesoplenty:dead_swamp",
+      "biomesoplenty:marsh",
+      "environs:moor",
+      "environs:wasteland_eroded",
+      "minecraft:snowy_plains",
+      "environs:dead_oak_forest",
+      "biomesoplenty:grassland"
+    ],
+    "leveling": "24",
+    "fill": "9",
+    "border": "9",
+    "blockSwap": "false",
+    "territoryName": "ruins",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "PMMOBSShriekerRuin",
+    "mods": "primitivemobs",
+    "size": "58,24,26",
+    "offset": "57,5,12"
+  }
+}

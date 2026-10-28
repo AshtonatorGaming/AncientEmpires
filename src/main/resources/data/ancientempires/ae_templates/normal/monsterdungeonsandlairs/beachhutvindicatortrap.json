@@ -1,0 +1,51 @@
+{
+  "name": "BeachHutVindicatorTrap",
+  "source": "normal/MonsterDungeonsAndLairs/BeachHutVindicatorTrap.aws",
+  "size": [
+    15,
+    25,
+    15
+  ],
+  "offset": [
+    6,
+    4,
+    14
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:beach"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "4",
+    "blockSwap": "false",
+    "territoryName": "beachruins",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "BeachHutVindicatorTrap",
+    "mods": "",
+    "size": "15,25,15",
+    "offset": "6,4,14"
+  }
+}

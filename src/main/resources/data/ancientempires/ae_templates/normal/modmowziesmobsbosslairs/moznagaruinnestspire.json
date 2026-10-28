@@ -1,0 +1,55 @@
+{
+  "name": "MOZNagaRuinNestSpire",
+  "source": "normal/ModMowziesMobsBossLairs/MOZNagaRuinNestSpire.aws",
+  "size": [
+    23,
+    85,
+    29
+  ],
+  "offset": [
+    12,
+    5,
+    28
+  ],
+  "requiredMods": [
+    "mowziesmobs"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "true",
+    "selectionWeight": "10",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:crag",
+      "traverse:cliffs",
+      "traverse:crag_cliffs",
+      "minecraft:stony_shore"
+    ],
+    "leveling": "12",
+    "fill": "12",
+    "border": "6",
+    "blockSwap": "true",
+    "territoryName": "ruins",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "MOZNagaRuinNestSpire",
+    "mods": "mowziesmobs",
+    "size": "23,85,29",
+    "offset": "12,5,28"
+  }
+}

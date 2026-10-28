@@ -1,0 +1,56 @@
+{
+  "name": "BarbarianMausoleum",
+  "source": "normal/AWTribalBarbarian/BarbarianMausoleum.aws",
+  "size": [
+    47,
+    53,
+    47
+  ],
+  "offset": [
+    23,
+    11,
+    46
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "40",
+    "clusterValue": "150",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:taiga",
+      "traverse:rocky_plains",
+      "traverse:rocky_plateau"
+    ],
+    "leveling": "12",
+    "fill": "12",
+    "border": "12",
+    "blockSwap": "false",
+    "territoryName": "barbarian",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "50",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "BarbarianMausoleum",
+    "mods": "",
+    "size": "47,53,47",
+    "offset": "23,11,46"
+  }
+}

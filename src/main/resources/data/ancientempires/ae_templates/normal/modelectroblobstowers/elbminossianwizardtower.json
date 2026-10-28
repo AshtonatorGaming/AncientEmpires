@@ -1,0 +1,62 @@
+{
+  "name": "ELBMinossianWizardTower",
+  "source": "normal/ModElectroblobsTowers/ELBMinossianWizardTower.aws",
+  "size": [
+    23,
+    37,
+    23
+  ],
+  "offset": [
+    11,
+    6,
+    22
+  ],
+  "requiredMods": [
+    "ebwizardry"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "eplus"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "nt:iron_beach",
+      "nt:orange_beach",
+      "nt:purple_beach",
+      "nt:aegean_archipelago",
+      "minecraft:beach",
+      "nt:black_beach"
+    ],
+    "leveling": "12",
+    "fill": "12",
+    "border": "12",
+    "blockSwap": "false",
+    "territoryName": "minossian",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "ELBMinossianWizardTower",
+    "mods": "ebwizardry",
+    "size": "23,37,23",
+    "offset": "11,6,22"
+  }
+}

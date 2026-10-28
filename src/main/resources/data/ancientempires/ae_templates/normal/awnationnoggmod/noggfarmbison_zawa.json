@@ -1,0 +1,55 @@
+{
+  "name": "NoggFarmBison_ZAWA",
+  "source": "normal/AWNationNoggMod/NoggFarmBison_ZAWA.aws",
+  "size": [
+    33,
+    15,
+    23
+  ],
+  "offset": [
+    20,
+    5,
+    11
+  ],
+  "requiredMods": [
+    "zawa"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "OddlySeagull",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:grove"
+    ],
+    "leveling": "10",
+    "fill": "10",
+    "border": "5",
+    "blockSwap": "false",
+    "territoryName": "nogg",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "NoggFarmBison_ZAWA",
+    "mods": "zawa",
+    "size": "33,15,23",
+    "offset": "20,5,11"
+  }
+}

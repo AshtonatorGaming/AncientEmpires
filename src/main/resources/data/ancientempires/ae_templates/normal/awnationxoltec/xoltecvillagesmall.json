@@ -1,0 +1,51 @@
+{
+  "name": "XoltecVillageSmall",
+  "source": "normal/AWNationXoltec/XoltecVillageSmall.aws",
+  "size": [
+    21,
+    22,
+    24
+  ],
+  "offset": [
+    13,
+    11,
+    23
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "40",
+    "clusterValue": "20",
+    "minDuplicateDistance": "900",
+    "dimensionWhiteList": "false",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "nt:lush_desert",
+      "minecraft:badlands",
+      "minecraft:wooded_badlands",
+      "minecraft:eroded_badlands"
+    ],
+    "leveling": "52",
+    "fill": "52",
+    "border": "5",
+    "blockSwap": "false",
+    "territoryName": "xoltec",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "XoltecVillageSmall",
+    "mods": "",
+    "size": "21,22,24",
+    "offset": "13,11,23"
+  }
+}

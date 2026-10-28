@@ -1,0 +1,55 @@
+{
+  "name": "IceAndFireHydraLairDesert",
+  "source": "normal/ModIce&FireLairs/IceAndFireHydraLairDesert.aws",
+  "size": [
+    110,
+    51,
+    121
+  ],
+  "offset": [
+    55,
+    15,
+    120
+  ],
+  "requiredMods": [
+    "iceandfire"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "experienceore",
+    "explorercraft",
+    "gemsplusplus",
+    "rustic"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "50",
+    "clusterValue": "400",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:desert"
+    ],
+    "leveling": "16",
+    "fill": "16",
+    "border": "10",
+    "blockSwap": "false",
+    "territoryName": "desertruins",
+    "biomeReplacement": "minecraft:desert"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "IceAndFireHydraLairDesert",
+    "mods": "iceandfire",
+    "size": "110,51,121",
+    "offset": "55,15,120"
+  }
+}

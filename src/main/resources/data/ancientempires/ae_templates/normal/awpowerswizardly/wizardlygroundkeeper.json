@@ -1,0 +1,56 @@
+{
+  "name": "WizardlyGroundkeeper",
+  "source": "normal/AWPowersWizardly/WizardlyGroundkeeper.aws",
+  "size": [
+    33,
+    29,
+    47
+  ],
+  "offset": [
+    15,
+    9,
+    46
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ebwizardry",
+    "primitivemobs"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "40",
+    "clusterValue": "40",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "false",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "traverse:forested_hills",
+      "biomesoplenty:dead_swamp",
+      "traverse:woodlands",
+      "traverse:rocky_plains",
+      "biomesoplenty:moor",
+      "biomesoplenty:lavender_fields"
+    ],
+    "leveling": "5",
+    "fill": "5",
+    "border": "5",
+    "blockSwap": "false",
+    "territoryName": "guardians",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "WizardlyGroundkeeper",
+    "mods": "",
+    "size": "33,29,47",
+    "offset": "15,9,46"
+  }
+}

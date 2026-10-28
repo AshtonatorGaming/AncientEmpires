@@ -1,0 +1,53 @@
+{
+  "name": "PirateWreckRaft",
+  "source": "normal/AWTribalPirate/PirateWreckRaft.aws",
+  "size": [
+    21,
+    10,
+    13
+  ],
+  "offset": [
+    12,
+    7,
+    11
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "water",
+    "structureAuthor": "",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "10",
+    "clusterValue": "90",
+    "minDuplicateDistance": "999",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:ocean",
+      "minecraft:deep_ocean"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "generic",
+    "biomeReplacement": ""
+  },
+  "header": {
+    "version": "2.11",
+    "name": "PirateWreckRaft",
+    "mods": "",
+    "size": "21,10,13",
+    "offset": "12,7,11"
+  }
+}

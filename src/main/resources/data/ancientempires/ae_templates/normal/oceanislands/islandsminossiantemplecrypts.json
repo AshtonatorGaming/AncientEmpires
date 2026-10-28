@@ -1,0 +1,60 @@
+{
+  "name": "IslandsMinossianTempleCrypts",
+  "source": "normal/OceanIslands/IslandsMinossianTempleCrypts.aws",
+  "size": [
+    76,
+    126,
+    117
+  ],
+  "offset": [
+    36,
+    50,
+    116
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ebwizardry",
+    "eplus",
+    "mocreatures",
+    "primitivemobs",
+    "thesummoner",
+    "vampirism"
+  ],
+  "validation": {
+    "type": "island",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "true",
+    "selectionWeight": "50",
+    "clusterValue": "50",
+    "minDuplicateDistance": "2000",
+    "dimensionWhiteList": "false",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:kelp_forest",
+      "biomesoplenty:coral_reef",
+      "climaticbiomesjbg:coastal_waters",
+      "minecraft:ocean",
+      "minecraft:deep_ocean"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "oceanjungle",
+    "biomeReplacement": "minecraft:jungle",
+    "minWaterDepth": "10",
+    "maxWaterDepth": "50"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "IslandsMinossianTempleCrypts",
+    "mods": "",
+    "size": "76,126,117",
+    "offset": "36,50,116"
+  }
+}

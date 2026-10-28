@@ -1,0 +1,65 @@
+{
+  "name": "ELBWizardsTowerGeneric",
+  "source": "normal/ModElectroblobsTowers/ELBWizardsTowerGeneric.aws",
+  "size": [
+    20,
+    104,
+    28
+  ],
+  "offset": [
+    9,
+    13,
+    27
+  ],
+  "requiredMods": [
+    "ebwizardry"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ebwizardry",
+    "eplus",
+    "harvestcraft"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "50",
+    "clusterValue": "400",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:windswept_hills",
+      "minecraft:taiga",
+      "biomesoplenty:mountain_foothills",
+      "biomesoplenty:mystic_grove",
+      "minecraft:old_growth_pine_taiga",
+      "biomesoplenty:moor",
+      "biomesoplenty:alps_foothills"
+    ],
+    "leveling": "5",
+    "fill": "5",
+    "border": "5",
+    "blockSwap": "false",
+    "territoryName": "magical",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "ELBWizardsTowerGeneric",
+    "mods": "ebwizardry",
+    "size": "20,104,28",
+    "offset": "9,13,27"
+  }
+}

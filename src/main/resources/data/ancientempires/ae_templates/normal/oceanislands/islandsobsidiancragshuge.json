@@ -1,0 +1,54 @@
+{
+  "name": "IslandsObsidianCragsHuge",
+  "source": "normal/OceanIslands/IslandsObsidianCragsHuge.aws",
+  "size": [
+    341,
+    171,
+    323
+  ],
+  "offset": [
+    193,
+    49,
+    322
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "mocreatures",
+    "primitivemobs"
+  ],
+  "validation": {
+    "type": "island",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "true",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "50",
+    "clusterValue": "50",
+    "minDuplicateDistance": "2000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:deep_ocean"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "oceansearocks",
+    "biomeReplacement": "minecraft:",
+    "minWaterDepth": "10",
+    "maxWaterDepth": "50"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "IslandsObsidianCragsHuge",
+    "mods": "",
+    "size": "341,171,323",
+    "offset": "193,49,322"
+  }
+}

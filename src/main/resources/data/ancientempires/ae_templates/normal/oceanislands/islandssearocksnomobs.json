@@ -1,0 +1,51 @@
+{
+  "name": "IslandsSeaRocksNoMobs",
+  "source": "normal/OceanIslands/IslandsSeaRocksNoMobs.aws",
+  "size": [
+    129,
+    117,
+    51
+  ],
+  "offset": [
+    59,
+    50,
+    50
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [],
+  "validation": {
+    "type": "island",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "true",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "50",
+    "clusterValue": "50",
+    "minDuplicateDistance": "2000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:deep_ocean"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "oceansearocks",
+    "biomeReplacement": "minecraft:",
+    "minWaterDepth": "10",
+    "maxWaterDepth": "50"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "IslandsSeaRocksNoMobs",
+    "mods": "",
+    "size": "129,117,51",
+    "offset": "59,50,50"
+  }
+}

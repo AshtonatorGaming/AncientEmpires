@@ -1,0 +1,58 @@
+{
+  "name": "PMMOBSManticoreSpire",
+  "source": "normal/ModPrimitiveMobsLairs/PMMOBSManticoreSpire.aws",
+  "size": [
+    20,
+    72,
+    19
+  ],
+  "offset": [
+    9,
+    8,
+    18
+  ],
+  "requiredMods": [
+    "primitivemobs"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "10",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:shrubland",
+      "traverse:woodlands",
+      "traverse:rocky_plains",
+      "minecraft:windswept_hills",
+      "traverse:badlands",
+      "minecraft:swamp",
+      "biomesoplenty:land_of_lakes"
+    ],
+    "leveling": "5",
+    "fill": "3",
+    "border": "5",
+    "blockSwap": "false",
+    "territoryName": "dungeon",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "PMMOBSManticoreSpire",
+    "mods": "primitivemobs",
+    "size": "20,72,19",
+    "offset": "9,8,18"
+  }
+}

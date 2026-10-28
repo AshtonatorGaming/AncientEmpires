@@ -1,0 +1,58 @@
+{
+  "name": "EmpireWizardLavaTowerELBwizard",
+  "source": "normal/ModElectroblobsTowers/EmpireWizardLavaTowerELBwizard.aws",
+  "size": [
+    124,
+    134,
+    76
+  ],
+  "offset": [
+    57,
+    8,
+    75
+  ],
+  "requiredMods": [
+    "ebwizardry"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ebwizardry",
+    "eplus"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "50",
+    "clusterValue": "150",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:forest"
+    ],
+    "leveling": "26",
+    "fill": "26",
+    "border": "12",
+    "blockSwap": "false",
+    "territoryName": "empire",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "EmpireWizardLavaTowerELBwizard",
+    "mods": "ebwizardry",
+    "size": "124,134,76",
+    "offset": "57,8,75"
+  }
+}

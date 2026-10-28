@@ -1,0 +1,55 @@
+{
+  "name": "MerchantGuildStoneBuyerQuark",
+  "source": "normal/AWNationGuildMerchant/MerchantGuildStoneBuyerQuark.aws",
+  "size": [
+    43,
+    20,
+    43
+  ],
+  "offset": [
+    23,
+    5,
+    26
+  ],
+  "requiredMods": [
+    "quark"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "quark"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "TheOddlySeagull",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "10",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:taiga"
+    ],
+    "leveling": "20",
+    "fill": "100",
+    "border": "5",
+    "blockSwap": "false",
+    "territoryName": "guild",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "MerchantGuildStoneBuyerQuark",
+    "mods": "quark",
+    "size": "43,20,43",
+    "offset": "23,5,26"
+  }
+}

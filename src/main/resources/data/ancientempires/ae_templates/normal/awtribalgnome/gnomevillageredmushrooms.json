@@ -1,0 +1,66 @@
+{
+  "name": "GnomeVillageRedMushrooms",
+  "source": "normal/AWTribalGnome/GnomeVillageRedMushrooms.aws",
+  "size": [
+    19,
+    20,
+    18
+  ],
+  "offset": [
+    10,
+    8,
+    17
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "grimoireofgaia"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "nt:fungal_jungle",
+      "nt:fungal_jungle_hills",
+      "nt:blossom_forest",
+      "nt:blossom_forest_hills",
+      "nt:poppy_meadow",
+      "environs:silkglades",
+      "byg:bjacarandaforest",
+      "byg:bcikaforest",
+      "byg:benchantedforest",
+      "minecraft:mushroom_fields",
+      "traverse:green_swamp",
+      "minecraft:plains",
+      "minecraft:birch_forest",
+      "byg:bwhisperingwoods",
+      "byg:bfungaljungle",
+      "byg:bmarshlands"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "gnome",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "GnomeVillageRedMushrooms",
+    "mods": "",
+    "size": "19,20,18",
+    "offset": "10,8,17"
+  }
+}

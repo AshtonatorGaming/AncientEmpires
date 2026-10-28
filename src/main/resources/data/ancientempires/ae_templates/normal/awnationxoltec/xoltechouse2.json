@@ -1,0 +1,52 @@
+{
+  "name": "XoltecHouse2",
+  "source": "normal/AWNationXoltec/XoltecHouse2.aws",
+  "size": [
+    11,
+    30,
+    15
+  ],
+  "offset": [
+    5,
+    5,
+    14
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "30",
+    "clusterValue": "10",
+    "minDuplicateDistance": "500",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "nt:lush_desert",
+      "minecraft:badlands",
+      "minecraft:wooded_badlands",
+      "minecraft:eroded_badlands"
+    ],
+    "leveling": "40",
+    "fill": "40",
+    "border": "5",
+    "territoryName": "xoltec",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "XoltecHouse2",
+    "mods": "",
+    "size": "11,30,15",
+    "offset": "5,5,14"
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "name": "OrcTraderClanHouse",
+  "source": "normal/AWTribalOrcRuined/OrcTraderClanHouse.aws",
+  "size": [
+    16,
+    15,
+    16
+  ],
+  "offset": [
+    7,
+    4,
+    15
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:bayou",
+      "biomesoplenty:dead_swamp",
+      "biomesoplenty:dead_forest",
+      "traverse:woodlands",
+      "traverse:rocky_plains",
+      "traverse:badlands",
+      "traverse:thicket"
+    ],
+    "leveling": "25",
+    "fill": "25",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "orcruined",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "OrcTraderClanHouse",
+    "mods": "",
+    "size": "16,15,16",
+    "offset": "7,4,15"
+  }
+}

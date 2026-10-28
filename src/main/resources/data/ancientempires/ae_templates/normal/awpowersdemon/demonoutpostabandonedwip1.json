@@ -1,0 +1,51 @@
+{
+  "name": "DemonOutpostAbandonedWIP1",
+  "source": "normal/AWPowersDemon/DemonOutpostAbandonedWIP1.aws",
+  "size": [
+    25,
+    18,
+    24
+  ],
+  "offset": [
+    11,
+    1,
+    17
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "futuremc"
+  ],
+  "validation": {
+    "type": "lava",
+    "structureAuthor": "lumberjacksparrow",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "50",
+    "clusterValue": "1",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:the_nether"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "false",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "DemonOutpostAbandonedWIP1",
+    "mods": "",
+    "size": "25,18,24",
+    "offset": "11,1,17"
+  }
+}

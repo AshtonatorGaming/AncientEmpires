@@ -1,0 +1,45 @@
+{
+  "name": "UndeadCemetaryFillFountain1",
+  "source": "towns/cosmetic/Undead/UndeadCemetaryFillFountain1.aws",
+  "size": [
+    7,
+    7,
+    7
+  ],
+  "offset": [
+    3,
+    5,
+    6
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "0",
+    "clusterValue": "0",
+    "minDuplicateDistance": "0",
+    "dimensionWhiteList": "false",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "false",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "UndeadCemetaryFillFountain1",
+    "mods": "",
+    "size": "7,7,7",
+    "offset": "3,5,6"
+  }
+}

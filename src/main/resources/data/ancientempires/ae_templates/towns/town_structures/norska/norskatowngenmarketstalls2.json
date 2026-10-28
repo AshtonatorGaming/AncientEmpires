@@ -1,0 +1,51 @@
+{
+  "name": "NorskaTownGenMarketStalls2",
+  "source": "towns/town structures/Norska/NorskaTownGenMarketStalls2.aws",
+  "size": [
+    36,
+    6,
+    10
+  ],
+  "offset": [
+    14,
+    2,
+    9
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "eplus"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "1",
+    "clusterValue": "1",
+    "minDuplicateDistance": "1",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "NorskaTownGenMarketStalls2",
+    "mods": "",
+    "size": "36,6,10",
+    "offset": "14,2,9"
+  }
+}

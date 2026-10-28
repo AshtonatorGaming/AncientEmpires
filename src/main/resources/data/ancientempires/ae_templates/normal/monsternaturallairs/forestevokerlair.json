@@ -1,0 +1,57 @@
+{
+  "name": "ForestEvokerLair",
+  "source": "normal/MonsterNaturalLairs/ForestEvokerLair.aws",
+  "size": [
+    40,
+    17,
+    47
+  ],
+  "offset": [
+    21,
+    9,
+    46
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ebwizardry",
+    "harvestcraft"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "50",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:plains",
+      "biomesoplenty:mystic_grove",
+      "biomesoplenty:grove",
+      "biomesoplenty:marsh"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "ForestEvokerLair",
+    "mods": "",
+    "size": "40,17,47",
+    "offset": "21,9,46"
+  }
+}

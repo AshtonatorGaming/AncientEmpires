@@ -1,0 +1,55 @@
+{
+  "name": "BanditCampBirchSmall",
+  "source": "normal/AWTribalBrigand/BanditCampBirchSmall.aws",
+  "size": [
+    27,
+    17,
+    27
+  ],
+  "offset": [
+    12,
+    9,
+    26
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:birch_forest",
+      "traverse:birch_forested_hills"
+    ],
+    "leveling": "3",
+    "fill": "0",
+    "border": "3",
+    "blockSwap": "false",
+    "territoryName": "brigand",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "BanditCampBirchSmall",
+    "mods": "",
+    "size": "27,17,27",
+    "offset": "12,9,26"
+  }
+}

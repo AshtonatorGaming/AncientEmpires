@@ -1,0 +1,55 @@
+{
+  "name": "IcelordRuinHilltopTower",
+  "source": "normal/AWPowersIcelord/IcelordRuinHilltopTower.aws",
+  "size": [
+    56,
+    47,
+    56
+  ],
+  "offset": [
+    27,
+    6,
+    55
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "primitivemobs"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "60",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "false",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "nt:cold_desert",
+      "minecraft:snowy_taiga",
+      "byg:bfrostyforest",
+      "minecraft:snowy_plains",
+      "environs:cold_savanna",
+      "environs:cold_pine_forest",
+      "environs:cold_savanna_rock"
+    ],
+    "leveling": "10",
+    "fill": "10",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "icelord",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "IcelordRuinHilltopTower",
+    "mods": "",
+    "size": "56,47,56",
+    "offset": "27,6,55"
+  }
+}

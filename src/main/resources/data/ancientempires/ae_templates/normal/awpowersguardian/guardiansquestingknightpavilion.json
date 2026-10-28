@@ -1,0 +1,67 @@
+{
+  "name": "GuardiansQuestingKnightPavilion",
+  "source": "normal/AWPowersGuardian/GuardiansQuestingKnightPavilion.aws",
+  "size": [
+    24,
+    20,
+    24
+  ],
+  "offset": [
+    11,
+    6,
+    23
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "150",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:dark_forest",
+      "traverse:woodlands",
+      "spookybiomes:ghostly_forest",
+      "minecraft:forest",
+      "traverse:autumnal_wooded_hills",
+      "minecraft:windswept_hills",
+      "traverse:badlands",
+      "traverse:meadow",
+      "minecraft:birch_forest",
+      "biomesoplenty:lavender_fields",
+      "traverse:autumnal_woods",
+      "traverse:rocky_plains",
+      "minecraft:plains",
+      "biomesoplenty:orchard"
+    ],
+    "leveling": "10",
+    "fill": "10",
+    "border": "6",
+    "blockSwap": "true",
+    "territoryName": "ruins",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "GuardiansQuestingKnightPavilion",
+    "mods": "",
+    "size": "24,20,24",
+    "offset": "11,6,23"
+  }
+}

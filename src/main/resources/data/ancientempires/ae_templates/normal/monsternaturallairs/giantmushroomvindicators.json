@@ -1,0 +1,59 @@
+{
+  "name": "GiantMushroomVindicators",
+  "source": "normal/MonsterNaturalLairs/GiantMushroomVindicators.aws",
+  "size": [
+    25,
+    28,
+    25
+  ],
+  "offset": [
+    13,
+    11,
+    24
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "90",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "byg:bglowshroombayou",
+      "byg:bwhisperingwoods",
+      "byg:bweepingwitchforest",
+      "minecraft:swamp",
+      "minecraft:mushroom_fields",
+      "biomesoplenty:bayou",
+      "biomesoplenty:dead_swamp",
+      "biomesoplenty:marsh",
+      "biomesoplenty:mangrove"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "sawmpruins",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "GiantMushroomVindicators",
+    "mods": "",
+    "size": "25,28,25",
+    "offset": "13,11,24"
+  }
+}

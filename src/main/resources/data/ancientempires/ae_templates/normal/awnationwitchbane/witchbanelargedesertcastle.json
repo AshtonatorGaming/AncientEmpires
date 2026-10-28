@@ -1,0 +1,57 @@
+{
+  "name": "WitchbaneLargeDesertCastle",
+  "source": "normal/AWNationWitchbane/WitchbaneLargeDesertCastle.aws",
+  "size": [
+    85,
+    41,
+    71
+  ],
+  "offset": [
+    43,
+    3,
+    70
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfare",
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "50",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:oasis",
+      "minecraft:desert",
+      "biomesoplenty:lush_desert"
+    ],
+    "leveling": "12",
+    "fill": "12",
+    "border": "16",
+    "blockSwap": "false",
+    "territoryName": "empirecrusader",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "WitchbaneLargeDesertCastle",
+    "mods": "",
+    "size": "85,41,71",
+    "offset": "43,3,70"
+  }
+}

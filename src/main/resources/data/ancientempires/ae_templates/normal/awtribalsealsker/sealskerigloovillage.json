@@ -1,0 +1,54 @@
+{
+  "name": "SealskerIglooVillage",
+  "source": "normal/AWTribalSealsker/SealskerIglooVillage.aws",
+  "size": [
+    24,
+    15,
+    25
+  ],
+  "offset": [
+    11,
+    4,
+    24
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "40",
+    "clusterValue": "40",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:snowy_plains",
+      "nt:snow_dune",
+      "minecraft:snowy_beach",
+      "auxbiomes:ice_wasteland"
+    ],
+    "leveling": "12",
+    "fill": "12",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "sealsker",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "SealskerIglooVillage",
+    "mods": "",
+    "size": "24,15,25",
+    "offset": "11,4,24"
+  }
+}

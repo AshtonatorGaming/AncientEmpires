@@ -1,0 +1,53 @@
+{
+  "name": "OrcVillageSmallRoofedForest",
+  "source": "normal/AWTribalOrcForest/OrcVillageSmallRoofedForest.aws",
+  "size": [
+    27,
+    17,
+    22
+  ],
+  "offset": [
+    14,
+    5,
+    21
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "50",
+    "clusterValue": "60",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "nt:cold_roofed_forest",
+      "nt:cold_roofed_forest_hills",
+      "minecraft:dark_forest",
+      "environs:roofed_swamp"
+    ],
+    "leveling": "12",
+    "fill": "12",
+    "border": "4",
+    "blockSwap": "false",
+    "territoryName": "orcforest",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "OrcVillageSmallRoofedForest",
+    "mods": "",
+    "size": "27,17,22",
+    "offset": "14,5,21"
+  }
+}

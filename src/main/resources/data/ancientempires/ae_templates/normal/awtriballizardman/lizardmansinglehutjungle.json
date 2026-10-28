@@ -1,0 +1,52 @@
+{
+  "name": "LizardmanSingleHutJungle",
+  "source": "normal/AWTribalLizardman/LizardmanSingleHutJungle.aws",
+  "size": [
+    15,
+    18,
+    19
+  ],
+  "offset": [
+    7,
+    3,
+    18
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "50",
+    "clusterValue": "30",
+    "minDuplicateDistance": "400",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:jungle"
+    ],
+    "leveling": "15",
+    "fill": "15",
+    "border": "10",
+    "blockSwap": "false",
+    "territoryName": "jungleruins",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "LizardmanSingleHutJungle",
+    "mods": "",
+    "size": "15,18,19",
+    "offset": "7,3,18"
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "name": "IslandsIceAndFireCyclopsAndHydra",
+  "source": "normal/OceanIslands/IslandsIceAndFireCyclopsAndHydra.aws",
+  "size": [
+    67,
+    129,
+    59
+  ],
+  "offset": [
+    18,
+    42,
+    58
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "island",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "true",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "50",
+    "clusterValue": "150",
+    "minDuplicateDistance": "2000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:ocean",
+      "minecraft:deep_ocean"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "oceanplains",
+    "biomeReplacement": "minecraft:extreme_hills",
+    "minWaterDepth": "10",
+    "maxWaterDepth": "50"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "IslandsIceAndFireCyclopsAndHydra",
+    "mods": "",
+    "size": "67,129,59",
+    "offset": "18,42,58"
+  }
+}

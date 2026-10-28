@@ -1,0 +1,54 @@
+{
+  "name": "ReiksgardManOfWarShip",
+  "source": "normal/OceanShips/ReiksgardManOfWarShip.aws",
+  "size": [
+    33,
+    81,
+    127
+  ],
+  "offset": [
+    16,
+    6,
+    125
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfare",
+    "ancientwarfarestructure",
+    "ancientwarfarevehicle"
+  ],
+  "validation": {
+    "type": "water",
+    "structureAuthor": "Gungnir",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "10",
+    "clusterValue": "350",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:deep_ocean"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "oceanplains",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "ReiksgardManOfWarShip",
+    "mods": "",
+    "size": "33,81,127",
+    "offset": "16,6,125"
+  }
+}

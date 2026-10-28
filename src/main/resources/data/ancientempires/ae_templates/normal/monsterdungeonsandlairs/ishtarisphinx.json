@@ -1,0 +1,52 @@
+{
+  "name": "IshtariSphinx",
+  "source": "normal/MonsterDungeonsAndLairs/IshtariSphinx.aws",
+  "size": [
+    28,
+    40,
+    61
+  ],
+  "offset": [
+    13,
+    16,
+    60
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "150",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:desert"
+    ],
+    "leveling": "6",
+    "fill": "6",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "ishtari",
+    "biomeReplacement": "minecraft:desert",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "IshtariSphinx",
+    "mods": "",
+    "size": "28,40,61",
+    "offset": "13,16,60"
+  }
+}

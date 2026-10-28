@@ -1,0 +1,57 @@
+{
+  "name": "OrcWatchtowerGeneric",
+  "source": "normal/AWTribalOrcRuined/OrcWatchtowerGeneric.aws",
+  "size": [
+    14,
+    17,
+    11
+  ],
+  "offset": [
+    6,
+    5,
+    10
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:shrubland",
+      "biomesoplenty:bayou",
+      "biomesoplenty:dead_swamp",
+      "biomesoplenty:dead_forest",
+      "traverse:woodlands",
+      "traverse:rocky_plains",
+      "minecraft:swamp",
+      "traverse:badlands"
+    ],
+    "leveling": "25",
+    "fill": "25",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "orcruined",
+    "biomeReplacement": "minecraft:minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "OrcWatchtowerGeneric",
+    "mods": "",
+    "size": "14,17,11",
+    "offset": "6,5,10"
+  }
+}

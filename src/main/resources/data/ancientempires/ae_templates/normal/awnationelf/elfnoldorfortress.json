@@ -1,0 +1,62 @@
+{
+  "name": "ElfNoldorFortress",
+  "source": "normal/AWNationElf/ElfNoldorFortress.aws",
+  "size": [
+    114,
+    94,
+    116
+  ],
+  "offset": [
+    55,
+    4,
+    115
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfare",
+    "ancientwarfarestructure",
+    "ebwizardry"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "true",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "40",
+    "clusterValue": "400",
+    "minDuplicateDistance": "1",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "pvj:blossoming_fields",
+      "nt:blossom_forest",
+      "nt:blossom_forest_hills",
+      "nt:poppy_meadow",
+      "explorercraft:forested_mountain",
+      "byg:bfloweringplains",
+      "byg:borchard",
+      "byg:bcherrygrove",
+      "auxbiomes:white_forest",
+      "traverse:autumnal_woods",
+      "biomesoplenty:mystic_grove",
+      "biomesoplenty:cherry_blossom_grove"
+    ],
+    "leveling": "50",
+    "fill": "12",
+    "border": "20",
+    "blockSwap": "false",
+    "territoryName": "elf",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "ElfNoldorFortress",
+    "mods": "",
+    "size": "114,94,116",
+    "offset": "55,4,115"
+  }
+}

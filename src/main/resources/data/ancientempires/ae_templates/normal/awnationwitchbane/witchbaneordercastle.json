@@ -1,0 +1,70 @@
+{
+  "name": "WitchbaneOrderCastle",
+  "source": "normal/AWNationWitchbane/WitchbaneOrderCastle.aws",
+  "size": [
+    47,
+    62,
+    47
+  ],
+  "offset": [
+    23,
+    17,
+    46
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ancientwarfarevehicle",
+    "ebwizardry"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "50",
+    "clusterValue": "150",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:mountains",
+      "minecraft:windswept_hills",
+      "environs:stone_hills",
+      "traverse:cliffs",
+      "environs:emerald_cliffs",
+      "nt:oak_forest",
+      "nt:oak_forest_hills",
+      "nt:tall_oak_forest",
+      "nt:tall_oak_forest_hills",
+      "minecraft:forest",
+      "traverse:meadow",
+      "nt:cold_forest_hill",
+      "traverse:forested_hills",
+      "environs:tall_oak_forest",
+      "environs:tall_oak_forest_hills"
+    ],
+    "leveling": "25",
+    "fill": "25",
+    "border": "20",
+    "blockSwap": "false",
+    "territoryName": "empire",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "WitchbaneOrderCastle",
+    "mods": "",
+    "size": "47,62,47",
+    "offset": "23,17,46"
+  }
+}

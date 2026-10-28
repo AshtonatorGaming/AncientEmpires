@@ -1,0 +1,52 @@
+{
+  "name": "SnowBarrowLair",
+  "source": "normal/AWPowersUndead/SnowBarrowLair.aws",
+  "size": [
+    44,
+    110,
+    21
+  ],
+  "offset": [
+    21,
+    5,
+    20
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "30",
+    "clusterValue": "30",
+    "minDuplicateDistance": "999",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:snowy_taiga",
+      "biomesoplenty:snowy_coniferous_forest",
+      "biomesoplenty:alps",
+      "minecraft:snowy_plains",
+      "minecraft:snowy_beach"
+    ],
+    "leveling": "6",
+    "fill": "4",
+    "border": "3",
+    "blockSwap": "true",
+    "territoryName": "icelord",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "SnowBarrowLair",
+    "mods": "",
+    "size": "44,110,21",
+    "offset": "21,5,20"
+  }
+}

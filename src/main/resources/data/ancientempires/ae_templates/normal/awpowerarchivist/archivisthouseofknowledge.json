@@ -1,0 +1,55 @@
+{
+  "name": "ArchivistHouseofKnowledge",
+  "source": "normal/AWPowerArchivist/ArchivistHouseofKnowledge.aws",
+  "size": [
+    49,
+    30,
+    46
+  ],
+  "offset": [
+    24,
+    3,
+    45
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfare",
+    "ancientwarfareautomation",
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "400",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:oasis",
+      "minecraft:desert",
+      "biomesoplenty:lush_desert"
+    ],
+    "leveling": "12",
+    "fill": "12",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "empirecrusader",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "ArchivistHouseofKnowledge",
+    "mods": "",
+    "size": "49,30,46",
+    "offset": "24,3,45"
+  }
+}

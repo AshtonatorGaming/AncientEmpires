@@ -1,0 +1,58 @@
+{
+  "name": "MOFrostmawCave",
+  "source": "normal/ModMowziesMobsBossLairs/MOZFrostmawCave.aws",
+  "size": [
+    32,
+    14,
+    28
+  ],
+  "offset": [
+    14,
+    5,
+    27
+  ],
+  "requiredMods": [
+    "mowziesmobs"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "primitivemobs"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "50",
+    "clusterValue": "200",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:snowy_taiga",
+      "traverse:snowy_coniferous_forest",
+      "minecraft:snowy_plains",
+      "biomesoplenty:alps",
+      "biomesoplenty:cold_desert",
+      "minecraft:snowy_beach"
+    ],
+    "leveling": "12",
+    "fill": "12",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "icelord",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "MOFrostmawCave",
+    "mods": "mowziesmobs",
+    "size": "32,14,28",
+    "offset": "14,5,27"
+  }
+}

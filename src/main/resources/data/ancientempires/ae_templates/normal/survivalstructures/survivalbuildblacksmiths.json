@@ -1,0 +1,43 @@
+{
+  "name": "SurvivalBuildBlacksmiths",
+  "source": "normal/SurvivalStructures/SurvivalBuildBlacksmiths.aws",
+  "size": [
+    26,
+    29,
+    21
+  ],
+  "offset": [
+    13,
+    5,
+    20
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "true",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "0",
+    "clusterValue": "0",
+    "minDuplicateDistance": "0",
+    "dimensionWhiteList": "false",
+    "dimensionList": [],
+    "biomeWhiteList": "false",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false"
+  },
+  "header": {
+    "version": "2.8",
+    "name": "SurvivalBuildBlacksmiths",
+    "mods": "",
+    "size": "26,29,21",
+    "offset": "13,5,20"
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "name": "EmpireSmallColony",
+  "source": "normal/AWNationEmpireCoastal/EmpireSmallColony.aws",
+  "size": [
+    41,
+    31,
+    63
+  ],
+  "offset": [
+    19,
+    6,
+    62
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "50",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "nt:brown_beach",
+      "nt:olivine_beach",
+      "nt:pink_beach",
+      "minecraft:beach"
+    ],
+    "leveling": "12",
+    "fill": "12",
+    "border": "12",
+    "blockSwap": "false",
+    "territoryName": "empirecoastal",
+    "biomeReplacement": "minecraft:beaches",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "EmpireSmallColony",
+    "mods": "",
+    "size": "41,31,63",
+    "offset": "19,6,62"
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "name": "IslandsIceDragonDoubleDragon",
+  "source": "normal/OceanIslands/IslandsIceDragonDoubleDragon.aws",
+  "size": [
+    215,
+    234,
+    221
+  ],
+  "offset": [
+    40,
+    53,
+    0
+  ],
+  "requiredMods": [
+    "iceandfire"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "iceandfire",
+    "pirates",
+    "rustic",
+    "spookybiomes"
+  ],
+  "validation": {
+    "type": "island",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "true",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "90",
+    "clusterValue": "50",
+    "minDuplicateDistance": "2000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:frozen_ocean",
+      "minecraft:deep_ocean"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "oceancold",
+    "biomeReplacement": "minecraft:frozen_ocean",
+    "minWaterDepth": "10",
+    "maxWaterDepth": "50"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "IslandsIceDragonDoubleDragon",
+    "mods": "iceandfire",
+    "size": "215,234,221",
+    "offset": "40,53,0"
+  }
+}

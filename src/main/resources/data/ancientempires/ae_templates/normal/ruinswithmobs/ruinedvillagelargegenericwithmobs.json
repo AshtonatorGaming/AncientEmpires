@@ -1,0 +1,59 @@
+{
+  "name": "RuinedVillageLargeGenericwithMobs",
+  "source": "normal/RuinsWithMobs/RuinedVillageLargeGenericwithMobs.aws",
+  "size": [
+    47,
+    39,
+    39
+  ],
+  "offset": [
+    21,
+    9,
+    38
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "40",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:meadow",
+      "biomesoplenty:shrubland",
+      "biomesoplenty:woodland",
+      "biomesoplenty:pasture",
+      "spookybiomes:ghostly_forest",
+      "traverse:rocky_plains",
+      "traverse:badlands",
+      "biomesoplenty:land_of_lakes",
+      "minecraft:plains",
+      "biomesoplenty:lavender_fields"
+    ],
+    "leveling": "5",
+    "fill": "0",
+    "border": "5",
+    "blockSwap": "false",
+    "territoryName": "ruins",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "RuinedVillageLargeGenericwithMobs",
+    "mods": "",
+    "size": "47,39,39",
+    "offset": "21,9,38"
+  }
+}

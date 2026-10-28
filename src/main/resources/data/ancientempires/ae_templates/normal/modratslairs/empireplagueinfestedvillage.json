@@ -1,0 +1,67 @@
+{
+  "name": "EmpirePlagueInfestedVillage",
+  "source": "normal/ModRatsLairs/EmpirePlagueInfestedVillage.aws",
+  "size": [
+    81,
+    33,
+    73
+  ],
+  "offset": [
+    39,
+    5,
+    0
+  ],
+  "requiredMods": [
+    "rats"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "rats"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "Gungnir",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "50",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "nt:oak_forest",
+      "nt:oak_forest_hills",
+      "nt:tall_oak_forest",
+      "nt:tall_oak_forest_hills",
+      "biomesoplenty:meadow",
+      "minecraft:forest",
+      "traverse:meadow",
+      "nt:cold_forest_hill",
+      "traverse:forested_hills",
+      "environs:tall_oak_forest",
+      "environs:tall_oak_forest_hills"
+    ],
+    "leveling": "16",
+    "fill": "16",
+    "border": "3",
+    "blockSwap": "false",
+    "territoryName": "empire",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "EmpirePlagueInfestedVillage",
+    "mods": "rats",
+    "size": "81,33,73",
+    "offset": "39,5,0"
+  }
+}

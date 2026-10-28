@@ -1,0 +1,66 @@
+{
+  "name": "GOGMinotaurLair",
+  "source": "normal/ModGrimoireOfGaiaLairs/GOGMinotaurLair.aws",
+  "size": [
+    42,
+    22,
+    42
+  ],
+  "offset": [
+    21,
+    9,
+    41
+  ],
+  "requiredMods": [
+    "grimoireofgaia"
+  ],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "primitivemobs",
+    "thesummoner",
+    "vampirism"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "50",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "false",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:swamp",
+      "biomesoplenty:shrubland",
+      "biomesoplenty:bayou",
+      "biomesoplenty:dead_forest",
+      "traverse:woodlands",
+      "traverse:badlands",
+      "biomesoplenty:lavender_fields",
+      "biomesoplenty:dead_swamp",
+      "traverse:rocky_plains",
+      "minecraft:snowy_plains"
+    ],
+    "leveling": "6",
+    "fill": "6",
+    "border": "6",
+    "blockSwap": "true",
+    "territoryName": "ruins",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "GOGMinotaurLair",
+    "mods": "grimoireofgaia",
+    "size": "42,22,42",
+    "offset": "21,9,41"
+  }
+}

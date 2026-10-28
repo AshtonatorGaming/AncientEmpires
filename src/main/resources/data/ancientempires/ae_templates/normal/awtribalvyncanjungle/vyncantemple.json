@@ -1,0 +1,57 @@
+{
+  "name": "VyncanTemple",
+  "source": "normal/AWTribalVyncanJungle/VyncanTemple.aws",
+  "size": [
+    45,
+    55,
+    50
+  ],
+  "offset": [
+    22,
+    4,
+    49
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "Gungnir",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "30",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [
+      "vyncan"
+    ],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:jungle",
+      "environs:overgrown_plains",
+      "nt:monsoon_forest",
+      "explorercraft:bamboo_forest"
+    ],
+    "leveling": "16",
+    "fill": "16",
+    "border": "3",
+    "blockSwap": "false",
+    "territoryName": "vyncanjungle",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "VyncanTemple",
+    "mods": "",
+    "size": "45,55,50",
+    "offset": "22,4,49"
+  }
+}

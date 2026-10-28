@@ -1,0 +1,62 @@
+{
+  "name": "OrcBalrogTempleHuge",
+  "source": "normal/AWTribalOrcRuined/OrcBalrogTempleHuge.aws",
+  "size": [
+    53,
+    72,
+    51
+  ],
+  "offset": [
+    27,
+    47,
+    50
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "primitivemobs",
+    "thesummoner"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "50",
+    "clusterValue": "100",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "nt:cold_roofed_forest",
+      "nt:cold_roofed_forest_hills",
+      "biomesoplenty:woodland",
+      "minecraft:snowy_taiga",
+      "biomesoplenty:bayou",
+      "biomesoplenty:dead_swamp",
+      "biomesoplenty:dead_forest",
+      "traverse:woodlands",
+      "traverse:rocky_plains",
+      "traverse:badlands",
+      "biomesoplenty:moor"
+    ],
+    "leveling": "25",
+    "fill": "25",
+    "border": "10",
+    "blockSwap": "false",
+    "territoryName": "ruin",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "OrcBalrogTempleHuge",
+    "mods": "",
+    "size": "53,72,51",
+    "offset": "27,47,50"
+  }
+}

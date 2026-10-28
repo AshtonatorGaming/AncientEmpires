@@ -1,0 +1,48 @@
+{
+  "name": "EmpireCityGenHousing1",
+  "source": "towns/house/Empire/EmpireCityGenHousing1.aws",
+  "size": [
+    23,
+    21,
+    15
+  ],
+  "offset": [
+    11,
+    2,
+    14
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "",
+    "survival": "false",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "1",
+    "clusterValue": "1",
+    "minDuplicateDistance": "1",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "EmpireCityGenHousing1",
+    "mods": "",
+    "size": "23,21,15",
+    "offset": "11,2,14"
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "name": "RuinedTownMountainGiantAttack",
+  "source": "normal/AWTribalGiant/RuinedTownMountainGiantAttack.aws",
+  "size": [
+    82,
+    21,
+    88
+  ],
+  "offset": [
+    38,
+    6,
+    87
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ebwizardry",
+    "mocreatures",
+    "primitivemobs"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "true",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "60",
+    "clusterValue": "60",
+    "minDuplicateDistance": "1",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:plains"
+    ],
+    "leveling": "15",
+    "fill": "15",
+    "border": "12",
+    "blockSwap": "true",
+    "territoryName": "ruins",
+    "biomeReplacement": "minecraft:plains",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "RuinedTownMountainGiantAttack",
+    "mods": "",
+    "size": "82,21,88",
+    "offset": "38,6,87"
+  }
+}

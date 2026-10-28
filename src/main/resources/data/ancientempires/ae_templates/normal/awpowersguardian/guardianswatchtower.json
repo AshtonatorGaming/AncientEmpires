@@ -1,0 +1,56 @@
+{
+  "name": "GuardiansWatchTower",
+  "source": "normal/AWPowersGuardian/GuardiansWatchTower.aws",
+  "size": [
+    17,
+    35,
+    17
+  ],
+  "offset": [
+    9,
+    2,
+    16
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "30",
+    "clusterValue": "50",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeList": [
+      "traverse:autumnal_wooded_hills",
+      "biomesoplenty:lavender_fields",
+      "traverse:autumnal_woods",
+      "biomesoplenty:orchard",
+      "nt:autumn_forest",
+      "nt:autumn_forest_hills",
+      "nt:cold_blue_taiga_hills",
+      "nt:cold_blue_taiga"
+    ],
+    "leveling": "12",
+    "fill": "12",
+    "border": "6",
+    "blockSwap": "true",
+    "territoryName": "guardians",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "GuardiansWatchTower",
+    "mods": "",
+    "size": "17,35,17",
+    "offset": "9,2,16"
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "name": "VampireSmallGraveyard",
+  "source": "normal/AWPowersVampire/VampireSmallGraveyard.aws",
+  "size": [
+    15,
+    13,
+    15
+  ],
+  "offset": [
+    7,
+    7,
+    14
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "50",
+    "clusterValue": "20",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:bayou",
+      "spookybiomes:bloodied_hills",
+      "biomesoplenty:ominous_woods",
+      "environs:silkglades",
+      "environs:dead_oak_forest_hills",
+      "vampirism:vampireforest",
+      "environs:dead_oak_forest"
+    ],
+    "leveling": "12",
+    "fill": "12",
+    "border": "6",
+    "blockSwap": "false",
+    "territoryName": "vampire",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "VampireSmallGraveyard",
+    "mods": "",
+    "size": "15,13,15",
+    "offset": "7,7,14"
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "name": "NorskaTownGenFillerWarehouseOpen1",
+  "source": "towns/house/Nogg/NorskaTownGenFillerWarehouseOpen1.aws",
+  "size": [
+    11,
+    14,
+    17
+  ],
+  "offset": [
+    6,
+    5,
+    16
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "0",
+    "clusterValue": "0",
+    "minDuplicateDistance": "0",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "false",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "NorskaTownGenFillerWarehouseOpen1",
+    "mods": "",
+    "size": "11,14,17",
+    "offset": "6,5,16"
+  }
+}

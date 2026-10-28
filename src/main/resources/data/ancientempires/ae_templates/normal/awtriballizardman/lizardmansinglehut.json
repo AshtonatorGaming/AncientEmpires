@@ -1,0 +1,61 @@
+{
+  "name": "LizardmanSingleHut",
+  "source": "normal/AWTribalLizardman/LizardmanSingleHut.aws",
+  "size": [
+    15,
+    18,
+    19
+  ],
+  "offset": [
+    7,
+    3,
+    18
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "60",
+    "clusterValue": "30",
+    "minDuplicateDistance": "400",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "nt:green_swamp",
+      "minecraft:swamp",
+      "biomesoplenty:bayou",
+      "biomesoplenty:marsh",
+      "byg:bquagmire",
+      "byg:bbayou",
+      "byg:bcypress_swamplands",
+      "byg:btropical_islands"
+    ],
+    "leveling": "5",
+    "fill": "5",
+    "border": "5",
+    "blockSwap": "false",
+    "territoryName": "lizardmantribal",
+    "biomeReplacement": "minecraft:",
+    "minGenerationHeight": "0",
+    "maxGenerationHeight": "255"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "LizardmanSingleHut",
+    "mods": "",
+    "size": "15,18,19",
+    "offset": "7,3,18"
+  }
+}

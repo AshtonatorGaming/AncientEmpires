@@ -1,0 +1,61 @@
+{
+  "name": "IslandsPirateCity",
+  "source": "normal/OceanIslands/IslandsPirateCity.aws",
+  "size": [
+    94,
+    76,
+    93
+  ],
+  "offset": [
+    0,
+    22,
+    61
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure",
+    "ancientwarfarevehicle",
+    "ebwizardry",
+    "eplus",
+    "mocreatures"
+  ],
+  "validation": {
+    "type": "island",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "true",
+    "preserveBlocks": "true",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "50",
+    "clusterValue": "250",
+    "minDuplicateDistance": "2000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "biomesoplenty:kelp_forest",
+      "biomesoplenty:coral_reef",
+      "climaticbiomesjbg:coastal_waters",
+      "minecraft:ocean",
+      "minecraft:deep_ocean"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "oceancastaway",
+    "biomeReplacement": "minecraft:",
+    "minWaterDepth": "10",
+    "maxWaterDepth": "28"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "IslandsPirateCity",
+    "mods": "",
+    "size": "94,76,93",
+    "offset": "0,22,61"
+  }
+}

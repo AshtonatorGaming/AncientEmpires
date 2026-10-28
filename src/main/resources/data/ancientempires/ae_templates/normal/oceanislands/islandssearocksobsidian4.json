@@ -1,0 +1,51 @@
+{
+  "name": "IslandsSeaRocksObsidian4",
+  "source": "normal/OceanIslands/IslandsSeaRocksObsidian4.aws",
+  "size": [
+    189,
+    67,
+    235
+  ],
+  "offset": [
+    100,
+    49,
+    234
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [],
+  "validation": {
+    "type": "island",
+    "structureAuthor": "mohawky",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "true",
+    "preventNaturalHostileSpawns": "false",
+    "selectionWeight": "50",
+    "clusterValue": "30",
+    "minDuplicateDistance": "1000",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "minecraft:ocean",
+      "minecraft:deep_ocean"
+    ],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "oceanplains",
+    "biomeReplacement": "minecraft:",
+    "minWaterDepth": "10",
+    "maxWaterDepth": "50"
+  },
+  "header": {
+    "version": "2.11",
+    "name": "IslandsSeaRocksObsidian4",
+    "mods": "",
+    "size": "189,67,235",
+    "offset": "100,49,234"
+  }
+}

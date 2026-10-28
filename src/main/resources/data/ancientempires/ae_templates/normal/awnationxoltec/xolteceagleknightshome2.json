@@ -1,0 +1,51 @@
+{
+  "name": "XoltecEagleKnightsHome2",
+  "source": "normal/AWNationXoltec/XoltecEagleKnightsHome2.aws",
+  "size": [
+    11,
+    13,
+    14
+  ],
+  "offset": [
+    5,
+    5,
+    13
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [
+    "ancientwarfarestructure"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "true",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "40",
+    "clusterValue": "20",
+    "minDuplicateDistance": "900",
+    "dimensionWhiteList": "false",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [
+      "nt:lush_desert",
+      "minecraft:badlands",
+      "minecraft:wooded_badlands",
+      "minecraft:eroded_badlands"
+    ],
+    "leveling": "52",
+    "fill": "52",
+    "border": "5",
+    "blockSwap": "false",
+    "territoryName": "xoltec",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "XoltecEagleKnightsHome2",
+    "mods": "",
+    "size": "11,13,14",
+    "offset": "5,5,13"
+  }
+}

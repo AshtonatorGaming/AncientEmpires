@@ -1,0 +1,49 @@
+{
+  "name": "SarkonidTownGenWaystone",
+  "source": "towns/cosmetic/Generic/SarkonidTownGenWaystone.aws",
+  "size": [
+    13,
+    23,
+    13
+  ],
+  "offset": [
+    6,
+    5,
+    12
+  ],
+  "requiredMods": [
+    "waystones"
+  ],
+  "usesNamespaces": [
+    "waystones"
+  ],
+  "validation": {
+    "type": "ground",
+    "survival": "false",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "preventNaturalHostileSpawns": "true",
+    "selectionWeight": "1",
+    "clusterValue": "1",
+    "minDuplicateDistance": "1",
+    "dimensionWhiteList": "true",
+    "dimensionList": [],
+    "biomeGroupList": [],
+    "biomeWhiteList": "true",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false",
+    "territoryName": "",
+    "biomeReplacement": "minecraft:"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "SarkonidTownGenWaystone",
+    "mods": "waystones",
+    "size": "13,23,13",
+    "offset": "6,5,12"
+  }
+}

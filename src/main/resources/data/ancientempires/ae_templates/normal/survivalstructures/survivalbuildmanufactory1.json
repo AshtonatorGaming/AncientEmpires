@@ -1,0 +1,44 @@
+{
+  "name": "SurvivalBuildManufactory1",
+  "source": "normal/SurvivalStructures/SurvivalBuildManufactory1.aws",
+  "size": [
+    31,
+    32,
+    30
+  ],
+  "offset": [
+    11,
+    8,
+    29
+  ],
+  "requiredMods": [],
+  "usesNamespaces": [],
+  "validation": {
+    "type": "ground",
+    "survival": "true",
+    "worldGenEnabled": "false",
+    "unique": "false",
+    "preserveBlocks": "false",
+    "selectionWeight": "0",
+    "clusterValue": "0",
+    "minDuplicateDistance": "0",
+    "dimensionWhiteList": "true",
+    "dimensionList": [
+      "minecraft:overworld"
+    ],
+    "biomeGroupList": [],
+    "biomeWhiteList": "false",
+    "biomeList": [],
+    "leveling": "0",
+    "fill": "0",
+    "border": "0",
+    "blockSwap": "false"
+  },
+  "header": {
+    "version": "2.10",
+    "name": "SurvivalBuildManufactory1",
+    "mods": "",
+    "size": "31,32,30",
+    "offset": "11,8,29"
+  }
+}
