@@ -185,3 +185,27 @@ That is enough to make the imported factions visible in the world. Everything el
 ---
 
 *This file is the practical structure plan. Update it when the loader lands or when a major placement rule changes.*
+
+---
+
+## Extended Garrison and Binding Notes (appended from later design sessions)
+
+These rules refine how structures interact with the hierarchy, director, and settlement systems once the basic loader exists. They do not change the core placement or resolution logic above.
+
+### Garrison Anchor Behavior
+
+- Each structure that contains spawners or a banner receives a lightweight garrison anchor (the banner itself or a dedicated block). The anchor stores: roster of expected NPCs (as data), owner faction ID, wake/aggro radius, and a dummy-leader flag.
+- Owner-faction units bound to the anchor receive a defensive morale buff while inside the structure. Visitors or invaders receive none.
+- Higher-ranking commanders (especially the “final” leader of a structure) remain data-only until the player enters the fighting range of the anchor or the anchor/banner is damaged or claimed. This prevents premature pathing out of the intended arena.
+- On low health or death of the top commander, the anchor can issue a Sally-out order: remaining roster spawns and engages the current threat.
+- Multi-faction structures designate a single owner on the anchor. Other factions present are treated as visitors.
+
+### Foreign Mob Integration
+
+Structures that reference non-AW entities (Grimoire of Gaia, other monster mods, vanilla bosses, etc.) resolve through the standard entity-registry path already described. When the structure is in a defensive state, these entities can optionally receive a temporary-ally flag so they fight alongside the owner faction. No custom AI is required; they use their existing combat behavior.
+
+### Settlement Binding Cross-Reference
+
+Once specialized anchors exist (Town Hall, Fort, Outpost, etc.), structure-spawned NPCs can bind to the nearest appropriate anchor on spawn rather than relying on a large radius. Forts additionally signal the director that normal pathing through their bounding volume is restricted (intrigue/clandestine goals exempt). This is a later integration; the first structure milestone only needs correct spawning and basic combat.
+
+All of the above remain configurable and can be disabled without affecting the loader or placer.
