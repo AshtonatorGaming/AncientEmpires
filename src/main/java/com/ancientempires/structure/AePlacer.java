@@ -1,6 +1,9 @@
 package com.ancientempires.structure;
 
 import com.ancientempires.block.CoinStackBlock;
+import com.ancientempires.block.FlagBlock;
+import com.ancientempires.block.FlagBlockEntity;
+import com.ancientempires.registry.ModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -17,6 +20,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.TreeMap;
@@ -61,8 +66,18 @@ public final class AePlacer
         return BoundingBox.fromCorners(a, b);
     }
 
-    public static Report place(ServerLevelAccessor level, AeTemplate template, int[] offset, BlockPos anchor, Rotation rotation, @Nullable BoundingBox limit)
+    /**
+     * Places {@code template} (named {@code name}, for the structure record).
+     * A whole placement (no {@code limit}) of a faction structure is recorded in
+     * {@link StructureRecords}: its owner is its protection flag's faction, or
+     * else the faction most of its garrison belongs to, and the flag is tied to
+     * the record, so claiming and protection work.
+     */
+    public static Report place(ServerLevelAccessor level, AeTemplate template, String name, int[] offset, BlockPos anchor, Rotation rotation,
+            @Nullable BoundingBox limit)
     {
+        Map<BlockPos, String> protectionFlags = new LinkedHashMap<>();
+        Map<String, Integer> factions = new HashMap<>();
         int size = template.palette().size();
         BlockState[] states = new BlockState[size];
         String[] notes = new String[size];
@@ -99,10 +114,10 @@ public final class AePlacer
                     CompoundTag nbt = template.blockEntityAt(x, y, z);
                     if (nbt != null && nbt.contains("aeRule"))
                     {
-                        String name = template.palette().get(state).getString("Name");
-                        if (placeAw(level, pos, name, nbt.getCompound("aeRule"), skipped))
+                        String blockName = template.palette().get(state).getString("Name");
+                        if (placeAw(level, pos, blockName, nbt.getCompound("aeRule"), rotation, skipped, protectionFlags, factions))
                         {
-                            aw.merge(name, 1, Integer::sum);
+                            aw.merge(blockName, 1, Integer::sum);
                         }
                     }
                     else if (nbt != null)
@@ -151,17 +166,72 @@ public final class AePlacer
             }
         }
         int entities = placeEntities(level, template, offset, anchor, rotation, limit, skipped);
+        if (limit == null)
+        {
+            record(level, name, bounds(template, offset, anchor, rotation), protectionFlags, factions);
+        }
         return new Report(placed[0], substituted, aw, entities, skipped);
     }
 
+    /** Records a faction structure and ties its protection flags to it; one with no faction is not recorded. */
+    private static void record(ServerLevelAccessor level, String name, BoundingBox bounds, Map<BlockPos, String> protectionFlags, Map<String, Integer> factions)
+    {
+        String faction = protectionFlags.values().stream().filter(id -> !id.isEmpty()).findFirst()
+                .orElseGet(() -> factions.entrySet().stream().max(Map.Entry.comparingByValue()).map(Map.Entry::getKey).orElse(""));
+        if (faction.isEmpty())
+        {
+            return;
+        }
+        BlockPos flag = protectionFlags.isEmpty() ? null : protectionFlags.keySet().iterator().next();
+        StructureRecords.Record record = StructureRecords.get(level.getLevel()).add(name, bounds, faction, flag);
+        for (BlockPos pos : protectionFlags.keySet())
+        {
+            if (level.getBlockEntity(pos) instanceof FlagBlockEntity entity)
+            {
+                if (entity.faction().isEmpty())
+                {
+                    entity.setFaction(faction);
+                }
+                entity.setProtection(true, record.id);
+            }
+        }
+    }
+
     /** AW's own blocks that have become ours; false leaves the table's stand-in. */
-    private static boolean placeAw(ServerLevelAccessor level, BlockPos pos, String name, CompoundTag rule, Map<String, Integer> problems)
+    private static boolean placeAw(ServerLevelAccessor level, BlockPos pos, String name, CompoundTag rule, Rotation rotation, Map<String, Integer> problems,
+            Map<BlockPos, String> protectionFlags, Map<String, Integer> factions)
     {
         switch (name)
         {
             case "ancientwarfarestructure:advanced_spawner" ->
             {
                 AwSpawnerImport.place(level, pos, rule, problems);
+                for (Tag group : rule.getCompound("teData").getCompound("spawnerSettings").getList("spawnGroups", Tag.TAG_COMPOUND))
+                {
+                    for (Tag entry : ((CompoundTag) group).getList("settingsList", Tag.TAG_COMPOUND))
+                    {
+                        String faction = ((CompoundTag) entry).getCompound("customTag").getString("factionName");
+                        if (!faction.isEmpty())
+                        {
+                            factions.merge(faction, 1, Integer::sum);
+                        }
+                    }
+                }
+                return true;
+            }
+            case "ancientwarfarestructure:protection_flag", "ancientwarfarestructure:decorative_flag" ->
+            {
+                int turn = Integer.parseInt("0" + rule.getCompound("blockState").getCompound("properties").getString("rotation"));
+                level.setBlock(pos, ModBlocks.FLAG.get().defaultBlockState().setValue(FlagBlock.ROTATION, rotation.rotate(turn & 15, 16)), FLAGS);
+                if (level.getBlockEntity(pos) instanceof FlagBlockEntity flag)
+                {
+                    String faction = rule.getCompound("teData").getString("name");
+                    flag.setFaction(faction);
+                    if (name.endsWith("protection_flag"))
+                    {
+                        protectionFlags.put(pos.immutable(), faction);
+                    }
+                }
                 return true;
             }
             case "ancientwarfarestructure:advanced_loot_chest", "ancientwarfarestructure:loot_basket", "ancientwarfarestructure:urn" ->

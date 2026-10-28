@@ -2,6 +2,7 @@ package com.ancientempires.structure;
 
 import com.ancientempires.AncientEmpires;
 import com.google.gson.JsonObject;
+import com.ancientempires.block.FlagBlockEntity;
 import com.ancientempires.block.NpcSpawnerBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -24,6 +25,7 @@ import net.minecraft.world.level.block.FenceBlock;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.ChestType;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.storage.loot.LootDataManager;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraftforge.gametest.GameTestHolder;
@@ -71,7 +73,7 @@ public final class StructureGameTests
             throw new IllegalStateException("Template " + id + " did not load (" + AeTemplates.all().size() + " indexed)");
         }
         long start = System.nanoTime();
-        AePlacer.Report report = AePlacer.place(helper.getLevel(), template, offset(id), anchor, rotation, null);
+        AePlacer.Report report = AePlacer.place(helper.getLevel(), template, AeTemplates.name(id), offset(id), anchor, rotation, null);
         AncientEmpires.LOGGER.info("GAMETEST placed {} ({}x{}x{}): {} blocks, {} entities in {} ms; substituted {}; made {}; skipped {}",
                 id, template.sizeX(), template.sizeY(), template.sizeZ(), report.blocks(), report.entities(),
                 (System.nanoTime() - start) / 1_000_000L, report.substituted(), report.aw(), report.skipped());
@@ -257,6 +259,50 @@ public final class StructureGameTests
         }
         helper.assertTrue(chests[0] == 2 && chests[1] == 2, "both loot chests fill: " + chests[1] + " of " + chests[0]);
         helper.assertTrue(report.aw().entrySet().stream().filter(entry -> entry.getKey().contains("coin_stack")).mapToInt(Map.Entry::getValue).sum() == 8, "all eight coin stacks made real: " + report.aw());
+        helper.succeed();
+    }
+
+    /**
+     * The Empire watch tower: its protection flag is tied to a record of the
+     * structure, a claim fails while its garrisons hold, and succeeds once
+     * they are gone.
+     */
+    @GameTest(template = ARENA, timeoutTicks = 400)
+    public static void protectionFlagClaims(GameTestHelper helper)
+    {
+        String path = "normal/awnationempire/empirewatchtower";
+        BlockPos anchor = helper.absolutePos(new BlockPos(0, 1, 0)).offset(300, 60, 300);
+        AePlacer.Report report = placeAndLog(helper, path, anchor, Rotation.NONE);
+        helper.assertTrue(report.aw().getOrDefault("ancientwarfarestructure:protection_flag", 0) == 1, "the flag is made real: " + report.aw());
+        ServerLevel level = helper.getLevel();
+        ResourceLocation id = ResourceLocation.fromNamespaceAndPath(AncientEmpires.MOD_ID, path);
+        AeTemplate template = AeTemplates.get(id).orElseThrow();
+        BoundingBox bounds = AePlacer.bounds(template, offset(id), anchor, Rotation.NONE);
+        StructureRecords.Record record = StructureRecords.get(level).at(bounds.getCenter());
+        helper.assertTrue(record != null && "empire".equals(record.faction) && record.flag != null, "an Empire record with its flag");
+        FlagBlockEntity flag = (FlagBlockEntity) level.getBlockEntity(record.flag);
+        helper.assertTrue(flag != null && flag.isProtection() && flag.record() == record.id, "the flag guards the record");
+
+        Player player = helper.makeMockPlayer();
+        StructureClaims.tryClaim(level, record.flag, flag, player);
+        helper.assertFalse(record.claimed(), "held while the garrisons hold");
+
+        // The garrisons gone (cleared), the claim goes through.
+        for (int cx = bounds.minX() >> 4; cx <= bounds.maxX() >> 4; cx++)
+        {
+            for (int cz = bounds.minZ() >> 4; cz <= bounds.maxZ() >> 4; cz++)
+            {
+                for (BlockPos spawner : List.copyOf(level.getChunk(cx, cz).getBlockEntities().keySet()))
+                {
+                    if (level.getBlockEntity(spawner) instanceof NpcSpawnerBlockEntity)
+                    {
+                        level.removeBlock(spawner, false);
+                    }
+                }
+            }
+        }
+        StructureClaims.tryClaim(level, record.flag, flag, player);
+        helper.assertTrue(record.claimed() && flag.claimedBy() != null, "claimed once cleared");
         helper.succeed();
     }
 

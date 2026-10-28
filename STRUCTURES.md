@@ -178,7 +178,8 @@ Biome lists become biome tags per template or territory, with modded biomes as o
   namespaces and port renames; per-mod block and item tables are next, for the user to review.
 - S2a (done 2026-10-28): spawners as garrison spawners with roster scrolls and the capture wand (every library spawner
   imports; see CLAUDE.md). S2b (done): coins, coin stacks, AW's loot tables, loot chests with their traps, faction
-  NPC coin drops. S2c: protection flag as the anchor with
+  NPC coin drops. S2c (done): flags (per-faction items), structure records, claiming with standing cost, block protection,
+  loot lock; garrison trigger ranges widened. Was S2c: protection flag as the anchor with
   claiming, block protection, loot chest lock; coins and loot tables. Milestone: one Empire structure.
 - S3: gates as entities (the six AW types) and the Gate Spawner.
 - S4: rotation normalization, overlap registry, then world generation (off by default).

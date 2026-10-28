@@ -1,6 +1,8 @@
 package com.ancientempires.registry;
 
 import com.ancientempires.AncientEmpires;
+import com.ancientempires.entity.npc.NpcFactions;
+import com.ancientempires.item.FlagItem;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
@@ -8,6 +10,9 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public final class ModCreativeTabs
 {
@@ -45,6 +50,15 @@ public final class ModCreativeTabs
                         output.accept(ModItems.KITCHEN.get());
                         output.accept(ModItems.NPC_SPAWNER.get());
                         output.accept(ModItems.CAPTURE_WAND.get());
+                        List<String> factions = new ArrayList<>(NpcFactions.ids());
+                        factions.sort(String::compareTo);
+                        for (boolean protection : new boolean[] {true, false})
+                        {
+                            for (String faction : factions)
+                            {
+                                output.accept(FlagItem.of(ModItems.FLAG.get(), faction, protection));
+                            }
+                        }
                         output.accept(ModItems.UPGRADE_SIZE_MEDIUM.get());
                         output.accept(ModItems.UPGRADE_SIZE_LARGE.get());
                         output.accept(ModItems.UPGRADE_QUARRY_MEDIUM.get());

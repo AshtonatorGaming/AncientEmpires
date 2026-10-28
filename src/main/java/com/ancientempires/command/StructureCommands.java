@@ -164,7 +164,7 @@ public final class StructureCommands
         };
         BlockPos anchor = player.blockPosition();
         long start = System.nanoTime();
-        AePlacer.Report report = AePlacer.place(context.getSource().getLevel(), template, offset(id), anchor, rotation, null);
+        AePlacer.Report report = AePlacer.place(context.getSource().getLevel(), template, AeTemplates.name(id), offset(id), anchor, rotation, null);
         long millis = (System.nanoTime() - start) / 1_000_000L;
         context.getSource().sendSuccess(() -> Component.translatable("commands.ancientempires.structure.placed",
                 id.toString(), report.blocks(), report.entities(), millis, rotation.name().toLowerCase(Locale.ROOT)), true);

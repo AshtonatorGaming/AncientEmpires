@@ -1,6 +1,7 @@
 package com.ancientempires.registry;
 
 import com.ancientempires.AncientEmpires;
+import com.ancientempires.block.FlagBlockEntity;
 import com.ancientempires.block.AnimalPenBlockEntity;
 import com.ancientempires.block.CropFarmBlockEntity;
 import com.ancientempires.block.FishingDockBlockEntity;
@@ -55,6 +56,8 @@ public final class ModBlockEntities
     @SuppressWarnings("DataFlowIssue")
     public static final RegistryObject<BlockEntityType<NpcSpawnerBlockEntity>> NPC_SPAWNER = BLOCK_ENTITIES.register("npc_spawner",
             () -> BlockEntityType.Builder.of(NpcSpawnerBlockEntity::new, ModBlocks.NPC_SPAWNER.get()).build(null));
+    public static final RegistryObject<BlockEntityType<FlagBlockEntity>> FLAG = BLOCK_ENTITIES.register("flag",
+            () -> BlockEntityType.Builder.of(FlagBlockEntity::new, ModBlocks.FLAG.get()).build(null));
     public static final RegistryObject<BlockEntityType<KitchenBlockEntity>> KITCHEN = BLOCK_ENTITIES.register("kitchen",
             () -> BlockEntityType.Builder.of(KitchenBlockEntity::new, ModBlocks.KITCHEN.get()).build(null));
 

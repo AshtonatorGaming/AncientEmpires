@@ -134,6 +134,19 @@ instead of reflecting per call), Skirmisher thresholds (about 4.5 to 28 blocks).
   table set for vanilla to roll, and AW's extras (more rolls, the trapped mob, potions, splash within 4, the
   message) kept as `AeLoot` in the block entity's persistent data and done on first right-click; a pot spills
   its loot.
+- Flags and claiming (S2c): `FlagBlock` (AW's faction flags, rotation 0 to 15, drawn by `FlagRenderer`: the faction's
+  banner art from `textures/gui/banner`, or once claimed a post and cloth in the claimer's two colours). One
+  `FlagItem` with `Faction` and `Protection` in its `BlockEntityTag`: the creative tab holds a Flag and a Protection
+  Flag per faction; admins sneak-click a flag to cycle its faction. Placing a structure whole records it
+  (`StructureRecords`, per-dimension saved data with a chunk index): bounds, owning faction (its protection flag's,
+  else its garrisons' most common), flag, claimer; its protection flags are tied to the record. A hand-placed
+  protection flag guards 16 blocks around it. `StructureClaims`: AW's conquest (score of soldier-path NPCs of the
+  faction or hostile to the player, 1 / elite 2 / leader 5, plus 1 per hostile spawner still holding people, must be
+  under `claimThreshold` 5; a failed claim makes them glow and names spawners; a won one costs
+  `claimStandingCost`), block protection (`protectionMultiplier` 100 slower mining in an unclaimed structure), and
+  the loot lock (containers shut while one of the faction sees you; `allowStealing` otherwise). Imported garrison
+  trigger ranges are scaled by `structures.triggerRangeScale` (1.5) and floored at `triggerMinRange` (10): tight
+  structures spawned their people on top of the player.
 
 ## Done
 

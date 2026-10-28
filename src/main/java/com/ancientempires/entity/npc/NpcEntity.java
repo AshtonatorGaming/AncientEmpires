@@ -2227,7 +2227,7 @@ public class NpcEntity extends PathfinderMob
      * before the row was saved. Owned NPCs without a row have no guess.
      */
     @Nullable
-    NpcRoster.Entry rosterEntry()
+    public NpcRoster.Entry rosterEntry()
     {
         NpcRoster.Entry saved = NpcRoster.byId(this.rosterId);
         if (saved != null)

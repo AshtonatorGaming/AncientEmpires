@@ -4,6 +4,7 @@ import com.ancientempires.AncientEmpires;
 import com.ancientempires.block.AnimalPenBlock;
 import com.ancientempires.block.CoinStackBlock;
 import com.ancientempires.block.CropFarmBlock;
+import com.ancientempires.block.FlagBlock;
 import com.ancientempires.block.FishingDockBlock;
 import com.ancientempires.block.HuntingLodgeBlock;
 import com.ancientempires.block.KitchenBlock;
@@ -42,6 +43,10 @@ public final class ModBlocks
     {
         return new CoinStackBlock(BlockBehaviour.Properties.of().mapColor(color).strength(0.5F).sound(SoundType.CHAIN).noOcclusion());
     }
+
+    /** AW's faction flags: decorative, or a structure's protection flag. Drawn by FlagRenderer. */
+    public static final RegistryObject<Block> FLAG = BLOCKS.register("flag", () -> new FlagBlock(BlockBehaviour.Properties.of()
+            .mapColor(MapColor.WOOD).strength(1.0F).sound(SoundType.WOOD).noOcclusion()));
 
     public static final RegistryObject<Block> SETTLERS_POST = BLOCKS.register("settlers_post",
             () -> new SettlersPostBlock(BlockBehaviour.Properties.of()

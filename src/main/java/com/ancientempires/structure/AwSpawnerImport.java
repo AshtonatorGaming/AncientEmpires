@@ -1,6 +1,7 @@
 package com.ancientempires.structure;
 
 import com.ancientempires.block.NpcSpawnerBlock;
+import com.ancientempires.config.AncientEmpiresConfig;
 import com.ancientempires.block.NpcSpawnerBlockEntity;
 import com.ancientempires.entity.npc.NpcRoster;
 import com.ancientempires.entity.npc.NpcSkins;
@@ -101,7 +102,10 @@ public final class AwSpawnerImport
         CompoundTag tag = new CompoundTag();
         tag.put("Items", items);
         tag.putString("Mode", mode);
-        int playerRange = Math.max(1, settings.getInt("playerRange"));
+        // AW's range, scaled and floored (structures.triggerRangeScale, triggerMinRange): tight structures had their
+        // people appear on top of the player. Scaling keeps AW's staging order.
+        int playerRange = Math.max(Math.max(1, AncientEmpiresConfig.structuresTriggerMin),
+                (int) Math.round(Math.max(1, settings.getInt("playerRange")) * AncientEmpiresConfig.structuresTriggerScale));
         tag.putInt("PlayerRange", playerRange);
         tag.putInt("SpawnRadius", Math.max(0, settings.getInt("spawnRange")));
         tag.putInt("ReturnRange", Math.max(48, playerRange + 16));
