@@ -24,6 +24,7 @@ import net.minecraft.world.level.levelgen.structure.StructureType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -86,12 +87,12 @@ public final class AwSiteStructure extends Structure
     {
         if (!AncientEmpiresConfig.structuresWorldGen)
         {
-            return Optional.empty();
+            return reject("off");
         }
         ServerLevel level = AwSites.level(context.chunkGenerator());
         if (level == null)
         {
-            return Optional.empty();
+            return reject("no level");
         }
         ChunkPos chunk = context.chunkPos();
         long seed = context.seed();
@@ -100,25 +101,25 @@ public final class AwSiteStructure extends Structure
         String territory = Territories.territory(seed, cell, context.biomeSource(), context.randomState().sampler(), index);
         if (territory.isEmpty())
         {
-            return Optional.empty();
+            return reject("no territory for the biome");
         }
         TerritorySettings.Settings settings = TerritorySettings.of(territory);
         WorldgenRandom random = context.random();
         if (random.nextDouble() >= AncientEmpiresConfig.structuresChance * settings.chanceMultiplier())
         {
-            return Optional.empty();
+            return reject("chance roll");
         }
         int x = chunk.getMiddleBlockX();
         int z = chunk.getMiddleBlockZ();
         if (level.dimension() == Level.OVERWORLD && nearSpawn(level, x, z))
         {
-            return Optional.empty();
+            return reject("near spawn");
         }
         boolean land = this.surface.equals(LAND);
         Ground centre = ground(context, x, z);
         if (land == centre.wet())
         {
-            return Optional.empty();
+            return reject("wrong surface");
         }
         String biome = context.biomeSource().getNoiseBiome(QuartPos.fromBlock(x), QuartPos.fromBlock(centre.surface()), QuartPos.fromBlock(z),
                 context.randomState().sampler()).unwrapKey().map(key -> key.location().toString()).orElse("");
@@ -136,15 +137,31 @@ public final class AwSiteStructure extends Structure
             {
                 continue;
             }
-            if (!site.territory().equals(territory) && !site.territory().equals(AwSiteIndex.GENERIC) || site.clusterValue() > left
-                    || !site.allowsDimension(dimensionId) || !site.allowsBiome(biome) || !selectable(site, centre))
+            if (!site.territory().equals(territory) && !site.territory().equals(AwSiteIndex.GENERIC) || !site.allowsDimension(dimensionId))
             {
+                continue;
+            }
+            if (!site.allowsBiome(biome))
+            {
+                noteTemplate("biome not listed");
+                continue;
+            }
+            if (site.clusterValue() > left)
+            {
+                noteTemplate("territory budget spent");
+                continue;
+            }
+            if (!selectable(site, centre))
+            {
+                noteTemplate("height or water depth");
                 continue;
             }
             if (AwSites.duplicated(dimension, site.name(), x, z, site.minDistance(), site.unique()))
             {
+                noteTemplate("unique or too close to a copy");
                 continue;
             }
+            noteTemplate("possible");
             int weight = weight(site, settings, x, z, territoryCentre);
             if (weight > 0)
             {
@@ -155,7 +172,7 @@ public final class AwSiteStructure extends Structure
         }
         if (total <= 0)
         {
-            return Optional.empty();
+            return reject("no template fits");
         }
         int pick = random.nextInt(total);
         AwSiteIndex.Site site = candidates.get(candidates.size() - 1);
@@ -173,11 +190,19 @@ public final class AwSiteStructure extends Structure
         BlockPos middle = AePlacer.bounds(site.size(), site.offset(), BlockPos.ZERO, rotation).getCenter();
         BlockPos anchor = new BlockPos(x - middle.getX(), y, z - middle.getZ());
         BoundingBox bounds = AePlacer.bounds(site.size(), site.offset(), anchor, rotation);
-        if (bounds.minY() <= context.heightAccessor().getMinBuildHeight() || bounds.maxY() >= context.heightAccessor().getMaxBuildHeight()
-                || !borderFits(context, site, bounds, y) || AwSites.overlaps(dimension, bounds, AncientEmpiresConfig.structuresSiteMargin))
+        if (bounds.minY() <= context.heightAccessor().getMinBuildHeight() || bounds.maxY() >= context.heightAccessor().getMaxBuildHeight())
         {
-            return Optional.empty();
+            return reject("outside the world's height");
         }
+        if (!borderFits(context, site, bounds, y))
+        {
+            return reject("ground around it (" + site.kind() + ")");
+        }
+        if (AwSites.overlaps(dimension, bounds, AncientEmpiresConfig.structuresSiteMargin))
+        {
+            return reject("overlaps another structure");
+        }
+        note("chosen " + site.name());
         AwSiteIndex.Site chosen = site;
         return Optional.of(new GenerationStub(new BlockPos(x, y, z), builder ->
         {
@@ -203,6 +228,46 @@ public final class AwSiteStructure extends Structure
                 builder.addPiece(new AwSitePiece(box, chosen.id(), chosen.name(), chosen.offset(), anchor, rotation, faction));
             }
         }));
+    }
+
+    /**
+     * A survey in progress on this thread ({@code /ancientempires structure survey}):
+     * why each chunk was turned down, and why templates dropped out.
+     */
+    private static final ThreadLocal<Map<String, Integer>> SURVEY = new ThreadLocal<>();
+
+    /** Runs {@code check} with the reasons it gives counted into {@code into}. */
+    public static void survey(Map<String, Integer> into, Runnable check)
+    {
+        SURVEY.set(into);
+        try
+        {
+            check.run();
+        }
+        finally
+        {
+            SURVEY.remove();
+        }
+    }
+
+    private static Optional<GenerationStub> reject(String reason)
+    {
+        note(reason);
+        return Optional.empty();
+    }
+
+    private static void note(String reason)
+    {
+        Map<String, Integer> survey = SURVEY.get();
+        if (survey != null)
+        {
+            survey.merge(reason, 1, Integer::sum);
+        }
+    }
+
+    private static void noteTemplate(String reason)
+    {
+        note("template: " + reason);
     }
 
     private static Ground ground(GenerationContext context, int x, int z)

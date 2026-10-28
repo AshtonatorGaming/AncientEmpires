@@ -1,6 +1,10 @@
 package com.ancientempires.command;
 
 import com.ancientempires.AncientEmpires;
+import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraft.world.level.ChunkPos;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.ancientempires.worldgen.AwSurvey;
 import com.ancientempires.structure.AePlacer;
 import com.ancientempires.structure.AeRemap;
 import com.ancientempires.structure.AeTemplate;
@@ -71,6 +75,10 @@ public final class StructureCommands
                                         .suggests((context, builder) -> SharedSuggestionProvider.suggest(
                                                 List.of("none", "clockwise_90", "180", "counterclockwise_90"), builder))
                                         .executes(context -> place(context, StringArgumentType.getString(context, "rotation"))))))
+                .then(Commands.literal("survey")
+                        .executes(context -> survey(context, 16))
+                        .then(Commands.argument("radius", IntegerArgumentType.integer(1, 64))
+                                .executes(context -> survey(context, IntegerArgumentType.getInteger(context, "radius")))))
                 .then(Commands.literal("check")
                         .then(Commands.argument("template", StringArgumentType.word())
                                 .suggests((context, builder) -> SharedSuggestionProvider.suggest(AeTemplates.names(), builder))
@@ -182,6 +190,25 @@ public final class StructureCommands
                 () -> Component.translatable("commands.ancientempires.structure.skipped", count, what), false));
         AncientEmpires.LOGGER.info("Placed {} at {} ({}): {} blocks, {} entities, {} ms; substituted {}; made {}; skipped {}",
                 id, anchor, rotation, report.blocks(), report.entities(), millis, report.substituted(), report.aw(), report.skipped());
+        return 1;
+    }
+
+    /**
+     * Runs world generation's own checks over the chunks around the player
+     * (radius in chunks) without building anything, and reports why sites were
+     * turned down and which were chosen: for finding out why structures are rare.
+     */
+    private static int survey(CommandContext<CommandSourceStack> context, int radius) throws CommandSyntaxException
+    {
+        ServerPlayer player = context.getSource().getPlayerOrException();
+        ChunkPos centre = player.chunkPosition();
+        long start = System.nanoTime();
+        Map<String, Integer> reasons = AwSurvey.around(context.getSource().getLevel(), centre, radius);
+        long millis = (System.nanoTime() - start) / 1_000_000L;
+        int chunks = (2 * radius + 1) * (2 * radius + 1);
+        context.getSource().sendSuccess(() -> Component.translatable("commands.ancientempires.structure.survey", chunks, millis), false);
+        reasons.forEach((reason, count) -> context.getSource().sendSuccess(() -> Component.literal("  " + count + "  " + reason), false));
+        AncientEmpires.LOGGER.info("Structure survey of {} chunks around {}: {}", chunks, centre, reasons);
         return 1;
     }
 

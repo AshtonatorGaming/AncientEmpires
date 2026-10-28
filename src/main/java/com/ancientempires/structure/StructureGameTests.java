@@ -21,6 +21,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.core.BlockPos;
+import com.ancientempires.worldgen.AwSurvey;
 import java.nio.file.Path;
 import java.io.IOException;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -683,6 +684,17 @@ public final class StructureGameTests
             }
         }
         helper.assertTrue(problems.isEmpty(), "the scan matches the template: " + problems);
+        helper.succeed();
+    }
+
+    /** Not a pass/fail check: logs world generation's survey around a far point, to see which checks turn sites down. */
+    @GameTest(template = ARENA, timeoutTicks = 2400)
+    public static void worldGenerationSurvey(GameTestHelper helper)
+    {
+        for (ChunkPos centre : List.of(new ChunkPos(150, 150), new ChunkPos(-200, 80)))
+        {
+            AncientEmpires.LOGGER.info("GAMETEST survey around {}: {}", centre, AwSurvey.around(helper.getLevel(), centre, 24));
+        }
         helper.succeed();
     }
 }

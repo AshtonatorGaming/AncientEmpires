@@ -98,7 +98,7 @@ for (const name of BLOCKS) {
     for (const part of parts) {
       const apply = { model: part.id }; const x = ((part.x % 360) + 360) % 360, y = ((part.y % 360) + 360) % 360;
       if (x) apply.x = x; if (y) apply.y = y; if (st.uvlock) apply.uvlock = true;
-      multipart.push({ when, apply });
+      multipart.push(names.length ? { when, apply } : { apply });
       for (const el of elementsOf(part.id)) boxes.push(rot([...el.from, ...el.to], x, y));
     }
     shapes[key] = boxes;

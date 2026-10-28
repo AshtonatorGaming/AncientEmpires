@@ -447,5 +447,6 @@
   "message.ancientempires.scanner.bad_name": "That name has no letters or digits",
   "message.ancientempires.scanner.too_big": "A scan may be at most %s blocks on a side",
   "message.ancientempires.scanner.failed": "Could not save the scan: %s",
-  "message.ancientempires.scanner.saved": "Saved %s (%s x %s x %s) in ancientempires/scanned; place it with /ancientempires structure place %1$s"
+  "message.ancientempires.scanner.saved": "Saved %s (%s x %s x %s) in ancientempires/scanned; place it with /ancientempires structure place %1$s",
+  "commands.ancientempires.structure.survey": "Surveyed %s chunks around you in %s ms (nothing built). Why sites were turned down:"
 }
