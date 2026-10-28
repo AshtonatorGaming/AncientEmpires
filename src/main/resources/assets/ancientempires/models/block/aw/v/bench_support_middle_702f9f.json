@@ -1,0 +1,8 @@
+{
+ "parent": "ancientempires:block/aw/bench_support_middle",
+ "textures": {
+  "0": "minecraft:block/bamboo_planks",
+  "particle": "minecraft:block/bamboo_planks"
+ },
+ "render_type": "minecraft:cutout"
+}

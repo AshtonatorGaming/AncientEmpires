@@ -9,6 +9,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.DeferredRegister;
@@ -106,6 +107,20 @@ public final class ModCreativeTabs
                         for (Map.Entry<String, RegistryObject<Item>> entry : ModItems.DECOR.entrySet())
                         {
                             List<String> variants = AwDecor.specs().get(entry.getKey()).properties().get("variant");
+                            if (entry.getKey().equals("altar_candle") || entry.getKey().endsWith("_cloth"))
+                            {
+                                // AW's altar pieces came in every dye colour.
+                                for (DyeColor dye : DyeColor.values())
+                                {
+                                    float[] rgb = dye.getTextureDiffuseColors();
+                                    ItemStack stack = new ItemStack(entry.getValue().get());
+                                    CompoundTag data = new CompoundTag();
+                                    data.putInt("Color", (int) (rgb[0] * 255.0F) << 16 | (int) (rgb[1] * 255.0F) << 8 | (int) (rgb[2] * 255.0F));
+                                    stack.getOrCreateTag().put("BlockEntityTag", data);
+                                    output.accept(stack);
+                                }
+                                continue;
+                            }
                             if (variants == null)
                             {
                                 output.accept(entry.getValue().get());

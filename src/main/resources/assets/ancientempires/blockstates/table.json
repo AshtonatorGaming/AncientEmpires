@@ -383,6 +383,321 @@
     "leg_northeast": "true",
     "leg_northwest": "true",
     "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_5f94b0"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4d395a"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4d395a",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4d395a",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4d395a",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_85f501"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ad72f8"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ad72f8",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ad72f8",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ad72f8",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_81b978"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a70574"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a70574",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a70574",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a70574",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_407033"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_40423b"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_40423b",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_40423b",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_40423b",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_3cb65a"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_10c324"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_10c324",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_10c324",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_10c324",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
     "leg_southwest": "false",
     "variant": "oak"
    },
@@ -682,6 +997,256 @@
    "when": {
     "leg_northeast": "true",
     "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_5f94b0"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4d395a"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4d395a",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4d395a",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_85f501"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ad72f8"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ad72f8",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ad72f8",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_81b978"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a70574"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a70574",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a70574",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_407033"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_40423b"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_40423b",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_40423b",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_3cb65a"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_10c324"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_10c324",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_10c324",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
     "leg_southeast": "false",
     "leg_southwest": "true",
     "variant": "oak"
@@ -983,6 +1548,256 @@
     "leg_northeast": "true",
     "leg_northwest": "true",
     "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_5f94b0"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4d395a"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4d395a",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4d395a",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_85f501"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ad72f8"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ad72f8",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ad72f8",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_81b978"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a70574"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a70574",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a70574",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_407033"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_40423b"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_40423b",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_40423b",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_3cb65a"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_10c324"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_10c324",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_10c324",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
     "leg_southwest": "false",
     "variant": "oak"
    },
@@ -1203,6 +2018,191 @@
   {
    "when": {
     "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_5f94b0"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4d395a"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4d395a",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_85f501"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ad72f8"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ad72f8",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_81b978"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a70574"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a70574",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_407033"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_40423b"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_40423b",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_3cb65a"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_10c324"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_10c324",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
     "leg_northwest": "false",
     "leg_southeast": "true",
     "leg_southwest": "true",
@@ -1505,6 +2505,256 @@
     "leg_northeast": "true",
     "leg_northwest": "false",
     "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_5f94b0"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4d395a"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4d395a",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4d395a",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_85f501"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ad72f8"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ad72f8",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ad72f8",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_81b978"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a70574"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a70574",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a70574",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_407033"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_40423b"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_40423b",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_40423b",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_3cb65a"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_10c324"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_10c324",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_10c324",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
     "leg_southwest": "false",
     "variant": "oak"
    },
@@ -1726,6 +2976,191 @@
    "when": {
     "leg_northeast": "true",
     "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_5f94b0"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4d395a"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4d395a",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_85f501"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ad72f8"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ad72f8",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_81b978"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a70574"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a70574",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_407033"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_40423b"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_40423b",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_3cb65a"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_10c324"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_10c324",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
     "leg_southeast": "false",
     "leg_southwest": "true",
     "variant": "oak"
@@ -1949,6 +3384,191 @@
     "leg_northeast": "true",
     "leg_northwest": "false",
     "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_5f94b0"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4d395a"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4d395a",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_85f501"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ad72f8"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ad72f8",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_81b978"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a70574"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a70574",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_407033"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_40423b"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_40423b",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_3cb65a"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_10c324"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_10c324",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
     "leg_southwest": "false",
     "variant": "oak"
    },
@@ -2090,6 +3710,126 @@
   },
   {
    "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_5f94b0"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4d395a"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_85f501"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ad72f8"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_81b978"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a70574"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_407033"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_40423b"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_3cb65a"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_10c324"
+   }
+  },
+  {
+   "when": {
     "leg_northeast": "false",
     "leg_northwest": "true",
     "leg_southeast": "true",
@@ -2399,6 +4139,261 @@
     "leg_northeast": "false",
     "leg_northwest": "true",
     "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_5f94b0"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4d395a",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4d395a",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4d395a",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_85f501"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ad72f8",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ad72f8",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ad72f8",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_81b978"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a70574",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a70574",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a70574",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_407033"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_40423b",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_40423b",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_40423b",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_3cb65a"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_10c324",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_10c324",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_10c324",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
     "leg_southwest": "false",
     "variant": "oak"
    },
@@ -2626,6 +4621,196 @@
    "when": {
     "leg_northeast": "false",
     "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_5f94b0"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4d395a",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4d395a",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_85f501"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ad72f8",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ad72f8",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_81b978"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a70574",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a70574",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_407033"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_40423b",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_40423b",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_3cb65a"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_10c324",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_10c324",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
     "leg_southeast": "false",
     "leg_southwest": "true",
     "variant": "oak"
@@ -2855,6 +5040,196 @@
     "leg_northeast": "false",
     "leg_northwest": "true",
     "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_5f94b0"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4d395a",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4d395a",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_85f501"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ad72f8",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ad72f8",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_81b978"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a70574",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a70574",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_407033"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_40423b",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_40423b",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_3cb65a"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_10c324",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_10c324",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
     "leg_southwest": "false",
     "variant": "oak"
    },
@@ -3003,6 +5378,131 @@
   {
    "when": {
     "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_5f94b0"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4d395a",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_85f501"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ad72f8",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_81b978"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a70574",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_407033"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_40423b",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_3cb65a"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_10c324",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
     "leg_northwest": "false",
     "leg_southeast": "true",
     "leg_southwest": "true",
@@ -3233,6 +5733,196 @@
     "leg_northeast": "false",
     "leg_northwest": "false",
     "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_5f94b0"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4d395a",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4d395a",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_85f501"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ad72f8",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ad72f8",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_81b978"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a70574",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a70574",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_407033"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_40423b",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_40423b",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_3cb65a"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_10c324",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_10c324",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
     "leg_southwest": "false",
     "variant": "oak"
    },
@@ -3382,6 +6072,131 @@
    "when": {
     "leg_northeast": "false",
     "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_5f94b0"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4d395a",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_85f501"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ad72f8",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_81b978"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a70574",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_407033"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_40423b",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_3cb65a"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_10c324",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
     "leg_southeast": "false",
     "leg_southwest": "true",
     "variant": "oak"
@@ -3533,6 +6348,131 @@
     "leg_northeast": "false",
     "leg_northwest": "false",
     "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_5f94b0"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4d395a",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_85f501"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ad72f8",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_81b978"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a70574",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_407033"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_40423b",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_3cb65a"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_10c324",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
     "leg_southwest": "false",
     "variant": "oak"
    },
@@ -3598,6 +6538,66 @@
    },
    "apply": {
     "model": "ancientempires:block/aw/v/table_top_7fe56d"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_5f94b0"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_85f501"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_81b978"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_407033"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_3cb65a"
    }
   }
  ]

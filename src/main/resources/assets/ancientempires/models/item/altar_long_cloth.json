@@ -1,3 +1,211 @@
 {
-  "parent": "ancientempires:block/aw/v/altar_base_38f532"
+ "parent": "minecraft:block/block",
+ "textures": {
+  "t0_bottom": "ancientempires:block/aw/structure/altar_long_cloth_bottom",
+  "t0_top": "ancientempires:block/aw/structure/altar_long_cloth_top",
+  "t0_side": "ancientempires:block/aw/structure/altar_long_cloth_side",
+  "t0_top_overlay": "ancientempires:block/aw/structure/altar_long_cloth_top_overlay",
+  "t0_side_overlay": "ancientempires:block/aw/structure/altar_long_cloth_side_overlay",
+  "particle": "ancientempires:block/aw/structure/altar_long_cloth_side"
+ },
+ "elements": [
+  {
+   "from": [
+    0,
+    0,
+    0
+   ],
+   "to": [
+    16,
+    16,
+    16
+   ],
+   "faces": {
+    "down": {
+     "texture": "#t0_bottom",
+     "cullface": "down"
+    },
+    "up": {
+     "texture": "#t0_top",
+     "cullface": "up"
+    },
+    "north": {
+     "texture": "#t0_side",
+     "cullface": "north"
+    },
+    "south": {
+     "texture": "#t0_side",
+     "cullface": "south"
+    },
+    "west": {
+     "texture": "#t0_side",
+     "cullface": "west"
+    },
+    "east": {
+     "texture": "#t0_side",
+     "cullface": "east"
+    }
+   }
+  },
+  {
+   "from": [
+    0,
+    0,
+    0
+   ],
+   "to": [
+    16,
+    16,
+    16
+   ],
+   "faces": {
+    "up": {
+     "texture": "#t0_top_overlay",
+     "cullface": "up",
+     "tintindex": 0
+    },
+    "north": {
+     "texture": "#t0_side_overlay",
+     "cullface": "north",
+     "tintindex": 0
+    },
+    "south": {
+     "texture": "#t0_side_overlay",
+     "cullface": "south",
+     "tintindex": 0
+    },
+    "west": {
+     "texture": "#t0_side_overlay",
+     "cullface": "west",
+     "tintindex": 0
+    },
+    "east": {
+     "texture": "#t0_side_overlay",
+     "cullface": "east",
+     "tintindex": 0
+    }
+   }
+  }
+ ],
+ "display": {
+  "gui": {
+   "rotation": [
+    30,
+    225,
+    0
+   ],
+   "translation": [
+    0,
+    0,
+    0
+   ],
+   "scale": [
+    0.625,
+    0.625,
+    0.625
+   ]
+  },
+  "ground": {
+   "rotation": [
+    0,
+    0,
+    0
+   ],
+   "translation": [
+    0,
+    3,
+    0
+   ],
+   "scale": [
+    0.25,
+    0.25,
+    0.25
+   ]
+  },
+  "fixed": {
+   "rotation": [
+    0,
+    0,
+    0
+   ],
+   "translation": [
+    0,
+    0,
+    0
+   ],
+   "scale": [
+    0.5,
+    0.5,
+    0.5
+   ]
+  },
+  "thirdperson_righthand": {
+   "rotation": [
+    75,
+    45,
+    0
+   ],
+   "translation": [
+    0,
+    2.5,
+    0
+   ],
+   "scale": [
+    0.375,
+    0.375,
+    0.375
+   ]
+  },
+  "thirdperson_lefthand": {
+   "rotation": [
+    75,
+    45,
+    0
+   ],
+   "translation": [
+    0,
+    2.5,
+    0
+   ],
+   "scale": [
+    0.375,
+    0.375,
+    0.375
+   ]
+  },
+  "firstperson_righthand": {
+   "rotation": [
+    0,
+    45,
+    0
+   ],
+   "translation": [
+    0,
+    0,
+    0
+   ],
+   "scale": [
+    0.4,
+    0.4,
+    0.4
+   ]
+  },
+  "firstperson_lefthand": {
+   "rotation": [
+    0,
+    225,
+    0
+   ],
+   "translation": [
+    0,
+    0,
+    0
+   ],
+   "scale": [
+    0.4,
+    0.4,
+    0.4
+   ]
+  }
+ }
 }

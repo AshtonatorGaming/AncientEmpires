@@ -123,6 +123,106 @@
   {
    "when": {
     "axis": "x",
+    "legs": "none",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_7fc931"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "none",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_middle_07a19a"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "none",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_3a2f3d"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "none",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_middle_a023c2"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "none",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_5ecee7"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "none",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_middle_702f9f"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "none",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_8b8d50"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "none",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_middle_029509"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "none",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_0e6018"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "none",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_middle_8970e5"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
     "legs": "both",
     "variant": "oak"
    },
@@ -363,6 +463,206 @@
   {
    "when": {
     "axis": "x",
+    "legs": "both",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_7fc931"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "both",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_6c1311"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "both",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_907dea"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "both",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_two_side_fc78c6"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "both",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_3a2f3d"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "both",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_dcdd9a"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "both",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_cf85c7"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "both",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_two_side_bbdb8d"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "both",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_5ecee7"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "both",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_f59854"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "both",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_6019a8"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "both",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_two_side_458ee0"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "both",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_8b8d50"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "both",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_6bc28d"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "both",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_7b99f8"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "both",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_two_side_1f7efc"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "both",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_0e6018"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "both",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_08c2d0"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "both",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_536eba"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "both",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_two_side_fadf91"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
     "legs": "left",
     "variant": "oak"
    },
@@ -538,6 +838,156 @@
    },
    "apply": {
     "model": "ancientempires:block/aw/v/bench_support_one_side_622b6e"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "left",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_7fc931"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "left",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_6c1311"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "left",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_0bb624"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "left",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_3a2f3d"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "left",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_dcdd9a"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "left",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_99e903"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "left",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_5ecee7"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "left",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_f59854"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "left",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_4042ed"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "left",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_8b8d50"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "left",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_6bc28d"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "left",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_ae18c7"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "left",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_0e6018"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "left",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_08c2d0"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "left",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_df2f07"
    }
   },
   {
@@ -723,6 +1173,161 @@
    },
    "apply": {
     "model": "ancientempires:block/aw/v/bench_support_one_side_622b6e",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "right",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_7fc931"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "right",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_907dea"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "right",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_0bb624",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "right",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_3a2f3d"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "right",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_cf85c7"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "right",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_99e903",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "right",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_5ecee7"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "right",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_6019a8"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "right",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_4042ed",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "right",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_8b8d50"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "right",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_7b99f8"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "right",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_ae18c7",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "right",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_0e6018"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "right",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_536eba"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "right",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_df2f07",
     "y": 180
    }
   },
@@ -849,6 +1454,106 @@
   {
    "when": {
     "axis": "y",
+    "legs": "none",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_7fc931"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "none",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_middle_07a19a"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "none",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_3a2f3d"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "none",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_middle_a023c2"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "none",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_5ecee7"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "none",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_middle_702f9f"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "none",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_8b8d50"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "none",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_middle_029509"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "none",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_0e6018"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "none",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_middle_8970e5"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
     "legs": "both",
     "variant": "oak"
    },
@@ -1089,6 +1794,206 @@
   {
    "when": {
     "axis": "y",
+    "legs": "both",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_7fc931"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "both",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_6c1311"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "both",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_907dea"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "both",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_two_side_fc78c6"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "both",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_3a2f3d"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "both",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_dcdd9a"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "both",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_cf85c7"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "both",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_two_side_bbdb8d"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "both",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_5ecee7"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "both",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_f59854"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "both",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_6019a8"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "both",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_two_side_458ee0"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "both",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_8b8d50"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "both",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_6bc28d"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "both",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_7b99f8"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "both",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_two_side_1f7efc"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "both",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_0e6018"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "both",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_08c2d0"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "both",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_536eba"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "both",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_two_side_fadf91"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
     "legs": "left",
     "variant": "oak"
    },
@@ -1264,6 +2169,156 @@
    },
    "apply": {
     "model": "ancientempires:block/aw/v/bench_support_one_side_622b6e"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "left",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_7fc931"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "left",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_6c1311"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "left",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_0bb624"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "left",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_3a2f3d"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "left",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_dcdd9a"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "left",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_99e903"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "left",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_5ecee7"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "left",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_f59854"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "left",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_4042ed"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "left",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_8b8d50"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "left",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_6bc28d"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "left",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_ae18c7"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "left",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_0e6018"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "left",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_08c2d0"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "left",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_df2f07"
    }
   },
   {
@@ -1449,6 +2504,161 @@
    },
    "apply": {
     "model": "ancientempires:block/aw/v/bench_support_one_side_622b6e",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "right",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_7fc931"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "right",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_907dea"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "right",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_0bb624",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "right",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_3a2f3d"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "right",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_cf85c7"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "right",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_99e903",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "right",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_5ecee7"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "right",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_6019a8"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "right",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_4042ed",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "right",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_8b8d50"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "right",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_7b99f8"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "right",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_ae18c7",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "right",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_0e6018"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "right",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_536eba"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "right",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_df2f07",
     "y": 180
    }
   },
@@ -1581,6 +2791,116 @@
    },
    "apply": {
     "model": "ancientempires:block/aw/v/bench_support_middle_fbd90c",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "none",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_7fc931",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "none",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_middle_07a19a",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "none",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_3a2f3d",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "none",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_middle_a023c2",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "none",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_5ecee7",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "none",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_middle_702f9f",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "none",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_8b8d50",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "none",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_middle_029509",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "none",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_0e6018",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "none",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_middle_8970e5",
     "y": 270
    }
   },
@@ -1851,6 +3171,226 @@
   {
    "when": {
     "axis": "z",
+    "legs": "both",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_7fc931",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "both",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_6c1311",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "both",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_907dea",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "both",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_two_side_fc78c6",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "both",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_3a2f3d",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "both",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_dcdd9a",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "both",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_cf85c7",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "both",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_two_side_bbdb8d",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "both",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_5ecee7",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "both",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_f59854",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "both",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_6019a8",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "both",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_two_side_458ee0",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "both",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_8b8d50",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "both",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_6bc28d",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "both",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_7b99f8",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "both",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_two_side_1f7efc",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "both",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_0e6018",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "both",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_08c2d0",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "both",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_536eba",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "both",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_two_side_fadf91",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
     "legs": "left",
     "variant": "oak"
    },
@@ -2049,6 +3589,171 @@
   {
    "when": {
     "axis": "z",
+    "legs": "left",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_7fc931",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "left",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_6c1311",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "left",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_0bb624",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "left",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_3a2f3d",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "left",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_dcdd9a",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "left",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_99e903",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "left",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_5ecee7",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "left",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_f59854",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "left",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_4042ed",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "left",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_8b8d50",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "left",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_6bc28d",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "left",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_ae18c7",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "left",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_0e6018",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "left",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_08c2d0",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "left",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_df2f07",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
     "legs": "right",
     "variant": "oak"
    },
@@ -2241,6 +3946,171 @@
    },
    "apply": {
     "model": "ancientempires:block/aw/v/bench_support_one_side_622b6e",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "right",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_7fc931",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "right",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_907dea",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "right",
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_0bb624",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "right",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_3a2f3d",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "right",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_cf85c7",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "right",
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_99e903",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "right",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_5ecee7",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "right",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_6019a8",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "right",
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_4042ed",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "right",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_8b8d50",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "right",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_7b99f8",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "right",
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_ae18c7",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "right",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_0e6018",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "right",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_536eba",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "right",
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_df2f07",
     "y": 90
    }
   }

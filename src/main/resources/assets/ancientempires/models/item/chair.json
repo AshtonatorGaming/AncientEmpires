@@ -1,3 +1,583 @@
 {
-  "parent": "ancientempires:block/aw/v/chair_c094cd"
+ "parent": "minecraft:block/block",
+ "textures": {
+  "t0_0": "minecraft:block/oak_planks",
+  "particle": "minecraft:block/oak_planks"
+ },
+ "elements": [
+  {
+   "name": "seat",
+   "from": [
+    1,
+    9,
+    1
+   ],
+   "to": [
+    15,
+    11,
+    15
+   ],
+   "faces": {
+    "north": {
+     "uv": [
+      0,
+      0,
+      16,
+      2
+     ],
+     "texture": "#t0_0"
+    },
+    "east": {
+     "uv": [
+      0,
+      0,
+      16,
+      2
+     ],
+     "texture": "#t0_0"
+    },
+    "south": {
+     "uv": [
+      0,
+      0,
+      16,
+      2
+     ],
+     "texture": "#t0_0"
+    },
+    "west": {
+     "uv": [
+      0,
+      0,
+      16,
+      2
+     ],
+     "texture": "#t0_0"
+    },
+    "up": {
+     "uv": [
+      0,
+      0,
+      16,
+      16
+     ],
+     "texture": "#t0_0"
+    },
+    "down": {
+     "uv": [
+      0,
+      0,
+      16,
+      16
+     ],
+     "texture": "#t0_0"
+    }
+   }
+  },
+  {
+   "name": "back",
+   "from": [
+    1,
+    11,
+    1
+   ],
+   "to": [
+    15,
+    25,
+    3
+   ],
+   "faces": {
+    "north": {
+     "uv": [
+      0,
+      0,
+      16,
+      16
+     ],
+     "rotation": 90,
+     "texture": "#t0_0"
+    },
+    "east": {
+     "uv": [
+      0,
+      0,
+      16,
+      2
+     ],
+     "rotation": 90,
+     "texture": "#t0_0"
+    },
+    "south": {
+     "uv": [
+      0,
+      0,
+      16,
+      16
+     ],
+     "rotation": 90,
+     "texture": "#t0_0"
+    },
+    "west": {
+     "uv": [
+      0,
+      0,
+      16,
+      2
+     ],
+     "rotation": 270,
+     "texture": "#t0_0"
+    },
+    "up": {
+     "uv": [
+      0,
+      0,
+      16,
+      2
+     ],
+     "texture": "#t0_0"
+    }
+   }
+  },
+  {
+   "name": "leg",
+   "from": [
+    1,
+    0,
+    13
+   ],
+   "to": [
+    3,
+    9,
+    15
+   ],
+   "faces": {
+    "north": {
+     "uv": [
+      0,
+      7,
+      2,
+      16
+     ],
+     "texture": "#t0_0"
+    },
+    "east": {
+     "uv": [
+      6,
+      7,
+      8,
+      16
+     ],
+     "texture": "#t0_0"
+    },
+    "south": {
+     "uv": [
+      2,
+      7,
+      4,
+      16
+     ],
+     "texture": "#t0_0"
+    },
+    "west": {
+     "uv": [
+      4,
+      7,
+      6,
+      16
+     ],
+     "texture": "#t0_0"
+    },
+    "down": {
+     "uv": [
+      0,
+      0,
+      2,
+      2
+     ],
+     "texture": "#t0_0"
+    }
+   }
+  },
+  {
+   "name": "leg",
+   "from": [
+    13,
+    0,
+    13
+   ],
+   "to": [
+    15,
+    9,
+    15
+   ],
+   "faces": {
+    "north": {
+     "uv": [
+      0,
+      7,
+      2,
+      16
+     ],
+     "texture": "#t0_0"
+    },
+    "east": {
+     "uv": [
+      6,
+      7,
+      8,
+      16
+     ],
+     "texture": "#t0_0"
+    },
+    "south": {
+     "uv": [
+      1,
+      7,
+      3,
+      16
+     ],
+     "texture": "#t0_0"
+    },
+    "west": {
+     "uv": [
+      4,
+      7,
+      6,
+      16
+     ],
+     "texture": "#t0_0"
+    },
+    "down": {
+     "uv": [
+      0,
+      0,
+      2,
+      2
+     ],
+     "texture": "#t0_0"
+    }
+   }
+  },
+  {
+   "name": "leg",
+   "from": [
+    13.01658,
+    -0.01046,
+    0.99386
+   ],
+   "to": [
+    15.01658,
+    8.98954,
+    2.99386
+   ],
+   "faces": {
+    "north": {
+     "uv": [
+      1,
+      7,
+      3,
+      16
+     ],
+     "texture": "#t0_0"
+    },
+    "east": {
+     "uv": [
+      5,
+      7,
+      7,
+      16
+     ],
+     "texture": "#t0_0"
+    },
+    "south": {
+     "uv": [
+      3,
+      7,
+      5,
+      16
+     ],
+     "texture": "#t0_0"
+    },
+    "west": {
+     "uv": [
+      4,
+      7,
+      6,
+      16
+     ],
+     "texture": "#t0_0"
+    },
+    "up": {
+     "uv": [
+      0,
+      0,
+      2,
+      2
+     ],
+     "texture": "#t0_0"
+    },
+    "down": {
+     "uv": [
+      0,
+      0,
+      2,
+      2
+     ],
+     "texture": "#t0_0"
+    }
+   }
+  },
+  {
+   "name": "leg",
+   "from": [
+    1.01658,
+    -0.01046,
+    0.99386
+   ],
+   "to": [
+    3.01658,
+    8.98954,
+    2.99386
+   ],
+   "faces": {
+    "north": {
+     "uv": [
+      0,
+      7,
+      2,
+      16
+     ],
+     "texture": "#t0_0"
+    },
+    "east": {
+     "uv": [
+      5,
+      7,
+      7,
+      16
+     ],
+     "texture": "#t0_0"
+    },
+    "south": {
+     "uv": [
+      2,
+      7,
+      4,
+      16
+     ],
+     "texture": "#t0_0"
+    },
+    "west": {
+     "uv": [
+      4,
+      7,
+      6,
+      16
+     ],
+     "texture": "#t0_0"
+    },
+    "up": {
+     "uv": [
+      0,
+      0,
+      2,
+      2
+     ],
+     "texture": "#t0_0"
+    },
+    "down": {
+     "uv": [
+      0,
+      0,
+      2,
+      2
+     ],
+     "texture": "#t0_0"
+    }
+   }
+  }
+ ],
+ "display": {
+  "gui": {
+   "rotation": [
+    30,
+    225,
+    0
+   ],
+   "translation": [
+    -0.003,
+    -1.797,
+    0.001
+   ],
+   "scale": [
+    0.4,
+    0.4,
+    0.4
+   ]
+  },
+  "ground": {
+   "rotation": [
+    0,
+    0,
+    0
+   ],
+   "translation": [
+    -0.001,
+    2.281,
+    0
+   ],
+   "scale": [
+    0.16,
+    0.16,
+    0.16
+   ]
+  },
+  "fixed": {
+   "rotation": [
+    0,
+    0,
+    0
+   ],
+   "translation": [
+    -0.003,
+    -1.438,
+    0.001
+   ],
+   "scale": [
+    0.32,
+    0.32,
+    0.32
+   ]
+  },
+  "thirdperson_righthand": {
+   "rotation": [
+    75,
+    45,
+    0
+   ],
+   "translation": [
+    -0.002,
+    1.422,
+    0.001
+   ],
+   "scale": [
+    0.24,
+    0.24,
+    0.24
+   ]
+  },
+  "thirdperson_lefthand": {
+   "rotation": [
+    75,
+    45,
+    0
+   ],
+   "translation": [
+    -0.002,
+    1.422,
+    0.001
+   ],
+   "scale": [
+    0.24,
+    0.24,
+    0.24
+   ]
+  },
+  "firstperson_righthand": {
+   "rotation": [
+    0,
+    45,
+    0
+   ],
+   "translation": [
+    -0.002,
+    -1.15,
+    0.001
+   ],
+   "scale": [
+    0.256,
+    0.256,
+    0.256
+   ]
+  },
+  "firstperson_lefthand": {
+   "rotation": [
+    0,
+    225,
+    0
+   ],
+   "translation": [
+    -0.002,
+    -1.15,
+    0.001
+   ],
+   "scale": [
+    0.256,
+    0.256,
+    0.256
+   ]
+  }
+ },
+ "overrides": [
+  {
+   "predicate": {
+    "ancientempires:variant": 1
+   },
+   "model": "ancientempires:item/aw/chair_spruce"
+  },
+  {
+   "predicate": {
+    "ancientempires:variant": 2
+   },
+   "model": "ancientempires:item/aw/chair_birch"
+  },
+  {
+   "predicate": {
+    "ancientempires:variant": 3
+   },
+   "model": "ancientempires:item/aw/chair_jungle"
+  },
+  {
+   "predicate": {
+    "ancientempires:variant": 4
+   },
+   "model": "ancientempires:item/aw/chair_acacia"
+  },
+  {
+   "predicate": {
+    "ancientempires:variant": 5
+   },
+   "model": "ancientempires:item/aw/chair_dark_oak"
+  },
+  {
+   "predicate": {
+    "ancientempires:variant": 6
+   },
+   "model": "ancientempires:item/aw/chair_mangrove"
+  },
+  {
+   "predicate": {
+    "ancientempires:variant": 7
+   },
+   "model": "ancientempires:item/aw/chair_cherry"
+  },
+  {
+   "predicate": {
+    "ancientempires:variant": 8
+   },
+   "model": "ancientempires:item/aw/chair_bamboo"
+  },
+  {
+   "predicate": {
+    "ancientempires:variant": 9
+   },
+   "model": "ancientempires:item/aw/chair_crimson"
+  },
+  {
+   "predicate": {
+    "ancientempires:variant": 10
+   },
+   "model": "ancientempires:item/aw/chair_warped"
+  }
+ ]
 }

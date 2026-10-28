@@ -1,3 +1,454 @@
 {
-  "parent": "ancientempires:block/aw/iron_cage_top"
+ "parent": "minecraft:block/block",
+ "textures": {
+  "t0_0": "ancientempires:block/aw/structure/iron_cage",
+  "particle": "ancientempires:block/aw/structure/iron_cage"
+ },
+ "elements": [
+  {
+   "name": "cage",
+   "from": [
+    0,
+    16,
+    0
+   ],
+   "to": [
+    16,
+    32,
+    16
+   ],
+   "faces": {
+    "north": {
+     "uv": [
+      0,
+      10,
+      4,
+      14
+     ],
+     "texture": "#t0_0"
+    },
+    "east": {
+     "uv": [
+      0,
+      10,
+      4,
+      14
+     ],
+     "texture": "#t0_0"
+    },
+    "south": {
+     "uv": [
+      0,
+      10,
+      4,
+      14
+     ],
+     "texture": "#t0_0"
+    },
+    "west": {
+     "uv": [
+      0,
+      10,
+      4,
+      14
+     ],
+     "texture": "#t0_0"
+    },
+    "down": {
+     "uv": [
+      4,
+      0,
+      8,
+      4
+     ],
+     "rotation": 90,
+     "texture": "#t0_0"
+    }
+   }
+  },
+  {
+   "name": "cagebottom",
+   "from": [
+    0,
+    16.01,
+    0
+   ],
+   "to": [
+    16,
+    16.01,
+    16
+   ],
+   "faces": {
+    "up": {
+     "uv": [
+      4,
+      0,
+      8,
+      4
+     ],
+     "rotation": 270,
+     "texture": "#t0_0"
+    }
+   }
+  },
+  {
+   "name": "cagesidenorth",
+   "from": [
+    0,
+    16,
+    0.01
+   ],
+   "to": [
+    16,
+    32,
+    0.01
+   ],
+   "faces": {
+    "south": {
+     "uv": [
+      0,
+      10,
+      4,
+      14
+     ],
+     "texture": "#t0_0"
+    }
+   }
+  },
+  {
+   "name": "cagesidesouth",
+   "from": [
+    0,
+    16,
+    15.99
+   ],
+   "to": [
+    16,
+    32,
+    15.99
+   ],
+   "faces": {
+    "north": {
+     "uv": [
+      0,
+      10,
+      4,
+      14
+     ],
+     "texture": "#t0_0"
+    }
+   }
+  },
+  {
+   "name": "cagesidewest",
+   "from": [
+    0.01,
+    16,
+    0
+   ],
+   "to": [
+    0.01,
+    32,
+    16
+   ],
+   "faces": {
+    "east": {
+     "uv": [
+      0,
+      10,
+      4,
+      14
+     ],
+     "texture": "#t0_0"
+    }
+   }
+  },
+  {
+   "name": "cagesideeast",
+   "from": [
+    16.01,
+    16,
+    0
+   ],
+   "to": [
+    16.01,
+    32,
+    16
+   ],
+   "faces": {
+    "west": {
+     "uv": [
+      0,
+      10,
+      4,
+      14
+     ],
+     "texture": "#t0_0"
+    }
+   }
+  },
+  {
+   "name": "horizontalwood03",
+   "from": [
+    10,
+    0,
+    0
+   ],
+   "to": [
+    14,
+    2,
+    16
+   ],
+   "faces": {
+    "north": {
+     "uv": [
+      8,
+      1.5,
+      9,
+      2
+     ],
+     "texture": "#t0_0"
+    },
+    "east": {
+     "uv": [
+      8,
+      1.5,
+      12,
+      2
+     ],
+     "texture": "#t0_0"
+    },
+    "south": {
+     "uv": [
+      8,
+      1.5,
+      9,
+      2
+     ],
+     "texture": "#t0_0"
+    },
+    "west": {
+     "uv": [
+      8,
+      1.5,
+      12,
+      2
+     ],
+     "texture": "#t0_0"
+    },
+    "up": {
+     "uv": [
+      8,
+      0,
+      12,
+      1
+     ],
+     "rotation": 270,
+     "texture": "#t0_0"
+    },
+    "down": {
+     "uv": [
+      12,
+      0,
+      16,
+      1
+     ],
+     "rotation": 90,
+     "texture": "#t0_0"
+    }
+   }
+  },
+  {
+   "name": "horizontalwood04",
+   "from": [
+    2,
+    0,
+    0
+   ],
+   "to": [
+    6,
+    2,
+    16
+   ],
+   "faces": {
+    "north": {
+     "uv": [
+      8,
+      1.5,
+      9,
+      2
+     ],
+     "texture": "#t0_0"
+    },
+    "east": {
+     "uv": [
+      8,
+      1.5,
+      12,
+      2
+     ],
+     "texture": "#t0_0"
+    },
+    "south": {
+     "uv": [
+      8,
+      1.5,
+      9,
+      2
+     ],
+     "texture": "#t0_0"
+    },
+    "west": {
+     "uv": [
+      8,
+      1.5,
+      12,
+      2
+     ],
+     "texture": "#t0_0"
+    },
+    "up": {
+     "uv": [
+      8,
+      0,
+      12,
+      1
+     ],
+     "rotation": 270,
+     "texture": "#t0_0"
+    },
+    "down": {
+     "uv": [
+      12,
+      0,
+      16,
+      1
+     ],
+     "rotation": 90,
+     "texture": "#t0_0"
+    }
+   }
+  }
+ ],
+ "display": {
+  "gui": {
+   "rotation": [
+    30,
+    225,
+    0
+   ],
+   "translation": [
+    -0.002,
+    -2.5,
+    0
+   ],
+   "scale": [
+    0.313,
+    0.313,
+    0.313
+   ]
+  },
+  "ground": {
+   "rotation": [
+    0,
+    0,
+    0
+   ],
+   "translation": [
+    -0.001,
+    2,
+    0
+   ],
+   "scale": [
+    0.125,
+    0.125,
+    0.125
+   ]
+  },
+  "fixed": {
+   "rotation": [
+    0,
+    0,
+    0
+   ],
+   "translation": [
+    -0.001,
+    -2,
+    0
+   ],
+   "scale": [
+    0.25,
+    0.25,
+    0.25
+   ]
+  },
+  "thirdperson_righthand": {
+   "rotation": [
+    75,
+    45,
+    0
+   ],
+   "translation": [
+    -0.001,
+    1,
+    0
+   ],
+   "scale": [
+    0.188,
+    0.188,
+    0.188
+   ]
+  },
+  "thirdperson_lefthand": {
+   "rotation": [
+    75,
+    45,
+    0
+   ],
+   "translation": [
+    -0.001,
+    1,
+    0
+   ],
+   "scale": [
+    0.188,
+    0.188,
+    0.188
+   ]
+  },
+  "firstperson_righthand": {
+   "rotation": [
+    0,
+    45,
+    0
+   ],
+   "translation": [
+    -0.001,
+    -1.6,
+    0
+   ],
+   "scale": [
+    0.2,
+    0.2,
+    0.2
+   ]
+  },
+  "firstperson_lefthand": {
+   "rotation": [
+    0,
+    225,
+    0
+   ],
+   "translation": [
+    -0.001,
+    -1.6,
+    0
+   ],
+   "scale": [
+    0.2,
+    0.2,
+    0.2
+   ]
+  }
+ }
 }

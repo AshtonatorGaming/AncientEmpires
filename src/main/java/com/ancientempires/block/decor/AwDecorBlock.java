@@ -119,7 +119,7 @@ public class AwDecorBlock extends Block implements EntityBlock
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
-        boolean holds = this.spec.name().equals("gravestone")
+        boolean holds = this.spec.name().equals("gravestone") || this.spec.name().startsWith("altar_candle") || this.spec.name().endsWith("_cloth")
                 || this.spec.name().equals("stake") && partOf(state, LAYOUTS.get("stake")) == LAYOUTS.get("stake").get(0);
         return holds ? new AwDecorBlockEntity(pos, state) : null;
     }

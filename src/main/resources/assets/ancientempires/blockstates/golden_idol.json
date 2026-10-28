@@ -45,7 +45,7 @@
     "facing": "north"
    },
    "apply": {
-    "model": "ancientempires:block/aw/golden_idol"
+    "model": "ancientempires:block/aw/empty"
    }
   },
   {
@@ -54,8 +54,7 @@
     "facing": "south"
    },
    "apply": {
-    "model": "ancientempires:block/aw/golden_idol",
-    "y": 180
+    "model": "ancientempires:block/aw/empty"
    }
   },
   {
@@ -64,8 +63,7 @@
     "facing": "west"
    },
    "apply": {
-    "model": "ancientempires:block/aw/golden_idol",
-    "y": 270
+    "model": "ancientempires:block/aw/empty"
    }
   },
   {
@@ -74,8 +72,7 @@
     "facing": "east"
    },
    "apply": {
-    "model": "ancientempires:block/aw/golden_idol",
-    "y": 90
+    "model": "ancientempires:block/aw/empty"
    }
   }
  ]

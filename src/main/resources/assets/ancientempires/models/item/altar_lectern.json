@@ -1,3 +1,337 @@
 {
-  "parent": "ancientempires:block/aw/altar_lectern"
+ "parent": "minecraft:block/block",
+ "textures": {
+  "t0_0": "ancientempires:block/aw/structure/altar_lectern",
+  "particle": "ancientempires:block/aw/structure/altar_lectern"
+ },
+ "elements": [
+  {
+   "name": "book",
+   "from": [
+    3,
+    4,
+    5
+   ],
+   "to": [
+    13,
+    5,
+    13
+   ],
+   "rotation": {
+    "angle": -22.5,
+    "axis": "x",
+    "origin": [
+     8,
+     0,
+     2
+    ]
+   },
+   "faces": {
+    "north": {
+     "uv": [
+      2,
+      6.25,
+      4.5,
+      6.5
+     ],
+     "texture": "#t0_0"
+    },
+    "east": {
+     "uv": [
+      4.5,
+      6.25,
+      6.5,
+      6.5
+     ],
+     "texture": "#t0_0"
+    },
+    "south": {
+     "uv": [
+      6.5,
+      6.25,
+      9,
+      6.5
+     ],
+     "texture": "#t0_0"
+    },
+    "west": {
+     "uv": [
+      0,
+      6.25,
+      2,
+      6.5
+     ],
+     "texture": "#t0_0"
+    },
+    "up": {
+     "uv": [
+      2,
+      4.25,
+      4.5,
+      6.25
+     ],
+     "texture": "#t0_0"
+    }
+   }
+  },
+  {
+   "name": "body",
+   "from": [
+    0,
+    0,
+    2
+   ],
+   "to": [
+    16,
+    4,
+    15
+   ],
+   "rotation": {
+    "angle": -22.5,
+    "axis": "x",
+    "origin": [
+     8,
+     0,
+     2
+    ]
+   },
+   "faces": {
+    "north": {
+     "uv": [
+      4,
+      3.25,
+      8,
+      4.25
+     ],
+     "texture": "#t0_0"
+    },
+    "east": {
+     "uv": [
+      8,
+      3.25,
+      12,
+      4.25
+     ],
+     "texture": "#t0_0"
+    },
+    "south": {
+     "uv": [
+      12,
+      3.25,
+      16,
+      4.25
+     ],
+     "texture": "#t0_0"
+    },
+    "west": {
+     "uv": [
+      0,
+      3.25,
+      4,
+      4.25
+     ],
+     "texture": "#t0_0"
+    },
+    "up": {
+     "uv": [
+      4,
+      3.25,
+      8,
+      0
+     ],
+     "texture": "#t0_0"
+    },
+    "down": {
+     "uv": [
+      8,
+      3.25,
+      12,
+      0
+     ],
+     "texture": "#t0_0"
+    }
+   }
+  },
+  {
+   "name": "bottom",
+   "from": [
+    4,
+    0,
+    4
+   ],
+   "to": [
+    12,
+    5,
+    12
+   ],
+   "faces": {
+    "north": {
+     "uv": [
+      2,
+      8.5,
+      4,
+      9.75
+     ],
+     "texture": "#t0_0"
+    },
+    "east": {
+     "uv": [
+      4,
+      8.5,
+      6,
+      9.75
+     ],
+     "texture": "#t0_0"
+    },
+    "south": {
+     "uv": [
+      6,
+      8.5,
+      8,
+      9.75
+     ],
+     "texture": "#t0_0"
+    },
+    "west": {
+     "uv": [
+      0,
+      8.5,
+      2,
+      9.75
+     ],
+     "texture": "#t0_0"
+    },
+    "down": {
+     "uv": [
+      4,
+      6.5,
+      6,
+      8.5
+     ],
+     "texture": "#t0_0"
+    }
+   }
+  }
+ ],
+ "display": {
+  "gui": {
+   "rotation": [
+    30,
+    225,
+    0
+   ],
+   "translation": [
+    0,
+    3.438,
+    -0.312
+   ],
+   "scale": [
+    0.625,
+    0.625,
+    0.625
+   ]
+  },
+  "ground": {
+   "rotation": [
+    0,
+    0,
+    0
+   ],
+   "translation": [
+    0,
+    4.375,
+    -0.125
+   ],
+   "scale": [
+    0.25,
+    0.25,
+    0.25
+   ]
+  },
+  "fixed": {
+   "rotation": [
+    0,
+    0,
+    0
+   ],
+   "translation": [
+    0,
+    2.75,
+    -0.25
+   ],
+   "scale": [
+    0.5,
+    0.5,
+    0.5
+   ]
+  },
+  "thirdperson_righthand": {
+   "rotation": [
+    75,
+    45,
+    0
+   ],
+   "translation": [
+    0,
+    4.563,
+    -0.187
+   ],
+   "scale": [
+    0.375,
+    0.375,
+    0.375
+   ]
+  },
+  "thirdperson_lefthand": {
+   "rotation": [
+    75,
+    45,
+    0
+   ],
+   "translation": [
+    0,
+    4.563,
+    -0.187
+   ],
+   "scale": [
+    0.375,
+    0.375,
+    0.375
+   ]
+  },
+  "firstperson_righthand": {
+   "rotation": [
+    0,
+    45,
+    0
+   ],
+   "translation": [
+    0,
+    2.2,
+    -0.2
+   ],
+   "scale": [
+    0.4,
+    0.4,
+    0.4
+   ]
+  },
+  "firstperson_lefthand": {
+   "rotation": [
+    0,
+    225,
+    0
+   ],
+   "translation": [
+    0,
+    2.2,
+    -0.2
+   ],
+   "scale": [
+    0.4,
+    0.4,
+    0.4
+   ]
+  }
+ }
 }

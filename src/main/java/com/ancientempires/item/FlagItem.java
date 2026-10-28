@@ -1,5 +1,11 @@
 package com.ancientempires.item;
 
+import com.ancientempires.client.FlagItemRenderer;
+import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
+import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+
+import java.util.function.Consumer;
+
 import com.ancientempires.entity.npc.NpcFactions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -17,6 +23,20 @@ public class FlagItem extends BlockItem
     public FlagItem(Block block, Properties properties)
     {
         super(block, properties);
+    }
+
+    /** The item is drawn as the flag itself ({@code client.FlagItemRenderer}). */
+    @Override
+    public void initializeClient(Consumer<IClientItemExtensions> consumer)
+    {
+        consumer.accept(new IClientItemExtensions()
+        {
+            @Override
+            public BlockEntityWithoutLevelRenderer getCustomRenderer()
+            {
+                return FlagItemRenderer.instance();
+            }
+        });
     }
 
     /** A flag of {@code faction} (empty for a plain cloth), a protection flag or a decorative one. */

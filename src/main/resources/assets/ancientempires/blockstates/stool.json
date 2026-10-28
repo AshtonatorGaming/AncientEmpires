@@ -47,6 +47,46 @@
    "apply": {
     "model": "ancientempires:block/aw/v/stool_a93d49"
    }
+  },
+  {
+   "when": {
+    "variant": "mangrove"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/stool_f7d992"
+   }
+  },
+  {
+   "when": {
+    "variant": "cherry"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/stool_4d06ff"
+   }
+  },
+  {
+   "when": {
+    "variant": "bamboo"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/stool_4541d0"
+   }
+  },
+  {
+   "when": {
+    "variant": "crimson"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/stool_180167"
+   }
+  },
+  {
+   "when": {
+    "variant": "warped"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/stool_90c7fc"
+   }
   }
  ]
 }

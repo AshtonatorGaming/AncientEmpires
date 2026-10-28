@@ -1,0 +1,523 @@
+{
+ "parent": "minecraft:block/block",
+ "textures": {
+  "t0_1": "ancientempires:block/aw/structure/totem_part_wings",
+  "particle": "ancientempires:block/aw/structure/totem_part_wings"
+ },
+ "elements": [
+  {
+   "name": "wingBase",
+   "from": [
+    8,
+    4,
+    6.5
+   ],
+   "to": [
+    16,
+    12,
+    9.5
+   ],
+   "faces": {
+    "north": {
+     "uv": [
+      1.5,
+      1.5,
+      5.5,
+      5.5
+     ],
+     "texture": "#t0_1"
+    },
+    "east": {
+     "uv": [
+      5.5,
+      1.5,
+      7,
+      5.5
+     ],
+     "texture": "#t0_1"
+    },
+    "south": {
+     "uv": [
+      1.5,
+      1.5,
+      5.5,
+      5.5
+     ],
+     "texture": "#t0_1"
+    },
+    "west": {
+     "uv": [
+      1.5,
+      1.5,
+      3,
+      5.5
+     ],
+     "texture": "#t0_1"
+    },
+    "up": {
+     "uv": [
+      2,
+      0,
+      6,
+      1.5
+     ],
+     "texture": "#t0_1"
+    },
+    "down": {
+     "uv": [
+      6,
+      0,
+      10,
+      1.5
+     ],
+     "texture": "#t0_1"
+    }
+   }
+  },
+  {
+   "name": "wingBody1",
+   "from": [
+    7.9395,
+    4,
+    6.75
+   ],
+   "to": [
+    11.0605,
+    13,
+    9.25
+   ],
+   "rotation": {
+    "angle": -22.5,
+    "axis": "z",
+    "origin": [
+     9.5,
+     13,
+     9
+    ]
+   },
+   "faces": {
+    "north": {
+     "uv": [
+      1.5,
+      1.5,
+      3,
+      5.5
+     ],
+     "texture": "#t0_1"
+    },
+    "east": {
+     "uv": [
+      1.5,
+      1.5,
+      3,
+      5.5
+     ],
+     "texture": "#t0_1"
+    },
+    "south": {
+     "uv": [
+      1.5,
+      1.5,
+      3,
+      5.5
+     ],
+     "texture": "#t0_1"
+    },
+    "west": {
+     "uv": [
+      1.5,
+      1.5,
+      2,
+      5.5
+     ],
+     "texture": "#t0_1"
+    },
+    "up": {
+     "uv": [
+      2,
+      0,
+      3.5605,
+      1.25
+     ],
+     "texture": "#t0_1"
+    },
+    "down": {
+     "uv": [
+      0,
+      0,
+      1,
+      1
+     ],
+     "texture": "#t0_1"
+    }
+   }
+  },
+  {
+   "name": "wingBody2",
+   "from": [
+    7.9395,
+    4,
+    7
+   ],
+   "to": [
+    11.0605,
+    13,
+    9
+   ],
+   "rotation": {
+    "angle": -45,
+    "axis": "z",
+    "origin": [
+     9.5,
+     13,
+     9
+    ]
+   },
+   "faces": {
+    "north": {
+     "uv": [
+      1.5,
+      1,
+      3,
+      5.5
+     ],
+     "texture": "#t0_1"
+    },
+    "east": {
+     "uv": [
+      1.5,
+      1.5,
+      2,
+      5.5
+     ],
+     "texture": "#t0_1"
+    },
+    "south": {
+     "uv": [
+      1.5,
+      1.5,
+      3,
+      5.5
+     ],
+     "texture": "#t0_1"
+    },
+    "west": {
+     "uv": [
+      1.5,
+      1.5,
+      2,
+      5.5
+     ],
+     "texture": "#t0_1"
+    },
+    "up": {
+     "uv": [
+      2,
+      0,
+      3.5605,
+      1
+     ],
+     "texture": "#t0_1"
+    },
+    "down": {
+     "uv": [
+      0,
+      0,
+      1,
+      1
+     ],
+     "texture": "#t0_1"
+    }
+   }
+  },
+  {
+   "name": "wingBody3",
+   "from": [
+    0.5,
+    11.4395,
+    7.25
+   ],
+   "to": [
+    9.5,
+    14.5605,
+    8.75
+   ],
+   "rotation": {
+    "angle": 22.5,
+    "axis": "z",
+    "origin": [
+     9.5,
+     13,
+     9
+    ]
+   },
+   "faces": {
+    "north": {
+     "uv": [
+      1.5,
+      1.5,
+      3,
+      5.5
+     ],
+     "texture": "#t0_1",
+     "rotation": 270
+    },
+    "east": {
+     "uv": [
+      2,
+      0,
+      3.5605,
+      0.75
+     ],
+     "texture": "#t0_1",
+     "rotation": 90
+    },
+    "south": {
+     "uv": [
+      1.5,
+      1,
+      3,
+      5.5
+     ],
+     "texture": "#t0_1",
+     "rotation": 90
+    },
+    "west": {
+     "uv": [
+      0,
+      0,
+      1,
+      1
+     ],
+     "texture": "#t0_1",
+     "rotation": 90
+    },
+    "up": {
+     "uv": [
+      1.5,
+      1.5,
+      2,
+      5.5
+     ],
+     "texture": "#t0_1",
+     "rotation": 90
+    },
+    "down": {
+     "uv": [
+      1.5,
+      1.5,
+      2,
+      5.5
+     ],
+     "texture": "#t0_1",
+     "rotation": 90
+    }
+   }
+  },
+  {
+   "name": "wingBody4",
+   "from": [
+    0.5,
+    11.4395,
+    7.5
+   ],
+   "to": [
+    9.5,
+    14.5605,
+    8.5
+   ],
+   "rotation": {
+    "angle": 0,
+    "axis": "z",
+    "origin": [
+     9.5,
+     13,
+     9
+    ]
+   },
+   "faces": {
+    "north": {
+     "uv": [
+      1.5,
+      1.5,
+      3,
+      5.5
+     ],
+     "texture": "#t0_1",
+     "rotation": 270
+    },
+    "east": {
+     "uv": [
+      2,
+      0,
+      3.5605,
+      0.5
+     ],
+     "texture": "#t0_1",
+     "rotation": 90
+    },
+    "south": {
+     "uv": [
+      1.5,
+      1.5,
+      3,
+      5.5
+     ],
+     "texture": "#t0_1",
+     "rotation": 90
+    },
+    "west": {
+     "uv": [
+      0,
+      0,
+      1,
+      1
+     ],
+     "texture": "#t0_1",
+     "rotation": 90
+    },
+    "up": {
+     "uv": [
+      1.5,
+      1.5,
+      2,
+      5.5
+     ],
+     "texture": "#t0_1",
+     "rotation": 90
+    },
+    "down": {
+     "uv": [
+      1.5,
+      1.5,
+      2,
+      5.5
+     ],
+     "texture": "#t0_1",
+     "rotation": 90
+    }
+   }
+  }
+ ],
+ "display": {
+  "gui": {
+   "rotation": [
+    30,
+    225,
+    0
+   ],
+   "translation": [
+    -0.156,
+    -0.8,
+    0
+   ],
+   "scale": [
+    0.625,
+    0.625,
+    0.625
+   ]
+  },
+  "ground": {
+   "rotation": [
+    0,
+    0,
+    0
+   ],
+   "translation": [
+    -0.062,
+    2.68,
+    0
+   ],
+   "scale": [
+    0.25,
+    0.25,
+    0.25
+   ]
+  },
+  "fixed": {
+   "rotation": [
+    0,
+    0,
+    0
+   ],
+   "translation": [
+    -0.125,
+    -0.64,
+    0
+   ],
+   "scale": [
+    0.5,
+    0.5,
+    0.5
+   ]
+  },
+  "thirdperson_righthand": {
+   "rotation": [
+    75,
+    45,
+    0
+   ],
+   "translation": [
+    -0.094,
+    2.02,
+    0
+   ],
+   "scale": [
+    0.375,
+    0.375,
+    0.375
+   ]
+  },
+  "thirdperson_lefthand": {
+   "rotation": [
+    75,
+    45,
+    0
+   ],
+   "translation": [
+    -0.094,
+    2.02,
+    0
+   ],
+   "scale": [
+    0.375,
+    0.375,
+    0.375
+   ]
+  },
+  "firstperson_righthand": {
+   "rotation": [
+    0,
+    45,
+    0
+   ],
+   "translation": [
+    -0.1,
+    -0.512,
+    0
+   ],
+   "scale": [
+    0.4,
+    0.4,
+    0.4
+   ]
+  },
+  "firstperson_lefthand": {
+   "rotation": [
+    0,
+    225,
+    0
+   ],
+   "translation": [
+    -0.1,
+    -0.512,
+    0
+   ],
+   "scale": [
+    0.4,
+    0.4,
+    0.4
+   ]
+  }
+ }
+}

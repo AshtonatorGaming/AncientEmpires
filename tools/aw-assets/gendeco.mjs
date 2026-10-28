@@ -9,7 +9,10 @@ const BLOCKS = ["altar_candle", "altar_lectern", "altar_long_cloth", "altar_shor
   "tribal_stool", "wooden_post", "wooden_throne"];
 const VANILLA = { cobblestone: "cobblestone", fire_layer_0: "fire_0", log_oak: "oak_log", log_oak_top: "oak_log_top", planks_oak: "oak_planks",
   planks_spruce: "spruce_planks", planks_birch: "birch_planks", planks_jungle: "jungle_planks", planks_acacia: "acacia_planks",
-  planks_big_oak: "dark_oak_planks", wool_colored_red: "red_wool", stone: "stone", gold_block: "gold_block", iron_bars: "iron_bars" };
+  planks_big_oak: "dark_oak_planks", wool_colored_red: "red_wool", stone: "stone", gold_block: "gold_block", iron_bars: "iron_bars",
+  planks_mangrove: "mangrove_planks", planks_cherry: "cherry_planks", planks_bamboo: "bamboo_planks", planks_crimson: "crimson_planks", planks_warped: "warped_planks" };
+/** Woods 1.20 added, offered wherever AW offered its six. */
+const NEW_WOODS = ["mangrove", "cherry", "bamboo", "crimson", "warped"];
 const usedTextures = new Set(); const problems = [];
 function tex(t) {
   if (t.startsWith("#")) return t;
@@ -67,9 +70,57 @@ function rot(box, x, y) { // rotate a box [x1,y1,z1,x2,y2,z2] in pixels: x about
   for (let i = 0; i < ((y / 90) % 4 + 4) % 4; i++) { [a, c, d, f] = [16 - f, a, 16 - c, d]; }
   return [Math.min(a, d), Math.min(b, e), Math.min(c, f), Math.max(a, d), Math.max(b, e), Math.max(c, f)];
 }
+/** A model's textures, through its parents. */
+function texturesOf(id) {
+  const m = models.get(id); if (!m) return {};
+  return { ...(m.json.parent ? texturesOf(m.json.parent) : {}), ...(m.json.textures || {}) };
+}
+function resolveTexture(textures, ref, depth = 0) {
+  if (!ref || !ref.startsWith("#") || depth > 8) return ref;
+  return resolveTexture(textures, textures[ref.slice(1)], depth + 1);
+}
+/**
+ * One item model from a piece's parts: their elements merged (only parts not turned; turned
+ * submodels such as three of a table's legs are left out), textures resolved per part, and the
+ * display of a vanilla block scaled to fit the piece's size.
+ */
+function itemModel(parts) {
+  const elements = []; const textures = {}; let index = 0;
+  for (const part of parts) {
+    if (((part.x % 360) + 360) % 360 || ((part.y % 360) + 360) % 360) continue;
+    const own = texturesOf(part.id);
+    for (const el of elementsOf(part.id)) {
+      const copy = JSON.parse(JSON.stringify(el));
+      for (const face of Object.values(copy.faces || {})) {
+        const real = resolveTexture(own, face.texture);
+        if (!real) continue;
+        const keyName = "t" + index + "_" + face.texture.replace("#", "");
+        textures[keyName] = real; face.texture = "#" + keyName;
+      }
+      elements.push(copy);
+    }
+    if (!textures.particle && own.particle) textures.particle = resolveTexture(own, own.particle);
+    index++;
+  }
+  if (!textures.particle) textures.particle = Object.values(textures)[0] ?? "minecraft:block/oak_planks";
+  let lo = [16, 16, 16], hi = [0, 0, 0];
+  for (const el of elements) for (let i = 0; i < 3; i++) { lo[i] = Math.min(lo[i], el.from[i], el.to[i]); hi[i] = Math.max(hi[i], el.from[i], el.to[i]); }
+  const span = Math.max(16, hi[0] - lo[0], hi[1] - lo[1], hi[2] - lo[2]); const k = 16 / span;
+  const round = v => Math.round(v * 1000) / 1000;
+  const centre = [8 - (lo[0] + hi[0]) / 2, 8 - (lo[1] + hi[1]) / 2, 8 - (lo[2] + hi[2]) / 2];
+  const view = (rotation, scale, lift = 0) => ({ rotation, translation: centre.map((c, i) => round(c * scale * k + (i === 1 ? lift : 0))), scale: [round(scale * k), round(scale * k), round(scale * k)] });
+  return { parent: "minecraft:block/block", textures, elements, display: {
+    gui: view([30, 225, 0], 0.625), ground: view([0, 0, 0], 0.25, 3), fixed: view([0, 0, 0], 0.5),
+    thirdperson_righthand: view([75, 45, 0], 0.375, 2.5), thirdperson_lefthand: view([75, 45, 0], 0.375, 2.5),
+    firstperson_righthand: view([0, 45, 0], 0.4), firstperson_lefthand: view([0, 225, 0], 0.4) } };
+}
 const table = {};
 for (const name of BLOCKS) {
   const bs = JSON.parse(fs.readFileSync(path.join(AW, "blockstates/structure", name + ".json"), "utf8"));
+  const woods = bs.variants?.variant;
+  if (woods && "oak" in woods && "dark_oak" in woods) {
+    for (const wood of NEW_WOODS) woods[wood] = { textures: { "0": "minecraft:blocks/planks_" + wood, particle: "minecraft:blocks/planks_" + wood } };
+  }
   const props = {}; const full = [];
   for (const [k, v] of Object.entries(bs.variants || {})) {
     if (k === "normal" || k === "inventory") continue;
@@ -79,7 +130,7 @@ for (const name of BLOCKS) {
   const names = Object.keys(props).sort();
   const combos = [{}];
   for (const p of names) { const next = []; for (const c of combos) for (const v of props[p]) next.push({ ...c, [p]: v }); combos.splice(0, combos.length, ...next); }
-  const multipart = []; const shapes = {};
+  const multipart = []; const shapes = {}; const partsByKey = {};
   for (const c of combos) {
     const st = { model: null, textures: {}, x: 0, y: 0, uvlock: false, submodels: {} };
     merge(st, bs.defaults);
@@ -87,7 +138,7 @@ for (const name of BLOCKS) {
     for (const [cond, v] of full) if (Object.entries(cond).every(([p, val]) => c[p] === val)) merge(st, v);
     const when = Object.fromEntries(names.map(p => [p, c[p]]));
     const key = names.map(p => p + "=" + c[p]).join(",");
-    if (c.visible === "false" || c.invisible === "true") { shapes[key] = null; multipart.push({ when, apply: { model: "ancientempires:block/aw/empty" } }); continue; }
+    if (c.visible === "false" || c.invisible === "true" || c.bottom_part === "false") { shapes[key] = null; multipart.push({ when, apply: { model: "ancientempires:block/aw/empty" } }); continue; }
     const parts = [];
     if (st.model) { const ref = modelRef(st.model); copyModel(ref); parts.push({ id: withTextures(ref.id, st.textures), x: st.x, y: st.y }); }
     for (const sub of Object.values(st.submodels)) {
@@ -102,11 +153,12 @@ for (const name of BLOCKS) {
       for (const el of elementsOf(part.id)) boxes.push(rot([...el.from, ...el.to], x, y));
     }
     shapes[key] = boxes;
+    partsByKey[key] = parts;
   }
   // Hidden parts collide like the visible part they belong to, a block lower down.
   for (const key of Object.keys(shapes)) {
     if (shapes[key] !== null) continue;
-    const shown = key.replace("visible=false", "visible=true").replace("invisible=true", "invisible=false");
+    const shown = key.replace("visible=false", "visible=true").replace("invisible=true", "invisible=false").replace("bottom_part=false", "bottom_part=true");
     const source = shapes[shown] ?? shapes[shown.replace("part=top", "part=bottom")] ?? [];
     if (name === 'stretching_rack') {
       // The rack lies flat: its hidden parts are the visible one's neighbours toward the front (facing).
@@ -123,10 +175,26 @@ for (const name of BLOCKS) {
   table[name] = { properties: Object.fromEntries(names.map(p => [p, [...props[p]]])), shapes };
   fs.mkdirSync(path.join(OUT, "blockstates"), { recursive: true });
   fs.writeFileSync(path.join(OUT, "blockstates", name + ".json"), JSON.stringify({ multipart }, null, 1) + "\n");
-  // The item shows the first combination's look.
-  const first = multipart.find(p => p.apply.model !== "ancientempires:block/aw/empty");
+  // Items: the piece as a block would show it (diagonal, scaled to fit), one model per wood or stone variant.
+  const key = c => names.map(p => p + "=" + c[p]).join(",");
+  const unturned = c => (partsByKey[key(c)] ?? []).some(p => !(((p.x % 360) + 360) % 360) && !(((p.y % 360) + 360) % 360));
+  const pick = (variant) => combos.filter(c => (c.visible ?? "true") === "true" && (c.invisible ?? "false") === "false"
+      && (c.bottom_part ?? "true") === "true" && (!props.part || c.part === (props.part.has("bottom") ? "bottom" : "south"))
+      && (variant === undefined || c.variant === variant)).sort((a, b) => (unturned(b) ? 1 : 0) - (unturned(a) ? 1 : 0) || ((a.facing ?? "south") === "south" ? -1 : 0))[0] ?? combos[0];
+  fs.mkdirSync(path.join(OUT, "models/item/aw"), { recursive: true });
+  const variants = props.variant ? [...props.variant] : [undefined];
+  // A piece built on a vanilla shape (a totem on block/cube) has no elements of its own: its block model already has the block view.
+  const itemModels = variants.map(v => { const parts = partsByKey[key(pick(v))] ?? []; const m = itemModel(parts); return m.elements.length || !parts.length ? m : { parent: parts[0].id }; });
+  const base = { ...itemModels[0] };
+  if (variants.length > 1) {
+    base.overrides = variants.slice(1).map((v, i) => {
+      const id = "ancientempires:item/aw/" + name + "_" + v;
+      fs.writeFileSync(path.join(OUT, "models/item/aw", name + "_" + v + ".json"), JSON.stringify(itemModels[i + 1], null, 1) + "\n");
+      return { predicate: { "ancientempires:variant": i + 1 }, model: id };
+    });
+  }
   fs.mkdirSync(path.join(OUT, "models/item"), { recursive: true });
-  fs.writeFileSync(path.join(OUT, "models/item", name + ".json"), JSON.stringify({ parent: first.apply.model }, null, 2) + "\n");
+  fs.writeFileSync(path.join(OUT, "models/item", name + ".json"), JSON.stringify(base, null, 1) + "\n");
 }
 models.set("ancientempires:block/aw/empty", { json: { textures: { particle: "minecraft:block/oak_planks" } } });
 for (const [id, m] of models) {

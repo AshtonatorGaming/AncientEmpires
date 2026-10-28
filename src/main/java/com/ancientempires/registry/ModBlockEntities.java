@@ -71,6 +71,7 @@ public final class ModBlockEntities
     /** Gravestones' loot and the mobs on stakes and statues. */
     public static final RegistryObject<BlockEntityType<AwDecorBlockEntity>> DECOR = BLOCK_ENTITIES.register("decor",
             () -> BlockEntityType.Builder.of(AwDecorBlockEntity::new, ModBlocks.DECOR.get("gravestone").get(), ModBlocks.DECOR.get("stake").get(),
+                    ModBlocks.DECOR.get("altar_candle").get(), ModBlocks.DECOR.get("altar_long_cloth").get(), ModBlocks.DECOR.get("altar_short_cloth").get(),
                     ModBlocks.STATUE.get()).build(null));
     public static final RegistryObject<BlockEntityType<FlagBlockEntity>> FLAG = BLOCK_ENTITIES.register("flag",
             () -> BlockEntityType.Builder.of(FlagBlockEntity::new, ModBlocks.FLAG.get()).build(null));

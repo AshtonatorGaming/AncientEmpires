@@ -1,0 +1,343 @@
+{
+ "parent": "minecraft:block/block",
+ "textures": {
+  "t0_0": "ancientempires:block/aw/structure/totem_part_irminsul_mid",
+  "particle": "ancientempires:block/aw/structure/totem_part_irminsul_mid"
+ },
+ "elements": [
+  {
+   "name": "tip",
+   "from": [
+    3,
+    -1,
+    4.5
+   ],
+   "to": [
+    13,
+    9,
+    11.5
+   ],
+   "rotation": {
+    "angle": -45,
+    "axis": "z",
+    "origin": [
+     8,
+     4,
+     8
+    ]
+   },
+   "faces": {
+    "north": {
+     "uv": [
+      4.25,
+      7.25,
+      1.75,
+      9.75
+     ],
+     "texture": "#t0_0"
+    },
+    "east": {
+     "uv": [
+      1.75,
+      7.25,
+      0,
+      9.75
+     ],
+     "texture": "#t0_0"
+    },
+    "south": {
+     "uv": [
+      1.75,
+      7.25,
+      4.25,
+      9.75
+     ],
+     "texture": "#t0_0"
+    },
+    "west": {
+     "uv": [
+      6,
+      7.25,
+      4.25,
+      9.75
+     ],
+     "texture": "#t0_0"
+    },
+    "up": {
+     "uv": [
+      1.75,
+      5.5,
+      4.25,
+      7.25
+     ],
+     "texture": "#t0_0"
+    },
+    "down": {
+     "uv": [
+      4.25,
+      5.5,
+      6.75,
+      7.25
+     ],
+     "texture": "#t0_0"
+    }
+   }
+  },
+  {
+   "name": "tiprightunder",
+   "from": [
+    8,
+    4,
+    4.5
+   ],
+   "to": [
+    13,
+    9,
+    11.5
+   ],
+   "rotation": {
+    "angle": -45,
+    "axis": "z",
+    "origin": [
+     8,
+     4,
+     8
+    ]
+   },
+   "faces": {
+    "down": {
+     "uv": [
+      0,
+      9.75,
+      1.75,
+      11
+     ],
+     "texture": "#t0_0"
+    }
+   }
+  },
+  {
+   "name": "tipleftunder",
+   "from": [
+    3,
+    -1,
+    4.5
+   ],
+   "to": [
+    8,
+    4,
+    11.5
+   ],
+   "rotation": {
+    "angle": -45,
+    "axis": "z",
+    "origin": [
+     8,
+     4,
+     8
+    ]
+   },
+   "faces": {
+    "east": {
+     "uv": [
+      0,
+      9.75,
+      1.75,
+      11
+     ],
+     "texture": "#t0_0"
+    }
+   }
+  },
+  {
+   "name": "body",
+   "from": [
+    4.5,
+    0,
+    5
+   ],
+   "to": [
+    11.5,
+    16,
+    11
+   ],
+   "faces": {
+    "north": {
+     "uv": [
+      4.75,
+      1.5,
+      6.5,
+      5.5
+     ],
+     "texture": "#t0_0"
+    },
+    "east": {
+     "uv": [
+      3.5,
+      1.5,
+      5,
+      5.5
+     ],
+     "texture": "#t0_0"
+    },
+    "south": {
+     "uv": [
+      1.5,
+      1.5,
+      3.25,
+      5.5
+     ],
+     "texture": "#t0_0"
+    },
+    "west": {
+     "uv": [
+      0,
+      1.5,
+      1.5,
+      5.5
+     ],
+     "texture": "#t0_0"
+    },
+    "up": {
+     "uv": [
+      1.5,
+      0,
+      3.25,
+      1.5
+     ],
+     "texture": "#t0_0"
+    },
+    "down": {
+     "uv": [
+      3.25,
+      0,
+      5,
+      1.5
+     ],
+     "texture": "#t0_0"
+    }
+   }
+  }
+ ],
+ "display": {
+  "gui": {
+   "rotation": [
+    30,
+    225,
+    0
+   ],
+   "translation": [
+    0,
+    0.294,
+    0
+   ],
+   "scale": [
+    0.588,
+    0.588,
+    0.588
+   ]
+  },
+  "ground": {
+   "rotation": [
+    0,
+    0,
+    0
+   ],
+   "translation": [
+    0,
+    3.118,
+    0
+   ],
+   "scale": [
+    0.235,
+    0.235,
+    0.235
+   ]
+  },
+  "fixed": {
+   "rotation": [
+    0,
+    0,
+    0
+   ],
+   "translation": [
+    0,
+    0.235,
+    0
+   ],
+   "scale": [
+    0.471,
+    0.471,
+    0.471
+   ]
+  },
+  "thirdperson_righthand": {
+   "rotation": [
+    75,
+    45,
+    0
+   ],
+   "translation": [
+    0,
+    2.676,
+    0
+   ],
+   "scale": [
+    0.353,
+    0.353,
+    0.353
+   ]
+  },
+  "thirdperson_lefthand": {
+   "rotation": [
+    75,
+    45,
+    0
+   ],
+   "translation": [
+    0,
+    2.676,
+    0
+   ],
+   "scale": [
+    0.353,
+    0.353,
+    0.353
+   ]
+  },
+  "firstperson_righthand": {
+   "rotation": [
+    0,
+    45,
+    0
+   ],
+   "translation": [
+    0,
+    0.188,
+    0
+   ],
+   "scale": [
+    0.376,
+    0.376,
+    0.376
+   ]
+  },
+  "firstperson_lefthand": {
+   "rotation": [
+    0,
+    225,
+    0
+   ],
+   "translation": [
+    0,
+    0.188,
+    0
+   ],
+   "scale": [
+    0.376,
+    0.376,
+    0.376
+   ]
+  }
+ }
+}

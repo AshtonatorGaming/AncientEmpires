@@ -406,7 +406,11 @@ public final class AePlacer
         }
         if (entity instanceof AwDecorBlockEntity held)
         {
-            if (decor.decorName().equals("stake"))
+            if (decor.decorName().equals("altar_candle") || decor.decorName().endsWith("_cloth"))
+            {
+                held.setColor(AwDecorBlockEntity.colorFrom(teData), teData.contains("flameColor") ? teData.getInt("flameColor") : -1);
+            }
+            else if (decor.decorName().equals("stake"))
             {
                 held.setMob(AwDecorBlockEntity.mobFrom(teData), teData.getBoolean("entityOnFire"), 0.0F);
             }

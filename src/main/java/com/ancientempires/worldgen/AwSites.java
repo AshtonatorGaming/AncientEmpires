@@ -14,10 +14,13 @@ import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.event.server.ServerStoppedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.server.ServerLifecycleHooks;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -111,18 +114,36 @@ public final class AwSites
     }
 
     private static final Map<ResourceKey<Level>, Sites> SITES = new ConcurrentHashMap<>();
-    private static final Map<ChunkGenerator, ServerLevel> LEVELS = new ConcurrentHashMap<>();
+    /** By identity: some mods give generators a hash that changes, which lost every lookup in a hash map. */
+    private static final Map<ChunkGenerator, ServerLevel> LEVELS = Collections.synchronizedMap(new IdentityHashMap<>());
     private static final Queue<Pending> PENDING = new ConcurrentLinkedQueue<>();
 
     private AwSites()
     {
     }
 
-    /** The level a chunk generator belongs to (null before it loads). */
+    /** The level a chunk generator belongs to (null before it loads); asks the server when the generator was not seen loading. */
     @Nullable
     public static ServerLevel level(ChunkGenerator generator)
     {
-        return LEVELS.get(generator);
+        ServerLevel known = LEVELS.get(generator);
+        if (known != null)
+        {
+            return known;
+        }
+        MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+        if (server != null)
+        {
+            for (ServerLevel level : server.getAllLevels())
+            {
+                if (level.getChunkSource().getGenerator() == generator)
+                {
+                    LEVELS.put(generator, level);
+                    return level;
+                }
+            }
+        }
+        return null;
     }
 
     private static Sites sites(ResourceKey<Level> dimension)
