@@ -14,6 +14,11 @@ import net.minecraftforge.registries.RegistryObject;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The mod's creative tab: food, coins, blocks, tools, gate spawners, a
+ * Protection Flag and a Flag per faction, then every NPC scroll. The scrolls
+ * also go in vanilla's spawn egg tab ({@code AncientEmpires.addCreative}).
+ */
 public final class ModCreativeTabs
 {
     public static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, AncientEmpires.MOD_ID);

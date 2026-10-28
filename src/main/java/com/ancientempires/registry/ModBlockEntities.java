@@ -17,6 +17,11 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+/**
+ * Block entity types for the blocks in {@link ModBlocks} that keep state: each
+ * worksite's store and area, the Town Hall, the Settlers' Post, the NPC
+ * spawner, and flags.
+ */
 public final class ModBlockEntities
 {
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, AncientEmpires.MOD_ID);

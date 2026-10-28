@@ -25,16 +25,14 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
 
 /**
- * Ancient Empires.
+ * Ancient Empires: the mod's entry point. Registers the deferred registries
+ * ({@code registry}), the network channel, the entity attributes, and both
+ * configs (gameplay per world, visuals per client).
  *
- * <p>Packages:
- * config — ranges, wind-up, and cooldowns
- * registry — entity, spawn egg, and creative tab
- * entity.npc — the NPC, its inventory, and its owner
- * inventory — the NPC container menu
- * network — name and skin packets for the NPC screen
- * combat — attack profiles, the melee goal, the bow goal, and the optional Better Combat reader
- * client — the NPC renderer and Better Combat poses
+ * <p>Each package has a {@code package-info.java} saying what it holds and how
+ * it connects to the rest; {@code docs/architecture.md} walks through the main
+ * flows (the NPC goal stack, combat, targeting, workers, structures, gates,
+ * claims).
  */
 @Mod(AncientEmpires.MOD_ID)
 public class AncientEmpires

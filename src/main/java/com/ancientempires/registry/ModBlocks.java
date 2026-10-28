@@ -22,6 +22,13 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+/**
+ * Every block this mod adds: the worksites (crop farm, tree farm, quarry, animal
+ * pen, hunting lodge, fishing dock, kitchen), the Town Hall and Settlers' Post,
+ * the NPC spawner, Ancient Warfare's coin stacks and flags, and the invisible
+ * gate proxy a closed gate fills its opening with. Their items are in
+ * {@link ModItems}, their block entities in {@link ModBlockEntities}.
+ */
 public final class ModBlocks
 {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, AncientEmpires.MOD_ID);

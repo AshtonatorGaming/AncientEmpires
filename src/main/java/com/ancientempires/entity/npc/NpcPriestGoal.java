@@ -24,7 +24,7 @@ import java.util.EnumSet;
  * A priest: a Worker-path NPC holding a book. When its owner's Town Hall in
  * reach has fallen NPCs recorded, it walks there and prays over them for
  * {@code priest.reviveTicks}, and the one fallen longest rises beside the hall
- * with what {@code upkeep.keepOnDeath} kept, paying {@code priest.cost} from
+ * with what {@code upkeep.keepOnDeath} kept, paying {@code priest.costCount} of {@code priest.costItem} from
  * the hall's store when {@code priest.costEnabled}. Fights, orders, and meals
  * come first.
  */

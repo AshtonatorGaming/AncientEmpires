@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * NPC ground navigation that, with {@code gates.npcUse}, plans through the
+ * NPC ground navigation that, with {@code structures.npcUse}, plans through the
  * closed gates the NPC may open ({@link GateEntity#mayNpcUse}): their proxy
  * cells read as a wooden door, which vanilla walks through when the NPC opens
  * doors (so at night, with doors kept shut, gates stay shut too). The gate goal

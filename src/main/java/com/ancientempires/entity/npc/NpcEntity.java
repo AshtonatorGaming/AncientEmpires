@@ -91,9 +91,14 @@ import java.util.Set;
 import java.util.UUID;
 
 /**
- * The base soldier. The main hand is a vanilla equipment slot, so weapon
- * attributes still apply. Extra slots live in {@link NpcInventory}. Jobs and
- * upkeep stay off this class.
+ * The one NPC entity ({@code ancientempires:npc}). Every role, trade, and
+ * faction is this class: what an NPC does comes from its equipment, its path
+ * ({@link NpcPath}), its roster row ({@link NpcRoster}), and its saved flags,
+ * never from a subclass. The main hand is a vanilla equipment slot, so weapon
+ * attributes still apply. Extra slots live in {@link NpcInventory}. Behaviour
+ * lives in the goals {@link #registerGoals} adds and in helpers it owns (guard,
+ * morale, mount, sidearm, target memory); this class keeps state, saving, and
+ * the vanilla hooks they need.
  * An owned NPC has an owner uuid, a home, and the follow flag. A faction NPC
  * has a faction id and no owner. Opening a faction NPC does not claim it.
  */
@@ -133,7 +138,7 @@ public class NpcEntity extends PathfinderMob
     private static final EntityDataAccessor<Boolean> DATA_STAGGERED = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.BOOLEAN);
     /** {@link NpcBadge} ordinal, for the badge beside the status icon. */
     private static final EntityDataAccessor<Byte> DATA_BADGE = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.BYTE);
-    /** Level 1 to {@code leveling.maxLevel}, and the XP toward the next, for the inventory. */
+    /** Level 1 to {@code levels.maxLevel}, and the XP toward the next, for the inventory. */
     private static final EntityDataAccessor<Byte> DATA_LEVEL = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<Float> DATA_XP = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.FLOAT);
     /** {@link NpcRank} ordinal, for the inventory label. */
@@ -327,7 +332,7 @@ public class NpcEntity extends PathfinderMob
     /**
      * Paths may run through doors a hand can open, and through open doors.
      * Any door built on {@code DoorBlock} counts, modded ones included; iron
-     * doors stay closed. Read once when the NPC is created. With {@code gates.npcUse}, paths also run
+     * doors stay closed. Read once when the NPC is created. With {@code structures.npcUse}, paths also run
      * through the gates the NPC may open ({@link NpcGateNavigation}).
      */
     @Override
@@ -1684,7 +1689,7 @@ public class NpcEntity extends PathfinderMob
         }
     }
 
-    /** Damage multiplier from level ({@code leveling.damagePerLevel}). */
+    /** Damage multiplier from level ({@code levels.damagePerLevel}). */
     private double getLevelDamage()
     {
         return 1.0D + (this.getLevel() - 1) * AncientEmpiresConfig.levelDamagePerLevel;

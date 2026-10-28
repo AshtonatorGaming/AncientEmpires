@@ -33,9 +33,11 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
- * Shared by worksites (crop farm, tree farm, quarry): an owner, a rectangular
+ * Shared by every worksite (crop farm, tree farm, quarry, animal pen, hunting
+ * lodge, fishing dock, kitchen) and the Town Hall: an owner, a rectangular
  * area near the block (moved and sized in the bounds screen, up to a limit
- * that size upgrades raise, as in Ancient Warfare), a double-chest store (plus filtered
+ * that size upgrades raise, as in Ancient Warfare; the kitchen and Town Hall
+ * have none), a double-chest store (plus filtered
  * supply slots) workers unload into and hoppers can reach,
  * and a to-do list the subclass rebuilds in {@link #scan}. The list is rebuilt
  * at most every {@code work.scanTicks}, and only when a worker asks, so an idle

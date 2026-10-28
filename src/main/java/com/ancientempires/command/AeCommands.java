@@ -39,9 +39,13 @@ import java.util.Locale;
 import java.util.List;
 
 /**
- * {@code /ancientempires standing}: a player's standing with every faction.
- * Anyone can read their own; admins (permission 2) read anyone's and can set,
- * adjust, or reset it.
+ * The {@code /ancientempires} command tree. Registers every sub-command:
+ * {@code standing} (anyone sees their own on the banner screen; admins,
+ * permission 2, read anyone's and can set, adjust, or reset it), {@code work}
+ * and {@code level} (the looked-at NPC, for its owner or a creative player),
+ * the admin tools {@code level <n>}, {@code rank}, {@code morale}, and
+ * {@code stress} ({@link StressTest}), and {@code structure}
+ * ({@link StructureCommands}). The player guide is {@code docs/commands.md}.
  */
 @Mod.EventBusSubscriber(modid = AncientEmpires.MOD_ID)
 public final class AeCommands

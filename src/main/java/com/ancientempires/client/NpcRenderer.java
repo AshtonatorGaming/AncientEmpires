@@ -36,8 +36,10 @@ import org.joml.Matrix4f;
 
 /**
  * Wide player model so a held weapon and armor are visible. The texture is the
- * vanilla Steve skin until NPCs have their own. Attack and idle poses come from
- * Better Combat when that mod and Player Animator are both loaded.
+ * NPC's skin ({@link NpcEntity#getSkinTexture}: a catalog skin, an old Ancient
+ * Warfare name, or a raw texture id), else the vanilla Steve skin. Attack and
+ * idle poses come from Better Combat when that mod and Player Animator are both
+ * loaded. Also draws the status icon and morale badge over the head.
  */
 @Mod.EventBusSubscriber(modid = AncientEmpires.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class NpcRenderer extends HumanoidMobRenderer<NpcEntity, NpcModel>

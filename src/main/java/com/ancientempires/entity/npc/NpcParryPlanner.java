@@ -5,7 +5,7 @@ import net.minecraft.world.entity.LivingEntity;
 
 /**
  * When a shield NPC whose shield is down raises it against an NPC's visible
- * wind-up. Once per swing it decides (its tier's {@code parry.chanceByTier})
+ * wind-up. Once per swing it decides (its tier's {@code perfectBlock.chanceByTier})
  * whether to try for a perfect block: then it holds the raise until just before
  * the hit, off by up to its tier's {@code timingErrorByTier}. Too late and the
  * hit lands; too early and it is an ordinary block. Otherwise it raises at once,

@@ -10,6 +10,10 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+/**
+ * Container menus: the NPC inventory, the NPC spawner, and the worksite and Town
+ * Hall storage. Their screens are registered on the client.
+ */
 public final class ModMenus
 {
     public static final DeferredRegister<MenuType<?>> MENUS = DeferredRegister.create(ForgeRegistries.MENU_TYPES, AncientEmpires.MOD_ID);

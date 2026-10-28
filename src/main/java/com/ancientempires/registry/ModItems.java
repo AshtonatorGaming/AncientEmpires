@@ -25,6 +25,14 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Every item. Most are fixed (food bundle, bandages, worksite upgrades, the War
+ * Horn, rank insignia, coins, the capture wand, one gate spawner per gate
+ * type, block items); the NPC scrolls are not: one {@link NpcSpawnEggItem} is
+ * registered per row of {@code roster.json} ({@link NpcRoster}), owned rows
+ * first, so the roster decides which scrolls exist. {@link #eggFor} finds a row's scroll again for
+ * repacking.
+ */
 public final class ModItems
 {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, AncientEmpires.MOD_ID);

@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * With {@code gates.npcUse}: an NPC opens the gate on its path just ahead,
+ * With {@code structures.npcUse}: an NPC opens the gate on its path just ahead,
  * if it may ({@link GateEntity#mayNpcUse}), and closes the gates it opened
  * once it is past them and nobody stands in the opening, as the door goal does
  * for doors. No flags, so it runs beside whatever moves the NPC.

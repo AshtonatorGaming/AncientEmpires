@@ -27,7 +27,7 @@ import java.util.WeakHashMap;
 
 /**
  * The perfect block, the same for players and NPCs: a shield raised just before
- * a melee hit lands ({@code parry.windowTicks} of the raise) turns it aside
+ * a melee hit lands ({@code perfectBlock.windowTicks} of the raise) turns it aside
  * whole. It costs no guard, and the attacker is staggered (slowed, and no swing
  * for {@code staggerTicks}), with a ring of steel. A shield held up longer is an
  * ordinary block (vanilla's, which wears the guard). It also covers vanilla's

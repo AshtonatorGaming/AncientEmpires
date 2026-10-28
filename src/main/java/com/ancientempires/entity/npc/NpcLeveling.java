@@ -17,7 +17,7 @@ import net.minecraftforge.fml.common.Mod;
 import java.util.List;
 
 /**
- * NPC levels, 1 to {@code leveling.maxLevel} (20), from Ancient Warfare's
+ * NPC levels, 1 to {@code levels.maxLevel} (20), from Ancient Warfare's
  * leveling (its cap was 10, its only XP source kills, and each level gave 5%
  * damage and half a heart). Here XP comes from what the NPC does: damage dealt
  * to enemies, kills (more for a higher-level victim), blocked hits and

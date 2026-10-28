@@ -9,6 +9,10 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+/**
+ * The two entity types: the NPC ({@code ancientempires:npc}; every role and
+ * faction is this one type, told apart by its data and equipment) and the gate.
+ */
 public final class ModEntities
 {
     public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, AncientEmpires.MOD_ID);
