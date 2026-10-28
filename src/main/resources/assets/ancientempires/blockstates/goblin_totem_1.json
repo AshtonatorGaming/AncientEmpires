@@ -1,0 +1,39 @@
+{
+ "multipart": [
+  {
+   "when": {
+    "facing": "north"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/cube_9f502d"
+   }
+  },
+  {
+   "when": {
+    "facing": "south"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/cube_9f502d",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/cube_9f502d",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "east"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/cube_9f502d",
+    "y": 90
+   }
+  }
+ ]
+}

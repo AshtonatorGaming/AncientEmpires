@@ -1,0 +1,10 @@
+{
+ "multipart": [
+  {
+   "when": {},
+   "apply": {
+    "model": "ancientempires:block/aw/v/altar_base_38f532"
+   }
+  }
+ ]
+}

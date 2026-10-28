@@ -13,6 +13,11 @@ import com.ancientempires.block.QuarryBlock;
 import com.ancientempires.block.SettlersPostBlock;
 import com.ancientempires.block.TownHallBlock;
 import com.ancientempires.block.TreeFarmBlock;
+import com.ancientempires.block.decor.AwDecor;
+import com.ancientempires.block.decor.AwDecorBlock;
+import com.ancientempires.block.decor.AwSoundBlock;
+import com.ancientempires.block.decor.CoffinBlock;
+import com.ancientempires.block.decor.StatueBlock;
 import com.ancientempires.gate.GateProxyBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
@@ -21,6 +26,10 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * Every block this mod adds: the worksites (crop farm, tree farm, quarry, animal
@@ -114,6 +123,31 @@ public final class ModBlocks
                     .mapColor(MapColor.STONE)
                     .strength(3.0F)
                     .sound(SoundType.STONE)));
+
+    /** AW's coffins: wooden (six woods) and stone sarcophagi (stone, sandstone, prismarine, demonic). */
+    public static final RegistryObject<Block> WOODEN_COFFIN = BLOCKS.register("wooden_coffin", () -> new CoffinBlock(false,
+            BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
+    public static final RegistryObject<Block> STONE_COFFIN = BLOCKS.register("stone_coffin", () -> new CoffinBlock(true,
+            BlockBehaviour.Properties.of().mapColor(MapColor.STONE).strength(2.5F, 6.0F).sound(SoundType.STONE).noOcclusion()));
+    /** AW's statue: a mob standing frozen. */
+    public static final RegistryObject<Block> STATUE = BLOCKS.register("statue", () -> new StatueBlock(
+            BlockBehaviour.Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F).sound(SoundType.STONE).noOcclusion()));
+    /** AW's sound block, dressed as another block; admins place and set it. */
+    public static final RegistryObject<Block> SOUND_BLOCK = BLOCKS.register("sound_block", () -> new AwSoundBlock(
+            BlockBehaviour.Properties.of().mapColor(MapColor.STONE).strength(1.5F, 6.0F).sound(SoundType.STONE)));
+
+    /** AW's decor blocks by name (chair, gravestone, totem_part...), one generic block each ({@link AwDecor}). */
+    public static final Map<String, RegistryObject<Block>> DECOR = decor();
+
+    private static Map<String, RegistryObject<Block>> decor()
+    {
+        Map<String, RegistryObject<Block>> decor = new LinkedHashMap<>();
+        for (AwDecor.Spec spec : AwDecor.specs().values())
+        {
+            decor.put(spec.name(), BLOCKS.register(spec.name(), () -> AwDecorBlock.create(spec, AwDecor.properties(spec.name()))));
+        }
+        return Collections.unmodifiableMap(decor);
+    }
 
     private ModBlocks()
     {

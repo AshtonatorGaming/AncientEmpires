@@ -1,0 +1,39 @@
+{
+ "multipart": [
+  {
+   "when": {
+    "facing": "north"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/tribal_stool"
+   }
+  },
+  {
+   "when": {
+    "facing": "south"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/tribal_stool",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/tribal_stool",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "east"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/tribal_stool",
+    "y": 90
+   }
+  }
+ ]
+}

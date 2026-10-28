@@ -1,0 +1,82 @@
+{
+ "multipart": [
+  {
+   "when": {
+    "bottom_part": "true",
+    "facing": "north"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/golden_idol"
+   }
+  },
+  {
+   "when": {
+    "bottom_part": "true",
+    "facing": "south"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/golden_idol",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "bottom_part": "true",
+    "facing": "west"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/golden_idol",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "bottom_part": "true",
+    "facing": "east"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/golden_idol",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "bottom_part": "false",
+    "facing": "north"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/golden_idol"
+   }
+  },
+  {
+   "when": {
+    "bottom_part": "false",
+    "facing": "south"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/golden_idol",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "bottom_part": "false",
+    "facing": "west"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/golden_idol",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "bottom_part": "false",
+    "facing": "east"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/golden_idol",
+    "y": 90
+   }
+  }
+ ]
+}

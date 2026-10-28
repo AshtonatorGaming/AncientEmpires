@@ -12,6 +12,7 @@ import com.ancientempires.item.FlagItem;
 import com.ancientempires.item.InsigniaItem;
 import com.ancientempires.item.MobScrollItem;
 import com.ancientempires.item.NpcSpawnEggItem;
+import com.ancientempires.item.ScannerItem;
 import com.ancientempires.item.WarHornItem;
 import com.ancientempires.item.WorksiteUpgradeItem;
 import net.minecraft.world.food.FoodProperties;
@@ -23,7 +24,10 @@ import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Every item. Most are fixed (food bundle, bandages, worksite upgrades, the War
@@ -76,6 +80,7 @@ public final class ModItems
     /** A captured mob for a spawner slot (anything but our NPCs, which use their own scrolls). */
     public static final RegistryObject<Item> MOB_SCROLL = ITEMS.register("mob_scroll", () -> new MobScrollItem(new Item.Properties()));
     /** AW's Mob Spawner Placement Tool: captures a mob, places or fills a garrison spawner. Admins only. */
+    public static final RegistryObject<Item> STRUCTURE_SCANNER = ITEMS.register("structure_scanner", () -> new ScannerItem(new Item.Properties().stacksTo(1)));
     public static final RegistryObject<Item> CAPTURE_WAND = ITEMS.register("capture_wand", () -> new CaptureWandItem(new Item.Properties().stacksTo(1)));
     /** AW's flags; the faction and kind ride in each stack's BlockEntityTag (one creative entry per faction). */
     public static final RegistryObject<FlagItem> FLAG = ITEMS.register("flag", () -> new FlagItem(ModBlocks.FLAG.get(), new Item.Properties()));
@@ -165,5 +170,20 @@ public final class ModItems
             }
         }
         return null;
+    }
+
+    public static final RegistryObject<Item> WOODEN_COFFIN = ITEMS.register("wooden_coffin", () -> new BlockItem(ModBlocks.WOODEN_COFFIN.get(), new Item.Properties()));
+    public static final RegistryObject<Item> STONE_COFFIN = ITEMS.register("stone_coffin", () -> new BlockItem(ModBlocks.STONE_COFFIN.get(), new Item.Properties()));
+    public static final RegistryObject<Item> STATUE = ITEMS.register("statue", () -> new BlockItem(ModBlocks.STATUE.get(), new Item.Properties()));
+    public static final RegistryObject<Item> SOUND_BLOCK = ITEMS.register("sound_block", () -> new BlockItem(ModBlocks.SOUND_BLOCK.get(), new Item.Properties()));
+
+    /** The items of AW's decor blocks, by name; a wood or stone variant rides in the stack's BlockStateTag. */
+    public static final Map<String, RegistryObject<Item>> DECOR = decor();
+
+    private static Map<String, RegistryObject<Item>> decor()
+    {
+        Map<String, RegistryObject<Item>> decor = new LinkedHashMap<>();
+        ModBlocks.DECOR.forEach((name, block) -> decor.put(name, ITEMS.register(name, () -> new BlockItem(block.get(), new Item.Properties()))));
+        return Collections.unmodifiableMap(decor);
     }
 }

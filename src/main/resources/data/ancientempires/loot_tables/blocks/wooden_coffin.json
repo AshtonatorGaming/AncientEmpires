@@ -1,0 +1,35 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "ancientempires:wooden_coffin",
+          "functions": [
+            {
+              "function": "minecraft:copy_state",
+              "block": "ancientempires:wooden_coffin",
+              "properties": [
+                "variant"
+              ]
+            }
+          ]
+        }
+      ],
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        },
+        {
+          "condition": "minecraft:block_state_property",
+          "block": "ancientempires:wooden_coffin",
+          "properties": {
+            "invisible": "false"
+          }
+        }
+      ]
+    }
+  ]
+}

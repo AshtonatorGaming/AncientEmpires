@@ -1,0 +1,170 @@
+{
+ "multipart": [
+  {
+   "when": {
+    "facing": "north",
+    "part": "top",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/wooden_post_top",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "part": "top",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "part": "bottom",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/wooden_post_bottom",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "part": "bottom",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "part": "top",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/wooden_post_top"
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "part": "top",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "part": "bottom",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/wooden_post_bottom"
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "part": "bottom",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "part": "top",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/wooden_post_top",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "part": "top",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "part": "bottom",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/wooden_post_bottom",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "part": "bottom",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "part": "top",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/wooden_post_top",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "part": "top",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "part": "bottom",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/wooden_post_bottom",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "part": "bottom",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  }
+ ]
+}

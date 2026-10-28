@@ -1,0 +1,58 @@
+{
+ "multipart": [
+  {
+   "when": {
+    "lit": "true",
+    "variant": "default"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/fire_pit"
+   }
+  },
+  {
+   "when": {
+    "lit": "true",
+    "variant": "log"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/fire_pit_log"
+   }
+  },
+  {
+   "when": {
+    "lit": "true",
+    "variant": "square"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/fire_pit_square"
+   }
+  },
+  {
+   "when": {
+    "lit": "false",
+    "variant": "default"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/fire_pit_unlit"
+   }
+  },
+  {
+   "when": {
+    "lit": "false",
+    "variant": "log"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/fire_pit_log_unlit"
+   }
+  },
+  {
+   "when": {
+    "lit": "false",
+    "variant": "square"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/fire_pit_square_unlit"
+   }
+  }
+ ]
+}

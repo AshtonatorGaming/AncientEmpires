@@ -113,11 +113,16 @@ public final class AwLoot
     @SubscribeEvent(priority = EventPriority.HIGH)
     public static void onRightClick(PlayerInteractEvent.RightClickBlock event)
     {
-        if (!(event.getLevel() instanceof ServerLevel level) || event.getEntity().isSpectator())
+        if (event.getLevel() instanceof ServerLevel level && !event.getEntity().isSpectator())
         {
-            return;
+            trigger(level, event.getPos(), event.getEntity());
         }
-        BlockEntity blockEntity = level.getBlockEntity(event.getPos());
+    }
+
+    /** Gives a block's AW extras to {@code player} if it still holds them (a coffin opened from its far end, say). */
+    public static void trigger(ServerLevel level, BlockPos pos, Player player)
+    {
+        BlockEntity blockEntity = level.getBlockEntity(pos);
         if (blockEntity == null || !blockEntity.getPersistentData().contains(KEY))
         {
             return;
@@ -125,7 +130,7 @@ public final class AwLoot
         CompoundTag extras = blockEntity.getPersistentData().getCompound(KEY);
         blockEntity.getPersistentData().remove(KEY);
         blockEntity.setChanged();
-        open(level, event.getPos(), blockEntity, extras, event.getEntity());
+        open(level, pos, blockEntity, extras, player);
     }
 
     private static void open(ServerLevel level, BlockPos pos, BlockEntity blockEntity, CompoundTag extras, Player player)

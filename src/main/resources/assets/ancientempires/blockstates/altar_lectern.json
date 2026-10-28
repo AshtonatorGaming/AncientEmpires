@@ -1,0 +1,39 @@
+{
+ "multipart": [
+  {
+   "when": {
+    "facing": "north"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/altar_lectern"
+   }
+  },
+  {
+   "when": {
+    "facing": "south"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/altar_lectern",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/altar_lectern",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "east"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/altar_lectern",
+    "y": 90
+   }
+  }
+ ]
+}

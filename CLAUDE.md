@@ -167,6 +167,20 @@ instead of reflecting per call), Skirmisher thresholds (about 4.5 to 28 blocks).
   with someone in the opening reopens instead of shutting them in.
 - Template text: 240 of AW's templates are Latin-1, not UTF-8; `AwsConvertTool.text` falls back to Latin-1 (their
   signs' section signs had become question marks), and sign lines drop formatting codes.
+- Decor (S5, `block/decor`): AW's 31 decor blocks are one generic `AwDecorBlock` each, described by
+  `assets/ancientempires/aw_decor/blocks.json` (properties and per-state collision boxes), with blockstates, models, and
+  textures generated from AW's 1.12 assets by a scratch script (Forge v1 blockstates, submodels and texture overrides,
+  turned into vanilla multipart). `facing`/`axis`/`lit` are vanilla properties so structures turn them; other values are
+  `AwStringProperty`. `visible=false` parts are the hidden tops of tall pieces (`LAYOUTS`: AW's onBlockPlacedBy shapes),
+  placed and broken together; part 0 drops. Seats (`SeatEntity`), braziers and fire pits (flint and steel or a torch,
+  water bucket), chairs' facing from AW's tile data. Coffins (`CoffinBlock`, `CoffinBlockEntity`, `CoffinRenderer`: AW's
+  models part for part, eight ways, lid, loot through `AwLoot.trigger`), gravestones 6 to 8 and stakes and statues
+  (`AwDecorBlockEntity`; the mob drawn frozen, statue poses dropped), sound blocks (`AwSoundBlock`: disguise drawn by
+  its renderer, AW's tune, sounds in `sounds/structures`). Siege engines (`siege/`): `SiegeEngineEntity` placeholders from
+  templates' `AWVehicle` entries, drawn from `aw_vehicles/models.json` (AW's model classes converted by a scratch script:
+  part trees, turret formulas, rough sizes) on AW's textures by material level. Scanner (`StructureScanner`,
+  `ScannerItem`): corners and a build key, saved as `AeTemplate` and sidecar into the game folder pack
+  `ancientempires/scanned` (`AddPackFindersEvent`, required, every world), turned so the key's facing is the front.
 - World generation (S4, `worldgen/`, on by default: `structures.worldGen`; read from AW's decompiled
   `WorldStructureGenerator`, `TerritoryManager`, `WorldGenStructureManager`, and validators). One vanilla structure type,
   `ancientempires:aw_site`, as two structures (`aw_site` land with `beard_thin`, `aw_sea_site` water and island types)

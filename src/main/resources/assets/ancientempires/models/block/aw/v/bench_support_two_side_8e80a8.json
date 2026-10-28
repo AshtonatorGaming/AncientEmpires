@@ -1,0 +1,7 @@
+{
+ "parent": "ancientempires:block/aw/bench_support_two_side",
+ "textures": {
+  "0": "minecraft:block/oak_planks"
+ },
+ "render_type": "minecraft:cutout"
+}

@@ -1,0 +1,1332 @@
+{
+ "multipart": [
+  {
+   "when": {
+    "facing": "north",
+    "variant": "base",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/totem_part_base"
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "variant": "base",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "variant": "mid",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/totem_part_mid"
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "variant": "mid",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "variant": "mid_alt",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/totem_part_mid_alt"
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "variant": "mid_alt",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "variant": "top",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/totem_part_top"
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "variant": "top",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "variant": "wings",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/totem_part_wings"
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "variant": "wings",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "variant": "irminsul_base",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/totem_part_irminsul_base"
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "variant": "irminsul_base",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "variant": "irminsul_mid",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/totem_part_irminsul_mid"
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "variant": "irminsul_mid",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "variant": "irminsul_top",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/totem_part_irminsul_top"
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "variant": "irminsul_top",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "variant": "irminsul_side",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/totem_part_irminsul_side"
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "variant": "irminsul_side",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "variant": "elephant_left",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/totem_part_elephant_left"
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "variant": "elephant_left",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "variant": "elephant_body",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/totem_part_elephant_body"
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "variant": "elephant_body",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "variant": "elephant_right",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/totem_part_elephant_right"
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "variant": "elephant_right",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "variant": "xoltec_idol_body_left",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/xoltec_idol_body_left"
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "variant": "xoltec_idol_body_left",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "variant": "xoltec_idol_body_right",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/xoltec_idol_body_right"
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "variant": "xoltec_idol_body_right",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "variant": "xoltec_idol_head_left",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/xoltec_idol_head_left"
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "variant": "xoltec_idol_head_left",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "variant": "xoltec_idol_head_right",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/xoltec_idol_head_right"
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "variant": "xoltec_idol_head_right",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "variant": "base",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/totem_part_base",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "variant": "base",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "variant": "mid",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/totem_part_mid",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "variant": "mid",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "variant": "mid_alt",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/totem_part_mid_alt",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "variant": "mid_alt",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "variant": "top",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/totem_part_top",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "variant": "top",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "variant": "wings",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/totem_part_wings",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "variant": "wings",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "variant": "irminsul_base",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/totem_part_irminsul_base",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "variant": "irminsul_base",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "variant": "irminsul_mid",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/totem_part_irminsul_mid",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "variant": "irminsul_mid",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "variant": "irminsul_top",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/totem_part_irminsul_top",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "variant": "irminsul_top",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "variant": "irminsul_side",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/totem_part_irminsul_side",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "variant": "irminsul_side",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "variant": "elephant_left",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/totem_part_elephant_left",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "variant": "elephant_left",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "variant": "elephant_body",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/totem_part_elephant_body",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "variant": "elephant_body",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "variant": "elephant_right",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/totem_part_elephant_right",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "variant": "elephant_right",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "variant": "xoltec_idol_body_left",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/xoltec_idol_body_left",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "variant": "xoltec_idol_body_left",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "variant": "xoltec_idol_body_right",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/xoltec_idol_body_right",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "variant": "xoltec_idol_body_right",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "variant": "xoltec_idol_head_left",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/xoltec_idol_head_left",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "variant": "xoltec_idol_head_left",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "variant": "xoltec_idol_head_right",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/xoltec_idol_head_right",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "variant": "xoltec_idol_head_right",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "variant": "base",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/totem_part_base",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "variant": "base",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "variant": "mid",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/totem_part_mid",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "variant": "mid",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "variant": "mid_alt",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/totem_part_mid_alt",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "variant": "mid_alt",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "variant": "top",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/totem_part_top",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "variant": "top",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "variant": "wings",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/totem_part_wings",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "variant": "wings",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "variant": "irminsul_base",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/totem_part_irminsul_base",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "variant": "irminsul_base",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "variant": "irminsul_mid",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/totem_part_irminsul_mid",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "variant": "irminsul_mid",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "variant": "irminsul_top",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/totem_part_irminsul_top",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "variant": "irminsul_top",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "variant": "irminsul_side",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/totem_part_irminsul_side",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "variant": "irminsul_side",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "variant": "elephant_left",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/totem_part_elephant_left",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "variant": "elephant_left",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "variant": "elephant_body",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/totem_part_elephant_body",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "variant": "elephant_body",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "variant": "elephant_right",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/totem_part_elephant_right",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "variant": "elephant_right",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "variant": "xoltec_idol_body_left",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/xoltec_idol_body_left",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "variant": "xoltec_idol_body_left",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "variant": "xoltec_idol_body_right",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/xoltec_idol_body_right",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "variant": "xoltec_idol_body_right",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "variant": "xoltec_idol_head_left",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/xoltec_idol_head_left",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "variant": "xoltec_idol_head_left",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "variant": "xoltec_idol_head_right",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/xoltec_idol_head_right",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "variant": "xoltec_idol_head_right",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "variant": "base",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/totem_part_base",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "variant": "base",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "variant": "mid",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/totem_part_mid",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "variant": "mid",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "variant": "mid_alt",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/totem_part_mid_alt",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "variant": "mid_alt",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "variant": "top",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/totem_part_top",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "variant": "top",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "variant": "wings",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/totem_part_wings",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "variant": "wings",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "variant": "irminsul_base",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/totem_part_irminsul_base",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "variant": "irminsul_base",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "variant": "irminsul_mid",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/totem_part_irminsul_mid",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "variant": "irminsul_mid",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "variant": "irminsul_top",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/totem_part_irminsul_top",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "variant": "irminsul_top",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "variant": "irminsul_side",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/totem_part_irminsul_side",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "variant": "irminsul_side",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "variant": "elephant_left",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/totem_part_elephant_left",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "variant": "elephant_left",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "variant": "elephant_body",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/totem_part_elephant_body",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "variant": "elephant_body",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "variant": "elephant_right",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/totem_part_elephant_right",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "variant": "elephant_right",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "variant": "xoltec_idol_body_left",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/xoltec_idol_body_left",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "variant": "xoltec_idol_body_left",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "variant": "xoltec_idol_body_right",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/xoltec_idol_body_right",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "variant": "xoltec_idol_body_right",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "variant": "xoltec_idol_head_left",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/xoltec_idol_head_left",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "variant": "xoltec_idol_head_left",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "variant": "xoltec_idol_head_right",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/xoltec_idol_head_right",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "variant": "xoltec_idol_head_right",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  }
+ ]
+}

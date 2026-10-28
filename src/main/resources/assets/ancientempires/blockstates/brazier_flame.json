@@ -1,0 +1,20 @@
+{
+ "multipart": [
+  {
+   "when": {
+    "lit": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/brazier_flame_on"
+   }
+  },
+  {
+   "when": {
+    "lit": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/brazier_flame_off"
+   }
+  }
+ ]
+}

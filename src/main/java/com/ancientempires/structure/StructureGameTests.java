@@ -21,6 +21,17 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.core.BlockPos;
+import java.nio.file.Path;
+import java.io.IOException;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.network.chat.Component;
+import net.minecraft.nbt.NbtIo;
+import com.ancientempires.siege.SiegeEngineEntity;
+import com.ancientempires.block.decor.CoffinBlockEntity;
+import com.ancientempires.block.decor.AwSoundBlockEntity;
+import com.ancientempires.block.decor.AwDecorBlockEntity;
+import com.ancientempires.block.decor.AwDecorBlock;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
@@ -565,5 +576,113 @@ public final class StructureGameTests
             helper.assertTrue(solid[0] > 0, "its middle chunk is built");
             helper.succeed();
         });
+    }
+
+    /**
+     * AW's decor comes out as our blocks: the vampire crypts' coffins (with
+     * their lie and loot), gravestones, and sound block, and the serpent
+     * temple's siege engines and statues.
+     */
+    @GameTest(template = ARENA, timeoutTicks = 800)
+    public static void decorAndSiegeEnginesPlace(GameTestHelper helper)
+    {
+        ServerLevel level = helper.getLevel();
+        Map<String, Integer> found = new TreeMap<>();
+        for (String path : List.of("normal/awpowersvampire/vampireswampcrypts", "normal/awpowersmalice/malicebeachserpenttemple"))
+        {
+            BlockPos anchor = helper.absolutePos(new BlockPos(0, 1, 0)).offset(700, 0, path.contains("vampire") ? 0 : 200);
+            placeAndLog(helper, path, anchor, Rotation.NONE);
+            ResourceLocation id = ResourceLocation.fromNamespaceAndPath(AncientEmpires.MOD_ID, path);
+            AeTemplate template = AeTemplates.get(id).orElseThrow();
+            BoundingBox bounds = AePlacer.bounds(template, offset(id), anchor, Rotation.NONE);
+            for (BlockPos pos : BlockPos.betweenClosed(bounds.minX(), bounds.minY(), bounds.minZ(), bounds.maxX(), bounds.maxY(), bounds.maxZ()))
+            {
+                BlockState state = level.getBlockState(pos);
+                if (state.getBlock() instanceof AwDecorBlock decor)
+                {
+                    found.merge("decor " + decor.decorName(), 1, Integer::sum);
+                }
+                BlockEntity entity = level.getBlockEntity(pos);
+                if (entity instanceof CoffinBlockEntity)
+                {
+                    found.merge("coffin", 1, Integer::sum);
+                }
+                else if (entity instanceof AwSoundBlockEntity)
+                {
+                    found.merge("sound block", 1, Integer::sum);
+                }
+                else if (entity instanceof AwDecorBlockEntity decor && !decor.mob().isEmpty())
+                {
+                    found.merge("mob " + decor.mob(), 1, Integer::sum);
+                }
+            }
+            found.merge("siege engines", level.getEntitiesOfClass(SiegeEngineEntity.class, AABB.of(bounds)).size(), Integer::sum);
+        }
+        AncientEmpires.LOGGER.info("GAMETEST decor found {}", found);
+        helper.assertTrue(found.getOrDefault("coffin", 0) > 0, "coffins are made: " + found);
+        helper.assertTrue(found.getOrDefault("decor gravestone", 0) > 0, "gravestones are made: " + found);
+        helper.assertTrue(found.getOrDefault("sound block", 0) > 0, "sound blocks are made: " + found);
+        helper.assertTrue(found.getOrDefault("siege engines", 0) > 0, "siege engines are made: " + found);
+        helper.succeed();
+    }
+
+    /**
+     * A scan turned back to the template's frame: the well placed facing east
+     * and scanned facing east gives the well's own cells again, block for block.
+     */
+    @GameTest(template = ARENA, timeoutTicks = 800)
+    public static void scannerRoundTrip(GameTestHelper helper)
+    {
+        String path = "normal/awnationempire/empireemperorstatuewell";
+        ResourceLocation id = ResourceLocation.fromNamespaceAndPath(AncientEmpires.MOD_ID, path);
+        AeTemplate original = AeTemplates.get(id).orElseThrow();
+        int[] offset = offset(id);
+        // High enough that the well's foundation is above the world floor.
+        BlockPos anchor = helper.absolutePos(new BlockPos(0, 1, 0)).offset(-300, 30, 600);
+        placeAndLog(helper, path, anchor, Rotation.CLOCKWISE_90);
+        BoundingBox bounds = AePlacer.bounds(original, offset, anchor, Rotation.CLOCKWISE_90);
+        ServerLevel level = helper.getLevel();
+        // Entities are not compared; clear them so the scan holds blocks only.
+        level.getEntitiesOfClass(Entity.class, AABB.of(bounds).inflate(1.0D), entity -> !(entity instanceof Player)).forEach(Entity::discard);
+        Component result = StructureScanner.scan(level, "gametest", new BlockPos(bounds.minX(), bounds.minY(), bounds.minZ()),
+                new BlockPos(bounds.maxX(), bounds.maxY(), bounds.maxZ()), anchor, Direction.EAST, "gametest_well", false);
+        AncientEmpires.LOGGER.info("GAMETEST scan: {}", result.getString());
+        Path file = StructureScanner.packRoot().resolve("data").resolve(AncientEmpires.MOD_ID).resolve(AeTemplates.FOLDER)
+                .resolve(StructureScanner.CATEGORY).resolve("gametest_well.nbt");
+        AeTemplate scanned;
+        try
+        {
+            scanned = AeTemplate.load(NbtIo.readCompressed(file.toFile()));
+        }
+        catch (IOException exception)
+        {
+            throw new IllegalStateException("the scan was not written: " + result.getString(), exception);
+        }
+        helper.assertTrue(scanned.sizeX() == original.sizeX() && scanned.sizeY() == original.sizeY() && scanned.sizeZ() == original.sizeZ(),
+                "same size: " + scanned.sizeX() + "x" + scanned.sizeY() + "x" + scanned.sizeZ());
+        List<String> problems = new ArrayList<>();
+        for (int tz = 0; tz < original.tilesZ(); tz++)
+        {
+            for (int tx = 0; tx < original.tilesX(); tx++)
+            {
+                original.forEachInTile(tx, tz, (x, y, z, state) ->
+                {
+                    CompoundTag rule = original.blockEntityAt(x, y, z);
+                    if (rule != null && rule.contains("aeRule"))
+                    {
+                        // AW's own blocks (spawners) are made real when placed, so the scan holds ours.
+                        return;
+                    }
+                    String want = AeRemap.block(original.palette().get(state)).state().getBlock().builtInRegistryHolder().key().location().toString();
+                    String got = scanned.palette().get(scanned.stateAt(x, y, z)).getString("Name");
+                    if (!want.equals(got) && problems.size() < 10)
+                    {
+                        problems.add(x + "," + y + "," + z + ": " + got + ", wanted " + want);
+                    }
+                });
+            }
+        }
+        helper.assertTrue(problems.isEmpty(), "the scan matches the template: " + problems);
+        helper.succeed();
     }
 }

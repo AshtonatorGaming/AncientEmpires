@@ -1,0 +1,8 @@
+{
+ "parent": "ancientempires:block/aw/stool",
+ "textures": {
+  "0": "minecraft:block/jungle_planks",
+  "particle": "minecraft:block/jungle_planks"
+ },
+ "render_type": "minecraft:cutout"
+}

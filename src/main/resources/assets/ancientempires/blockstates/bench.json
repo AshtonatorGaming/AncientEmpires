@@ -1,0 +1,2248 @@
+{
+ "multipart": [
+  {
+   "when": {
+    "axis": "x",
+    "legs": "none",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_e554e7"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "none",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_middle_0beefe"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "none",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_953df5"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "none",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_middle_777556"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "none",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_b05d18"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "none",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_middle_119011"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "none",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_71a34f"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "none",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_middle_de533e"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "none",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_13daad"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "none",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_middle_dc11f0"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "none",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_6789a0"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "none",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_middle_fbd90c"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "both",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_e554e7"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "both",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_21c902"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "both",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_7a6fa0"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "both",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_two_side_8e80a8"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "both",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_953df5"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "both",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_0f4366"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "both",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_d7255a"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "both",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_two_side_965150"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "both",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_b05d18"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "both",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_a28980"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "both",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_6c007b"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "both",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_two_side_668097"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "both",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_71a34f"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "both",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_e12004"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "both",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_752bf3"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "both",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_two_side_b84d2b"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "both",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_13daad"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "both",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_3b8417"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "both",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_7ca6b0"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "both",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_two_side_06e2d6"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "both",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_6789a0"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "both",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_40a9a8"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "both",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_98221e"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "both",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_two_side_689179"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "left",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_e554e7"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "left",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_21c902"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "left",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_8a89ae"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "left",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_953df5"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "left",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_0f4366"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "left",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_3bb6f0"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "left",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_b05d18"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "left",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_a28980"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "left",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_f74747"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "left",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_71a34f"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "left",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_e12004"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "left",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_d2cb1f"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "left",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_13daad"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "left",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_3b8417"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "left",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_8bafb1"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "left",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_6789a0"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "left",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_40a9a8"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "left",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_622b6e"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "right",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_e554e7"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "right",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_7a6fa0"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "right",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_8a89ae",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "right",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_953df5"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "right",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_d7255a"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "right",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_3bb6f0",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "right",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_b05d18"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "right",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_6c007b"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "right",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_f74747",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "right",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_71a34f"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "right",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_752bf3"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "right",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_d2cb1f",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "right",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_13daad"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "right",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_7ca6b0"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "right",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_8bafb1",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "right",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_6789a0"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "right",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_98221e"
+   }
+  },
+  {
+   "when": {
+    "axis": "x",
+    "legs": "right",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_622b6e",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "none",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_e554e7"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "none",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_middle_0beefe"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "none",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_953df5"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "none",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_middle_777556"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "none",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_b05d18"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "none",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_middle_119011"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "none",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_71a34f"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "none",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_middle_de533e"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "none",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_13daad"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "none",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_middle_dc11f0"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "none",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_6789a0"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "none",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_middle_fbd90c"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "both",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_e554e7"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "both",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_21c902"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "both",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_7a6fa0"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "both",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_two_side_8e80a8"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "both",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_953df5"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "both",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_0f4366"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "both",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_d7255a"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "both",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_two_side_965150"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "both",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_b05d18"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "both",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_a28980"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "both",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_6c007b"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "both",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_two_side_668097"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "both",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_71a34f"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "both",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_e12004"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "both",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_752bf3"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "both",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_two_side_b84d2b"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "both",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_13daad"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "both",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_3b8417"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "both",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_7ca6b0"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "both",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_two_side_06e2d6"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "both",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_6789a0"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "both",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_40a9a8"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "both",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_98221e"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "both",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_two_side_689179"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "left",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_e554e7"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "left",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_21c902"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "left",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_8a89ae"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "left",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_953df5"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "left",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_0f4366"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "left",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_3bb6f0"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "left",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_b05d18"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "left",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_a28980"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "left",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_f74747"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "left",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_71a34f"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "left",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_e12004"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "left",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_d2cb1f"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "left",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_13daad"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "left",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_3b8417"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "left",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_8bafb1"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "left",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_6789a0"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "left",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_40a9a8"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "left",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_622b6e"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "right",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_e554e7"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "right",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_7a6fa0"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "right",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_8a89ae",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "right",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_953df5"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "right",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_d7255a"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "right",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_3bb6f0",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "right",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_b05d18"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "right",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_6c007b"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "right",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_f74747",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "right",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_71a34f"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "right",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_752bf3"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "right",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_d2cb1f",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "right",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_13daad"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "right",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_7ca6b0"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "right",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_8bafb1",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "right",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_6789a0"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "right",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_98221e"
+   }
+  },
+  {
+   "when": {
+    "axis": "y",
+    "legs": "right",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_622b6e",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "none",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_e554e7",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "none",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_middle_0beefe",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "none",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_953df5",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "none",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_middle_777556",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "none",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_b05d18",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "none",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_middle_119011",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "none",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_71a34f",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "none",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_middle_de533e",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "none",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_13daad",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "none",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_middle_dc11f0",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "none",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_6789a0",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "none",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_middle_fbd90c",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "both",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_e554e7",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "both",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_21c902",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "both",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_7a6fa0",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "both",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_two_side_8e80a8",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "both",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_953df5",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "both",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_0f4366",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "both",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_d7255a",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "both",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_two_side_965150",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "both",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_b05d18",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "both",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_a28980",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "both",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_6c007b",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "both",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_two_side_668097",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "both",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_71a34f",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "both",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_e12004",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "both",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_752bf3",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "both",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_two_side_b84d2b",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "both",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_13daad",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "both",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_3b8417",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "both",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_7ca6b0",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "both",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_two_side_06e2d6",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "both",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_6789a0",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "both",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_40a9a8",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "both",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_98221e",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "both",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_two_side_689179",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "left",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_e554e7",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "left",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_21c902",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "left",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_8a89ae",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "left",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_953df5",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "left",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_0f4366",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "left",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_3bb6f0",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "left",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_b05d18",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "left",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_a28980",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "left",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_f74747",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "left",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_71a34f",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "left",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_e12004",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "left",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_d2cb1f",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "left",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_13daad",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "left",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_3b8417",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "left",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_8bafb1",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "left",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_6789a0",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "left",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_left_40a9a8",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "left",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_622b6e",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "right",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_e554e7",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "right",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_7a6fa0",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "right",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_8a89ae",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "right",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_953df5",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "right",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_d7255a",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "right",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_3bb6f0",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "right",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_b05d18",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "right",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_6c007b",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "right",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_f74747",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "right",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_71a34f",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "right",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_752bf3",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "right",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_d2cb1f",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "right",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_13daad",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "right",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_7ca6b0",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "right",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_8bafb1",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "right",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_top_6789a0",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "right",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_leg_right_98221e",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "axis": "z",
+    "legs": "right",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/bench_support_one_side_622b6e",
+    "y": 90
+   }
+  }
+ ]
+}

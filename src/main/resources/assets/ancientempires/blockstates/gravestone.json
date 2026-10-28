@@ -1,0 +1,316 @@
+{
+ "multipart": [
+  {
+   "when": {
+    "facing": "north",
+    "variant": "1"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/gravestone_1_d320b4"
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "variant": "2"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/gravestone_1_cd725f"
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "variant": "3"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/gravestone_3_52f3a2"
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "variant": "4"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/gravestone_3_d3856e"
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "variant": "5"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/gravestone_5_81928a"
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "variant": "6"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/gravestone_6_6ddb39"
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "variant": "7"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/gravestone_7_56a30c"
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "variant": "8"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/gravestone_8_1a4697"
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "variant": "1"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/gravestone_1_d320b4",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "variant": "2"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/gravestone_1_cd725f",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "variant": "3"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/gravestone_3_52f3a2",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "variant": "4"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/gravestone_3_d3856e",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "variant": "5"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/gravestone_5_81928a",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "variant": "6"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/gravestone_6_6ddb39",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "variant": "7"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/gravestone_7_56a30c",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "variant": "8"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/gravestone_8_1a4697",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "variant": "1"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/gravestone_1_d320b4",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "variant": "2"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/gravestone_1_cd725f",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "variant": "3"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/gravestone_3_52f3a2",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "variant": "4"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/gravestone_3_d3856e",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "variant": "5"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/gravestone_5_81928a",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "variant": "6"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/gravestone_6_6ddb39",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "variant": "7"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/gravestone_7_56a30c",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "variant": "8"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/gravestone_8_1a4697",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "variant": "1"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/gravestone_1_d320b4",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "variant": "2"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/gravestone_1_cd725f",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "variant": "3"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/gravestone_3_52f3a2",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "variant": "4"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/gravestone_3_d3856e",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "variant": "5"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/gravestone_5_81928a",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "variant": "6"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/gravestone_6_6ddb39",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "variant": "7"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/gravestone_7_56a30c",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "variant": "8"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/gravestone_8_1a4697",
+    "y": 90
+   }
+  }
+ ]
+}

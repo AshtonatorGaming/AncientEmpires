@@ -1,0 +1,1811 @@
+{
+ "coffin_opens": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:coffin_opens",
+    "stream": false
+   }
+  ]
+ },
+ "coinstack_break": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:coinstack_break",
+    "stream": false
+   }
+  ]
+ },
+ "coinstack_interact": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:coinstack_interact",
+    "stream": false
+   }
+  ]
+ },
+ "demonic_coffin": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:demonic_coffin",
+    "stream": false
+   }
+  ]
+ },
+ "demonic_coffin_2": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:demonic_coffin_2",
+    "stream": false
+   }
+  ]
+ },
+ "iron_gate": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:iron_gate",
+    "stream": false
+   }
+  ]
+ },
+ "iron_gate_break": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:iron_gate_break",
+    "stream": false
+   }
+  ]
+ },
+ "prismarine_coffin": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:prismarine_coffin",
+    "stream": false
+   }
+  ]
+ },
+ "protection_flag_claim": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:protection_flag_claim",
+    "stream": false
+   }
+  ]
+ },
+ "sandstone_sarcophagus": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:sandstone_sarcophagus",
+    "stream": false
+   }
+  ]
+ },
+ "stone_coffin": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:stone_coffin",
+    "stream": false
+   }
+  ]
+ },
+ "urn_break": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:urn_break",
+    "stream": false
+   }
+  ]
+ },
+ "wooden_gate": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:wooden_gate",
+    "stream": false
+   }
+  ]
+ },
+ "wooden_gate_break_1": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:wooden_gate_break_1",
+    "stream": false
+   }
+  ]
+ },
+ "wooden_gate_break_2": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:wooden_gate_break_2",
+    "stream": false
+   }
+  ]
+ },
+ "structures/barbarian_drums_cautious": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/barbarian_drums_cautious",
+    "stream": true
+   }
+  ]
+ },
+ "structures/barbarian_drums_distant": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/barbarian_drums_distant",
+    "stream": false
+   }
+  ]
+ },
+ "structures/barbarian_drums_slow_short": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/barbarian_drums_slow_short",
+    "stream": true
+   }
+  ]
+ },
+ "structures/barbarian_drums_warning": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/barbarian_drums_warning",
+    "stream": true
+   }
+  ]
+ },
+ "structures/barracks_ambiance": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/barracks_ambiance",
+    "stream": true
+   }
+  ]
+ },
+ "structures/clock_grandfather_chimes": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/clock_grandfather_chimes",
+    "stream": false
+   }
+  ]
+ },
+ "structures/creepy_chittering": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/creepy_chittering",
+    "stream": false
+   }
+  ]
+ },
+ "structures/creepy_crypt_voice_1": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/creepy_crypt_voice_1",
+    "stream": false
+   }
+  ]
+ },
+ "structures/creepy_crypt_voice_2": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/creepy_crypt_voice_2",
+    "stream": false
+   }
+  ]
+ },
+ "structures/creepy_crypt_voice_4": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/creepy_crypt_voice_4",
+    "stream": false
+   }
+  ]
+ },
+ "structures/creepy_droning_1": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/creepy_droning_1",
+    "stream": true
+   }
+  ]
+ },
+ "structures/creepy_droning_2": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/creepy_droning_2",
+    "stream": true
+   }
+  ]
+ },
+ "structures/creepy_evil_girl": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/creepy_evil_girl",
+    "stream": false
+   }
+  ]
+ },
+ "structures/creepy_ghostly_breath": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/creepy_ghostly_breath",
+    "stream": false
+   }
+  ]
+ },
+ "structures/creepy_ghostly_whisper": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/creepy_ghostly_whisper",
+    "stream": false
+   }
+  ]
+ },
+ "structures/creepy_knock_knock": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/creepy_knock_knock",
+    "stream": false
+   }
+  ]
+ },
+ "structures/creepy_spooky_ravens": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/creepy_spooky_ravens",
+    "stream": false
+   }
+  ]
+ },
+ "structures/cthulhu": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/cthulhu",
+    "stream": false
+   }
+  ]
+ },
+ "structures/cthulhu_background_1": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/cthulhu_background_1",
+    "stream": true
+   }
+  ]
+ },
+ "structures/cthulhu_background_2": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/cthulhu_background_2",
+    "stream": true
+   }
+  ]
+ },
+ "structures/cthulhu_background_3": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/cthulhu_background_3",
+    "stream": false
+   }
+  ]
+ },
+ "structures/del_cashinhand": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/del_cashinhand",
+    "stream": false
+   }
+  ]
+ },
+ "structures/del_cowboy": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/del_cowboy",
+    "stream": false
+   }
+  ]
+ },
+ "structures/del_dontbeaplonker": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/del_dontbeaplonker",
+    "stream": false
+   }
+  ]
+ },
+ "structures/del_dozytwonk": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/del_dozytwonk",
+    "stream": false
+   }
+  ]
+ },
+ "structures/del_gonnabecushty": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/del_gonnabecushty",
+    "stream": false
+   }
+  ]
+ },
+ "structures/del_keepyourmitsoff": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/del_keepyourmitsoff",
+    "stream": false
+   }
+  ]
+ },
+ "structures/del_millionares": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/del_millionares",
+    "stream": false
+   }
+  ]
+ },
+ "structures/del_moneyforoldrope": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/del_moneyforoldrope",
+    "stream": false
+   }
+  ]
+ },
+ "structures/del_ohshutupyoutart": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/del_ohshutupyoutart",
+    "stream": false
+   }
+  ]
+ },
+ "structures/del_packitin": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/del_packitin",
+    "stream": false
+   }
+  ]
+ },
+ "structures/del_plonker": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/del_plonker",
+    "stream": false
+   }
+  ]
+ },
+ "structures/del_youdipstick": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/del_youdipstick",
+    "stream": false
+   }
+  ]
+ },
+ "structures/del_youpranny": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/del_youpranny",
+    "stream": false
+   }
+  ]
+ },
+ "structures/empire_church_bell": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/empire_church_bell",
+    "stream": false
+   }
+  ]
+ },
+ "structures/evil_ambience_1": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/evil_ambience_1",
+    "stream": true
+   }
+  ]
+ },
+ "structures/evil_ambience_2": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/evil_ambience_2",
+    "stream": false
+   }
+  ]
+ },
+ "structures/evil_boogiemancackle": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/evil_boogiemancackle",
+    "stream": false
+   }
+  ]
+ },
+ "structures/evil_dark_prayer": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/evil_dark_prayer",
+    "stream": true
+   }
+  ]
+ },
+ "structures/evil_demonichaunting1": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/evil_demonichaunting1",
+    "stream": false
+   }
+  ]
+ },
+ "structures/evil_demonichaunting2": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/evil_demonichaunting2",
+    "stream": false
+   }
+  ]
+ },
+ "structures/evil_demonichaunting3": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/evil_demonichaunting3",
+    "stream": false
+   }
+  ]
+ },
+ "structures/evil_demonichaunting4": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/evil_demonichaunting4",
+    "stream": false
+   }
+  ]
+ },
+ "structures/evil_getout": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/evil_getout",
+    "stream": false
+   }
+  ]
+ },
+ "structures/gongs_1": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/gongs_1",
+    "stream": false
+   }
+  ]
+ },
+ "structures/gongs_2": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/gongs_2",
+    "stream": false
+   }
+  ]
+ },
+ "structures/gongs_3": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/gongs_3",
+    "stream": false
+   }
+  ]
+ },
+ "structures/gongs_4": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/gongs_4",
+    "stream": false
+   }
+  ]
+ },
+ "structures/gongs_5": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/gongs_5",
+    "stream": false
+   }
+  ]
+ },
+ "structures/gongs_6": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/gongs_6",
+    "stream": false
+   }
+  ]
+ },
+ "structures/gong_large": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/gong_large",
+    "stream": false
+   }
+  ]
+ },
+ "structures/grindstone_generic": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/grindstone_generic",
+    "stream": false
+   }
+  ]
+ },
+ "structures/guardians_church_choir": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/guardians_church_choir",
+    "stream": true
+   }
+  ]
+ },
+ "structures/haunted_graveyard": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/haunted_graveyard",
+    "stream": false
+   }
+  ]
+ },
+ "structures/haunted_graveyard_entry_ambience": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/haunted_graveyard_entry_ambience",
+    "stream": true
+   }
+  ]
+ },
+ "structures/haunted_graveyard_tree_rustling_leaves": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/haunted_graveyard_tree_rustling_leaves",
+    "stream": false
+   }
+  ]
+ },
+ "structures/haunted_graveyard_wind_in_trees_01": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/haunted_graveyard_wind_in_trees_01",
+    "stream": false
+   }
+  ]
+ },
+ "structures/haunted_graveyard_wind_in_trees_02": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/haunted_graveyard_wind_in_trees_02",
+    "stream": false
+   }
+  ]
+ },
+ "structures/haunted_graveyard_wind_in_trees_03": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/haunted_graveyard_wind_in_trees_03",
+    "stream": false
+   }
+  ]
+ },
+ "structures/haunted_graveyard_wind_in_trees_04": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/haunted_graveyard_wind_in_trees_04",
+    "stream": false
+   }
+  ]
+ },
+ "structures/horn_1": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/horn_1",
+    "stream": false
+   }
+  ]
+ },
+ "structures/horn_3": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/horn_3",
+    "stream": false
+   }
+  ]
+ },
+ "structures/horn_5": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/horn_5",
+    "stream": false
+   }
+  ]
+ },
+ "structures/horn_6": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/horn_6",
+    "stream": false
+   }
+  ]
+ },
+ "structures/horn_7": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/horn_7",
+    "stream": false
+   }
+  ]
+ },
+ "structures/horn_8": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/horn_8",
+    "stream": false
+   }
+  ]
+ },
+ "structures/jungle_drums_1": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/jungle_drums_1",
+    "stream": false
+   }
+  ]
+ },
+ "structures/jungle_drums_2": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/jungle_drums_2",
+    "stream": false
+   }
+  ]
+ },
+ "structures/location_sigh_1": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/location_sigh_1",
+    "stream": false
+   }
+  ]
+ },
+ "structures/magical_appearance": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/magical_appearance",
+    "stream": false
+   }
+  ]
+ },
+ "structures/market_generic": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/market_generic",
+    "stream": true
+   }
+  ]
+ },
+ "structures/market_generic_2": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/market_generic_2",
+    "stream": true
+   }
+  ]
+ },
+ "structures/mythbusters_eyebrow": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/mythbusters_eyebrow",
+    "stream": false
+   }
+  ]
+ },
+ "structures/mythbusters_quack": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/mythbusters_quack",
+    "stream": false
+   }
+  ]
+ },
+ "structures/mythbusters_theresyourproblem": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/mythbusters_theresyourproblem",
+    "stream": false
+   }
+  ]
+ },
+ "structures/myth_boldpredictions": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/myth_boldpredictions",
+    "stream": false
+   }
+  ]
+ },
+ "structures/myth_pithhelmet": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/myth_pithhelmet",
+    "stream": false
+   }
+  ]
+ },
+ "structures/nogg_church_bells": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/nogg_church_bells",
+    "stream": true
+   }
+  ]
+ },
+ "structures/nogg_clock_tower": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/nogg_clock_tower",
+    "stream": false
+   }
+  ]
+ },
+ "structures/pirate_pugwash": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/pirate_pugwash",
+    "stream": false
+   }
+  ]
+ },
+ "structures/religious_church_bells_12": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/religious_church_bells_12",
+    "stream": false
+   }
+  ]
+ },
+ "structures/sarkonid_music": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/sarkonid_music",
+    "stream": true
+   }
+  ]
+ },
+ "structures/undead_ambience": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/undead_ambience",
+    "stream": false
+   }
+  ]
+ },
+ "structures/undead_haunting": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/undead_haunting",
+    "stream": false
+   }
+  ]
+ },
+ "structures/undead_spooky": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/undead_spooky",
+    "stream": false
+   }
+  ]
+ },
+ "structures/undead_vampire_evil_laugh": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/undead_vampire_evil_laugh",
+    "stream": false
+   }
+  ]
+ },
+ "structures/undead_whispering_voices": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/undead_whispering_voices",
+    "stream": false
+   }
+  ]
+ },
+ "structures/vampire_castle_organ_short": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/vampire_castle_organ_short",
+    "stream": false
+   }
+  ]
+ },
+ "structures/vampire_crypt": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/vampire_crypt",
+    "stream": false
+   }
+  ]
+ },
+ "structures/vampire_ghostly_voices": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/vampire_ghostly_voices",
+    "stream": false
+   }
+  ]
+ },
+ "structures/vampire_organmusic": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/vampire_organmusic",
+    "stream": true
+   }
+  ]
+ },
+ "structures/vampire_watcher": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/vampire_watcher",
+    "stream": false
+   }
+  ]
+ },
+ "structures/vampire_whispers": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/vampire_whispers",
+    "stream": false
+   }
+  ]
+ },
+ "structures/village_carpenter_1": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/village_carpenter_1",
+    "stream": false
+   }
+  ]
+ },
+ "structures/village_carpenter_2": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/village_carpenter_2",
+    "stream": false
+   }
+  ]
+ },
+ "structures/village_carpenter_3": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/village_carpenter_3",
+    "stream": false
+   }
+  ]
+ },
+ "structures/village_carpenter_4": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/village_carpenter_4",
+    "stream": false
+   }
+  ]
+ },
+ "structures/village_carpenter_5": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/village_carpenter_5",
+    "stream": false
+   }
+  ]
+ },
+ "structures/village_farm_ambience_3": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/village_farm_ambience_3",
+    "stream": true
+   }
+  ]
+ },
+ "structures/village_general_ambience_1": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/village_general_ambience_1",
+    "stream": true
+   }
+  ]
+ },
+ "structures/village_general_ambience_3": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/village_general_ambience_3",
+    "stream": true
+   }
+  ]
+ },
+ "structures/village_lumberjack_1": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/village_lumberjack_1",
+    "stream": false
+   }
+  ]
+ },
+ "structures/village_lumberjack_2": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/village_lumberjack_2",
+    "stream": false
+   }
+  ]
+ },
+ "structures/village_market_general_background_1": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/village_market_general_background_1",
+    "stream": true
+   }
+  ]
+ },
+ "structures/village_pigeons_1": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/village_pigeons_1",
+    "stream": false
+   }
+  ]
+ },
+ "structures/village_pigeons_2": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/village_pigeons_2",
+    "stream": false
+   }
+  ]
+ },
+ "structures/village_pigeons_3": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/village_pigeons_3",
+    "stream": false
+   }
+  ]
+ },
+ "structures/village_tavern_ambient_loop": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/village_tavern_ambient_loop",
+    "stream": false
+   }
+  ]
+ },
+ "structures/village_water_mill_wheel_turning": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/village_water_mill_wheel_turning",
+    "stream": false
+   }
+  ]
+ },
+ "structures/village_weavers_loom": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/village_weavers_loom",
+    "stream": false
+   }
+  ]
+ },
+ "structures/village_well_crank": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/village_well_crank",
+    "stream": false
+   }
+  ]
+ },
+ "structures/village_windmill": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/village_windmill",
+    "stream": false
+   }
+  ]
+ },
+ "structures/village_windmill_interior": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/village_windmill_interior",
+    "stream": false
+   }
+  ]
+ },
+ "structures/village_windmill_sails_turning_1": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/village_windmill_sails_turning_1",
+    "stream": false
+   }
+  ]
+ },
+ "structures/village_windmill_sails_turning_2": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/village_windmill_sails_turning_2",
+    "stream": false
+   }
+  ]
+ },
+ "structures/volcano": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/volcano",
+    "stream": false
+   }
+  ]
+ },
+ "structures/volcano_1": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/volcano_1",
+    "stream": true
+   }
+  ]
+ },
+ "structures/volcano_10": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/volcano_10",
+    "stream": false
+   }
+  ]
+ },
+ "structures/volcano_2": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/volcano_2",
+    "stream": true
+   }
+  ]
+ },
+ "structures/volcano_3": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/volcano_3",
+    "stream": true
+   }
+  ]
+ },
+ "structures/volcano_4": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/volcano_4",
+    "stream": true
+   }
+  ]
+ },
+ "structures/volcano_5": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/volcano_5",
+    "stream": true
+   }
+  ]
+ },
+ "structures/volcano_6": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/volcano_6",
+    "stream": true
+   }
+  ]
+ },
+ "structures/volcano_7": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/volcano_7",
+    "stream": false
+   }
+  ]
+ },
+ "structures/volcano_8": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/volcano_8",
+    "stream": false
+   }
+  ]
+ },
+ "structures/volcano_9": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/volcano_9",
+    "stream": false
+   }
+  ]
+ },
+ "structures/volcano_erupts_1": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/volcano_erupts_1",
+    "stream": false
+   }
+  ]
+ },
+ "structures/volcano_erupts_2": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/volcano_erupts_2",
+    "stream": false
+   }
+  ]
+ },
+ "structures/volcano_erupts_3": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/volcano_erupts_3",
+    "stream": false
+   }
+  ]
+ },
+ "structures/volcano_erupts_4": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/volcano_erupts_4",
+    "stream": false
+   }
+  ]
+ },
+ "structures/volcano_explosion": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/volcano_explosion",
+    "stream": false
+   }
+  ]
+ },
+ "structures/volcano_rumble": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/volcano_rumble",
+    "stream": false
+   }
+  ]
+ },
+ "structures/witchbane_church_entry": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/witchbane_church_entry",
+    "stream": false
+   }
+  ]
+ },
+ "structures/witchbane_nuns_chant": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/witchbane_nuns_chant",
+    "stream": false
+   }
+  ]
+ },
+ "structures/witch_house_1": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/witch_house_1",
+    "stream": false
+   }
+  ]
+ },
+ "structures/witch_house_2_cackle": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/witch_house_2_cackle",
+    "stream": false
+   }
+  ]
+ },
+ "structures/witch_house_2_hungry": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/witch_house_2_hungry",
+    "stream": false
+   }
+  ]
+ },
+ "structures/witch_house_2_laugh_1": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/witch_house_2_laugh_1",
+    "stream": false
+   }
+  ]
+ },
+ "structures/witch_house_2_oooh": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/witch_house_2_oooh",
+    "stream": false
+   }
+  ]
+ },
+ "structures/witch_house_3": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/witch_house_3",
+    "stream": true
+   }
+  ]
+ },
+ "structures/witch_house_4": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/witch_house_4",
+    "stream": false
+   }
+  ]
+ },
+ "structures/witch_house_5_1": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/witch_house_5_1",
+    "stream": false
+   }
+  ]
+ },
+ "structures/witch_house_5_2": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/witch_house_5_2",
+    "stream": false
+   }
+  ]
+ },
+ "structures/witch_house_5_3": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/witch_house_5_3",
+    "stream": false
+   }
+  ]
+ },
+ "structures/witch_house_bubbling_cauldron_1": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/witch_house_bubbling_cauldron_1",
+    "stream": false
+   }
+  ]
+ },
+ "structures/witch_house_bubbling_cauldron_2": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/witch_house_bubbling_cauldron_2",
+    "stream": false
+   }
+  ]
+ },
+ "structures/witch_house_bubbling_cauldron_3": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/witch_house_bubbling_cauldron_3",
+    "stream": false
+   }
+  ]
+ },
+ "structures/witch_house_bubbling_cauldron_4": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/witch_house_bubbling_cauldron_4",
+    "stream": false
+   }
+  ]
+ },
+ "structures/witch_house_bugs": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/witch_house_bugs",
+    "stream": false
+   }
+  ]
+ },
+ "structures/witch_house_cat_screeching": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/witch_house_cat_screeching",
+    "stream": false
+   }
+  ]
+ },
+ "structures/witch_house_crow_1": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/witch_house_crow_1",
+    "stream": false
+   }
+  ]
+ },
+ "structures/witch_house_crow_2": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/witch_house_crow_2",
+    "stream": false
+   }
+  ]
+ },
+ "structures/witch_house_mad_laugh": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/witch_house_mad_laugh",
+    "stream": false
+   }
+  ]
+ },
+ "structures/witch_house_rats_squeak_1": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/witch_house_rats_squeak_1",
+    "stream": false
+   }
+  ]
+ },
+ "structures/witch_house_rats_squeak_2": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/witch_house_rats_squeak_2",
+    "stream": false
+   }
+  ]
+ },
+ "structures/witch_house_rats_squeak_3": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/witch_house_rats_squeak_3",
+    "stream": false
+   }
+  ]
+ },
+ "structures/witch_house_toad_1": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/witch_house_toad_1",
+    "stream": false
+   }
+  ]
+ },
+ "structures/witch_house_toad_2": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/witch_house_toad_2",
+    "stream": false
+   }
+  ]
+ },
+ "structures/wizards_tower_13": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/wizards_tower_13",
+    "stream": false
+   }
+  ]
+ },
+ "structures/wizards_tower_14": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/wizards_tower_14",
+    "stream": false
+   }
+  ]
+ },
+ "structures/wizards_tower_15": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/wizards_tower_15",
+    "stream": false
+   }
+  ]
+ },
+ "structures/wizards_tower_16": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/wizards_tower_16",
+    "stream": false
+   }
+  ]
+ },
+ "structures/wizards_tower_17": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/wizards_tower_17",
+    "stream": false
+   }
+  ]
+ },
+ "structures/wizards_tower_18": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/wizards_tower_18",
+    "stream": false
+   }
+  ]
+ },
+ "structures/wizard_explosion_2": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/wizard_explosion_2",
+    "stream": false
+   }
+  ]
+ },
+ "structures/wizard_tower_1": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/wizard_tower_1",
+    "stream": false
+   }
+  ]
+ },
+ "structures/wizard_tower_10": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/wizard_tower_10",
+    "stream": false
+   }
+  ]
+ },
+ "structures/wizard_tower_11": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/wizard_tower_11",
+    "stream": false
+   }
+  ]
+ },
+ "structures/wizard_tower_12": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/wizard_tower_12",
+    "stream": false
+   }
+  ]
+ },
+ "structures/wizard_tower_2": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/wizard_tower_2",
+    "stream": false
+   }
+  ]
+ },
+ "structures/wizard_tower_3": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/wizard_tower_3",
+    "stream": false
+   }
+  ]
+ },
+ "structures/wizard_tower_4": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/wizard_tower_4",
+    "stream": false
+   }
+  ]
+ },
+ "structures/wizard_tower_5": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/wizard_tower_5",
+    "stream": false
+   }
+  ]
+ },
+ "structures/wizard_tower_6": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/wizard_tower_6",
+    "stream": false
+   }
+  ]
+ },
+ "structures/wizard_tower_7": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/wizard_tower_7",
+    "stream": false
+   }
+  ]
+ },
+ "structures/wizard_tower_8": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/wizard_tower_8",
+    "stream": false
+   }
+  ]
+ },
+ "structures/wizard_tower_9": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/wizard_tower_9",
+    "stream": false
+   }
+  ]
+ },
+ "structures/xoltec_long_drum_beat": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/xoltec_long_drum_beat",
+    "stream": true
+   }
+  ]
+ },
+ "structures/xoltec_pyramid_drums": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/xoltec_pyramid_drums",
+    "stream": true
+   }
+  ]
+ },
+ "structures/xoltec_temple_flute": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/xoltec_temple_flute",
+    "stream": false
+   }
+  ]
+ },
+ "structures/xoltec_town_drums": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/xoltec_town_drums",
+    "stream": true
+   }
+  ]
+ },
+ "structures/xoltec_town_flutes": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/xoltec_town_flutes",
+    "stream": false
+   }
+  ]
+ },
+ "structures/xoltec_town_long": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/xoltec_town_long",
+    "stream": true
+   }
+  ]
+ },
+ "structures/yo_way_yo": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/yo_way_yo",
+    "stream": true
+   }
+  ]
+ },
+ "structures/zimba_drums_2": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/zimba_drums_2",
+    "stream": false
+   }
+  ]
+ },
+ "structures/zimba_village_dance": {
+  "category": "ambient",
+  "sounds": [
+   {
+    "name": "ancientempires:structures/zimba_village_dance",
+    "stream": true
+   }
+  ]
+ }
+}

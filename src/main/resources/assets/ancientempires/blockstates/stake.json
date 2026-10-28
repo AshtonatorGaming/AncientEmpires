@@ -1,0 +1,462 @@
+{
+ "multipart": [
+  {
+   "when": {
+    "facing": "north",
+    "on_fire": "true",
+    "part": "top",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/stake_top",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "on_fire": "true",
+    "part": "top",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "minecraft:block/fire_floor0",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "on_fire": "true",
+    "part": "top",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "on_fire": "true",
+    "part": "bottom",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/stake_bottom",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "on_fire": "true",
+    "part": "bottom",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "minecraft:block/fire_floor0",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "on_fire": "true",
+    "part": "bottom",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "on_fire": "false",
+    "part": "top",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/stake_top",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "on_fire": "false",
+    "part": "top",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "on_fire": "false",
+    "part": "bottom",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/stake_bottom",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "on_fire": "false",
+    "part": "bottom",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "on_fire": "true",
+    "part": "top",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/stake_top"
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "on_fire": "true",
+    "part": "top",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "minecraft:block/fire_floor0"
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "on_fire": "true",
+    "part": "top",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "on_fire": "true",
+    "part": "bottom",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/stake_bottom"
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "on_fire": "true",
+    "part": "bottom",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "minecraft:block/fire_floor0"
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "on_fire": "true",
+    "part": "bottom",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "on_fire": "false",
+    "part": "top",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/stake_top"
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "on_fire": "false",
+    "part": "top",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "on_fire": "false",
+    "part": "bottom",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/stake_bottom"
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "on_fire": "false",
+    "part": "bottom",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "on_fire": "true",
+    "part": "top",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/stake_top",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "on_fire": "true",
+    "part": "top",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "minecraft:block/fire_floor0",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "on_fire": "true",
+    "part": "top",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "on_fire": "true",
+    "part": "bottom",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/stake_bottom",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "on_fire": "true",
+    "part": "bottom",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "minecraft:block/fire_floor0",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "on_fire": "true",
+    "part": "bottom",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "on_fire": "false",
+    "part": "top",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/stake_top",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "on_fire": "false",
+    "part": "top",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "on_fire": "false",
+    "part": "bottom",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/stake_bottom",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "on_fire": "false",
+    "part": "bottom",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "on_fire": "true",
+    "part": "top",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/stake_top",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "on_fire": "true",
+    "part": "top",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "minecraft:block/fire_floor0",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "on_fire": "true",
+    "part": "top",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "on_fire": "true",
+    "part": "bottom",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/stake_bottom",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "on_fire": "true",
+    "part": "bottom",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "minecraft:block/fire_floor0",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "on_fire": "true",
+    "part": "bottom",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "on_fire": "false",
+    "part": "top",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/stake_top",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "on_fire": "false",
+    "part": "top",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "on_fire": "false",
+    "part": "bottom",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/stake_bottom",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "on_fire": "false",
+    "part": "bottom",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  }
+ ]
+}

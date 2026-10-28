@@ -1,0 +1,3604 @@
+{
+ "multipart": [
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_ff29e4"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4cfce1"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4cfce1",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4cfce1",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4cfce1",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_95785a"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_64f67b"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_64f67b",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_64f67b",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_64f67b",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_6812aa"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ac4561"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ac4561",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ac4561",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ac4561",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_f5e5be"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_033620"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_033620",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_033620",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_033620",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_91c114"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_12c6f4"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_12c6f4",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_12c6f4",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_12c6f4",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_7fe56d"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a41db3"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a41db3",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a41db3",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a41db3",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_ff29e4"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4cfce1"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4cfce1",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4cfce1",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_95785a"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_64f67b"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_64f67b",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_64f67b",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_6812aa"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ac4561"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ac4561",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ac4561",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_f5e5be"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_033620"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_033620",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_033620",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_91c114"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_12c6f4"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_12c6f4",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_12c6f4",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_7fe56d"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a41db3"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a41db3",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a41db3",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_ff29e4"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4cfce1"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4cfce1",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4cfce1",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_95785a"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_64f67b"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_64f67b",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_64f67b",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_6812aa"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ac4561"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ac4561",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ac4561",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_f5e5be"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_033620"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_033620",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_033620",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_91c114"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_12c6f4"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_12c6f4",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_12c6f4",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_7fe56d"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a41db3"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a41db3",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a41db3",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_ff29e4"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4cfce1"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4cfce1",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_95785a"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_64f67b"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_64f67b",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_6812aa"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ac4561"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ac4561",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_f5e5be"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_033620"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_033620",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_91c114"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_12c6f4"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_12c6f4",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_7fe56d"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a41db3"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a41db3",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_ff29e4"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4cfce1"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4cfce1",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4cfce1",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_95785a"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_64f67b"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_64f67b",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_64f67b",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_6812aa"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ac4561"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ac4561",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ac4561",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_f5e5be"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_033620"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_033620",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_033620",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_91c114"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_12c6f4"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_12c6f4",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_12c6f4",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_7fe56d"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a41db3"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a41db3",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a41db3",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_ff29e4"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4cfce1"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4cfce1",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_95785a"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_64f67b"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_64f67b",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_6812aa"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ac4561"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ac4561",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_f5e5be"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_033620"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_033620",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_91c114"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_12c6f4"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_12c6f4",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_7fe56d"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a41db3"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a41db3",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_ff29e4"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4cfce1"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4cfce1",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_95785a"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_64f67b"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_64f67b",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_6812aa"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ac4561"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ac4561",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_f5e5be"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_033620"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_033620",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_91c114"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_12c6f4"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_12c6f4",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_7fe56d"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a41db3"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a41db3",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_ff29e4"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4cfce1"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_95785a"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_64f67b"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_6812aa"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ac4561"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_f5e5be"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_033620"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_91c114"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_12c6f4"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_7fe56d"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "true",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a41db3"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_ff29e4"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4cfce1",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4cfce1",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4cfce1",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_95785a"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_64f67b",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_64f67b",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_64f67b",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_6812aa"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ac4561",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ac4561",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ac4561",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_f5e5be"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_033620",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_033620",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_033620",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_91c114"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_12c6f4",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_12c6f4",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_12c6f4",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_7fe56d"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a41db3",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a41db3",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a41db3",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_ff29e4"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4cfce1",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4cfce1",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_95785a"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_64f67b",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_64f67b",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_6812aa"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ac4561",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ac4561",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_f5e5be"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_033620",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_033620",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_91c114"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_12c6f4",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_12c6f4",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_7fe56d"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a41db3",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a41db3",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_ff29e4"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4cfce1",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4cfce1",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_95785a"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_64f67b",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_64f67b",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_6812aa"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ac4561",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ac4561",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_f5e5be"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_033620",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_033620",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_91c114"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_12c6f4",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_12c6f4",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_7fe56d"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a41db3",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a41db3",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_ff29e4"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4cfce1",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_95785a"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_64f67b",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_6812aa"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ac4561",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_f5e5be"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_033620",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_91c114"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_12c6f4",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_7fe56d"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "true",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a41db3",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_ff29e4"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4cfce1",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4cfce1",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_95785a"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_64f67b",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_64f67b",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_6812aa"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ac4561",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ac4561",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_f5e5be"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_033620",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_033620",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_91c114"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_12c6f4",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_12c6f4",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_7fe56d"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a41db3",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "true",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a41db3",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_ff29e4"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4cfce1",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_95785a"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_64f67b",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_6812aa"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ac4561",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_f5e5be"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_033620",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_91c114"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_12c6f4",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_7fe56d"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "true",
+    "leg_southwest": "false",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a41db3",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_ff29e4"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_4cfce1",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_95785a"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_64f67b",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_6812aa"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_ac4561",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_f5e5be"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_033620",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_91c114"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_12c6f4",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_7fe56d"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "true",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_leg_a41db3",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_ff29e4"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_95785a"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_6812aa"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_f5e5be"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_91c114"
+   }
+  },
+  {
+   "when": {
+    "leg_northeast": "false",
+    "leg_northwest": "false",
+    "leg_southeast": "false",
+    "leg_southwest": "false",
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/table_top_7fe56d"
+   }
+  }
+ ]
+}

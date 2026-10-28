@@ -17,6 +17,7 @@ import net.minecraft.util.datafix.fixes.References;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Upgrades Minecraft 1.12 data (block states, block entities, items, entities,
@@ -407,6 +408,32 @@ public final class LegacyFixer
         }
         return this.biomes.computeIfAbsent(id, key -> this.fix(References.BIOME, StringTag.valueOf(key)).getAsString());
     }
+
+    /**
+     * A 1.12 block or item by name and metadata ({@code minecraft:stonebrick} 1)
+     * as today's item id ({@code minecraft:mossy_stone_bricks}), through the
+     * item flattening; for AW data that kept a block that way (a sound block's
+     * disguise). Safe from any thread.
+     */
+    public static String itemId(String name, int meta)
+    {
+        if (!name.startsWith("minecraft:"))
+        {
+            return name;
+        }
+        return ITEM_IDS.computeIfAbsent(name + "#" + meta, key ->
+        {
+            CompoundTag stack = new CompoundTag();
+            stack.putString("id", name);
+            stack.putByte("Count", (byte) 1);
+            stack.putShort("Damage", (short) meta);
+            Tag fixed = DataFixers.getDataFixer().update(References.ITEM_STACK, new Dynamic<>(NbtOps.INSTANCE, (Tag) stack), FROM,
+                    SharedConstants.getCurrentVersion().getDataVersion().getVersion()).getValue();
+            return ((CompoundTag) fixed).getString("id");
+        });
+    }
+
+    private static final Map<String, String> ITEM_IDS = new ConcurrentHashMap<>();
 
     /** A 1.12 dye colour by metadata (white first). */
     public static String color(int metadata)

@@ -1,0 +1,502 @@
+{
+ "multipart": [
+  {
+   "when": {
+    "facing": "north",
+    "variant": "oak",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/chair_c094cd",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "variant": "oak",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "variant": "spruce",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/chair_4689f3",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "variant": "spruce",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "variant": "birch",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/chair_b77eec",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "variant": "birch",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "variant": "jungle",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/chair_59832c",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "variant": "jungle",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "variant": "acacia",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/chair_976143",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "variant": "acacia",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "variant": "dark_oak",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/chair_cfdbdf",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "variant": "dark_oak",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "variant": "oak",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/chair_c094cd"
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "variant": "oak",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "variant": "spruce",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/chair_4689f3"
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "variant": "spruce",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "variant": "birch",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/chair_b77eec"
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "variant": "birch",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "variant": "jungle",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/chair_59832c"
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "variant": "jungle",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "variant": "acacia",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/chair_976143"
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "variant": "acacia",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "variant": "dark_oak",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/chair_cfdbdf"
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "variant": "dark_oak",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "variant": "oak",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/chair_c094cd",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "variant": "oak",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "variant": "spruce",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/chair_4689f3",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "variant": "spruce",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "variant": "birch",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/chair_b77eec",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "variant": "birch",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "variant": "jungle",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/chair_59832c",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "variant": "jungle",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "variant": "acacia",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/chair_976143",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "variant": "acacia",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "variant": "dark_oak",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/chair_cfdbdf",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "variant": "dark_oak",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "variant": "oak",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/chair_c094cd",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "variant": "oak",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "variant": "spruce",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/chair_4689f3",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "variant": "spruce",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "variant": "birch",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/chair_b77eec",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "variant": "birch",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "variant": "jungle",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/chair_59832c",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "variant": "jungle",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "variant": "acacia",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/chair_976143",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "variant": "acacia",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "variant": "dark_oak",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/chair_cfdbdf",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "variant": "dark_oak",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  }
+ ]
+}

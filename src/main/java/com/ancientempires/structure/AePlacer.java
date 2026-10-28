@@ -3,15 +3,24 @@ package com.ancientempires.structure;
 import com.ancientempires.block.CoinStackBlock;
 import com.ancientempires.block.FlagBlock;
 import com.ancientempires.block.FlagBlockEntity;
+import com.ancientempires.block.decor.AwDecorBlock;
+import com.ancientempires.block.decor.AwDecorBlockEntity;
+import com.ancientempires.block.decor.AwSoundBlockEntity;
+import com.ancientempires.block.decor.AwStringProperty;
+import com.ancientempires.block.decor.CoffinBlock;
+import com.ancientempires.block.decor.CoffinBlockEntity;
+import com.ancientempires.block.decor.StatueBlock;
 import com.ancientempires.gate.GateEntity;
 import com.ancientempires.gate.GateType;
 import com.ancientempires.registry.ModBlocks;
+import com.ancientempires.siege.SiegeEngineEntity;
 import com.ancientempires.worldgen.AwSites;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.util.Mth;
 import net.minecraft.world.Clearable;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -23,11 +32,13 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.TreeMap;
@@ -213,6 +224,11 @@ public final class AePlacer
                             data.putInt("z", pos.getZ());
                             blockEntity.load(data);
                             blockEntity.setChanged();
+                            if (blockEntity instanceof FlagBlockEntity flag && flag.isProtection())
+                            {
+                                // A scanned protection flag guards the structure it came with, as AW's did.
+                                protectionFlags.put(pos.immutable(), flag.faction());
+                            }
                         }
                     }
                 });
@@ -344,9 +360,63 @@ public final class AePlacer
             }
             default ->
             {
-                return false;
+                return placeDecor(level, pos, rule.getCompound("teData"), rule, rotation);
             }
         }
+    }
+
+    /**
+     * AW's decor pieces that kept something in their tile: a chair's facing (its
+     * block state facing is stale), a coffin's lie and loot, a gravestone's loot
+     * (AW's variants 6 to 8 only), a stake's or statue's mob, a sound block's
+     * disguise and tune. False for anything else, leaving the stand-in.
+     */
+    private static boolean placeDecor(ServerLevelAccessor level, BlockPos pos, CompoundTag teData, CompoundTag rule, Rotation rotation)
+    {
+        BlockState placed = level.getBlockState(pos);
+        BlockEntity entity = level.getBlockEntity(pos);
+        if (entity instanceof CoffinBlockEntity coffin)
+        {
+            coffin.importAw(teData, rotation);
+            AwLoot.place(level, pos, rule);
+            return true;
+        }
+        if (entity instanceof AwSoundBlockEntity sound)
+        {
+            sound.importAw(teData);
+            return true;
+        }
+        if (placed.getBlock() instanceof StatueBlock && entity instanceof AwDecorBlockEntity statue)
+        {
+            statue.setMob(AwDecorBlockEntity.mobFrom(teData), false, rotation.rotate(Direction.from2DDataValue(teData.getByte("facing"))).toYRot());
+            return true;
+        }
+        if (placed.getBlock() instanceof CoffinBlock)
+        {
+            return true;
+        }
+        if (!(placed.getBlock() instanceof AwDecorBlock decor))
+        {
+            return false;
+        }
+        Direction facing = Direction.byName(teData.getString("facing"));
+        if (facing != null && facing.getAxis().isHorizontal() && placed.hasProperty(BlockStateProperties.HORIZONTAL_FACING))
+        {
+            level.setBlock(pos, placed.setValue(BlockStateProperties.HORIZONTAL_FACING, rotation.rotate(facing)), FLAGS);
+        }
+        if (entity instanceof AwDecorBlockEntity held)
+        {
+            if (decor.decorName().equals("stake"))
+            {
+                held.setMob(AwDecorBlockEntity.mobFrom(teData), teData.getBoolean("entityOnFire"), 0.0F);
+            }
+            else if (decor.decorName().equals("gravestone") && placed.getBlock().getStateDefinition().getProperty("variant") instanceof AwStringProperty variant
+                    && List.of("6", "7", "8").contains(placed.getValue(variant)))
+            {
+                AwLoot.place(level, pos, rule);
+            }
+        }
+        return true;
     }
 
     private static int placeEntities(ServerLevelAccessor level, AeTemplate template, int[] offset, BlockPos anchor, Rotation rotation,
@@ -365,6 +435,14 @@ public final class AePlacer
                 else
                 {
                     skipped.merge("awGate (opening blocked)", 1, Integer::sum);
+                }
+                continue;
+            }
+            if (entry.getString("plugin").equals("AWVehicle"))
+            {
+                if (placeVehicle(level, entry, nbt.getCompound("aeRule"), offset, anchor, rotation, limit))
+                {
+                    count++;
                 }
                 continue;
             }
@@ -408,6 +486,31 @@ public final class AePlacer
             count++;
         }
         return count;
+    }
+
+    /**
+     * One of AW's siege engines: a placeholder with its type, material level,
+     * health, and turret as AW saved them, turned with the structure.
+     */
+    private static boolean placeVehicle(ServerLevelAccessor level, CompoundTag entry, CompoundTag rule, int[] offset, BlockPos anchor, Rotation rotation,
+            @Nullable BoundingBox limit)
+    {
+        ListTag pos = entry.getList("pos", Tag.TAG_DOUBLE);
+        double[] local = rotate(pos.getDouble(0) - offset[0], pos.getDouble(2) - offset[2], rotation);
+        double x = anchor.getX() + local[0];
+        double y = anchor.getY() + pos.getDouble(1) - offset[1];
+        double z = anchor.getZ() + local[1];
+        if (limit != null && !limit.isInside(BlockPos.containing(x, y, z)))
+        {
+            return false;
+        }
+        CompoundTag data = rule.getCompound("entityData");
+        float yaw = rule.getFloat("rotation") + 90.0F * rotation.ordinal();
+        SiegeEngineEntity engine = SiegeEngineEntity.of(level.getLevel(), data.getInt("vehType"), data.getInt("matLvl"), yaw,
+                Mth.wrapDegrees(rule.getFloat("rotation") - rule.getFloat("turretRotation")), data.getFloat("health"));
+        engine.moveTo(x, y, z, yaw, 0.0F);
+        level.addFreshEntity(engine);
+        return true;
     }
 
     /**

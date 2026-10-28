@@ -1,9 +1,12 @@
 package com.ancientempires.registry;
 
 import com.ancientempires.AncientEmpires;
+import com.ancientempires.block.decor.AwDecor;
+import com.ancientempires.block.decor.CoffinBlock;
 import com.ancientempires.entity.npc.NpcFactions;
 import com.ancientempires.item.FlagItem;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -13,6 +16,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The mod's creative tab: food, coins, blocks, tools, gate spawners, a
@@ -55,6 +59,7 @@ public final class ModCreativeTabs
                         output.accept(ModItems.KITCHEN.get());
                         output.accept(ModItems.NPC_SPAWNER.get());
                         output.accept(ModItems.CAPTURE_WAND.get());
+                        output.accept(ModItems.STRUCTURE_SCANNER.get());
                         for (RegistryObject<Item> gate : ModItems.GATE_SPAWNERS)
                         {
                             output.accept(gate.get());
@@ -75,6 +80,45 @@ public final class ModCreativeTabs
                         for (RegistryObject<Item> egg : ModItems.SPAWN_EGGS)
                         {
                             output.accept(egg.get());
+                        }
+                    })
+                    .build());
+
+    /** AW's decor blocks, each wood or stone variant as its own stack. */
+    public static final RegistryObject<CreativeModeTab> DECOR = TABS.register("decor",
+            () -> CreativeModeTab.builder()
+                    .title(Component.translatable("itemGroup.ancientempires.decor"))
+                    .icon(() -> new ItemStack(ModItems.DECOR.get("chair").get()))
+                    .withTabsBefore(MAIN.getKey())
+                    .displayItems((parameters, output) ->
+                    {
+                        for (String variant : CoffinBlock.VARIANT.getPossibleValues())
+                        {
+                            ItemStack stack = new ItemStack(variant.equals("stone") || variant.equals("sandstone") || variant.equals("prismarine")
+                                    || variant.equals("demonic") ? ModItems.STONE_COFFIN.get() : ModItems.WOODEN_COFFIN.get());
+                            CompoundTag state = new CompoundTag();
+                            state.putString("variant", variant);
+                            stack.getOrCreateTag().put("BlockStateTag", state);
+                            output.accept(stack);
+                        }
+                        output.accept(ModItems.STATUE.get());
+                        output.accept(ModItems.SOUND_BLOCK.get());
+                        for (Map.Entry<String, RegistryObject<Item>> entry : ModItems.DECOR.entrySet())
+                        {
+                            List<String> variants = AwDecor.specs().get(entry.getKey()).properties().get("variant");
+                            if (variants == null)
+                            {
+                                output.accept(entry.getValue().get());
+                                continue;
+                            }
+                            for (String variant : variants)
+                            {
+                                ItemStack stack = new ItemStack(entry.getValue().get());
+                                CompoundTag state = new CompoundTag();
+                                state.putString("variant", variant);
+                                stack.getOrCreateTag().put("BlockStateTag", state);
+                                output.accept(stack);
+                            }
                         }
                     })
                     .build());

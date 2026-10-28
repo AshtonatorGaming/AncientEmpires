@@ -1,0 +1,79 @@
+{
+ "multipart": [
+  {
+   "when": {
+    "facing": "north",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/tribal_chair",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/tribal_chair"
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/tribal_chair",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "visible": "true"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/tribal_chair",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "visible": "false"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/empty"
+   }
+  }
+ ]
+}

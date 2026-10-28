@@ -1,0 +1,10 @@
+{
+ "multipart": [
+  {
+   "when": {},
+   "apply": {
+    "model": "ancientempires:block/aw/altar_candle"
+   }
+  }
+ ]
+}

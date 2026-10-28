@@ -1,0 +1,13 @@
+{
+ "parent": "minecraft:block/cube",
+ "textures": {
+  "particle": "ancientempires:block/aw/structure/orc_totem_front_2_lit",
+  "down": "ancientempires:block/aw/structure/totem_bottom",
+  "up": "ancientempires:block/aw/structure/totem_top_2",
+  "north": "ancientempires:block/aw/structure/orc_totem_front_2_lit",
+  "west": "ancientempires:block/aw/structure/totem_side_2",
+  "south": "ancientempires:block/aw/structure/orc_totem_front_2_lit",
+  "east": "ancientempires:block/aw/structure/totem_side_2"
+ },
+ "render_type": "minecraft:cutout"
+}

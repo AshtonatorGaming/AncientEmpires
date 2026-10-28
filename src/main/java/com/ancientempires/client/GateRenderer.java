@@ -17,6 +17,7 @@ import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.NoopRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.Direction;
@@ -80,6 +81,7 @@ public class GateRenderer extends EntityRenderer<GateEntity>
     public static void registerRenderer(EntityRenderersEvent.RegisterRenderers event)
     {
         event.registerEntityRenderer(ModEntities.GATE.get(), GateRenderer::new);
+        event.registerEntityRenderer(ModEntities.SEAT.get(), NoopRenderer::new);
     }
 
     @SubscribeEvent

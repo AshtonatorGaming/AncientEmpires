@@ -12,6 +12,9 @@ import com.ancientempires.block.QuarryBlockEntity;
 import com.ancientempires.block.SettlersPostBlockEntity;
 import com.ancientempires.block.TownHallBlockEntity;
 import com.ancientempires.block.TreeFarmBlockEntity;
+import com.ancientempires.block.decor.AwDecorBlockEntity;
+import com.ancientempires.block.decor.AwSoundBlockEntity;
+import com.ancientempires.block.decor.CoffinBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -61,6 +64,14 @@ public final class ModBlockEntities
     @SuppressWarnings("DataFlowIssue")
     public static final RegistryObject<BlockEntityType<NpcSpawnerBlockEntity>> NPC_SPAWNER = BLOCK_ENTITIES.register("npc_spawner",
             () -> BlockEntityType.Builder.of(NpcSpawnerBlockEntity::new, ModBlocks.NPC_SPAWNER.get()).build(null));
+    public static final RegistryObject<BlockEntityType<CoffinBlockEntity>> COFFIN = BLOCK_ENTITIES.register("coffin",
+            () -> BlockEntityType.Builder.of(CoffinBlockEntity::new, ModBlocks.WOODEN_COFFIN.get(), ModBlocks.STONE_COFFIN.get()).build(null));
+    public static final RegistryObject<BlockEntityType<AwSoundBlockEntity>> SOUND_BLOCK = BLOCK_ENTITIES.register("sound_block",
+            () -> BlockEntityType.Builder.of(AwSoundBlockEntity::new, ModBlocks.SOUND_BLOCK.get()).build(null));
+    /** Gravestones' loot and the mobs on stakes and statues. */
+    public static final RegistryObject<BlockEntityType<AwDecorBlockEntity>> DECOR = BLOCK_ENTITIES.register("decor",
+            () -> BlockEntityType.Builder.of(AwDecorBlockEntity::new, ModBlocks.DECOR.get("gravestone").get(), ModBlocks.DECOR.get("stake").get(),
+                    ModBlocks.STATUE.get()).build(null));
     public static final RegistryObject<BlockEntityType<FlagBlockEntity>> FLAG = BLOCK_ENTITIES.register("flag",
             () -> BlockEntityType.Builder.of(FlagBlockEntity::new, ModBlocks.FLAG.get()).build(null));
     public static final RegistryObject<BlockEntityType<KitchenBlockEntity>> KITCHEN = BLOCK_ENTITIES.register("kitchen",

@@ -1,0 +1,7 @@
+{
+ "parent": "ancientempires:block/aw/gravestone_1",
+ "textures": {
+  "0": "ancientempires:block/aw/structure/gravestone_2"
+ },
+ "render_type": "minecraft:cutout"
+}

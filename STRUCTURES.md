@@ -191,7 +191,13 @@ Biome lists become biome tags per template or territory, with modded biomes as o
   minimum duplicate distance across generation threads; a game test that turns a template all four ways and checks
   every cell. Left: 28 islands wider than 256 blocks (vanilla links a structure to chunks within 8 of its start),
   sky, underground, harbor, and lava types, towns.
-- S5: real decor blocks, placeholder siege engines, the Scanner.
+- S5 (done 2026-10-28): AW's 31 decor blocks with AW's own models (its Forge blockstates generated into vanilla multipart
+  ones, collision from the model boxes; `block/decor`), tall pieces placed and broken whole, seats, lighting and dousing;
+  coffins and sarcophagi (AW's models rebuilt, lid, loot and traps), gravestone loot, stakes and statues showing their
+  mob (statue poses not kept), the sound block (disguise and AW's 186 ambience sounds); siege engine placeholders
+  (`siege/`, AW's 18 vehicle models converted from its model classes, static, breakable); the Structure Scanner (saves
+  our format into the game-folder pack `ancientempires/scanned`, loaded in every world). Left: totems' multi-block
+  hand placement, statue poses, loot baskets and urns still vanilla stand-ins, the scanner's validation editor.
 - Then chain of command (garrisons are its first real use).
 
 ---

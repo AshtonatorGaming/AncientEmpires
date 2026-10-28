@@ -1,0 +1,11 @@
+{
+ "parent": "ancientempires:block/aw/altar_base",
+ "textures": {
+  "bottom": "ancientempires:block/aw/structure/altar_long_cloth_bottom",
+  "top": "ancientempires:block/aw/structure/altar_long_cloth_top",
+  "side": "ancientempires:block/aw/structure/altar_long_cloth_side",
+  "top_overlay": "ancientempires:block/aw/structure/altar_long_cloth_top_overlay",
+  "side_overlay": "ancientempires:block/aw/structure/altar_long_cloth_side_overlay"
+ },
+ "render_type": "minecraft:cutout"
+}

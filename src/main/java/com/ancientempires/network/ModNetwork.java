@@ -23,7 +23,7 @@ import java.util.List;
 public final class ModNetwork
 {
     /** Bump whenever a packet is added or changes shape, so mismatched clients are refused cleanly. */
-    private static final String PROTOCOL = "5";
+    private static final String PROTOCOL = "6";
     private static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(
             ResourceLocation.parse(AncientEmpires.MOD_ID + ":main"),
             () -> PROTOCOL,
@@ -67,6 +67,16 @@ public final class ModNetwork
                 .decoder(WorksiteBoundsSetPacket::decode)
                 .consumerMainThread(WorksiteBoundsSetPacket::handle)
                 .add();
+        CHANNEL.messageBuilder(ScannerSavePacket.class, nextId++, NetworkDirection.PLAY_TO_SERVER)
+                .encoder(ScannerSavePacket::encode)
+                .decoder(ScannerSavePacket::decode)
+                .consumerMainThread(ScannerSavePacket::handle)
+                .add();
+    }
+
+    public static void sendToServer(Object packet)
+    {
+        CHANNEL.sendToServer(packet);
     }
 
     public static void requestStandings()

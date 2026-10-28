@@ -1,0 +1,52 @@
+{
+ "multipart": [
+  {
+   "when": {
+    "variant": "oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/stool_18203f"
+   }
+  },
+  {
+   "when": {
+    "variant": "spruce"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/stool_2bf58c"
+   }
+  },
+  {
+   "when": {
+    "variant": "birch"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/stool_9a8422"
+   }
+  },
+  {
+   "when": {
+    "variant": "jungle"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/stool_9c26db"
+   }
+  },
+  {
+   "when": {
+    "variant": "acacia"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/stool_c565c5"
+   }
+  },
+  {
+   "when": {
+    "variant": "dark_oak"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/v/stool_a93d49"
+   }
+  }
+ ]
+}

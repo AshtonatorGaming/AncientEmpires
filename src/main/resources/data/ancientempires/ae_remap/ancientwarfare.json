@@ -1,107 +1,49 @@
 {
-  "_comment": "Stand-ins for Ancient Warfare's own blocks until each is ported (STRUCTURES.md S2 to S5). Properties of the same name (facing, axis, lit) carry over. Spawners, gates, and flags become real blocks and entities in S2 and S3.",
+  "_comment": "Ancient Warfare's own blocks: AW's decor blocks are ours under the same name (S5), properties carried over; spawners, gates, flags, loot containers, and coins become real blocks and entities (S2, S3); the rest are stand-ins until ported.",
   "blocks": {
     "ancientwarfarestructure:advanced_spawner": "minecraft:air",
     "ancientwarfarestructure:gate_proxy": "minecraft:air",
-    "ancientwarfarestructure:sound_block": "minecraft:air",
+    "ancientwarfarestructure:sound_block": "ancientempires:sound_block",
     "ancientwarfarestructure:structure_scanner_block": "minecraft:air",
     "ancientwarfarestructure:advanced_loot_chest": "minecraft:chest",
     "ancientwarfarestructure:loot_basket": "minecraft:barrel",
     "ancientwarfarestructure:urn": "minecraft:decorated_pot",
     "ancientwarfarestructure:protection_flag": "minecraft:oak_fence",
     "ancientwarfarestructure:decorative_flag": "minecraft:oak_fence",
-    "ancientwarfarestructure:chair": "minecraft:oak_stairs",
-    "ancientwarfarestructure:tribal_chair": "minecraft:jungle_stairs",
-    "ancientwarfarestructure:wooden_throne": "minecraft:dark_oak_stairs",
-    "ancientwarfarestructure:golden_throne": {
-      "Name": "minecraft:smooth_quartz_stairs"
-    },
-    "ancientwarfarestructure:stool": {
-      "Name": "minecraft:oak_slab",
-      "Properties": {
-        "type": "bottom"
-      }
-    },
-    "ancientwarfarestructure:tribal_stool": {
-      "Name": "minecraft:jungle_slab",
-      "Properties": {
-        "type": "bottom"
-      }
-    },
-    "ancientwarfarestructure:scissor_seat": {
-      "Name": "minecraft:spruce_slab",
-      "Properties": {
-        "type": "bottom"
-      }
-    },
-    "ancientwarfarestructure:bench": {
-      "Name": "minecraft:oak_slab",
-      "Properties": {
-        "type": "bottom"
-      }
-    },
-    "ancientwarfarestructure:table": {
-      "Name": "minecraft:oak_slab",
-      "Properties": {
-        "type": "top"
-      }
-    },
-    "ancientwarfarestructure:stretching_rack": {
-      "Name": "minecraft:spruce_slab",
-      "Properties": {
-        "type": "top"
-      }
-    },
-    "ancientwarfarestructure:wooden_coffin": {
-      "Name": "minecraft:spruce_slab",
-      "Properties": {
-        "type": "bottom"
-      }
-    },
-    "ancientwarfarestructure:stone_coffin": {
-      "Name": "minecraft:smooth_stone_slab",
-      "Properties": {
-        "type": "bottom"
-      }
-    },
-    "ancientwarfarestructure:gravestone": "minecraft:stone_brick_wall",
-    "ancientwarfarestructure:statue": "minecraft:stone_brick_wall",
-    "ancientwarfarestructure:wooden_post": "minecraft:oak_fence",
-    "ancientwarfarestructure:stake": "minecraft:oak_fence",
-    "ancientwarfarestructure:gibbet": "minecraft:chain",
-    "ancientwarfarestructure:iron_cage": "minecraft:iron_bars",
-    "ancientwarfarestructure:altar_candle": {
-      "Name": "minecraft:white_candle",
-      "Properties": {
-        "candles": "1",
-        "lit": "true"
-      }
-    },
-    "ancientwarfarestructure:altar_lectern": "minecraft:lectern",
-    "ancientwarfarestructure:altar_long_cloth": "minecraft:white_wool",
-    "ancientwarfarestructure:altar_short_cloth": "minecraft:white_wool",
-    "ancientwarfarestructure:altar_sun": "minecraft:gold_block",
-    "ancientwarfarestructure:golden_idol": "minecraft:gold_block",
-    "ancientwarfarestructure:fire_pit": "minecraft:campfire",
-    "ancientwarfarestructure:brazier_flame": {
-      "Name": "minecraft:campfire",
-      "Properties": {
-        "lit": "true"
-      }
-    },
-    "ancientwarfarestructure:brazier_ember": {
-      "Name": "minecraft:campfire",
-      "Properties": {
-        "lit": "false"
-      }
-    },
-    "ancientwarfarestructure:totem_part": "minecraft:stripped_spruce_log",
-    "ancientwarfarestructure:orc_totem_1": "minecraft:stripped_spruce_log",
-    "ancientwarfarestructure:orc_totem_2": "minecraft:stripped_spruce_log",
-    "ancientwarfarestructure:orc_totem_2_lit": "minecraft:jack_o_lantern",
-    "ancientwarfarestructure:goblin_totem_1": "minecraft:stripped_jungle_log",
-    "ancientwarfarestructure:goblin_totem_2": "minecraft:stripped_jungle_log",
-    "ancientwarfarestructure:goblin_totem_2_lit": "minecraft:jack_o_lantern",
+    "ancientwarfarestructure:chair": "ancientempires:chair",
+    "ancientwarfarestructure:tribal_chair": "ancientempires:tribal_chair",
+    "ancientwarfarestructure:wooden_throne": "ancientempires:wooden_throne",
+    "ancientwarfarestructure:golden_throne": "ancientempires:golden_throne",
+    "ancientwarfarestructure:stool": "ancientempires:stool",
+    "ancientwarfarestructure:tribal_stool": "ancientempires:tribal_stool",
+    "ancientwarfarestructure:scissor_seat": "ancientempires:scissor_seat",
+    "ancientwarfarestructure:bench": "ancientempires:bench",
+    "ancientwarfarestructure:table": "ancientempires:table",
+    "ancientwarfarestructure:stretching_rack": "ancientempires:stretching_rack",
+    "ancientwarfarestructure:wooden_coffin": "ancientempires:wooden_coffin",
+    "ancientwarfarestructure:stone_coffin": "ancientempires:stone_coffin",
+    "ancientwarfarestructure:gravestone": "ancientempires:gravestone",
+    "ancientwarfarestructure:statue": "ancientempires:statue",
+    "ancientwarfarestructure:wooden_post": "ancientempires:wooden_post",
+    "ancientwarfarestructure:stake": "ancientempires:stake",
+    "ancientwarfarestructure:gibbet": "ancientempires:gibbet",
+    "ancientwarfarestructure:iron_cage": "ancientempires:iron_cage",
+    "ancientwarfarestructure:altar_candle": "ancientempires:altar_candle",
+    "ancientwarfarestructure:altar_lectern": "ancientempires:altar_lectern",
+    "ancientwarfarestructure:altar_long_cloth": "ancientempires:altar_long_cloth",
+    "ancientwarfarestructure:altar_short_cloth": "ancientempires:altar_short_cloth",
+    "ancientwarfarestructure:altar_sun": "ancientempires:altar_sun",
+    "ancientwarfarestructure:golden_idol": "ancientempires:golden_idol",
+    "ancientwarfarestructure:fire_pit": "ancientempires:fire_pit",
+    "ancientwarfarestructure:brazier_flame": "ancientempires:brazier_flame",
+    "ancientwarfarestructure:brazier_ember": "ancientempires:brazier_ember",
+    "ancientwarfarestructure:totem_part": "ancientempires:totem_part",
+    "ancientwarfarestructure:orc_totem_1": "ancientempires:orc_totem_1",
+    "ancientwarfarestructure:orc_totem_2": "ancientempires:orc_totem_2",
+    "ancientwarfarestructure:orc_totem_2_lit": "ancientempires:orc_totem_2_lit",
+    "ancientwarfarestructure:goblin_totem_1": "ancientempires:goblin_totem_1",
+    "ancientwarfarestructure:goblin_totem_2": "ancientempires:goblin_totem_2",
+    "ancientwarfarestructure:goblin_totem_2_lit": "ancientempires:goblin_totem_2_lit",
     "ancientwarfarestructure:coin_stack_gold": "ancientempires:coin_stack_gold",
     "ancientwarfarestructure:coin_stack_ancient": "ancientempires:coin_stack_ancient",
     "ancientwarfarestructure:coin_stack_silver": "ancientempires:coin_stack_silver",

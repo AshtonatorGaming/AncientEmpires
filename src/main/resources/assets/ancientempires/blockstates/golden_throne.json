@@ -1,0 +1,82 @@
+{
+ "multipart": [
+  {
+   "when": {
+    "facing": "north",
+    "part": "top"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/golden_throne_top",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "north",
+    "part": "bottom"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/golden_throne_bottom",
+    "y": 180
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "part": "top"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/golden_throne_top"
+   }
+  },
+  {
+   "when": {
+    "facing": "south",
+    "part": "bottom"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/golden_throne_bottom"
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "part": "top"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/golden_throne_top",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "west",
+    "part": "bottom"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/golden_throne_bottom",
+    "y": 90
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "part": "top"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/golden_throne_top",
+    "y": 270
+   }
+  },
+  {
+   "when": {
+    "facing": "east",
+    "part": "bottom"
+   },
+   "apply": {
+    "model": "ancientempires:block/aw/golden_throne_bottom",
+    "y": 270
+   }
+  }
+ ]
+}
