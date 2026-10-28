@@ -167,6 +167,28 @@ instead of reflecting per call), Skirmisher thresholds (about 4.5 to 28 blocks).
   with someone in the opening reopens instead of shutting them in.
 - Template text: 240 of AW's templates are Latin-1, not UTF-8; `AwsConvertTool.text` falls back to Latin-1 (their
   signs' section signs had become question marks), and sign lines drop formatting codes.
+- World generation (S4, `worldgen/`, on by default: `structures.worldGen`; read from AW's decompiled
+  `WorldStructureGenerator`, `TerritoryManager`, `WorldGenStructureManager`, and validators). One vanilla structure type,
+  `ancientempires:aw_site`, as two structures (`aw_site` land with `beard_thin`, `aw_sea_site` water and island types)
+  in one structure set spaced one chunk apart, so every chunk is a candidate and /locate works. `AwSiteStructure`
+  does AW's steps: roll `generationChance` (AW 0.075) times the territory's multiplier; the chunk's territory
+  (`Territories`: jittered Voronoi cells of `territoryCellChunks`, each picked from the biome at its centre with AW's
+  weight, its templates plus the generic ones times `territory_weight_multiplier`); templates of that territory or
+  generic that list the biome and dimension, fit the cell's cluster budget (`chunkClusterValue` times the territory's
+  multiplier over its chunks, capped by its radius), are not a placed unique or within their minimum duplicate
+  distance, and suit the spot (island water depth, ground height band); weighted, big ones less away from the cell's
+  centre. Then AW's border check around the template (ground within leveling and fill, at least `maxSlope`; water
+  deeper than fill; island floor within its depths), clear of other structures by `siteMargin`, not within
+  `spawnProtectionRadius` of spawn. AW's per-territory tuning is its own file, `data/*/ae_territories/*.json`
+  (`TerritorySettings`). The site is taken in the pieces builder, which runs only for real generation (not /locate):
+  `AwSites.claim` checks and takes it in one step per dimension, since generation is threaded, and the record is
+  written on the main thread. `AwSitePiece` places its template a chunk at a time (`AePlacer.placeInChunk`): chunk
+  edges are marked for vanilla's post-processing, which reshapes them once neighbours exist; an air cell never opens
+  a gate filled from the next chunk; protection flags guard record 0 and find their record by position when claimed.
+  Every whole placement is now recorded, factionless ones too (only so world generation keeps clear;
+  `StructureRecords.at` answers faction structures only). `/ancientempires structure place` warns on overlap.
+  `AwSiteIndex.MAX_WIDTH` 256 leaves out AW's 28 widest islands: vanilla links a structure only to chunks within 8 of
+  its start. Sky, underground, harbor, and lava types are not placed yet.
 
 ## Done
 

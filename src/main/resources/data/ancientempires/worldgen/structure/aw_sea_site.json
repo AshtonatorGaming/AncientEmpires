@@ -1,0 +1,8 @@
+{
+  "type": "ancientempires:aw_site",
+  "biomes": "#ancientempires:has_structure/aw_site",
+  "step": "surface_structures",
+  "spawn_overrides": {},
+  "terrain_adaptation": "none",
+  "surface": "sea"
+}

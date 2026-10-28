@@ -6,6 +6,7 @@ import com.ancientempires.block.FlagBlockEntity;
 import com.ancientempires.gate.GateEntity;
 import com.ancientempires.gate.GateType;
 import com.ancientempires.registry.ModBlocks;
+import com.ancientempires.worldgen.AwSites;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -16,6 +17,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Rotation;
@@ -65,8 +67,14 @@ public final class AePlacer
     /** The world area a placement covers. */
     public static BoundingBox bounds(AeTemplate template, int[] offset, BlockPos anchor, Rotation rotation)
     {
+        return bounds(new int[] {template.sizeX(), template.sizeY(), template.sizeZ()}, offset, anchor, rotation);
+    }
+
+    /** The world area a template of {@code size} would cover, without loading it (world generation plans with the sidecar). */
+    public static BoundingBox bounds(int[] size, int[] offset, BlockPos anchor, Rotation rotation)
+    {
         BlockPos a = cellToWorld(offset, anchor, rotation, 0, 0, 0);
-        BlockPos b = cellToWorld(offset, anchor, rotation, template.sizeX() - 1, template.sizeY() - 1, template.sizeZ() - 1);
+        BlockPos b = cellToWorld(offset, anchor, rotation, size[0] - 1, size[1] - 1, size[2] - 1);
         return BoundingBox.fromCorners(a, b);
     }
 
@@ -80,6 +88,71 @@ public final class AePlacer
     public static Report place(ServerLevelAccessor level, AeTemplate template, String name, int[] offset, BlockPos anchor, Rotation rotation,
             @Nullable BoundingBox limit)
     {
+        return place(level, template, name, offset, anchor, rotation, limit, null);
+    }
+
+    /**
+     * World generation's share of a template: the cells inside one chunk's
+     * {@code chunkBox}, on a generation thread. The structure is recorded
+     * when it is chosen, not here; protection flags are marked as such and
+     * found by position when claimed ({@code faction} fills a flag that
+     * names none). Blocks on the chunk's edge are left to vanilla's
+     * post-processing, which shapes them once the neighbours exist.
+     */
+    public static Report placeInChunk(WorldGenLevel level, AeTemplate template, String name, int[] offset, BlockPos anchor, Rotation rotation,
+            BoundingBox chunkBox, String faction)
+    {
+        return place(level, template, name, offset, anchor, rotation, chunkBox, faction);
+    }
+
+    /**
+     * The faction a template belongs to, read from its blocks without placing
+     * it: its protection flag's, else the one most of its garrison belongs to
+     * (empty: none), as {@link #place} decides for a whole placement.
+     */
+    public static String faction(AeTemplate template)
+    {
+        Map<String, Integer> factions = new HashMap<>();
+        for (Map.Entry<Integer, CompoundTag> entry : template.blockEntities().entrySet())
+        {
+            CompoundTag rule = entry.getValue().getCompound("aeRule");
+            if (rule.isEmpty())
+            {
+                continue;
+            }
+            int[] cell = template.cellOf(entry.getKey());
+            String block = template.palette().get(template.stateAt(cell[0], cell[1], cell[2])).getString("Name");
+            if (block.equals("ancientwarfarestructure:protection_flag") && !rule.getCompound("teData").getString("name").isEmpty())
+            {
+                return rule.getCompound("teData").getString("name");
+            }
+            if (block.equals("ancientwarfarestructure:advanced_spawner"))
+            {
+                countGarrison(rule, factions);
+            }
+        }
+        return factions.entrySet().stream().max(Map.Entry.comparingByValue()).map(Map.Entry::getKey).orElse("");
+    }
+
+    private static void countGarrison(CompoundTag rule, Map<String, Integer> factions)
+    {
+        for (Tag group : rule.getCompound("teData").getCompound("spawnerSettings").getList("spawnGroups", Tag.TAG_COMPOUND))
+        {
+            for (Tag entry : ((CompoundTag) group).getList("settingsList", Tag.TAG_COMPOUND))
+            {
+                String faction = ((CompoundTag) entry).getCompound("customTag").getString("factionName");
+                if (!faction.isEmpty())
+                {
+                    factions.merge(faction, 1, Integer::sum);
+                }
+            }
+        }
+    }
+
+    private static Report place(ServerLevelAccessor level, AeTemplate template, String name, int[] offset, BlockPos anchor, Rotation rotation,
+            @Nullable BoundingBox limit, @Nullable String worldGenFaction)
+    {
+        BlockState proxy = ModBlocks.GATE_PROXY.get().defaultBlockState();
         Map<BlockPos, String> protectionFlags = new LinkedHashMap<>();
         Map<String, Integer> factions = new HashMap<>();
         int size = template.palette().size();
@@ -105,6 +178,11 @@ public final class AePlacer
                     BlockPos pos = cellToWorld(offset, anchor, rotation, x, y, z);
                     if (limit != null && !limit.isInside(pos))
                     {
+                        return;
+                    }
+                    if (states[state].isAir() && level.getBlockState(pos).is(proxy.getBlock()))
+                    {
+                        // A gate built from a neighbouring chunk already closes this cell.
                         return;
                     }
                     BlockEntity old = level.getBlockEntity(pos);
@@ -158,6 +236,10 @@ public final class AePlacer
                     {
                         level.setBlock(cursor, shaped, FLAGS);
                     }
+                    if (worldGenFaction != null && !current.isAir() && onEdge(limit, cursor))
+                    {
+                        level.getChunk(cursor).markPosForPostprocessing(cursor);
+                    }
                 });
             }
         }
@@ -170,24 +252,39 @@ public final class AePlacer
             }
         }
         int entities = placeEntities(level, template, offset, anchor, rotation, limit, skipped);
-        if (limit == null)
+        if (worldGenFaction != null)
+        {
+            guard(level, protectionFlags, worldGenFaction, 0);
+        }
+        else if (limit == null)
         {
             record(level, name, bounds(template, offset, anchor, rotation), protectionFlags, factions);
         }
         return new Report(placed[0], substituted, aw, entities, skipped);
     }
 
-    /** Records a faction structure and ties its protection flags to it; one with no faction is not recorded. */
+    private static boolean onEdge(BoundingBox box, BlockPos pos)
+    {
+        return pos.getX() == box.minX() || pos.getX() == box.maxX() || pos.getZ() == box.minZ() || pos.getZ() == box.maxZ();
+    }
+
+    /**
+     * Records a placed structure (one with no faction only so world
+     * generation keeps clear of it) and ties its protection flags to it.
+     */
     private static void record(ServerLevelAccessor level, String name, BoundingBox bounds, Map<BlockPos, String> protectionFlags, Map<String, Integer> factions)
     {
         String faction = protectionFlags.values().stream().filter(id -> !id.isEmpty()).findFirst()
                 .orElseGet(() -> factions.entrySet().stream().max(Map.Entry.comparingByValue()).map(Map.Entry::getKey).orElse(""));
-        if (faction.isEmpty())
-        {
-            return;
-        }
         BlockPos flag = protectionFlags.isEmpty() ? null : protectionFlags.keySet().iterator().next();
         StructureRecords.Record record = StructureRecords.get(level.getLevel()).add(name, bounds, faction, flag);
+        AwSites.remember(level.getLevel().dimension(), name, bounds);
+        guard(level, protectionFlags, faction, record.id);
+    }
+
+    /** Marks a structure's protection flags as guarding {@code record} (0: found by position when claimed). */
+    private static void guard(ServerLevelAccessor level, Map<BlockPos, String> protectionFlags, String faction, int record)
+    {
         for (BlockPos pos : protectionFlags.keySet())
         {
             if (level.getBlockEntity(pos) instanceof FlagBlockEntity entity)
@@ -196,7 +293,7 @@ public final class AePlacer
                 {
                     entity.setFaction(faction);
                 }
-                entity.setProtection(true, record.id);
+                entity.setProtection(true, record);
             }
         }
     }
@@ -210,17 +307,7 @@ public final class AePlacer
             case "ancientwarfarestructure:advanced_spawner" ->
             {
                 AwSpawnerImport.place(level, pos, rule, problems);
-                for (Tag group : rule.getCompound("teData").getCompound("spawnerSettings").getList("spawnGroups", Tag.TAG_COMPOUND))
-                {
-                    for (Tag entry : ((CompoundTag) group).getList("settingsList", Tag.TAG_COMPOUND))
-                    {
-                        String faction = ((CompoundTag) entry).getCompound("customTag").getString("factionName");
-                        if (!faction.isEmpty())
-                        {
-                            factions.merge(faction, 1, Integer::sum);
-                        }
-                    }
-                }
+                countGarrison(rule, factions);
                 return true;
             }
             case "ancientwarfarestructure:protection_flag", "ancientwarfarestructure:decorative_flag" ->
@@ -349,7 +436,7 @@ public final class AePlacer
             level.setBlock(cell, Blocks.AIR.defaultBlockState(), FLAGS);
         }
         Direction facing = rotation.rotate(Direction.from2DDataValue(rule.getByte("orientation")));
-        GateEntity gate = GateEntity.create(level.getLevel(), pos1, pos2, GateType.byAwName(rule.getString("gateType")), facing, null);
+        GateEntity gate = GateEntity.create(level.getLevel(), level, pos1, pos2, GateType.byAwName(rule.getString("gateType")), facing, null);
         if (gate == null)
         {
             return false;

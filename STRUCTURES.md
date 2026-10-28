@@ -183,7 +183,14 @@ Biome lists become biome tags per template or territory, with modded biomes as o
   claiming, block protection, loot chest lock; coins and loot tables. Milestone: one Empire structure.
 - S3 (done 2026-10-28): gates as entities (AW's seven types, its own models) and the Gate Spawner; NPCs using gates is
   still to do.
-- S4: rotation normalization, overlap registry, then world generation (off by default).
+- S4 (done 2026-10-28): world generation, on by default (the user: structures are the draw), as one vanilla structure
+  (`ancientempires:aw_site`, land and sea) so /locate and terrain blending work; AW's territories (cells of
+  `territoryCellChunks`, weighted as AW did) with AW's own `territory_settings.json` (`data/*/ae_territories`); AW's
+  config knobs (chance, chunk cluster value, spawn protection) plus slope and margin; AW's selection and ground
+  checks for ground, water, and island types; an overlap registry (`AwSites`) that also keeps AW's unique and
+  minimum duplicate distance across generation threads; a game test that turns a template all four ways and checks
+  every cell. Left: 28 islands wider than 256 blocks (vanilla links a structure to chunks within 8 of its start),
+  sky, underground, harbor, and lava types, towns.
 - S5: real decor blocks, placeholder siege engines, the Scanner.
 - Then chain of command (garrisons are its first real use).
 

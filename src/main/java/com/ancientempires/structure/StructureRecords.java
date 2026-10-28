@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 /**
  * The faction structures placed in a dimension: each one's bounds, owning
@@ -79,7 +80,11 @@ public final class StructureRecords extends SavedData
         return this.records.get(id);
     }
 
-    /** The structure a block is in (the innermost if two overlap; of two alike, the newest), or null. */
+    /**
+     * The faction structure a block is in (the innermost if two overlap; of
+     * two alike, the newest), or null. Structures with no faction (ruins and
+     * the like, kept so world generation leaves room) are not answered.
+     */
     @Nullable
     public Record at(BlockPos pos)
     {
@@ -91,13 +96,28 @@ public final class StructureRecords extends SavedData
         Record best = null;
         for (Record record : here)
         {
-            if (record.bounds.isInside(pos) && (best == null || volume(record.bounds) < volume(best.bounds)
+            if (!record.faction.isEmpty() && record.bounds.isInside(pos) && (best == null || volume(record.bounds) < volume(best.bounds)
                     || volume(record.bounds) == volume(best.bounds) && record.id > best.id))
             {
                 best = record;
             }
         }
         return best;
+    }
+
+    public void forEach(Consumer<Record> action)
+    {
+        this.records.values().forEach(action);
+    }
+
+    /** Ties a protection flag found later (world generation's) to its record. */
+    public void tieFlag(Record record, BlockPos flag)
+    {
+        if (record.flag == null)
+        {
+            record.flag = flag.immutable();
+            this.setDirty();
+        }
     }
 
     public void claim(Record record, UUID player, String name)

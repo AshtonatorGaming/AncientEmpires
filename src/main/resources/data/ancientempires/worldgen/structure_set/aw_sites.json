@@ -1,0 +1,12 @@
+{
+  "structures": [
+    { "structure": "ancientempires:aw_site", "weight": 1 },
+    { "structure": "ancientempires:aw_sea_site", "weight": 1 }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 1094561278,
+    "spacing": 1,
+    "separation": 0
+  }
+}

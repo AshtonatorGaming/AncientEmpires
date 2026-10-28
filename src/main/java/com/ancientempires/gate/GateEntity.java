@@ -34,6 +34,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.PickaxeItem;
 import net.minecraft.world.item.Tiers;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 import net.minecraftforge.network.NetworkHooks;
@@ -91,6 +92,16 @@ public class GateEntity extends Entity implements IEntityAdditionalSpawnData
     @Nullable
     public static GateEntity create(Level level, BlockPos pos1, BlockPos pos2, GateType type, Direction facing, @Nullable UUID owner)
     {
+        return create(level, level, pos1, pos2, type, facing, owner);
+    }
+
+    /**
+     * A gate whose closed opening is filled through {@code writer}: world
+     * generation builds gates on a generation thread, where only its region
+     * may be written, not the level.
+     */
+    public static GateEntity create(Level level, LevelAccessor writer, BlockPos pos1, BlockPos pos2, GateType type, Direction facing, @Nullable UUID owner)
+    {
         if (pos1.getX() != pos2.getX() && pos1.getZ() != pos2.getZ())
         {
             return null;
@@ -110,7 +121,7 @@ public class GateEntity extends Entity implements IEntityAdditionalSpawnData
         gate.entityData.set(HEALTH, AncientEmpiresConfig.gateHealth);
         gate.placeAt();
         // Built closed: the opening is blocked at once, ticking or not.
-        gate.fill(gate.wallArea());
+        gate.fill(writer, gate.wallArea());
         return gate;
     }
 
@@ -338,11 +349,16 @@ public class GateEntity extends Entity implements IEntityAdditionalSpawnData
     /** Proxies into the area's empty cells (anything else standing there stays). */
     private void fill(BlockPos[] area)
     {
+        this.fill(this.level(), area);
+    }
+
+    private void fill(LevelAccessor writer, BlockPos[] area)
+    {
         for (BlockPos pos : BlockPos.betweenClosed(area[0], area[1]))
         {
-            if (this.level().getBlockState(pos).canBeReplaced())
+            if (writer.getBlockState(pos).canBeReplaced())
             {
-                this.level().setBlock(pos, ModBlocks.GATE_PROXY.get().defaultBlockState(), 3);
+                writer.setBlock(pos, ModBlocks.GATE_PROXY.get().defaultBlockState(), 3);
             }
         }
     }

@@ -286,6 +286,7 @@
   "commands.ancientempires.structure.unknown": "No structure template named %s (try /ancientempires structure list)",
   "commands.ancientempires.structure.placed": "Placed %s: %s blocks, %s entities, in %s ms (rotation %s)",
   "commands.ancientempires.structure.skipped": "  Left out for now: %s x %s",
+  "commands.ancientempires.structure.overlaps": "This overlaps a structure already standing; where they overlap, the smaller one decides protection and claims.",
   "commands.ancientempires.structure.made": "  Made real: %s x %s",
   "commands.ancientempires.structure.check": "%s: %s x %s x %s, %s block states, %s block entities, %s entities",
   "commands.ancientempires.structure.mod_present": "  Needs %s: installed",

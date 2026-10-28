@@ -1,6 +1,7 @@
 package com.ancientempires.structure;
 
 import com.ancientempires.AncientEmpires;
+import com.ancientempires.worldgen.TerritorySettings;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -18,5 +19,6 @@ public final class StructureReloads
     {
         event.addListener(new AeRemap());
         event.addListener(new AeTemplates());
+        event.addListener(new TerritorySettings());
     }
 }

@@ -10,7 +10,20 @@ import com.ancientempires.gate.GateEntity;
 import com.ancientempires.gate.GateType;
 import com.ancientempires.registry.ModEntities;
 import com.ancientempires.registry.ModBlocks;
+import com.ancientempires.worldgen.AwSiteIndex;
+import com.ancientempires.worldgen.TerritorySettings;
+import com.mojang.datafixers.util.Pair;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.levelgen.structure.StructureStart;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.InteractionHand;
@@ -419,5 +432,138 @@ public final class StructureGameTests
         AePlacer.Report report = placeAndLog(helper, "normal/oceanislands/islandsgriffonroostsrocky", anchor, Rotation.NONE);
         helper.assertTrue(report.blocks() > 0, "the island placed");
         helper.succeed();
+    }
+
+    /**
+     * Every cell of a template lands where its turn puts it, inside the turned
+     * bounds, as the block it should be and facing the turned way, in all
+     * four turns (the shape pass may change connections and drop unsupported
+     * blocks, never a block's kind or facing).
+     */
+    @GameTest(template = ARENA, timeoutTicks = 800)
+    public static void rotationsAgree(GameTestHelper helper)
+    {
+        String path = "normal/awnationempire/empireemperorstatuewell";
+        ResourceLocation id = ResourceLocation.fromNamespaceAndPath(AncientEmpires.MOD_ID, path);
+        AeTemplate template = AeTemplates.get(id).orElseThrow();
+        int[] offset = offset(id);
+        ServerLevel level = helper.getLevel();
+        List<String> problems = new ArrayList<>();
+        List<Property<?>> turned = List.of(BlockStateProperties.HORIZONTAL_FACING, BlockStateProperties.FACING, BlockStateProperties.AXIS,
+                BlockStateProperties.ROTATION_16);
+        for (Rotation rotation : Rotation.values())
+        {
+            BlockPos anchor = helper.absolutePos(new BlockPos(0, 1, 0)).offset(-300, 0, 120 + rotation.ordinal() * 80);
+            placeAndLog(helper, path, anchor, rotation);
+            BoundingBox bounds = AePlacer.bounds(template, offset, anchor, rotation);
+            int[] checked = new int[1];
+            for (int tz = 0; tz < template.tilesZ(); tz++)
+            {
+                for (int tx = 0; tx < template.tilesX(); tx++)
+                {
+                    template.forEachInTile(tx, tz, (x, y, z, state) ->
+                    {
+                        BlockPos pos = AePlacer.cellToWorld(offset, anchor, rotation, x, y, z);
+                        if (!bounds.isInside(pos) && problems.size() < 20)
+                        {
+                            problems.add(rotation + ": cell " + x + "," + y + "," + z + " at " + pos + " is outside " + bounds);
+                        }
+                        CompoundTag nbt = template.blockEntityAt(x, y, z);
+                        if (nbt != null && nbt.contains("aeRule"))
+                        {
+                            return;
+                        }
+                        BlockState expected = AeRemap.block(template.palette().get(state)).state().rotate(level, BlockPos.ZERO, rotation);
+                        BlockState actual = level.getBlockState(pos);
+                        checked[0]++;
+                        if (actual.isAir() || problems.size() >= 20)
+                        {
+                            return;
+                        }
+                        if (actual.getBlock() != expected.getBlock())
+                        {
+                            problems.add(rotation + ": " + pos + " is " + actual + ", wanted " + expected);
+                            return;
+                        }
+                        for (Property<?> property : turned)
+                        {
+                            if (expected.hasProperty(property) && actual.hasProperty(property) && !actual.getValue(property).equals(expected.getValue(property)))
+                            {
+                                problems.add(rotation + ": " + pos + " " + property.getName() + " is " + actual.getValue(property) + ", wanted "
+                                        + expected.getValue(property));
+                            }
+                        }
+                    });
+                }
+            }
+            AncientEmpires.LOGGER.info("GAMETEST rotation {}: {} cells checked, bounds {}", rotation, checked[0], bounds);
+        }
+        helper.assertTrue(problems.isEmpty(), "every turn agrees: " + problems);
+        helper.succeed();
+    }
+
+    /**
+     * World generation end to end: the structure is registered, the index
+     * and AW's territory settings are read, a site is found as /locate finds
+     * one, and its start, made and placed chunk by chunk as generation does
+     * (the test world is flat with structures off, so this calls the same
+     * steps by hand), builds it and records it. A rerun finds the site from
+     * the last run already standing, which counts.
+     */
+    @GameTest(template = ARENA, timeoutTicks = 6000)
+    public static void worldGenerationBuildsASite(GameTestHelper helper)
+    {
+        ServerLevel level = helper.getLevel();
+        helper.assertTrue(AwSiteIndex.get().sites().size() > 500, "the index holds the templates (fewer without compat mods): " + AwSiteIndex.get().sites().size());
+        helper.assertTrue(TerritorySettings.of("empire").maxRadiusChunks() == 23, "AW's territory settings are read: " + TerritorySettings.of("empire"));
+        Holder<Structure> land = level.registryAccess().registryOrThrow(Registries.STRUCTURE)
+                .getHolderOrThrow(ResourceKey.create(Registries.STRUCTURE, ResourceLocation.fromNamespaceAndPath(AncientEmpires.MOD_ID, "aw_site")));
+        long start = System.nanoTime();
+        Pair<BlockPos, Holder<Structure>> found = level.getChunkSource().getGenerator().findNearestMapStructure(level, HolderSet.direct(land),
+                helper.absolutePos(BlockPos.ZERO), 64, false);
+        AncientEmpires.LOGGER.info("GAMETEST locate found {} in {} ms", found == null ? "nothing" : found.getFirst(), (System.nanoTime() - start) / 1_000_000L);
+        helper.assertTrue(found != null, "a site is found within 64 chunks");
+        // Locate gives the chunk's corner; a site stands on its chunk's middle.
+        BlockPos at = new ChunkPos(found.getFirst()).getMiddleBlockPosition(0);
+        start = System.nanoTime();
+        ChunkGenerator generator = level.getChunkSource().getGenerator();
+        StructureStart site = land.value().generate(level.registryAccess(), generator, generator.getBiomeSource(), level.getChunkSource().randomState(),
+                level.getStructureManager(), level.getSeed(), new ChunkPos(at), 0, level, biome -> true);
+        if (site.isValid())
+        {
+            BoundingBox box = site.getBoundingBox();
+            for (int cx = box.minX() >> 4; cx <= box.maxX() >> 4; cx++)
+            {
+                for (int cz = box.minZ() >> 4; cz <= box.maxZ() >> 4; cz++)
+                {
+                    ChunkPos chunk = new ChunkPos(cx, cz);
+                    level.getChunk(cx, cz);
+                    site.placeInChunk(level, level.structureManager(), generator, level.getRandom(), new BoundingBox(chunk.getMinBlockX(),
+                            level.getMinBuildHeight(), chunk.getMinBlockZ(), chunk.getMaxBlockX(), level.getMaxBuildHeight() - 1, chunk.getMaxBlockZ()), chunk);
+                }
+            }
+        }
+        AncientEmpires.LOGGER.info("GAMETEST generated the site ({}) in {} ms", site.isValid() ? site.getBoundingBox() : "already standing",
+                (System.nanoTime() - start) / 1_000_000L);
+        helper.runAfterDelay(2, () ->
+        {
+            List<StructureRecords.Record> here = new ArrayList<>();
+            StructureRecords.get(level).forEach(record ->
+            {
+                if (record.bounds.minX() <= at.getX() && at.getX() <= record.bounds.maxX() && record.bounds.minZ() <= at.getZ() && at.getZ() <= record.bounds.maxZ())
+                {
+                    here.add(record);
+                }
+            });
+            helper.assertTrue(!here.isEmpty(), "the site is recorded at " + at);
+            StructureRecords.Record record = here.get(0);
+            int[] solid = new int[1];
+            BlockPos.betweenClosed(at.getX() - 8, record.bounds.minY(), at.getZ() - 8, at.getX() + 7, record.bounds.maxY(), at.getZ() + 7)
+                    .forEach(pos -> solid[0] += level.getBlockState(pos).isAir() ? 0 : 1);
+            AncientEmpires.LOGGER.info("GAMETEST world generation placed {} ({}) at {}, faction '{}'; {} blocks in its middle chunk", record.template,
+                    record.bounds, at, record.faction, solid[0]);
+            helper.assertTrue(solid[0] > 0, "its middle chunk is built");
+            helper.succeed();
+        });
     }
 }

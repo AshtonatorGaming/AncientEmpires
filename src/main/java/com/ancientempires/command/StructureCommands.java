@@ -5,6 +5,7 @@ import com.ancientempires.structure.AePlacer;
 import com.ancientempires.structure.AeRemap;
 import com.ancientempires.structure.AeTemplate;
 import com.ancientempires.structure.AeTemplates;
+import com.ancientempires.worldgen.AwSites;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.brigadier.arguments.StringArgumentType;
@@ -163,6 +164,11 @@ public final class StructureCommands
             default -> Rotation.NONE;
         };
         BlockPos anchor = player.blockPosition();
+        if (AwSites.overlaps(context.getSource().getLevel().dimension(), AePlacer.bounds(template, offset(id), anchor, rotation), 0))
+        {
+            // Placed anyway (an admin may mean it), but the inner one decides protection where they overlap.
+            context.getSource().sendSuccess(() -> Component.translatable("commands.ancientempires.structure.overlaps"), false);
+        }
         long start = System.nanoTime();
         AePlacer.Report report = AePlacer.place(context.getSource().getLevel(), template, AeTemplates.name(id), offset(id), anchor, rotation, null);
         long millis = (System.nanoTime() - start) / 1_000_000L;

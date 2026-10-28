@@ -12,6 +12,7 @@ import com.ancientempires.registry.ModItems;
 import com.ancientempires.network.ModNetwork;
 import com.ancientempires.registry.ModLoot;
 import com.ancientempires.registry.ModMenus;
+import com.ancientempires.registry.ModWorldGen;
 import com.mojang.logging.LogUtils;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
@@ -51,6 +52,8 @@ public class AncientEmpires
         ModCreativeTabs.TABS.register(modBus);
         ModMenus.MENUS.register(modBus);
         ModLoot.ENTRY_TYPES.register(modBus);
+        ModWorldGen.STRUCTURE_TYPES.register(modBus);
+        ModWorldGen.PIECE_TYPES.register(modBus);
         ModNetwork.register();
 
         modBus.addListener(this::commonSetup);

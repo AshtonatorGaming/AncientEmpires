@@ -57,7 +57,18 @@ public final class StructureClaims
     public static void tryClaim(ServerLevel level, BlockPos flagPos, FlagBlockEntity flag, Player player)
     {
         StructureRecords records = StructureRecords.get(level);
-        StructureRecords.Record record = records.byId(flag.record());
+        StructureRecords.Record found = records.byId(flag.record());
+        if (found == null && flag.record() == 0)
+        {
+            // World generation records a structure after placing its flag, so the flag finds it by position once.
+            found = records.at(flagPos);
+            if (found != null)
+            {
+                flag.setProtection(true, found.id);
+                records.tieFlag(found, flagPos);
+            }
+        }
+        StructureRecords.Record record = found;
         if (record == null)
         {
             player.displayClientMessage(Component.translatable("message.ancientempires.flag.guards_nothing"), true);
