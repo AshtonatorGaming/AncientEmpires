@@ -158,8 +158,11 @@ Redux), grimoireofgaia 41/64 (Grimoire of Gaia 4, alpha), xreliquary 18/21 (`rel
 PrimitiveMobsRevival, partial), astikorcarts 0/3 (`astikorcartsredux`), spartanshields 0/4, silentgems 0/6,
 tombstone 0/2. Biomes: biomesoplenty 24/51; byg 0/40 (`biomeswevegone`; 1.12 names carried a `b` prefix, so most
 should match once it is stripped).
-Not on Modrinth for 1.20.1, to check on CurseForge: Pam's HarvestCraft 2, Better Animals Plus, Twilight Forest,
-MineColonies and Structurize, ZAWA Rebuilt. No 1.20.1 version found: rustic, dungeonmobs, dungeontactics,
+From CurseForge: harvestcraft 86/120 (now four mods: `pamhc2crops`, `pamhc2trees`, `pamhc2foodcore`,
+`pamhc2foodextended`; the misses are mostly the old `...item` suffixes), zawa 7/46 (ZAWA Evolved, alpha; names
+gained underscores, `americanbison` to `american_bison` likely), twilightforest 1/2, minecolonies 2/2,
+structurize 0/5 (its 1.12 timber frames and shingles were reorganised). Better Animals Plus has no 1.20.1 Forge
+build (newest Forge is 1.19.2), so it gets fallbacks. No 1.20.1 version found: rustic, dungeonmobs, dungeontactics,
 thesummoner, eplus, mod_lavacow, exoticbirds, explorercraft, familiarfauna, openglider, reptilemod, eerieentities,
 pirates, gemsplusplus, and the biome mods `nt`, `environs`, `traverse` (Traverse is Fabric only).
 Biome lists become biome tags per template or territory, with modded biomes as optional tag entries
