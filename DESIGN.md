@@ -140,3 +140,19 @@ Examples discussed:
 - Ancient Combat and Ancient Tactics features should be native here, making those compat mods unnecessary for this project.
 
 This document is the complete current vision. All ideas are potentially addable. Prioritize by the tiers above.
+
+---
+
+## Later Expansion Notes (added from extended design discussions — do not treat as current priorities)
+
+These items reuse the existing primitives (flags, anchors, slow director, data templates) and can be layered later without rewriting core systems. They are recorded here so they are not lost; full detail lives in VISION.md.
+
+- **Settlement binding over radius:** NPCs bind themselves to a Town Hall, Fort, Outpost, or similar anchor block instead of continuous radius checks. This allows arbitrarily large settlements without the lag that large AW-style areas produced. Binding is a one-time or rare registration; the block owns the list.
+- **Additional specialized blocks:** Fort (defensive morale source + Director pathing restriction except for intrigue/clandestine goals), Outpost (awareness/score), Granary (supply ledger that can be drained in sieges), Armory (repair modifier), Chapel (morale recovery anchor), War Council (high-level order entry), Siege Camp / War Camp (attrition objective, closer to Villager Recruits style siege cores).
+- **Garrison refinements:** Banner or structure anchor acts as dummy leader and morale source for owner-faction units. Commanders stay data-only until the player is in fighting range or the banner is attacked. Sally-out order on low health or death of the top commander. Owner vs visitor/invader split (visitors get no defensive buff). Foreign mobs (e.g. Grimoire of Gaia) resolve via entity registry and can be marked temporary allies if desired.
+- **Civilian hierarchy (block-centric):** Laborer draws buffs from their work block. Foreman / Overseer / Governor apply modifiers to the block itself rather than ticking on individual NPCs. Supports simplified levies.
+- **Optional hardcore heir respawn:** MCA Descendants-style overwrite of an heir NPC with the player (traits follow). Strictly optional and off by default.
+- **Director events and loyalty:** Rare director-spawned groups (caravans, refugees, scouts). Interaction-only loyalty offers with intermediate consideration state and trait-gated immediate accept/reject. Threat assessment before any superior-UUID rewrite. In-character reports from spies/nobles. Guilds and subfactions as lightweight flags or records.
+- **Personality flags:** Simple trait flags (Martial, Just, Cruel, Ambitious, etc.) and leanings read only on rare events or ledger ticks. No continuous AI.
+
+All of the above remain configurable and absent-safe. They do not change the priority order of the tiers above.
