@@ -3,6 +3,6 @@
   "biomes": "#ancientempires:has_structure/aw_site",
   "step": "surface_structures",
   "spawn_overrides": {},
-  "terrain_adaptation": "beard_thin",
+  "terrain_adaptation": "none",
   "surface": "land"
 }

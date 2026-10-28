@@ -223,6 +223,7 @@
   "block.ancientempires.coin_stack_gold": "Gold Dragon Stack",
   "block.ancientempires.coin_stack_ancient": "Ancient Coin Stack",
   "block.ancientempires.flag": "Flag",
+  "block.ancientempires.flag_top": "Flag",
   "item.ancientempires.flag": "Flag",
   "item.ancientempires.flag.named": "%s Flag",
   "item.ancientempires.flag.protection": "%s Protection Flag",

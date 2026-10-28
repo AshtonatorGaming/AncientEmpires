@@ -5,6 +5,7 @@ import com.ancientempires.block.AnimalPenBlock;
 import com.ancientempires.block.CoinStackBlock;
 import com.ancientempires.block.CropFarmBlock;
 import com.ancientempires.block.FlagBlock;
+import com.ancientempires.block.FlagTopBlock;
 import com.ancientempires.block.FishingDockBlock;
 import com.ancientempires.block.HuntingLodgeBlock;
 import com.ancientempires.block.KitchenBlock;
@@ -23,6 +24,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.PushReaction;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -64,6 +66,9 @@ public final class ModBlocks
     /** AW's faction flags: decorative, or a structure's protection flag. Drawn by FlagRenderer. */
     public static final RegistryObject<Block> FLAG = BLOCKS.register("flag", () -> new FlagBlock(BlockBehaviour.Properties.of()
             .mapColor(MapColor.WOOD).strength(1.0F).sound(SoundType.WOOD).noOcclusion()));
+    /** A flag's invisible upper part, so the whole banner can be clicked. */
+    public static final RegistryObject<Block> FLAG_TOP = BLOCKS.register("flag_top", () -> new FlagTopBlock(BlockBehaviour.Properties.of()
+            .mapColor(MapColor.WOOD).strength(1.0F).sound(SoundType.WOOD).noOcclusion().noLootTable().pushReaction(PushReaction.DESTROY)));
 
     /** The invisible solid stand-in a closed gate fills its opening with; cannot be mined. */
     public static final RegistryObject<Block> GATE_PROXY = BLOCKS.register("gate_proxy", () -> new GateProxyBlock(BlockBehaviour.Properties.of()

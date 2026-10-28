@@ -2,6 +2,7 @@ package com.ancientempires.block;
 
 import com.ancientempires.entity.npc.NpcEntity;
 import com.ancientempires.entity.npc.NpcFactions;
+import com.ancientempires.registry.ModBlocks;
 import com.ancientempires.structure.StructureClaims;
 import com.ancientempires.structure.StructureRecords;
 import net.minecraft.core.BlockPos;
@@ -16,6 +17,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
@@ -46,6 +48,8 @@ public class FlagBlock extends BaseEntityBlock
 {
     public static final IntegerProperty ROTATION = BlockStateProperties.ROTATION_16;
     private static final VoxelShape POLE = Block.box(7.0D, 0.0D, 7.0D, 9.0D, 16.0D, 9.0D);
+    /** Pole and the cloth's lower part; the rest is {@link FlagTopBlock} above. */
+    private static final VoxelShape BANNER = Block.box(2.0D, 0.0D, 2.0D, 14.0D, 16.0D, 14.0D);
 
     public FlagBlock(Properties properties)
     {
@@ -63,6 +67,11 @@ public class FlagBlock extends BaseEntityBlock
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context)
     {
+        BlockPos above = context.getClickedPos().above();
+        if (context.getLevel().isOutsideBuildHeight(above) || !context.getLevel().getBlockState(above).canBeReplaced(context))
+        {
+            return null;
+        }
         return this.defaultBlockState().setValue(ROTATION, Mth.floor((180.0F + context.getRotation()) * 16.0F / 360.0F + 0.5D) & 15);
     }
 
@@ -81,7 +90,24 @@ public class FlagBlock extends BaseEntityBlock
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
     {
+        return BANNER;
+    }
+
+    /** Only the pole is solid; the cloth is walked through. */
+    @Override
+    public VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
+    {
         return POLE;
+    }
+
+    /** The banner's upper part, where there is room for it (a flag under a ceiling just goes without). */
+    public static void placeTop(LevelAccessor level, BlockPos pos, int flags)
+    {
+        BlockPos above = pos.above();
+        if (!level.isOutsideBuildHeight(above) && level.getBlockState(above).canBeReplaced())
+        {
+            level.setBlock(above, ModBlocks.FLAG_TOP.get().defaultBlockState(), flags);
+        }
     }
 
     /** The pole and cloth are drawn by the flag's renderer. */
@@ -130,6 +156,7 @@ public class FlagBlock extends BaseEntityBlock
     @Override
     public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
     {
+        placeTop(level, pos, Block.UPDATE_ALL);
         if (level instanceof ServerLevel server && level.getBlockEntity(pos) instanceof FlagBlockEntity flag && flag.isProtection() && flag.record() == 0)
         {
             BoundingBox box = new BoundingBox(pos.getX() - MANUAL_RADIUS, pos.getY() - 8, pos.getZ() - MANUAL_RADIUS,

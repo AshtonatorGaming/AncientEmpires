@@ -23,7 +23,7 @@ import java.util.List;
 public final class ModNetwork
 {
     /** Bump whenever a packet is added or changes shape, so mismatched clients are refused cleanly. */
-    private static final String PROTOCOL = "7";
+    private static final String PROTOCOL = "8";
     private static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(
             ResourceLocation.parse(AncientEmpires.MOD_ID + ":main"),
             () -> PROTOCOL,
@@ -77,6 +77,17 @@ public final class ModNetwork
                 .decoder(SoundBlockPacket::decode)
                 .consumerMainThread(SoundBlockPacket::handle)
                 .add();
+        CHANNEL.messageBuilder(FlagHighlightPacket.class, nextId++, NetworkDirection.PLAY_TO_CLIENT)
+                .encoder(FlagHighlightPacket::encode)
+                .decoder(FlagHighlightPacket::decode)
+                .consumerMainThread(FlagHighlightPacket::handle)
+                .add();
+    }
+
+    /** Outlines a structure's flag for one player. */
+    public static void highlightFlag(ServerPlayer player, BlockPos flag)
+    {
+        CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), new FlagHighlightPacket(flag));
     }
 
     public static void sendToServer(Object packet)

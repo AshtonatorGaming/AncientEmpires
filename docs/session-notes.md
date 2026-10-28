@@ -65,6 +65,12 @@ layer with water (AW's handleClearAction); textureless faces in AW's idol and to
 over NPC spawners (33e35fd). Open: terrain blending around land sites (beard_thin cuts pits into slopes; AW smoothed
 its borders), not yet changed.
 
+Fourth play test fixes (jar installed): drawbridges and gates were turned by a 2D/3D direction mix-up (AW saved
+EnumFacing indices), so bridges lowered inward; game test drawbridgeLowersOutward. Flags have an invisible top
+block so the whole banner is clickable. Chest use in an unclaimed faction structure outlines its flag through walls
+for 8 s. Land sites: groundSlope 3 (was maxSlope 8) avoids hillsides; terrain_adaptation none, and the piece clears,
+fills, and eases a border ring into the land (AW's preGeneration). Unseen in game: all of it.
+
 ## Next, in order
 
 1. Finish the play test above; fix what the user finds.

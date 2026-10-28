@@ -1087,7 +1087,7 @@ public final class AncientEmpiresConfig
         STRUCTURES_CLUSTER_VALUE = builder.comment("Each chunk of a territory adds this much to its structure budget, which each structure spends by its clusterValue (AW's chunk_cluster_value).").defineInRange("chunkClusterValue", 1.0D, 0.0D, 100.0D);
         STRUCTURES_TERRITORY_CHUNKS = builder.comment("Size of a territory (one faction's region), in chunks across. AW grew territories through matching biomes up to each one's max_radius_in_chunks (ae_territories data; 11 by default); here they are cells around seeded centres. Changing it moves territories in chunks not yet generated.").defineInRange("territoryCellChunks", 20, 2, 128);
         STRUCTURES_MARGIN = builder.comment("Blocks kept clear between generated structures.").defineInRange("siteMargin", 4, 0, 64);
-        STRUCTURES_SLOPE = builder.comment("A ground structure is skipped where the land under it varies by more than this many blocks (or its template's own leveling, if more); the terrain blends the rest.").defineInRange("maxSlope", 8, 1, 64);
+        STRUCTURES_SLOPE = builder.comment("A ground structure is skipped where the land around it rises or falls more than this many blocks from its floor (or its template's own leveling and fill, if more); what passes is cleared, filled, and eased into the land around it.").defineInRange("groundSlope", 3, 0, 64);
         STRUCTURES_TRIGGER_MIN = builder.comment("An AW garrison's trigger range, raised to at least this many blocks when a structure is placed, so tight structures do not spawn their people on top of the player. 0 keeps AW's own.").defineInRange("triggerMinRange", 10, 0, 64);
         STRUCTURES_TRIGGER_SCALE = builder.comment("An AW garrison's trigger range is multiplied by this when placed (AW staged fights by range; scaling keeps the order: walls first, leaders last).").defineInRange("triggerRangeScale", 1.5D, 0.5D, 4.0D);
         CLAIM_THRESHOLD = builder.comment("Claiming a structure's protection flag (AW's conquest): the hostiles still inside must score under this. 1: not one may be left.").defineInRange("claimThreshold", 5, 1, 1000);
@@ -1571,7 +1571,7 @@ public final class AncientEmpiresConfig
     public static double structuresChunkClusterValue = 1.0D;
     public static int territoryCellChunks = 20;
     public static int structuresSiteMargin = 4;
-    public static int structuresMaxSlope = 8;
+    public static int structuresMaxSlope = 3;
     public static int structuresTriggerMin = 10;
     public static double structuresTriggerScale = 1.5D;
     public static int claimThreshold = 5;

@@ -1,5 +1,9 @@
 package com.ancientempires.structure;
 
+import org.jetbrains.annotations.Nullable;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.minecraft.server.level.ServerPlayer;
+import com.ancientempires.network.ModNetwork;
 import com.ancientempires.AncientEmpires;
 import com.ancientempires.block.FlagBlockEntity;
 import com.ancientempires.block.NpcSpawnerBlockEntity;
@@ -167,6 +171,41 @@ public final class StructureClaims
      * shut while any of the faction can see you; unseen, you may steal.
      * Before {@link AwLoot}, so a locked chest's traps wait too.
      */
+    /**
+     * A structure's protection flag. World generation records a structure
+     * without one (it is placed a chunk at a time), so the first time it is
+     * asked for, the flag is looked for in the structure's loaded chunks and
+     * tied to the record.
+     */
+    @Nullable
+    private static BlockPos flagOf(ServerLevel level, StructureRecords.Record record)
+    {
+        if (record.flag != null)
+        {
+            return record.flag;
+        }
+        BoundingBox box = record.bounds;
+        for (int cx = box.minX() >> 4; cx <= box.maxX() >> 4; cx++)
+        {
+            for (int cz = box.minZ() >> 4; cz <= box.maxZ() >> 4; cz++)
+            {
+                if (!level.hasChunk(cx, cz))
+                {
+                    continue;
+                }
+                for (BlockEntity blockEntity : level.getChunk(cx, cz).getBlockEntities().values())
+                {
+                    if (blockEntity instanceof FlagBlockEntity flag && flag.isProtection() && box.isInside(blockEntity.getBlockPos()))
+                    {
+                        StructureRecords.get(level).tieFlag(record, blockEntity.getBlockPos());
+                        return record.flag;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onRightClick(PlayerInteractEvent.RightClickBlock event)
     {
@@ -187,6 +226,12 @@ public final class StructureClaims
         }
         boolean seen = !level.getEntitiesOfClass(NpcEntity.class, player.getBoundingBox().inflate(SIGHT_RANGE),
                 npc -> npc.isAlive() && npc.getFaction().equals(record.faction) && !npc.getMorale().isSurrendered() && npc.hasLineOfSight(player)).isEmpty();
+        // Point out the banner to take, through the walls.
+        BlockPos flag = flagOf(level, record);
+        if (flag != null && player instanceof ServerPlayer server)
+        {
+            ModNetwork.highlightFlag(server, flag);
+        }
         if (AncientEmpiresConfig.allowStealing && !seen)
         {
             player.displayClientMessage(Component.translatable("message.ancientempires.flag.stealing"), true);
@@ -194,7 +239,6 @@ public final class StructureClaims
         }
         event.setCanceled(true);
         event.setCancellationResult(InteractionResult.FAIL);
-        BlockPos flag = record.flag;
         player.displayClientMessage(flag == null ? Component.translatable("message.ancientempires.flag.locked")
                 : Component.translatable("message.ancientempires.flag.locked_at", flag.getX(), flag.getY(), flag.getZ()), true);
     }

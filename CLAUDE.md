@@ -112,7 +112,10 @@ instead of reflecting per call), Skirmisher thresholds (about 4.5 to 28 blocks).
   `place <name> [rotation]`, `check <name>`, `export <name>` (vanilla `.nbt` in `generated/` for a Structure Block).
   Templates go by their short name (the file name, unique); `structure list` shows the categories (AW's folders),
   `list <category or part of a name>` the templates.
-  AW gates, NPCs placed directly, vehicles, and flags are kept but not placed yet (S2, S3, S5).
+  Gate orientation in templates is a 1.12 EnumFacing index (2 north .. 5 east), read with `from3DDataValue`.
+  A flag is two blocks: `FlagTopBlock` above is the banner's upper part (clicks and breaking go to the flag). Using a
+  container in an unclaimed faction structure outlines its flag through walls (`FlagHighlight`, `FlagHighlightPacket`);
+  world-generated records find and tie their flag then. AW gates, NPCs placed directly, vehicles, and flags are kept but not placed yet (S2, S3, S5).
 - Garrisons from structures (S2a): an AW advanced spawner becomes our `NpcSpawnerBlock` (`AwSpawnerImport` writes
   the spawner's saved form and loads it): one-shot ones GARRISON, ones with more to give REPEATING, redstone ones
   REDSTONE; AW's per-block `playerRange` is kept (it staged the fight: walls first, leaders last). AW NPC entries
@@ -194,12 +197,15 @@ instead of reflecting per call), Skirmisher thresholds (about 4.5 to 28 blocks).
   generic that list the biome and dimension, fit the cell's cluster budget (`chunkClusterValue` times the territory's
   multiplier over its chunks, capped by its radius), are not a placed unique or within their minimum duplicate
   distance, and suit the spot (island water depth, ground height band); weighted, big ones less away from the cell's
-  centre. Then AW's border check around the template (ground within leveling and fill, at least `maxSlope`; water
+  centre. Then AW's border check around the template (ground within leveling and fill, at least `groundSlope` 3; water
   deeper than fill; island floor within its depths), clear of other structures by `siteMargin`, not within
   `spawnProtectionRadius` of spawn. AW's per-territory tuning is its own file, `data/*/ae_territories/*.json`
   (`TerritorySettings`). The site is taken in the pieces builder, which runs only for real generation (not /locate):
   `AwSites.claim` checks and takes it in one step per dimension, since generation is threaded, and the record is
-  written on the main thread. `AwSitePiece` places its template a chunk at a time (`AePlacer.placeInChunk`): chunk
+  written on the main thread. On land `AwSitePiece` first shapes the ground as AW's ground validator did (no vanilla
+  terrain adaptation): cleared above the footprint, filled up to the floor, and a border ring (template border, 3 to 16)
+  eased from the floor to the noise height just past it (`BorderCurve`, AW's SmoothingMatrixBuilder curve). It
+  places its template a chunk at a time (`AePlacer.placeInChunk`): chunk
   edges are marked for vanilla's post-processing, which reshapes them once neighbours exist; an air cell never opens
   a gate filled from the next chunk; protection flags guard record 0 and find their record by position when claimed.
   Every whole placement is now recorded, factionless ones too (only so world generation keeps clear;

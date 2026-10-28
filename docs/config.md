@@ -627,14 +627,14 @@ Ancient Warfare's structures generate in new chunks, **on by default**. These se
 | `chunkClusterValue` | `1.0` | 0.0 to 100.0 | Each chunk of a territory adds this much to the territory's structure budget, times the territory's own multiplier. Every structure spends its `clusterValue` (a village about 100, a small ruin 10 or less). Raise it for denser regions. |
 | `territoryCellChunks` | `20` | 2 to 128 | How wide a territory (one faction's region) is, in chunks. Changing it moves the territories of chunks not yet generated. |
 | `siteMargin` | `4` | 0 to 64 | Blocks kept clear between generated structures. |
-| `maxSlope` | `8` | 1 to 64 | A land structure is skipped where the ground around it rises or falls more than this many blocks from where it would stand (or its template's own `leveling` / `fill`, if more). Terrain blending smooths the rest. |
+| `groundSlope` | `3` | 0 to 64 | A land structure is skipped where the ground around it rises or falls more than this many blocks from its floor (or its template's own `leveling` / `fill`, if more), so hillsides are avoided. What passes is prepared as Ancient Warfare did: cleared above the footprint, filled under it, and a border ring (the template's `border`, 3 to 16 blocks) eased from the floor into the land around it. |
 
 **How a spot is chosen** (as Ancient Warfare chose it):
 
 1. The chunk rolls `generationChance` times its territory's multiplier (times `clusterChanceBoost` near a standing structure).
 2. Its **territory** is the region it lies in. Each region holds one territory, picked from those with a template for the biome at the region's centre, weighted by how many templates they have (plus the generic ones) times their `territory_weight_multiplier`.
 3. A template is picked from the territory's own and the generic ones that list this biome and dimension, still fit the territory's remaining budget, are not a unique one already placed or a copy within its `minDuplicateDistance`, and suit the spot (an island needs water of its depth). Weighted by `selectionWeight`; big ones (`clusterValue` over 50) are less likely away from the territory's centre.
-4. The ground around it is checked (dry land within `maxSlope`; water deep enough; an island's sea floor at its depths), and it must stay `siteMargin` clear of every other structure.
+4. The ground around it is checked (dry land within `maxSlope`; water deep enough; an island's sea floor at its depths), and it must stay `siteMargin` (plus its border ring) clear of every other structure.
 
 **Per-territory tuning** is Ancient Warfare's own `territory_settings.json`, shipped as `data/ancientempires/ae_territories/ancientwarfare.json`. A data pack can add its own file in `data/<namespace>/ae_territories/` to retune a territory; later files win per setting. Each territory takes:
 

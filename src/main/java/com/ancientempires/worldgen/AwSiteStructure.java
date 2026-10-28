@@ -58,6 +58,8 @@ public final class AwSiteStructure extends Structure
     private static final int BIG_CLUSTER = 50;
     /** The border ring AW checked is capped here, in blocks. */
     private static final int MAX_BORDER = 16;
+    /** Even a template with no border of its own gets this much of a ring eased into the land. */
+    private static final int MIN_BORDER = 3;
 
     /** The height of the land (water counts) and of the ground under any water, each the first free block. */
     private record Ground(int surface, int floor)
@@ -204,7 +206,10 @@ public final class AwSiteStructure extends Structure
         {
             return reject("ground around it (" + site.kind() + ")");
         }
-        if (AwSites.overlaps(dimension, bounds, AncientEmpiresConfig.structuresSiteMargin))
+        // On land the border ring is reshaped, so it must keep clear of other structures too.
+        int border = land ? Math.min(MAX_BORDER, Math.max(MIN_BORDER, site.border())) : 0;
+        int margin = AncientEmpiresConfig.structuresSiteMargin + border;
+        if (AwSites.overlaps(dimension, bounds, margin))
         {
             return reject("overlaps another structure");
         }
@@ -220,7 +225,7 @@ public final class AwSiteStructure extends Structure
                 return;
             }
             String faction = AePlacer.faction(template.get());
-            if (!AwSites.claim(dimension, chosen.name(), bounds, faction, AncientEmpiresConfig.structuresSiteMargin, chosen.minDistance(),
+            if (!AwSites.claim(dimension, chosen.name(), bounds, faction, margin, chosen.minDistance(),
                     chosen.unique(), cell, chosen.clusterValue(), budget))
             {
                 AncientEmpires.LOGGER.debug("World generation chose {} at {} but it was taken meanwhile", chosen.name(), bounds);
@@ -228,10 +233,9 @@ public final class AwSiteStructure extends Structure
             else
             {
                 AncientEmpires.LOGGER.debug("World generation places {} ({}) at {} in territory {}", chosen.name(), faction, bounds, territory);
-                // On land the box starts at ground level: below it the terrain is filled up to the floor, inside it cleared.
-                BoundingBox box = land ? new BoundingBox(bounds.minX(), y, bounds.minZ(), bounds.maxX(), Math.max(y, bounds.maxY()), bounds.maxZ())
-                        : bounds;
-                builder.addPiece(new AwSitePiece(box, chosen.id(), chosen.name(), chosen.offset(), anchor, rotation, faction));
+                // On land the piece shapes the ground itself (the floor's top is the block under the anchor) and reaches over its border.
+                builder.addPiece(new AwSitePiece(bounds, chosen.id(), chosen.name(), chosen.offset(), anchor, rotation, faction,
+                        land ? y - 1 : AwSitePiece.NO_GROUND, border));
             }
         }));
     }

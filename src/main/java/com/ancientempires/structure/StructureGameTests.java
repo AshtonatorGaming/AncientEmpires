@@ -347,6 +347,33 @@ public final class StructureGameTests
      * template, closed with proxies filling their openings, and opening clears
      * them; then closed again.
      */
+    /**
+     * AW's drawbridges are built facing out of the castle (AW saved a gate's
+     * orientation as a full direction index) and lower across the moat.
+     */
+    @GameTest(template = ARENA, timeoutTicks = 800)
+    public static void drawbridgeLowersOutward(GameTestHelper helper)
+    {
+        String path = "normal/awnationwitchbane/witchbanedesertcastle";
+        BlockPos anchor = helper.absolutePos(new BlockPos(0, 1, 0)).offset(-40, 2, 70);
+        ServerLevel level = helper.getLevel();
+        ResourceLocation id = ResourceLocation.fromNamespaceAndPath(AncientEmpires.MOD_ID, path);
+        BoundingBox bounds = AePlacer.bounds(AeTemplates.get(id).orElseThrow(), offset(id), anchor, Rotation.NONE);
+        // Only this castle's gates from last run: other tests' gates stand nearby.
+        level.getEntitiesOfClass(GateEntity.class, AABB.of(bounds)).forEach(GateEntity::discard);
+        placeAndLog(helper, path, anchor, Rotation.NONE);
+        List<GateEntity> bridges = level.getEntitiesOfClass(GateEntity.class, AABB.of(bounds).inflate(2.0D)).stream()
+                .filter(gate -> gate.gateType() == GateType.DRAWBRIDGE).toList();
+        helper.assertTrue(!bridges.isEmpty(), "a drawbridge was built");
+        GateEntity bridge = bridges.get(0);
+        AncientEmpires.LOGGER.info("GAMETEST drawbridge pos1 {} pos2 {} facing {} castle {}", bridge.pos1(), bridge.pos2(), bridge.facing(), bounds);
+        helper.runAfterDelay(5, () ->
+        {
+            bridge.toggle();
+            helper.succeedWhen(() -> helper.assertTrue(bridge.edge() > 0.0F, "the bridge lowers (status " + bridge.status() + ")"));
+        });
+    }
+
     @GameTest(template = ARENA, timeoutTicks = 600)
     public static void gatesBuildOpenAndClose(GameTestHelper helper)
     {

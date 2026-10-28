@@ -391,6 +391,7 @@ public final class AePlacer
             {
                 int turn = Integer.parseInt("0" + rule.getCompound("blockState").getCompound("properties").getString("rotation"));
                 level.setBlock(pos, ModBlocks.FLAG.get().defaultBlockState().setValue(FlagBlock.ROTATION, rotation.rotate(turn & 15, 16)), FLAGS);
+                FlagBlock.placeTop(level, pos, FLAGS);
                 if (level.getBlockEntity(pos) instanceof FlagBlockEntity flag)
                 {
                     String faction = rule.getCompound("teData").getString("name");
@@ -620,7 +621,8 @@ public final class AePlacer
         {
             level.setBlock(cell, Blocks.AIR.defaultBlockState(), FLAGS);
         }
-        Direction facing = rotation.rotate(Direction.from2DDataValue(rule.getByte("orientation")));
+        // AW saved the orientation as a full direction index (1.12 EnumFacing: 2 north, 3 south, 4 west, 5 east).
+        Direction facing = rotation.rotate(Direction.from3DDataValue(rule.getByte("orientation")));
         GateEntity gate = GateEntity.create(level.getLevel(), level, pos1, pos2, GateType.byAwName(rule.getString("gateType")), facing, null);
         if (gate == null)
         {
