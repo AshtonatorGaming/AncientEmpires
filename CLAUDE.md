@@ -107,7 +107,9 @@ instead of reflecting per call), Skirmisher thresholds (about 4.5 to 28 blocks).
   namespace renames, then `structures.missingBlock`), so a mod added later just works. `AeTemplates` indexes
   sidecars at datapack reload and caches loaded templates up to `structures.templateCacheMb`. AW's offset y is
   the first layer above ground, so the build key goes at a player's feet. `/ancientempires structure list`,
-  `place <id> [rotation]`, `check <id>`, `export <id>` (vanilla `.nbt` in `generated/` for a Structure Block).
+  `place <name> [rotation]`, `check <name>`, `export <name>` (vanilla `.nbt` in `generated/` for a Structure Block).
+  Templates go by their short name (the file name, unique); `structure list` shows the categories (AW's folders),
+  `list <category or part of a name>` the templates.
   AW gates, NPCs placed directly, vehicles, and flags are kept but not placed yet (S2, S3, S5).
 - Garrisons from structures (S2a): an AW advanced spawner becomes our `NpcSpawnerBlock` (`AwSpawnerImport` writes
   the spawner's saved form and loads it): one-shot ones GARRISON, ones with more to give REPEATING, redstone ones
@@ -117,7 +119,8 @@ instead of reflecting per call), Skirmisher thresholds (about 4.5 to 28 blocks).
   `structures.missingEntity`). All 35,354 library spawners import; 2 name an AW worker with no roster row. The
   spawner gained AW's options: `ClearXp`, `Pool` (one slot by weight), `Hostile` (blocks claiming), a per-scroll
   least count (`AeMinCount`), and spawn radius 0 (a post: on the spawner's own spot). `CaptureWandItem` (admins):
-  right-click a mob to capture it (our NPCs as their scroll via `NpcEntity.captureScroll`), then each right-click
+  right-click a mob to pick it up, removing it from the world as AW did (our NPCs as their scroll via
+  `NpcEntity.captureScroll`), then each right-click
   on a block places another one-soldier post, or adds to a spawner clicked; sneak-use clears.
 - Coins and loot (S2b): AW's coins (`coin_copper` Copper Owl, `coin_silver` Silver Stag, `coin_gold` Gold Dragon,
   `coin_ancient`; AW's one coin texture tinted in `NpcEggColors`) and `CoinStackBlock` (layers 1 to 8, one stack
@@ -192,6 +195,10 @@ Done since: daylight (`NpcSunGoal`, `sunlight` config, factions.json `sunlight`)
    bards, traders, smaller factions), which reads as spotty. Fix is data in skins.json (the user curates it).H. Sidearms beyond ranged (later, the user wants this): a pikeman with a reach weapon swapping to a shorter one
    in close quarters, and similar weapon-for-the-distance swaps; `NpcSidearm` already does it for bows and
    throwers.
+
+I. Later, from the user's testing: a visual overhaul of the NPC screens (EMI's search bar overlaps the NPC inventory now);
+   a character sheet ("Champion Sergeant Halberdier, Lv 17": rank, band, role, level, and the like); AW's Loot Chest
+   Placer for builders to set a chest's loot table (structures keep AW's per-chest tables already).
 
 1. Ancient Warfare baseline still missing: lance charges and other mounted tactics,
    day and night patrols, and the
@@ -565,7 +572,10 @@ its own unless noted). Before adding behavior, check what AW did first.
   (`NpcEntity.checkDespawn`), so the structure is manned again next visit; when all are dead the
   block removes itself; with none of its NPCs about and nobody near it re-arms. REPEATING: one at
   a time every min to max delay while a player is in range, up to most-at-once and a total. REDSTONE:
-  one per pulse. Dark-only and hidden (not drawn, no collision) toggles. Admin-only; one distance
+  one per pulse. Dark-only toggle. Hidden by default: never in the chunk mesh, no collision, and targetable only
+  by admins, who see a static placeholder (`NpcSpawnerRenderer`); survival players never see it. `Shown` (block
+  state, AW's non-transparent spawners, the giant scarecrow's) makes it a solid, breakable block everyone sees, with AW's
+  red animated spawner texture. Admin-only; one distance
   check a second.
 - Ranks (`NpcRank`, leadership apart from level): soldier, sergeant, captain, general, synced
   for the inventory label ("Captain, Lv 14"; the tooltip keeps the role). Faction leaders are

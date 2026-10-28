@@ -15,9 +15,11 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.TreeMap;
@@ -36,6 +38,8 @@ public final class AeTemplates extends SimpleJsonResourceReloadListener
     public static final String FOLDER = "ae_templates";
     private static final Gson GSON = new Gson();
     private static volatile Map<ResourceLocation, JsonObject> sidecars = Map.of();
+    /** Each template by its short name (the file name; unique across the library). */
+    private static volatile Map<String, ResourceLocation> byName = Map.of();
     @Nullable
     private static volatile ResourceManager resources;
     private static final Map<ResourceLocation, AeTemplate> CACHE = new LinkedHashMap<>(16, 0.75F, true);
@@ -58,6 +62,9 @@ public final class AeTemplates extends SimpleJsonResourceReloadListener
             }
         });
         sidecars = Collections.unmodifiableMap(loaded);
+        Map<String, ResourceLocation> names = new TreeMap<>();
+        loaded.keySet().forEach(id -> names.putIfAbsent(name(id), id));
+        byName = Collections.unmodifiableMap(names);
         resources = manager;
         synchronized (CACHE)
         {
@@ -71,6 +78,40 @@ public final class AeTemplates extends SimpleJsonResourceReloadListener
     public static Map<ResourceLocation, JsonObject> all()
     {
         return sidecars;
+    }
+
+    /** A template's short name: its file name, such as {@code empireballistaetower}. */
+    public static String name(ResourceLocation id)
+    {
+        return id.getPath().substring(id.getPath().lastIndexOf('/') + 1);
+    }
+
+    /** Its category: the folder it sits in (AW's nation or set: {@code awnationempire}, {@code oceanislands}). */
+    public static String category(ResourceLocation id)
+    {
+        String path = id.getPath();
+        int last = path.lastIndexOf('/');
+        return last < 0 ? "" : path.substring(path.lastIndexOf('/', last - 1) + 1, last);
+    }
+
+    /** Every short name, for command suggestions. */
+    public static Collection<String> names()
+    {
+        return byName.keySet();
+    }
+
+    /** The template a short name (or a full id) names, or null. */
+    @Nullable
+    public static ResourceLocation byName(String name)
+    {
+        String lower = name.toLowerCase(Locale.ROOT);
+        ResourceLocation id = byName.get(lower);
+        if (id == null)
+        {
+            ResourceLocation full = ResourceLocation.tryParse(lower);
+            id = full != null && sidecars.containsKey(full) ? full : null;
+        }
+        return id;
     }
 
     @Nullable

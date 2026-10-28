@@ -45,8 +45,8 @@ public final class AwSpawnerImport
     public static void place(ServerLevelAccessor level, BlockPos pos, CompoundTag rule, Map<String, Integer> report)
     {
         CompoundTag settings = rule.getCompound("teData").getCompound("spawnerSettings");
-        boolean hidden = settings.getBoolean("transparent");
-        level.setBlock(pos, ModBlocks.NPC_SPAWNER.get().defaultBlockState().setValue(NpcSpawnerBlock.HIDDEN, hidden), FLAGS);
+        // AW's transparent spawners (nearly all) are hidden; the rest players are meant to see.
+        level.setBlock(pos, ModBlocks.NPC_SPAWNER.get().defaultBlockState().setValue(NpcSpawnerBlock.SHOWN, !settings.getBoolean("transparent")), FLAGS);
         if (!(level.getBlockEntity(pos) instanceof NpcSpawnerBlockEntity spawner))
         {
             return;
@@ -111,7 +111,6 @@ public final class AwSpawnerImport
         tag.putInt("MaxNearby", nearby > 0 ? nearby : 6);
         tag.putInt("TotalLimit", endless ? 0 : total);
         tag.putBoolean("LightSensitive", settings.getBoolean("lightSensitive"));
-        tag.putBoolean("Hidden", settings.getBoolean("transparent"));
         tag.putInt("ClearXp", Math.max(0, settings.getInt("xpToDrop")));
         tag.putBoolean("Pool", groups.size() > 1);
         tag.putBoolean("Hostile", hostile || entries.isEmpty());

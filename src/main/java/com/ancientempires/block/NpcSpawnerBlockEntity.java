@@ -44,8 +44,8 @@ import org.jetbrains.annotations.Nullable;
  * alive, {@code totalLimit} in all (0 for no limit).</li>
  * <li>REDSTONE: one spawn on each redstone pulse, up to {@code maxNearby}.</li>
  * </ul>
- * Light sensitive: only in the dark. Hidden: the block is not drawn. Only
- * admins (creative) open or change it. Nothing ticks for a spawner no player
+ * Light sensitive: only in the dark. Shown: a solid block everyone sees;
+ * otherwise only admins do. Only admins (creative) open or change it. Nothing ticks for a spawner no player
  * is near beyond one distance check a second.
  */
 public final class NpcSpawnerBlockEntity extends BlockEntity
@@ -61,12 +61,12 @@ public final class NpcSpawnerBlockEntity extends BlockEntity
     public static final int MAX_NEARBY = 6;
     public static final int TOTAL_LIMIT = 7;
     public static final int LIGHT_SENSITIVE = 8;
-    public static final int HIDDEN = 9;
-    public static final int OUT = 10;
-    public static final int SPAWNED = 11;
-    public static final int CLEAR_XP = 12;
-    public static final int POOL = 13;
-    public static final int HOSTILE = 14;
+    public static final int OUT = 9;
+    public static final int SPAWNED = 10;
+    public static final int CLEAR_XP = 11;
+    public static final int POOL = 12;
+    public static final int HOSTILE = 13;
+    public static final int SHOWN = 14;
     public static final int DATA_COUNT = 15;
 
     public enum Mode
@@ -87,10 +87,10 @@ public final class NpcSpawnerBlockEntity extends BlockEntity
             {1, 32, 1},
             {0, 500, 1},
             {0, 1, 1},
-            {0, 1, 1},
             {0, 0, 0},
             {0, 0, 0},
             {0, 1000, 5},
+            {0, 1, 1},
             {0, 1, 1},
             {0, 1, 1}};
     private static final int CHECK_TICKS = 20;
@@ -126,7 +126,6 @@ public final class NpcSpawnerBlockEntity extends BlockEntity
     private int maxNearby = 6;
     private int totalLimit;
     private boolean lightSensitive;
-    private boolean hidden;
     /** GARRISON: experience dropped when the last of the garrison dies and the spawner goes. */
     private int clearXp;
     /** GARRISON: one slot, picked by weight the first time, instead of all of them. */
@@ -184,11 +183,6 @@ public final class NpcSpawnerBlockEntity extends BlockEntity
         return this.data;
     }
 
-    public boolean isHidden()
-    {
-        return this.hidden;
-    }
-
     int get(int index)
     {
         return switch (index)
@@ -202,12 +196,12 @@ public final class NpcSpawnerBlockEntity extends BlockEntity
             case MAX_NEARBY -> this.maxNearby;
             case TOTAL_LIMIT -> this.totalLimit;
             case LIGHT_SENSITIVE -> this.lightSensitive ? 1 : 0;
-            case HIDDEN -> this.hidden ? 1 : 0;
             case OUT -> this.out;
             case SPAWNED -> this.spawned;
             case CLEAR_XP -> this.clearXp;
             case POOL -> this.pool ? 1 : 0;
             case HOSTILE -> this.hostile ? 1 : 0;
+            case SHOWN -> this.getBlockState().hasProperty(NpcSpawnerBlock.SHOWN) && this.getBlockState().getValue(NpcSpawnerBlock.SHOWN) ? 1 : 0;
             default -> 0;
         };
     }
@@ -225,12 +219,12 @@ public final class NpcSpawnerBlockEntity extends BlockEntity
             case MAX_NEARBY -> this.maxNearby = value;
             case TOTAL_LIMIT -> this.totalLimit = value;
             case LIGHT_SENSITIVE -> this.lightSensitive = value != 0;
-            case HIDDEN -> this.setHidden(value != 0);
             case OUT -> this.out = value;
             case SPAWNED -> this.spawned = value;
             case CLEAR_XP -> this.clearXp = value;
             case POOL -> this.pool = value != 0;
             case HOSTILE -> this.hostile = value != 0;
+            case SHOWN -> this.setShown(value != 0);
             default ->
             {
             }
@@ -257,7 +251,7 @@ public final class NpcSpawnerBlockEntity extends BlockEntity
         {
             value = Math.floorMod(value + Integer.signum(step), Mode.values().length);
         }
-        else if (setting == LIGHT_SENSITIVE || setting == HIDDEN || setting == POOL || setting == HOSTILE)
+        else if (setting == LIGHT_SENSITIVE || setting == POOL || setting == HOSTILE || setting == SHOWN)
         {
             value = value == 0 ? 1 : 0;
         }
@@ -280,16 +274,13 @@ public final class NpcSpawnerBlockEntity extends BlockEntity
         this.setChanged();
     }
 
-    private void setHidden(boolean hidden)
+    /** Shown (a solid block everyone sees) or hidden (admins only); kept in the block state, which the client draws from. */
+    private void setShown(boolean shown)
     {
-        this.hidden = hidden;
-        if (this.level != null && !this.level.isClientSide)
+        BlockState state = this.getBlockState();
+        if (this.level != null && !this.level.isClientSide && state.hasProperty(NpcSpawnerBlock.SHOWN) && state.getValue(NpcSpawnerBlock.SHOWN) != shown)
         {
-            BlockState state = this.getBlockState();
-            if (state.hasProperty(NpcSpawnerBlock.HIDDEN) && state.getValue(NpcSpawnerBlock.HIDDEN) != hidden)
-            {
-                this.level.setBlock(this.worldPosition, state.setValue(NpcSpawnerBlock.HIDDEN, hidden), 3);
-            }
+            this.level.setBlock(this.worldPosition, state.setValue(NpcSpawnerBlock.SHOWN, shown), 3);
         }
     }
 
@@ -447,10 +438,9 @@ public final class NpcSpawnerBlockEntity extends BlockEntity
     {
         if (this.spawnRadius == 0)
         {
-            // A post: on the spawner's own spot (a hidden spawner is no obstacle), or just above it.
-            BlockPos here = this.worldPosition;
-            boolean passable = this.hidden || level.isEmptyBlock(here);
-            return passable && level.isEmptyBlock(here.above()) ? here : level.isEmptyBlock(here.above()) && level.isEmptyBlock(here.above(2)) ? here.above() : null;
+            // A post: on the spawner's own spot (hidden, it never collides), or on top of it when shown.
+            BlockPos here = this.getBlockState().getValue(NpcSpawnerBlock.SHOWN) ? this.worldPosition.above() : this.worldPosition;
+            return level.isEmptyBlock(here.above()) ? here : null;
         }
         RandomSource random = level.getRandom();
         for (int attempt = 0; attempt < PLACE_TRIES; attempt++)
@@ -624,7 +614,6 @@ public final class NpcSpawnerBlockEntity extends BlockEntity
         tag.putInt("MaxNearby", this.maxNearby);
         tag.putInt("TotalLimit", this.totalLimit);
         tag.putBoolean("LightSensitive", this.lightSensitive);
-        tag.putBoolean("Hidden", this.hidden);
         tag.putInt("Out", this.out);
         tag.putInt("Spawned", this.spawned);
         tag.putBoolean("Powered", this.powered);
@@ -660,7 +649,6 @@ public final class NpcSpawnerBlockEntity extends BlockEntity
         this.maxNearby = tag.contains("MaxNearby") ? tag.getInt("MaxNearby") : 6;
         this.totalLimit = tag.getInt("TotalLimit");
         this.lightSensitive = tag.getBoolean("LightSensitive");
-        this.hidden = tag.getBoolean("Hidden");
         this.out = tag.getInt("Out");
         this.spawned = tag.getInt("Spawned");
         this.powered = tag.getBoolean("Powered");

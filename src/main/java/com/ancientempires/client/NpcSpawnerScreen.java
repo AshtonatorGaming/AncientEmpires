@@ -51,9 +51,9 @@ public class NpcSpawnerScreen extends AbstractContainerScreen<NpcSpawnerMenu>
 
     private static final Toggle[] TOGGLES = {
             new Toggle(NpcSpawnerBlockEntity.LIGHT_SENSITIVE, "light"),
-            new Toggle(NpcSpawnerBlockEntity.HIDDEN, "hidden"),
             new Toggle(NpcSpawnerBlockEntity.POOL, "pool"),
-            new Toggle(NpcSpawnerBlockEntity.HOSTILE, "hostile")};
+            new Toggle(NpcSpawnerBlockEntity.HOSTILE, "hostile"),
+            new Toggle(NpcSpawnerBlockEntity.SHOWN, "shown")};
 
     /** A settings row: which setting, and its label key. */
     private record Row(int setting, String key)
@@ -118,7 +118,7 @@ public class NpcSpawnerScreen extends AbstractContainerScreen<NpcSpawnerMenu>
                     .bounds(right - 13, y, 13, 12).build());
         }
         int toggleY = this.topPos + ROW_TOP + this.rows.size() * ROW_H + 3;
-        int quarter = (right - left - 6) / 4;
+        int quarter = (right - left - 4) / TOGGLES.length;
         for (int index = 0; index < TOGGLES.length; index++)
         {
             Toggle toggle = TOGGLES[index];
@@ -208,7 +208,7 @@ public class NpcSpawnerScreen extends AbstractContainerScreen<NpcSpawnerMenu>
             FitText.draw(graphics, this.font, this.value(row.setting()), right - 62, y, 32, 9, GOLD, true, false);
         }
         int toggleY = ROW_TOP + this.rows.size() * ROW_H + 3 + 17;
-        int quarter = (right - PANEL_X - 6) / 4;
+        int quarter = (right - PANEL_X - 4) / TOGGLES.length;
         for (int index = 0; index < TOGGLES.length; index++)
         {
             Toggle toggle = TOGGLES[index];

@@ -2152,12 +2152,21 @@ public class NpcEntity extends PathfinderMob
     }
 
     /**
-     * A scroll of this NPC as it stands (row, gear, skin, name, level), leaving
-     * it in the world: the capture wand's copy for a spawner.
+     * The capture wand's pick-up, as AW's: this NPC as a scroll (row, gear,
+     * skin, name, level), readied the way a repack readies it, and taken out of
+     * the world. Its home is not kept; a spawner gives it a new one.
      */
     public ItemStack captureScroll()
     {
-        return this.createPackedItem(false);
+        this.sidearm.restore();
+        this.mount.beforeRepack();
+        this.releaseBed();
+        ItemStack scroll = this.createPackedItem(false);
+        if (!scroll.isEmpty())
+        {
+            this.discard();
+        }
+        return scroll;
     }
 
     /**

@@ -290,6 +290,9 @@ Yes. This is both feasible and desirable.
 
 ## Improvements That Can Wait
 
+- AW's Loot Chest Placer, so builders can give a chest a loot table fitting the structure (converted templates keep
+  AW's per-chest tables, castle treasury, lizardman and so on).
+
 - Full in-game scanner and creative structure tools.
 - Jigsaw / vanilla structure export.
 - Dynamic block reassignment by biome (old AW feature).

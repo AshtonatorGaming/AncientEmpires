@@ -23,42 +23,61 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.EntityCollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * The NPC spawner (see {@link NpcSpawnerBlockEntity}). Admins (creative)
- * right-click it to set it up. Hidden, it is not drawn and has no collision,
- * so it can sit in a structure's floor, but an admin can still target it.
+ * The NPC spawner (see {@link NpcSpawnerBlockEntity}). Hidden (the default,
+ * AW's transparent spawner) it is an admin block: a survival player never
+ * sees, touches, or targets it (a structure's garrison just appears), while
+ * admins (creative or spectator) see a placeholder drawn by
+ * {@code NpcSpawnerRenderer}; it never collides, so it can sit in a floor or
+ * where its post's soldier stands. {@link #SHOWN}, it is a solid block everyone
+ * sees and can break, like vanilla's spawner (AW's giant scarecrow spawning
+ * the Coven). Admins right-click it to set it up.
  */
 public final class NpcSpawnerBlock extends BaseEntityBlock
 {
-    public static final BooleanProperty HIDDEN = BooleanProperty.create("hidden");
+    public static final BooleanProperty SHOWN = BooleanProperty.create("shown");
 
     public NpcSpawnerBlock(Properties properties)
     {
         super(properties);
-        this.registerDefaultState(this.stateDefinition.any().setValue(HIDDEN, false));
+        this.registerDefaultState(this.stateDefinition.any().setValue(SHOWN, false));
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
-        builder.add(HIDDEN);
+        builder.add(SHOWN);
     }
 
+    /** Hidden, never in the chunk mesh: only admins see it, through its block entity renderer. */
     @Override
     public RenderShape getRenderShape(BlockState state)
     {
-        return state.getValue(HIDDEN) ? RenderShape.INVISIBLE : RenderShape.MODEL;
+        return state.getValue(SHOWN) ? RenderShape.MODEL : RenderShape.INVISIBLE;
+    }
+
+    /** Hidden, targetable (outline, clicks, breaking) by admins only. */
+    @Override
+    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
+    {
+        if (state.getValue(SHOWN))
+        {
+            return Shapes.block();
+        }
+        return context instanceof EntityCollisionContext entityContext && entityContext.getEntity() instanceof Player player
+                && (player.isCreative() || player.isSpectator()) ? Shapes.block() : Shapes.empty();
     }
 
     @Override
     public VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
     {
-        return state.getValue(HIDDEN) ? Shapes.empty() : super.getCollisionShape(state, level, pos, context);
+        return state.getValue(SHOWN) ? Shapes.block() : Shapes.empty();
     }
 
     @Override

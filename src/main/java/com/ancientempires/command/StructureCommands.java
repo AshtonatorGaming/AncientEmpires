@@ -14,7 +14,6 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
-import net.minecraft.commands.arguments.ResourceLocationArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.DoubleTag;
@@ -49,6 +48,7 @@ import java.util.TreeMap;
 public final class StructureCommands
 {
     private static final int SHOWN = 15;
+    private static final int LISTED = 80;
 
     private StructureCommands()
     {
@@ -63,42 +63,59 @@ public final class StructureCommands
                         .then(Commands.argument("filter", StringArgumentType.greedyString())
                                 .executes(context -> list(context, StringArgumentType.getString(context, "filter")))))
                 .then(Commands.literal("place")
-                        .then(Commands.argument("template", ResourceLocationArgument.id())
-                                .suggests((context, builder) -> SharedSuggestionProvider.suggestResource(AeTemplates.all().keySet(), builder))
+                        .then(Commands.argument("template", StringArgumentType.word())
+                                .suggests((context, builder) -> SharedSuggestionProvider.suggest(AeTemplates.names(), builder))
                                 .executes(context -> place(context, null))
                                 .then(Commands.argument("rotation", StringArgumentType.word())
                                         .suggests((context, builder) -> SharedSuggestionProvider.suggest(
                                                 List.of("none", "clockwise_90", "180", "counterclockwise_90"), builder))
                                         .executes(context -> place(context, StringArgumentType.getString(context, "rotation"))))))
                 .then(Commands.literal("check")
-                        .then(Commands.argument("template", ResourceLocationArgument.id())
-                                .suggests((context, builder) -> SharedSuggestionProvider.suggestResource(AeTemplates.all().keySet(), builder))
+                        .then(Commands.argument("template", StringArgumentType.word())
+                                .suggests((context, builder) -> SharedSuggestionProvider.suggest(AeTemplates.names(), builder))
                                 .executes(StructureCommands::check)))
                 .then(Commands.literal("export")
-                        .then(Commands.argument("template", ResourceLocationArgument.id())
-                                .suggests((context, builder) -> SharedSuggestionProvider.suggestResource(AeTemplates.all().keySet(), builder))
+                        .then(Commands.argument("template", StringArgumentType.word())
+                                .suggests((context, builder) -> SharedSuggestionProvider.suggest(AeTemplates.names(), builder))
                                 .executes(StructureCommands::export)));
     }
 
+    /**
+     * No filter: the categories (AW's folders: empire, nogg, oceanislands, ...)
+     * with how many each holds. A category's name: its templates. Anything else:
+     * templates whose name has it.
+     */
     private static int list(CommandContext<CommandSourceStack> context, String filter)
     {
-        String needle = filter.toLowerCase(Locale.ROOT);
-        List<ResourceLocation> matches = AeTemplates.all().keySet().stream().filter(id -> id.toString().contains(needle)).toList();
-        context.getSource().sendSuccess(() -> Component.translatable("commands.ancientempires.structure.list", matches.size(), AeTemplates.all().size()), false);
-        matches.stream().limit(SHOWN).forEach(id -> context.getSource().sendSuccess(() -> Component.literal("  " + id), false));
-        if (matches.size() > SHOWN)
+        CommandSourceStack source = context.getSource();
+        String needle = filter.strip().toLowerCase(Locale.ROOT);
+        if (needle.isEmpty())
         {
-            context.getSource().sendSuccess(() -> Component.translatable("commands.ancientempires.structure.more", matches.size() - SHOWN), false);
+            Map<String, Integer> categories = new TreeMap<>();
+            AeTemplates.all().keySet().forEach(id -> categories.merge(AeTemplates.category(id), 1, Integer::sum));
+            source.sendSuccess(() -> Component.translatable("commands.ancientempires.structure.categories", categories.size(), AeTemplates.all().size()), false);
+            source.sendSuccess(() -> Component.literal(String.join(", ", categories.entrySet().stream()
+                    .map(entry -> entry.getKey() + " (" + entry.getValue() + ")").toList())), false);
+            return categories.size();
+        }
+        List<ResourceLocation> inCategory = AeTemplates.all().keySet().stream().filter(id -> AeTemplates.category(id).equals(needle)).toList();
+        List<ResourceLocation> matches = !inCategory.isEmpty() ? inCategory
+                : AeTemplates.all().keySet().stream().filter(id -> AeTemplates.name(id).contains(needle) || AeTemplates.category(id).contains(needle)).toList();
+        source.sendSuccess(() -> Component.translatable("commands.ancientempires.structure.list", matches.size(), AeTemplates.all().size()), false);
+        source.sendSuccess(() -> Component.literal(String.join(", ", matches.stream().limit(LISTED).map(AeTemplates::name).toList())), false);
+        if (matches.size() > LISTED)
+        {
+            source.sendSuccess(() -> Component.translatable("commands.ancientempires.structure.more", matches.size() - LISTED), false);
         }
         return matches.size();
     }
 
     private static AeTemplate template(CommandContext<CommandSourceStack> context, ResourceLocation id)
     {
-        AeTemplate template = AeTemplates.get(id).orElse(null);
+        AeTemplate template = id == null ? null : AeTemplates.get(id).orElse(null);
         if (template == null)
         {
-            context.getSource().sendFailure(Component.translatable("commands.ancientempires.structure.unknown", id.toString()));
+            context.getSource().sendFailure(Component.translatable("commands.ancientempires.structure.unknown", StringArgumentType.getString(context, "template")));
         }
         return template;
     }
@@ -132,7 +149,7 @@ public final class StructureCommands
     private static int place(CommandContext<CommandSourceStack> context, String rotationName) throws CommandSyntaxException
     {
         ServerPlayer player = context.getSource().getPlayerOrException();
-        ResourceLocation id = ResourceLocationArgument.getId(context, "template");
+        ResourceLocation id = AeTemplates.byName(StringArgumentType.getString(context, "template"));
         AeTemplate template = template(context, id);
         if (template == null)
         {
@@ -164,7 +181,7 @@ public final class StructureCommands
 
     private static int check(CommandContext<CommandSourceStack> context)
     {
-        ResourceLocation id = ResourceLocationArgument.getId(context, "template");
+        ResourceLocation id = AeTemplates.byName(StringArgumentType.getString(context, "template"));
         AeTemplate template = template(context, id);
         if (template == null)
         {
@@ -220,7 +237,7 @@ public final class StructureCommands
      */
     private static int export(CommandContext<CommandSourceStack> context)
     {
-        ResourceLocation id = ResourceLocationArgument.getId(context, "template");
+        ResourceLocation id = AeTemplates.byName(StringArgumentType.getString(context, "template"));
         AeTemplate template = template(context, id);
         if (template == null)
         {

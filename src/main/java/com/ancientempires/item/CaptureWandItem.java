@@ -26,8 +26,9 @@ import java.util.List;
 
 /**
  * Ancient Warfare's Mob Spawner Placement Tool, for admins building structures.
- * Right-click a mob to capture it (one of our NPCs as its scroll, with gear,
- * skin, name and level; anything else as a {@link MobScrollItem}), then
+ * Right-click a mob to pick it up into the wand (one of our NPCs as its scroll,
+ * with gear, skin, name and level; anything else as a {@link MobScrollItem};
+ * either way it leaves the world), then
  * right-click a block to place a garrison spawner holding it, or a spawner to
  * add it to the spawner's slots (the same capture again adds one more).
  * Sneak-use in the air clears the capture. The spawner's settings are then
@@ -64,7 +65,17 @@ public class CaptureWandItem extends Item
         {
             return InteractionResult.PASS;
         }
-        ItemStack scroll = target instanceof NpcEntity npc ? npc.captureScroll() : MobScrollItem.capture(ModItems.MOB_SCROLL.get(), target);
+        ItemStack scroll;
+        if (target instanceof NpcEntity npc)
+        {
+            scroll = npc.captureScroll();
+        }
+        else
+        {
+            scroll = MobScrollItem.capture(ModItems.MOB_SCROLL.get(), target);
+            // Picked up, as AW's tool did: the mob leaves the world for the wand.
+            target.discard();
+        }
         if (scroll.isEmpty())
         {
             return InteractionResult.FAIL;
