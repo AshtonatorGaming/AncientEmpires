@@ -207,3 +207,24 @@ Spies and certain nobles can generate in-character reports stored as ordinary me
 Guilds and subfactions are lightweight extra flags or records. They are readable by dialogue, prices, loyalty checks, or director events. No additional ticking.
 
 All of the above continue to obey the architectural primitives. They are recorded so the design space stays coherent as the mod grows.
+
+### Charge Bonus, Anti-Charge, and Formation Attacks
+
+Any ordered formation attack can receive a short-lived charge bonus. On the attack order the sergeant (or solo unit) sets a `charging` flag and a small speed modifier for a configurable window. While the flag is active and the unit is still moving above a speed threshold, the first hit applies a damage multiplier (and optional brief stagger). The flag clears when the unit stops, enters sustained melee, or the formation breaks. No ongoing cost afterward.
+
+Anti-charge units (pikes, braced spears, certain heavy infantry) carry an `anti-charge` flag. On a charging hit they cancel or reduce the multiplier, with an optional partial reflection or stagger back to the charger. Both checks happen at the existing hit-resolution point in the attack goal. All values (threshold, multiplier, duration, reflection strength) are config. Faction templates can raise or lower them. The same system works for infantry lines, wedges, and cavalry; cavalry simply reach the speed threshold more easily due to higher base speed.
+
+### Cavalry Movement and 1v1 Gating
+
+Mounted units must not inherit ground footwork, backstep, or tight duel circling. While mounted the attack controller skips those weights and uses only the charge window, a simple maintain-preferred-range or close movement rule, and normal melee once the charge flag drops. On dismount they fall back to the full ground profile. This prevents the old jittery half-mounted, half-dueling behavior in 1v1s. Horse archers and mounted skirmishers keep larger preferred range and faster retreat triggers; they do not switch to melee unless cornered and ordered into a last stand. Preferred open-ground bias is a light path weight, not custom pathfinding.
+
+### Companions and Personal Guards
+
+A companion or personal guard is an NPC whose leader UUID points to the player (or a short-lived retinue flag). They use the normal attack, inventory, and morale systems. Differences are data and rules only:
+
+- Tighter follow tether and higher priority on staying near the player. They ignore normal squad formation and are not assigned to sergeants.
+- High or locked loyalty flag; optional bound flag that allows re-summon at a Town Hall or War Council after death if resources allow.
+- Hard cap (config, default 2–4) so the cost stays near zero. Beyond the cap they become regular soldiers.
+- Differentiation is visual and UI: unique title/role flag in the name tag or GUI, optional heraldry overlay or distinct equipment, a small passive (nearby morale aura or one-time intercept chance) stored as a flag, and a separate short list in the War Council or player screen.
+
+Cameo / Ancient Heroes characters can start with the companion flag, or a high-prestige soldier can be promoted into the role later. No new ticking goals.
