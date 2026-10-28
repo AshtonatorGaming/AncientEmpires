@@ -4,7 +4,11 @@ import com.ancientempires.AncientEmpires;
 import com.google.gson.JsonObject;
 import com.ancientempires.block.FlagBlockEntity;
 import com.ancientempires.block.NpcSpawnerBlockEntity;
+import com.ancientempires.config.AncientEmpiresConfig;
+import com.ancientempires.entity.npc.NpcEntity;
 import com.ancientempires.gate.GateEntity;
+import com.ancientempires.gate.GateType;
+import com.ancientempires.registry.ModEntities;
 import com.ancientempires.registry.ModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -22,6 +26,7 @@ import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.CrossCollisionBlock;
 import net.minecraft.world.level.block.FenceBlock;
@@ -38,6 +43,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.UUID;
 import java.util.stream.IntStream;
 
 /**
@@ -322,6 +328,8 @@ public final class StructureGameTests
         String path = "normal/awnationempire/empirebordertower";
         // Close by: gates are entities, which tick only near the test.
         BlockPos anchor = helper.absolutePos(new BlockPos(0, 1, 0)).offset(12, 2, 12);
+        // The test world keeps entities between runs: clear last run's gates first.
+        helper.getLevel().getEntitiesOfClass(GateEntity.class, new AABB(anchor).inflate(48.0D)).forEach(GateEntity::discard);
         placeAndLog(helper, path, anchor, Rotation.CLOCKWISE_90);
         ServerLevel level = helper.getLevel();
         ResourceLocation id = ResourceLocation.fromNamespaceAndPath(AncientEmpires.MOD_ID, path);
@@ -344,6 +352,63 @@ public final class StructureGameTests
                 helper.succeedWhen(() -> helper.assertTrue(gate.edge() == 0.0F && level.getBlockState(gate.min()).is(ModBlocks.GATE_PROXY.get()),
                         "closed again and blocked"));
             });
+        });
+    }
+
+    /**
+     * With gates.npcUse on: a player's NPC walks through its owner's gate in
+     * a wall (opening it ahead, closing it behind), rather than around.
+     */
+    @GameTest(template = ARENA, timeoutTicks = 600)
+    public static void ownedNpcUsesOwnersGate(GameTestHelper helper)
+    {
+        AncientEmpiresConfig.gateNpcUse = true;
+        ServerLevel level = helper.getLevel();
+        level.setDayTime(6000L);
+        level.getEntitiesOfClass(GateEntity.class, new AABB(helper.absolutePos(new BlockPos(-20, 1, -20))).inflate(2.0D)).forEach(GateEntity::discard);
+        UUID owner = UUID.randomUUID();
+        // A floor, and a wall across it with a two-high gate in the middle.
+        for (int x = -6; x <= 6; x++)
+        {
+            for (int z = -12; z <= 12; z++)
+            {
+                helper.setBlock(new BlockPos(x - 20, 0, z - 20), Blocks.STONE);
+                for (int y = 1; y <= 5; y++)
+                {
+                    // The test world is solid ground here: clear room to walk.
+                    helper.setBlock(new BlockPos(x - 20, y, z - 20), Blocks.AIR);
+                }
+            }
+        }
+        for (int z = -12; z <= 12; z++)
+        {
+            for (int y = 1; y <= 4; y++)
+            {
+                helper.setBlock(new BlockPos(-20, y, z - 20), z == 0 && y <= 2 ? Blocks.AIR : Blocks.STONE_BRICKS);
+            }
+        }
+        GateEntity gate = GateEntity.create(level, helper.absolutePos(new BlockPos(-20, 1, -20)), helper.absolutePos(new BlockPos(-20, 2, -20)),
+                GateType.VERTICAL_WOOD, Direction.EAST, owner);
+        level.addFreshEntity(gate);
+        NpcEntity npc = ModEntities.NPC.get().create(level);
+        BlockPos start = helper.absolutePos(new BlockPos(-24, 1, -20));
+        npc.moveTo(start.getX() + 0.5D, start.getY(), start.getZ() + 0.5D, 0.0F, 0.0F);
+        npc.setOwner(owner);
+        level.addFreshEntity(npc);
+        BlockPos goal = helper.absolutePos(new BlockPos(-16, 1, -20));
+        helper.onEachTick(() ->
+        {
+            if (npc.tickCount % 10 == 0)
+            {
+                npc.getNavigation().moveTo(goal.getX() + 0.5D, goal.getY(), goal.getZ() + 0.5D, 1.0D);
+            }
+        });
+        helper.succeedWhen(() ->
+        {
+            helper.assertTrue(npc.getX() > goal.getX() - 1.0D, "the NPC reaches the far side, now at " + npc.blockPosition() + " goal " + goal
+                    + "; gate status " + gate.status() + " edge " + gate.edge() + " may " + gate.mayNpcUse(npc) + " path "
+                    + (npc.getNavigation().getPath() == null ? "none" : npc.getNavigation().getPath().getNodeCount() + " nodes, reaches " + npc.getNavigation().getPath().canReach()));
+            AncientEmpires.LOGGER.info("GAMETEST npc through gate, gate status {} edge {}", gate.status(), gate.edge());
         });
     }
 

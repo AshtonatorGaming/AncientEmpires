@@ -159,7 +159,12 @@ instead of reflecting per call), Skirmisher thresholds (about 4.5 to 28 blocks).
   ModelGateBasic and ModelGateBridge rebuilt box for box on AW's sheets, with AW's per-cell frame and wall logic in
   AW's flipped space. `GateSpawnerItem`, one per type: click two corners, then again to build. Structures build
   AW's `awGate` entries closed (`AePlacer.placeGate`). `gateMoveSpeed` 0.05 (AW's 0.025 took ten seconds for a
-  five-high gate), `gateBridgeSpeed` 1 degree a tick. Not yet: NPCs opening gates for themselves (AW's soldiers did).
+  five-high gate), `gateBridgeSpeed` 1 degree a tick. AW's NPCs never opened gates (only its siege-vehicle
+  pathfinder did). `gates.npcUse` (off by default, beyond AW): a player's own NPCs path through their owner's gates
+  (built or claimed; `NpcGateNavigation` reads a permitted gate's proxies as a wooden door, so night door rules apply)
+  and `NpcGateGoal` opens the gate ahead and closes it behind; never a drawbridge, a held fort's gate, while
+  fighting, or with a monster or a faction NPC hostile to the owner within `npcHostileRange` (16). A closing gate
+  with someone in the opening reopens instead of shutting them in.
 - Template text: 240 of AW's templates are Latin-1, not UTF-8; `AwsConvertTool.text` falls back to Latin-1 (their
   signs' section signs had become question marks), and sign lines drop formatting codes.
 
@@ -779,6 +784,8 @@ target-scan design.
   background executor when an NPC arrives on the client or its skin changes.
 
 ## Testing
+
+- Working cache: `docs/session-notes.md` (state, next steps, later notes). Read it first; update it after each chunk.
 
 - The user tests in a separate game instance (see their notes); check its `logs/latest.log`
   to see which combat and animation path is live (Better Mob Combat, the fallback driver,

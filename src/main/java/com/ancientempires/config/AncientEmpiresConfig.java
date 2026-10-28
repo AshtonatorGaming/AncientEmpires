@@ -271,6 +271,8 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.IntValue GATE_HEALTH;
     private static final ForgeConfigSpec.DoubleValue GATE_SPEED;
     private static final ForgeConfigSpec.DoubleValue GATE_BRIDGE_SPEED;
+    private static final ForgeConfigSpec.BooleanValue GATE_NPC_USE;
+    private static final ForgeConfigSpec.DoubleValue GATE_NPC_HOSTILE_RANGE;
     private static final ForgeConfigSpec.BooleanValue MORALE_ENABLED;
     private static final ForgeConfigSpec.BooleanValue MORALE_OWNED;
     private static final ForgeConfigSpec.ConfigValue<List<? extends Double>> MORALE_BASE;
@@ -1083,6 +1085,8 @@ public final class AncientEmpiresConfig
         GATE_HEALTH = builder.comment("A gate's health (AW's 80). Explosions do ten times their damage; an axe half against wood, a pickaxe a half or third against iron, anything else a quarter; arrows nothing.").defineInRange("gateHealth", 80, 1, 10000);
         GATE_SPEED = builder.comment("Blocks a gate's wall moves per tick (AW's was 0.025: a five-high gate took ten seconds).").defineInRange("gateMoveSpeed", 0.05D, 0.005D, 1.0D);
         GATE_BRIDGE_SPEED = builder.comment("Degrees a drawbridge turns per tick (AW's 1: ninety ticks to lower).").defineInRange("gateBridgeSpeed", 1.0D, 0.1D, 10.0D);
+        GATE_NPC_USE = builder.comment("NPCs open and close gates for themselves (beyond AW, where gates were walls to NPCs). Only a player's own NPCs, through their owner's gates (built or claimed), never a garrisoned fort's, never while fighting or with an enemy near the gate.").define("npcUse", false);
+        GATE_NPC_HOSTILE_RANGE = builder.comment("With npcUse: no NPC opens a gate while a monster or a faction NPC hostile to its owner is this close to it.").defineInRange("npcHostileRange", 16.0D, 0.0D, 64.0D);
         builder.pop();
 
         builder.comment("Morale, Total War style: soldiers waver, rout, and shatter. Each soldier's morale (0 to 100) drifts toward what its situation is worth: its rank's base, a commander's aura, the odds around it, its wounds, a recent hit from behind, hunger, and routing allies; deaths and kills nearby shock it. Below routBelow it runs (as civilians do, fighting only when cornered) and rallies once recovered; the third rout shatters it for good. Fearless factions (factions.json) never break.").push("morale");
@@ -1556,6 +1560,8 @@ public final class AncientEmpiresConfig
     public static int gateHealth = 80;
     public static float gateMoveSpeed = 0.05F;
     public static float gateBridgeSpeed = 1.0F;
+    public static boolean gateNpcUse = false;
+    public static double gateNpcHostileRange = 16.0D;
     public static boolean moraleEnabled = true;
     public static boolean moraleOwnedNpcs = true;
     public static List<? extends Double> moraleBaseByTier = List.of(60.0D, 70.0D, 80.0D, 90.0D);
@@ -1949,6 +1955,8 @@ public final class AncientEmpiresConfig
         gateHealth = GATE_HEALTH.get();
         gateMoveSpeed = (float) (double) GATE_SPEED.get();
         gateBridgeSpeed = (float) (double) GATE_BRIDGE_SPEED.get();
+        gateNpcUse = GATE_NPC_USE.get();
+        gateNpcHostileRange = GATE_NPC_HOSTILE_RANGE.get();
         moraleEnabled = MORALE_ENABLED.get();
         moraleOwnedNpcs = MORALE_OWNED.get();
         moraleBaseByTier = MORALE_BASE.get();

@@ -1,6 +1,7 @@
 package com.ancientempires.gate;
 
 import com.ancientempires.config.AncientEmpiresConfig;
+import com.ancientempires.entity.npc.NpcEntity;
 import com.ancientempires.entity.npc.NpcStandings;
 import com.ancientempires.registry.ModBlocks;
 import com.ancientempires.registry.ModEntities;
@@ -24,6 +25,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.AxeItem;
@@ -252,9 +254,20 @@ public class GateEntity extends Entity implements IEntityAdditionalSpawnData
         }
         else if (edge <= 0.0F)
         {
-            edge = 0.0F;
-            this.entityData.set(STATUS, (byte) 0);
-            this.fill(this.wallArea());
+            BlockPos[] wall = this.wallArea();
+            if (!this.level().getEntitiesOfClass(LivingEntity.class, new AABB(wall[0].getX(), wall[0].getY(), wall[0].getZ(),
+                    wall[1].getX() + 1, wall[1].getY() + 1, wall[1].getZ() + 1), LivingEntity::isAlive).isEmpty())
+            {
+                // Someone stands in the opening: open again rather than shut them in the wall.
+                edge = 0.0F;
+                this.entityData.set(STATUS, (byte) 1);
+            }
+            else
+            {
+                edge = 0.0F;
+                this.entityData.set(STATUS, (byte) 0);
+                this.fill(wall);
+            }
         }
         this.entityData.set(EDGE, edge);
         this.setBoundingBox(this.makeBoundingBox());
@@ -357,6 +370,68 @@ public class GateEntity extends Entity implements IEntityAdditionalSpawnData
         {
             this.toggle();
         }
+    }
+
+    /** Opens it if it is closed or closing. */
+    public void open()
+    {
+        if (this.status() == -1 || (this.status() == 0 && this.edge() < this.edgeMax()))
+        {
+            this.toggle();
+        }
+    }
+
+    /** Closes it if it is open or opening. */
+    public void close()
+    {
+        if (this.status() == 1 || (this.status() == 0 && this.edge() > 0.0F))
+        {
+            this.toggle();
+        }
+    }
+
+    /**
+     * Whether an NPC may open this gate by itself ({@code gates.npcUse}, beyond
+     * AW): only a player's own NPC, through its owner's gate (built by the owner,
+     * or in a structure the owner claimed), never a drawbridge (AW kept those
+     * from soldiers too), never a held fort's gate, never while it is fighting,
+     * and never with a monster or a faction NPC hostile to its owner within
+     * {@code npcHostileRange} of the gate: opening for a friend opens for
+     * whoever is outside.
+     */
+    public boolean mayNpcUse(NpcEntity npc)
+    {
+        if (!AncientEmpiresConfig.gateNpcUse || this.type.motion == GateType.Motion.BRIDGE || !npc.isOwnedNpc() || npc.getTarget() != null)
+        {
+            return false;
+        }
+        UUID master = npc.getOwner();
+        if (master == null)
+        {
+            return false;
+        }
+        boolean theirs;
+        if (this.owner != null)
+        {
+            theirs = this.owner.equals(master);
+        }
+        else
+        {
+            StructureRecords.Record record = this.level() instanceof ServerLevel server ? StructureRecords.get(server).at(this.blockPosition()) : null;
+            theirs = record != null && master.equals(record.claimedBy);
+        }
+        return theirs && !this.enemyNear(master);
+    }
+
+    private boolean enemyNear(UUID master)
+    {
+        double range = AncientEmpiresConfig.gateNpcHostileRange;
+        if (range <= 0.0D)
+        {
+            return false;
+        }
+        return !this.level().getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(range), living -> living.isAlive()
+                && (living instanceof Enemy || living instanceof NpcEntity other && other.isFactionNpc() && other.isHostileToPlayer(master))).isEmpty();
     }
 
     /** Whether this player may open, close, or (sneaking, as owner) pack the gate. */

@@ -13,6 +13,8 @@ import com.ancientempires.combat.SpartanThrowing;
 import com.ancientempires.combat.WeaponClassifier;
 import com.ancientempires.config.AncientEmpiresConfig;
 import com.ancientempires.inventory.NpcMenu;
+import com.ancientempires.gate.NpcGateGoal;
+import com.ancientempires.gate.NpcGateNavigation;
 import com.ancientempires.item.CaptureWandItem;
 import com.ancientempires.item.InsigniaItem;
 import com.ancientempires.item.WarHornItem;
@@ -325,12 +327,13 @@ public class NpcEntity extends PathfinderMob
     /**
      * Paths may run through doors a hand can open, and through open doors.
      * Any door built on {@code DoorBlock} counts, modded ones included; iron
-     * doors stay closed. Read once when the NPC is created.
+     * doors stay closed. Read once when the NPC is created. With {@code gates.npcUse}, paths also run
+     * through the gates the NPC may open ({@link NpcGateNavigation}).
      */
     @Override
     protected PathNavigation createNavigation(Level level)
     {
-        GroundPathNavigation navigation = new GroundPathNavigation(this, level);
+        GroundPathNavigation navigation = new NpcGateNavigation(this, level);
         navigation.setCanOpenDoors(AncientEmpiresConfig.openDoors);
         navigation.setCanPassDoors(true);
         return navigation;
@@ -420,6 +423,8 @@ public class NpcEntity extends PathfinderMob
             this.goalSelector.addGoal(0, new OpenDoorGoal(this, AncientEmpiresConfig.closeDoors));
             this.goalSelector.addGoal(0, new NpcNightDoorsGoal(this));
         }
+        // Gates as doors, for a player's own NPCs and only with gates.npcUse on (off by default).
+        this.goalSelector.addGoal(0, new NpcGateGoal(this));
         // A bow keeps this goal for the whole fight. Melee does not run while it does.
         this.goalSelector.addGoal(1, new NpcBowAttackGoal(this));
         // A Spartan throwing weapon keeps the skirmish goal; a drawn sidearm hands the fight to melee.
