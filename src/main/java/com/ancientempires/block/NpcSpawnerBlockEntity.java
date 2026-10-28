@@ -8,6 +8,11 @@ import com.ancientempires.registry.ModBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Container;
@@ -23,6 +28,7 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -103,6 +109,7 @@ public final class NpcSpawnerBlockEntity extends BlockEntity
         {
             super.setChanged();
             NpcSpawnerBlockEntity.this.setChanged();
+            NpcSpawnerBlockEntity.this.relabel();
         }
 
         @Override
@@ -118,6 +125,8 @@ public final class NpcSpawnerBlockEntity extends BlockEntity
         }
     };
     private Mode mode = Mode.GARRISON;
+    /** Client side: what the admin nametag reads (synced; see {@link #label()}). */
+    private String label = "";
     private int playerRange = 16;
     private int spawnRadius = 4;
     private int returnRange = 48;
@@ -593,6 +602,106 @@ public final class NpcSpawnerBlockEntity extends BlockEntity
     private int nextDelay(RandomSource random)
     {
         return this.minDelay + (this.maxDelay > this.minDelay ? random.nextInt(this.maxDelay - this.minDelay + 1) : 0);
+    }
+
+    /**
+     * What admins see over the spawner, as AW's spawner showed its first mob's
+     * name: the first scroll's NPC custom name, else the scroll's own name,
+     * then how many it holds and how many other kinds.
+     */
+    public Component label()
+    {
+        ItemStack first = ItemStack.EMPTY;
+        int count = 0;
+        int kinds = 0;
+        for (int slot = 0; slot < SLOTS; slot++)
+        {
+            ItemStack stack = this.slots.getItem(slot);
+            if (stack.isEmpty())
+            {
+                continue;
+            }
+            if (first.isEmpty())
+            {
+                first = stack;
+            }
+            count += stack.getCount();
+            kinds++;
+        }
+        if (first.isEmpty())
+        {
+            return Component.translatable("block.ancientempires.npc_spawner.empty");
+        }
+        Component name = first.getHoverName();
+        String custom = first.getTag() == null ? "" : first.getTag().getCompound("EntityTag").getString("CustomName");
+        if (!custom.isEmpty())
+        {
+            try
+            {
+                Component parsed = Component.Serializer.fromJson(custom);
+                if (parsed != null)
+                {
+                    name = parsed;
+                }
+            }
+            catch (RuntimeException exception)
+            {
+                name = Component.literal(custom);
+            }
+        }
+        return kinds > 1 ? Component.translatable("block.ancientempires.npc_spawner.label_more", name, count, kinds - 1)
+                : Component.translatable("block.ancientempires.npc_spawner.label", name, count);
+    }
+
+    /** Tall enough for the admin nametag over it (NpcSpawnerRenderer). */
+    @Override
+    public AABB getRenderBoundingBox()
+    {
+        return new AABB(this.worldPosition).expandTowards(0.0D, 1.0D, 0.0D);
+    }
+
+    public String clientLabel()
+    {
+        return this.label;
+    }
+
+    /** Sends the new nametag to watching clients, from the server thread only (never during generation). */
+    private void relabel()
+    {
+        if (this.level instanceof ServerLevel server && server.getServer().isSameThread())
+        {
+            server.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), Block.UPDATE_CLIENTS);
+        }
+    }
+
+    /** Only the nametag goes to clients; the scrolls stay on the server. */
+    @Override
+    public CompoundTag getUpdateTag()
+    {
+        CompoundTag tag = new CompoundTag();
+        tag.putString("Label", Component.Serializer.toJson(this.label()));
+        return tag;
+    }
+
+    @Override
+    public void handleUpdateTag(CompoundTag tag)
+    {
+        this.label = tag.getString("Label");
+    }
+
+    @Override
+    public void onDataPacket(Connection connection, ClientboundBlockEntityDataPacket packet)
+    {
+        if (packet.getTag() != null)
+        {
+            this.handleUpdateTag(packet.getTag());
+        }
+    }
+
+    @Override
+    public Packet<ClientGamePacketListener> getUpdatePacket()
+    {
+        return ClientboundBlockEntityDataPacket.create(this);
     }
 
     @Override
