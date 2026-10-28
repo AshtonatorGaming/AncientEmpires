@@ -21,6 +21,106 @@ Vanilla structure pieces / jigsaws can be an optional export or a future authori
 
 ---
 
+## Findings From the Template Library (2026-10-28)
+
+Read from the 1,472 templates in `libs/ancientwarfare-1.6.1.jar` (`MohawkyPackTweaked1.20.1V76`). These change the plan above.
+
+- **The templates are 1.12 data.** Block states use 1.12 names and properties (`minecraft:grass` with `snowy`,
+  `minecraft:stonebrick` with `variant:mossy_stonebrick`), biomes are 1.12 ids (`forest_hills`), dimensions are
+  numbers (`dimensionList=0`). The registry is not a detector until the data is converted.
+- **How the 1.20.1 port converts them, and why it is not enough:** `RegistryTools.fixLegacyName` runs only the block
+  *name* through vanilla's DataFixer, then looks it up, else air. The 1.12 variant properties are dropped, so mossy
+  stone bricks, colored wool, plank species and similar lose their variant, and `minecraft:grass` survives the
+  name pass as the 1.20 tall-grass plant instead of `grass_block`. The idea is right, the input is wrong.
+- **Our conversion:** feed the whole state (`{Name, Properties}`) through vanilla's DataFixer as
+  `References.BLOCK_STATE` from data version 1343 (1.12.2) to the current one. That is Mojang's own flattening
+  table (`BlockStateData`), so vanilla blocks come out right with their variants. Biome names go through the same
+  fixer (`References.BIOME`). Do it once in an offline converter that writes our own template files, so the game
+  never runs the fixer and the result can be diffed and hand-corrected. AW's own blocks and entities go through
+  our mapping table, not the fixer.
+- **Source of truth:** AW Tweaked's or classic 1.12.2 AW's own templates, for parity. The 1.20.1 port's copies are
+  the same files; its code is only a reference for what not to do.
+- **AW content the templates need**, by use count. All of it returns, as placeholders first where needed:
+  - Spawners: `advanced_spawner` (35k block uses, 1,172 templates) → our `NpcSpawnerBlock`. Its `entityId`
+    (`ancientwarfarenpc:faction.archer`, `.soldier`, `.leader`, `.civilian`, `.elite` variants) plus `factionName`
+    (`empire`, `nogg`, `norska`, ...) resolves through `NpcRoster`. Also `AWNpc` rules (219, NPCs placed directly).
+  - Faction flags and banners: `decorative_flag` (982), `protection_flag` (279), the `flag` (1,247) and `banner`
+    (1,779) rule plugins. The protection flag is AW's claim marker: it protects the structure it stands in and is
+    what a player takes to claim it. Port it as the garrison anchor (owner faction, protected bounds, claim),
+    with the faction's own flag art.
+  - Gates: `gate_proxy` (4,989) and `awGate` rules (266): vertical iron, double wood, vertical wooden,
+    drawbridge, single wood, double iron. A gate is an entity spanning a proxy block frame, as in AW.
+  - Stationary siege engines: `AWVehicle` (438 rules in 88 templates), mostly `vehType` 5, 10, 9, 4, 17. Placeholder
+    entities first (model, health, can be destroyed); firing comes later with siege work.
+  - Loot: `advanced_loot_chest` (3,457), `loot_basket` (793), `urn` (2,404). Map to vanilla loot tables.
+  - Decor: chair, table, bench, stool, thrones, coffins, gravestone, altar pieces, candles, totems, fire pit,
+    braziers, coin stacks, iron cage, gibbet, stake, statue, golden idol, stretching rack, wooden post, sound block.
+    AW's models and textures are reused where practical. Until each exists, a mapping table gives a vanilla
+    stand-in so the templates still read right.
+  - Skip: `structure_scanner_block`, drafting and research stations, automation blocks (windmill blades are kept
+    as decor).
+
+### AW's spawner as the library uses it
+
+All 35,355 `advanced_spawner` entries were counted:
+- Every one holds one group with one entity (37 are empty). Group weights, random pools, the spawner's own
+  inventory, and redstone (1) or light (19) gating are essentially unused.
+- 33,756 spawn exactly one (`remainingSpawnCount:1`, delay 10): a one-shot garrison post. About 1,000 spawn
+  4 to 10, and 54 roll a count between a min and a max.
+- `playerRange` is per block, and builders used it to stage the fight. Elite archers wake at about 29 blocks
+  (the walls shoot first), soldiers at 11, leaders at 12, priests at 12, siege engineers at 54. Leader-last
+  comes from the data and needs no rule of its own. Keep each spawner's own range.
+- Per-entry NPC data: 1,291 entries give custom gear (`hasCustomEquipment:1b`), 2,198 a custom name
+  (named bosses), and about 1,800 a fixed skin (`skinTypeSelected:"npc_type"`). Roster id = `factionName` +
+  `.` + the type after `faction.` (`empire.soldier.elite`), which matches `roster.json` directly.
+- `hostile` (32k true) marks spawners that block claiming. About 600 give XP when broken (`xpToDrop`).
+
+### AW's conquest, loot, and coins
+
+- Claiming (`ConquerHelper`, `TileProtectionFlag`): a structure's protection flag can be claimed once the
+  hostiles inside score under `conquer_threshold`. Each living hostile faction NPC counts its resistance
+  (normal, elite, leader), and each hostile spawner not yet spawned counts too. A failed claim marks the
+  witnesses (glow) and names one. Until then: blocks in the bounds mine `block_protection_multiplier` (100)
+  times slower, loot chests are locked (`loot_chest_protection`; `allow_stealing` allows it while unseen),
+  and the structure's sound blocks play. Claiming makes the claiming player the owner and silences them.
+- Advanced Loot Chest and Basket: filled from a loot table on first open, `lootRolls` times, optionally
+  applying potion effects, a message, or spawning a mob (trapped). Set with the Loot Chest Placer. AW ships
+  124 chest tables (per faction and value tier).
+- Coins: Copper Owl, Silver Stag, Gold Dragon, Ancient Coin (one item with a `metal` tag). Every faction NPC
+  type has an entity loot table dropping them (archer: 1 to 8 copper). Coin stack blocks are decor.
+- Authoring tools: Structure Scanner (two corners plus facing, exports a template), Structure Builder and
+  WorldGen Builder (place one), Survival Builder, Town Builder, Construction and Lake tools (area fill),
+  Gate Spawner (two corners), Mob Spawner Placement Tool (right-click a mob to capture its type and data,
+  right-click a block to place a spawner of it).
+
+### Decisions (user, 2026-10-28)
+
+- Spawner: keep our 3x3 of scrolls. Add the capture wand (any mob, with its gear, name, and data, becomes a
+  scroll; placing it makes a garrison spawner). The converter writes the same scrolls (repacked-style NPC
+  scrolls for AW NPCs, so gear, name, and skin carry over). Keep AW's capabilities where they could matter
+  even though the library does not use them: a pool option (spawn one slot at random, weighted), a min to
+  max count, and per-spawner XP and hostile flag.
+- Claiming: AW's rules, and claiming costs standing with the owning faction through `NpcStandings`.
+- Coins: port the four coins, AW's faction NPC drop tables, the coin stack blocks, and the chest loot tables
+  now. Uses (trade, tax, wages) come with the economy ledger.
+- Tools: commands first (`structure place`, `check`, `list`); the Scanner after the garrison milestone,
+  saving in our converted format.
+- Not ported yet, noted: AW's shields (port them, the look was fine); AW's weapons (not wanted, at least not
+  with their old look).
+
+### Build order (locked 2026-10-28)
+
+- S1: offline converter (1.12 → 1.20.1 through vanilla's DataFixer, AW blocks through our table), our template
+  reader, commands, unit tests. Converted templates place, AW blocks as stand-ins.
+- S2: spawners as garrison spawners with roster scrolls and the capture wand; protection flag as the anchor with
+  claiming, block protection, loot chest lock; coins and loot tables. Milestone: one Empire structure.
+- S3: gates as entities (the six AW types) and the Gate Spawner.
+- S4: rotation normalization, overlap registry, then world generation (off by default).
+- S5: real decor blocks, placeholder siege engines, the Scanner.
+- Then chain of command (garrisons are its first real use).
+
+---
+
 ## What We Change vs Old AW
 
 Old behavior we do **not** copy:
