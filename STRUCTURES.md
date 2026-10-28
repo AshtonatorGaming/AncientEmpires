@@ -149,6 +149,22 @@ All 35,355 `advanced_spawner` entries were counted:
   (blocks, items, entities, biomes) written from its current registry; dead ones get fallback tables
   (to vanilla, to our own content, or to another 1.20.1 mod). Which are alive is to be checked, not assumed.
 
+### Mod status on 1.20.1 Forge (checked 2026-10-28 against Modrinth jars)
+
+IDs used by the templates that still exist under the same name in the current jar (new namespace in brackets):
+mocreatures 40/40 (Mo' Creatures Nostalgia Edition), iceandfire 83/96, ebwizardry 62/102 (Electroblob's Wizardry
+Redux), grimoireofgaia 41/64 (Grimoire of Gaia 4, alpha), xreliquary 18/21 (`reliquary`), mowziesmobs 11/15, rats
+7/8, vampirism 8/12, simplytea 4/5, waystones 2/2, quark 6/21, comforts 2/5, primitivemobs 8/23 (`traveler`,
+PrimitiveMobsRevival, partial), astikorcarts 0/3 (`astikorcartsredux`), spartanshields 0/4, silentgems 0/6,
+tombstone 0/2. Biomes: biomesoplenty 24/51; byg 0/40 (`biomeswevegone`; 1.12 names carried a `b` prefix, so most
+should match once it is stripped).
+Not on Modrinth for 1.20.1, to check on CurseForge: Pam's HarvestCraft 2, Better Animals Plus, Twilight Forest,
+MineColonies and Structurize, ZAWA Rebuilt. No 1.20.1 version found: rustic, dungeonmobs, dungeontactics,
+thesummoner, eplus, mod_lavacow, exoticbirds, explorercraft, familiarfauna, openglider, reptilemod, eerieentities,
+pirates, gemsplusplus, and the biome mods `nt`, `environs`, `traverse` (Traverse is Fabric only).
+Biome lists become biome tags per template or territory, with modded biomes as optional tag entries
+(`"required": false`), so a missing biome mod drops out of the tag instead of failing to load.
+
 ### Build order (locked 2026-10-28)
 
 - S1: offline converter (1.12 → 1.20.1 through vanilla's DataFixer, AW blocks through our table), our template
