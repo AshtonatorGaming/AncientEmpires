@@ -31,10 +31,28 @@ VISION.md (vision). Update at the end of each chunk of work.
 - Not yet: AW's 28 islands wider than 256 (vanilla's 8-chunk reference reach), sky/underground/harbor/lava types,
   towns from `.awt`, AW's preventNaturalHostileSpawns.
 
+## In-game testing (2026-10-28, latest commit 6b83ccb, jar installed)
+
+Fixed from the user's first play test:
+- No structures: `AwSites.level` missed every lookup (a mod in the pack changes ChunkGenerator hashes). Now an
+  IdentityHashMap plus a server fallback. `/ancientempires structure survey [radius]` (`AwSurvey`) counts why sites
+  are turned down, without building; use it first when generation looks wrong.
+- Generation crash: a template's command block had 1.12 plain-text CustomName. `AePlacer` now cleans that and
+  catches any bad block or entity data per cell (logged, skipped), so generation never crashes on AW data.
+- Banners: faction flags are vanilla's banner model with AW's textures (`textures/entity/aw/banner`), swaying; the
+  flag item draws the banner (`FlagItemRenderer`, builtin/entity).
+- Decor: items show a diagonal block view, one icon per wood (`ancientempires:variant` item property in `DecorClient`);
+  1.20 woods added (mangrove, cherry, bamboo, crimson, warped); golden idol top hidden; altar candles and cloths keep
+  AW's colour (`AwDecorBlockEntity` Color, block and item tints, 16 dye colours in the tab).
+- Altar blockstates without properties use multipart without `when`.
+
+Still to check by eye: whether structures now appear often enough, siege engine orientation, coffin orientation, seat
+height, sound blocks, the Scanner. Not done: coloured candle flames, statue poses, totem multi-block hand placement,
+coffins' hidden parts on hand placement, item icons leave out turned submodels (table shows one leg).
+
 ## Next, in order
 
-1. Test S4 and S5 in the user's game: new world, /locate ancientempires:aw_site, decor look and facing, coffins opening,
-   siege engine models (orientation untested by eye), sound blocks, the Scanner.
+1. Finish the play test above; fix what the user finds.
 2. Towns and cities (`.awt`), which also need a way past vanilla's 8-chunk reach for the giant islands.
 3. Chain of command (sergeant as the brain; DESIGN/VISION), after garrisons.
 
