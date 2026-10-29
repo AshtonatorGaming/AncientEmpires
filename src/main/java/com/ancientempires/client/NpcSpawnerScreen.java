@@ -193,7 +193,7 @@ public class NpcSpawnerScreen extends AbstractContainerScreen<NpcSpawnerMenu>
     @Override
     protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY)
     {
-        graphics.drawString(this.font, this.title, 8, 7, GOLD, false);
+        FitText.draw(graphics, this.font, this.title.getString(), 8, 7, this.imageWidth - 16, 8, GOLD, false, false);
         graphics.drawString(this.font, Component.translatable("gui.ancientempires.spawner.spawns"), NpcSpawnerMenu.SLOTS_X, 19, INK, false);
         FitText.draw(graphics, this.font, this.status().getString(), NpcSpawnerMenu.SLOTS_X - 2, NpcSpawnerMenu.SLOTS_Y + 58, 60, 9, DIM, false, false);
         FitText.draw(graphics, this.font, Component.translatable("gui.ancientempires.spawner.mode." + this.modeKey()).getString(),

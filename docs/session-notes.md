@@ -120,14 +120,31 @@ Step 1 is committed (63dee22).
 
 Step 2 is committed (c96c1ad) and pushed: branch `structures` is on origin, tracking.
 
-Step 3, the War Table, is built: the banner-hall chart, the ledger page and roster, reserves, drag and drop,
-hover glow, Locate, and look-and-K to pick a soldier up. Tests pass. The screens are client-only and not seen in game
-yet.
+Step 3, the War Table, is committed (a84de6e) and pushed: the banner-hall chart, the ledger page and roster,
+reserves, drag and drop, hover glow, Locate, and look-and-K to pick a soldier up.
 
-Next is step 4, commanders deciding: the battle brain, with configurable chatter (personalities later). After that:
-- the horn's "planned operations";
-- kill tracking for the ledger;
-- the map tab.
+After the user's first look (2026-10-29), fixed and installed (game closed; OpenLoader re-enabled by the user):
+banner cloth culling, the chart fitting on open, a compact ledger, the wheel ring sizing to the screen.
+
+Better Combat looked "lost": the pack, not our code (resource packs reset; OpenLoader, which applies Malfu's combat
+datapack from `config/openloader/data`, was disabled). Re-enabled.
+
+**Decided (2026-10-29): the cohort model**, docs/army-command-design.md "Command levels, revised". Cohorts (sergeant
+squads) are what you order; captains and generals command groups of cohorts plus a small retinue cohort of their own
+(their bodyguard, ordered like any cohort, at a command post by default, mounted if horses). Stances flow down the
+chain, positions never. No merged super formations; group placement lays cohorts side by side.
+
+Text fitting pass (2026-10-29, built, not installed: the game was running): `FitEditBox` for the NPC name and the
+War Table unit name; the NPC level moved to a badge so the role label fits long titles; the War Table, wheel bar and
+ring middle, spawner title, sound block labels, and worksite bounds line go through `FitText`. More will turn up in
+play; fix each the same way.
+
+**Agreed order of work** (so we don't get lost):
+1. UI text fitting mod-wide (names cut off at the field's end, long role titles like Standard Bearer clipped), then
+   commit the War Table and wheel fixes.
+2. The cohort model (step 3.5).
+3. Step 4, commanders deciding.
+4. Later: horn operations, the map tab, kill tracking, the Signal Flag's new use.
 
 ## Next, in order
 

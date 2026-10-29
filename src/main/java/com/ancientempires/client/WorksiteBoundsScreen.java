@@ -175,8 +175,8 @@ public final class WorksiteBoundsScreen extends Screen
         int textX = left + 12 + MAP + 12;
         graphics.drawString(this.font, Component.translatable("gui.ancientempires.bounds.size", area.width(), area.length(), this.state.maxSize()),
                 textX, top + 146, INK, false);
-        graphics.drawString(this.font, Component.translatable("gui.ancientempires.bounds.upgrade." + this.state.tier()),
-                left + 12, top + 24 + MAP + 4, 0xFFA09070, false);
+        FitText.draw(graphics, this.font, Component.translatable("gui.ancientempires.bounds.upgrade." + this.state.tier()).getString(),
+                left + 12, top + 24 + MAP + 4, PANEL_W - 24, 8, 0xFFA09070, false, false);
         if (this.state.locked())
         {
             FitText.draw(graphics, this.font, Component.translatable("gui.ancientempires.bounds.locked").getString(),

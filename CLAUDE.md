@@ -968,6 +968,10 @@ guessing it compiles.
   `AncientEmpiresClientConfig`. Adding a setting means three edits there (the spec
   field, the public value, the load line); keep them together.
 - Bump `ModNetwork.PROTOCOL` whenever a packet is added or changes shape.
+- Screen text never hard-cuts: a label in a fixed width goes through `client/FitText.draw` (shrinks to 0.6, then an
+  ellipsis), and a name field is a `client/FitEditBox` (shows the whole value fitted while not being typed in; vanilla's
+  showed the tail end cut at the frame). Not `plainSubstrByWidth`. The NPC screen's level is a badge in the preview's
+  corner, so the role label has room for titles like Standard Bearer.
 - Import classes; do not write fully qualified names inline (one deliberate exception:
   `StandingsPacket`'s client-only screen call).
 - New per-tick or per-scan work goes inside a profiler section

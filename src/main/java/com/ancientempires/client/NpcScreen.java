@@ -82,7 +82,7 @@ public class NpcScreen extends AbstractContainerScreen<NpcMenu>
         super.init();
         NpcEntity npc = this.menu.getNpc();
         // Unbordered, the text sits at the box's top, so the box starts 4 px down to center it.
-        this.nameField = new EditBox(this.font, this.leftPos + NpcLayout.PREVIEW_X + 4, this.topPos + NpcLayout.NAME_Y + 4,
+        this.nameField = new FitEditBox(this.font, this.leftPos + NpcLayout.PREVIEW_X + 4, this.topPos + NpcLayout.NAME_Y + 4,
                 NpcLayout.PREVIEW_W - 8, NpcLayout.NAME_H - 4, Component.translatable("gui.ancientempires.npc.name"));
         this.nameField.setBordered(false);
         this.nameField.setMaxLength(32);
@@ -264,9 +264,8 @@ public class NpcScreen extends AbstractContainerScreen<NpcMenu>
     private static Component roleLabel(NpcEntity npc)
     {
         Component role = Component.translatable(NpcPath.translationKey(npc.getRoleId()));
-        // A ranked soldier is known by its rank; the tooltip still names its role.
-        Component name = npc.getRank() != NpcRank.SOLDIER ? npc.getRankName() : role;
-        return npc.levels() ? Component.translatable("gui.ancientempires.npc.role_level", name, npc.getLevel()) : name;
+        // A ranked soldier is known by its rank; the tooltip still names its role. The level has its own badge.
+        return npc.getRank() != NpcRank.SOLDIER ? npc.getRankName() : role;
     }
 
     private static boolean mayChoose(NpcEntity npc)
@@ -470,6 +469,13 @@ public class NpcScreen extends AbstractContainerScreen<NpcMenu>
                 NpcLayout.BACKPACK_X, NpcLayout.BACKPACK_LABEL_Y, backpackW, NpcLayout.SECTION_LABEL_H, NpcGui.NAME_INK, true, true);
         FitText.draw(graphics, this.font, Component.translatable("gui.ancientempires.npc.inventory").getString(),
                 NpcLayout.PLAYER_X, NpcLayout.PLAYER_LABEL_Y, 9 * SLOT, NpcLayout.SECTION_LABEL_H, NpcGui.NAME_INK, false, true);
+        NpcEntity npc = this.menu.getNpc();
+        if (npc != null && npc.levels())
+        {
+            // The level in the preview's top corner, so the role label below keeps its width for long titles.
+            FitText.draw(graphics, this.font, Component.translatable("gui.ancientempires.npc.level_badge", npc.getLevel()).getString(),
+                    NpcLayout.PREVIEW_X + 3, NpcLayout.PREVIEW_Y + 3, 30, 9, NpcGui.GOLD, false, true);
+        }
     }
 
     @Override

@@ -89,7 +89,7 @@ public final class WarTableScreen extends Screen
             0xFF2A2A2A};
     private static final int HEADER = 26;
     private static final int RESERVES = 46;
-    private static final int ROW = 14;
+    private static final int ROW = 12;
     private static final int ROW_GAP = 40;
     private static final int SIBLING_GAP = 16;
     private static final int LABELS = 28;
@@ -141,6 +141,8 @@ public final class WarTableScreen extends Screen
     private boolean nearbyOnly;
     @Nullable
     private UUID glowFor;
+    /** Whether the chart has been zoomed to fit its space yet (once, on opening). */
+    private boolean fitted;
     private EditBox nameBox;
     /** The mouse this frame, for the hand-drawn buttons. */
     private int mouseX;
@@ -189,9 +191,11 @@ public final class WarTableScreen extends Screen
     @Override
     protected void init()
     {
-        this.nameBox = new EditBox(this.font, 0, 0, 100, 14, Component.translatable("gui.ancientempires.army.unit_name"));
+        this.nameBox = new FitEditBox(this.font, 0, 0, 100, 14, Component.translatable("gui.ancientempires.army.unit_name"));
         this.nameBox.setMaxLength(NpcArmy.NAME_LENGTH);
-        this.nameBox.setBordered(true);
+        this.nameBox.setBordered(false);
+        this.nameBox.setTextColor(TEXT_DARK);
+        this.nameBox.setHint(Component.translatable("gui.ancientempires.war_table.name_hint"));
         this.addRenderableWidget(this.nameBox);
         this.rebuild();
     }
@@ -200,7 +204,7 @@ public final class WarTableScreen extends Screen
 
     private int ledgerWidth()
     {
-        return Mth.clamp(this.width * 36 / 100, 170, 240);
+        return Mth.clamp(this.width * 30 / 100, 180, 280);
     }
 
     private int chartLeft()
@@ -283,6 +287,14 @@ public final class WarTableScreen extends Screen
         if (this.held != null && !this.byId.containsKey(this.held))
         {
             this.held = null;
+        }
+        if (!this.fitted && !this.nodes.isEmpty())
+        {
+            // Opened: the whole tree fills the chart, as large as it fits.
+            double across = (this.chartRight() - this.chartLeft() - 30) / Math.max(80.0D, this.treeWidth);
+            double down = (this.chartBottom() - this.chartTop() - 30) / Math.max(80.0D, this.treeHeight + 10.0D);
+            this.zoom = (float) Mth.clamp(Math.min(across, down), 0.5D, 2.5D);
+            this.fitted = true;
         }
         ArmyPacket.Entry unit = this.selected == null ? null : this.byId.get(this.selected);
         if (this.nameBox != null && unit != null && !this.nameBox.isFocused())
@@ -575,10 +587,10 @@ public final class WarTableScreen extends Screen
         String name = entry.unitName().isEmpty() ? ClientArmy.parse(entry.name()).getString() : entry.unitName();
         int labelY = (int) y0 + h + 3;
         int labelW = Math.max(w + 24, 70);
-        graphics.drawCenteredString(this.font, this.font.plainSubstrByWidth(name, labelW), cx, labelY, picked ? GOLD : LIGHT);
+        FitText.draw(graphics, this.font, name, cx - labelW / 2, labelY, labelW, 8, picked ? GOLD : LIGHT, true, true);
         NpcOrder order = NpcOrder.values()[Math.min(entry.order(), NpcOrder.values().length - 1)];
         Component line = Component.literal(this.strength(entry) + " · ").append(Component.translatable("order.ancientempires." + order.id()));
-        graphics.drawCenteredString(this.font, line, cx, labelY + 10, 0xFFC8B48C);
+        FitText.draw(graphics, this.font, line.getString(), cx - labelW / 2, labelY + 10, labelW, 8, 0xFFC8B48C, true, true);
         int barW = w;
         bar(graphics, cx - barW / 2, labelY + 20, barW, 2, health, health >= 0.6F ? GOOD : health >= 0.3F ? FAIR : BAD);
         float morale = entry.morale() / 100.0F;
@@ -647,76 +659,82 @@ public final class WarTableScreen extends Screen
             graphics.drawCenteredString(this.font, Component.translatable("gui.ancientempires.war_table.pick"), (left + right) / 2, top + 20, TEXT_MID);
             return;
         }
-        int x = left + 8;
-        int y = top + 8;
+        int x = left + 6;
+        int inner = right - 6;
+        int y = top + 6;
         // The leader in full (if it is near enough to be seen), else its face.
-        graphics.fill(x - 1, y - 1, x + 43, y + 59, PARCHMENT_EDGE);
-        graphics.fill(x, y, x + 42, y + 58, 0xFFD8C49A);
+        graphics.fill(x - 1, y - 1, x + 31, y + 41, PARCHMENT_EDGE);
+        graphics.fill(x, y, x + 30, y + 40, 0xFFD8C49A);
         LivingEntity body = this.loaded(unit.id());
         if (body != null)
         {
-            graphics.enableScissor(x, y, x + 42, y + 58);
-            InventoryScreen.renderEntityInInventoryFollowsMouse(graphics, x + 21, y + 54, 24, x + 21 - mouseX, y + 20 - mouseY, body);
+            graphics.enableScissor(x, y, x + 30, y + 40);
+            InventoryScreen.renderEntityInInventoryFollowsMouse(graphics, x + 15, y + 38, 17, x + 15 - mouseX, y + 12 - mouseY, body);
             graphics.disableScissor();
         }
         else
         {
-            PlayerFaceRenderer.draw(graphics, skin(unit), x + 9, y + 17, 24);
+            PlayerFaceRenderer.draw(graphics, skin(unit), x + 5, y + 10, 20);
         }
-        int tx = x + 50;
-        int width = right - tx - 6;
-        graphics.drawString(this.font, this.font.plainSubstrByWidth(ClientArmy.parse(unit.name()).getString(), width), tx, y, TEXT_DARK, false);
-        graphics.drawString(this.font, Component.translatable("gui.ancientempires.war_table.rank_level", ClientArmy.parse(unit.rankName()), unit.level()),
-                tx, y + 11, TEXT_MID, false);
-        graphics.drawString(this.font, Component.translatable(unit.band()), tx, y + 21, TEXT_MID, false);
-        // The unit's name, edited in place; Enter saves it.
-        this.nameBox.setX(tx);
-        this.nameBox.setY(y + 33);
-        this.nameBox.setWidth(Math.max(40, width - 22));
-        String number = unit.unitNumber() == 0 ? "-" : String.valueOf(unit.unitNumber());
-        this.button(graphics, right - 26, y + 33, 20, 14, Component.literal(number),
-                () -> this.send(NpcArmy.Action.NUMBER, unit.id(), null, ""), Component.translatable("gui.ancientempires.war_table.number_tip"));
-        y += 64;
-        float morale = unit.morale() / 100.0F;
-        String state = unit.broken() ? "broken" : unit.morale() < 40.0F ? "shaken" : "steady";
-        graphics.drawString(this.font, Component.translatable("gui.ancientempires.war_table.health"), x, y, TEXT_MID, false);
-        bar(graphics, x + 48, y + 2, right - x - 56, 4, this.unitHealth(unit), GOOD);
-        y += 10;
-        graphics.drawString(this.font, Component.translatable("gui.ancientempires.war_table.morale." + state), x, y, TEXT_MID, false);
-        bar(graphics, x + 48, y + 2, right - x - 56, 4, morale, 0xFF3A6AA0);
-        y += 14;
-        // Settings, each a click to change.
+        int tx = x + 36;
+        int width = inner - tx - 20;
         NpcOrder order = NpcOrder.values()[Math.min(unit.order(), NpcOrder.values().length - 1)];
+        FitText.draw(graphics, this.font, ClientArmy.parse(unit.name()).getString(), tx, y + 1, width, 8, TEXT_DARK, false, false);
+        FitText.draw(graphics, this.font, Component.translatable("gui.ancientempires.war_table.rank_level", ClientArmy.parse(unit.rankName()), unit.level()).getString(),
+                tx, y + 12, inner - tx, 8, TEXT_MID, false, false);
+        Component orderLine = Component.translatable(unit.band()).append(" \u00B7 ")
+                .append(Component.translatable("gui.ancientempires.war_table.order", Component.translatable("order.ancientempires." + order.id())));
+        FitText.draw(graphics, this.font, orderLine.getString(), tx, y + 23, inner - tx, 8, TEXT_MID, false, false);
+        String number = unit.unitNumber() == 0 ? "-" : String.valueOf(unit.unitNumber());
+        this.button(graphics, inner - 16, y, 16, 12, Component.literal(number),
+                () -> this.send(NpcArmy.Action.NUMBER, unit.id(), null, ""), Component.translatable("gui.ancientempires.war_table.number_tip"));
+        y += 44;
+        // The unit's name, edited in place; Enter saves it.
+        graphics.fill(x, y, inner, y + 12, PARCHMENT_EDGE);
+        graphics.fill(x + 1, y + 1, inner - 1, y + 11, this.nameBox.isFocused() ? 0xFFFBF3DE : 0xFFF1E5C6);
+        this.nameBox.setX(x + 4);
+        this.nameBox.setY(y + 2);
+        this.nameBox.setWidth(inner - x - 8);
+        y += 15;
+        int middle = (x + inner) / 2;
+        String state = unit.broken() ? "broken" : unit.morale() < 40.0F ? "shaken" : "steady";
+        Component health = Component.translatable("gui.ancientempires.war_table.health");
+        Component morale = Component.translatable("gui.ancientempires.war_table.morale." + state);
+        graphics.drawString(this.font, health, x, y, TEXT_MID, false);
+        bar(graphics, x + this.font.width(health) + 4, y + 3, middle - x - this.font.width(health) - 10, 3, this.unitHealth(unit), GOOD);
+        graphics.drawString(this.font, morale, middle, y, TEXT_MID, false);
+        bar(graphics, middle + this.font.width(morale) + 4, y + 3, inner - middle - this.font.width(morale) - 4, 3, unit.morale() / 100.0F, 0xFF3A6AA0);
+        y += 12;
+        // Settings, each a click to change.
         NpcFormation formation = NpcFormation.values()[Math.min(unit.formation(), NpcFormation.values().length - 1)];
         NpcStance stance = unit.unpackStance();
-        int half = (right - x - 12) / 2;
-        this.button(graphics, x, y, half, 14, Component.translatable("formation.ancientempires." + formation.id()),
+        int half = (inner - x - 3) / 2;
+        this.button(graphics, x, y, half, 12, Component.translatable("formation.ancientempires." + formation.id()),
                 () -> this.send(NpcArmy.Action.SET_FORMATION, unit.id(), null, formation.next().id()), Component.translatable("gui.ancientempires.war_table.formation_tip"));
         NpcStance.Engage engage = NpcStance.Engage.values()[(stance.engage().ordinal() + 1) % NpcStance.Engage.values().length];
-        this.button(graphics, x + half + 4, y, half, 14, Component.translatable("gui.ancientempires.army.command." + engageId(stance.engage())),
+        this.button(graphics, x + half + 3, y, half, 12, Component.translatable("gui.ancientempires.army.command." + engageId(stance.engage())),
                 () -> this.send(NpcArmy.Action.SET_ENGAGE, unit.id(), null, engage.name()), Component.translatable("gui.ancientempires.war_table.engage_tip"));
-        y += 17;
+        y += 14;
         NpcStance.Fire fire = NpcStance.Fire.values()[(stance.fire().ordinal() + 1) % NpcStance.Fire.values().length];
-        this.button(graphics, x, y, half, 14, Component.translatable("gui.ancientempires.army.command." + fireId(stance.fire())),
+        this.button(graphics, x, y, half, 12, Component.translatable("gui.ancientempires.army.command." + fireId(stance.fire())),
                 () -> this.send(NpcArmy.Action.SET_FIRE, unit.id(), null, fire.name()), Component.translatable("gui.ancientempires.war_table.fire_tip"));
-        this.button(graphics, x + half + 4, y, half, 14, Component.translatable(stance.shieldsUp() ? "gui.ancientempires.war_table.shields_up" : "gui.ancientempires.war_table.shields_down"),
+        this.button(graphics, x + half + 3, y, half, 12, Component.translatable(stance.shieldsUp() ? "gui.ancientempires.war_table.shields_up" : "gui.ancientempires.war_table.shields_down"),
                 () -> this.send(NpcArmy.Action.SHIELDS, unit.id(), null, ""), null);
-        y += 19;
-        graphics.drawString(this.font, Component.translatable("gui.ancientempires.war_table.order", Component.translatable("order.ancientempires." + order.id())),
-                x, y, TEXT_DARK, false);
-        y += 11;
-        int quarter = (right - x - 18) / 4;
-        this.button(graphics, x, y, quarter, 14, Component.translatable("gui.ancientempires.war_table.follow"), () -> this.send(NpcArmy.Action.FOLLOW, unit.id(), null, ""), null);
-        this.button(graphics, x + quarter + 4, y, quarter, 14, Component.translatable("gui.ancientempires.war_table.hold"), () -> this.send(NpcArmy.Action.HOLD, unit.id(), null, ""),
-                Component.translatable("gui.ancientempires.war_table.hold_tip"));
-        this.button(graphics, x + (quarter + 4) * 2, y, quarter, 14, Component.translatable("gui.ancientempires.war_table.fall_back"),
-                () -> this.send(NpcArmy.Action.FALL_BACK, unit.id(), null, ""), null);
-        this.button(graphics, x + (quarter + 4) * 3, y, quarter, 14, Component.translatable("gui.ancientempires.war_table.free"), () -> this.send(NpcArmy.Action.FREE, unit.id(), null, ""),
-                null);
-        y += 18;
-        this.button(graphics, x, y, right - x - 8, 14, Component.translatable("gui.ancientempires.war_table.locate"), () -> this.locate(unit), null);
-        y += 20;
-        this.drawRoster(graphics, unit, x, y, right - 8, bottom - 6, mouseX, mouseY);
+        y += 16;
+        // Orders, and finding the unit in the world.
+        int fifth = (inner - x - 12) / 5;
+        String[] orders = {"follow", "hold", "fall_back", "free"};
+        NpcArmy.Action[] actions = {NpcArmy.Action.FOLLOW, NpcArmy.Action.HOLD, NpcArmy.Action.FALL_BACK, NpcArmy.Action.FREE};
+        for (int i = 0; i < orders.length; i++)
+        {
+            NpcArmy.Action action = actions[i];
+            this.button(graphics, x + i * (fifth + 3), y, fifth, 12, Component.translatable("gui.ancientempires.war_table." + orders[i]),
+                    () -> this.send(action, unit.id(), null, ""), Component.translatable("gui.ancientempires.war_table." + orders[i] + "_tip"));
+        }
+        this.button(graphics, x + 4 * (fifth + 3), y, inner - x - 4 * (fifth + 3), 12, Component.translatable("gui.ancientempires.war_table.locate"),
+                () -> this.locate(unit), Component.translatable("gui.ancientempires.war_table.locate_tip"));
+        y += 17;
+        this.drawRoster(graphics, unit, x, y, inner, bottom - 4, mouseX, mouseY);
     }
 
     /** The roll of the unit's own soldiers: face, name, trade, level, health, morale. Each row can be picked up. */
@@ -744,9 +762,9 @@ public final class WarTableScreen extends Screen
             }
             PlayerFaceRenderer.draw(graphics, skin(soldier), left, y, 10);
             int nameW = (right - left) * 42 / 100;
-            graphics.drawString(this.font, this.font.plainSubstrByWidth(ClientArmy.parse(soldier.name()).getString(), nameW), left + 13, y + 1, TEXT_DARK, false);
+            FitText.draw(graphics, this.font, ClientArmy.parse(soldier.name()).getString(), left + 13, y + 1, nameW, 8, TEXT_DARK, false, false);
             String role = Component.translatable("role.ancientempires." + soldier.role()).getString();
-            graphics.drawString(this.font, this.font.plainSubstrByWidth(role, (right - left) * 28 / 100), left + 15 + nameW, y + 1, TEXT_MID, false);
+            FitText.draw(graphics, this.font, role, left + 15 + nameW, y + 1, (right - left) * 28 / 100, 8, TEXT_MID, false, false);
             String level = "Lv " + soldier.level();
             int healthX = right - 22;
             graphics.drawString(this.font, level, healthX - 4 - this.font.width(level), y + 1, TEXT_MID, false);
@@ -836,7 +854,8 @@ public final class WarTableScreen extends Screen
         boolean over = this.mouseX >= x && this.mouseX < x + w && this.mouseY >= y && this.mouseY < y + h;
         graphics.fill(x, y, x + w, y + h, over ? 0xFF8A6A3A : PARCHMENT_EDGE);
         graphics.fill(x + 1, y + 1, x + w - 1, y + h - 1, over ? 0xFFF3E6C8 : 0xFFDCCBA4);
-        graphics.drawCenteredString(this.font, Component.literal(this.font.plainSubstrByWidth(label.getString(), w - 4)), x + w / 2, y + 3, TEXT_DARK);
+        // Ink on parchment: no shadow.
+        FitText.draw(graphics, this.font, label.getString(), x + 2, y, w - 4, h, TEXT_DARK, true, false);
         this.hits.add(new Hit(x, y, w, h, action, null, tip));
     }
 
@@ -1048,7 +1067,7 @@ public final class WarTableScreen extends Screen
         {
             // Zoom about the cursor.
             float before = this.zoom;
-            this.zoom = Mth.clamp(this.zoom * (delta > 0.0D ? 1.15F : 1.0F / 1.15F), 0.4F, 2.0F);
+            this.zoom = Mth.clamp(this.zoom * (delta > 0.0D ? 1.15F : 1.0F / 1.15F), 0.4F, 3.0F);
             double cx = (mouseX - this.originX()) / before;
             double cy = (mouseY - this.originY()) / before;
             this.panX += (mouseX - this.originX()) - cx * this.zoom;
@@ -1247,6 +1266,8 @@ public final class WarTableScreen extends Screen
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         RenderSystem.setShader(GameRenderer::getPositionColorShader);
+        // Either winding: the screen's y runs down, so a shape listed clockwise would be culled.
+        RenderSystem.disableCull();
         BufferBuilder buffer = Tesselator.getInstance().getBuilder();
         buffer.begin(VertexFormat.Mode.TRIANGLE_FAN, DefaultVertexFormat.POSITION_COLOR);
         int a = argb >>> 24;
@@ -1258,6 +1279,7 @@ public final class WarTableScreen extends Screen
             buffer.vertex(matrix, points[i], points[i + 1], 0.0F).color(r, g, b, a).endVertex();
         }
         BufferUploader.drawWithShader(buffer.end());
+        RenderSystem.enableCull();
         RenderSystem.disableBlend();
     }
 }

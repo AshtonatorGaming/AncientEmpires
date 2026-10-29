@@ -216,7 +216,8 @@ public final class ClientScreens
             String[] labels = {"player_range", "sound_range", "min_delay", "max_delay"};
             for (int i = 0; i < labels.length; i++)
             {
-                graphics.drawString(this.font, Component.translatable("screen.ancientempires.sound_block." + labels[i]), left + 76 * i, top + 139, 0xA0A0A0);
+                FitText.draw(graphics, this.font, Component.translatable("screen.ancientempires.sound_block." + labels[i]).getString(), left + 76 * i, top + 139, 72, 8,
+                        0xFFA0A0A0, false, true);
             }
             super.render(graphics, mouseX, mouseY, partialTick);
         }

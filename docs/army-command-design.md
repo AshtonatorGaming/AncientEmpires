@@ -264,6 +264,54 @@ Each step is playable on its own. Step 1 makes the existing wheel better straigh
   alone, say, or triggering an operation laid out beforehand. This is for later, after the War Table.
 - Commander chat: configurable. Commanders' personalities (who talks, and how) come later.
 
+## Command levels, revised (decided 2026-10-29, from the user's play test)
+
+What went wrong in play: ordering a captain's unit dragged its squads along in odd ways (they formed on the captain as
+slots of its layout and inherited its order), and picking every unit gave each squad its own order. Above a sergeant
+the chain should be more abstract, as in Total War: you command cohorts; a captain or general commands cohorts too,
+it does not drag them about as one blob. Mixed units should be discouraged.
+
+- **The cohort is the unit you command.** A sergeant's squad (up to 16) is the only thing with a formation, a spot,
+  a number on the battle keys, and placement ghosts. Orders always go to cohorts.
+- **Captains and generals are commanders, not formations.** Nobody forms on them. A captain owns its cohorts for:
+  - organising (the War Table's hall);
+  - its aura and morale;
+  - selecting them as a group (picking the captain picks its cohorts);
+  - its own judgement in step 4: its cohorts on "As you see fit" take its orders.
+- **A group order keeps the arrangement.** Several cohorts ordered together, a captain's company or a hand-picked
+  set, keep their places relative to one another (Total War's group formation). Moving a group moves the block, and a
+  dragged line spreads the cohorts along it in their order. No cohort follows a commander's body.
+- **The commander's retinue is a cohort of its own** (the user's "captains act as their own cohorts", and Total War's
+  general's bodyguard). A captain or general's direct soldiers, capped low (`retinueSize`, about 4 to 8), form on it
+  and take orders like any cohort: held back at a command post behind the middle of its cohorts by default, or thrown
+  in. Mounted if given horses, which also shows its status at a glance. Following the player is the group's order,
+  not the commander's.
+- **Stances flow down, positions do not.** A stance given to a captain (hold fire, aggressive, ...) reaches its cohorts
+  through `stanceSource` as now; a position order never does.
+- **No super formations.** Merging cohorts into one block was considered and dropped: target hand-outs, morale,
+  succession, and the wedge and square math all assume one leader per formation. A long line of similar cohorts comes
+  from group placement already. Later, if wanted: group arrangements (archers behind, riders on the wings) as layout
+  presets, Bannerlord style, not a new kind of unit.
+- **Mixed cohorts are discouraged, not forbidden.**
+  - A cohort's type comes from what most of it carries: melee, shields, archers, throwers, or riders.
+  - A cohort with others mixed in shows "mixed" on its banner.
+  - It loses its formation morale bonus.
+  - The War Table warns before a drop would mix it.
+- **What changes in code:**
+  - No officer slots in a captain's layout, and no order inherited for position.
+  - Each cohort holds its own order; stance may still default from its captain.
+  - A new command-post goal for captains and generals.
+  - Group orders laid out from the cohorts' current arrangement.
+  - The wheel's bar groups cohorts under their captain.
+  - The hall draws commanders as standards over their cohorts' banners.
+
+## Order of work (agreed 2026-10-29)
+
+1. UI text fitting across the mod (names and long role titles were clipped), commit the War Table and wheel fixes.
+2. The cohort model above (step 3.5): it comes before step 4, which needs to know what a commander commands.
+3. Step 4, commanders deciding (configurable chatter; personalities later).
+4. Later: horn operations, the map tab (B), kill tracking for the ledger, the Signal Flag's new use.
+
 ## Progress
 
 - Step 1, the order model: built 2026-10-29 (see CLAUDE.md, chain of command). The current V wheel has submenus for

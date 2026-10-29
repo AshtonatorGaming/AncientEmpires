@@ -20,6 +20,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
@@ -52,14 +53,10 @@ import java.util.function.Predicate;
 @OnlyIn(Dist.CLIENT)
 public final class BattleWheelScreen extends Screen
 {
-    private static final int INNER = 46;
-    private static final int OUTER = 112;
     /** How far a hovered slice stands out of the ring. */
     private static final int POP = 6;
-    private static final int LABEL_RADIUS = OUTER + 12;
     private static final int GOLD = 0xFFE2C27A;
     private static final int PARCHMENT = 0xFFE9DCC0;
-    private static final int BAR_WIDTH = 84;
     private static final int BAR_HEIGHT = 26;
     private static final int BAR_TOP = 8;
     private static final double AIM_RANGE = 96.0D;
@@ -123,6 +120,29 @@ public final class BattleWheelScreen extends Screen
     private final Component aimed;
     private boolean placing;
 
+    /** The ring's outer radius: as large as fits between the units bar and the bottom, its labels included. */
+    private int outer()
+    {
+        return Mth.clamp(this.height / 2 - BAR_TOP - BAR_HEIGHT - 28, 54, 112);
+    }
+
+    private int inner()
+    {
+        return Math.max(30, this.outer() * 41 / 100);
+    }
+
+    private int labelRadius()
+    {
+        return this.outer() + 12;
+    }
+
+    /** A units bar box: narrower when many units share the screen's width. */
+    private int barWidth()
+    {
+        int count = ArmyPicks.units().size() + 1;
+        return Mth.clamp((this.width - 16) / count - 4, 40, 84);
+    }
+
     private BattleWheelScreen(@Nullable Component aimed)
     {
         super(Component.translatable("gui.ancientempires.army.wheel"));
@@ -172,8 +192,8 @@ public final class BattleWheelScreen extends Screen
             double from = i * step - Math.PI / 2.0D - step / 2.0D + gap;
             double to = from + step - gap * 2.0D;
             boolean on = i == this.hovered;
-            int outer = OUTER + (on ? POP : 0);
-            arc(graphics, cx, cy, INNER, outer, from, to, on ? 0xE86B4E24 : 0xC8201810);
+            int outer = this.outer() + (on ? POP : 0);
+            arc(graphics, cx, cy, this.inner(), outer, from, to, on ? 0xE86B4E24 : 0xC8201810);
             if (this.current(slices[i]))
             {
                 arc(graphics, cx, cy, outer - 3, outer, from, to, GOLD);
@@ -183,12 +203,12 @@ public final class BattleWheelScreen extends Screen
                 arc(graphics, cx, cy, outer - 1, outer, from, to, 0xFF8A6A3A);
             }
         }
-        disc(graphics, cx, cy, INNER - 4, 0xD8201810);
+        disc(graphics, cx, cy, this.inner() - 4, 0xD8201810);
         for (int i = 0; i < slices.length; i++)
         {
             double angle = i * step - Math.PI / 2.0D;
             boolean on = i == this.hovered;
-            int middle = (INNER + OUTER) / 2 + (on ? POP / 2 : 0);
+            int middle = (this.inner() + this.outer()) / 2 + (on ? POP / 2 : 0);
             int x = cx + (int) Math.round(Math.cos(angle) * middle);
             int y = cy + (int) Math.round(Math.sin(angle) * middle);
             Slice slice = slices[i];
@@ -213,8 +233,8 @@ public final class BattleWheelScreen extends Screen
         Component text = this.name(slice);
         int width = this.font.width(text);
         double cos = Math.cos(angle);
-        int x = cx + (int) Math.round(cos * LABEL_RADIUS);
-        int y = cy + (int) Math.round(Math.sin(angle) * LABEL_RADIUS) - 4;
+        int x = cx + (int) Math.round(cos * this.labelRadius());
+        int y = cy + (int) Math.round(Math.sin(angle) * this.labelRadius()) - 4;
         int left = cos > 0.3D ? x : cos < -0.3D ? x - width : x - width / 2;
         graphics.fill(left - 3, y - 2, left + width + 3, y + 10, on ? 0xD06B4E24 : 0x90101010);
         graphics.drawString(this.font, text, left, y, on ? 0xFFFFFFFF : PARCHMENT);
@@ -225,12 +245,13 @@ public final class BattleWheelScreen extends Screen
     {
         if (this.hovered < 0)
         {
-            graphics.drawCenteredString(this.font, Component.translatable("gui.ancientempires.army.menu.title." + this.menu), cx, cy - 4, GOLD);
+            FitText.draw(graphics, this.font, Component.translatable("gui.ancientempires.army.menu.title." + this.menu).getString(),
+                    cx - this.inner() + 6, cy - 4, (this.inner() - 6) * 2, 8, GOLD, true, true);
             return;
         }
         Slice slice = MENUS[this.menu][this.hovered];
-        graphics.drawCenteredString(this.font, this.name(slice), cx, cy - 14, GOLD);
-        List<FormattedCharSequence> lines = this.font.split(Component.translatable(slice.key() + ".hint"), (INNER - 6) * 2);
+        FitText.draw(graphics, this.font, this.name(slice).getString(), cx - this.inner() + 6, cy - 14, (this.inner() - 6) * 2, 8, GOLD, true, true);
+        List<FormattedCharSequence> lines = this.font.split(Component.translatable(slice.key() + ".hint"), (this.inner() - 6) * 2);
         int y = cy - 2;
         for (FormattedCharSequence line : lines.subList(0, Math.min(3, lines.size())))
         {
@@ -296,16 +317,18 @@ public final class BattleWheelScreen extends Screen
     {
         Map<Integer, ArmyPacket.Entry> units = ArmyPicks.units();
         int count = units.size() + 1;
-        int left = this.width / 2 - (count * (BAR_WIDTH + 4) - 4) / 2;
+        int left = this.width / 2 - (count * (this.barWidth() + 4) - 4) / 2;
         boolean all = ArmyPicks.selected().isEmpty();
         this.box(graphics, left, all, this.overBar(mouseX, mouseY) == 0);
-        graphics.drawCenteredString(this.font, Component.translatable("gui.ancientempires.army.all_units"), left + BAR_WIDTH / 2, BAR_TOP + 5, GOLD);
-        graphics.drawCenteredString(this.font, Component.translatable("gui.ancientempires.army.all_key"), left + BAR_WIDTH / 2, BAR_TOP + 15, 0xFFA08C6A);
+        FitText.draw(graphics, this.font, Component.translatable("gui.ancientempires.army.all_units").getString(), left + 2, BAR_TOP + 5, this.barWidth() - 4, 8,
+                GOLD, true, true);
+        FitText.draw(graphics, this.font, Component.translatable("gui.ancientempires.army.all_key").getString(), left + 2, BAR_TOP + 15, this.barWidth() - 4, 8,
+                0xFFA08C6A, true, true);
         if (units.isEmpty())
         {
-            graphics.drawString(this.font, Component.translatable("gui.ancientempires.army.no_units_yet"), left + BAR_WIDTH + 8, BAR_TOP + 9, 0xFFA0A0A0);
+            graphics.drawString(this.font, Component.translatable("gui.ancientempires.army.no_units_yet"), left + this.barWidth() + 8, BAR_TOP + 9, 0xFFA0A0A0);
         }
-        int x = left + BAR_WIDTH + 4;
+        int x = left + this.barWidth() + 4;
         for (Map.Entry<Integer, ArmyPacket.Entry> unit : units.entrySet())
         {
             ArmyPacket.Entry leader = unit.getValue();
@@ -317,22 +340,23 @@ public final class BattleWheelScreen extends Screen
             graphics.drawString(this.font, String.valueOf(unit.getKey()), 0, 0, picked || all ? GOLD : 0xFF907A58);
             graphics.pose().popPose();
             String name = leader.unitName().isEmpty() ? ClientArmy.parse(leader.name()).getString() : leader.unitName();
-            graphics.drawString(this.font, this.font.plainSubstrByWidth(name, BAR_WIDTH - 24), x + 18, BAR_TOP + 4, PARCHMENT);
+            // Clear of the morale pip in the corner.
+            FitText.draw(graphics, this.font, name, x + 18, BAR_TOP + 4, this.barWidth() - 27, 8, PARCHMENT, false, true);
             NpcOrder order = NpcOrder.values()[Math.min(leader.order(), NpcOrder.values().length - 1)];
             Component line = Component.literal(leader.members() + " · ").append(Component.translatable("order.ancientempires." + order.id()));
-            graphics.drawString(this.font, line, x + 18, BAR_TOP + 15, 0xFFC8B48C);
+            FitText.draw(graphics, this.font, line.getString(), x + 18, BAR_TOP + 15, this.barWidth() - 21, 8, 0xFFC8B48C, false, true);
             float morale = leader.morale();
             int pip = morale >= 60.0F ? 0xFF4F8A3A : morale >= 30.0F ? 0xFFB8862A : 0xFFC0392B;
-            graphics.fill(x + BAR_WIDTH - 7, BAR_TOP + 4, x + BAR_WIDTH - 3, BAR_TOP + 8, pip);
-            x += BAR_WIDTH + 4;
+            graphics.fill(x + this.barWidth() - 7, BAR_TOP + 4, x + this.barWidth() - 3, BAR_TOP + 8, pip);
+            x += this.barWidth() + 4;
         }
     }
 
     private void box(GuiGraphics graphics, int x, boolean picked, boolean hovered)
     {
         int border = picked ? GOLD : 0xFF5A4128;
-        graphics.fill(x - 1, BAR_TOP - 1, x + BAR_WIDTH + 1, BAR_TOP + BAR_HEIGHT + 1, border);
-        graphics.fill(x, BAR_TOP, x + BAR_WIDTH, BAR_TOP + BAR_HEIGHT, hovered ? 0xE04A3A26 : picked ? 0xD82B2218 : 0xB8181410);
+        graphics.fill(x - 1, BAR_TOP - 1, x + this.barWidth() + 1, BAR_TOP + BAR_HEIGHT + 1, border);
+        graphics.fill(x, BAR_TOP, x + this.barWidth(), BAR_TOP + BAR_HEIGHT, hovered ? 0xE04A3A26 : picked ? 0xD82B2218 : 0xB8181410);
     }
 
     /** The unit number of the bar box under the mouse (0 for All), or -1. */
@@ -344,9 +368,9 @@ public final class BattleWheelScreen extends Screen
         }
         Map<Integer, ArmyPacket.Entry> units = ArmyPicks.units();
         int count = units.size() + 1;
-        int left = this.width / 2 - (count * (BAR_WIDTH + 4) - 4) / 2;
-        int index = (int) Math.floor((mouseX - left) / (BAR_WIDTH + 4));
-        if (mouseX < left || index >= count || mouseX - left - index * (BAR_WIDTH + 4) > BAR_WIDTH)
+        int left = this.width / 2 - (count * (this.barWidth() + 4) - 4) / 2;
+        int index = (int) Math.floor((mouseX - left) / (this.barWidth() + 4));
+        if (mouseX < left || index >= count || mouseX - left - index * (this.barWidth() + 4) > this.barWidth())
         {
             return -1;
         }
@@ -361,7 +385,7 @@ public final class BattleWheelScreen extends Screen
     {
         double dx = mouseX - this.width / 2.0D;
         double dy = mouseY - this.height / 2.0D;
-        if (dx * dx + dy * dy < INNER * INNER)
+        if (dx * dx + dy * dy < this.inner() * this.inner())
         {
             return -1;
         }
