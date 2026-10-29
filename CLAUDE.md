@@ -114,7 +114,7 @@ instead of reflecting per call), Skirmisher thresholds (about 4.5 to 28 blocks).
   `list <category or part of a name>` the templates.
   Gate orientation in templates is a 1.12 EnumFacing index (2 north .. 5 east), read with `from3DDataValue`.
   A flag is two blocks: `FlagTopBlock` above is the banner's upper part (clicks and breaking go to the flag). Using a
-  container in an unclaimed faction structure outlines its flag through walls (`FlagHighlight`, `FlagHighlightPacket`);
+  container in an unclaimed faction structure outlines its flag in gold through walls, and a failed claim outlines the spawners still holding it in red (`BlockOutlines`, `OutlinePacket`);
   world-generated records find and tie their flag then. AW gates, NPCs placed directly, vehicles, and flags are kept but not placed yet (S2, S3, S5).
 - Garrisons from structures (S2a): an AW advanced spawner becomes our `NpcSpawnerBlock` (`AwSpawnerImport` writes
   the spawner's saved form and loads it): one-shot ones GARRISON, ones with more to give REPEATING, redstone ones

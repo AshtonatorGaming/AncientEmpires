@@ -23,7 +23,7 @@ import java.util.List;
 public final class ModNetwork
 {
     /** Bump whenever a packet is added or changes shape, so mismatched clients are refused cleanly. */
-    private static final String PROTOCOL = "8";
+    private static final String PROTOCOL = "9";
     private static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(
             ResourceLocation.parse(AncientEmpires.MOD_ID + ":main"),
             () -> PROTOCOL,
@@ -77,17 +77,17 @@ public final class ModNetwork
                 .decoder(SoundBlockPacket::decode)
                 .consumerMainThread(SoundBlockPacket::handle)
                 .add();
-        CHANNEL.messageBuilder(FlagHighlightPacket.class, nextId++, NetworkDirection.PLAY_TO_CLIENT)
-                .encoder(FlagHighlightPacket::encode)
-                .decoder(FlagHighlightPacket::decode)
-                .consumerMainThread(FlagHighlightPacket::handle)
+        CHANNEL.messageBuilder(OutlinePacket.class, nextId++, NetworkDirection.PLAY_TO_CLIENT)
+                .encoder(OutlinePacket::encode)
+                .decoder(OutlinePacket::decode)
+                .consumerMainThread(OutlinePacket::handle)
                 .add();
     }
 
-    /** Outlines a structure's flag for one player. */
-    public static void highlightFlag(ServerPlayer player, BlockPos flag)
+    /** Outlines blocks for one player, through walls, for a few seconds. */
+    public static void outline(ServerPlayer player, List<BlockPos> blocks, OutlinePacket.Kind kind)
     {
-        CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), new FlagHighlightPacket(flag));
+        CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), new OutlinePacket(blocks, kind));
     }
 
     public static void sendToServer(Object packet)

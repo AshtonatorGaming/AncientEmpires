@@ -4,6 +4,7 @@ import org.jetbrains.annotations.Nullable;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.server.level.ServerPlayer;
 import com.ancientempires.network.ModNetwork;
+import com.ancientempires.network.OutlinePacket;
 import com.ancientempires.AncientEmpires;
 import com.ancientempires.block.FlagBlockEntity;
 import com.ancientempires.block.NpcSpawnerBlockEntity;
@@ -111,6 +112,10 @@ public final class StructureClaims
             for (NpcEntity npc : holders)
             {
                 npc.addEffect(new MobEffectInstance(MobEffects.GLOWING, AncientEmpiresConfig.claimWitnessTicks, 0, false, false));
+            }
+            if (player instanceof ServerPlayer server)
+            {
+                ModNetwork.outline(server, spawners, OutlinePacket.Kind.SPAWNER);
             }
             player.sendSystemMessage(Component.translatable("message.ancientempires.flag.held", holders.size(), spawners.size()));
             for (BlockPos spawner : spawners.subList(0, Math.min(NAMED_SPAWNERS, spawners.size())))
@@ -230,7 +235,7 @@ public final class StructureClaims
         BlockPos flag = flagOf(level, record);
         if (flag != null && player instanceof ServerPlayer server)
         {
-            ModNetwork.highlightFlag(server, flag);
+            ModNetwork.outline(server, List.of(flag), OutlinePacket.Kind.FLAG);
         }
         if (AncientEmpiresConfig.allowStealing && !seen)
         {

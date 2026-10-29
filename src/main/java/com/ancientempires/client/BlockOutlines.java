@@ -1,6 +1,7 @@
 package com.ancientempires.client;
 
 import com.ancientempires.AncientEmpires;
+import com.ancientempires.network.OutlinePacket;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -17,32 +18,37 @@ import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Map;
 import java.util.OptionalDouble;
 
 /**
- * A structure's flag, outlined in gold through walls for a few seconds after
- * the server points it out (using a chest of an unclaimed faction structure),
- * so the banner to claim can be found.
+ * Blocks the server points out, outlined through walls for a few seconds: a
+ * structure's flag in gold (using a chest of an unclaimed faction structure),
+ * the spawners still holding it in red (a failed claim; NPCs glow instead).
  */
 @Mod.EventBusSubscriber(modid = AncientEmpires.MOD_ID, value = Dist.CLIENT)
-public final class FlagHighlight
+public final class BlockOutlines
 {
     private static final int SHOW_TICKS = 160;
 
-    private static BlockPos pos;
-    private static long until;
-
-    private FlagHighlight()
+    private record Shown(List<BlockPos> blocks, long until)
     {
     }
 
-    public static void show(BlockPos flag)
+    private static final Map<OutlinePacket.Kind, Shown> SHOWN = new EnumMap<>(OutlinePacket.Kind.class);
+
+    private BlockOutlines()
+    {
+    }
+
+    public static void show(List<BlockPos> blocks, OutlinePacket.Kind kind)
     {
         Minecraft minecraft = Minecraft.getInstance();
-        if (minecraft.level != null)
+        if (minecraft.level != null && !blocks.isEmpty())
         {
-            pos = flag;
-            until = minecraft.level.getGameTime() + SHOW_TICKS;
+            SHOWN.put(kind, new Shown(List.copyOf(blocks), minecraft.level.getGameTime() + SHOW_TICKS));
         }
     }
 
@@ -50,14 +56,14 @@ public final class FlagHighlight
     public static void render(RenderLevelStageEvent event)
     {
         Minecraft minecraft = Minecraft.getInstance();
-        if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_PARTICLES || pos == null || minecraft.level == null)
+        if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_PARTICLES || SHOWN.isEmpty() || minecraft.level == null)
         {
             return;
         }
-        long left = until - minecraft.level.getGameTime();
-        if (left <= 0)
+        long now = minecraft.level.getGameTime();
+        SHOWN.values().removeIf(shown -> shown.until() <= now);
+        if (SHOWN.isEmpty())
         {
-            pos = null;
             return;
         }
         Vec3 camera = event.getCamera().getPosition();
@@ -66,10 +72,18 @@ public final class FlagHighlight
         pose.translate(-camera.x, -camera.y, -camera.z);
         MultiBufferSource.BufferSource buffers = minecraft.renderBuffers().bufferSource();
         VertexConsumer lines = buffers.getBuffer(Types.LINES_THROUGH);
-        // Pulses, and fades over the last second.
-        float alpha = Math.min(1.0F, left / 20.0F) * (0.6F + 0.4F * (float) Math.sin((minecraft.level.getGameTime() + event.getPartialTick()) * 0.3F));
-        AABB box = new AABB(pos).expandTowards(0.0D, 0.75D, 0.0D).inflate(0.05D);
-        LevelRenderer.renderLineBox(pose, lines, box, 1.0F, 0.8F, 0.2F, alpha);
+        float pulse = 0.6F + 0.4F * (float) Math.sin((now + event.getPartialTick()) * 0.3F);
+        for (Map.Entry<OutlinePacket.Kind, Shown> entry : SHOWN.entrySet())
+        {
+            OutlinePacket.Kind kind = entry.getKey();
+            // Fades over the last second.
+            float alpha = Math.min(1.0F, (entry.getValue().until() - now) / 20.0F) * pulse;
+            for (BlockPos pos : entry.getValue().blocks())
+            {
+                AABB box = new AABB(pos).expandTowards(0.0D, kind.extraHeight, 0.0D).inflate(0.05D);
+                LevelRenderer.renderLineBox(pose, lines, box, kind.red, kind.green, kind.blue, alpha);
+            }
+        }
         buffers.endBatch(Types.LINES_THROUGH);
         pose.popPose();
     }
