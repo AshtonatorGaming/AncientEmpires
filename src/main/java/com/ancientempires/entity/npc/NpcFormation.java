@@ -4,9 +4,11 @@ import java.util.Locale;
 
 /**
  * How a leader arranges the soldiers under it, as offsets from itself: to its
- * right and behind it, in blocks. The leader stands at the front; its own
- * soldiers fill rows behind it, and any leaders under it (a captain's
- * sergeants) stand behind those with their squads behind them in turn. Pure
+ * right and behind it, in blocks (negative behind is ahead). Soldiers form the
+ * front, as armies did: a leader stands just behind its own front rank, where
+ * its men are between it and the enemy and it still sees the line. Leaders
+ * under it (a captain's sergeants) stand ahead with their units, so a captain
+ * ends up behind its squads and a general behind its captains. Pure
  * arithmetic, so it is tested without the game.
  */
 public enum NpcFormation
@@ -17,6 +19,9 @@ public enum NpcFormation
     COLUMN,
     /** Wide rows with double spacing: skirmishers, archers in the open. */
     LOOSE;
+
+    /** How far a leader's front rank stands ahead of it, in spacings. */
+    private static final double FRONT_LEAD = 0.6D;
 
     public String id()
     {
@@ -59,9 +64,23 @@ public enum NpcFormation
         return (count + width - 1) / width;
     }
 
+    /** Blocks the front rank stands ahead of its leader. */
+    public double lead(double spacing)
+    {
+        return this.spacing(spacing) * FRONT_LEAD;
+    }
+
+    /** Blocks a unit of {@code count} reaches behind its leader (its rear ranks). */
+    public double depthBehind(int count, int lineWidth, int columnWidth, double spacing)
+    {
+        int rows = this.rows(count, lineWidth, columnWidth);
+        return Math.max(0.0D, (rows - 1) * this.spacing(spacing) - this.lead(spacing));
+    }
+
     /**
      * Where soldier {@code index} of {@code count} stands: {right, back} from
-     * the leader. Rows are centred; the last, short row is centred too.
+     * the leader. The front rank is just ahead of it, the rest behind; rows are
+     * centred, the last, short row too.
      */
     public double[] soldierSlot(int index, int count, int lineWidth, int columnWidth, double spacing)
     {
@@ -71,24 +90,26 @@ public enum NpcFormation
         int inRow = Math.min(width, count - row * width);
         int column = index % width;
         double right = (column - (inRow - 1) / 2.0D) * gap;
-        double back = gap + row * gap;
+        double back = row * gap - this.lead(spacing);
         return new double[] {right, back};
     }
 
     /**
-     * Where sub-leader {@code index} of {@code count} stands, behind the
-     * leader's own {@code ownRows} rows: side by side in a line (each squad
-     * {@code frontage} wide), one behind another in a column ({@code depth} deep).
+     * Where sub-leader {@code index} of {@code count} stands: ahead of this
+     * leader's own front rank by a gap and the depth its unit reaches behind
+     * it ({@code unitBehind}). In a line the units stand side by side (each
+     * {@code frontage} wide), in a column one ahead of another (each
+     * {@code unitDepth} deep, front rank to rear).
      */
-    public double[] officerSlot(int index, int count, int ownRows, double frontage, double depth, double spacing)
+    public double[] officerSlot(int index, int count, int ownRows, double frontage, double unitBehind, double unitDepth, double spacing)
     {
         double gap = this.spacing(spacing);
-        double base = gap + ownRows * gap + gap;
+        double ahead = (ownRows > 0 ? this.lead(spacing) : 0.0D) + gap + unitBehind;
         if (this == COLUMN)
         {
-            return new double[] {0.0D, base + index * (depth + gap)};
+            return new double[] {0.0D, -(ahead + index * (unitDepth + gap))};
         }
         double width = frontage + gap;
-        return new double[] {(index - (count - 1) / 2.0D) * width, base};
+        return new double[] {(index - (count - 1) / 2.0D) * width, -ahead};
     }
 }

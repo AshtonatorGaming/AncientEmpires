@@ -241,6 +241,11 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.DoubleValue CHAIN_CATCH_UP_DISTANCE;
     private static final ForgeConfigSpec.DoubleValue CHAIN_CATCH_UP_SPEED;
     private static final ForgeConfigSpec.DoubleValue CHAIN_WALK_SPEED;
+    private static final ForgeConfigSpec.DoubleValue CHAIN_HOLD_RANGE;
+    private static final ForgeConfigSpec.DoubleValue CHAIN_DEFEND_RADIUS;
+    private static final ForgeConfigSpec.DoubleValue CHAIN_FOLLOW_LEASH;
+    private static final ForgeConfigSpec.DoubleValue CHAIN_RANGED_LEASH;
+    private static final ForgeConfigSpec.DoubleValue CHAIN_CORNER_RANGE;
     private static final ForgeConfigSpec.ConfigValue<List<? extends Double>> COMMAND_STRENGTH;
     private static final ForgeConfigSpec.ConfigValue<List<? extends Double>> COMMAND_RADIUS;
     private static final ForgeConfigSpec.ConfigValue<List<? extends Integer>> COMMAND_PROMOTE_LEVELS;
@@ -1075,6 +1080,11 @@ public final class AncientEmpiresConfig
         CHAIN_CATCH_UP_DISTANCE = builder.comment("Blocks off its slot past which a soldier runs to catch up instead of walking.").defineInRange("catchUpDistance", 6.0D, 2.0D, 64.0D);
         CHAIN_CATCH_UP_SPEED = builder.comment("Speed multiplier while catching up (a player's sprint is about 1.12).").defineInRange("catchUpSpeed", 1.12D, 0.5D, 1.4D);
         CHAIN_WALK_SPEED = builder.comment("Speed multiplier for small steps back into the slot.").defineInRange("walkSpeed", 0.9D, 0.3D, 1.4D);
+        CHAIN_HOLD_RANGE = builder.comment("Hold: blocks from its place in the line within which a soldier fights; it does not chase further.").defineInRange("holdRange", 4.0D, 1.0D, 32.0D);
+        CHAIN_DEFEND_RADIUS = builder.comment("Defend: blocks from the defended spot within which the unit goes after enemies.").defineInRange("defendRadius", 16.0D, 2.0D, 64.0D);
+        CHAIN_FOLLOW_LEASH = builder.comment("Follow: blocks from the unit's leader within which its soldiers fight; they let go of anything further.").defineInRange("followLeash", 24.0D, 4.0D, 64.0D);
+        CHAIN_RANGED_LEASH = builder.comment("Extra blocks of reach for a soldier with a bow, so a holding line of archers still shoots.").defineInRange("rangedLeash", 24.0D, 0.0D, 64.0D);
+        CHAIN_CORNER_RANGE = builder.comment("Fall back: an enemy this close is fought anyway (cornered).").defineInRange("cornerRange", 2.5D, 1.0D, 8.0D);
         builder.pop();
 
         builder.comment("Daylight: factions with \"sunlight\": \"burn\" in factions.json (the undead) burn in daylight like zombies (a helmet takes the wear) and seek shade once burning; \"avoid\" (vampires, as in Ancient Warfare) also keep to shade by day.").push("sunlight");
@@ -1573,6 +1583,11 @@ public final class AncientEmpiresConfig
     public static double chainCatchUpDistance = 6.0D;
     public static double chainCatchUpSpeed = 1.12D;
     public static double chainWalkSpeed = 0.9D;
+    public static double chainHoldRange = 4.0D;
+    public static double chainDefendRadius = 16.0D;
+    public static double chainFollowLeash = 24.0D;
+    public static double chainRangedLeash = 24.0D;
+    public static double chainCornerRange = 2.5D;
     public static List<? extends Double> commandStrengthByRank = List.of(0.0D, 0.5D, 1.0D, 1.25D);
     public static List<? extends Double> commandRadiusByRank = List.of(0.0D, 8.0D, 12.0D, 16.0D);
     public static List<? extends Integer> commandPromoteLevels = List.of(1, 6, 12, 18);
@@ -1988,6 +2003,11 @@ public final class AncientEmpiresConfig
         chainCatchUpDistance = CHAIN_CATCH_UP_DISTANCE.get();
         chainCatchUpSpeed = CHAIN_CATCH_UP_SPEED.get();
         chainWalkSpeed = CHAIN_WALK_SPEED.get();
+        chainHoldRange = CHAIN_HOLD_RANGE.get();
+        chainDefendRadius = CHAIN_DEFEND_RADIUS.get();
+        chainFollowLeash = CHAIN_FOLLOW_LEASH.get();
+        chainRangedLeash = CHAIN_RANGED_LEASH.get();
+        chainCornerRange = CHAIN_CORNER_RANGE.get();
         commandStrengthByRank = COMMAND_STRENGTH.get();
         commandRadiusByRank = COMMAND_RADIUS.get();
         commandPromoteLevels = COMMAND_PROMOTE_LEVELS.get();

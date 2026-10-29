@@ -1,6 +1,7 @@
 package com.ancientempires.entity.npc;
 
 import com.ancientempires.config.AncientEmpiresConfig;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
@@ -8,6 +9,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,15 +25,20 @@ import java.util.UUID;
 /**
  * An NPC's place in a chain of command (docs/chain-of-command.md): one link up
  * to its leader, and, for a leader, the short list of those directly under it.
- * Leaders hold the order and the formation; everyone under them reads those
- * one link up and never walks the tree. A link to an NPC that cannot be found
- * is asked of {@link NpcChainLedger}: away (wait, acting free meanwhile) or
- * gone (follow its heir, or stand alone).
  * <p>
+ * Orders: an NPC either holds its own order (the top of a chain, or a unit
+ * below given one of its own: detached until it rejoins) or inherits its
+ * leader's. Whoever holds the order (the "holder") keeps its spot, facing, and
+ * target; everyone under it reads those one link up each tick
+ * ({@link #holder}), never walking the tree. The order also leashes whom a
+ * soldier may fight ({@link #allowsTarget}): a holding line does not chase off,
+ * a falling-back unit fights only when cornered.
+ * <p>
+ * A link to an NPC that cannot be found is asked of {@link NpcChainLedger}:
+ * away (wait, acting free meanwhile) or gone (follow its heir, or stand alone).
  * Only players' soldiers join, and only when their owner assigns them (the
- * Signal Flag). Saved on the NPC ({@code AeLeader}, {@code AeSquad},
- * {@code AeSquadOfficers}, {@code AeOrder}, {@code AeFormation}); not packed:
- * a repacked NPC comes back out of any unit.
+ * Signal Flag). Saved on the NPC (docs/nbt-keys.md); not packed: a repacked NPC
+ * comes back out of any unit.
  */
 public final class NpcChain
 {
@@ -39,6 +46,9 @@ public final class NpcChain
     private static final String MEMBERS_KEY = "AeSquad";
     private static final String OFFICERS_KEY = "AeSquadOfficers";
     private static final String ORDER_KEY = "AeOrder";
+    private static final String ORDER_POS_KEY = "AeOrderPos";
+    private static final String ORDER_FACING_KEY = "AeOrderFacing";
+    private static final String ORDER_TARGET_KEY = "AeOrderTarget";
     private static final String FORMATION_KEY = "AeFormation";
     /** Ticks between looking for a missing leader, and between a leader's member checks. */
     private static final int RESOLVE_TICKS = 20;
@@ -47,6 +57,8 @@ public final class NpcChain
     private static final int SLOT_TICKS = 10;
     /** How far up a loop check looks (soldier, sergeant, captain, general and one spare). */
     private static final int MAX_DEPTH = 5;
+    /** Blocks from its rally point at which a falling-back unit stops and holds. */
+    private static final double RALLIED = 2.0D;
 
     /** Why an assignment was refused, or that it went through. */
     public enum Assign
@@ -60,23 +72,37 @@ public final class NpcChain
     private final List<UUID> members = new ArrayList<>();
     /** Members that lead units of their own (stood apart in the layout, counted against the officer cap). */
     private final Set<UUID> officers = new HashSet<>();
-    private NpcOrder order = NpcOrder.FREE;
+    /** This NPC's own order, or null to take its leader's (at the top of a chain, null is Free). */
+    @Nullable
+    private NpcOrder order;
+    @Nullable
+    private BlockPos orderPos;
+    private float orderFacing = Float.NaN;
+    @Nullable
+    private UUID orderTarget;
     private NpcFormation formation = NpcFormation.LINE;
 
     @Nullable
     private NpcEntity leader;
-    private NpcOrder effective = NpcOrder.FREE;
-    /** The way the unit faces: where its leader last walked. */
+    /** Whose order this NPC acts on (itself, or the holder above it). */
+    private NpcChain holder = this;
+    /** The way the unit faces while moving: where its leader last walked. */
     private float facing = Float.NaN;
     private Vec3 lastPos;
     private final Map<UUID, Vec3> slots = new HashMap<>();
     private Vec3 slotsFrom;
     private float slotsFacing;
+    private NpcFormation slotsFormation;
     private long slotsAt = -1L;
 
     NpcChain(NpcEntity npc)
     {
         this.npc = npc;
+    }
+
+    public NpcEntity npc()
+    {
+        return this.npc;
     }
 
     @Nullable
@@ -102,15 +128,41 @@ public final class NpcChain
         return !this.members.isEmpty();
     }
 
+    /** Whether this NPC is in a chain of command at all. */
+    public boolean inChain()
+    {
+        return this.leaderId != null || !this.members.isEmpty();
+    }
+
+    /** This NPC's own order, or null when it takes its leader's. */
+    @Nullable
     public NpcOrder order()
     {
         return this.order;
     }
 
-    /** The order this NPC acts on: its own at the top of a chain, its leader's below. */
+    /** Whose order this NPC acts on: its own, or the nearest one above that holds one. */
+    public NpcChain holder()
+    {
+        return this.holder;
+    }
+
+    /** The order this NPC acts on. */
     public NpcOrder effectiveOrder()
     {
-        return this.effective;
+        return this.holder.order == null ? NpcOrder.FREE : this.holder.order;
+    }
+
+    /** Whether this NPC holds an order of its own (it leads it, rather than forming on its leader). */
+    public boolean holdsOrder()
+    {
+        return this.holder == this;
+    }
+
+    @Nullable
+    public BlockPos orderPos()
+    {
+        return this.holder.orderPos;
     }
 
     public NpcFormation formation()
@@ -121,18 +173,34 @@ public final class NpcChain
     /** Whether this NPC keeps a slot in its leader's formation now. */
     public boolean formed()
     {
-        return AncientEmpiresConfig.chainEnabled && this.leader() != null && this.effective != NpcOrder.FREE;
+        return AncientEmpiresConfig.chainEnabled && !this.holdsOrder() && this.leader() != null && this.effectiveOrder().formed();
     }
 
-    /** The order for this unit and everyone under it. At the top of a chain, Follow follows the owner. */
-    public void setOrder(NpcOrder order)
+    /**
+     * Gives this unit an order. At the top of a chain anything goes, Free and
+     * Follow included (Follow follows the owner); a unit under another leader
+     * takes Hold, Defend, Attack, or Fall back as its own (detaching), and
+     * Follow or Free rejoins it to its leader.
+     */
+    public void setOrder(NpcOrder order, @Nullable BlockPos pos, float facing, @Nullable UUID target)
     {
-        this.order = order;
-        if (this.leaderId == null)
+        boolean top = this.leaderId == null;
+        if (!top && (order == NpcOrder.FOLLOW || order == NpcOrder.FREE))
         {
-            this.effective = order;
-            this.npc.setFollowing(order == NpcOrder.FOLLOW);
+            this.order = null;
+            this.orderPos = null;
+            this.orderTarget = null;
         }
+        else
+        {
+            this.order = order;
+            this.orderPos = pos == null ? null : pos.immutable();
+            this.orderFacing = facing;
+            this.orderTarget = target;
+        }
+        this.holder = this.order != null || top ? this : this.holder;
+        this.npc.setFollowing(top && order == NpcOrder.FOLLOW);
+        this.slotsAt = -1L;
     }
 
     public void setFormation(NpcFormation formation)
@@ -161,6 +229,47 @@ public final class NpcChain
             case CAPTAIN -> AncientEmpiresConfig.chainSquadsPerCaptain;
             case GENERAL -> AncientEmpiresConfig.chainCaptainsPerGeneral <= 0 ? Integer.MAX_VALUE : AncientEmpiresConfig.chainCaptainsPerGeneral;
         };
+    }
+
+    /**
+     * Whether the order lets this NPC fight {@code target}. Outside a chain,
+     * or Free, anything goes; Follow keeps within {@code followLeash} of the
+     * holder, Hold within {@code holdRange} of the NPC's own place in the line,
+     * Defend within {@code defendRadius} of the spot, Fall back only what is
+     * on top of it; Attack anything. Soldiers with a bow reach further.
+     */
+    public boolean allowsTarget(LivingEntity target)
+    {
+        if (!AncientEmpiresConfig.chainEnabled || !this.inChain())
+        {
+            return true;
+        }
+        double reach = this.npc.isHoldingBow() ? AncientEmpiresConfig.chainRangedLeash : 0.0D;
+        return switch (this.effectiveOrder())
+        {
+            case FREE, ATTACK -> true;
+            case FOLLOW -> within(target, this.holder.npc.position(), AncientEmpiresConfig.chainFollowLeash + reach);
+            case HOLD -> within(target, this.place(), AncientEmpiresConfig.chainHoldRange + reach);
+            case DEFEND -> this.orderPos() == null || within(target, Vec3.atBottomCenterOf(this.orderPos()), AncientEmpiresConfig.chainDefendRadius + reach);
+            case FALL_BACK -> this.npc.distanceToSqr(target) <= AncientEmpiresConfig.chainCornerRange * AncientEmpiresConfig.chainCornerRange;
+        };
+    }
+
+    private static boolean within(LivingEntity target, Vec3 from, double range)
+    {
+        return target.position().distanceToSqr(from) <= range * range;
+    }
+
+    /** Where this NPC stands in its unit now: its slot, or the order's spot for whoever holds it. */
+    private Vec3 place()
+    {
+        NpcEntity current = this.leader();
+        Vec3 slot = this.formed() && current != null ? current.getChain().slotOf(this.npc) : null;
+        if (slot != null)
+        {
+            return slot;
+        }
+        return this.holdsOrder() && this.orderPos != null ? Vec3.atBottomCenterOf(this.orderPos) : this.npc.position();
     }
 
     /**
@@ -207,12 +316,15 @@ public final class NpcChain
             }
             above = above.getChain().leader();
         }
-        soldier.getChain().leave();
         NpcChain own = soldier.getChain();
+        own.leave();
         own.leaderId = leader.getUUID();
         own.leader = leader;
-        own.effective = chain.effective;
-        // A soldier taken into a unit stops following on its own; its unit moves it now.
+        // It joins under its new leader's order, and stops following on its own.
+        own.order = null;
+        own.orderPos = null;
+        own.orderTarget = null;
+        own.holder = chain.holder;
         soldier.setFollowing(false);
         chain.members.add(soldier.getUUID());
         if (officer)
@@ -233,7 +345,7 @@ public final class NpcChain
         }
         this.leaderId = null;
         this.leader = null;
-        this.effective = this.order;
+        this.holder = this;
     }
 
     private void drop(UUID member)
@@ -257,7 +369,7 @@ public final class NpcChain
     @Nullable
     public NpcEntity depart(boolean succeed)
     {
-        if (!(this.npc.level() instanceof ServerLevel level) || this.leaderId == null && this.members.isEmpty())
+        if (!(this.npc.level() instanceof ServerLevel level) || !this.inChain())
         {
             return null;
         }
@@ -296,14 +408,14 @@ public final class NpcChain
             next.leaderId = this.leaderId;
             next.leader = above;
             next.order = this.order;
+            next.orderPos = this.orderPos;
+            next.orderFacing = this.orderFacing;
+            next.orderTarget = this.orderTarget;
             next.formation = this.formation;
-            next.effective = this.effective;
+            next.holder = this.holder == this ? next : this.holder;
             next.slotsAt = -1L;
-            if (this.leaderId == null)
-            {
-                // The top of the chain: the heir carries the order on (following the owner, say).
-                heir.setFollowing(this.order == NpcOrder.FOLLOW);
-            }
+            // At the top of a chain the heir carries the order on (following the owner, say).
+            heir.setFollowing(this.leaderId == null && this.order == NpcOrder.FOLLOW);
             if (above != null)
             {
                 NpcChain upper = above.getChain();
@@ -330,7 +442,7 @@ public final class NpcChain
                 {
                     member.getChain().leaderId = null;
                     member.getChain().leader = null;
-                    member.getChain().effective = member.getChain().order;
+                    member.getChain().holder = member.getChain();
                 }
             }
         }
@@ -339,6 +451,7 @@ public final class NpcChain
         this.officers.clear();
         this.leaderId = null;
         this.leader = null;
+        this.holder = this;
         return heir;
     }
 
@@ -352,7 +465,11 @@ public final class NpcChain
         return candidate.getLevel() > than.getLevel();
     }
 
-    /** Server tick: finds the leader, mirrors its order, tracks the unit's facing, and keeps the member list true. */
+    /**
+     * Server tick: finds the leader, takes its order holder, tracks the unit's
+     * heading, keeps the member list true, and carries out its own order's
+     * changes (an attack whose enemy fell, a fall back that reached its point).
+     */
     void tick()
     {
         if (!(this.npc.level() instanceof ServerLevel level))
@@ -360,13 +477,21 @@ public final class NpcChain
             return;
         }
         long now = level.getGameTime();
-        int phase = Math.floorMod(this.npc.getId(), RESOLVE_TICKS);
-        if (this.leaderId != null && this.leader() == null && now % RESOLVE_TICKS == phase)
+        if (this.leaderId != null && this.leader() == null && now % RESOLVE_TICKS == Math.floorMod(this.npc.getId(), RESOLVE_TICKS))
         {
             this.resolve(level);
         }
         NpcEntity current = this.leader();
-        this.effective = this.leaderId == null ? this.order : current == null ? NpcOrder.FREE : current.getChain().effective;
+        this.holder = this.order != null || this.leaderId == null || current == null ? this : current.getChain().holder;
+        if (this.holder == this && this.leaderId != null && current == null && this.order == null)
+        {
+            // The leader is away: act free until it is back.
+            return;
+        }
+        if (this.holdsOrder())
+        {
+            this.carryOut(level);
+        }
         if (!this.members.isEmpty())
         {
             this.trackFacing();
@@ -374,6 +499,35 @@ public final class NpcChain
             {
                 this.prune(level);
             }
+        }
+        NpcOrder effective = this.effectiveOrder();
+        if (effective == NpcOrder.ATTACK && this.npc.getTarget() == null && this.holder.orderTarget != null
+                && level.getEntity(this.holder.orderTarget) instanceof LivingEntity enemy && enemy.isAlive())
+        {
+            this.npc.setTarget(enemy);
+        }
+        else if (this.npc.getTarget() != null && now % 10L == Math.floorMod(this.npc.getId(), 10) && !this.allowsTarget(this.npc.getTarget()))
+        {
+            // Out of what the order allows (a holding line does not chase off).
+            this.npc.setTarget(null);
+        }
+    }
+
+    private void carryOut(ServerLevel level)
+    {
+        if (this.order == NpcOrder.ATTACK)
+        {
+            Entity enemy = this.orderTarget == null ? null : level.getEntity(this.orderTarget);
+            if (!(enemy instanceof LivingEntity living) || !living.isAlive())
+            {
+                // The enemy fell (or is gone): hold where the unit stands.
+                this.setOrder(NpcOrder.HOLD, this.npc.blockPosition(), this.facing(), null);
+            }
+        }
+        else if (this.order == NpcOrder.FALL_BACK && this.orderPos != null
+                && this.npc.position().distanceToSqr(Vec3.atBottomCenterOf(this.orderPos)) <= RALLIED * RALLIED)
+        {
+            this.setOrder(NpcOrder.HOLD, this.orderPos, this.orderFacing, null);
         }
     }
 
@@ -446,9 +600,13 @@ public final class NpcChain
         }
     }
 
-    /** The way this unit faces, in degrees (a mob's yaw). */
+    /** The way this unit faces, in degrees (a mob's yaw): the order's facing at a held spot, else where it walks. */
     public float facing()
     {
+        if (this.effectiveOrder().anchored() && !Float.isNaN(this.holder.orderFacing))
+        {
+            return this.holder.orderFacing;
+        }
         return Float.isNaN(this.facing) ? this.npc.getYRot() : this.facing;
     }
 
@@ -463,8 +621,8 @@ public final class NpcChain
         long now = this.npc.level().getGameTime();
         Vec3 here = this.npc.position();
         float facing = this.facing();
-        if (this.slotsAt < 0L || now - this.slotsAt > SLOT_TICKS && (this.slotsFrom.distanceToSqr(here) > 1.0D
-                || Math.abs(Mth.wrapDegrees(facing - this.slotsFacing)) > 15.0F))
+        if (this.slotsAt < 0L || this.slotsFormation != this.formation || now - this.slotsAt > SLOT_TICKS
+                && (this.slotsFrom.distanceToSqr(here) > 1.0D || Math.abs(Mth.wrapDegrees(facing - this.slotsFacing)) > 15.0F))
         {
             this.layout(here, facing);
             this.slotsAt = now;
@@ -477,6 +635,7 @@ public final class NpcChain
         this.slots.clear();
         this.slotsFrom = here;
         this.slotsFacing = facing;
+        this.slotsFormation = this.formation;
         double radians = facing * Mth.DEG_TO_RAD;
         // A mob facing yaw 0 looks south (+z); its right is west (-x).
         double forwardX = -Math.sin(radians);
@@ -497,15 +656,16 @@ public final class NpcChain
             double[] slot = this.formation.soldierSlot(i, soldiers.size(), lineWidth, columnWidth, spacing);
             this.slots.put(soldiers.get(i), place(here, slot, forwardX, forwardZ, rightX, rightZ));
         }
-        // Officers' squads, assumed full: as wide and deep as a whole squad in this formation.
+        // Officers' units, assumed full: as wide and deep as a whole squad in this formation, standing ahead.
         int squad = AncientEmpiresConfig.chainSquadSize;
         double gap = this.formation.spacing(spacing);
         double frontage = Math.min(squad, this.formation.width(lineWidth, columnWidth)) * gap;
-        double depth = this.formation.rows(squad, lineWidth, columnWidth) * gap + gap;
+        double behind = this.formation.depthBehind(squad, lineWidth, columnWidth, spacing);
+        double depth = this.formation.lead(spacing) + behind;
         int ownRows = this.formation.rows(soldiers.size(), lineWidth, columnWidth);
         for (int i = 0; i < leaders.size(); i++)
         {
-            double[] slot = this.formation.officerSlot(i, leaders.size(), ownRows, frontage, depth, spacing);
+            double[] slot = this.formation.officerSlot(i, leaders.size(), ownRows, frontage, behind, depth, spacing);
             this.slots.put(leaders.get(i), place(here, slot, forwardX, forwardZ, rightX, rightZ));
         }
     }
@@ -530,9 +690,21 @@ public final class NpcChain
             this.officers.forEach(id -> officers.add(NbtUtils.createUUID(id)));
             tag.put(OFFICERS_KEY, officers);
         }
-        if (this.order != NpcOrder.FREE)
+        if (this.order != null)
         {
             tag.putString(ORDER_KEY, this.order.id());
+        }
+        if (this.orderPos != null)
+        {
+            tag.putLong(ORDER_POS_KEY, this.orderPos.asLong());
+        }
+        if (!Float.isNaN(this.orderFacing))
+        {
+            tag.putFloat(ORDER_FACING_KEY, this.orderFacing);
+        }
+        if (this.orderTarget != null)
+        {
+            tag.putUUID(ORDER_TARGET_KEY, this.orderTarget);
         }
         if (this.formation != NpcFormation.LINE)
         {
@@ -553,8 +725,11 @@ public final class NpcChain
         {
             this.officers.add(NbtUtils.loadUUID(id));
         }
-        this.order = NpcOrder.byName(tag.getString(ORDER_KEY));
+        this.order = tag.contains(ORDER_KEY) ? NpcOrder.byName(tag.getString(ORDER_KEY)) : null;
+        this.orderPos = tag.contains(ORDER_POS_KEY) ? BlockPos.of(tag.getLong(ORDER_POS_KEY)) : null;
+        this.orderFacing = tag.contains(ORDER_FACING_KEY) ? tag.getFloat(ORDER_FACING_KEY) : Float.NaN;
+        this.orderTarget = tag.hasUUID(ORDER_TARGET_KEY) ? tag.getUUID(ORDER_TARGET_KEY) : null;
         this.formation = NpcFormation.byName(tag.getString(FORMATION_KEY));
-        this.effective = this.leaderId == null ? this.order : NpcOrder.FREE;
+        this.holder = this;
     }
 }

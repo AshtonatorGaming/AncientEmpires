@@ -501,22 +501,27 @@ public final class StructureGameTests
             soldiers.add(soldier);
         }
         helper.assertTrue(NpcChain.toggle(soldiers.get(0), sergeant) != NpcChain.Assign.ADDED, "a soldier cannot lead its sergeant");
-        sergeant.getChain().setOrder(NpcOrder.FOLLOW);
-        helper.runAfterDelay(160, () ->
+        // Hold a spot a few blocks off, facing east: the sergeant goes there, its soldiers form up in front of it.
+        BlockPos spot = helper.absolutePos(new BlockPos(24, 1, -18));
+        sergeant.getChain().setOrder(NpcOrder.HOLD, spot, -90.0F, null);
+        helper.runAfterDelay(200, () ->
         {
+            helper.assertTrue(sergeant.position().distanceTo(Vec3.atBottomCenterOf(spot)) <= 2.0D, "the sergeant holds the spot, at " + sergeant.position());
             for (NpcEntity soldier : soldiers)
             {
                 Vec3 slot = sergeant.getChain().slotOf(soldier);
                 helper.assertTrue(slot != null, "a slot for every soldier");
                 double off = Math.sqrt(Math.pow(slot.x - soldier.getX(), 2) + Math.pow(slot.z - soldier.getZ(), 2));
                 AncientEmpires.LOGGER.info("GAMETEST squad soldier at {} slot {} off {}", soldier.position(), slot, off);
-                helper.assertTrue(off <= AncientEmpiresConfig.chainSlotTolerance + 1.0D, "in formation, off by " + off);
+                helper.assertTrue(off <= 0.75D, "in its slot, off by " + off);
+                // Facing east, the front rank stands east of its sergeant.
+                helper.assertTrue(slot.x > sergeant.getX(), "the soldiers stand in front of their sergeant");
             }
             sergeant.kill();
             NpcEntity heir = soldiers.get(2);
             helper.assertTrue(heir.getChain().leaderId() == null, "the best soldier now leads");
             helper.assertTrue(heir.getChain().members().size() == 2, "and has the other two under it, has " + heir.getChain().members().size());
-            helper.assertTrue(heir.getChain().order() == NpcOrder.FOLLOW, "with the fallen sergeant's order");
+            helper.assertTrue(heir.getChain().order() == NpcOrder.HOLD && spot.equals(heir.getChain().orderPos()), "with the fallen sergeant's order and spot");
             for (NpcEntity soldier : soldiers.subList(0, 2))
             {
                 helper.assertTrue(heir.getUUID().equals(soldier.getChain().leaderId()), "the others answer to the heir");

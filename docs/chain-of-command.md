@@ -1,6 +1,7 @@
 # Chain of command (plan)
 
-Status: plan; the decisions below are agreed (2026-10-28), the rest is to build. Sources: VISION.md (Architectural Primitives, Military
+Status: phases 1 and 2 built (2026-10-28); the rest to build. Formation layout revised with the user: soldiers form
+the front, a leader stands just behind its own front rank, a captain behind its squads, a general behind its captains. Sources: VISION.md (Architectural Primitives, Military
 Hierarchy and Scale, Garrison Rules, Charge Bonus, Companions) and DESIGN.md (Tier 1 command aura and succession,
 Tier 2 doctrines and squad rules, Tier 4 living chain of command).
 
@@ -68,6 +69,8 @@ sergeant as a rally point; cavalry spaces wider and releases as a charge.
 
 ## Formations
 
+Soldiers form the front: a sergeant stands just behind its own front rank (its men between it and the enemy, still
+seeing the line), a captain behind its squads, a general behind its captains; the higher the rank, the further back.
 A leader works out a slot for each soldier (an offset from itself and its facing) when it moves a block or turns,
 and at most every half second. A soldier walks only when it is out of its slot by more than a block or two, so a
 standing unit costs almost nothing. First set: **line** (default; shields front, archers a row behind),
@@ -91,6 +94,9 @@ To decide (see questions): a held order item, a command screen, or both. Propose
 
 - **Command screen** (a key, default unbound or `K`): your army as a tree (generals, captains, squads), each
   with its order and formation; drag to reassign, buttons to give orders, rename squads.
+- **Signal Flag** (built): on a block Hold there facing your way, on the same spot again Defend it, sneaking Fall
+  back to it; on a creature Attack it; in the air Follow / Free (a sub-unit rejoins its leader), sneaking the
+  formation. Giving a unit under a captain its own order detaches it until it rejoins.
 - **Point-and-order item** for the field (agreed: screen and item, horn kept): with a unit selected, use on a block to move or hold there, on a mob
   to attack it, on a structure to defend it; sneak to cycle the selected unit. Not a baton (you dislike those): a
   signal flag, or the War Horn's next mode.

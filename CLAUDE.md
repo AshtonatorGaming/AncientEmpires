@@ -669,16 +669,22 @@ its own unless noted). Before adding behavior, check what AW did first.
 - Chain of command (`NpcChain`, `chain` config; plan and phases in docs/chain-of-command.md). Phase 1 done: an NPC
   holds one leader link (`AeLeader`) and, as a leader, its unit (`AeSquad`, officers apart); only a player's soldiers,
   only when the owner assigns them with the Signal Flag (`SignalFlagItem`: use on a sergeant or above to take up its
-  unit, on soldiers to add or remove; in the air Follow or Free at the top of a chain, sneaking the formation). Caps:
-  `squadSize` 16 soldiers per leader, `squadsPerCaptain` 4, generals any. Orders (`NpcOrder`: Free, Follow so far)
-  sit on the top leader and are read one link down each tick (`effectiveOrder`); Follow at the top sets the vanilla
-  follow flag. A formed soldier runs only `NpcFormationGoal` (priority 3): its slot from the leader's layout
-  (`NpcFormation`: line, column, loose; officers' squads behind the leader's own rows), worked out per unit when the
-  leader moves or turns; it walks only when off by `slotTolerance`, faces the unit's heading, and a target takes it
-  out of formation until the fight ends. Death or repack `depart`s: the best member (rank, then level) takes the
+  unit, on soldiers to add or remove; on a block Hold, again on the spot Defend, sneaking Fall back; on a creature
+  Attack; in the air Follow or Free (a sub-unit rejoins), sneaking the formation). Caps: `squadSize` 16 soldiers per
+  leader, `squadsPerCaptain` 4, generals any. Orders (`NpcOrder`): an NPC holds its own (top of a chain, or a
+  detached sub-unit) or inherits; the nearest holder above is cached as `holder` each tick, so everyone reads one
+  link up. The holder runs `NpcOrderGoal` (to the spot, facing the order's way; Attack ends in Hold where the enemy
+  fell, Fall back in Hold at the rally point); Follow at the top sets the vanilla follow flag. The order leashes
+  targets (`allowsTarget`, in the target scan and every 10 ticks): Follow within `followLeash` of the holder, Hold
+  within `holdRange` of the soldier's own slot, Defend within `defendRadius` of the spot, Fall back only the
+  cornered; bows reach `rangedLeash` further. A formed soldier runs only `NpcFormationGoal` (priority 3): its slot
+  from the leader's layout (`NpcFormation`: line, column, loose; the front rank just ahead of its leader, the rest
+  behind; a captain's squads ahead of it, so higher ranks stand further back), worked out per unit when the leader
+  moves or turns; it sets off past `slotTolerance` (or when its slot moves) and steps straight onto the exact spot
+  for the last two blocks, faces the unit's heading, and a target takes it out of formation until the fight ends. Death or repack `depart`s: the best member (rank, then level) takes the
   place, order, and the rest of the unit, and the command aura (`NpcCommand.succeed` prefers it); `NpcChainLedger`
   (per-dimension saved data, 7 days) answers unloaded links (away, or gone and to whom). `/ancientempires squad`.
-  Next: phase 2 (Hold, Defend, Attack, Fall back), then unit fighting with lobotomised grunts.
+  Phases 1 and 2 done. Next: phase 3, unit fighting with lobotomised grunts.
 - Command (`NpcCommand`, `command` config, DESIGN Tier 1): every rank above soldier pulses an
   aura every `auraTicks` at its rank's `strengthByRank` (0.5, 1, 1.25) over allied soldiers
   within `radiusByRank` (8, 12, 16): `damageBonus` (15%) melee damage with any weapon and `armorBonus` armour, as

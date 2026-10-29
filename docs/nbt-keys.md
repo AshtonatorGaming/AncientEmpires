@@ -23,7 +23,10 @@ The NPC entity is `ancientempires:npc`. Besides vanilla's mob keys (`Health`, `H
 | `AeLeader` | UUID | no | Chain of command: the NPC's leader. Repacked NPCs come back out of any unit. |
 | `AeSquad` | UUID list | no | Chain of command: those directly under this leader. |
 | `AeSquadOfficers` | UUID list | no | The members of `AeSquad` who lead units of their own. |
-| `AeOrder` | text | no | The unit's order, `follow` (absent: free). Meaningful at the top of a chain; everyone below acts on it. |
+| `AeOrder` | text | no | This NPC's own order: `free`, `follow`, `hold`, `defend`, `attack`, or `fall_back`. Absent: it takes its leader's (at the top of a chain, Free). |
+| `AeOrderPos` | long | no | The order's spot (Hold, Defend, Fall back), as a packed block position. |
+| `AeOrderFacing` | float | no | The way the unit faces at that spot (a yaw). |
+| `AeOrderTarget` | UUID | no | Attack: the enemy the unit goes for. |
 | `AeFormation` | text | no | `column` or `loose` (absent: line). |
 | `AeRank` | text | yes | `soldier`, `sergeant`, `captain`, or `general`, when set by insignia or command. Without it, the rank comes from the roster row. |
 | `AeSkill` | int | yes | Pins the NPC's skill to one entry (0 to 3) of every `skill` list, instead of reading the lists by level. For testing or special NPCs. |

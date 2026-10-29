@@ -19,9 +19,16 @@ import java.util.EnumSet;
 public class NpcFormationGoal extends Goal
 {
     private static final int REPATH_TICKS = 10;
+    /** Blocks off the slot that count as in it, once moving (it sets off again only past the tolerance). */
+    private static final double SETTLED = 0.35D;
+    /** Blocks off the slot from which it steps straight in, rather than pathing to a block's centre. */
+    private static final double STEP_IN = 2.0D;
 
     private final NpcEntity npc;
     private int repath;
+    private boolean moving;
+    /** The slot it last settled in: if the slot itself moves (the leader shifted), it steps over. */
+    private Vec3 settledIn;
 
     public NpcFormationGoal(NpcEntity npc)
     {
@@ -45,6 +52,8 @@ public class NpcFormationGoal extends Goal
     public void start()
     {
         this.repath = 0;
+        this.moving = true;
+        this.settledIn = null;
     }
 
     @Override
@@ -71,16 +80,26 @@ public class NpcFormationGoal extends Goal
         double dx = slot.x - this.npc.getX();
         double dz = slot.z - this.npc.getZ();
         double off = Math.sqrt(dx * dx + dz * dz);
-        if (off > AncientEmpiresConfig.chainSlotTolerance)
+        // Sets off once past the tolerance, then keeps on until it is really in its slot, so the line stays straight.
+        this.moving = this.moving ? off > SETTLED
+                : off > AncientEmpiresConfig.chainSlotTolerance || this.settledIn != null && this.settledIn.distanceToSqr(slot) > SETTLED * SETTLED;
+        if (this.moving)
         {
-            if (--this.repath <= 0)
+            double speed = off > AncientEmpiresConfig.chainCatchUpDistance ? AncientEmpiresConfig.chainCatchUpSpeed : AncientEmpiresConfig.chainWalkSpeed;
+            if (off <= STEP_IN)
+            {
+                // The last step straight onto the spot (a path ends at a block's centre).
+                this.npc.getNavigation().stop();
+                this.npc.getMoveControl().setWantedPosition(slot.x, this.npc.getY(), slot.z, speed);
+            }
+            else if (--this.repath <= 0)
             {
                 this.repath = this.adjustedTickDelay(REPATH_TICKS);
-                double speed = off > AncientEmpiresConfig.chainCatchUpDistance ? AncientEmpiresConfig.chainCatchUpSpeed : AncientEmpiresConfig.chainWalkSpeed;
                 this.npc.getNavigation().moveTo(slot.x, slot.y, slot.z, speed);
             }
             return;
         }
+        this.settledIn = slot;
         if (!this.npc.getNavigation().isDone())
         {
             this.npc.getNavigation().stop();

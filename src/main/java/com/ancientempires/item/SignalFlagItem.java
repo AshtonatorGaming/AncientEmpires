@@ -7,6 +7,7 @@ import com.ancientempires.entity.npc.NpcFormation;
 import com.ancientempires.entity.npc.NpcOrder;
 import com.ancientempires.entity.npc.NpcRank;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -18,6 +19,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,17 +30,23 @@ import java.util.UUID;
 /**
  * The Signal Flag, the field tool of the chain of command
  * (docs/chain-of-command.md). Use it on one of your sergeants, captains, or
- * generals to take up their unit; then use it on your soldiers to put them
- * under that leader, or take them out again (a captain takes sergeants, with
- * their squads, and soldiers; a general captains and sergeants too). Used in
- * the air it gives the selected unit its order (Follow you, or Free), sneaking
- * it changes the unit's formation (line, column, loose). Using it on the
- * selected leader again puts the flag down.
+ * generals to take up their unit; then on your soldiers to put them under that
+ * leader, or take them out again. With a unit taken up:
+ * <ul>
+ * <li>on a block: Hold there, facing the way you look; on the same spot
+ * again: Defend it (and again: Hold); sneaking: Fall back to it;</li>
+ * <li>on any other creature: Attack it;</li>
+ * <li>in the air: Follow you (a unit under another leader: rejoin it), again
+ * Free; sneaking: the next formation (line, column, loose).</li>
+ * </ul>
+ * Using it on the selected leader again puts the flag down.
  */
 public class SignalFlagItem extends Item
 {
     private static final String LEADER_KEY = "Leader";
     private static final String LEADER_NAME_KEY = "LeaderName";
+    /** Blocks within which a second Hold on the spot means Defend. */
+    private static final double SAME_SPOT = 2.5D;
 
     public SignalFlagItem(Properties properties)
     {
@@ -48,7 +56,7 @@ public class SignalFlagItem extends Item
     @Override
     public InteractionResult interactLivingEntity(ItemStack ignored, Player player, LivingEntity target, InteractionHand hand)
     {
-        if (!(target instanceof NpcEntity npc))
+        if (target == player)
         {
             return InteractionResult.PASS;
         }
@@ -58,12 +66,20 @@ public class SignalFlagItem extends Item
         }
         // The held stack itself (in creative the one passed in is a copy).
         ItemStack flag = player.getItemInHand(hand);
-        if (!npc.isOwnedNpc() || !player.getUUID().equals(npc.getOwner()))
+        NpcEntity selected = selected(flag, player);
+        boolean own = target instanceof NpcEntity npc && npc.isOwnedNpc() && player.getUUID().equals(npc.getOwner());
+        if (!own)
         {
-            say(player, "message.ancientempires.signal.not_yours");
+            if (selected == null)
+            {
+                say(player, "message.ancientempires.signal.select_leader");
+                return InteractionResult.CONSUME;
+            }
+            selected.getChain().setOrder(NpcOrder.ATTACK, null, Float.NaN, target.getUUID());
+            say(player, "message.ancientempires.signal.attack", selected.getDisplayName(), target.getDisplayName());
             return InteractionResult.CONSUME;
         }
-        NpcEntity selected = selected(flag, player);
+        NpcEntity npc = (NpcEntity) target;
         if (selected == npc)
         {
             flag.removeTagKey(LEADER_KEY);
@@ -96,12 +112,47 @@ public class SignalFlagItem extends Item
         tag.putUUID(LEADER_KEY, npc.getUUID());
         tag.putString(LEADER_NAME_KEY, Component.Serializer.toJson(npc.getDisplayName()));
         NpcChain chain = npc.getChain();
-        say(player, "message.ancientempires.signal.selected", npc.getDisplayName(), count(npc),
-                Component.translatable("order.ancientempires." + chain.order().id()),
+        say(player, "message.ancientempires.signal.selected", npc.getDisplayName(), count(npc), orderName(chain),
                 Component.translatable("formation.ancientempires." + chain.formation().id()));
         return InteractionResult.CONSUME;
     }
 
+    /** On a block: Hold there (again on the spot: Defend), or sneaking, Fall back to it. */
+    @Override
+    public InteractionResult useOn(UseOnContext context)
+    {
+        Player player = context.getPlayer();
+        if (player == null)
+        {
+            return InteractionResult.PASS;
+        }
+        if (context.getLevel().isClientSide)
+        {
+            return InteractionResult.SUCCESS;
+        }
+        NpcEntity selected = this.selectedOrSay(player, context.getItemInHand());
+        if (selected == null)
+        {
+            return InteractionResult.CONSUME;
+        }
+        BlockPos spot = context.getClickedPos().relative(context.getClickedFace());
+        float facing = player.getYRot();
+        NpcChain chain = selected.getChain();
+        if (player.isShiftKeyDown())
+        {
+            chain.setOrder(NpcOrder.FALL_BACK, spot, facing, null);
+            say(player, "message.ancientempires.signal.fall_back", selected.getDisplayName());
+            return InteractionResult.CONSUME;
+        }
+        NpcOrder now = chain.holdsOrder() ? chain.effectiveOrder() : null;
+        boolean sameSpot = chain.holdsOrder() && chain.orderPos() != null && chain.orderPos().distSqr(spot) <= SAME_SPOT * SAME_SPOT;
+        NpcOrder next = sameSpot && now == NpcOrder.HOLD ? NpcOrder.DEFEND : NpcOrder.HOLD;
+        chain.setOrder(next, sameSpot ? chain.orderPos() : spot, facing, null);
+        say(player, next == NpcOrder.DEFEND ? "message.ancientempires.signal.defend" : "message.ancientempires.signal.hold", selected.getDisplayName());
+        return InteractionResult.CONSUME;
+    }
+
+    /** In the air: Follow (or rejoin), then Free; sneaking, the next formation. */
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand)
     {
@@ -110,15 +161,9 @@ public class SignalFlagItem extends Item
         {
             return InteractionResultHolder.success(flag);
         }
-        if (!flag.hasTag() || !flag.getTag().hasUUID(LEADER_KEY))
-        {
-            say(player, "message.ancientempires.signal.select_leader");
-            return InteractionResultHolder.consume(flag);
-        }
-        NpcEntity selected = selected(flag, player);
+        NpcEntity selected = this.selectedOrSay(player, flag);
         if (selected == null)
         {
-            say(player, "message.ancientempires.signal.out_of_reach");
             return InteractionResultHolder.consume(flag);
         }
         NpcChain chain = selected.getChain();
@@ -130,13 +175,14 @@ public class SignalFlagItem extends Item
         }
         else if (chain.leaderId() != null)
         {
-            // Orders come from the top: a unit under another leader follows that leader.
-            say(player, "message.ancientempires.signal.not_top", selected.getDisplayName());
+            // A unit under another leader rejoins it, taking its order again.
+            chain.setOrder(NpcOrder.FOLLOW, null, Float.NaN, null);
+            say(player, "message.ancientempires.signal.rejoin", selected.getDisplayName());
         }
         else
         {
             NpcOrder next = chain.order() == NpcOrder.FOLLOW ? NpcOrder.FREE : NpcOrder.FOLLOW;
-            chain.setOrder(next);
+            chain.setOrder(next, null, Float.NaN, null);
             say(player, "message.ancientempires.signal.order", selected.getDisplayName(), Component.translatable("order.ancientempires." + next.id()));
         }
         return InteractionResultHolder.consume(flag);
@@ -154,6 +200,24 @@ public class SignalFlagItem extends Item
             }
         }
         tooltip.add(Component.translatable("item.ancientempires.signal_flag.help").withStyle(ChatFormatting.GRAY));
+        tooltip.add(Component.translatable("item.ancientempires.signal_flag.orders").withStyle(ChatFormatting.GRAY));
+    }
+
+    /** The unit taken up, or null after telling the player why there is none. */
+    @Nullable
+    private NpcEntity selectedOrSay(Player player, ItemStack flag)
+    {
+        if (!flag.hasTag() || !flag.getTag().hasUUID(LEADER_KEY))
+        {
+            say(player, "message.ancientempires.signal.select_leader");
+            return null;
+        }
+        NpcEntity selected = selected(flag, player);
+        if (selected == null)
+        {
+            say(player, "message.ancientempires.signal.out_of_reach");
+        }
+        return selected;
     }
 
     @Nullable
@@ -165,6 +229,11 @@ public class SignalFlagItem extends Item
         }
         UUID id = flag.getTag().getUUID(LEADER_KEY);
         return level.getEntity(id) instanceof NpcEntity npc && npc.isAlive() ? npc : null;
+    }
+
+    private static Component orderName(NpcChain chain)
+    {
+        return Component.translatable("order.ancientempires." + chain.effectiveOrder().id());
     }
 
     private static Component count(NpcEntity leader)

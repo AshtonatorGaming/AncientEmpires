@@ -404,6 +404,11 @@ Chain of command (see [chain-of-command.md](chain-of-command.md)): a player's se
 | `catchUpDistance` | `6.0` | 2.0 to 64.0 | Blocks off its slot past which a soldier runs to catch up instead of walking. |
 | `catchUpSpeed` | `1.12` | 0.5 to 1.4 | Speed multiplier while catching up (a player's sprint is about 1.12). |
 | `walkSpeed` | `0.9` | 0.3 to 1.4 | Speed multiplier for small steps back into the slot. |
+| `holdRange` | `4.0` | 1.0 to 32.0 | Hold: blocks from its place in the line within which a soldier fights; it does not chase further. |
+| `defendRadius` | `16.0` | 2.0 to 64.0 | Defend: blocks from the defended spot within which the unit goes after enemies. |
+| `followLeash` | `24.0` | 4.0 to 64.0 | Follow: blocks from the unit's leader within which its soldiers fight; they let go of anything further. |
+| `rangedLeash` | `24.0` | 0.0 to 64.0 | Extra blocks of reach for a soldier with a bow, so a holding line of archers still shoots. |
+| `cornerRange` | `2.5` | 1.0 to 8.0 | Fall back: an enemy this close is fought anyway (cornered). |
 
 ### `[sunlight]`
 

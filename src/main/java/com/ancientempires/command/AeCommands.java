@@ -206,7 +206,7 @@ public final class AeCommands
         int present = here;
         context.getSource().sendSuccess(() -> Component.translatable("commands.ancientempires.squad", npc.getDisplayName(), npc.getRankName(), leaderName,
                 chain.soldierCount(), chain.officerCount(), present,
-                Component.translatable("order.ancientempires." + chain.order().id()),
+                Component.translatable(chain.order() == null ? "order.ancientempires.inherit" : "order.ancientempires." + chain.order().id()),
                 Component.translatable("order.ancientempires." + chain.effectiveOrder().id()),
                 Component.translatable("formation.ancientempires." + chain.formation().id()),
                 Component.translatable(chain.formed() ? "commands.ancientempires.squad.formed" : "commands.ancientempires.squad.not_formed")), false);
