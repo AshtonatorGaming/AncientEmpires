@@ -51,7 +51,7 @@ public final class NpcThreat
             {
                 score -= AncientEmpiresConfig.threatSelfWeight;
             }
-            else if (victim instanceof NpcEntity other && npc.isAlly(other))
+            else if (victim instanceof NpcEntity other && npc.getRelations().isAlly(other))
             {
                 score -= AncientEmpiresConfig.threatAllyWeight;
             }

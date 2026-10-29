@@ -449,7 +449,7 @@ public class GateEntity extends Entity implements IEntityAdditionalSpawnData
             return false;
         }
         return !this.level().getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(range), living -> living.isAlive()
-                && (living instanceof Enemy || living instanceof NpcEntity other && other.isFactionNpc() && other.isHostileToPlayer(master))).isEmpty();
+                && (living instanceof Enemy || living instanceof NpcEntity other && other.isFactionNpc() && other.getRelations().hostileToPlayer(master))).isEmpty();
     }
 
     /** Whether this player may open, close, or (sneaking, as owner) pack the gate. */

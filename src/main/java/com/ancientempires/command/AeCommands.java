@@ -168,7 +168,7 @@ public final class AeCommands
             return 0;
         }
         List<NpcEntity> targets = radius <= 0.0D ? List.of(npc)
-                : npc.level().getEntitiesOfClass(NpcEntity.class, npc.getBoundingBox().inflate(radius), other -> other == npc || npc.isAlly(other));
+                : npc.level().getEntitiesOfClass(NpcEntity.class, npc.getBoundingBox().inflate(radius), other -> other == npc || npc.getRelations().isAlly(other));
         int changed = 0;
         for (NpcEntity target : targets)
         {

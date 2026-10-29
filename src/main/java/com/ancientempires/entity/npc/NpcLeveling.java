@@ -118,12 +118,12 @@ public final class NpcLeveling
         }
         if (victim instanceof NpcEntity other)
         {
-            return !npc.isAlly(other) && !NpcEntity.sameOwner(npc, other);
+            return !npc.getRelations().isAlly(other) && !NpcRelations.sameOwner(npc, other);
         }
         if (victim instanceof Player player)
         {
             return !player.getUUID().equals(npc.getOwner());
         }
-        return victim instanceof Enemy || npc.isScanTarget((LivingEntity) victim);
+        return victim instanceof Enemy || npc.getRelations().scanTarget((LivingEntity) victim);
     }
 }

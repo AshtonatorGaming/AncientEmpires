@@ -244,14 +244,14 @@ public final class NpcFleeGoal extends Goal
         if (other instanceof Player player)
         {
             // A player the faction is at odds with (standing below zero, or a fresh grudge).
-            return this.npc.isHostileTo(player);
+            return this.npc.getRelations().hostileTo(player);
         }
         if (other instanceof Monster)
         {
             // Evil factions live alongside monsters; everyone else runs from them.
             return !this.npc.isFactionNpc() || !AncientEmpiresConfig.relationsEnabled || NpcFactions.hunts(this.npc.getFaction(), other);
         }
-        return other instanceof NpcEntity npc && !npc.isCivilian() && !npc.getMorale().isBroken() && npc.isScanTarget(this.npc);
+        return other instanceof NpcEntity npc && !npc.isCivilian() && !npc.getMorale().isBroken() && npc.getRelations().scanTarget(this.npc);
     }
 
     /** Ancient Warfare's fear level: nearby allied soldiers shorten the time spent hiding. */
@@ -259,7 +259,7 @@ public final class NpcFleeGoal extends Goal
     {
         double range = AncientEmpiresConfig.civilianFleeRange;
         int soldiers = this.npc.level().getEntitiesOfClass(NpcEntity.class, this.npc.getBoundingBox().inflate(range, 4.0D, range),
-                other -> this.npc.isAlly(other) && !other.isCivilian() && !other.getMorale().isBroken()).size();
+                other -> this.npc.getRelations().isAlly(other) && !other.isCivilian() && !other.getMorale().isBroken()).size();
         return Math.max(AncientEmpiresConfig.civilianSoldierCalmTicks, AncientEmpiresConfig.civilianStayAwayTicks - soldiers * AncientEmpiresConfig.civilianSoldierCalmTicks);
     }
 

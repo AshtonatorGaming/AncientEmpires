@@ -238,7 +238,7 @@ public final class NpcShieldGoal extends Goal
                 arrow -> arrow.isAlive() && arrow.getDeltaMovement().lengthSqr() > 0.01D))
         {
             if (!(arrow.getOwner() instanceof LivingEntity shooter) || shooter == this.npc
-                    || shooter instanceof NpcEntity other && this.npc.isAlly(other) || shooter.getUUID().equals(this.npc.getOwner()))
+                    || shooter instanceof NpcEntity other && this.npc.getRelations().isAlly(other) || shooter.getUUID().equals(this.npc.getOwner()))
             {
                 continue;
             }

@@ -188,7 +188,7 @@ public final class NpcMedicGoal extends Goal
         }
         if (other instanceof NpcEntity npc)
         {
-            return this.npc.isAlly(npc);
+            return this.npc.getRelations().isAlly(npc);
         }
         return other instanceof Player player && !player.isSpectator() && player.getUUID().equals(this.npc.getOwner());
     }

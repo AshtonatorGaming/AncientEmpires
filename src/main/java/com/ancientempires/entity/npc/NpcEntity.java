@@ -174,7 +174,6 @@ public class NpcEntity extends PathfinderMob
     /** What earlier builds saved the path as. Read only. */
     private static final String[] LEGACY_PATH_KEYS = {"AeCalling", "AeRole"};
     private static final String LEVY_KEY = "AeLevy";
-    private static final String REVENGE_KEY = "AeRevenge";
 
     private final NpcInventory inventory = new NpcInventory(this);
     private final NpcSidearm sidearm = new NpcSidearm(this);
@@ -195,6 +194,7 @@ public class NpcEntity extends PathfinderMob
     private final NpcAttack attack = new NpcAttack(this);
     private final NpcHold hold = new NpcHold(this);
     private final NpcNeeds needs = new NpcNeeds(this);
+    private final NpcRelations relations = new NpcRelations(this);
     /** The NPC spawner that made it (its home), its slot there, and whether it is a garrison. Not packed. */
     @Nullable
     private BlockPos spawnerPos;
@@ -227,8 +227,6 @@ public class NpcEntity extends PathfinderMob
     /** Server only: a would-be target a civilian flees instead. */
     @Nullable
     private LivingEntity fearSource;
-    /** Players this NPC holds a faction-mate's death against, with the game time it ends. Saved as {@code AeRevenge}. */
-    private final Map<UUID, Long> revenge = new HashMap<>();
     /** Set for a death a Town Hall records, from {@code upkeep.keepOnDeath}: those items stay for the record. */
     private boolean keepEquipmentOnDeath;
     private boolean keepBackpackOnDeath;
@@ -438,7 +436,7 @@ public class NpcEntity extends PathfinderMob
             targets.add(this.addTarget(4, new NearestAttackableTargetGoal<>(this, Monster.class, 10, true, false,
                     living -> NpcTargetCache.countLegacyCandidate())));
             targets.add(this.addTarget(5, new NearestAttackableTargetGoal<>(this, NpcEntity.class, 10, true, false,
-                    living -> living instanceof NpcEntity other && this.acceptsTarget(other) && NpcTargetCache.countLegacyCandidate())));
+                    living -> living instanceof NpcEntity other && this.relations.acceptsTarget(other) && NpcTargetCache.countLegacyCandidate())));
         }
         else
         {
@@ -500,181 +498,10 @@ public class NpcEntity extends PathfinderMob
         this.fighterGoals = fighter;
     }
 
-    /**
-     * Same side: the same faction for faction NPCs, the same owner for owned ones.
-     * Allies answer each other's alerts.
-     */
-    public boolean isAlly(NpcEntity other)
-    {
-        if (other == this)
-        {
-            return false;
-        }
-        if (this.isFactionNpc())
-        {
-            return this.getFaction().equals(other.getFaction());
-        }
-        return sameOwner(this, other);
-    }
-
-    /**
-     * What the automatic scan may pick: any monster, or an NPC that
-     * {@link #acceptsTarget} allows. Vanilla's combat checks run after this.
-     */
-    boolean isScanTarget(LivingEntity living)
-    {
-        if (living.getFirstPassenger() instanceof NpcEntity)
-        {
-            // An NPC's mount (a gremlin's spider, an undead's skeleton horse); the rider is the target.
-            return false;
-        }
-        if (living instanceof Player player)
-        {
-            return this.isHostileTo(player);
-        }
-        if (living instanceof NpcEntity target)
-        {
-            return this.acceptsTarget(target);
-        }
-        if (this.isFactionNpc() && AncientEmpiresConfig.relationsEnabled)
-        {
-            return NpcFactions.hunts(this.getFaction(), living);
-        }
-        return living instanceof Enemy;
-    }
-
-    /**
-     * Automatic scans only. A same-owner pair is never a target. Factions attack
-     * the factions on their hostile list, and owned NPCs of players they are
-     * hostile to; an owned NPC attacks faction NPCs hostile to its owner.
-     * A hit still uses the hurt-by goal, which only rejects a same-owner attacker.
-     */
-    private boolean acceptsTarget(NpcEntity target)
-    {
-        if (target == this || !target.isAlive() || sameOwner(this, target) || target.morale.isSurrendered())
-        {
-            return false;
-        }
-        if (!this.chases(target))
-        {
-            return false;
-        }
-        if (this.isFactionNpc())
-        {
-            if (target.isFactionNpc())
-            {
-                return NpcFactions.hostile(this.getFaction(), target.getFaction());
-            }
-            return target.isOwnedNpc() && this.isHostileToPlayer(target.getOwner());
-        }
-        if (!this.isOwnedNpc() || !target.isFactionNpc())
-        {
-            return false;
-        }
-        return !AncientEmpiresConfig.relationsEnabled || target.isHostileToPlayer(this.getOwner());
-    }
-
-    /**
-     * Whether this NPC goes after a target: anyone fighting, and a routing NPC
-     * only within {@code morale.chaseRange} on foot, so a won fight does not
-     * scatter the winners across the field; riders run routers down.
-     */
-    boolean chases(LivingEntity target)
-    {
-        if (!(target instanceof NpcEntity npc) || !npc.morale.isBroken() || this.isPassenger() || AncientEmpiresConfig.moraleChaseRange <= 0.0D)
-        {
-            return true;
-        }
-        return this.distanceToSqr(target) <= AncientEmpiresConfig.moraleChaseRange * AncientEmpiresConfig.moraleChaseRange;
-    }
-
-    /** A faction NPC's view of a player in the world. Creative and spectator players are never enemies. */
-    public boolean isHostileTo(Player player)
-    {
-        return !player.isCreative() && !player.isSpectator() && this.isHostileToPlayer(player.getUUID());
-    }
-
-    /**
-     * Whether this faction NPC treats the player (and the player's NPCs) as an
-     * enemy: standing below zero, or a recent kill of one of its own nearby
-     * (revenge, as in Ancient Warfare). Owned NPCs never do.
-     */
-    public boolean isHostileToPlayer(@Nullable UUID player)
-    {
-        if (player == null || !this.isFactionNpc() || !AncientEmpiresConfig.relationsEnabled || this.level().isClientSide)
-        {
-            return false;
-        }
-        Long until = this.revenge.get(player);
-        if (until != null)
-        {
-            if (until > this.level().getGameTime())
-            {
-                return true;
-            }
-            this.revenge.remove(player);
-        }
-        MinecraftServer server = this.level().getServer();
-        return server != null && NpcStandings.get(server).hostile(player, this.getFaction());
-    }
-
-    /** This NPC holds the kill of one of its own against the player for {@code relations.revengeTicks}. */
-    void markRevenge(UUID player)
-    {
-        this.revenge.put(player, this.level().getGameTime() + AncientEmpiresConfig.relationsRevengeTicks);
-    }
-
-    /**
-     * Ancient Warfare's standing change and revenge: killing a faction NPC, or
-     * having one's owned NPCs kill it, costs the player that faction's
-     * {@code kill} standing, and the dead NPC's faction-mates within
-     * {@code relations.revengeRange} turn on the player for a while.
-     */
-    private void recordKill(DamageSource source)
-    {
-        if (!this.isFactionNpc() || !AncientEmpiresConfig.relationsEnabled || !(this.level() instanceof ServerLevel level))
-        {
-            return;
-        }
-        Entity killer = source.getEntity();
-        UUID player = null;
-        if (killer instanceof Player killerPlayer)
-        {
-            if (!killerPlayer.isCreative() || AncientEmpiresConfig.relationsCountCreative)
-            {
-                player = killerPlayer.getUUID();
-            }
-        }
-        else if (killer instanceof NpcEntity npc && npc.isOwnedNpc())
-        {
-            player = npc.getOwner();
-        }
-        if (player == null)
-        {
-            return;
-        }
-        String faction = this.getFaction();
-        NpcStandings standings = NpcStandings.get(level.getServer());
-        boolean wasHostile = standings.hostile(player, faction);
-        int now = standings.adjust(player, faction, NpcFactions.killChange(faction));
-        Player online = level.getServer().getPlayerList().getPlayer(player);
-        if (online != null && !wasHostile && now < 0)
-        {
-            online.displayClientMessage(Component.translatable("message.ancientempires.standing.hostile", NpcFactions.displayName(faction)), false);
-        }
-        double range = AncientEmpiresConfig.relationsRevengeRange;
-        UUID avenged = player;
-        for (NpcEntity mate : level.getEntitiesOfClass(NpcEntity.class, this.getBoundingBox().inflate(range),
-                other -> other != this && other.isAlive() && faction.equals(other.getFaction())))
-        {
-            mate.markRevenge(avenged);
-        }
-    }
-
     @Override
     public boolean canAttack(LivingEntity target)
     {
-        if (target instanceof NpcEntity other && sameOwner(this, other))
+        if (target instanceof NpcEntity other && NpcRelations.sameOwner(this, other))
         {
             return false;
         }
@@ -685,12 +512,6 @@ public class NpcEntity extends PathfinderMob
             return false;
         }
         return super.canAttack(target);
-    }
-
-    static boolean sameOwner(NpcEntity left, NpcEntity right)
-    {
-        UUID owner = left.getOwner();
-        return owner != null && owner.equals(right.getOwner());
     }
 
     @Override
@@ -1543,6 +1364,12 @@ public class NpcEntity extends PathfinderMob
         return this.needs;
     }
 
+    /** Who this NPC sides with and goes after: allies, hostility, revenge. */
+    public NpcRelations getRelations()
+    {
+        return this.relations;
+    }
+
     public NpcProgress getProgress()
     {
         return this.progress;
@@ -2344,7 +2171,7 @@ public class NpcEntity extends PathfinderMob
             // A cornered civilian's stand is over; it runs again rather than keep fighting.
             this.setTarget(null);
         }
-        else if (target != null && (this.tickCount + this.getId()) % 10 == 0 && !this.chases(target))
+        else if (target != null && (this.tickCount + this.getId()) % 10 == 0 && !this.getRelations().chases(target))
         {
             // The enemy broke and got clear: let it go and hold the field.
             this.setTarget(null);
@@ -2666,7 +2493,7 @@ public class NpcEntity extends PathfinderMob
         }
         if (alive)
         {
-            this.recordKill(source);
+            this.relations.recordKill(source);
             if (recorded && this.level() instanceof ServerLevel level)
             {
                 // After the death drops: the record holds only what the setting kept, for a priest to raise.
@@ -2728,18 +2555,7 @@ public class NpcEntity extends PathfinderMob
         this.morale.save(tag);
         this.chain.save(tag);
         this.needs.save(tag);
-        if (!this.revenge.isEmpty())
-        {
-            ListTag grudges = new ListTag();
-            for (Map.Entry<UUID, Long> entry : this.revenge.entrySet())
-            {
-                CompoundTag grudge = new CompoundTag();
-                grudge.putUUID("Player", entry.getKey());
-                grudge.putLong("Until", entry.getValue());
-                grudges.add(grudge);
-            }
-            tag.put(REVENGE_KEY, grudges);
-        }
+        this.relations.save(tag);
         this.writeRoster(tag);
         if (this.skillOverride >= 0)
         {
@@ -2816,15 +2632,7 @@ public class NpcEntity extends PathfinderMob
         this.morale.load(tag);
         this.chain.load(tag);
         this.needs.load(tag);
-        this.revenge.clear();
-        for (Tag element : tag.getList(REVENGE_KEY, Tag.TAG_COMPOUND))
-        {
-            CompoundTag grudge = (CompoundTag) element;
-            if (grudge.hasUUID("Player"))
-            {
-                this.revenge.put(grudge.getUUID("Player"), grudge.getLong("Until"));
-            }
-        }
+        this.relations.load(tag);
         if (tag.contains(ROSTER_KEY))
         {
             this.rosterId = tag.getString(ROSTER_KEY);

@@ -155,7 +155,7 @@ public final class NpcTargetGoal extends TargetGoal
         {
             LivingEntity candidate = candidates.get(index);
             if (candidate == this.npc || !candidate.isAlive() || candidate.isRemoved()
-                    || !this.npc.isScanTarget(candidate) || !this.npc.getChain().allowsTarget(candidate))
+                    || !this.npc.getRelations().scanTarget(candidate) || !this.npc.getChain().allowsTarget(candidate))
             {
                 continue;
             }

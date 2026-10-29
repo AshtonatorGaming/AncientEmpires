@@ -108,7 +108,7 @@ final class NpcGovernorGoal extends Goal
         this.npc.level().getProfiler().push("ancientempires_governor");
         double radius = AncientEmpiresConfig.governorAuraRadius;
         List<NpcEntity> workers = this.npc.level().getEntitiesOfClass(NpcEntity.class, this.npc.getBoundingBox().inflate(radius, 8.0D, radius),
-                other -> other != this.npc && other.isAlive() && other.getNpcPath() == NpcPath.WORKER && NpcEntity.sameOwner(this.npc, other));
+                other -> other != this.npc && other.isAlive() && other.getNpcPath() == NpcPath.WORKER && NpcRelations.sameOwner(this.npc, other));
         for (NpcEntity worker : workers)
         {
             // Lasts two pulses, so it holds while the governor stands at the hall.

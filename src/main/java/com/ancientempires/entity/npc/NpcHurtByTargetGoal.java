@@ -70,7 +70,7 @@ public final class NpcHurtByTargetGoal extends HurtByTargetGoal
             return;
         }
         AABB area = this.mob.getBoundingBox().inflate(range, AncientEmpiresConfig.allyAlertHeight, range);
-        for (NpcEntity ally : this.mob.level().getEntitiesOfClass(NpcEntity.class, area, this.npc::isAlly))
+        for (NpcEntity ally : this.mob.level().getEntitiesOfClass(NpcEntity.class, area, this.npc.getRelations()::isAlly))
         {
             if (ally.getTarget() == null && ally.isAlive() && ally.canAttack(attacker) && !ally.isAlliedTo(attacker))
             {

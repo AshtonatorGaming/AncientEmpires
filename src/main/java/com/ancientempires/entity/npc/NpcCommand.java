@@ -75,7 +75,7 @@ public final class NpcCommand
         double radius = radius(commander);
         int until = AncientEmpiresConfig.commandAuraTicks * 2 + 20;
         for (NpcEntity ally : commander.level().getEntitiesOfClass(NpcEntity.class, commander.getBoundingBox().inflate(radius),
-                other -> other != commander && other.isAlive() && other.getNpcPath().combat() && commander.isAlly(other)))
+                other -> other != commander && other.isAlive() && other.getNpcPath().combat() && commander.getRelations().isAlly(other)))
         {
             ally.inspire(strength, until);
         }
@@ -138,7 +138,7 @@ public final class NpcCommand
             {
                 chainHeir.setInheritedCommand(inherited);
             }
-            if (killer != null && killer.isAlive() && chainHeir.isScanTarget(killer))
+            if (killer != null && killer.isAlive() && chainHeir.getRelations().scanTarget(killer))
             {
                 chainHeir.setTarget(killer);
             }
@@ -147,7 +147,7 @@ public final class NpcCommand
         double range = AncientEmpiresConfig.commandSuccessionRange;
         NpcEntity heir = null;
         for (NpcEntity ally : fallen.level().getEntitiesOfClass(NpcEntity.class, fallen.getBoundingBox().inflate(range),
-                other -> other != fallen && other.isAlive() && other.getNpcPath().combat() && !other.isLevied() && fallen.isAlly(other)))
+                other -> other != fallen && other.isAlive() && other.getNpcPath().combat() && !other.isLevied() && fallen.getRelations().isAlly(other)))
         {
             if (strength(ally) > 0.0F)
             {
@@ -165,7 +165,7 @@ public final class NpcCommand
         }
         float inherited = inherited(strength, AncientEmpiresConfig.commandSuccessionScale, AncientEmpiresConfig.commandMinScale);
         heir.setInheritedCommand(inherited);
-        if (killer != null && killer.isAlive() && heir.isScanTarget(killer))
+        if (killer != null && killer.isAlive() && heir.getRelations().scanTarget(killer))
         {
             heir.setTarget(killer);
         }

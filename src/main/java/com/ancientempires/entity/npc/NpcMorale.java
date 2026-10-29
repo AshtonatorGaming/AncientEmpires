@@ -238,7 +238,7 @@ public final class NpcMorale
             }
             if (other instanceof NpcEntity npc)
             {
-                if (this.npc.isAlly(npc))
+                if (this.npc.getRelations().isAlly(npc))
                 {
                     if (npc.isCivilian())
                     {
@@ -261,7 +261,7 @@ public final class NpcMorale
                     continue;
                 }
             }
-            if (this.npc.isScanTarget(other) || (other instanceof Mob mob && mob.getTarget() == this.npc))
+            if (this.npc.getRelations().scanTarget(other) || (other instanceof Mob mob && mob.getTarget() == this.npc))
             {
                 enemies += weight(other);
             }
@@ -539,7 +539,7 @@ public final class NpcMorale
         {
             return;
         }
-        if (killer instanceof NpcEntity victor && !victor.isAlly(fallen))
+        if (killer instanceof NpcEntity victor && !victor.getRelations().isAlly(fallen))
         {
             victor.getMorale().addShock((float) AncientEmpiresConfig.moraleKillBoost);
         }
@@ -552,7 +552,7 @@ public final class NpcMorale
             return;
         }
         double allySqr = allyRange * allyRange;
-        for (NpcEntity ally : fallen.level().getEntitiesOfClass(NpcEntity.class, fallen.getBoundingBox().inflate(range, 6.0D, range), fallen::isAlly))
+        for (NpcEntity ally : fallen.level().getEntitiesOfClass(NpcEntity.class, fallen.getBoundingBox().inflate(range, 6.0D, range), fallen.getRelations()::isAlly))
         {
             float shock = 0.0F;
             if (ally.distanceToSqr(fallen) <= allySqr)
