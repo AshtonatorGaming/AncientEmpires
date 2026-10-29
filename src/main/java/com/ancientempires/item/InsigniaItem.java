@@ -57,6 +57,7 @@ public final class InsigniaItem extends Item
             return InteractionResult.CONSUME;
         }
         npc.setRank(this.rank);
+        npc.getRecord().promoted(npc, this.rank.displayName(npc.getFaction()));
         if (!player.getAbilities().instabuild)
         {
             stack.shrink(1);

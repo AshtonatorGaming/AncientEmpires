@@ -2,6 +2,7 @@ package com.ancientempires.structure;
 
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import com.ancientempires.entity.npc.NpcInventory;
+import com.ancientempires.entity.npc.NpcRecord;
 import com.ancientempires.item.RoutingOrderItem;
 import com.ancientempires.item.OrderItem;
 import com.ancientempires.registry.ModItems;
@@ -1032,6 +1033,29 @@ public final class StructureGameTests
             level.removeBlock(from, false);
             level.removeBlock(to, false);
         });
+    }
+
+    /** The service record: a kill is counted, kept as the best, journaled as the first, and survives a save. */
+    @GameTest(template = ARENA, timeoutTicks = 100)
+    public static void serviceRecordKeepsTheStory(GameTestHelper helper)
+    {
+        ServerLevel level = helper.getLevel();
+        NpcEntity veteran = squadNpc(helper, UUID.randomUUID(), new BlockPos(-60, 1, 46), NpcRank.SOLDIER, 3);
+        Husk husk = EntityType.HUSK.create(level);
+        BlockPos at = helper.absolutePos(new BlockPos(-58, 1, 46));
+        husk.moveTo(at.getX() + 0.5D, at.getY(), at.getZ() + 0.5D, 0.0F, 0.0F);
+        husk.setNoAi(true);
+        level.addFreshEntity(husk);
+        husk.hurt(veteran.damageSources().mobAttack(veteran), 1000.0F);
+        NpcRecord record = veteran.getRecord();
+        helper.assertTrue(record.kills() == 1, "the kill is counted, has " + record.kills());
+        helper.assertTrue(record.bestKill() != null, "and kept as the best kill");
+        helper.assertTrue(!record.journal().isEmpty() && record.journal().get(0).key().equals("first_kill"), "and journaled as the first: " + record.journal());
+        NpcRecord copy = new NpcRecord();
+        copy.read(record.write());
+        helper.assertTrue(copy.kills() == 1 && copy.journal().size() == record.journal().size(), "the record survives a save");
+        veteran.discard();
+        helper.succeed();
     }
 
     private static NpcEntity squadNpc(GameTestHelper helper, UUID owner, BlockPos at, NpcRank rank, int npcLevel)

@@ -3,6 +3,7 @@ package com.ancientempires.entity.npc;
 import com.ancientempires.config.AncientEmpiresConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
@@ -743,6 +744,7 @@ public final class NpcChain
             above = above.getChain().leader();
         }
         link(leader, soldier);
+        soldier.getRecord().note(soldier, chain.name.isEmpty() ? "joined" : "joined_unit", leader.getDisplayName(), Component.literal(chain.name));
         if (chain.unitNumber == 0 && leader.level() instanceof ServerLevel level && leader.getOwner() != null)
         {
             // A new unit gets the owner's lowest free number, for the order keys.

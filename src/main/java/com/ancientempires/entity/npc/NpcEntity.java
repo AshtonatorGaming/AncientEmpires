@@ -193,6 +193,7 @@ public class NpcEntity extends PathfinderMob
     private final NpcMorale morale = new NpcMorale(this);
     private final NpcChain chain = new NpcChain(this);
     private final NpcTrades trades = new NpcTrades();
+    private final NpcRecord record = new NpcRecord();
     private final NpcProgress progress = new NpcProgress(this);
     private final NpcAttack attack = new NpcAttack(this);
     private final NpcHold hold = new NpcHold(this);
@@ -651,6 +652,10 @@ public class NpcEntity extends PathfinderMob
                 }
             }
         }
+        if (npc.isOwnedNpc())
+        {
+            npc.record.entered(npc);
+        }
         // A fresh spawn stands on its home. A saved home in the egg replaces this.
         // AeNoHome clears it again, because the egg merge cannot delete this key.
         if (npc.getHome() == null)
@@ -714,6 +719,12 @@ public class NpcEntity extends PathfinderMob
 
     /** Morale: steady, wavering, routing, shattered, surrendered. */
     /** This NPC's place in a chain of command (leader, unit, order, formation). */
+    /** Its service record and journal (kills, battles, wounds, the story so far). */
+    public NpcRecord getRecord()
+    {
+        return this.record;
+    }
+
     /** A trader's goods (from its structure template), empty for everyone else. */
     public NpcTrades getTrades()
     {
@@ -1269,6 +1280,10 @@ public class NpcEntity extends PathfinderMob
         {
             this.fearSource = target;
             target = null;
+        }
+        if (target != null && !this.level().isClientSide)
+        {
+            this.record.fought(this);
         }
         super.setTarget(target);
     }
@@ -2359,7 +2374,12 @@ public class NpcEntity extends PathfinderMob
             NetworkHooks.openScreen(serverPlayer, new SimpleMenuProvider(
                     (containerId, playerInventory, opener) -> new NpcMenu(containerId, playerInventory, this),
                     this.getDisplayName()
-            ), buffer -> buffer.writeVarInt(this.getId()));
+            ), buffer ->
+            {
+                buffer.writeVarInt(this.getId());
+                // The service record, sent only with its screen.
+                buffer.writeNbt(this.record.write());
+            });
         }
         return InteractionResult.sidedSuccess(this.level().isClientSide);
     }
@@ -2502,10 +2522,12 @@ public class NpcEntity extends PathfinderMob
     public boolean hurt(DamageSource source, float amount)
     {
         this.guard.setIncoming(source.getEntity());
+        float healthBefore = this.getHealth();
         boolean hurt = super.hurt(source, amount);
         this.guard.setIncoming(null);
         if (hurt && !this.level().isClientSide)
         {
+            this.record.hurt(this, healthBefore, source.getEntity() instanceof LivingEntity attacker ? attacker : null);
             this.morale.onHurt(source);
             if (NpcGarrison.callsSally(this, false))
             {
@@ -2622,6 +2644,7 @@ public class NpcEntity extends PathfinderMob
         this.morale.save(tag);
         this.chain.save(tag);
         this.trades.save(tag);
+        this.record.save(tag);
         this.needs.save(tag);
         this.relations.save(tag);
         this.writeRoster(tag);
@@ -2700,6 +2723,7 @@ public class NpcEntity extends PathfinderMob
         this.morale.load(tag);
         this.chain.load(tag);
         this.trades.load(tag);
+        this.record.load(tag);
         this.needs.load(tag);
         this.relations.load(tag);
         if (tag.contains(ROSTER_KEY))

@@ -22,8 +22,13 @@ clicks; the player's inventory slots hide the same way. Only the name stays on e
 
 ## Layers to come (in this order)
 
-1. Service record and kill tracking (kills, battles, wounds, routs, times raised, best kill); the War Table reads it too.
-2. A journal: the last 8 to 10 notable events, as translation keys and arguments, written when they happen.
+1. Done 2026-10-29: the service record (`NpcRecord`, saved `AeRecord`, packed): kills, battles (a target taken after a
+   minute of calm), wounds (under 30% health, counted again once healed past 70%), routs, times raised, the best kill
+   (officers, players, named and great creatures rank highest). Shown on the Sheet. Not yet: the War Table's kill column.
+2. Done 2026-10-29: the journal, a fourth tab: the last 10 events (entered service, first and notable kills, kill
+   milestones, wounds, routs, raised, new band, promotions, joining a unit), newest first, with the world day. Sent with
+   the screen (the menu's open data), so nothing syncs otherwise. Sheet title: veterancy, role, rank (Champion Archer
+   Sergeant).
 3. Earned epithets ("the Bold", "Ironside"), data-driven rules, appended to the name.
 4. A mood line from state already tracked (content, hungry, weary, shaken, homeless).
 5. Origin and service length, set on first placement.

@@ -145,7 +145,12 @@ public final class NpcProgress
         if (gained > 0)
         {
             float before = this.npc.getMaxHealth();
+            int bandBefore = this.band();
             this.setLevel(level);
+            if (this.band() != bandBefore)
+            {
+                this.npc.getRecord().note(this.npc, "band", Component.translatable(bandKey(this.npc.getNpcPath(), this.band())));
+            }
             // The health a level brings comes with it, as a fresh wind.
             this.npc.heal(this.npc.getMaxHealth() - before);
             this.onLevelUp(level);

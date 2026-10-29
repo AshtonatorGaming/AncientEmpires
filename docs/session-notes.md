@@ -145,7 +145,8 @@ Progress for what is left). Neither installed yet when written (the user's game 
 Parity started (2026-10-29, the user: parity before polish): faction trading done (template traders, the Coin Purse);
 the order base and the courier done. Next: Work, Upkeep, Combat orders, then the owned trader (Trade Order and a
 goods editor). NPC screen redesign, layout A (docs/npc-screen-design.md): tabs and the two order slots built 2026-10-29; the sheet's
-layers (service record, journal, epithets, mood, origin, traits) next, then Work, Upkeep, Combat orders.
+layers: service record and journal done (2026-10-29); epithets, mood, origin, traits later. Next: Work, Upkeep,
+Combat orders (parity).
 
 **The plan now lives in docs/roadmap.md** (reassessed 2026-10-29: phases Stabilize, Close the loop, Deepen war, Deepen towns). Read it first.
 

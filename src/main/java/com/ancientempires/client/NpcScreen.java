@@ -12,6 +12,8 @@ import com.ancientempires.registry.ModMenus;
 import com.ancientempires.registry.ModItems;
 import com.ancientempires.item.OrderItem;
 import com.ancientempires.entity.npc.NpcStatus;
+import com.ancientempires.entity.npc.NpcRecord;
+import net.minecraft.util.FormattedCharSequence;
 import com.ancientempires.entity.npc.NpcFactions;
 import net.minecraft.core.BlockPos;
 import java.util.Locale;
@@ -64,7 +66,7 @@ public class NpcScreen extends AbstractContainerScreen<NpcMenu>
     /** The screen's pages, picked from the strip on the left: gear (the inventory), the character sheet, the orders. */
     private enum Tab
     {
-        GEAR, SHEET, ORDERS
+        GEAR, SHEET, ORDERS, JOURNAL
     }
 
     private final NpcEntityPreview preview;
@@ -126,6 +128,7 @@ public class NpcScreen extends AbstractContainerScreen<NpcMenu>
         this.tabButton(Tab.GEAR, new ItemStack(Items.IRON_CHESTPLATE), "gui.ancientempires.npc.tab.gear");
         this.tabButton(Tab.SHEET, new ItemStack(Items.WRITABLE_BOOK), "gui.ancientempires.npc.tab.sheet");
         this.tabButton(Tab.ORDERS, new ItemStack(ModItems.ROUTING_ORDER.get()), "gui.ancientempires.npc.tab.orders");
+        this.tabButton(Tab.JOURNAL, new ItemStack(Items.WRITTEN_BOOK), "gui.ancientempires.npc.tab.journal");
 
         this.commands.clear();
         this.command(NpcGui.Icon.FOLLOW, "gui.ancientempires.npc.follow", NpcMenu.BUTTON_FOLLOW, active(npc, NpcEntity::isFollowing));
@@ -519,6 +522,11 @@ public class NpcScreen extends AbstractContainerScreen<NpcMenu>
             this.renderSheet(graphics, npc, x, y, width, height, mouseX, mouseY);
             return;
         }
+        if (this.tab == Tab.JOURNAL)
+        {
+            this.renderJournal(graphics, npc, x, y, width, height);
+            return;
+        }
         this.renderDuty(graphics, npc, x, y, width);
     }
 
@@ -529,7 +537,7 @@ public class NpcScreen extends AbstractContainerScreen<NpcMenu>
     private void renderSheet(GuiGraphics graphics, NpcEntity npc, int x, int y, int width, int height, int mouseX, int mouseY)
     {
         int portraitW = 80;
-        int portraitH = 150;
+        int portraitH = 132;
         NpcGui.bevel(graphics, x + 4, y + 4, portraitW, portraitH, NpcGui.SLOT_FILL);
         if (this.preview != null)
         {
@@ -546,8 +554,52 @@ public class NpcScreen extends AbstractContainerScreen<NpcMenu>
         line += 12;
         FitText.draw(graphics, this.font, home(npc).getString(), x + 6, line, inner, 10, NpcGui.NAME_HINT, false, true);
         line += 14;
-        FitText.draw(graphics, this.font, Component.translatable("gui.ancientempires.npc.sheet.record_soon").getString(), x + 6, line, inner, 10,
-                NpcGui.NAME_HINT, false, false);
+        NpcRecord record = npc.getRecord();
+        Component counts = record.raised() > 0
+                ? Component.translatable("gui.ancientempires.record.counts_raised", record.kills(), record.battles(), record.wounds(), record.routs(), record.raised())
+                : Component.translatable("gui.ancientempires.record.counts", record.kills(), record.battles(), record.wounds(), record.routs());
+        FitText.draw(graphics, this.font, counts.getString(), x + 6, line, inner, 10, NpcGui.NAME_INK, false, true);
+        line += 12;
+        if (record.bestKill() != null)
+        {
+            FitText.draw(graphics, this.font, Component.translatable("gui.ancientempires.record.best", record.bestKill()).getString(), x + 6, line, inner, 10,
+                    NpcGui.NAME_INK, false, true);
+        }
+    }
+
+    /** The journal: what happened to this NPC, newest first, each with its day. */
+    private void renderJournal(GuiGraphics graphics, NpcEntity npc, int x, int y, int width, int height)
+    {
+        int inner = width - 12;
+        int line = y + 6;
+        FitText.draw(graphics, this.font, Component.translatable("gui.ancientempires.journal.title", npc.getDisplayName()).getString(), x + 6, line, inner, 10,
+                NpcGui.GOLD, false, true);
+        line += 14;
+        List<NpcRecord.Entry> entries = npc.getRecord().journal();
+        if (entries.isEmpty())
+        {
+            FitText.draw(graphics, this.font, Component.translatable("gui.ancientempires.journal.empty").getString(), x + 6, line, inner, 10,
+                    NpcGui.NAME_HINT, false, false);
+            return;
+        }
+        for (NpcRecord.Entry entry : entries)
+        {
+            if (line + 20 > y + height)
+            {
+                break;
+            }
+            FitText.draw(graphics, this.font, Component.translatable("gui.ancientempires.journal.day", entry.day()).getString(), x + 6, line, inner, 9,
+                    NpcGui.NAME_HINT, false, false);
+            line += 9;
+            // An entry may run to two lines.
+            List<FormattedCharSequence> lines = this.font.split(entry.text(), inner - 6);
+            for (int i = 0; i < Math.min(2, lines.size()); i++)
+            {
+                graphics.drawString(this.font, lines.get(i), x + 12, line, NpcGui.NAME_INK, false);
+                line += 9;
+            }
+            line += 4;
+        }
     }
 
     /**

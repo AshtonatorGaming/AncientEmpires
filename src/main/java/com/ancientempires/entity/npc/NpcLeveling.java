@@ -105,6 +105,7 @@ public final class NpcLeveling
         {
             return;
         }
+        npc.getRecord().killed(npc, event.getEntity());
         int victimLevel = event.getEntity() instanceof NpcEntity victim ? victim.getLevel() : 1;
         npc.addXp(AncientEmpiresConfig.levelXpPerKill + victimLevel * AncientEmpiresConfig.levelXpPerKillLevel);
     }

@@ -398,6 +398,7 @@ public final class NpcMorale
         this.routedAt = this.npc.tickCount;
         this.state = this.routs >= AncientEmpiresConfig.moraleShatterAfterRouts ? State.SHATTERED : State.ROUTING;
         this.clearTicks = 0;
+        this.npc.getRecord().routed(this.npc);
         this.npc.onBroken();
     }
 

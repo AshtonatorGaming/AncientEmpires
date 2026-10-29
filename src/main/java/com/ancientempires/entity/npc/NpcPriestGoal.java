@@ -159,6 +159,7 @@ public final class NpcPriestGoal extends Goal
         {
             return;
         }
+        raised.getRecord().raisedBy(raised, this.npc.getDisplayName());
         Item cost = costItem();
         if (AncientEmpiresConfig.priestCostEnabled && cost != null)
         {

@@ -21,6 +21,7 @@ import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
+import net.minecraft.nbt.CompoundTag;
 import com.ancientempires.item.OrderItem;
 
 import java.util.function.BooleanSupplier;
@@ -100,6 +101,11 @@ public class NpcMenu extends AbstractContainerMenu
     {
         Entity entity = playerInventory.player.level().getEntity(data.readVarInt());
         NpcEntity npc = entity instanceof NpcEntity found ? found : null;
+        CompoundTag record = data.readNbt();
+        if (npc != null && record != null)
+        {
+            npc.getRecord().read(record);
+        }
         return new NpcMenu(containerId, playerInventory, npc);
     }
 

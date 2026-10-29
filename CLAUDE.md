@@ -182,6 +182,10 @@ instead of reflecting per call), Skirmisher thresholds (about 4.5 to 28 blocks).
   AW's order slots: `NpcInventory.ORDERS_SLOT` (15) and `UPKEEP_SLOT` (16), after the backpack (`SLOT_COUNT` stays the backpack's end,
   `CONTAINER_SIZE` 17 is every slot), order items only, saved as `AeOrderSlots`, dropped with the backpack. A Routing Order in
   the orders slot also makes a courier. `FitEditBox.noShadow` for ink on parchment (the War Table's unit name).
+- Service record (`NpcRecord`, `AeRecord`, packed): counts, best kill, and a 10-line journal, written on events (kills in
+  `NpcLeveling.onDeath`, battles in `setTarget`, wounds in `hurt`, routs, priest revival, band changes, insignia, joining a
+  unit, entering service) and sent with the NPC screen's open data. Shown on the Sheet and the Journal tab. Game test
+  `serviceRecordKeepsTheStory`.
 - Gates (S3, `gate/`; read from AW's decompiled 1.12 code): `GateEntity` spans its opening (`pos1`, `pos2` as given,
   one block thick) and, while closed, fills it with `GateProxyBlock`s (invisible, solid, unmineable; clicks and blows go
   to the gate), so collision and paths treat it as a wall; opening clears them. Seven `GateType`s: vertical wood and
