@@ -38,8 +38,17 @@ public final class NpcEntityPreview
      * Draws the NPC in the box, facing the mouse. A screen drawn under a popup gets
      * {@link Integer#MAX_VALUE} for the mouse; the NPC then looks straight ahead.
      */
-    @SuppressWarnings("deprecation") // runAsFancy is what the vanilla inventory paperdoll still calls
     public void render(GuiGraphics graphics, int x, int y, int width, int height, int mouseX, int mouseY)
+    {
+        this.render(graphics, x, y, width, height, mouseX, mouseY, 1.0F);
+    }
+
+    /**
+     * As above, the figure drawn at {@code fill} of the size that fits (a portrait with room around it); the box still
+     * clips, so a smaller figure is never cut short of the box's edge.
+     */
+    @SuppressWarnings("deprecation") // runAsFancy is what the vanilla inventory paperdoll still calls
+    public void render(GuiGraphics graphics, int x, int y, int width, int height, int mouseX, int mouseY, float fill)
     {
         float bbHeight = Math.max(0.25F, this.entity.getBbHeight());
         float bbWidth = Math.max(0.25F, this.entity.getBbWidth());
@@ -51,8 +60,9 @@ public final class NpcEntityPreview
         {
             return;
         }
-        float scale = Math.min(usableHeight / visualHeight, usableWidth / visualWidth);
-        float feetY = y + height - NpcLayout.PREVIEW_FOOT_MARGIN;
+        float scale = Math.min(usableHeight / visualHeight, usableWidth / visualWidth) * fill;
+        // A smaller figure still stands on the box's floor, with the room above it.
+        float feetY = y + height - NpcLayout.PREVIEW_FOOT_MARGIN - (fill < 1.0F ? 6.0F : 0.0F);
         float centerX = x + width / 2.0F;
         float centerY = feetY - scale * visualHeight / 2.0F;
 

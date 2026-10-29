@@ -542,7 +542,7 @@ public class NpcScreen extends AbstractContainerScreen<NpcMenu>
         if (this.preview != null)
         {
             // A margin inside the frame, so the figure stands in it rather than filling it edge to edge.
-            this.preview.render(graphics, x + 12, y + 14, portraitW - 16, portraitH - 22, mouseX, mouseY);
+            this.preview.render(graphics, x + 5, y + 5, portraitW - 2, portraitH - 2, mouseX, mouseY, 0.8F);
         }
         NpcStatsSheet.draw(graphics, this.font, this.menu, npc, x + portraitW + 10, y + 6, width - portraitW - 16);
         int line = y + portraitH + 10;
