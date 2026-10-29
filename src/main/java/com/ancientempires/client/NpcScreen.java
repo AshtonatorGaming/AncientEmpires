@@ -528,12 +528,13 @@ public class NpcScreen extends AbstractContainerScreen<NpcMenu>
      */
     private void renderSheet(GuiGraphics graphics, NpcEntity npc, int x, int y, int width, int height, int mouseX, int mouseY)
     {
-        int portraitW = 74;
+        int portraitW = 80;
         int portraitH = 150;
         NpcGui.bevel(graphics, x + 4, y + 4, portraitW, portraitH, NpcGui.SLOT_FILL);
         if (this.preview != null)
         {
-            this.preview.render(graphics, x + 5, y + 5, portraitW - 2, portraitH - 2, mouseX, mouseY);
+            // A margin inside the frame, so the figure stands in it rather than filling it edge to edge.
+            this.preview.render(graphics, x + 12, y + 14, portraitW - 16, portraitH - 22, mouseX, mouseY);
         }
         NpcStatsSheet.draw(graphics, this.font, this.menu, npc, x + portraitW + 10, y + 6, width - portraitW - 16);
         int line = y + portraitH + 10;
@@ -678,10 +679,10 @@ public class NpcScreen extends AbstractContainerScreen<NpcMenu>
         ResourceLocation icon = slot.hasItem() ? null : this.menu.emptyIcon(index);
         if (icon != null && this.minecraft != null)
         {
-            // A faint parchment-tinted outline of what goes here.
+            // An outline of what goes here, in the trim's gold.
             TextureAtlasSprite sprite = this.minecraft.getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(icon);
             RenderSystem.enableBlend();
-            graphics.setColor(0.92F, 0.82F, 0.62F, 0.7F);
+            graphics.setColor(0.78F, 0.65F, 0.42F, 0.9F);
             graphics.blit(this.leftPos + slot.x, this.topPos + slot.y, 0, 16, 16, sprite);
             graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
             RenderSystem.disableBlend();
