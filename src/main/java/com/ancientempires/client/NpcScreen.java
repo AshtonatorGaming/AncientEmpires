@@ -540,9 +540,7 @@ public class NpcScreen extends AbstractContainerScreen<NpcMenu>
         int line = y + portraitH + 10;
         int inner = width - 12;
         graphics.fill(x + 6, line - 4, x + width - 6, line - 3, NpcGui.BUTTON);
-        Component path = Component.translatable("gui.ancientempires.npc.sheet.path",
-                Component.translatable(NpcPath.translationKey(npc.getNpcPath().id())), Component.translatable(NpcPath.translationKey(npc.getRoleId())));
-        FitText.draw(graphics, this.font, path.getString(), x + 6, line, inner, 10, NpcGui.NAME_INK, false, true);
+        FitText.draw(graphics, this.font, title(npc), x + 6, line, inner, 10, NpcGui.GOLD, false, true);
         line += 12;
         FitText.draw(graphics, this.font, this.allegiance(npc).getString(), x + 6, line, inner, 10, NpcGui.NAME_INK, false, true);
         line += 12;
@@ -550,6 +548,31 @@ public class NpcScreen extends AbstractContainerScreen<NpcMenu>
         line += 14;
         FitText.draw(graphics, this.font, Component.translatable("gui.ancientempires.npc.sheet.record_soon").getString(), x + 6, line, inner, 10,
                 NpcGui.NAME_HINT, false, false);
+    }
+
+    /**
+     * The NPC's full title: its veterancy, its role, and its rank ("Champion Archer
+     * Sergeant", "Veteran Archer", "Recruit Sergeant"); the plain role ("Soldier")
+     * only when nothing more says what it is.
+     */
+    private static String title(NpcEntity npc)
+    {
+        List<String> words = new ArrayList<>();
+        if (npc.levels())
+        {
+            words.add(Component.translatable(NpcEntity.bandKey(npc.getNpcPath(), npc.getLevelBand())).getString());
+        }
+        String role = npc.getRoleId();
+        boolean ranked = npc.getRank() != NpcRank.SOLDIER;
+        if (!role.equals(npc.getNpcPath().id()) || !ranked)
+        {
+            words.add(Component.translatable(NpcPath.translationKey(role)).getString());
+        }
+        if (ranked)
+        {
+            words.add(npc.getRankName().getString());
+        }
+        return String.join(" ", words);
     }
 
     /** Whom the NPC serves: its owner by name (or "a player" when not online), or its faction. */
