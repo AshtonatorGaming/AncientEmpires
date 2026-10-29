@@ -34,8 +34,8 @@ same thing. Decisions marked **?** are the user's to make before building.
 | Auto crafting station (a worker crafts a set recipe) | Cook only | **Missing**: craftsman |
 | Ore processor | Nothing | Missing (small) |
 | Worksite upgrades | Ours | Done |
-| Torque power (hand crank, Stirling, waterwheel, windmill, shafts, flywheels) running worksites without NPCs | Nothing | **?** Port, or leave power to Create and keep worksites NPC-only |
-| Warehouse (storage, interface, stock viewer, crafting station, stock linker): one networked store workers fill and players order from | Nothing | **?** Port, or lean on Town Hall stores and storage mods |
+| Torque power (hand crank, Stirling, waterwheel, windmill, shafts, flywheels) running worksites without NPCs | Nothing | Skip (decided): worksites stay NPC-run |
+| Warehouse (storage, interface, stock viewer, crafting station, stock linker): one networked store workers fill and players order from | Nothing | **Port** (decided) |
 | Mailbox (routed item delivery) | Nothing | With couriers **?** |
 | Chunk loaders | Nothing | **?** Port, or leave to FTB Chunks |
 
@@ -43,8 +43,8 @@ same thing. Decisions marked **?** are the user's to make before building.
 
 | AW | Ours | Status |
 | --- | --- | --- |
-| Research (research station, book, notes, quill) gating recipes | Nothing (upgrades without research) | **?** Port, or keep everything open |
-| Engineering station (crafting bench that remembers recipes) | Nothing | Goes with research **?** |
+| Research (research station, book, notes, quill) gating recipes | Nothing (upgrades without research) | **Reworked** (decided): scholars advancing buffs, not recipe locks; see Decisions |
+| Engineering station (crafting bench that remembers recipes) | Nothing | Skip with recipe-gated research |
 | Manual (in-game guide) | Nothing | **Missing**: onboarding needs one |
 | Backpack item | Nothing | Missing (small; storage mods cover it) **?** |
 | Hammer (lock and turn worksites), info tool | Sneak-click actions | Partial |
@@ -64,7 +64,19 @@ same thing. Decisions marked **?** are the user's to make before building.
 
 | AW | Ours | Status |
 | --- | --- | --- |
-| Siege engines (catapult, ballista, trebuchet, ram, cannons), ammo, upgrades, armour; NPC crews | Placeholders from templates, drawn but inert | **?** Port (large), or a smaller set later |
+| Siege engines (catapult, ballista, trebuchet, ram, cannons), ammo, upgrades, armour; NPC crews | Placeholders from templates, drawn but inert | **Port** (decided), last; compat with other siege mods later |
+
+## Decisions (user, 2026-10-29)
+
+- **Torque: no.** It always felt odd; worksites stay NPC-run. Kept only if a use turns up (one idea: a mill as a town
+  building that speeds nearby workers, no power network).
+- **Warehouse: yes.** Very useful: one store workers fill and players order from. Part of parity.
+- **Research: reworked, our own.** Not recipe locks. Scholars and holy men (Crusader Kings, Europa Universalis style)
+  slowly push toward advancements that grant buffs and new options (better work speed, drill, morale, building
+  bonuses, and the like) rather than unlocking crafting. A Worker-path scholar at a study (or a priest at a shrine)
+  gains progress over time; the player picks the next advancement. Designed after parity; not a parity item.
+- **Siege vehicles: port**, so structures' engines work, last in the parity order. Later, compat so NPC crews can use
+  other mods' more refined siege equipment.
 
 ## DESIGN.md items jumped past
 
@@ -81,4 +93,6 @@ Small and clear first, big decisions after the user rules on them:
 3. Fruit farm, craftsman (auto crafting), ore processor.
 4. Survival structure builder and drafting station; the manual.
 5. Towns and the missing site types.
-6. Whatever the user picks of torque, warehouse, research, vehicles, chunk loaders, backpack.
+6. The warehouse.
+7. Siege vehicles and NPC crews.
+8. Smaller calls still open: chunk loaders, the backpack item, the recruiting station, spellcasters.
