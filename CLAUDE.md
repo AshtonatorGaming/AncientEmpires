@@ -171,6 +171,13 @@ instead of reflecting per call), Skirmisher thresholds (about 4.5 to 28 blocks).
   worth (`trade` config: 8, 64, 512 copper), a Coin Purse (leather and string) holds one sum; use it to gather loose
   coins, sneak-use to pour them out; coin prices are paid from purses then coins with change, coin payouts go into a
   purse. Game test `templateTraderSellsForThePurse`. Not yet: AW's creative trade editor, owned traders on routes.
+- Orders (AW parity): `item/OrderItem` is the base for AW's order items (a list of stops: block, dimension, mode,
+  filter; use on a block to add, again to cycle the mode, sneaking to strike off; the off-hand item becomes the filter).
+  `RoutingOrderItem`: a Worker-path NPC holding one is a courier (role from the main hand), `NpcCourierGoal` (priority 4,
+  civilian set): by day in dry weather it walks the stops in order (pathing to beside the container), moves items
+  between its backpack and the container by the stop's mode (deposit or take: all, only the filter, all but the filter;
+  orders in its backpack never leave it), works longer the more it moved (shorter with work speed), and passes stops
+  that are gone, unreachable, in another dimension, or another player's worksite. Game test `courierCarriesAlongItsRoute`.
 - Gates (S3, `gate/`; read from AW's decompiled 1.12 code): `GateEntity` spans its opening (`pos1`, `pos2` as given,
   one block thick) and, while closed, fills it with `GateProxyBlock`s (invisible, solid, unmineable; clicks and blows go
   to the gate), so collision and paths treat it as a wall; opening clears them. Seven `GateType`s: vertical wood and

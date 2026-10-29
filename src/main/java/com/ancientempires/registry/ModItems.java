@@ -9,6 +9,7 @@ import com.ancientempires.gate.GateType;
 import com.ancientempires.item.BandageItem;
 import com.ancientempires.item.CaptureWandItem;
 import com.ancientempires.item.CoinPurseItem;
+import com.ancientempires.item.RoutingOrderItem;
 import com.ancientempires.item.FlagItem;
 import com.ancientempires.item.InsigniaItem;
 import com.ancientempires.item.MobScrollItem;
@@ -75,6 +76,7 @@ public final class ModItems
     public static final RegistryObject<Item> COIN_SILVER = ITEMS.register("coin_silver", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> COIN_GOLD = ITEMS.register("coin_gold", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> COIN_ANCIENT = ITEMS.register("coin_ancient", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> ROUTING_ORDER = ITEMS.register("routing_order", () -> new RoutingOrderItem(new Item.Properties()));
     public static final RegistryObject<Item> COIN_PURSE = ITEMS.register("coin_purse", () -> new CoinPurseItem(new Item.Properties().stacksTo(1)));
     public static final RegistryObject<Item> COIN_STACK_COPPER = ITEMS.register("coin_stack_copper", () -> new BlockItem(ModBlocks.COIN_STACK_COPPER.get(), new Item.Properties()));
     public static final RegistryObject<Item> COIN_STACK_SILVER = ITEMS.register("coin_stack_silver", () -> new BlockItem(ModBlocks.COIN_STACK_SILVER.get(), new Item.Properties()));

@@ -14,7 +14,7 @@ same thing. Decisions marked **?** are the user's to make before building.
 | Combat Order: patrol points for soldiers (`NpcAIPlayerOwnedPatrol`) | Nothing | **Missing**: patrols |
 | Work Order: a list of worksites with times | Nearest own site, automatic | Partial: no assigning a worker to a chosen site or a rota |
 | Upkeep Order: where to eat | Nearest Town Hall in range | Partial: no chosen upkeep spot |
-| Routing Order + Courier: carries items between chests on a route | Nothing | **Missing**: courier |
+| Routing Order + Courier: carries items between chests on a route | `RoutingOrderItem`, `NpcCourierGoal` | Done 2026-10-29: six of AW's twelve modes (all, only, except; each way) |
 | Trade Order + Trader: player-owned trader runs a trade route (POTrade) | Nothing | **Missing**: owned trader |
 | Faction traders (FactionTrade): buy and sell; the only way to raise standing | `NpcTrades`, `TradeScreen`, the Coin Purse | Done 2026-10-29: template traders keep AW's goods; coins by worth through a purse |
 | Bard (instrument, sings: morale) | Role label only | **Missing**: bard |
@@ -87,6 +87,14 @@ same thing. Decisions marked **?** are the user's to make before building.
   purse, Mount and Blade's one money count); coin prices draw from purses then loose coins, with change, and coin
   payouts go into the purse. 8 copper a silver, 8 silver a gold; ancient coins 8 gold for now (`trade` config,
   balance untested). Barter (goods for goods, arrows for diamonds) is any trade without coins.
+
+- **Orders (user, 2026-10-29):** AW's orders (Routing, Work, Upkeep, Combat, Trade) were how you told workers which
+  site, where to eat, where to patrol, which route; all of them come back, on one base (`item/OrderItem`: click blocks
+  to add, cycle, or strike off stops; the off-hand item is a stop's filter). AW kept them in a dedicated orders slot.
+  For now a courier holds its Routing Order in its main hand (the order is its tool, as a hoe is a farmer's). Where the
+  other orders live (a dedicated orders slot, or read from the backpack) is decided with the NPC screen redesign
+  (character sheet, overview), which the user wants anyway. Next: Work, Upkeep, Combat (patrol), then the owned
+  trader's Trade Order and its goods editor (shared with the creative faction-trader editor).
 
 ## DESIGN.md items jumped past
 

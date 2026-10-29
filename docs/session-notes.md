@@ -143,7 +143,8 @@ Committed since: the text fitting and UI fixes (a6ee65c); the cohort model's cor
 Progress for what is left). Neither installed yet when written (the user's game was open).
 
 Parity started (2026-10-29, the user: parity before polish): faction trading done (template traders, the Coin Purse);
-next in docs/aw-parity.md: the owned trader and courier, patrols, the Town Hall alarm, the bard.
+the order base and the courier done. Next: Work, Upkeep, Combat orders, then the owned trader (Trade Order and a
+goods editor). Open: where orders live on an NPC (a dedicated slot, as AW had, comes with the NPC screen redesign).
 
 **The plan now lives in docs/roadmap.md** (reassessed 2026-10-29: phases Stabilize, Close the loop, Deepen war, Deepen towns). Read it first.
 

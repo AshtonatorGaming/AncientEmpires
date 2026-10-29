@@ -7,6 +7,7 @@ import net.minecraft.world.item.BookItem;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.EnchantedBookItem;
+import com.ancientempires.item.RoutingOrderItem;
 import net.minecraft.world.item.FishingRodItem;
 import net.minecraft.world.item.HoeItem;
 import net.minecraft.world.item.Items;
@@ -230,6 +231,10 @@ public enum NpcPath
         if (stack.is(Items.BOWL))
         {
             return "cook";
+        }
+        if (stack.getItem() instanceof RoutingOrderItem)
+        {
+            return "courier";
         }
         return null;
     }

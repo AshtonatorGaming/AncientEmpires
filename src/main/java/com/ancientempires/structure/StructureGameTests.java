@@ -1,5 +1,9 @@
 package com.ancientempires.structure;
 
+import net.minecraft.world.level.block.entity.ChestBlockEntity;
+import com.ancientempires.entity.npc.NpcInventory;
+import com.ancientempires.item.RoutingOrderItem;
+import com.ancientempires.item.OrderItem;
 import com.ancientempires.registry.ModItems;
 import com.ancientempires.item.CoinPurseItem;
 import com.ancientempires.item.Coins;
@@ -991,6 +995,43 @@ public final class StructureGameTests
         player.getInventory().clearContent();
         level.getEntitiesOfClass(NpcEntity.class, new AABB(anchor).inflate(48.0D)).forEach(NpcEntity::discard);
         helper.succeed();
+    }
+
+    /** AW parity, couriers: a worker holding a Routing Order carries a chest's goods to another along its route. */
+    @GameTest(template = ARENA, timeoutTicks = 900)
+    public static void courierCarriesAlongItsRoute(GameTestHelper helper)
+    {
+        ServerLevel level = helper.getLevel();
+        BlockPos base = helper.absolutePos(new BlockPos(-90, 1, 60));
+        level.getEntitiesOfClass(LivingEntity.class, new AABB(base).inflate(12.0D), living -> !(living instanceof Player)).forEach(Entity::discard);
+        level.setDayTime(1000L);
+        level.setWeatherParameters(6000, 0, false, false);
+        // The test world is solid here: a floor and open air over the walk.
+        for (BlockPos cell : BlockPos.betweenClosed(base.offset(-6, -1, -3), base.offset(6, 3, 3)))
+        {
+            level.setBlockAndUpdate(cell, cell.getY() < base.getY() ? Blocks.STONE.defaultBlockState() : Blocks.AIR.defaultBlockState());
+        }
+        BlockPos from = base.offset(-4, 0, 0);
+        BlockPos to = base.offset(4, 0, 0);
+        level.setBlockAndUpdate(from, Blocks.CHEST.defaultBlockState());
+        level.setBlockAndUpdate(to, Blocks.CHEST.defaultBlockState());
+        ((ChestBlockEntity) level.getBlockEntity(from)).setItem(0, new ItemStack(Items.COBBLESTONE, 10));
+        NpcEntity courier = squadNpc(helper, UUID.randomUUID(), new BlockPos(-90, 1, 61), NpcRank.SOLDIER, 1);
+        courier.setNpcPath(NpcPath.WORKER);
+        ItemStack order = new ItemStack(ModItems.ROUTING_ORDER.get());
+        String dimension = level.dimension().location().toString();
+        OrderItem.addStop(order, from, dimension, RoutingOrderItem.Mode.WITHDRAW_ALL.ordinal(), ItemStack.EMPTY);
+        OrderItem.addStop(order, to, dimension, RoutingOrderItem.Mode.DEPOSIT_ALL.ordinal(), ItemStack.EMPTY);
+        courier.setItemSlot(EquipmentSlot.MAINHAND, order);
+        helper.assertTrue("courier".equals(courier.getRoleId()), "holding a Routing Order makes a courier, is " + courier.getRoleId());
+        helper.succeedWhen(() ->
+        {
+            ItemStack arrived = ((ChestBlockEntity) level.getBlockEntity(to)).getItem(0);
+            helper.assertTrue(arrived.is(Items.COBBLESTONE) && arrived.getCount() == 10, "the goods reached the second chest, has " + arrived);
+            courier.discard();
+            level.removeBlock(from, false);
+            level.removeBlock(to, false);
+        });
     }
 
     private static NpcEntity squadNpc(GameTestHelper helper, UUID owner, BlockPos at, NpcRank rank, int npcLevel)

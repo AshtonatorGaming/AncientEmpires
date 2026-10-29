@@ -451,6 +451,7 @@ public class NpcEntity extends PathfinderMob
     {
         goals.add(this.addGoal(4, new NpcPriestGoal(this)));
         goals.add(this.addGoal(4, new NpcGovernorGoal(this)));
+        goals.add(this.addGoal(4, new NpcCourierGoal(this)));
         // Every hands-on trade (farmer, woodcutter, miner, rancher, hunter, fisher, cook) as one goal: the tool picks it.
         goals.add(this.addGoal(4, new NpcJobGoal(this)));
     }
