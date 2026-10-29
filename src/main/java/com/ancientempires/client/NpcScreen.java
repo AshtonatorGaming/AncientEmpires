@@ -616,7 +616,9 @@ public class NpcScreen extends AbstractContainerScreen<NpcMenu>
         }
         String role = npc.getRoleId();
         boolean ranked = npc.getRank() != NpcRank.SOLDIER;
-        if (!role.equals(npc.getNpcPath().id()) || !ranked)
+        // A plain footman (or path) is left out once a rank says more.
+        boolean generic = role.equals(npc.getNpcPath().id()) || role.equals("footman");
+        if (!generic || !ranked)
         {
             words.add(Component.translatable(NpcPath.translationKey(role)).getString());
         }

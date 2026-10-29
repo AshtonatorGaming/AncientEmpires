@@ -423,7 +423,8 @@ its own unless noted). Before adding behavior, check what AW did first.
   Later: retirement and conscription items between the two paths, recruiting faction NPCs.
 - Role (`getRoleId`, shown in the inventory, no behavior of its own): what the equipment
   makes the NPC within its path, as in Albion Online. Bow archer, crossbow crossbowman,
-  thrown weapon skirmisher; hoe farmer, pickaxe miner, axe woodcutter, rod fisher. Without
+  thrown weapon skirmisher; melee by weapon (`NpcPath.meleeRole`, cached per item; Spartan by name, checked polearm,
+  spear, mace, axe, blade in that order): halberdier, spearman, maceman, axeman, swordsman, else footman; hoe farmer, pickaxe miner, axe woodcutter, rod fisher. Without
   such an item, the trade the rank names (medic, trader, ...), then the path.
 - Access: only admins can open a faction NPC's inventory or command it (a plain right-click). An NPC
   the player may not command takes no right-click at all (the click

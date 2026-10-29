@@ -3,6 +3,11 @@ package com.ancientempires.entity.npc;
 import com.ancientempires.combat.WeaponClassifier;
 import com.ancientempires.item.BandageItem;
 import net.minecraft.world.item.AxeItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.SwordItem;
+import net.minecraft.world.item.TridentItem;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraft.world.item.BookItem;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.CrossbowItem;
@@ -22,6 +27,9 @@ import net.minecraft.world.item.WrittenBookItem;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Locale;
+import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.Set;
 
 /**
@@ -161,7 +169,8 @@ public enum NpcPath
         {
             return tool;
         }
-        return trade.isEmpty() ? this.id : trade;
+        // A soldier with nothing to name it by is a footman.
+        return trade.isEmpty() ? this.combat ? "footman" : this.id : trade;
     }
 
     /** A book of any kind: a worker holding one is a priest. */
@@ -190,7 +199,45 @@ public enum NpcPath
         {
             return stack.getItem() instanceof CrossbowItem ? "crossbowman" : "skirmisher";
         }
-        return null;
+        return stack.isEmpty() ? null : MELEE_ROLES.computeIfAbsent(stack.getItem(), NpcPath::meleeRole).orElse(null);
+    }
+
+    /** Each melee item's infantry role, worked out once. */
+    private static final Map<Item, Optional<String>> MELEE_ROLES = new ConcurrentHashMap<>();
+
+    /**
+     * Infantry named by the weapon in hand, as archers are by the bow: polearms make
+     * halberdiers, spears spearmen, maces and hammers macemen, axes axemen, blades
+     * swordsmen. Spartan's weapons are told apart by name (checked in that order, so
+     * a poleaxe is no axe); vanilla's by kind. Anything else is a footman.
+     */
+    private static Optional<String> meleeRole(Item item)
+    {
+        ResourceLocation id = ForgeRegistries.ITEMS.getKey(item);
+        String name = id == null ? "" : id.getPath();
+        if (name.contains("halberd") || name.contains("glaive") || name.contains("poleaxe") || name.contains("pollaxe") || name.contains("scythe"))
+        {
+            return Optional.of("halberdier");
+        }
+        if (item instanceof TridentItem || name.contains("spear") || name.contains("pike") || name.contains("lance") || name.contains("trident"))
+        {
+            return Optional.of("spearman");
+        }
+        if (name.contains("mace") || name.contains("hammer") || name.contains("club") || name.contains("morning_star") || name.contains("flail"))
+        {
+            return Optional.of("maceman");
+        }
+        if (!(item instanceof PickaxeItem) && (item instanceof AxeItem || name.contains("axe") && !name.contains("pickaxe")))
+        {
+            return Optional.of("axeman");
+        }
+        if (item instanceof SwordItem || name.contains("sword") || name.contains("saber") || name.contains("sabre") || name.contains("katana")
+                || name.contains("rapier") || name.contains("dagger") || name.contains("blade") || name.contains("cutlass") || name.contains("scimitar")
+                || name.contains("falchion"))
+        {
+            return Optional.of("swordsman");
+        }
+        return Optional.empty();
     }
 
     @Nullable
