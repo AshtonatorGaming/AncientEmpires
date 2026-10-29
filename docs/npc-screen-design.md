@@ -18,7 +18,7 @@ home); Orders is a duty page (what it is doing now, home, a card per order with 
 are labelled like the equipment cross, with a faint paper (orders) and bread (upkeep).
 
 Other tabs hide the NPC's slots through vanilla's `Slot.isActive` (creative tabs' way), so they neither draw nor take
-clicks; the name, commands, and the player's inventory stay on every tab.
+clicks; the player's inventory slots hide the same way. Only the name stays on every tab.
 
 ## Layers to come (in this order)
 
