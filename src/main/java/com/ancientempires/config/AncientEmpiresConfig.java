@@ -232,6 +232,8 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.BooleanValue COMMAND_ENABLED;
     private static final ForgeConfigSpec.BooleanValue CHAIN_ENABLED;
     private static final ForgeConfigSpec.IntValue CHAIN_SQUAD_SIZE;
+    private static final ForgeConfigSpec.IntValue CHAIN_RETINUE_SIZE;
+    private static final ForgeConfigSpec.DoubleValue CHAIN_COMMAND_POST;
     private static final ForgeConfigSpec.IntValue CHAIN_SQUADS_PER_CAPTAIN;
     private static final ForgeConfigSpec.IntValue CHAIN_CAPTAINS_PER_GENERAL;
     private static final ForgeConfigSpec.DoubleValue CHAIN_SPACING;
@@ -1097,6 +1099,10 @@ public final class AncientEmpiresConfig
         builder.comment("Chain of command (docs/chain-of-command.md): a player's sergeants, captains, and generals lead units of the soldiers assigned to them with the Signal Flag; a unit given Follow forms up on its leader and keeps formation. Off: every NPC acts alone, as before.").push("chain");
         CHAIN_ENABLED = builder.define("enabled", true);
         CHAIN_SQUAD_SIZE = builder.comment("Soldiers one leader can have directly under it (a squad).").defineInRange("squadSize", 16, 1, 64);
+        CHAIN_RETINUE_SIZE = builder.comment("Soldiers a captain or general can have directly under it: its retinue, a small cohort of its own.")
+                .defineInRange("retinueSize", 6, 0, 64);
+        CHAIN_COMMAND_POST = builder.comment("Blocks behind its cohorts' rear rank that a commander placed with them stands.")
+                .defineInRange("commandPostDistance", 4.0D, 0.0D, 32.0D);
         CHAIN_SQUADS_PER_CAPTAIN = builder.comment("Sergeants (with their squads) a captain can have under it.").defineInRange("squadsPerCaptain", 4, 1, 16);
         CHAIN_CAPTAINS_PER_GENERAL = builder.comment("Captains and sergeants a general can have under it; 0 for any number.").defineInRange("captainsPerGeneral", 0, 0, 64);
         CHAIN_SPACING = builder.comment("Blocks between soldiers in formation (loose doubles it).").defineInRange("spacing", 1.5D, 1.0D, 6.0D);
@@ -1626,6 +1632,8 @@ public final class AncientEmpiresConfig
     public static boolean commandEnabled = true;
     public static boolean chainEnabled = true;
     public static int chainSquadSize = 16;
+    public static int chainRetinueSize = 6;
+    public static double chainCommandPost = 4.0D;
     public static int chainSquadsPerCaptain = 4;
     public static int chainCaptainsPerGeneral = 0;
     public static double chainSpacing = 1.5D;
@@ -2072,6 +2080,8 @@ public final class AncientEmpiresConfig
         commandEnabled = COMMAND_ENABLED.get();
         chainEnabled = CHAIN_ENABLED.get();
         chainSquadSize = CHAIN_SQUAD_SIZE.get();
+        chainRetinueSize = CHAIN_RETINUE_SIZE.get();
+        chainCommandPost = CHAIN_COMMAND_POST.get();
         chainSquadsPerCaptain = CHAIN_SQUADS_PER_CAPTAIN.get();
         chainCaptainsPerGeneral = CHAIN_CAPTAINS_PER_GENERAL.get();
         chainSpacing = CHAIN_SPACING.get();

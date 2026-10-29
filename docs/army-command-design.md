@@ -319,6 +319,11 @@ it does not drag them about as one blob. Mixed units should be discouraged.
 - Step 2, the battle wheel and placement: built 2026-10-29. The ring tree, units bar, gold glow on picked units, and
   placement with ghosts (click a spot, drag the front line, scroll to turn). Facing is its own Maneuver entries rather
   than a Facing submenu. Not yet: hovering a unit in the bar to preview just that unit's glow.
+- Step 3.5, the cohort model's core: built 2026-10-29. Officers hold their own orders (never slots on their commander),
+  the retinue cap (`retinueSize`), group orders fanned out to cohorts with commanders behind the line (server and
+  ghosts alike). Not yet (next week's polish): the command-post goal (a commander keeping to its post when the group
+  moves), mounted commanders, the mixed-cohort mark and warning, the wheel's bar grouped by captain, the hall drawing
+  commanders as standards, and the heir of a fallen captain merging its cohort into the retinue (it takes both now).
 - Step 3, the War Table: built 2026-10-29 (A, the banner hall, for the chart; C, the ledger, for the page and roster).
   It replaces the old K list screen. The Signal Flag stays as it was for now; repurposing it is open. Not yet: kills and
   "fell at" lines in the ledger (no kill tracking yet), units away from the player shown from the ledger, and B, the map

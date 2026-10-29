@@ -741,7 +741,8 @@ public final class WarTableScreen extends Screen
     private void drawRoster(GuiGraphics graphics, ArmyPacket.Entry unit, int left, int top, int right, int bottom, int mouseX, int mouseY)
     {
         List<ArmyPacket.Entry> soldiers = this.soldiersOf(unit);
-        graphics.drawString(this.font, Component.translatable("gui.ancientempires.war_table.roster", soldiers.size(), AncientEmpiresConfig.chainSquadSize), left, top, TEXT_DARK,
+        graphics.drawString(this.font, Component.translatable("gui.ancientempires.war_table.roster", soldiers.size(),
+                NpcChain.soldierCap(NpcRank.values()[Math.min(unit.rank(), NpcRank.values().length - 1)])), left, top, TEXT_DARK,
                 false);
         graphics.fill(left, top + 10, right, top + 11, PARCHMENT_EDGE);
         int y = top + 13;
@@ -900,7 +901,7 @@ public final class WarTableScreen extends Screen
                 soldiers++;
             }
         }
-        if (officer ? officers >= NpcChain.officerCap(rank) : soldiers >= AncientEmpiresConfig.chainSquadSize)
+        if (officer ? officers >= NpcChain.officerCap(rank) : soldiers >= NpcChain.soldierCap(rank))
         {
             return "gui.ancientempires.war_table.refuse.full";
         }

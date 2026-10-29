@@ -25,6 +25,7 @@ import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
@@ -116,10 +117,11 @@ public final class NpcArmy
         NpcChain chain = npc.getChain();
         switch (action)
         {
-            case FOLLOW -> chain.setOrder(NpcOrder.FOLLOW, null, Float.NaN, null);
-            case FREE -> chain.setOrder(NpcOrder.FREE, null, Float.NaN, null);
-            case HOLD -> chain.setOrder(NpcOrder.HOLD, npc.blockPosition(), chain.facing(), null);
-            case FALL_BACK -> chain.setOrder(NpcOrder.FALL_BACK, player.blockPosition(), player.getYRot(), null);
+            // A commander's orders go to its whole command: its retinue and every cohort under it.
+            case FOLLOW -> group(npc).forEach(each -> each.getChain().setOrder(NpcOrder.FOLLOW, null, Float.NaN, null));
+            case FREE -> group(npc).forEach(each -> each.getChain().setOrder(NpcOrder.FREE, null, Float.NaN, null));
+            case HOLD -> group(npc).forEach(each -> each.getChain().setOrder(NpcOrder.HOLD, each.blockPosition(), each.getChain().facing(), null));
+            case FALL_BACK -> deploy(player.serverLevel(), group(npc), player.position(), player.getYRot(), 0.0D, NpcOrder.FALL_BACK);
             case FORMATION -> chain.setFormation(chain.formation().next());
             case REJOIN -> chain.setOrder(NpcOrder.FOLLOW, null, Float.NaN, null);
             case REMOVE -> chain.leave();
@@ -274,6 +276,13 @@ public final class NpcArmy
             return;
         }
         leaders.sort(Comparator.comparingInt(npc -> npc.getChain().unitNumber()));
+        // A picked commander brings its command along (the cohort model): its retinue and its cohorts.
+        Set<NpcEntity> expanded = new LinkedHashSet<>();
+        for (NpcEntity leader : leaders)
+        {
+            expanded.addAll(group(leader));
+        }
+        leaders = new ArrayList<>(expanded);
         Vec3 eye = player.getEyePosition();
         if (placement != null && (placement.from().distanceTo(eye) > AIM_RANGE + 8.0D || placement.to().distanceTo(eye) > AIM_RANGE + 8.0D
                 || placement.length() > AncientEmpiresConfig.chainSpacing * 64.0D))
@@ -289,14 +298,8 @@ public final class NpcArmy
                         && !(entity instanceof NpcEntity npc && player.getUUID().equals(npc.getOwner())), AIM_RANGE * AIM_RANGE);
         BlockPos spot = block.getType() == HitResult.Type.MISS ? null : block.getBlockPos().relative(block.getDirection());
         float facing = placement != null ? placement.facing() : player.getYRot();
-        BlockPos[] spots = null;
         if (command == Command.HOLD || command == Command.DEFEND || command == Command.FALL_BACK)
         {
-            FormationLayout.Unit[] shapes = new FormationLayout.Unit[leaders.size()];
-            for (int i = 0; i < shapes.length; i++)
-            {
-                shapes[i] = leaders.get(i).getChain().unitShape();
-            }
             Vec3 at;
             double length = 0.0D;
             if (command == Command.FALL_BACK)
@@ -312,19 +315,14 @@ public final class NpcArmy
             {
                 at = spot == null ? null : Vec3.atBottomCenterOf(spot);
             }
+            NpcOrder order = command == Command.HOLD ? NpcOrder.HOLD : command == Command.DEFEND ? NpcOrder.DEFEND : NpcOrder.FALL_BACK;
             if (at != null)
             {
-                FormationLayout.Placed[] where = FormationLayout.place(shapes, at.x, at.z, facing, length, unitGap());
-                spots = new BlockPos[where.length];
-                for (int i = 0; i < where.length; i++)
-                {
-                    if (where[i].width() > 0)
-                    {
-                        // A dragged line: the unit stands as many abreast as its share of it holds.
-                        leaders.get(i).getChain().setWidth(where[i].width());
-                    }
-                    spots[i] = ground(level, where[i].x(), at.y, where[i].z());
-                }
+                deploy(level, leaders, at, facing, length, order);
+            }
+            else
+            {
+                leaders.forEach(each -> each.getChain().setOrder(order, each.blockPosition(), facing, null));
             }
         }
         for (int i = 0; i < leaders.size(); i++)
@@ -359,9 +357,7 @@ public final class NpcArmy
                 case RELEASE -> chain.release();
                 case HOLD, DEFEND, FALL_BACK ->
                 {
-                    BlockPos at = spots == null ? leaders.get(i).blockPosition() : spots[i];
-                    NpcOrder order = command == Command.HOLD ? NpcOrder.HOLD : command == Command.DEFEND ? NpcOrder.DEFEND : NpcOrder.FALL_BACK;
-                    chain.setOrder(order, at, facing, null);
+                    // Placed above.
                 }
                 case CHARGE ->
                 {
@@ -379,6 +375,66 @@ public final class NpcArmy
         player.displayClientMessage(Component.translatable("message.ancientempires.army.ordered", units.isEmpty()
                 ? Component.translatable("gui.ancientempires.army.all_units") : Component.literal(units.stream().sorted().map(String::valueOf).collect(Collectors.joining(", "))),
                 Component.translatable("gui.ancientempires.army.command." + command.id())), true);
+    }
+
+    /**
+     * A leader and, if it commands, everyone it commands: its own unit (a
+     * commander's retinue) first, then each officer's group under it, loaded
+     * ones only.
+     */
+    public static List<NpcEntity> group(NpcEntity leader)
+    {
+        Set<NpcEntity> found = new LinkedHashSet<>();
+        collect(leader, found, 0);
+        return new ArrayList<>(found);
+    }
+
+    private static void collect(NpcEntity leader, Set<NpcEntity> found, int depth)
+    {
+        if (!found.add(leader) || depth > 4 || !(leader.level() instanceof ServerLevel level))
+        {
+            return;
+        }
+        for (UUID id : leader.getChain().officers())
+        {
+            if (level.getEntity(id) instanceof NpcEntity officer && officer.isAlive())
+            {
+                collect(officer, found, depth + 1);
+            }
+        }
+    }
+
+    /** Whether this leader commands cohorts (has officers under it): it stands behind them in a group order. */
+    public static boolean commands(NpcEntity leader)
+    {
+        return leader.getChain().officerCount() > 0;
+    }
+
+    /**
+     * Gives {@code leaders} a spot order across one spot or front line
+     * ({@code length} 0 for a spot): cohorts on it side by side, commanders
+     * behind its middle (FormationLayout.placeGroup), each on the ground.
+     */
+    static void deploy(ServerLevel level, List<NpcEntity> leaders, Vec3 at, float facing, double length, NpcOrder order)
+    {
+        FormationLayout.Unit[] shapes = new FormationLayout.Unit[leaders.size()];
+        boolean[] commanders = new boolean[leaders.size()];
+        for (int i = 0; i < shapes.length; i++)
+        {
+            shapes[i] = leaders.get(i).getChain().unitShape();
+            commanders[i] = commands(leaders.get(i));
+        }
+        FormationLayout.Placed[] where = FormationLayout.placeGroup(shapes, commanders, at.x, at.z, facing, length, unitGap(), AncientEmpiresConfig.chainCommandPost);
+        for (int i = 0; i < where.length; i++)
+        {
+            NpcChain chain = leaders.get(i).getChain();
+            if (where[i].width() > 0)
+            {
+                // A dragged line: the unit stands as many abreast as its share of it holds.
+                chain.setWidth(where[i].width());
+            }
+            chain.setOrder(order, ground(level, where[i].x(), at.y, where[i].z()), facing, null);
+        }
     }
 
     @Nullable

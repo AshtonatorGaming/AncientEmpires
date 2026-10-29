@@ -17,6 +17,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -84,18 +85,50 @@ public final class ArmyPicks
         return units;
     }
 
-    /** The picked units' leaders, by number. */
+    /**
+     * The picked units' leaders, by number, each commander followed by its
+     * command (its cohorts, and theirs), as the server expands a group order.
+     */
     public static List<ArmyPacket.Entry> pickedUnits()
     {
-        List<ArmyPacket.Entry> picked = new ArrayList<>();
+        Map<UUID, List<ArmyPacket.Entry>> children = children();
+        Set<ArmyPacket.Entry> picked = new LinkedHashSet<>();
         for (Map.Entry<Integer, ArmyPacket.Entry> unit : units().entrySet())
         {
             if (picked(unit.getKey()))
             {
-                picked.add(unit.getValue());
+                collect(unit.getValue(), children, picked, 0);
             }
         }
-        return picked;
+        return new ArrayList<>(picked);
+    }
+
+    private static void collect(ArmyPacket.Entry leader, Map<UUID, List<ArmyPacket.Entry>> children, Set<ArmyPacket.Entry> found, int depth)
+    {
+        if (!found.add(leader) || depth > 4)
+        {
+            return;
+        }
+        for (ArmyPacket.Entry member : children.getOrDefault(leader.id(), List.of()))
+        {
+            if (member.rank() != NpcRank.SOLDIER.ordinal())
+            {
+                collect(member, children, found, depth + 1);
+            }
+        }
+    }
+
+    /** Whether this leader commands cohorts (officers under it): it stands behind them in a group order. */
+    public static boolean commands(ArmyPacket.Entry leader)
+    {
+        for (ArmyPacket.Entry member : children().getOrDefault(leader.id(), List.of()))
+        {
+            if (member.rank() != NpcRank.SOLDIER.ordinal())
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     /** Everyone directly under each leader in the last army list. */
@@ -118,14 +151,14 @@ public final class ArmyPicks
         int melee = 0;
         int archers = 0;
         int riders = 0;
-        int officers = 0;
         for (ArmyPacket.Entry member : children().getOrDefault(leader.id(), List.of()))
         {
             if (member.rank() != NpcRank.SOLDIER.ordinal())
             {
-                officers++;
+                // Officers stand with their own cohorts.
+                continue;
             }
-            else if (member.mounted())
+            if (member.mounted())
             {
                 riders++;
             }
@@ -139,7 +172,7 @@ public final class ArmyPicks
             }
         }
         NpcFormation formation = NpcFormation.values()[Math.min(leader.formation(), NpcFormation.values().length - 1)];
-        return new FormationLayout.Unit(formation, melee, archers, riders, officers, NpcChain.settings(leader.width(), leader.spread()));
+        return new FormationLayout.Unit(formation, melee, archers, riders, 0, NpcChain.settings(leader.width(), leader.spread()));
     }
 
     /** Only these soldiers glow (the War Table's hover), until cleared with none. */

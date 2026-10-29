@@ -1,6 +1,7 @@
 package com.ancientempires.client;
 
 import com.ancientempires.AncientEmpires;
+import com.ancientempires.config.AncientEmpiresConfig;
 import com.ancientempires.entity.npc.FormationLayout;
 import com.ancientempires.entity.npc.NpcArmy;
 import com.ancientempires.entity.npc.NpcFormation;
@@ -176,13 +177,16 @@ public final class PlacementMode
         }
         ghostsFor = key;
         FormationLayout.Unit[] shapes = new FormationLayout.Unit[units.size()];
+        boolean[] commanders = new boolean[units.size()];
         for (int i = 0; i < shapes.length; i++)
         {
             shapes[i] = ArmyPicks.shape(units.get(i));
+            commanders[i] = ArmyPicks.commands(units.get(i));
         }
         boolean line = placement.line();
         Vec3 at = line ? placement.from().add(placement.to()).scale(0.5D) : placement.from();
-        FormationLayout.Placed[] placed = FormationLayout.place(shapes, at.x, at.z, placement.facing(), line ? placement.length() : 0.0D, NpcArmy.unitGap());
+        FormationLayout.Placed[] placed = FormationLayout.placeGroup(shapes, commanders, at.x, at.z, placement.facing(), line ? placement.length() : 0.0D,
+                NpcArmy.unitGap(), AncientEmpiresConfig.chainCommandPost);
         double[] forward = NpcFormation.forward(placement.facing());
         double rightX = -forward[1];
         double rightZ = forward[0];

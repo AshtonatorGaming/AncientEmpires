@@ -681,15 +681,22 @@ its own unless noted). Before adding behavior, check what AW did first.
   only when the owner assigns them with the Signal Flag (`SignalFlagItem`: use on a sergeant or above to take up its
   unit, on soldiers to add or remove; on a block Hold, again on the spot Defend, sneaking Fall back; on a creature
   Attack; in the air Follow or Free (a sub-unit rejoins), sneaking the formation). Caps: `squadSize` 16 soldiers per
-  leader, `squadsPerCaptain` 4, generals any. Orders (`NpcOrder`): an NPC holds its own (top of a chain, or a
-  detached sub-unit) or inherits; the nearest holder above is cached as `holder` each tick, so everyone reads one
+  sergeant, `retinueSize` 6 per captain or general (its retinue), `squadsPerCaptain` 4, generals any. The cohort model
+  (docs/army-command-design.md "Command levels, revised"): an officer (a member leading a cohort or command of its own)
+  always holds its own order, never a slot on its commander; one with none takes a copy of its commander's kind
+  (`NpcChain.adopt`: Follow, Free, an attack as is, a spot held where it stands, a posted garrison's order posted).
+  Stances still flow down (`stanceSource`); positions never. A group order (`NpcArmy.group`, the War Table's buttons, a
+  picked commander's number) reaches every cohort under it; spot orders go through `NpcArmy.deploy` and
+  `FormationLayout.placeGroup`: cohorts on the line, commanders with their retinues `commandPostDistance` behind its
+  rear rank (the ghosts use the same). Orders (`NpcOrder`): an NPC holds its own (top of a chain, an officer, or a
+  detached soldier) or inherits; the nearest holder above is cached as `holder` each tick, so everyone reads one
   link up. The holder runs `NpcOrderGoal` (to the spot, facing the order's way; Attack ends in Hold where the enemy
   fell, Fall back in Hold at the rally point); Follow at the top sets the vanilla follow flag. The order leashes
   targets (`allowsTarget`, in the target scan and every 10 ticks): Follow within `followLeash` of the holder, Hold
   within `holdRange` of the soldier's own slot, Defend within `defendRadius` of the spot, Fall back only the
   cornered; bows reach `rangedLeash` further. A formed soldier runs only `NpcFormationGoal` (priority 3): its slot
   from the leader's layout (`NpcFormation`: line, column, loose; the front rank just ahead of its leader, the rest
-  behind; a captain's squads ahead of it, so higher ranks stand further back), worked out per unit when the leader
+  behind; officers have no slots; game test `cohortsUnderACaptain`), worked out per unit when the leader
   moves or turns; it sets off past `slotTolerance` (or when its slot moves) and steps straight onto the exact spot
   for the last two blocks, faces the unit's heading, and a target takes it out of formation until the fight ends. Death or repack `depart`s: the best member (rank, then level) takes the
   place, order, and the rest of the unit, and the command aura (`NpcCommand.succeed` prefers it); `NpcChainLedger`

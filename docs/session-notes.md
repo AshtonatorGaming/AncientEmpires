@@ -139,10 +139,13 @@ War Table unit name; the NPC level moved to a badge so the role label fits long 
 ring middle, spawner title, sound block labels, and worksite bounds line go through `FitText`. More will turn up in
 play; fix each the same way.
 
+Committed since: the text fitting and UI fixes (a6ee65c); the cohort model's core (step 3.5, see the design doc's
+Progress for what is left). Neither installed yet when written (the user's game was open).
+
 **Agreed order of work** (so we don't get lost):
-1. UI text fitting mod-wide (names cut off at the field's end, long role titles like Standard Bearer clipped), then
-   commit the War Table and wheel fixes.
-2. The cohort model (step 3.5).
+1. Done: UI text fitting, the War Table and wheel fixes.
+2. Done (core): the cohort model. Polish next week: command post, mounted commanders, mixed cohorts, the bar grouped
+   by captain, the hall's standards.
 3. Step 4, commanders deciding.
 4. Later: horn operations, the map tab, kill tracking, the Signal Flag's new use.
 

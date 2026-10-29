@@ -246,9 +246,9 @@ public class SignalFlagItem extends Item
     {
         NpcChain chain = leader.getChain();
         int officers = NpcChain.officerCap(leader.getRank());
-        return officers == 0 ? Component.translatable("message.ancientempires.signal.count", chain.soldierCount(), AncientEmpiresConfig.chainSquadSize)
+        return officers == 0 ? Component.translatable("message.ancientempires.signal.count", chain.soldierCount(), NpcChain.soldierCap(leader.getRank()))
                 : Component.translatable("message.ancientempires.signal.count_officers", chain.soldierCount(),
-                        AncientEmpiresConfig.chainSquadSize, chain.officerCount(),
+                        NpcChain.soldierCap(leader.getRank()), chain.officerCount(),
                         officers == Integer.MAX_VALUE ? "-" : Integer.toString(officers));
     }
 

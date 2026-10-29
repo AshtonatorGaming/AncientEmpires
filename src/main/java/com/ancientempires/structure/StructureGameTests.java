@@ -878,6 +878,61 @@ public final class StructureGameTests
         });
     }
 
+    /**
+     * The cohort model: a captain's retinue is capped, a sergeant's cohort put
+     * under it holds an order of its own (never a slot on the captain), and a
+     * group order to the captain's number reaches the cohort, standing it on the
+     * line with the captain and retinue behind.
+     */
+    @GameTest(template = ARENA, timeoutTicks = 100)
+    public static void cohortsUnderACaptain(GameTestHelper helper)
+    {
+        ServerLevel level = helper.getLevel();
+        BlockPos base = helper.absolutePos(new BlockPos(-60, 1, 60));
+        level.getEntitiesOfClass(LivingEntity.class, new AABB(base).inflate(16.0D), living -> !(living instanceof Player)).forEach(Entity::discard);
+        FakePlayer player = FakePlayerFactory.getMinecraft(level);
+        player.moveTo(base.getCenter());
+        UUID owner = player.getUUID();
+        NpcEntity captain = squadNpc(helper, owner, new BlockPos(-60, 1, 60), NpcRank.CAPTAIN, 15);
+        NpcEntity sergeant = squadNpc(helper, owner, new BlockPos(-56, 1, 60), NpcRank.SERGEANT, 8);
+        List<NpcEntity> everyone = new ArrayList<>(List.of(captain, sergeant));
+        int cap = NpcChain.soldierCap(NpcRank.CAPTAIN);
+        for (int i = 0; i <= cap; i++)
+        {
+            NpcEntity guard = squadNpc(helper, owner, new BlockPos(-63 - i % 3, 1, 58 + i / 3), NpcRank.SOLDIER, 3);
+            everyone.add(guard);
+            NpcChain.Assign result = NpcChain.toggle(captain, guard);
+            helper.assertTrue(result == (i < cap ? NpcChain.Assign.ADDED : NpcChain.Assign.FULL), "retinue " + i + " of cap " + cap + ": " + result);
+        }
+        List<NpcEntity> cohort = new ArrayList<>();
+        for (int i = 0; i < 3; i++)
+        {
+            NpcEntity soldier = squadNpc(helper, owner, new BlockPos(-55, 1, 58 + i), NpcRank.SOLDIER, 3);
+            everyone.add(soldier);
+            cohort.add(soldier);
+            NpcChain.toggle(sergeant, soldier);
+        }
+        captain.getChain().setOrder(NpcOrder.FOLLOW, null, Float.NaN, null);
+        helper.assertTrue(NpcChain.toggle(captain, sergeant) == NpcChain.Assign.ADDED, "the sergeant joins the captain's command");
+        NpcChain cohortChain = sergeant.getChain();
+        helper.assertTrue(cohortChain.holdsOrder() && cohortChain.order() == NpcOrder.FOLLOW, "the cohort takes its own copy of the order, has " + cohortChain.order());
+        helper.assertTrue(captain.getChain().slotOf(sergeant) == null, "no slot for an officer on its captain");
+        helper.assertTrue(NpcArmy.group(captain).size() == 2, "the captain's group is itself and the cohort");
+        int number = captain.getChain().unitNumber();
+        // A spot six blocks south, facing south: the cohort's front on it, the captain behind.
+        BlockPos spot = helper.absolutePos(new BlockPos(-60, 1, 70));
+        NpcArmy.command(player, Set.of(number), NpcArmy.Command.HOLD, new NpcArmy.Placement(Vec3.atBottomCenterOf(spot), Vec3.atBottomCenterOf(spot), 0.0F));
+        BlockPos cohortAt = cohortChain.orderPos();
+        BlockPos captainAt = captain.getChain().orderPos();
+        helper.assertTrue(cohortChain.order() == NpcOrder.HOLD && cohortAt != null, "the group order reaches the cohort");
+        helper.assertTrue(captain.getChain().order() == NpcOrder.HOLD && captainAt != null, "and the captain with its retinue");
+        helper.assertTrue(captainAt.getZ() < cohortAt.getZ() - 2, "the captain stands behind the cohort: " + captainAt + " behind " + cohortAt);
+        Vec3 slot = cohortChain.slotOf(cohort.get(0));
+        helper.assertTrue(slot != null && slot.distanceTo(Vec3.atBottomCenterOf(cohortAt)) < 4.0D, "the cohort forms on its own sergeant, at " + slot);
+        everyone.forEach(NpcEntity::discard);
+        helper.succeed();
+    }
+
     private static NpcEntity squadNpc(GameTestHelper helper, UUID owner, BlockPos at, NpcRank rank, int npcLevel)
     {
         NpcEntity npc = ModEntities.NPC.get().create(helper.getLevel());

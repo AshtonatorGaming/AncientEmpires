@@ -205,6 +205,12 @@ public final class NpcChain
         return Collections.unmodifiableList(this.members);
     }
 
+    /** Members leading cohorts (or commands) of their own. */
+    public Set<UUID> officers()
+    {
+        return Collections.unmodifiableSet(this.officers);
+    }
+
     public boolean leads()
     {
         return !this.members.isEmpty();
@@ -239,6 +245,42 @@ public final class NpcChain
     public boolean holdsOrder()
     {
         return this.holder == this;
+    }
+
+    /**
+     * Whether this NPC is an officer under its leader: it leads a cohort of
+     * its own (or a command), which takes orders of its own and never forms
+     * on its commander's body (docs/army-command-design.md, the cohort model).
+     */
+    public boolean officer()
+    {
+        NpcEntity current = this.leader();
+        return current != null && current.getChain().officers.contains(this.npc.getUUID());
+    }
+
+    /**
+     * An officer's own order when it has none (just put under a commander, or
+     * an older save where it took its commander's): a copy of the commander's
+     * kind of order, kept apart. Follow, Free and an attack are taken as they
+     * are; a spot is held where the officer stands, facing the commander's way;
+     * a posted garrison's officer is posted on the same order.
+     */
+    private void adopt(NpcChain over)
+    {
+        NpcChain from = over.holder;
+        NpcOrder kind = from.order == null ? NpcOrder.FREE : from.order;
+        if (from.posted)
+        {
+            this.setOrder(kind, from.orderPos, from.orderFacing, from.orderTarget);
+            this.posted = true;
+            return;
+        }
+        switch (kind)
+        {
+            case FOLLOW, FREE -> this.setOrder(kind, null, Float.NaN, null);
+            case ATTACK -> this.setOrder(kind, null, Float.NaN, from.orderTarget);
+            default -> this.setOrder(NpcOrder.HOLD, this.npc.blockPosition(), over.facing(), null);
+        }
     }
 
     @Nullable
@@ -326,14 +368,15 @@ public final class NpcChain
     }
 
     /**
-     * Gives this unit an order. At the top of a chain anything goes, Free and
-     * Follow included (Follow follows the owner); a unit under another leader
-     * takes Hold, Defend, Attack, or Fall back as its own (detaching), and
-     * Follow or Free rejoins it to its leader.
+     * Gives this unit an order. At the top of a chain, or for an officer (a
+     * cohort under a commander), anything goes, Free and Follow included
+     * (Follow follows the owner); a soldier formed under a leader takes Hold,
+     * Defend, Attack, or Fall back as its own (detaching), and Follow or Free
+     * rejoins it to its leader.
      */
     public void setOrder(NpcOrder order, @Nullable BlockPos pos, float facing, @Nullable UUID target)
     {
-        boolean top = this.leaderId == null;
+        boolean top = this.leaderId == null || this.officer();
         if (!top && (order == NpcOrder.FOLLOW || order == NpcOrder.FREE))
         {
             this.order = null;
@@ -555,6 +598,15 @@ public final class NpcChain
         return this.officers.size();
     }
 
+    /**
+     * How many soldiers this leader's rank may have directly under it: a
+     * sergeant's cohort, or a captain's or general's retinue.
+     */
+    public static int soldierCap(NpcRank rank)
+    {
+        return rank == NpcRank.CAPTAIN || rank == NpcRank.GENERAL ? AncientEmpiresConfig.chainRetinueSize : AncientEmpiresConfig.chainSquadSize;
+    }
+
     /** How many officers this leader's rank may have under it (Integer.MAX_VALUE for any). */
     public static int officerCap(NpcRank rank)
     {
@@ -676,7 +728,7 @@ public final class NpcChain
             return Assign.NOT_LOWER;
         }
         boolean officer = soldier.getRank() != NpcRank.SOLDIER;
-        if (officer ? chain.officerCount() >= officerCap(leader.getRank()) : chain.soldierCount() >= AncientEmpiresConfig.chainSquadSize)
+        if (officer ? chain.officerCount() >= officerCap(leader.getRank()) : chain.soldierCount() >= soldierCap(leader.getRank()))
         {
             return Assign.FULL;
         }
@@ -721,7 +773,10 @@ public final class NpcChain
         chain.members.add(soldier.getUUID());
         if (soldier.getRank() != NpcRank.SOLDIER)
         {
+            // An officer keeps a cohort (or a command) of its own: it takes its own copy of the order, not a slot.
             chain.officers.add(soldier.getUUID());
+            own.holder = own;
+            own.adopt(chain);
         }
         chain.slotsAt = -1L;
     }
@@ -881,6 +936,10 @@ public final class NpcChain
             this.resolve(level);
         }
         NpcEntity current = this.leader();
+        if (this.order == null && current != null && this.officer())
+        {
+            this.adopt(current.getChain());
+        }
         this.holder = this.order != null || this.leaderId == null || current == null ? this : current.getChain().holder;
         this.stanceSource = this.stance != null || current == null ? this : current.getChain().stanceSource;
         if (this.holder == this && this.leaderId != null && current == null && this.order == null)
@@ -1323,15 +1382,15 @@ public final class NpcChain
         List<UUID> soldiers = new ArrayList<>();
         List<UUID> archers = new ArrayList<>();
         List<UUID> riders = new ArrayList<>();
-        List<UUID> leaders = new ArrayList<>();
         for (UUID id : this.members)
         {
             Entity member = this.npc.level() instanceof ServerLevel level ? level.getEntity(id) : null;
             if (this.officers.contains(id))
             {
-                leaders.add(id);
+                // Officers stand with their own cohorts, never in this layout.
+                continue;
             }
-            else if (member instanceof NpcEntity npc && npc.isPassenger())
+            if (member instanceof NpcEntity npc && npc.isPassenger())
             {
                 riders.add(id);
             }
@@ -1344,7 +1403,7 @@ public final class NpcChain
                 soldiers.add(id);
             }
         }
-        FormationLayout layout = FormationLayout.of(this.formation, soldiers.size(), archers.size(), riders.size(), leaders.size(), this.layoutSettings());
+        FormationLayout layout = FormationLayout.of(this.formation, soldiers.size(), archers.size(), riders.size(), 0, this.layoutSettings());
         List<UUID> front = layout.mounted() ? riders : soldiers;
         for (int i = 0; i < front.size(); i++)
         {
@@ -1363,10 +1422,6 @@ public final class NpcChain
         for (int i = 0; i < layout.riders().length; i++)
         {
             this.slots.put(riders.get(i), place(here, layout.riders()[i], forwardX, forwardZ, rightX, rightZ));
-        }
-        for (int i = 0; i < leaders.size(); i++)
-        {
-            this.slots.put(leaders.get(i), place(here, layout.officers()[i], forwardX, forwardZ, rightX, rightZ));
         }
     }
 
@@ -1396,7 +1451,7 @@ public final class NpcChain
                 melee++;
             }
         }
-        return new FormationLayout.Unit(this.formation, melee, archers, riders, this.officers.size(), this.layoutSettings());
+        return new FormationLayout.Unit(this.formation, melee, archers, riders, 0, this.layoutSettings());
     }
 
     /** The numbers this leader's layout uses: its own frontage if a dragged line set one, its spread. */

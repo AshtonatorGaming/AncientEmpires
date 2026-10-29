@@ -1,5 +1,8 @@
 package com.ancientempires.entity.npc;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * A unit's slots as offsets from its leader, {right, back} in blocks, by kind:
  * melee on foot in the front ranks, archers in the rows behind them, riders
@@ -128,6 +131,20 @@ public record FormationLayout(double[][] melee, double[][] archers, double[][] r
         return most;
     }
 
+    /** How far behind its leader the unit's rear rank stands. */
+    public double back()
+    {
+        double most = 0.0D;
+        for (double[][] group : new double[][][] {this.melee, this.archers, this.riders})
+        {
+            for (double[] slot : group)
+            {
+                most = Math.max(most, slot[1]);
+            }
+        }
+        return most;
+    }
+
     /** Blocks from the unit's left edge to its right (officers' units taken as {@code officerFrontage} wide). */
     public double span(double spacing, double officerFrontage)
     {
@@ -233,6 +250,62 @@ public record FormationLayout(double[][] melee, double[][] archers, double[][] r
             Settings with = widths[i] > 0 ? new Settings(widths[i], settings.columnWidth(), settings.spacing(), settings.riderFactor(), settings.squadSize()) : settings;
             double front = units[i].layout(with).front(units[i].shape(), with.spacing());
             placed[i] = new Placed(x + rightX * middles[i] - forward[0] * front, z + rightZ * middles[i] - forward[1] * front, widths[i]);
+        }
+        return placed;
+    }
+
+    /**
+     * A group order (the cohort model): the cohorts are {@link #place}d on the
+     * spot or line, and the commanders among the units ({@code commanders},
+     * with their retinues) stand side by side behind its middle,
+     * {@code postBehind} blocks past the deepest cohort's rear rank. With no
+     * cohorts, or no commanders, it is a plain {@link #place}. Results keep the
+     * units' order.
+     */
+    public static Placed[] placeGroup(Unit[] units, boolean[] commanders, double x, double z, float facing, double length, double gap, double postBehind)
+    {
+        List<Integer> line = new ArrayList<>();
+        List<Integer> posts = new ArrayList<>();
+        for (int i = 0; i < units.length; i++)
+        {
+            (commanders[i] ? posts : line).add(i);
+        }
+        if (line.isEmpty() || posts.isEmpty())
+        {
+            return place(units, x, z, facing, length, gap);
+        }
+        Unit[] lineUnits = new Unit[line.size()];
+        for (int i = 0; i < lineUnits.length; i++)
+        {
+            lineUnits[i] = units[line.get(i)];
+        }
+        Placed[] lineAt = place(lineUnits, x, z, facing, length, gap);
+        // The deepest cohort: from the line (its front) back through its leader to its rear rank.
+        double deepest = 0.0D;
+        for (int i = 0; i < lineUnits.length; i++)
+        {
+            Settings settings = lineUnits[i].settings();
+            Settings with = lineAt[i].width() > 0 ? new Settings(lineAt[i].width(), settings.columnWidth(), settings.spacing(), settings.riderFactor(), settings.squadSize())
+                    : settings;
+            FormationLayout layout = lineUnits[i].layout(with);
+            deepest = Math.max(deepest, layout.front(lineUnits[i].shape(), with.spacing()) + layout.back());
+        }
+        Unit[] postUnits = new Unit[posts.size()];
+        for (int i = 0; i < postUnits.length; i++)
+        {
+            postUnits[i] = units[posts.get(i)];
+        }
+        double[] forward = NpcFormation.forward(facing);
+        double behind = deepest + postBehind;
+        Placed[] postAt = place(postUnits, x - forward[0] * behind, z - forward[1] * behind, facing, 0.0D, gap);
+        Placed[] placed = new Placed[units.length];
+        for (int i = 0; i < lineAt.length; i++)
+        {
+            placed[line.get(i)] = lineAt[i];
+        }
+        for (int i = 0; i < postAt.length; i++)
+        {
+            placed[posts.get(i)] = postAt[i];
         }
         return placed;
     }

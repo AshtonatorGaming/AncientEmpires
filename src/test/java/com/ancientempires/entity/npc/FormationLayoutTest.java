@@ -58,6 +58,28 @@ class FormationLayoutTest
     }
 
     @Test
+    void aCommanderStandsBehindItsCohorts()
+    {
+        FormationLayout.Unit cohort = new FormationLayout.Unit(NpcFormation.LINE, 16, 0, 0, 0, SETTINGS);
+        FormationLayout.Unit retinue = new FormationLayout.Unit(NpcFormation.LINE, 4, 0, 0, 0, SETTINGS);
+        FormationLayout.Unit[] units = {retinue, cohort, cohort};
+        boolean[] commanders = {true, false, false};
+        // Facing south (+z): behind is north (-z).
+        FormationLayout.Placed[] placed = FormationLayout.placeGroup(units, commanders, 0.0D, 0.0D, 0.0F, 0.0D, 3.0D, 4.0D);
+        FormationLayout.Placed[] line = FormationLayout.place(new FormationLayout.Unit[] {cohort, cohort}, 0.0D, 0.0D, 0.0F, 0.0D, 3.0D);
+        assertEquals(line[0].x(), placed[1].x(), 1.0E-9, "the cohorts stand as they would alone");
+        assertEquals(line[1].z(), placed[2].z(), 1.0E-9);
+        assertEquals(0.0D, placed[0].x(), 1.0E-9, "the commander behind the middle");
+        FormationLayout cohortLayout = FormationLayout.of(NpcFormation.LINE, 16, 0, 0, 0, SETTINGS);
+        double rear = cohortLayout.front(NpcFormation.LINE, 1.5D) + cohortLayout.back();
+        double retinueFront = FormationLayout.of(NpcFormation.LINE, 4, 0, 0, 0, SETTINGS).front(NpcFormation.LINE, 1.5D);
+        assertEquals(-(rear + 4.0D) - retinueFront, placed[0].z(), 1.0E-9, "its retinue's front the post distance past the cohorts' rear rank");
+        // No cohorts picked: a commander alone is placed like any unit.
+        FormationLayout.Placed[] alone = FormationLayout.placeGroup(new FormationLayout.Unit[] {retinue}, new boolean[] {true}, 0.0D, 0.0D, 0.0F, 0.0D, 3.0D, 4.0D);
+        assertEquals(FormationLayout.place(new FormationLayout.Unit[] {retinue}, 0.0D, 0.0D, 0.0F, 0.0D, 3.0D)[0].z(), alone[0].z(), 1.0E-9);
+    }
+
+    @Test
     void aClickedSpotPutsTheFrontOnItAndTheLeaderBehind()
     {
         FormationLayout.Unit unit = new FormationLayout.Unit(NpcFormation.LINE, 8, 0, 0, 0, SETTINGS);
