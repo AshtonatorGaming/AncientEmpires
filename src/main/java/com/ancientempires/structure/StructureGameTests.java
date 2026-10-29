@@ -6,6 +6,10 @@ import com.ancientempires.block.FlagBlockEntity;
 import com.ancientempires.block.NpcSpawnerBlockEntity;
 import com.ancientempires.config.AncientEmpiresConfig;
 import com.ancientempires.entity.npc.NpcEntity;
+import com.ancientempires.entity.npc.NpcRank;
+import com.ancientempires.entity.npc.NpcPath;
+import com.ancientempires.entity.npc.NpcOrder;
+import com.ancientempires.entity.npc.NpcChain;
 import com.ancientempires.gate.GateEntity;
 import com.ancientempires.gate.GateType;
 import com.ancientempires.registry.ModEntities;
@@ -462,6 +466,76 @@ public final class StructureGameTests
                     + (npc.getNavigation().getPath() == null ? "none" : npc.getNavigation().getPath().getNodeCount() + " nodes, reaches " + npc.getNavigation().getPath().canReach()));
             AncientEmpires.LOGGER.info("GAMETEST npc through gate, gate status {} edge {}", gate.status(), gate.edge());
         });
+    }
+
+    /**
+     * Chain of command, phase 1: a sergeant takes three soldiers, they form up
+     * behind it in their slots, and when it falls the best of them takes its
+     * place (its order, and the other two under it).
+     */
+    @GameTest(template = ARENA, timeoutTicks = 600)
+    public static void squadFormsUpAndSucceeds(GameTestHelper helper)
+    {
+        ServerLevel level = helper.getLevel();
+        level.setDayTime(6000L);
+        for (int x = 10; x <= 30; x++)
+        {
+            for (int z = -30; z <= -10; z++)
+            {
+                helper.setBlock(new BlockPos(x, 0, z), Blocks.STONE);
+                for (int y = 1; y <= 4; y++)
+                {
+                    helper.setBlock(new BlockPos(x, y, z), Blocks.AIR);
+                }
+            }
+        }
+        level.getEntitiesOfClass(NpcEntity.class, new AABB(helper.absolutePos(new BlockPos(20, 1, -20))).inflate(14.0D)).forEach(NpcEntity::discard);
+        UUID owner = UUID.randomUUID();
+        NpcEntity sergeant = squadNpc(helper, owner, new BlockPos(20, 1, -20), NpcRank.SERGEANT, 5);
+        List<NpcEntity> soldiers = new ArrayList<>();
+        int[][] starts = {{12, -12}, {28, -28}, {13, -27}};
+        for (int i = 0; i < starts.length; i++)
+        {
+            NpcEntity soldier = squadNpc(helper, owner, new BlockPos(starts[i][0], 1, starts[i][1]), NpcRank.SOLDIER, 1 + i * 3);
+            helper.assertTrue(NpcChain.toggle(sergeant, soldier) == NpcChain.Assign.ADDED, "soldier " + i + " joins");
+            soldiers.add(soldier);
+        }
+        helper.assertTrue(NpcChain.toggle(soldiers.get(0), sergeant) != NpcChain.Assign.ADDED, "a soldier cannot lead its sergeant");
+        sergeant.getChain().setOrder(NpcOrder.FOLLOW);
+        helper.runAfterDelay(160, () ->
+        {
+            for (NpcEntity soldier : soldiers)
+            {
+                Vec3 slot = sergeant.getChain().slotOf(soldier);
+                helper.assertTrue(slot != null, "a slot for every soldier");
+                double off = Math.sqrt(Math.pow(slot.x - soldier.getX(), 2) + Math.pow(slot.z - soldier.getZ(), 2));
+                AncientEmpires.LOGGER.info("GAMETEST squad soldier at {} slot {} off {}", soldier.position(), slot, off);
+                helper.assertTrue(off <= AncientEmpiresConfig.chainSlotTolerance + 1.0D, "in formation, off by " + off);
+            }
+            sergeant.kill();
+            NpcEntity heir = soldiers.get(2);
+            helper.assertTrue(heir.getChain().leaderId() == null, "the best soldier now leads");
+            helper.assertTrue(heir.getChain().members().size() == 2, "and has the other two under it, has " + heir.getChain().members().size());
+            helper.assertTrue(heir.getChain().order() == NpcOrder.FOLLOW, "with the fallen sergeant's order");
+            for (NpcEntity soldier : soldiers.subList(0, 2))
+            {
+                helper.assertTrue(heir.getUUID().equals(soldier.getChain().leaderId()), "the others answer to the heir");
+            }
+            helper.succeed();
+        });
+    }
+
+    private static NpcEntity squadNpc(GameTestHelper helper, UUID owner, BlockPos at, NpcRank rank, int npcLevel)
+    {
+        NpcEntity npc = ModEntities.NPC.get().create(helper.getLevel());
+        BlockPos start = helper.absolutePos(at);
+        npc.moveTo(start.getX() + 0.5D, start.getY(), start.getZ() + 0.5D, 0.0F, 0.0F);
+        npc.setOwner(owner);
+        npc.setNpcPath(NpcPath.SOLDIER);
+        npc.setRank(rank);
+        npc.setLevel(npcLevel);
+        helper.getLevel().addFreshEntity(npc);
+        return npc;
     }
 
     @GameTest(template = ARENA, timeoutTicks = 2400)

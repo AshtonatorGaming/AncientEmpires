@@ -13,6 +13,7 @@ import com.ancientempires.item.InsigniaItem;
 import com.ancientempires.item.MobScrollItem;
 import com.ancientempires.item.NpcSpawnEggItem;
 import com.ancientempires.item.ScannerItem;
+import com.ancientempires.item.SignalFlagItem;
 import com.ancientempires.item.WarHornItem;
 import com.ancientempires.item.WorksiteUpgradeItem;
 import net.minecraft.world.food.FoodProperties;
@@ -81,6 +82,8 @@ public final class ModItems
     public static final RegistryObject<Item> MOB_SCROLL = ITEMS.register("mob_scroll", () -> new MobScrollItem(new Item.Properties()));
     /** AW's Mob Spawner Placement Tool: captures a mob, places or fills a garrison spawner. Admins only. */
     public static final RegistryObject<Item> STRUCTURE_SCANNER = ITEMS.register("structure_scanner", () -> new ScannerItem(new Item.Properties().stacksTo(1)));
+    /** The chain of command's field tool: select a leader, assign soldiers, give the unit its order and formation. */
+    public static final RegistryObject<Item> SIGNAL_FLAG = ITEMS.register("signal_flag", () -> new SignalFlagItem(new Item.Properties().stacksTo(1)));
     public static final RegistryObject<Item> CAPTURE_WAND = ITEMS.register("capture_wand", () -> new CaptureWandItem(new Item.Properties().stacksTo(1)));
     /** AW's flags; the faction and kind ride in each stack's BlockEntityTag (one creative entry per faction). */
     public static final RegistryObject<FlagItem> FLAG = ITEMS.register("flag", () -> new FlagItem(ModBlocks.FLAG.get(), new Item.Properties()));

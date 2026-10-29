@@ -387,6 +387,24 @@ Command: ranked soldiers (sergeants, captains, generals) inspire the allied sold
 | `successionScale` | `0.6` | 0.1 to 1.0 | A successor's aura, as a fraction of the fallen commander's. |
 | `minScale` | `0.3` | 0.05 to 1.0 | The weakest a passed-down aura gets, however many times command passes. |
 
+### `[chain]`
+
+Chain of command (see [chain-of-command.md](chain-of-command.md)): a player's sergeants, captains, and generals lead units of the soldiers assigned to them with the Signal Flag; a unit given Follow forms up on its leader and keeps formation. Off: every NPC acts alone, as before.
+
+| Setting | Default | Allowed | What it does |
+|---|---|---|---|
+| `enabled` | `true` | true / false | Units, orders, and formations. |
+| `squadSize` | `16` | 1 to 64 | Soldiers one leader can have directly under it (a squad). |
+| `squadsPerCaptain` | `4` | 1 to 16 | Sergeants (with their squads) a captain can have under it. |
+| `captainsPerGeneral` | `0` | 0 to 64 | Captains and sergeants a general can have under it; 0 for any number. |
+| `spacing` | `1.5` | 1.0 to 6.0 | Blocks between soldiers in formation (loose order doubles it). |
+| `lineWidth` | `8` | 1 to 32 | Soldiers abreast in a line (and in loose order). |
+| `columnWidth` | `2` | 1 to 8 | Soldiers abreast in a column. |
+| `slotTolerance` | `1.5` | 0.5 to 8.0 | Blocks a soldier may stand off its slot before it moves back into it. |
+| `catchUpDistance` | `6.0` | 2.0 to 64.0 | Blocks off its slot past which a soldier runs to catch up instead of walking. |
+| `catchUpSpeed` | `1.12` | 0.5 to 1.4 | Speed multiplier while catching up (a player's sprint is about 1.12). |
+| `walkSpeed` | `0.9` | 0.3 to 1.4 | Speed multiplier for small steps back into the slot. |
+
 ### `[sunlight]`
 
 Daylight: factions with "sunlight": "burn" in factions.json (the undead) burn in daylight like zombies (a helmet takes the wear) and seek shade once burning; "avoid" (vampires, as in Ancient Warfare) also keep to shade by day.

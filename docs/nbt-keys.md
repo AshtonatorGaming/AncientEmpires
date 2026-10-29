@@ -20,6 +20,11 @@ The NPC entity is `ancientempires:npc`. Besides vanilla's mob keys (`Health`, `H
 | `AePath` | text | yes | `settler`, `worker`, or `soldier`. Older saves used `AeCalling` or `AeRole`; those are still read. |
 | `AeLevel` | int | yes | Level, 1 to `levels.maxLevel`. |
 | `AeXp` | float | yes | XP toward the next level. |
+| `AeLeader` | UUID | no | Chain of command: the NPC's leader. Repacked NPCs come back out of any unit. |
+| `AeSquad` | UUID list | no | Chain of command: those directly under this leader. |
+| `AeSquadOfficers` | UUID list | no | The members of `AeSquad` who lead units of their own. |
+| `AeOrder` | text | no | The unit's order, `follow` (absent: free). Meaningful at the top of a chain; everyone below acts on it. |
+| `AeFormation` | text | no | `column` or `loose` (absent: line). |
 | `AeRank` | text | yes | `soldier`, `sergeant`, `captain`, or `general`, when set by insignia or command. Without it, the rank comes from the roster row. |
 | `AeSkill` | int | yes | Pins the NPC's skill to one entry (0 to 3) of every `skill` list, instead of reading the lists by level. For testing or special NPCs. |
 | `AeFeintChance` | float | yes | This NPC's own chance to feint, replacing `skill.feintChance`. |

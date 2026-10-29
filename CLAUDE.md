@@ -666,6 +666,19 @@ its own unless noted). Before adding behavior, check what AW did first.
   anyone. factions.json may name the ranks (`ranks`: Norska Huscarl, Hersir, Jarl) and set
   `command`: `ranks` (default), `pack` (beast, monster, giant: Packleader, Alpha, Great Alpha;
   pack behavior comes with squads), or `none` (no commanders). Commanders use any weapon.
+- Chain of command (`NpcChain`, `chain` config; plan and phases in docs/chain-of-command.md). Phase 1 done: an NPC
+  holds one leader link (`AeLeader`) and, as a leader, its unit (`AeSquad`, officers apart); only a player's soldiers,
+  only when the owner assigns them with the Signal Flag (`SignalFlagItem`: use on a sergeant or above to take up its
+  unit, on soldiers to add or remove; in the air Follow or Free at the top of a chain, sneaking the formation). Caps:
+  `squadSize` 16 soldiers per leader, `squadsPerCaptain` 4, generals any. Orders (`NpcOrder`: Free, Follow so far)
+  sit on the top leader and are read one link down each tick (`effectiveOrder`); Follow at the top sets the vanilla
+  follow flag. A formed soldier runs only `NpcFormationGoal` (priority 3): its slot from the leader's layout
+  (`NpcFormation`: line, column, loose; officers' squads behind the leader's own rows), worked out per unit when the
+  leader moves or turns; it walks only when off by `slotTolerance`, faces the unit's heading, and a target takes it
+  out of formation until the fight ends. Death or repack `depart`s: the best member (rank, then level) takes the
+  place, order, and the rest of the unit, and the command aura (`NpcCommand.succeed` prefers it); `NpcChainLedger`
+  (per-dimension saved data, 7 days) answers unloaded links (away, or gone and to whom). `/ancientempires squad`.
+  Next: phase 2 (Hold, Defend, Attack, Fall back), then unit fighting with lobotomised grunts.
 - Command (`NpcCommand`, `command` config, DESIGN Tier 1): every rank above soldier pulses an
   aura every `auraTicks` at its rank's `strengthByRank` (0.5, 1, 1.25) over allied soldiers
   within `radiusByRank` (8, 12, 16): `damageBonus` (15%) melee damage with any weapon and `armorBonus` armour, as

@@ -123,11 +123,25 @@ public final class NpcCommand
      * A commander fell: the highest-ranked allied soldier near it takes command,
      * weakened, and turns on the killer.
      */
-    static void succeed(NpcEntity fallen, @Nullable LivingEntity killer)
+    static void succeed(NpcEntity fallen, @Nullable LivingEntity killer, @Nullable NpcEntity chainHeir)
     {
         float strength = strength(fallen);
         if (strength <= 0.0F)
         {
+            return;
+        }
+        if (chainHeir != null)
+        {
+            // Its own unit's next in line takes command; never weaker than its own rank's.
+            float inherited = inherited(strength, AncientEmpiresConfig.commandSuccessionScale, AncientEmpiresConfig.commandMinScale);
+            if (inherited > strength(chainHeir))
+            {
+                chainHeir.setInheritedCommand(inherited);
+            }
+            if (killer != null && killer.isAlive() && chainHeir.isScanTarget(killer))
+            {
+                chainHeir.setTarget(killer);
+            }
             return;
         }
         double range = AncientEmpiresConfig.commandSuccessionRange;

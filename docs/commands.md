@@ -18,6 +18,7 @@ Every command starts with `/ancientempires`. Tab completion suggests the sub-com
 | `/ancientempires standing <player> add <faction> <value>` | operators | Adds to (or, with a negative number, takes from) a player's standing. |
 | `/ancientempires standing <player> reset` | operators | Puts all of a player's standings back to each faction's starting value. |
 | `/ancientempires work` | everyone | For the looked-at NPC: a checklist of every condition its job needs, green `[ok]` or red `[NO]`. |
+| `/ancientempires squad` | everyone | For the looked-at NPC: its leader, its unit (soldiers, officers, how many are loaded), its order and the one it acts on, its formation, and whether it is in formation now. |
 | `/ancientempires level` | everyone | For the looked-at NPC: its band (Recruit, Veteran, ...), level, and XP toward the next level. |
 | `/ancientempires level <1-100>` | operators | Sets the looked-at NPC's level (capped at `levels.maxLevel`). |
 | `/ancientempires rank <rank>` | operators | Sets the looked-at NPC's rank: `soldier`, `sergeant`, `captain`, or `general`. |

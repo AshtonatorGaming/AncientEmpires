@@ -49,6 +49,7 @@ public final class ModCreativeTabs
                         output.accept(ModItems.SERGEANT_INSIGNIA.get());
                         output.accept(ModItems.CAPTAIN_INSIGNIA.get());
                         output.accept(ModItems.GENERAL_INSIGNIA.get());
+                        output.accept(ModItems.SIGNAL_FLAG.get());
                         output.accept(ModItems.SETTLERS_POST.get());
                         output.accept(ModItems.TOWN_HALL.get());
                         output.accept(ModItems.CROP_FARM.get());

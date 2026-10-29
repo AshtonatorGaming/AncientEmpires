@@ -73,6 +73,11 @@ fills, and eases a border ring into the land (AW's preGeneration). Unseen in gam
 
 Chain of command: plan in docs/chain-of-command.md (decisions agreed 2026-10-28: screen + order item, squads of 16, manual joining, grunts lobotomised in formation, garrisons last). Build phase 1 next.
 
+Chain of command phase 1 built (links, Signal Flag, Follow in line/column/loose, succession, ledger, squad command,
+game test squadFormsUpAndSucceeds). Not seen in game yet. Raised by the user: NpcEntity is fat; the real cost is ~25
+goals per NPC whose canUse runs every other tick. Plan after phase 1 lands: measure with the stress test, then
+register goals by path (soldiers no job goals, workers no combat goals) and split NpcEntity into components.
+
 ## Next, in order
 
 1. Finish the play test above; fix what the user finds.

@@ -1,6 +1,7 @@
 package com.ancientempires.command;
 
 import com.ancientempires.AncientEmpires;
+import com.ancientempires.entity.npc.NpcChain;
 import com.ancientempires.entity.npc.NpcEntity;
 import com.ancientempires.entity.npc.NpcFactions;
 import com.ancientempires.entity.npc.NpcJobGoal;
@@ -36,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Locale;
+import java.util.UUID;
 import java.util.List;
 
 /**
@@ -83,6 +85,8 @@ public final class AeCommands
                                 .suggests((context, builder) -> SharedSuggestionProvider.suggest(
                                         Arrays.stream(NpcRank.values()).map(NpcRank::id), builder))
                                 .executes(AeCommands::rank)))
+                .then(Commands.literal("squad")
+                        .executes(AeCommands::squad))
                 .then(Commands.literal("level")
                         .executes(context -> level(context, -1))
                         .then(Commands.argument("level", IntegerArgumentType.integer(1, 100))
@@ -175,6 +179,38 @@ public final class AeCommands
         context.getSource().sendSuccess(() -> Component.translatable("commands.ancientempires.morale", count,
                 Component.translatable("gui.ancientempires.morale." + name)), false);
         return count;
+    }
+
+    /**
+     * The looked-at NPC's place in the chain of command: its leader, its unit
+     * (soldiers and officers, how many are here), its order (its own and the
+     * one it acts on), formation, and whether it is in formation now.
+     */
+    private static int squad(CommandContext<CommandSourceStack> context) throws CommandSyntaxException
+    {
+        NpcEntity npc = lookedAt(context.getSource().getPlayerOrException());
+        if (npc == null)
+        {
+            context.getSource().sendFailure(Component.translatable("commands.ancientempires.work.none"));
+            return 0;
+        }
+        NpcChain chain = npc.getChain();
+        NpcEntity leader = chain.leader();
+        Component leaderName = leader != null ? leader.getDisplayName()
+                : Component.translatable(chain.leaderId() == null ? "commands.ancientempires.squad.no_leader" : "commands.ancientempires.squad.leader_away");
+        int here = 0;
+        for (UUID id : chain.members())
+        {
+            here += context.getSource().getLevel().getEntity(id) instanceof NpcEntity ? 1 : 0;
+        }
+        int present = here;
+        context.getSource().sendSuccess(() -> Component.translatable("commands.ancientempires.squad", npc.getDisplayName(), npc.getRankName(), leaderName,
+                chain.soldierCount(), chain.officerCount(), present,
+                Component.translatable("order.ancientempires." + chain.order().id()),
+                Component.translatable("order.ancientempires." + chain.effectiveOrder().id()),
+                Component.translatable("formation.ancientempires." + chain.formation().id()),
+                Component.translatable(chain.formed() ? "commands.ancientempires.squad.formed" : "commands.ancientempires.squad.not_formed")), false);
+        return 1;
     }
 
     /** Sets the looked-at NPC's rank (admins). */

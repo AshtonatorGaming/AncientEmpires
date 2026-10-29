@@ -16,6 +16,7 @@ import com.ancientempires.inventory.NpcMenu;
 import com.ancientempires.gate.NpcGateGoal;
 import com.ancientempires.gate.NpcGateNavigation;
 import com.ancientempires.item.CaptureWandItem;
+import com.ancientempires.item.SignalFlagItem;
 import com.ancientempires.item.InsigniaItem;
 import com.ancientempires.item.WarHornItem;
 import com.ancientempires.registry.ModItems;
@@ -202,6 +203,7 @@ public class NpcEntity extends PathfinderMob
     /** The shield: raising, blocking, guard, bash, stagger. */
     private final NpcGuard guard = new NpcGuard(this);
     private final NpcMorale morale = new NpcMorale(this);
+    private final NpcChain chain = new NpcChain(this);
     /** The NPC spawner that made it (its home), its slot there, and whether it is a garrison. Not packed. */
     @Nullable
     private BlockPos spawnerPos;
@@ -442,6 +444,7 @@ public class NpcEntity extends PathfinderMob
         this.goalSelector.addGoal(1, new NpcBurningGoal(this));
         this.goalSelector.addGoal(1, new NpcSunGoal(this));
         this.goalSelector.addGoal(2, new NpcMeleeAttackGoal(this));
+        this.goalSelector.addGoal(3, new NpcFormationGoal(this));
         this.goalSelector.addGoal(3, new NpcHoldPositionGoal(this, 0.9D));
         this.goalSelector.addGoal(3, new NpcUpkeepGoal(this));
         this.goalSelector.addGoal(4, new NpcFollowOwnerGoal(this, 1.12D, 3.0F));
@@ -951,6 +954,12 @@ public class NpcEntity extends PathfinderMob
     }
 
     /** Morale: steady, wavering, routing, shattered, surrendered. */
+    /** This NPC's place in a chain of command (leader, unit, order, formation). */
+    public NpcChain getChain()
+    {
+        return this.chain;
+    }
+
     public NpcMorale getMorale()
     {
         return this.morale;
@@ -2145,6 +2154,8 @@ public class NpcEntity extends PathfinderMob
         this.sidearm.restore();
         this.mount.beforeRepack();
         this.releaseBed();
+        // Out of any unit: placed again it is a new NPC, and its unit stands alone meanwhile.
+        this.chain.depart(false);
         // A repacked NPC forgets its home: placed again, the spot it lands on is its new one.
         ItemStack packed = this.createPackedItem(false);
         if (packed.isEmpty())
@@ -2171,6 +2182,7 @@ public class NpcEntity extends PathfinderMob
         this.sidearm.restore();
         this.mount.beforeRepack();
         this.releaseBed();
+        this.chain.depart(false);
         ItemStack scroll = this.createPackedItem(false);
         if (!scroll.isEmpty())
         {
@@ -2734,6 +2746,7 @@ public class NpcEntity extends PathfinderMob
         this.targetMemory.tick();
         this.sidearm.tick();
         this.guard.tick();
+        this.chain.tick();
         NpcCommand.tick(this);
         if (this.inspiredStrength > 0.0F && !this.isInspired())
         {
@@ -2850,7 +2863,7 @@ public class NpcEntity extends PathfinderMob
         {
             return insignia.promote(this, player, player.getItemInHand(hand));
         }
-        if (player.getItemInHand(hand).getItem() instanceof CaptureWandItem)
+        if (player.getItemInHand(hand).getItem() instanceof CaptureWandItem || player.getItemInHand(hand).getItem() instanceof SignalFlagItem)
         {
             // The wand captures this NPC (its interactLivingEntity), rather than opening the inventory.
             return InteractionResult.PASS;
@@ -3004,7 +3017,9 @@ public class NpcEntity extends PathfinderMob
         {
             // A commander falls: command passes to the best soldier near it, and its army feels it.
             float command = NpcCommand.strength(this);
-            NpcCommand.succeed(this, source.getEntity() instanceof LivingEntity killer ? killer : null);
+            // The unit's next in line takes this NPC's place in the chain, and its command.
+            NpcEntity heir = this.chain.depart(true);
+            NpcCommand.succeed(this, source.getEntity() instanceof LivingEntity killer ? killer : null, heir);
             NpcMorale.onDeath(this, command, source.getEntity());
         }
         if (this.garrison && !this.isRemoved() && !this.dead && this.spawner() != null)
@@ -3094,6 +3109,7 @@ public class NpcEntity extends PathfinderMob
         this.sidearm.save(tag);
         this.mount.save(tag);
         this.morale.save(tag);
+        this.chain.save(tag);
         if (this.worksite != null)
         {
             tag.putLong(WORKSITE_KEY, this.worksite.asLong());
@@ -3218,6 +3234,7 @@ public class NpcEntity extends PathfinderMob
         this.sidearm.load(tag);
         this.mount.load(tag);
         this.morale.load(tag);
+        this.chain.load(tag);
         this.worksite = tag.contains(WORKSITE_KEY) ? BlockPos.of(tag.getLong(WORKSITE_KEY)) : null;
         this.hungry = tag.getBoolean(HUNGRY_KEY);
         this.nextMeal = tag.contains(NEXT_MEAL_KEY) ? tag.getLong(NEXT_MEAL_KEY) : -1L;
