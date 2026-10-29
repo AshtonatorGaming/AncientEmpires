@@ -19,9 +19,9 @@ same thing. Decisions marked **?** are the user's to make before building.
 | Faction traders (FactionTrade): buy and sell; the only way to raise standing | Nothing | **Missing**: faction trading |
 | Bard (instrument, sings: morale) | Role label only | **Missing**: bard |
 | Town Hall alarm (`AlarmResponse`): civilians hide, soldiers muster | War Horn calls | Partial: no hall alarm |
-| Recruiting Station (craft NPCs from a station) | Settler recipe, Settlers' Post | Different; **?** add a recruiting station |
+| Recruiting Station (`npc/tile/TileRecruitingStation` in the 1.12 jar) | Settler recipe, Settlers' Post | To look up: the user does not remember it; check AW's code before deciding |
 | Siege engineer (NPC crews a vehicle; `ai/vehicle`) | Nothing | Missing, needs vehicles |
-| Spellcaster (Electroblob's Wizardry compat) | Nothing | Skip unless a magic mod is in the pack **?** |
+| Spellcaster (Electroblob's Wizardry compat) | Nothing | **Port** (decided): spellcaster NPCs through a magic-mod bridge |
 | AW weapons (club, ice spear, macuahuitl, pitchfork, scythe, sickle, shields, reach weapons) | Remapped to Spartan / vanilla | Done by remap (decided earlier) |
 | Leveling, food bundle, coins, horses | Ours | Done (beyond AW) |
 
@@ -37,7 +37,7 @@ same thing. Decisions marked **?** are the user's to make before building.
 | Torque power (hand crank, Stirling, waterwheel, windmill, shafts, flywheels) running worksites without NPCs | Nothing | Skip (decided): worksites stay NPC-run |
 | Warehouse (storage, interface, stock viewer, crafting station, stock linker): one networked store workers fill and players order from | Nothing | **Port** (decided) |
 | Mailbox (routed item delivery) | Nothing | With couriers **?** |
-| Chunk loaders | Nothing | **?** Port, or leave to FTB Chunks |
+| Chunk loaders | Nothing | **Port** (decided), behind a config setting |
 
 ## Core (AW's `core` module)
 
@@ -46,7 +46,7 @@ same thing. Decisions marked **?** are the user's to make before building.
 | Research (research station, book, notes, quill) gating recipes | Nothing (upgrades without research) | **Reworked** (decided): scholars advancing buffs, not recipe locks; see Decisions |
 | Engineering station (crafting bench that remembers recipes) | Nothing | Skip with recipe-gated research |
 | Manual (in-game guide) | Nothing | **Missing**: onboarding needs one |
-| Backpack item | Nothing | Missing (small; storage mods cover it) **?** |
+| Backpack item (AW's couriers carried their goods in one) | Every NPC has a 3x3 backpack | Covered: couriers use their own backpack, maybe enlarged by an item |
 | Hammer (lock and turn worksites), info tool | Sneak-click actions | Partial |
 
 ## Structures (AW's `structure` module)
@@ -75,6 +75,11 @@ same thing. Decisions marked **?** are the user's to make before building.
   slowly push toward advancements that grant buffs and new options (better work speed, drill, morale, building
   bonuses, and the like) rather than unlocking crafting. A Worker-path scholar at a study (or a priest at a shrine)
   gains progress over time; the player picks the next advancement. Designed after parity; not a parity item.
+- **Spellcasters (Wizardry): port.** Electroblob's Wizardry has no official 1.20.1 Forge release that I know of; check
+  what the pack has (Iron's Spells 'n Books is the big 1.20.1 one) and build one bridge with an adapter per mod.
+- **Backpacks:** AW's couriers stored goods in a backpack item; ours carry everything in the backpack every NPC has.
+- **Chunk loaders: yes**, behind a setting. **Recruiting station:** to look up in AW's code.
+- Research ideas, raw: docs/research-ideas.md.
 - **Siege vehicles: port**, so structures' engines work, last in the parity order. Later, compat so NPC crews can use
   other mods' more refined siege equipment.
 
@@ -95,4 +100,4 @@ Small and clear first, big decisions after the user rules on them:
 5. Towns and the missing site types.
 6. The warehouse.
 7. Siege vehicles and NPC crews.
-8. Smaller calls still open: chunk loaders, the backpack item, the recruiting station, spellcasters.
+8. Spellcasters (a magic-mod bridge), chunk loaders (config-gated), the recruiting station once looked up.
