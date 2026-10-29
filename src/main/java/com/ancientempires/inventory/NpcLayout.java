@@ -44,6 +44,8 @@ public final class NpcLayout
     public static final int PLAYER_Y = BUTTON_Y + BUTTON_SIZE + 12;
     public static final int HOTBAR_Y = PLAYER_Y + 3 * SLOT + 4;
     public static final int SECTION_LABEL_H = 10;
+    /** The two order slots, under the backpack. */
+    public static final int ORDERS_Y = BACKPACK_Y + 3 * SLOT + 4;
     public static final int BACKPACK_LABEL_Y = BACKPACK_Y - SECTION_LABEL_H - 1;
     public static final int PLAYER_LABEL_Y = PLAYER_Y - SECTION_LABEL_H - 1;
 
@@ -66,11 +68,16 @@ public final class NpcLayout
         {
             return CROSS_X + SLOT;
         }
+        if (index == NpcInventory.ORDERS_SLOT || index == NpcInventory.UPKEEP_SLOT)
+        {
+            // The pair sits centred under the 3x3 backpack, half a cell in from either side.
+            return BACKPACK_X + SLOT / 2 + (index - NpcInventory.ORDERS_SLOT) * SLOT;
+        }
         if (index < NpcInventory.SLOT_COUNT)
         {
             return BACKPACK_X + (index - NpcInventory.BACKPACK_START) % 3 * SLOT;
         }
-        int player = index - NpcInventory.SLOT_COUNT;
+        int player = index - NpcInventory.CONTAINER_SIZE;
         if (player < 27)
         {
             return PLAYER_X + player % 9 * SLOT;
@@ -96,11 +103,15 @@ public final class NpcLayout
         {
             return CROSS_Y + 3 * SLOT;
         }
+        if (index == NpcInventory.ORDERS_SLOT || index == NpcInventory.UPKEEP_SLOT)
+        {
+            return ORDERS_Y;
+        }
         if (index < NpcInventory.SLOT_COUNT)
         {
             return BACKPACK_Y + (index - NpcInventory.BACKPACK_START) / 3 * SLOT;
         }
-        int player = index - NpcInventory.SLOT_COUNT;
+        int player = index - NpcInventory.CONTAINER_SIZE;
         if (player < 27)
         {
             return PLAYER_Y + player / 9 * SLOT;

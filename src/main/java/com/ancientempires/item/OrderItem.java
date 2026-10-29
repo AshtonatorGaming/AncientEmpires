@@ -154,6 +154,21 @@ public abstract class OrderItem extends Item
         return InteractionResult.CONSUME;
     }
 
+    /** Each stop of {@code order} as a line ("1. 120, 64, -30: take everything (any item)"), for screens. */
+    public static List<Component> lines(ItemStack order)
+    {
+        List<Component> lines = new ArrayList<>();
+        if (order.getItem() instanceof OrderItem kind)
+        {
+            List<Stop> stops = stops(order);
+            for (int i = 0; i < stops.size(); i++)
+            {
+                lines.add(describe(i, stops.get(i), kind));
+            }
+        }
+        return lines;
+    }
+
     private static Component describe(int index, Stop stop, OrderItem kind)
     {
         Component filter = stop.filter().isEmpty() ? Component.translatable("item.ancientempires.order.any") : stop.filter().getHoverName();

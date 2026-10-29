@@ -47,38 +47,41 @@ final class NpcStatsSheet extends NpcPopupScreen
     @Override
     protected void renderPanel(GuiGraphics graphics, int mouseX, int mouseY, float partialTick)
     {
-        Font font = this.font;
-        int left = this.left + 6;
-        int inner = WIDTH - 12;
-        int line = this.top + 6;
-        Component title = this.npc.getRank() != NpcRank.SOLDIER
-                ? Component.translatable("gui.ancientempires.stats.title_rank", this.npc.getDisplayName(), this.npc.getRankName())
-                : this.npc.getDisplayName();
+        draw(graphics, this.font, this.menu, this.npc, this.left + 6, this.top + 6, WIDTH - 12);
+    }
+
+    /** The sheet at ({@code left}, {@code top}), {@code inner} wide; the popup and the NPC screen's Sheet tab draw the same. */
+    static void draw(GuiGraphics graphics, Font font, NpcMenu menu, NpcEntity npc, int left, int top, int inner)
+    {
+        int line = top;
+        Component title = npc.getRank() != NpcRank.SOLDIER
+                ? Component.translatable("gui.ancientempires.stats.title_rank", npc.getDisplayName(), npc.getRankName())
+                : npc.getDisplayName();
         FitText.draw(graphics, font, title.getString(), left, line, inner, 10, GOLD, true, true);
         line += LINE + 2;
-        if (this.npc.levels())
+        if (npc.levels())
         {
-            double need = this.npc.getXpToNext();
-            String band = Component.translatable(NpcEntity.bandKey(this.npc.getNpcPath(), this.npc.getLevelBand())).getString();
+            double need = npc.getXpToNext();
+            String band = Component.translatable(NpcEntity.bandKey(npc.getNpcPath(), npc.getLevelBand())).getString();
             String level = need > 0.0D
-                    ? Component.translatable("gui.ancientempires.stats.level", band, this.npc.getLevel(), (int) this.npc.getXp(), (int) Math.ceil(need)).getString()
-                    : Component.translatable("gui.ancientempires.stats.level_max", band, this.npc.getLevel()).getString();
+                    ? Component.translatable("gui.ancientempires.stats.level", band, npc.getLevel(), (int) npc.getXp(), (int) Math.ceil(need)).getString()
+                    : Component.translatable("gui.ancientempires.stats.level_max", band, npc.getLevel()).getString();
             FitText.draw(graphics, font, level, left, line, inner, 10, INK, false, true);
             line += LINE;
-            bar(graphics, left, line, inner, need > 0.0D ? this.npc.getXp() / need : 1.0D, XP);
+            bar(graphics, left, line, inner, need > 0.0D ? npc.getXp() / need : 1.0D, XP);
             line += 6;
-            if (!this.npc.getNpcPath().combat())
+            if (!npc.getNpcPath().combat())
             {
-                int faster = (int) Math.round((this.npc.getWorkSpeed() - 1.0D) * 100.0D);
+                int faster = (int) Math.round((npc.getWorkSpeed() - 1.0D) * 100.0D);
                 FitText.draw(graphics, font, Component.translatable("gui.ancientempires.stats.work", faster).getString(),
                         left, line, inner, 10, DIM, false, true);
                 line += LINE;
             }
         }
-        int morale = this.menu.stat(NpcMenu.STAT_MORALE);
+        int morale = menu.stat(NpcMenu.STAT_MORALE);
         if (morale >= 0)
         {
-            NpcMorale.State state = NpcMorale.State.values()[Math.min(this.menu.stat(NpcMenu.STAT_MORALE_STATE), NpcMorale.State.values().length - 1)];
+            NpcMorale.State state = NpcMorale.State.values()[Math.min(menu.stat(NpcMenu.STAT_MORALE_STATE), NpcMorale.State.values().length - 1)];
             String label = Component.translatable("gui.ancientempires.stats.morale",
                     Component.translatable("gui.ancientempires.morale." + state.name().toLowerCase(Locale.ROOT)), morale / 10).getString();
             FitText.draw(graphics, font, label, left, line, inner, 10, INK, false, true);
@@ -87,7 +90,7 @@ final class NpcStatsSheet extends NpcPopupScreen
             mark(graphics, left, line, inner, AncientEmpiresConfig.moraleWaverBelow / 100.0D);
             mark(graphics, left, line, inner, AncientEmpiresConfig.moraleRoutBelow / 100.0D);
             line += 6;
-            int reasons = this.menu.stat(NpcMenu.STAT_MORALE_REASONS);
+            int reasons = menu.stat(NpcMenu.STAT_MORALE_REASONS);
             int shown = 0;
             for (int reason = 0; reason < NpcMorale.REASON_COUNT && shown < MAX_REASONS; reason++)
             {
@@ -111,8 +114,8 @@ final class NpcStatsSheet extends NpcPopupScreen
             }
             line += 2;
         }
-        int guard = this.menu.stat(NpcMenu.STAT_GUARD);
-        int guardMax = this.menu.stat(NpcMenu.STAT_GUARD_MAX);
+        int guard = menu.stat(NpcMenu.STAT_GUARD);
+        int guardMax = menu.stat(NpcMenu.STAT_GUARD_MAX);
         if (guard >= 0 && guardMax > 0)
         {
             FitText.draw(graphics, font, Component.translatable("gui.ancientempires.stats.guard", guard / 10, guardMax / 10).getString(),
@@ -121,9 +124,9 @@ final class NpcStatsSheet extends NpcPopupScreen
             bar(graphics, left, line, inner, guard / (double) guardMax, GUARD);
             line += 6;
         }
-        if (this.npc.isOwnedNpc())
+        if (npc.isOwnedNpc())
         {
-            boolean hungry = this.menu.stat(NpcMenu.STAT_HUNGRY) != 0;
+            boolean hungry = menu.stat(NpcMenu.STAT_HUNGRY) != 0;
             FitText.draw(graphics, font, Component.translatable(hungry ? "gui.ancientempires.stats.hungry" : "gui.ancientempires.stats.fed").getString(),
                     left, line, inner, 10, hungry ? 0xFFE08A70 : DIM, false, true);
         }

@@ -9,6 +9,14 @@ import com.ancientempires.inventory.NpcLayout;
 import com.ancientempires.inventory.NpcMenu;
 import com.ancientempires.network.ModNetwork;
 import com.ancientempires.registry.ModMenus;
+import com.ancientempires.registry.ModItems;
+import com.ancientempires.item.OrderItem;
+import net.minecraft.world.item.ItemStack;
+import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.item.Items;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
@@ -49,8 +57,17 @@ public class NpcScreen extends AbstractContainerScreen<NpcMenu>
     /** How long a sent name may take to come back before the field shows the NPC's name again. */
     private static final int NAME_SYNC_TICKS = 40;
 
+    /** The screen's pages, picked from the strip on the left: gear (the inventory), the character sheet, the orders. */
+    private enum Tab
+    {
+        GEAR, SHEET, ORDERS
+    }
+
     private final NpcEntityPreview preview;
     private final List<NpcButton> commands = new ArrayList<>();
+    private Tab tab = Tab.GEAR;
+    private NpcButton skinButton;
+    private NpcButton roleButton;
     private EditBox nameField;
     private boolean nameWasFocused;
     /** A name sent and not yet seen back from the server, and how long to wait for it. */
@@ -93,15 +110,19 @@ public class NpcScreen extends AbstractContainerScreen<NpcMenu>
 
         int frameX = this.leftPos + NpcLayout.PREVIEW_X;
         int frameY = this.topPos + NpcLayout.PREVIEW_Y;
-        this.addRenderableWidget(new NpcButton(frameX + NpcLayout.PREVIEW_W - 14, frameY + NpcLayout.PREVIEW_H - 14, 12, 12,
+        this.skinButton = this.addRenderableWidget(new NpcButton(frameX + NpcLayout.PREVIEW_W - 14, frameY + NpcLayout.PREVIEW_H - 14, 12, 12,
                 Component.translatable("gui.ancientempires.npc.skin"),
                 (graphics, x, y, width, height) -> NpcGui.iconCentered(graphics, NpcGui.Icon.SKIN, x, y, width, height, 8, 8),
                 this::openSkin)
                 .tooltip(Component.translatable("gui.ancientempires.npc.skin")));
         if (npc != null)
         {
-            this.addRenderableWidget(this.roleButton(npc, frameX + 2, frameY + NpcLayout.PREVIEW_H - 14));
+            this.roleButton = this.addRenderableWidget(this.roleButton(npc, frameX + 2, frameY + NpcLayout.PREVIEW_H - 14));
         }
+        this.tabButton(Tab.GEAR, new ItemStack(Items.IRON_CHESTPLATE), "gui.ancientempires.npc.tab.gear");
+        this.tabButton(Tab.SHEET, new ItemStack(Items.WRITABLE_BOOK), "gui.ancientempires.npc.tab.sheet");
+        this.tabButton(Tab.ORDERS, new ItemStack(ModItems.ROUTING_ORDER.get()), "gui.ancientempires.npc.tab.orders");
+        this.showTab(this.tab);
 
         this.commands.clear();
         this.command(NpcGui.Icon.FOLLOW, "gui.ancientempires.npc.follow", NpcMenu.BUTTON_FOLLOW, active(npc, NpcEntity::isFollowing));
@@ -116,6 +137,35 @@ public class NpcScreen extends AbstractContainerScreen<NpcMenu>
         this.commands.get(CREATIVE).visible = showCreative();
         this.commands.get(LEVY).visible = showLevy(npc);
         this.placeCommands();
+    }
+
+    /** A tab in the strip left of the panel, its icon an item. */
+    private void tabButton(Tab tab, ItemStack icon, String tooltip)
+    {
+        int x = this.leftPos - 22;
+        int y = this.topPos + 8 + tab.ordinal() * 22;
+        this.addRenderableWidget(new NpcButton(x, y, 20, 20, Component.translatable(tooltip),
+                (graphics, left, top, width, height) -> graphics.renderItem(icon, left + 2, top + 2),
+                pressed -> pressed == 0 && this.showTab(tab))
+                .fill(() -> this.tab == tab ? NpcGui.BUTTON_ON : NpcGui.BUTTON)
+                .tooltip(Component.translatable(tooltip)));
+    }
+
+    /** Shows a tab: the NPC's slots, the skin and role buttons only with the gear. */
+    private boolean showTab(Tab tab)
+    {
+        this.tab = tab;
+        boolean gear = tab == Tab.GEAR;
+        this.menu.setNpcSlotsShown(gear);
+        if (this.skinButton != null)
+        {
+            this.skinButton.visible = gear;
+        }
+        if (this.roleButton != null)
+        {
+            this.roleButton.visible = gear;
+        }
+        return true;
     }
 
     private void command(NpcGui.Icon icon, String tooltip, int buttonId, BooleanSupplier on)
@@ -396,6 +446,13 @@ public class NpcScreen extends AbstractContainerScreen<NpcMenu>
         this.renderBackground(graphics);
         super.render(graphics, mouseX, mouseY, partialTick);
         this.renderTooltip(graphics, mouseX, mouseY);
+        if (this.hoveredSlot != null && !this.hoveredSlot.hasItem() && this.hoveredSlot.isActive()
+                && (this.hoveredSlot.index == NpcInventory.ORDERS_SLOT || this.hoveredSlot.index == NpcInventory.UPKEEP_SLOT))
+        {
+            // What an empty order slot is for.
+            String key = this.hoveredSlot.index == NpcInventory.ORDERS_SLOT ? "gui.ancientempires.npc.orders_slot" : "gui.ancientempires.npc.upkeep_slot";
+            graphics.renderTooltip(this.font, this.font.split(Component.translatable(key), 180), mouseX, mouseY);
+        }
     }
 
     @Override
@@ -406,16 +463,94 @@ public class NpcScreen extends AbstractContainerScreen<NpcMenu>
         NpcGui.bevel(graphics, left, top, this.imageWidth, this.imageHeight, NpcGui.PARCHMENT);
         graphics.fill(left + NpcLayout.PREVIEW_X, top + NpcLayout.NAME_Y, left + NpcLayout.PREVIEW_X + NpcLayout.PREVIEW_W,
                 top + NpcLayout.NAME_Y + NpcLayout.NAME_H, NpcGui.INK);
-        NpcGui.bevel(graphics, left + NpcLayout.PREVIEW_X, top + NpcLayout.PREVIEW_Y, NpcLayout.PREVIEW_W, NpcLayout.PREVIEW_H, NpcGui.INK);
-        if (this.preview != null)
+        if (this.tab == Tab.GEAR)
         {
-            this.preview.render(graphics, left + NpcLayout.PREVIEW_X + NpcLayout.PREVIEW_ENTITY_X, top + NpcLayout.PREVIEW_Y + NpcLayout.PREVIEW_ENTITY_Y,
-                    NpcLayout.PREVIEW_ENTITY_W, NpcLayout.PREVIEW_ENTITY_H, mouseX, mouseY);
+            NpcGui.bevel(graphics, left + NpcLayout.PREVIEW_X, top + NpcLayout.PREVIEW_Y, NpcLayout.PREVIEW_W, NpcLayout.PREVIEW_H, NpcGui.INK);
+            if (this.preview != null)
+            {
+                this.preview.render(graphics, left + NpcLayout.PREVIEW_X + NpcLayout.PREVIEW_ENTITY_X, top + NpcLayout.PREVIEW_Y + NpcLayout.PREVIEW_ENTITY_Y,
+                        NpcLayout.PREVIEW_ENTITY_W, NpcLayout.PREVIEW_ENTITY_H, mouseX, mouseY);
+            }
+        }
+        else
+        {
+            this.renderPage(graphics, left, top, mouseX, mouseY);
         }
         for (int index = 0; index < this.menu.slots.size(); index++)
         {
-            this.renderCell(graphics, this.menu.slots.get(index), index, mouseX, mouseY);
+            Slot slot = this.menu.slots.get(index);
+            if (slot.isActive())
+            {
+                this.renderCell(graphics, slot, index, mouseX, mouseY);
+            }
         }
+    }
+
+    /** The page of the Sheet or Orders tab, over the area the gear takes on the Gear tab. */
+    private void renderPage(GuiGraphics graphics, int left, int top, int mouseX, int mouseY)
+    {
+        int x = left + NpcLayout.CROSS_X;
+        int y = top + NpcLayout.PREVIEW_Y;
+        int width = NpcLayout.WIDTH - NpcLayout.CROSS_X * 2;
+        int height = NpcLayout.BUTTON_Y - NpcLayout.PREVIEW_Y - 4;
+        NpcGui.bevel(graphics, x, y, width, height, NpcGui.INK);
+        NpcEntity npc = this.menu.getNpc();
+        if (npc == null)
+        {
+            return;
+        }
+        if (this.tab == Tab.SHEET)
+        {
+            // The NPC itself beside its sheet, so the page is about someone.
+            int previewW = 58;
+            if (this.preview != null)
+            {
+                this.preview.render(graphics, x + 2, y + 2, previewW, height - 4, mouseX, mouseY);
+            }
+            NpcStatsSheet.draw(graphics, this.font, this.menu, npc, x + previewW + 8, y + 4, width - previewW - 14);
+            return;
+        }
+        int inner = width - 12;
+        int line = y + 5;
+        line = this.orderSection(graphics, Component.translatable("gui.ancientempires.npc.orders_title"), this.orders(npc), x + 6, line, inner, 6);
+        line += 4;
+        this.orderSection(graphics, Component.translatable("gui.ancientempires.npc.upkeep_title"), npc.getInventory().upkeepItem(), x + 6, line, inner, 2);
+    }
+
+    /** The order the NPC works by: a Routing Order in hand (a courier's), else the orders slot's. */
+    private ItemStack orders(NpcEntity npc)
+    {
+        ItemStack hand = npc.getMainHandItem();
+        return hand.getItem() instanceof OrderItem ? hand : npc.getInventory().ordersItem();
+    }
+
+    /** A heading, the order's name (or what happens without one), and up to {@code most} of its stops. Returns the next line. */
+    private int orderSection(GuiGraphics graphics, Component heading, ItemStack order, int x, int line, int width, int most)
+    {
+        FitText.draw(graphics, this.font, heading.getString(), x, line, width, 10, NpcGui.GOLD, false, true);
+        line += 11;
+        if (order.isEmpty())
+        {
+            String none = heading.getString().equals(Component.translatable("gui.ancientempires.npc.upkeep_title").getString())
+                    ? "gui.ancientempires.npc.upkeep_none" : "gui.ancientempires.npc.orders_none";
+            FitText.draw(graphics, this.font, Component.translatable(none).getString(), x + 4, line, width - 4, 10, NpcGui.NAME_HINT, false, false);
+            return line + 11;
+        }
+        FitText.draw(graphics, this.font, order.getHoverName().getString(), x + 4, line, width - 4, 10, NpcGui.NAME_INK, false, true);
+        line += 11;
+        List<Component> stops = OrderItem.lines(order);
+        for (int i = 0; i < Math.min(most, stops.size()); i++)
+        {
+            FitText.draw(graphics, this.font, stops.get(i).getString(), x + 8, line, width - 8, 10, NpcGui.NAME_INK, false, false);
+            line += 10;
+        }
+        if (stops.size() > most)
+        {
+            FitText.draw(graphics, this.font, Component.translatable("item.ancientempires.order.more", stops.size() - most).getString(), x + 8, line, width - 8, 10,
+                    NpcGui.NAME_HINT, false, false);
+            line += 10;
+        }
+        return line;
     }
 
     /**
@@ -443,15 +578,32 @@ public class NpcScreen extends AbstractContainerScreen<NpcMenu>
             shareBottom = cell / 3 < 2;
             shareRight = cell % 3 < 2;
         }
+        else if (index < NpcInventory.CONTAINER_SIZE)
+        {
+            // The two order slots, a pair under the backpack.
+            shareBottom = false;
+            shareRight = index == NpcInventory.ORDERS_SLOT;
+        }
         else
         {
-            int cell = index - NpcInventory.SLOT_COUNT;
+            int cell = index - NpcInventory.CONTAINER_SIZE;
             // The hotbar stands apart from the three rows above it.
             shareBottom = cell < 18;
             shareRight = cell % 9 < 8;
         }
         boolean hover = mouseX >= x && mouseX < x + SLOT && mouseY >= y && mouseY < y + height;
         NpcGui.bevel(graphics, x, y, SLOT, height, hover ? NpcGui.SLOT_HOVER : NpcGui.SLOT_FILL, shareBottom, shareRight);
+        ResourceLocation icon = slot.hasItem() ? null : this.menu.emptyIcon(index);
+        if (icon != null && this.minecraft != null)
+        {
+            // A faint parchment-tinted outline of what goes here.
+            TextureAtlasSprite sprite = this.minecraft.getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(icon);
+            RenderSystem.enableBlend();
+            graphics.setColor(0.92F, 0.82F, 0.62F, 0.35F);
+            graphics.blit(this.leftPos + slot.x, this.topPos + slot.y, 0, 16, 16, sprite);
+            graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+            RenderSystem.disableBlend();
+        }
     }
 
     /** The cell's hover fill marks the slot; vanilla's white square over the item is left out. */
@@ -465,12 +617,15 @@ public class NpcScreen extends AbstractContainerScreen<NpcMenu>
     protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY)
     {
         int backpackW = 3 * SLOT;
-        FitText.draw(graphics, this.font, Component.translatable("gui.ancientempires.npc.backpack").getString(),
-                NpcLayout.BACKPACK_X, NpcLayout.BACKPACK_LABEL_Y, backpackW, NpcLayout.SECTION_LABEL_H, NpcGui.NAME_INK, true, true);
+        if (this.tab == Tab.GEAR)
+        {
+            FitText.draw(graphics, this.font, Component.translatable("gui.ancientempires.npc.backpack").getString(),
+                    NpcLayout.BACKPACK_X, NpcLayout.BACKPACK_LABEL_Y, backpackW, NpcLayout.SECTION_LABEL_H, NpcGui.NAME_INK, true, true);
+        }
         FitText.draw(graphics, this.font, Component.translatable("gui.ancientempires.npc.inventory").getString(),
                 NpcLayout.PLAYER_X, NpcLayout.PLAYER_LABEL_Y, 9 * SLOT, NpcLayout.SECTION_LABEL_H, NpcGui.NAME_INK, false, true);
         NpcEntity npc = this.menu.getNpc();
-        if (npc != null && npc.levels())
+        if (npc != null && npc.levels() && this.tab == Tab.GEAR)
         {
             // The level in the preview's top corner, so the role label below keeps its width for long titles.
             FitText.draw(graphics, this.font, Component.translatable("gui.ancientempires.npc.level_badge", npc.getLevel()).getString(),

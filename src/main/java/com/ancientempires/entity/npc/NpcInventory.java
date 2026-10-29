@@ -30,11 +30,23 @@ public class NpcInventory implements Container
     public static final int FEET_SLOT = 5;
     public static final int BACKPACK_START = 6;
     public static final int BACKPACK_SLOTS = 9;
+    /** The end of the backpack (equipment and backpack); every backpack loop runs to it. */
     public static final int SLOT_COUNT = BACKPACK_START + BACKPACK_SLOTS;
+    /**
+     * AW's order slots, after the backpack: the orders (a Routing, Work, Combat,
+     * or Trade order) and the upkeep order. Order items only; saved apart, so
+     * older saves load as they were.
+     */
+    public static final int ORDERS_SLOT = SLOT_COUNT;
+    public static final int UPKEEP_SLOT = SLOT_COUNT + 1;
+    /** Every slot: equipment, backpack, and the two order slots. */
+    public static final int CONTAINER_SIZE = SLOT_COUNT + 2;
     private static final String ITEMS_KEY = "Inventory";
+    private static final String ORDERS_KEY = "AeOrderSlots";
 
     private final NpcEntity npc;
     private final SimpleContainer backpack = new SimpleContainer(BACKPACK_SLOTS);
+    private final SimpleContainer orders = new SimpleContainer(2);
     /**
      * Bumped on every write through this container, including menu clicks that
      * change a stack in place. Not saved. Sidearm lookups rescan only when it moves.
@@ -62,12 +74,46 @@ public class NpcInventory implements Container
             list.add(entry);
         }
         tag.put(ITEMS_KEY, list);
+        ListTag orders = new ListTag();
+        for (int slot = 0; slot < this.orders.getContainerSize(); slot++)
+        {
+            if (!this.orders.getItem(slot).isEmpty())
+            {
+                CompoundTag entry = new CompoundTag();
+                entry.putByte("Slot", (byte) slot);
+                this.orders.getItem(slot).save(entry);
+                orders.add(entry);
+            }
+        }
+        tag.put(ORDERS_KEY, orders);
+    }
+
+    /** The order in the orders slot (empty for none). */
+    public ItemStack ordersItem()
+    {
+        return this.orders.getItem(0);
+    }
+
+    /** The order in the upkeep slot (empty for none). */
+    public ItemStack upkeepItem()
+    {
+        return this.orders.getItem(1);
     }
 
     public void load(CompoundTag tag)
     {
         this.backpackVersion++;
         this.backpack.clearContent();
+        this.orders.clearContent();
+        for (Tag order : tag.getList(ORDERS_KEY, Tag.TAG_COMPOUND))
+        {
+            CompoundTag entry = (CompoundTag) order;
+            int slot = entry.getByte("Slot") & 255;
+            if (slot < this.orders.getContainerSize())
+            {
+                this.orders.setItem(slot, ItemStack.of(entry));
+            }
+        }
         if (!tag.contains(ITEMS_KEY, Tag.TAG_LIST))
         {
             return;
@@ -122,6 +168,14 @@ public class NpcInventory implements Container
                 dropped.add(stack);
             }
         }
+        for (int slot = 0; slot < this.orders.getContainerSize(); slot++)
+        {
+            ItemStack stack = this.orders.removeItemNoUpdate(slot);
+            if (!stack.isEmpty())
+            {
+                dropped.add(stack);
+            }
+        }
         return dropped;
     }
 
@@ -158,7 +212,7 @@ public class NpcInventory implements Container
     @Override
     public int getContainerSize()
     {
-        return SLOT_COUNT;
+        return CONTAINER_SIZE;
     }
 
     @Override
@@ -171,7 +225,7 @@ public class NpcInventory implements Container
                 return false;
             }
         }
-        return this.backpack.isEmpty();
+        return this.backpack.isEmpty() && this.orders.isEmpty();
     }
 
     @Override
@@ -181,6 +235,10 @@ public class NpcInventory implements Container
         if (equipment != null)
         {
             return this.npc.getItemBySlot(equipment);
+        }
+        if (slot == ORDERS_SLOT || slot == UPKEEP_SLOT)
+        {
+            return this.orders.getItem(slot - ORDERS_SLOT);
         }
         int backpackSlot = slot - BACKPACK_START;
         if (backpackSlot < 0 || backpackSlot >= BACKPACK_SLOTS)
@@ -222,6 +280,10 @@ public class NpcInventory implements Container
         if (equipment != null)
         {
             return this.replaceEquipment(equipment, Integer.MAX_VALUE);
+        }
+        if (slot == ORDERS_SLOT || slot == UPKEEP_SLOT)
+        {
+            return this.orders.removeItemNoUpdate(slot - ORDERS_SLOT);
         }
         int backpackSlot = slot - BACKPACK_START;
         if (backpackSlot < 0 || backpackSlot >= BACKPACK_SLOTS)
@@ -291,7 +353,11 @@ public class NpcInventory implements Container
         else
         {
             int backpackSlot = slot - BACKPACK_START;
-            if (backpackSlot >= 0 && backpackSlot < BACKPACK_SLOTS)
+            if (slot == ORDERS_SLOT || slot == UPKEEP_SLOT)
+            {
+                this.orders.setItem(slot - ORDERS_SLOT, stack);
+            }
+            else if (backpackSlot >= 0 && backpackSlot < BACKPACK_SLOTS)
             {
                 this.backpack.setItem(backpackSlot, stack);
             }
@@ -339,5 +405,6 @@ public class NpcInventory implements Container
         }
         this.backpackVersion++;
         this.backpack.clearContent();
+        this.orders.clearContent();
     }
 }

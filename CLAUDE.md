@@ -178,6 +178,10 @@ instead of reflecting per call), Skirmisher thresholds (about 4.5 to 28 blocks).
   between its backpack and the container by the stop's mode (deposit or take: all, only the filter, all but the filter;
   orders in its backpack never leave it), works longer the more it moved (shorter with work speed), and passes stops
   that are gone, unreachable, in another dimension, or another player's worksite. Game test `courierCarriesAlongItsRoute`.
+- NPC screen (docs/npc-screen-design.md): tabs left of the panel (Gear, Sheet, Orders); other tabs hide the NPC slots by `Slot.isActive`.
+  AW's order slots: `NpcInventory.ORDERS_SLOT` (15) and `UPKEEP_SLOT` (16), after the backpack (`SLOT_COUNT` stays the backpack's end,
+  `CONTAINER_SIZE` 17 is every slot), order items only, saved as `AeOrderSlots`, dropped with the backpack. A Routing Order in
+  the orders slot also makes a courier. `FitEditBox.noShadow` for ink on parchment (the War Table's unit name).
 - Gates (S3, `gate/`; read from AW's decompiled 1.12 code): `GateEntity` spans its opening (`pos1`, `pos2` as given,
   one block thick) and, while closed, fills it with `GateProxyBlock`s (invisible, solid, unmineable; clicks and blows go
   to the gate), so collision and paths treat it as a wall; opening clears them. Seven `GateType`s: vertical wood and

@@ -191,7 +191,7 @@ public final class WarTableScreen extends Screen
     @Override
     protected void init()
     {
-        this.nameBox = new FitEditBox(this.font, 0, 0, 100, 14, Component.translatable("gui.ancientempires.army.unit_name"));
+        this.nameBox = new FitEditBox(this.font, 0, 0, 100, 14, Component.translatable("gui.ancientempires.army.unit_name")).noShadow();
         this.nameBox.setMaxLength(NpcArmy.NAME_LENGTH);
         this.nameBox.setBordered(false);
         this.nameBox.setTextColor(TEXT_DARK);

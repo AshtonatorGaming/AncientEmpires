@@ -2,6 +2,7 @@ package com.ancientempires.entity.npc;
 
 import com.ancientempires.AncientEmpires;
 import com.ancientempires.network.TradePacket;
+import com.ancientempires.item.RoutingOrderItem;
 import com.ancientempires.block.NpcUpkeep;
 import com.ancientempires.block.NpcSpawnerBlockEntity;
 import com.ancientempires.block.TownHallBlockEntity;
@@ -970,7 +971,13 @@ public class NpcEntity extends PathfinderMob
         {
             return "standard_bearer";
         }
-        return this.getNpcPath().roleId(this.getMainHandItem(), this.getOffhandItem(), this.entityData.get(DATA_TRADE));
+        String role = this.getNpcPath().roleId(this.getMainHandItem(), this.getOffhandItem(), this.entityData.get(DATA_TRADE));
+        if (role.equals(this.getNpcPath().id()) && this.inventory.ordersItem().getItem() instanceof RoutingOrderItem)
+        {
+            // Nothing in hand says otherwise: a Routing Order in the orders slot makes a courier.
+            return "courier";
+        }
+        return role;
     }
 
     /**

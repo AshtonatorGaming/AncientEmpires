@@ -51,14 +51,21 @@ final class NpcCourierGoal extends Goal
         this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }
 
+    /** The Routing Order it works by: in the main hand, else in the orders slot. */
+    private ItemStack order()
+    {
+        ItemStack hand = this.npc.getMainHandItem();
+        return hand.getItem() instanceof RoutingOrderItem ? hand : this.npc.getInventory().ordersItem();
+    }
+
     private List<OrderItem.Stop> route()
     {
-        return OrderItem.stops(this.npc.getMainHandItem());
+        return OrderItem.stops(this.order());
     }
 
     private boolean onDuty()
     {
-        return this.npc.getNpcPath() == NpcPath.WORKER && this.npc.getMainHandItem().getItem() instanceof RoutingOrderItem && this.npc.isOwnedNpc()
+        return this.npc.getNpcPath() == NpcPath.WORKER && this.order().getItem() instanceof RoutingOrderItem && this.npc.isOwnedNpc()
                 && this.npc.getTarget() == null && !this.npc.isFollowing() && !this.npc.getNeeds().hungry() && this.npc.level().isDay()
                 && !this.npc.level().isRaining();
     }

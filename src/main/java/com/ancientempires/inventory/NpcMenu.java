@@ -21,6 +21,9 @@ import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
+import com.ancientempires.item.OrderItem;
+
+import java.util.function.BooleanSupplier;
 
 /**
  * Hands, armor, and a 3x3 backpack, then the player's inventory. Slot positions
@@ -55,13 +58,14 @@ public class NpcMenu extends AbstractContainerMenu
     private final NpcEntity npc;
     private final Container inventory;
     private final ContainerData stats;
+    private boolean npcSlotsShown = true;
 
     public NpcMenu(int containerId, Inventory playerInventory, @Nullable NpcEntity npc)
     {
         super(ModMenus.NPC_INVENTORY.get(), containerId);
         this.npc = npc;
-        this.inventory = npc == null ? new SimpleContainer(NpcInventory.SLOT_COUNT) : npc.getInventory();
-        checkContainerSize(this.inventory, NpcInventory.SLOT_COUNT);
+        this.inventory = npc == null ? new SimpleContainer(NpcInventory.CONTAINER_SIZE) : npc.getInventory();
+        checkContainerSize(this.inventory, NpcInventory.CONTAINER_SIZE);
         this.inventory.startOpen(playerInventory.player);
         this.stats = npc == null || playerInventory.player.level().isClientSide ? new SimpleContainerData(STAT_COUNT) : new Stats(npc);
         this.addDataSlots(this.stats);
@@ -72,21 +76,22 @@ public class NpcMenu extends AbstractContainerMenu
         this.addGear(NpcInventory.CHEST_SLOT, EquipmentSlot.CHEST, true, InventoryMenu.EMPTY_ARMOR_SLOT_CHESTPLATE);
         this.addGear(NpcInventory.LEGS_SLOT, EquipmentSlot.LEGS, true, InventoryMenu.EMPTY_ARMOR_SLOT_LEGGINGS);
         this.addGear(NpcInventory.FEET_SLOT, EquipmentSlot.FEET, true, InventoryMenu.EMPTY_ARMOR_SLOT_BOOTS);
-        for (int slot = NpcInventory.BACKPACK_START; slot < NpcInventory.SLOT_COUNT; slot++)
+        for (int slot = NpcInventory.BACKPACK_START; slot < NpcInventory.CONTAINER_SIZE; slot++)
         {
-            this.addSlot(new Slot(this.inventory, slot, NpcLayout.slotX(slot), NpcLayout.slotY(slot)));
+            this.addSlot(new NpcSlot(this.inventory, slot, NpcLayout.slotX(slot), NpcLayout.slotY(slot), this::npcSlotsShown,
+                    slot >= NpcInventory.ORDERS_SLOT));
         }
         for (int row = 0; row < 3; row++)
         {
             for (int column = 0; column < 9; column++)
             {
-                int index = NpcInventory.SLOT_COUNT + column + row * 9;
+                int index = NpcInventory.CONTAINER_SIZE + column + row * 9;
                 this.addSlot(new Slot(playerInventory, column + row * 9 + 9, NpcLayout.slotX(index), NpcLayout.slotY(index)));
             }
         }
         for (int column = 0; column < 9; column++)
         {
-            int index = NpcInventory.SLOT_COUNT + 27 + column;
+            int index = NpcInventory.CONTAINER_SIZE + 27 + column;
             this.addSlot(new Slot(playerInventory, column, NpcLayout.slotX(index), NpcLayout.slotY(index)));
         }
     }
@@ -100,7 +105,26 @@ public class NpcMenu extends AbstractContainerMenu
 
     private void addGear(int index, EquipmentSlot equipmentSlot, boolean armorOnly, @Nullable ResourceLocation icon)
     {
-        this.addSlot(new GearSlot(this.inventory, index, this.npc, equipmentSlot, armorOnly, icon, NpcLayout.slotX(index), NpcLayout.slotY(index)));
+        this.addSlot(new GearSlot(this.inventory, index, this.npc, equipmentSlot, armorOnly, icon, NpcLayout.slotX(index), NpcLayout.slotY(index),
+                this::npcSlotsShown));
+    }
+
+    /** The picture an empty equipment slot shows (vanilla's armour and shield outlines), or null. */
+    @Nullable
+    public ResourceLocation emptyIcon(int index)
+    {
+        return index >= 0 && index < this.slots.size() && this.slots.get(index) instanceof GearSlot gear && gear.icon != null ? gear.icon.getSecond() : null;
+    }
+
+    /** Whether the NPC's own slots are shown (the screen's Gear tab); other tabs hide them, and hidden slots take no clicks. */
+    public boolean npcSlotsShown()
+    {
+        return this.npcSlotsShown;
+    }
+
+    public void setNpcSlotsShown(boolean shown)
+    {
+        this.npcSlotsShown = shown;
     }
 
     /** A stat for the panel: morale and guard are tenths, -1 when the NPC has none. */
@@ -192,9 +216,9 @@ public class NpcMenu extends AbstractContainerMenu
         ItemStack stack = gear ? slot.getItem().copy() : slot.getItem();
         ItemStack original = stack.copy();
         boolean moved;
-        if (index < NpcInventory.SLOT_COUNT)
+        if (index < NpcInventory.CONTAINER_SIZE)
         {
-            moved = this.moveItemStackTo(stack, NpcInventory.SLOT_COUNT, this.slots.size(), true);
+            moved = this.moveItemStackTo(stack, NpcInventory.CONTAINER_SIZE, this.slots.size(), true);
         }
         else
         {
@@ -223,6 +247,15 @@ public class NpcMenu extends AbstractContainerMenu
     private boolean moveToNpc(ItemStack stack)
     {
         int before = stack.getCount();
+        if (stack.getItem() instanceof OrderItem)
+        {
+            // Orders go to the order slots first.
+            this.moveItemStackTo(stack, NpcInventory.ORDERS_SLOT, NpcInventory.CONTAINER_SIZE, false);
+            if (stack.isEmpty())
+            {
+                return true;
+            }
+        }
         EquipmentSlot preferred = Mob.getEquipmentSlotForItem(stack);
         if (preferred.getType() == EquipmentSlot.Type.ARMOR || preferred == EquipmentSlot.OFFHAND)
         {
@@ -292,9 +325,13 @@ public class NpcMenu extends AbstractContainerMenu
         @Nullable
         private final Pair<ResourceLocation, ResourceLocation> icon;
 
-        private GearSlot(Container container, int index, @Nullable NpcEntity npc, EquipmentSlot equipmentSlot, boolean armorOnly, @Nullable ResourceLocation icon, int x, int y)
+        private final BooleanSupplier shown;
+
+        private GearSlot(Container container, int index, @Nullable NpcEntity npc, EquipmentSlot equipmentSlot, boolean armorOnly, @Nullable ResourceLocation icon, int x, int y,
+                BooleanSupplier shown)
         {
             super(container, index, x, y);
+            this.shown = shown;
             this.npc = npc;
             this.equipmentSlot = equipmentSlot;
             this.armorOnly = armorOnly;
@@ -359,11 +396,50 @@ public class NpcMenu extends AbstractContainerMenu
             return this.armorOnly ? 1 : super.getMaxStackSize();
         }
 
+        /** The empty-slot picture is drawn faint by the screen ({@link #emptyIcon}); vanilla's full-strength one looked burned into the cell. */
         @Override
         @Nullable
         public Pair<ResourceLocation, ResourceLocation> getNoItemIcon()
         {
-            return this.icon;
+            return null;
+        }
+
+        @Override
+        public boolean isActive()
+        {
+            return this.shown.getAsBoolean();
+        }
+    }
+
+    /** A backpack or order slot, hidden with the Gear tab; an order slot takes one order item. */
+    private static final class NpcSlot extends Slot
+    {
+        private final BooleanSupplier shown;
+        private final boolean order;
+
+        private NpcSlot(Container container, int index, int x, int y, BooleanSupplier shown, boolean order)
+        {
+            super(container, index, x, y);
+            this.shown = shown;
+            this.order = order;
+        }
+
+        @Override
+        public boolean mayPlace(ItemStack stack)
+        {
+            return !this.order || stack.getItem() instanceof OrderItem;
+        }
+
+        @Override
+        public int getMaxStackSize()
+        {
+            return this.order ? 1 : super.getMaxStackSize();
+        }
+
+        @Override
+        public boolean isActive()
+        {
+            return this.shown.getAsBoolean();
         }
     }
 }
