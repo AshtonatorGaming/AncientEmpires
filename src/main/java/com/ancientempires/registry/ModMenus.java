@@ -1,5 +1,6 @@
 package com.ancientempires.registry;
 
+import com.ancientempires.inventory.TradeOrderMenu;
 import com.ancientempires.AncientEmpires;
 import com.ancientempires.inventory.NpcMenu;
 import com.ancientempires.inventory.NpcSpawnerMenu;
@@ -25,6 +26,10 @@ public final class ModMenus
             () -> IForgeMenuType.create(NpcSpawnerMenu::fromNetwork));
     public static final RegistryObject<MenuType<WorksiteMenu>> WORKSITE = MENUS.register("worksite",
             () -> IForgeMenuType.create(WorksiteMenu::fromNetwork));
+
+    /** The Trade Order's goods editor, opened from the hand it is held in. */
+    public static final RegistryObject<MenuType<TradeOrderMenu>> TRADE_ORDER = MENUS.register("trade_order",
+            () -> IForgeMenuType.create(TradeOrderMenu::fromNetwork));
 
     private ModMenus()
     {

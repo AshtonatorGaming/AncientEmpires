@@ -1,5 +1,6 @@
 package com.ancientempires.registry;
 
+import com.ancientempires.block.FruitFarmBlock;
 import com.ancientempires.AncientEmpires;
 import com.ancientempires.block.AnimalPenBlock;
 import com.ancientempires.block.CoinStackBlock;
@@ -83,6 +84,12 @@ public final class ModBlocks
 
     public static final RegistryObject<Block> CROP_FARM = BLOCKS.register("crop_farm",
             () -> new CropFarmBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOD)
+                    .strength(2.5F)
+                    .sound(SoundType.WOOD)));
+
+    public static final RegistryObject<Block> FRUIT_FARM = BLOCKS.register("fruit_farm",
+            () -> new FruitFarmBlock(BlockBehaviour.Properties.of()
                     .mapColor(MapColor.WOOD)
                     .strength(2.5F)
                     .sound(SoundType.WOOD)));

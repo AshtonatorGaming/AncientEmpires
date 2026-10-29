@@ -15,9 +15,9 @@ same thing. Decisions marked **?** are the user's to make before building.
 | Work Order: a list of worksites with times | `WorkOrderItem` | Done 2026-10-29: the first listed site of its trade (no rota or times yet) |
 | Upkeep Order: where to eat | `UpkeepOrderItem` | Done 2026-10-29: a Town Hall or any container (a chest) |
 | Routing Order + Courier: carries items between chests on a route | `RoutingOrderItem`, `NpcCourierGoal` | Done 2026-10-29: six of AW's twelve modes (all, only, except; each way) |
-| Trade Order + Trader: player-owned trader runs a trade route (POTrade) | Nothing | **Missing**: owned trader |
+| Trade Order + Trader: player-owned trader runs a trade route (POTrade) | `TradeOrderItem`, `NpcShop`, the goods editor | Done 2026-10-29: sells from its backpack; its round banks takings, restocks, keeps shop. The order also writes or copies a faction trader's goods (AW's creative editor) |
 | Faction traders (FactionTrade): buy and sell; the only way to raise standing | `NpcTrades`, `TradeScreen`, the Coin Purse | Done 2026-10-29: template traders keep AW's goods; coins by worth through a purse |
-| Bard (instrument, sings: morale) | Role label only | **Missing**: bard |
+| Bard (instrument, sings: morale) | `InstrumentItem` (lute, flute, harp, drum), `NpcBardGoal` | Done 2026-10-29: AW's six songs when a player is near; beyond AW, a song lifts allies' morale and work pace. Faction bards carry instruments |
 | Town Hall alarm (`AlarmResponse`): civilians hide, soldiers muster | `TownHallBlock` alarm, `NpcAlarmGoal` | Done 2026-10-29: redstone-powered hall; civilians to home or hall (`upkeep.alarmShelter`), soldiers muster. Later: an inner sanctum for great threats |
 | Recruiting Station (`npc/tile/TileRecruitingStation` in the 1.12 jar) | Settler recipe, Settlers' Post | To look up: the user does not remember it; check AW's code before deciding |
 | Siege engineer (NPC crews a vehicle; `ai/vehicle`) | Nothing | Missing, needs vehicles |
@@ -30,7 +30,7 @@ same thing. Decisions marked **?** are the user's to make before building.
 | AW | Ours | Status |
 | --- | --- | --- |
 | Crop farm, tree farm, animal farm, fish farm, quarry | By hand, with areas and upgrades | Done |
-| Fruit farm (cocoa, melons and pumpkins picked, berries) | Nothing | **Missing** (small) |
+| Fruit farm (cocoa, melons and pumpkins picked, berries) | `FruitFarmBlock`, `NpcFruitPickerGoal` | Done 2026-10-29: a hoe worker without a crop farm (or with a Work Order naming it) picks cocoa (replanted), berries, glow berries, melons, pumpkins; sets cocoa on jungle logs |
 | Auto crafting station (a worker crafts a set recipe) | Cook only | **Missing**: craftsman |
 | Ore processor | Nothing | Missing (small) |
 | Worksite upgrades | Ours | Done |

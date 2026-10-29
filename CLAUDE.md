@@ -192,6 +192,24 @@ instead of reflecting per call), Skirmisher thresholds (about 4.5 to 28 blocks).
   (`NpcPatrolGoal`, priority 4, soldiers: points walked in turn day and night, "stand watch" waits 10 s; not under a unit
   order other than Free, following, holding, or broken). Placeholder icons are vanilla banner patterns. Game test
   `soldierWalksItsPatrol`.
+- Owned trader (AW parity): `TradeOrderItem` holds goods (`AeGoods`, up to 16 trades of nine stacks a side) and a round
+  (stops: trade = bank, restock, keep shop; shop; bank; restock). A Worker-path NPC with it (main hand or orders slot) is a
+  trader (`NpcShop`): everyone but its owner trades by right-click (the owner sneaks), selling only what its backpack holds,
+  the price going into the backpack (worked out on a copy first, so nothing is lost when it does not fit). The round runs
+  in `NpcCourierGoal`: banks everything but the goods it sells, restocks `trade.restockUses` trades' worth, keeps shop
+  `trade.shopTicks` facing customers. Used in the air the order opens its goods editor (`TradeOrderMenu`, ghost slots:
+  click sets, right click adds one, empty hand clears). An admin uses it on a faction trader to write the goods in
+  (`NpcTrades.setGoods`, stock kept per row), sneaking to copy them out. Game test `ownedTraderRestocksAndSells`.
+- Bard (AW parity): `InstrumentItem` (lute, flute, harp, drum; AW's textures and recipes; a player plays a note). An NPC holding
+  one (Worker path, or a faction's bard, whose roster rows now carry instruments) plays one of AW's six songs
+  (`sounds/bard`, streamed, lengths from the files) when a player is within `bard.listenRange`, strumming, then rests
+  `pauseMin` to `pauseMax`; broken off, the song is stopped for listeners. Beyond AW, every `pulseTicks` its allies within
+  `bard.range` hear it (`NpcEntity.hearSong`): `moraleBonus` (reason 16, synced in a second stat as container data is
+  shorts) and `workBonus`. Game test `bardCheersItsOwnPeople`.
+- Fruit farm (AW parity): `FruitFarmBlock`, `NpcFruitPickerGoal`, the hoe's second trade (`NpcJobGoal` runs the first trade
+  for the tool that finds work). Picks cocoa (a bean set back), sweet berries and glow berries (left growing), melons and
+  pumpkins, from two below to seven above the block; sets carried cocoa beans (its supply) on jungle logs. Game test
+  `fruitPickerPicksBerries`.
 - Town Hall alarm (AW parity): redstone power on a hall sounds it (a bell, a message to the owner); scheduled block
   ticks every 40 call its owner's NPCs within `upkeep.range` (`NpcEntity.alarm`, held 100 ticks, not saved), so an idle
   hall costs nothing. `NpcAlarmGoal` (priority 2): civilians shelter at home or the hall (`upkeep.alarmShelter`), soldiers

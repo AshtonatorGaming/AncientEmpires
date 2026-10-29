@@ -41,6 +41,11 @@ public final class ModCreativeTabs
                         output.accept(ModItems.COIN_ANCIENT.get());
                         output.accept(ModItems.COIN_PURSE.get());
                         output.accept(ModItems.ROUTING_ORDER.get());
+                        output.accept(ModItems.TRADE_ORDER.get());
+                        output.accept(ModItems.INSTRUMENT_LUTE.get());
+                        output.accept(ModItems.INSTRUMENT_FLUTE.get());
+                        output.accept(ModItems.INSTRUMENT_HARP.get());
+                        output.accept(ModItems.INSTRUMENT_DRUM.get());
                         output.accept(ModItems.WORK_ORDER.get());
                         output.accept(ModItems.UPKEEP_ORDER.get());
                         output.accept(ModItems.COMBAT_ORDER.get());
@@ -58,6 +63,7 @@ public final class ModCreativeTabs
                         output.accept(ModItems.SETTLERS_POST.get());
                         output.accept(ModItems.TOWN_HALL.get());
                         output.accept(ModItems.CROP_FARM.get());
+                        output.accept(ModItems.FRUIT_FARM.get());
                         output.accept(ModItems.TREE_FARM.get());
                         output.accept(ModItems.QUARRY.get());
                         output.accept(ModItems.ANIMAL_PEN.get());

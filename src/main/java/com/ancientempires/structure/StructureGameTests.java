@@ -1,5 +1,12 @@
 package com.ancientempires.structure;
 
+import com.ancientempires.entity.npc.NpcJobGoal;
+import com.mojang.authlib.GameProfile;
+import net.minecraft.world.level.block.SweetBerryBushBlock;
+import com.ancientempires.block.FruitFarmBlockEntity;
+import com.ancientempires.entity.npc.NpcBardGoal;
+import com.ancientempires.item.TradeOrderItem;
+import com.ancientempires.entity.npc.NpcShop;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import com.ancientempires.entity.npc.NpcInventory;
 import com.ancientempires.entity.npc.NpcRecord;
@@ -633,7 +640,7 @@ public final class StructureGameTests
             }
         }
         AABB field = new AABB(helper.absolutePos(new BlockPos(minX, 0, minZ)), helper.absolutePos(new BlockPos(minX + 21, 5, minZ + 21)));
-        level.getEntitiesOfClass(LivingEntity.class, field, living -> !(living instanceof Player)).forEach(Entity::discard);
+        level.getEntitiesOfClass(LivingEntity.class, field, living -> !(living instanceof Player) && !living.getTags().contains(RUN_TAG)).forEach(Entity::discard);
         UUID owner = UUID.randomUUID();
         NpcEntity sergeant = squadNpc(helper, owner, new BlockPos(minX + 6, 1, minZ + 10), NpcRank.SERGEANT, 5);
         sergeant.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
@@ -806,7 +813,7 @@ public final class StructureGameTests
             }
         }
         AABB field = new AABB(helper.absolutePos(new BlockPos(minX, 0, minZ)), helper.absolutePos(new BlockPos(minX + 39, 5, minZ + 15)));
-        level.getEntitiesOfClass(LivingEntity.class, field, living -> !(living instanceof Player)).forEach(Entity::discard);
+        level.getEntitiesOfClass(LivingEntity.class, field, living -> !(living instanceof Player) && !living.getTags().contains(RUN_TAG)).forEach(Entity::discard);
         UUID owner = UUID.randomUUID();
         NpcEntity sergeant = squadNpc(helper, owner, new BlockPos(minX + 4, 1, minZ + 7), NpcRank.SERGEANT, 5);
         List<NpcEntity> soldiers = new ArrayList<>();
@@ -855,7 +862,7 @@ public final class StructureGameTests
     {
         ServerLevel level = helper.getLevel();
         BlockPos base = helper.absolutePos(new BlockPos(-60, 1, 40));
-        level.getEntitiesOfClass(LivingEntity.class, new AABB(base).inflate(12.0D), living -> !(living instanceof Player)).forEach(Entity::discard);
+        level.getEntitiesOfClass(LivingEntity.class, new AABB(base).inflate(12.0D), living -> !(living instanceof Player) && !living.getTags().contains(RUN_TAG)).forEach(Entity::discard);
         UUID owner = UUID.randomUUID();
         NpcEntity sergeant = squadNpc(helper, owner, new BlockPos(-60, 1, 40), NpcRank.SERGEANT, 5);
         NpcEntity swordsman = squadNpc(helper, owner, new BlockPos(-59, 1, 41), NpcRank.SOLDIER, 5);
@@ -900,7 +907,7 @@ public final class StructureGameTests
     {
         ServerLevel level = helper.getLevel();
         BlockPos base = helper.absolutePos(new BlockPos(-60, 1, 60));
-        level.getEntitiesOfClass(LivingEntity.class, new AABB(base).inflate(16.0D), living -> !(living instanceof Player)).forEach(Entity::discard);
+        level.getEntitiesOfClass(LivingEntity.class, new AABB(base).inflate(16.0D), living -> !(living instanceof Player) && !living.getTags().contains(RUN_TAG)).forEach(Entity::discard);
         FakePlayer player = FakePlayerFactory.getMinecraft(level);
         player.moveTo(base.getCenter());
         UUID owner = player.getUUID();
@@ -1004,7 +1011,7 @@ public final class StructureGameTests
     {
         ServerLevel level = helper.getLevel();
         BlockPos base = helper.absolutePos(new BlockPos(-90, 1, 60));
-        level.getEntitiesOfClass(LivingEntity.class, new AABB(base).inflate(12.0D), living -> !(living instanceof Player)).forEach(Entity::discard);
+        level.getEntitiesOfClass(LivingEntity.class, new AABB(base).inflate(12.0D), living -> !(living instanceof Player) && !living.getTags().contains(RUN_TAG)).forEach(Entity::discard);
         level.setDayTime(1000L);
         level.setWeatherParameters(6000, 0, false, false);
         // The test world is solid here: a floor and open air over the walk.
@@ -1032,6 +1039,125 @@ public final class StructureGameTests
             courier.discard();
             level.removeBlock(from, false);
             level.removeBlock(to, false);
+        });
+    }
+
+    /**
+     * AW parity, the owned trader: a worker with a Trade Order in its orders
+     * slot has nothing to sell until its round restocks it from a chest, then
+     * sells from its backpack, the price going into the backpack.
+     */
+    @GameTest(template = ARENA, timeoutTicks = 900)
+    public static void ownedTraderRestocksAndSells(GameTestHelper helper)
+    {
+        ServerLevel level = helper.getLevel();
+        BlockPos base = helper.absolutePos(new BlockPos(-90, 1, 130));
+        level.getEntitiesOfClass(LivingEntity.class, new AABB(base).inflate(12.0D), living -> !(living instanceof Player) && !living.getTags().contains(RUN_TAG)).forEach(Entity::discard);
+        level.setDayTime(1000L);
+        level.setWeatherParameters(6000, 0, false, false);
+        for (BlockPos cell : BlockPos.betweenClosed(base.offset(-6, -1, -3), base.offset(6, 3, 3)))
+        {
+            level.setBlockAndUpdate(cell, cell.getY() < base.getY() ? Blocks.STONE.defaultBlockState() : Blocks.AIR.defaultBlockState());
+        }
+        BlockPos store = base.offset(4, 0, 0);
+        level.setBlockAndUpdate(store, Blocks.CHEST.defaultBlockState());
+        ((ChestBlockEntity) level.getBlockEntity(store)).setItem(0, new ItemStack(Items.IRON_INGOT, 40));
+        NpcEntity trader = squadNpc(helper, UUID.randomUUID(), new BlockPos(-93, 1, 130), NpcRank.SOLDIER, 1);
+        trader.setNpcPath(NpcPath.WORKER);
+        ItemStack order = new ItemStack(ModItems.TRADE_ORDER.get());
+        TradeOrderItem.setGoods(order, List.of(new TradeOrderItem.Goods(List.of(new ItemStack(ModItems.COIN_COPPER.get(), 3)),
+                List.of(new ItemStack(Items.IRON_INGOT, 2)))));
+        OrderItem.addStop(order, store, level.dimension().location().toString(), TradeOrderItem.Mode.TRADE.ordinal(), ItemStack.EMPTY);
+        trader.getInventory().setItem(NpcInventory.ORDERS_SLOT, order);
+        helper.assertTrue("trader".equals(trader.getRoleId()), "a Trade Order in the orders slot makes a trader, is " + trader.getRoleId());
+        helper.assertTrue(NpcShop.isShop(trader) && NpcShop.views(trader).get(0).available() == 0, "nothing to sell before restocking");
+        FakePlayer player = FakePlayerFactory.get(level, new GameProfile(UUID.fromString("6a1e0000-0000-4000-8000-000000000001"), "ae_customer"));
+        player.getInventory().clearContent();
+        ItemStack purse = new ItemStack(ModItems.COIN_PURSE.get());
+        CoinPurseItem.set(purse, 10L);
+        player.getInventory().add(purse);
+        helper.assertFalse(NpcShop.perform(trader, player, 0), "no sale from an empty backpack");
+        helper.succeedWhen(() ->
+        {
+            helper.assertTrue(!NpcShop.views(trader).isEmpty(), "still a shop: owned " + trader.isOwnedNpc() + ", path " + trader.getNpcPath() + ", orders " + trader.getInventory().ordersItem() + " " + trader.getInventory().ordersItem().getTag() + ", alive " + trader.isAlive());
+            int stocked = NpcShop.views(trader).get(0).available();
+            helper.assertTrue(stocked >= 8, "restocked for 8 sales, has " + stocked);
+            helper.assertTrue(NpcShop.perform(trader, player, 0), "the sale goes through");
+            helper.assertTrue(player.getInventory().countItem(Items.IRON_INGOT) == 2, "the customer got the iron");
+            helper.assertTrue(CoinPurseItem.held(player.getInventory().items.stream().filter(stack -> stack.is(ModItems.COIN_PURSE.get())).findFirst().orElseThrow()) == 7L,
+                    "the purse paid 3");
+            int copper = 0;
+            for (int slot = NpcInventory.BACKPACK_START; slot < NpcInventory.SLOT_COUNT; slot++)
+            {
+                ItemStack held = trader.getInventory().getItem(slot);
+                copper += held.is(ModItems.COIN_COPPER.get()) ? held.getCount() : 0;
+            }
+            helper.assertTrue(copper == 3, "the price went into the trader's backpack, has " + copper);
+            player.getInventory().clearContent();
+            trader.discard();
+            level.removeBlock(store, false);
+        });
+    }
+
+    /** AW parity, the bard: a worker holding a lute is a bard, and its song cheers its owner's people, not a stranger's. */
+    @GameTest(template = ARENA, timeoutTicks = 100)
+    public static void bardCheersItsOwnPeople(GameTestHelper helper)
+    {
+        UUID owner = UUID.randomUUID();
+        NpcEntity bard = squadNpc(helper, owner, new BlockPos(-60, 1, 140), NpcRank.SOLDIER, 1);
+        bard.setNpcPath(NpcPath.WORKER);
+        bard.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.INSTRUMENT_LUTE.get()));
+        helper.assertTrue("bard".equals(bard.getRoleId()), "holding a lute makes a bard, is " + bard.getRoleId());
+        NpcEntity worker = squadNpc(helper, owner, new BlockPos(-57, 1, 140), NpcRank.SOLDIER, 1);
+        worker.setNpcPath(NpcPath.WORKER);
+        NpcEntity stranger = squadNpc(helper, UUID.randomUUID(), new BlockPos(-63, 1, 140), NpcRank.SOLDIER, 1);
+        double before = worker.getWorkSpeed();
+        NpcBardGoal.cheer(bard, 60);
+        helper.assertTrue(worker.hearsSong() && worker.getWorkSpeed() > before, "the song quickens its owner's worker: " + before + " to " + worker.getWorkSpeed());
+        helper.assertFalse(stranger.hearsSong(), "a stranger's soldier is not cheered");
+        bard.discard();
+        worker.discard();
+        stranger.discard();
+        helper.succeed();
+    }
+
+    /**
+     * AW parity, the fruit farm: a worker with a hoe and no crop farm picks its
+     * owner's fruit farm, berries into its backpack and the bush left growing.
+     */
+    @GameTest(template = ARENA, timeoutTicks = 600)
+    public static void fruitPickerPicksBerries(GameTestHelper helper)
+    {
+        ServerLevel level = helper.getLevel();
+        BlockPos base = helper.absolutePos(new BlockPos(-60, 1, 115));
+        level.getEntitiesOfClass(LivingEntity.class, new AABB(base).inflate(12.0D), living -> !(living instanceof Player) && !living.getTags().contains(RUN_TAG)).forEach(Entity::discard);
+        level.setDayTime(1000L);
+        level.setWeatherParameters(6000, 0, false, false);
+        for (BlockPos cell : BlockPos.betweenClosed(base.offset(-6, -1, -6), base.offset(6, 3, 6)))
+        {
+            level.setBlockAndUpdate(cell, cell.getY() < base.getY() ? Blocks.GRASS_BLOCK.defaultBlockState() : Blocks.AIR.defaultBlockState());
+        }
+        UUID owner = UUID.randomUUID();
+        level.setBlockAndUpdate(base, ModBlocks.FRUIT_FARM.get().defaultBlockState());
+        ((FruitFarmBlockEntity) level.getBlockEntity(base)).setOwner(owner);
+        BlockPos bush = base.offset(2, 0, 2);
+        level.setBlockAndUpdate(bush, Blocks.SWEET_BERRY_BUSH.defaultBlockState().setValue(SweetBerryBushBlock.AGE, SweetBerryBushBlock.MAX_AGE));
+        NpcEntity picker = squadNpc(helper, owner, new BlockPos(-63, 1, 115), NpcRank.SOLDIER, 1);
+        picker.setNpcPath(NpcPath.WORKER);
+        picker.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_HOE));
+        helper.succeedWhen(() ->
+        {
+            int berries = 0;
+            for (int slot = NpcInventory.BACKPACK_START; slot < NpcInventory.SLOT_COUNT; slot++)
+            {
+                ItemStack held = picker.getInventory().getItem(slot);
+                berries += held.is(Items.SWEET_BERRIES) ? held.getCount() : 0;
+            }
+            helper.assertTrue(berries >= 2, "the berries are in the picker's backpack, has " + berries + "; farm " + level.getBlockState(base) + "; " + NpcJobGoal.diagnose(picker) + ", bush " + level.getBlockState(bush) + ", alive " + picker.isAlive() + " at " + picker.blockPosition());
+            helper.assertTrue(level.getBlockState(bush).is(Blocks.SWEET_BERRY_BUSH), "the bush is left growing");
+            picker.discard();
+            level.removeBlock(base, false);
+            level.removeBlock(bush, false);
         });
     }
 
@@ -1064,7 +1190,7 @@ public final class StructureGameTests
     {
         ServerLevel level = helper.getLevel();
         BlockPos base = helper.absolutePos(new BlockPos(-90, 1, 80));
-        level.getEntitiesOfClass(LivingEntity.class, new AABB(base).inflate(12.0D), living -> !(living instanceof Player)).forEach(Entity::discard);
+        level.getEntitiesOfClass(LivingEntity.class, new AABB(base).inflate(12.0D), living -> !(living instanceof Player) && !living.getTags().contains(RUN_TAG)).forEach(Entity::discard);
         for (BlockPos cell : BlockPos.betweenClosed(base.offset(-8, -1, -3), base.offset(8, 3, 3)))
         {
             level.setBlockAndUpdate(cell, cell.getY() < base.getY() ? Blocks.STONE.defaultBlockState() : Blocks.AIR.defaultBlockState());
@@ -1089,7 +1215,7 @@ public final class StructureGameTests
     {
         ServerLevel level = helper.getLevel();
         BlockPos base = helper.absolutePos(new BlockPos(-90, 1, 100));
-        level.getEntitiesOfClass(LivingEntity.class, new AABB(base).inflate(14.0D), living -> !(living instanceof Player)).forEach(Entity::discard);
+        level.getEntitiesOfClass(LivingEntity.class, new AABB(base).inflate(14.0D), living -> !(living instanceof Player) && !living.getTags().contains(RUN_TAG)).forEach(Entity::discard);
         for (BlockPos cell : BlockPos.betweenClosed(base.offset(-10, -1, -3), base.offset(10, 3, 3)))
         {
             level.setBlockAndUpdate(cell, cell.getY() < base.getY() ? Blocks.STONE.defaultBlockState() : Blocks.AIR.defaultBlockState());
@@ -1107,7 +1233,7 @@ public final class StructureGameTests
         helper.succeedWhen(() ->
         {
             helper.assertTrue(worker.alarmHall() != null && worker.distanceToSqr(Vec3.atBottomCenterOf(base)) < 4.5D * 4.5D,
-                    "the worker answers the alarm and shelters by the hall, at " + worker.blockPosition() + " answering " + worker.alarmHall());
+                    "the worker answers the alarm and shelters by the hall, at " + worker.blockPosition() + " answering " + worker.alarmHall() + ", alive " + worker.isAlive() + ", hall " + level.getBlockState(base) + ", power " + level.hasNeighborSignal(base) + ", ticking " + level.getBlockTicks().hasScheduledTick(base, ModBlocks.TOWN_HALL.get()));
             AncientEmpiresConfig.upkeepAlarmShelter = shelter;
             worker.discard();
             level.removeBlock(base.above(), false);
@@ -1115,12 +1241,19 @@ public final class StructureGameTests
         });
     }
 
+    /**
+     * Marks this run's NPCs: tests stand side by side and reach past their own arena, so a
+     * test clearing its ground of stale entities (left by an earlier run) must spare another test's.
+     */
+    private static final String RUN_TAG = "AeTestRun" + System.nanoTime();
+
     private static NpcEntity squadNpc(GameTestHelper helper, UUID owner, BlockPos at, NpcRank rank, int npcLevel)
     {
         NpcEntity npc = ModEntities.NPC.get().create(helper.getLevel());
         BlockPos start = helper.absolutePos(at);
         npc.moveTo(start.getX() + 0.5D, start.getY(), start.getZ() + 0.5D, 0.0F, 0.0F);
         npc.setOwner(owner);
+        npc.addTag(RUN_TAG);
         npc.setNpcPath(NpcPath.SOLDIER);
         npc.setRank(rank);
         npc.setLevel(npcLevel);

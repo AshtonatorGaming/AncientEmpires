@@ -1,5 +1,6 @@
 package com.ancientempires.registry;
 
+import com.ancientempires.block.FruitFarmBlockEntity;
 import com.ancientempires.AncientEmpires;
 import com.ancientempires.block.FlagBlockEntity;
 import com.ancientempires.block.AnimalPenBlockEntity;
@@ -34,6 +35,8 @@ public final class ModBlockEntities
             () -> BlockEntityType.Builder.of(SettlersPostBlockEntity::new, ModBlocks.SETTLERS_POST.get()).build(null));
 
     @SuppressWarnings("DataFlowIssue")
+    public static final RegistryObject<BlockEntityType<FruitFarmBlockEntity>> FRUIT_FARM = BLOCK_ENTITIES.register("fruit_farm",
+            () -> BlockEntityType.Builder.of(FruitFarmBlockEntity::new, ModBlocks.FRUIT_FARM.get()).build(null));
     public static final RegistryObject<BlockEntityType<CropFarmBlockEntity>> CROP_FARM = BLOCK_ENTITIES.register("crop_farm",
             () -> BlockEntityType.Builder.of(CropFarmBlockEntity::new, ModBlocks.CROP_FARM.get()).build(null));
 

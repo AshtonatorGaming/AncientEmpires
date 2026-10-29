@@ -225,7 +225,7 @@ public abstract class WorksiteBlockEntity extends BlockEntity
         return this.owner;
     }
 
-    void setOwner(@Nullable UUID owner)
+    public void setOwner(@Nullable UUID owner)
     {
         this.owner = owner;
         this.setChanged();

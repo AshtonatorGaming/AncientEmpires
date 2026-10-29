@@ -90,7 +90,7 @@ final class NpcStatsSheet extends NpcPopupScreen
             mark(graphics, left, line, inner, AncientEmpiresConfig.moraleWaverBelow / 100.0D);
             mark(graphics, left, line, inner, AncientEmpiresConfig.moraleRoutBelow / 100.0D);
             line += 6;
-            int reasons = menu.stat(NpcMenu.STAT_MORALE_REASONS);
+            int reasons = menu.stat(NpcMenu.STAT_MORALE_REASONS) & 0xFFFF | (menu.stat(NpcMenu.STAT_MORALE_REASONS_HIGH) & 0xFFFF) << 16;
             int shown = 0;
             for (int reason = 0; reason < NpcMorale.REASON_COUNT && shown < MAX_REASONS; reason++)
             {
@@ -100,7 +100,8 @@ final class NpcStatsSheet extends NpcPopupScreen
                 }
                 boolean good = reason == NpcMorale.REASON_OUTNUMBERING || reason == NpcMorale.REASON_HEARTENED
                         || reason == NpcMorale.REASON_INSPIRED || reason == NpcMorale.REASON_OWNER || reason == NpcMorale.REASON_BANNER
-                        || reason == NpcMorale.REASON_WATCH || reason == NpcMorale.REASON_FORMED || reason == NpcMorale.REASON_HOME;
+                        || reason == NpcMorale.REASON_WATCH || reason == NpcMorale.REASON_FORMED || reason == NpcMorale.REASON_HOME
+                        || reason == NpcMorale.REASON_SONG;
                 FitText.draw(graphics, font, (good ? "+ " : "- ") + Component.translatable("gui.ancientempires.morale.reason." + reason).getString(),
                         left + 4, line, inner - 4, 10, good ? 0xFF9FD07F : 0xFFE08A70, false, true);
                 line += LINE - 1;

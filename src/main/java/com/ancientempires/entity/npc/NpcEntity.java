@@ -1,5 +1,6 @@
 package com.ancientempires.entity.npc;
 
+import com.ancientempires.item.TradeOrderItem;
 import com.ancientempires.AncientEmpires;
 import com.ancientempires.network.TradePacket;
 import com.ancientempires.item.RoutingOrderItem;
@@ -194,6 +195,8 @@ public class NpcEntity extends PathfinderMob
     private final NpcChain chain = new NpcChain(this);
     private final NpcTrades trades = new NpcTrades();
     private final NpcRecord record = new NpcRecord();
+    /** tickCount until which a bard's song cheers this NPC (not saved). */
+    private int songUntil;
     /** The Town Hall sounding the alarm this NPC answers, and until when (not saved: the hall calls again while it sounds). */
     @Nullable
     private BlockPos alarmHall;
@@ -460,6 +463,7 @@ public class NpcEntity extends PathfinderMob
         goals.add(this.addGoal(4, new NpcPriestGoal(this)));
         goals.add(this.addGoal(4, new NpcGovernorGoal(this)));
         goals.add(this.addGoal(4, new NpcCourierGoal(this)));
+        goals.add(this.addGoal(5, new NpcBardGoal(this)));
         // Every hands-on trade (farmer, woodcutter, miner, rancher, hunter, fisher, cook) as one goal: the tool picks it.
         goals.add(this.addGoal(4, new NpcJobGoal(this)));
     }
@@ -1008,6 +1012,10 @@ public class NpcEntity extends PathfinderMob
             // Nothing in hand says otherwise: a Routing Order in the orders slot makes a courier.
             return "courier";
         }
+        if (role.equals(this.getNpcPath().id()) && this.inventory.ordersItem().getItem() instanceof TradeOrderItem)
+        {
+            return "trader";
+        }
         return role;
     }
 
@@ -1484,6 +1492,18 @@ public class NpcEntity extends PathfinderMob
     public boolean isOnWatch()
     {
         return this.onWatch;
+    }
+
+    /** A bard's song reaches this NPC for {@code ticks}: morale for a soldier, pace for a worker. */
+    void hearSong(int ticks)
+    {
+        this.songUntil = this.tickCount + ticks;
+    }
+
+    /** Cheered by a bard's song lately. */
+    public boolean hearsSong()
+    {
+        return this.tickCount < this.songUntil;
     }
 
     /** A governor at the Town Hall oversees this worker for {@code ticks}: it works faster. */
@@ -2359,6 +2379,20 @@ public class NpcEntity extends PathfinderMob
         if (hand != InteractionHand.MAIN_HAND || player.isSpectator())
         {
             return InteractionResult.PASS;
+        }
+        // An admin's Trade Order writes or copies a faction trader's goods (the order's own use, AW's creative trade editor).
+        if (this.isFactionNpc() && player.getItemInHand(hand).getItem() instanceof TradeOrderItem && mayToggleCreative(player))
+        {
+            return InteractionResult.PASS;
+        }
+        // A player's trader trades with everyone but its owner, who sneaks to trade and clicks plainly for the inventory.
+        if (NpcShop.isShop(this) && (!this.canOpenInventory(player) || player.isShiftKeyDown()))
+        {
+            if (!this.level().isClientSide && player instanceof ServerPlayer serverPlayer)
+            {
+                TradePacket.open(serverPlayer, this);
+            }
+            return InteractionResult.sidedSuccess(this.level().isClientSide);
         }
         // A trader trades with anyone its faction is not hostile to (AW's faction traders); an admin sneaks to open it instead.
         if (!this.trades.isEmpty() && !(player.isShiftKeyDown() && this.canOpenInventory(player)))

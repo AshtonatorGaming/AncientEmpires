@@ -227,7 +227,8 @@ public final class NpcProgress
     public double workSpeed()
     {
         return (1.0D + (this.level() - 1) * AncientEmpiresConfig.levelWorkSpeedPerLevel)
-                * (this.npc.tickCount < this.governedUntil ? 1.0D + AncientEmpiresConfig.governorWorkBonus : 1.0D);
+                * (this.npc.tickCount < this.governedUntil ? 1.0D + AncientEmpiresConfig.governorWorkBonus : 1.0D)
+                * (this.npc.hearsSong() ? 1.0D + AncientEmpiresConfig.bardWorkBonus : 1.0D);
     }
 
     /** Tool wear multiplier from level: skilled hands wear tools less. */

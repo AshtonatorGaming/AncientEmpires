@@ -1,5 +1,7 @@
 package com.ancientempires.registry;
 
+import com.ancientempires.item.InstrumentItem;
+import com.ancientempires.item.TradeOrderItem;
 import com.ancientempires.AncientEmpires;
 import com.ancientempires.block.WorksiteBlockEntity;
 import com.ancientempires.entity.npc.NpcRank;
@@ -83,6 +85,11 @@ public final class ModItems
     public static final RegistryObject<Item> WORK_ORDER = ITEMS.register("work_order", () -> new WorkOrderItem(new Item.Properties()));
     public static final RegistryObject<Item> UPKEEP_ORDER = ITEMS.register("upkeep_order", () -> new UpkeepOrderItem(new Item.Properties()));
     public static final RegistryObject<Item> COMBAT_ORDER = ITEMS.register("combat_order", () -> new CombatOrderItem(new Item.Properties()));
+    public static final RegistryObject<Item> TRADE_ORDER = ITEMS.register("trade_order", () -> new TradeOrderItem(new Item.Properties()));
+    public static final RegistryObject<Item> INSTRUMENT_LUTE = ITEMS.register("instrument_lute", () -> new InstrumentItem(InstrumentItem.Kind.LUTE, new Item.Properties()));
+    public static final RegistryObject<Item> INSTRUMENT_FLUTE = ITEMS.register("instrument_flute", () -> new InstrumentItem(InstrumentItem.Kind.FLUTE, new Item.Properties()));
+    public static final RegistryObject<Item> INSTRUMENT_HARP = ITEMS.register("instrument_harp", () -> new InstrumentItem(InstrumentItem.Kind.HARP, new Item.Properties()));
+    public static final RegistryObject<Item> INSTRUMENT_DRUM = ITEMS.register("instrument_drum", () -> new InstrumentItem(InstrumentItem.Kind.DRUM, new Item.Properties()));
     public static final RegistryObject<Item> COIN_PURSE = ITEMS.register("coin_purse", () -> new CoinPurseItem(new Item.Properties().stacksTo(1)));
     public static final RegistryObject<Item> COIN_STACK_COPPER = ITEMS.register("coin_stack_copper", () -> new BlockItem(ModBlocks.COIN_STACK_COPPER.get(), new Item.Properties()));
     public static final RegistryObject<Item> COIN_STACK_SILVER = ITEMS.register("coin_stack_silver", () -> new BlockItem(ModBlocks.COIN_STACK_SILVER.get(), new Item.Properties()));
@@ -116,6 +123,8 @@ public final class ModItems
             () -> new BlockItem(ModBlocks.SETTLERS_POST.get(), new Item.Properties()));
     public static final RegistryObject<Item> CROP_FARM = ITEMS.register("crop_farm",
             () -> new BlockItem(ModBlocks.CROP_FARM.get(), new Item.Properties()));
+    public static final RegistryObject<Item> FRUIT_FARM = ITEMS.register("fruit_farm",
+            () -> new BlockItem(ModBlocks.FRUIT_FARM.get(), new Item.Properties()));
     public static final RegistryObject<Item> TREE_FARM = ITEMS.register("tree_farm",
             () -> new BlockItem(ModBlocks.TREE_FARM.get(), new Item.Properties()));
     public static final RegistryObject<Item> QUARRY = ITEMS.register("quarry",

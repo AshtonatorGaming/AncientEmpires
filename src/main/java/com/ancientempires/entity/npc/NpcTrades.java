@@ -1,6 +1,7 @@
 package com.ancientempires.entity.npc;
 
 import com.ancientempires.item.Coins;
+import com.ancientempires.item.TradeOrderItem;
 import com.ancientempires.structure.AeRemap;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
@@ -101,6 +102,41 @@ public final class NpcTrades
         return Collections.unmodifiableList(this.trades);
     }
 
+    /**
+     * Replaces the goods (AW's creative trade editor, through a Trade Order): a
+     * trade keeps the stock and refill of the one it replaces, a new one AW's
+     * default (one use, back every five minutes).
+     */
+    public void setGoods(List<TradeOrderItem.Goods> goods)
+    {
+        List<Trade> old = new ArrayList<>(this.trades);
+        this.trades.clear();
+        for (int i = 0; i < goods.size(); i++)
+        {
+            TradeOrderItem.Goods entry = goods.get(i);
+            if (!entry.valid())
+            {
+                continue;
+            }
+            Trade trade = new Trade();
+            for (ItemStack stack : entry.input())
+            {
+                trade.input.add(stack.copy());
+            }
+            for (ItemStack stack : entry.output())
+            {
+                trade.output.add(stack.copy());
+            }
+            if (i < old.size())
+            {
+                trade.refill = old.get(i).refill;
+                trade.max = old.get(i).max;
+                trade.available = Math.min(trade.max, old.get(i).available);
+            }
+            this.trades.add(trade);
+        }
+    }
+
     /** Brings every trade's stock up to date (AW did this when the trade screen opened). */
     public void update(long now)
     {
@@ -131,21 +167,38 @@ public final class NpcTrades
         {
             return false;
         }
-        for (ItemStack stack : compact(trade.input))
+        takeFrom(player, trade.input);
+        giveTo(player, trade.output);
+        if (trade.refill > 0)
+        {
+            trade.available--;
+            trade.refillAt = now + trade.refill;
+        }
+        return true;
+    }
+
+    /** Takes a trade's price from the player (check {@link #canPay} first): the goods, then the coins by worth. */
+    static void takeFrom(Player player, List<ItemStack> input)
+    {
+        for (ItemStack stack : compact(input))
         {
             if (!Coins.isCoin(stack))
             {
                 take(player, stack, stack.getCount());
             }
         }
-        Coins.pay(player, Coins.worth(trade.input));
-        // Coins paid out go into the player's purse; goods (barter) into the inventory.
-        long earned = Coins.worth(trade.output);
+        Coins.pay(player, Coins.worth(input));
+    }
+
+    /** Hands a trade's goods to the player: coins into its purse, goods (barter) into the inventory or at its feet. */
+    static void giveTo(Player player, List<ItemStack> output)
+    {
+        long earned = Coins.worth(output);
         if (earned > 0L)
         {
             Coins.receive(player, earned);
         }
-        for (ItemStack stack : trade.output)
+        for (ItemStack stack : output)
         {
             if (Coins.isCoin(stack))
             {
@@ -157,12 +210,6 @@ public final class NpcTrades
                 player.drop(given, false);
             }
         }
-        if (trade.refill > 0)
-        {
-            trade.available--;
-            trade.refillAt = now + trade.refill;
-        }
-        return true;
     }
 
     /**
@@ -183,7 +230,7 @@ public final class NpcTrades
     }
 
     /** Same items asked in several slots counted together, so one stack is not counted twice. */
-    private static List<ItemStack> compact(List<ItemStack> stacks)
+    static List<ItemStack> compact(List<ItemStack> stacks)
     {
         List<ItemStack> merged = new ArrayList<>();
         for (ItemStack stack : stacks)

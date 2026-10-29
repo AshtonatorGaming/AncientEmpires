@@ -149,6 +149,10 @@ layers: service record and journal done (2026-10-29); epithets, mood, origin, tr
 (2026-10-29). Town Hall alarm done. Next in parity: the owned trader (Trade Order and a goods editor), the bard,
 the fruit farm, the craftsman.
 
+Parity, 2026-10-29 (user away, "work on everything you can for testing later"): the owned trader (Trade Order, goods
+editor, round), the bard (instruments, AW's songs, cheer), and the fruit farm done, none seen in game. Next in
+docs/aw-parity.md order: the craftsman (auto crafting), the ore processor, then the survival structure builder.
+
 **The plan now lives in docs/roadmap.md** (reassessed 2026-10-29: phases Stabilize, Close the loop, Deepen war, Deepen towns). Read it first.
 
 **Agreed order of work** (so we don't get lost):

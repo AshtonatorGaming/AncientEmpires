@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "TT ",
+    "SST",
+    "TT "
+  ],
+  "key": {
+    "S": {
+      "tag": "forge:string"
+    },
+    "T": {
+      "item": "minecraft:stick"
+    }
+  },
+  "result": {
+    "item": "ancientempires:instrument_harp"
+  }
+}

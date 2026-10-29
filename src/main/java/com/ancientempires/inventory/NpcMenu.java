@@ -53,7 +53,9 @@ public class NpcMenu extends AbstractContainerMenu
     public static final int STAT_GUARD = 3;
     public static final int STAT_GUARD_MAX = 4;
     public static final int STAT_HUNGRY = 5;
-    private static final int STAT_COUNT = 6;
+    /** The morale reasons past the sixteenth (container data is shorts). */
+    public static final int STAT_MORALE_REASONS_HIGH = 6;
+    private static final int STAT_COUNT = 7;
 
     @Nullable
     private final NpcEntity npc;
@@ -158,7 +160,8 @@ public class NpcMenu extends AbstractContainerMenu
             {
                 case STAT_MORALE -> morale.applies() ? Math.round(morale.value() * 10.0F) : -1;
                 case STAT_MORALE_STATE -> morale.state().ordinal();
-                case STAT_MORALE_REASONS -> morale.reasons();
+                case STAT_MORALE_REASONS -> morale.reasons() & 0xFFFF;
+                case STAT_MORALE_REASONS_HIGH -> morale.reasons() >>> 16;
                 case STAT_GUARD -> shield ? Math.round(this.npc.getGuard().points() * 10.0F) : -1;
                 case STAT_GUARD_MAX -> shield ? Math.round(this.npc.getGuard().max() * 10.0F) : -1;
                 case STAT_HUNGRY -> this.npc.getNeeds().hungry() ? 1 : 0;

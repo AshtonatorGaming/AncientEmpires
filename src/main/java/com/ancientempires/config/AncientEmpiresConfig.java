@@ -170,6 +170,15 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.IntValue TRADE_SILVER_VALUE;
     private static final ForgeConfigSpec.IntValue TRADE_GOLD_VALUE;
     private static final ForgeConfigSpec.IntValue TRADE_ANCIENT_VALUE;
+    private static final ForgeConfigSpec.IntValue TRADE_SHOP_TICKS;
+    private static final ForgeConfigSpec.DoubleValue BARD_LISTEN_RANGE;
+    private static final ForgeConfigSpec.DoubleValue BARD_RANGE;
+    private static final ForgeConfigSpec.IntValue BARD_PAUSE_MIN;
+    private static final ForgeConfigSpec.IntValue BARD_PAUSE_MAX;
+    private static final ForgeConfigSpec.IntValue BARD_PULSE_TICKS;
+    private static final ForgeConfigSpec.DoubleValue BARD_MORALE_BONUS;
+    private static final ForgeConfigSpec.DoubleValue BARD_WORK_BONUS;
+    private static final ForgeConfigSpec.IntValue TRADE_RESTOCK_USES;
     private static final ForgeConfigSpec.IntValue RELATIONS_STANDING_LIMIT;
     private static final ForgeConfigSpec.BooleanValue RELATIONS_COUNT_CREATIVE;
     private static final ForgeConfigSpec.BooleanValue IMMIGRATION_ENABLED;
@@ -896,6 +905,8 @@ public final class AncientEmpiresConfig
         TRADE_SILVER_VALUE = builder.comment("Copper coins one silver coin is worth.").defineInRange("silverValue", 8, 1, 1000000);
         TRADE_GOLD_VALUE = builder.comment("Copper coins one gold coin is worth (8 silver).").defineInRange("goldValue", 64, 1, 1000000);
         TRADE_ANCIENT_VALUE = builder.comment("Copper coins one ancient coin is worth (8 gold). Ancient coins were rare treasure in Ancient Warfare; the balance is untested.").defineInRange("ancientValue", 512, 1, 1000000);
+        TRADE_SHOP_TICKS = builder.comment("Ticks a player's trader (Trade Order) keeps shop at a stop of its round before going on.").defineInRange("shopTicks", 1200, 0, 72000);
+        TRADE_RESTOCK_USES = builder.comment("A player's trader restocking at a container takes enough of each good it sells for this many trades (its backpack permitting).").defineInRange("restockUses", 8, 1, 64);
         builder.pop();
 
         builder.comment("Settlers' Posts: Dwarf Fortress style immigration. Checked once per in-game day, at the day change.").push("immigration");
@@ -1170,6 +1181,16 @@ public final class AncientEmpiresConfig
         SKIRMISH_COOLDOWN = builder.comment("Ticks between throws.").defineInRange("throwCooldownTicks", 40, 0, 400);
         SKIRMISH_SPEED = builder.comment("Throw speed (a full bow shot is 3).").defineInRange("throwSpeed", 2.2D, 0.5D, 5.0D);
         SKIRMISH_RESTOCK = builder.comment("Out of a fight, one spent throw comes back every this many ticks.").defineInRange("restockTicks", 100, 1, 24000);
+        builder.pop();
+
+        builder.comment("Bards (Ancient Warfare's): an NPC holding an instrument (lute, flute, harp, drum) plays AW's songs when a player is near, and (beyond AW) cheers its allies while it plays.").push("bard");
+        BARD_LISTEN_RANGE = builder.comment("Blocks within which a player must be for a bard to start a song.").defineInRange("listenRange", 24.0D, 1.0D, 128.0D);
+        BARD_RANGE = builder.comment("Blocks within which a song cheers the bard's allies (same owner or faction).").defineInRange("range", 16.0D, 1.0D, 64.0D);
+        BARD_PAUSE_MIN = builder.comment("Fewest ticks a bard rests between songs.").defineInRange("pauseMin", 400, 0, 72000);
+        BARD_PAUSE_MAX = builder.comment("Most ticks a bard rests between songs.").defineInRange("pauseMax", 1600, 0, 72000);
+        BARD_PULSE_TICKS = builder.comment("Ticks between a song's cheers reaching the bard's allies.").defineInRange("pulseTicks", 40, 10, 1200);
+        BARD_MORALE_BONUS = builder.comment("Morale a song gives soldiers that hear it (0 for none).").defineInRange("moraleBonus", 6.0D, 0.0D, 50.0D);
+        BARD_WORK_BONUS = builder.comment("How much faster workers that hear a song work (0.1 is 10%).").defineInRange("workBonus", 0.1D, 0.0D, 2.0D);
         builder.pop();
 
         builder.comment("Governor (DESIGN Tier 1): an owned Worker-path NPC holding a map goes to its owner's nearest Town Hall by day; the owner's workers around it work faster, and each one it oversees earns the hall a tax.").push("governor");
@@ -1583,6 +1604,8 @@ public final class AncientEmpiresConfig
     public static int tradeSilverValue = 8;
     public static int tradeGoldValue = 64;
     public static int tradeAncientValue = 512;
+    public static int tradeShopTicks = 1200;
+    public static int tradeRestockUses = 8;
     public static int relationsStandingLimit = 1000;
     public static boolean relationsCountCreative = false;
     public static boolean immigrationEnabled = true;
@@ -1712,6 +1735,13 @@ public final class AncientEmpiresConfig
     public static int governorPulseTicks = 40;
     public static double governorAuraRadius = 24.0D;
     public static double governorWorkBonus = 0.15D;
+    public static double bardListenRange = 24.0D;
+    public static double bardRange = 16.0D;
+    public static int bardPauseMin = 400;
+    public static int bardPauseMax = 1600;
+    public static int bardPulseTicks = 40;
+    public static double bardMoraleBonus = 6.0D;
+    public static double bardWorkBonus = 0.1D;
     public static String governorTaxItem = "minecraft:gold_nugget";
     public static int governorTaxTicksPerWorker = 2400;
     public static int structuresTemplateCacheMb = 256;
@@ -2041,6 +2071,8 @@ public final class AncientEmpiresConfig
         tradeSilverValue = TRADE_SILVER_VALUE.get();
         tradeGoldValue = TRADE_GOLD_VALUE.get();
         tradeAncientValue = TRADE_ANCIENT_VALUE.get();
+        tradeShopTicks = TRADE_SHOP_TICKS.get();
+        tradeRestockUses = TRADE_RESTOCK_USES.get();
         relationsStandingLimit = RELATIONS_STANDING_LIMIT.get();
         relationsCountCreative = RELATIONS_COUNT_CREATIVE.get();
         immigrationEnabled = IMMIGRATION_ENABLED.get();
@@ -2170,6 +2202,13 @@ public final class AncientEmpiresConfig
         governorPulseTicks = GOVERNOR_PULSE.get();
         governorAuraRadius = GOVERNOR_RADIUS.get();
         governorWorkBonus = GOVERNOR_BONUS.get();
+        bardListenRange = BARD_LISTEN_RANGE.get();
+        bardRange = BARD_RANGE.get();
+        bardPauseMin = BARD_PAUSE_MIN.get();
+        bardPauseMax = BARD_PAUSE_MAX.get();
+        bardPulseTicks = BARD_PULSE_TICKS.get();
+        bardMoraleBonus = BARD_MORALE_BONUS.get();
+        bardWorkBonus = BARD_WORK_BONUS.get();
         governorTaxItem = GOVERNOR_TAX_ITEM.get();
         governorTaxTicksPerWorker = GOVERNOR_TAX_TICKS.get();
         structuresTemplateCacheMb = STRUCTURES_CACHE_MB.get();

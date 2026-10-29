@@ -1820,5 +1820,59 @@
     "stream": false
    }
   ]
+ },
+ "bard.lute": {
+  "category": "record",
+  "sounds": [
+   {
+    "name": "ancientempires:bard/suonatore_di_liuto",
+    "stream": true
+   }
+  ]
+ },
+ "bard.master": {
+  "category": "record",
+  "sounds": [
+   {
+    "name": "ancientempires:bard/master-122",
+    "stream": true
+   }
+  ]
+ },
+ "bard.lord": {
+  "category": "record",
+  "sounds": [
+   {
+    "name": "ancientempires:bard/lord-112",
+    "stream": true
+   }
+  ]
+ },
+ "bard.teller_1": {
+  "category": "record",
+  "sounds": [
+   {
+    "name": "ancientempires:bard/teller-130-1",
+    "stream": true
+   }
+  ]
+ },
+ "bard.teller_2": {
+  "category": "record",
+  "sounds": [
+   {
+    "name": "ancientempires:bard/teller-130-2",
+    "stream": true
+   }
+  ]
+ },
+ "bard.drums": {
+  "category": "record",
+  "sounds": [
+   {
+    "name": "ancientempires:bard/drums-103",
+    "stream": true
+   }
+  ]
  }
 }

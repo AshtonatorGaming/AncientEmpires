@@ -137,7 +137,8 @@ public final class TradeScreen extends Screen
             hovered = this.items(graphics, trade.input(), left + PAD, y + 2, mouseX, mouseY, hovered);
             graphics.drawString(this.font, "→", arrowX + 4, y + 6, ready ? NpcGui.GOLD : NpcGui.NAME_HINT, false);
             hovered = this.items(graphics, trade.output(), outputX, y + 2, mouseX, mouseY, hovered);
-            String stock = trade.available() + "/" + trade.max();
+            String stock = trade.max() < 0 ? Component.translatable("gui.ancientempires.trade.in_pack", trade.available()).getString()
+                    : trade.available() + "/" + trade.max();
             FitText.draw(graphics, this.font, stock, left + width - PAD - STOCK_W, y, STOCK_W, ROW - 2, trade.available() > 0 ? NpcGui.NAME_INK : NpcGui.NAME_HINT,
                     true, false);
         }

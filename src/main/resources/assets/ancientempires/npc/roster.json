@@ -11,7 +11,7 @@
     {"id": "owned.courier", "subtype": "courier", "name": "Courier", "skin": "courier", "item": "owned_courier_spawn_egg"},
     {"id": "owned.trader", "subtype": "trader", "name": "Trader", "skin": "trader", "item": "owned_trader_spawn_egg", "mainhand": "minecraft:emerald"},
     {"id": "owned.priest", "subtype": "priest", "name": "Priest", "skin": "priest", "item": "owned_priest_spawn_egg", "mainhand": "minecraft:book"},
-    {"id": "owned.bard", "subtype": "bard", "name": "Bard", "skin": "bard", "item": "owned_bard_spawn_egg", "mainhand": "minecraft:stick"},
+    {"id": "owned.bard", "subtype": "bard", "name": "Bard", "skin": "bard", "item": "owned_bard_spawn_egg", "mainhand": "ancientempires:instrument_lute"},
     {"id": "owned.siege_engineer", "subtype": "siege_engineer", "name": "Siege Engineer", "skin": "siege_engineer", "item": "owned_siege_engineer_spawn_egg"},
     {"id": "owned.medic", "subtype": "medic", "name": "Medic", "skin": "combat.medic", "item": "owned_medic_spawn_egg", "mainhand": "minecraft:iron_sword", "offhand": "ancientempires:bandage*16"},
     {"id": "owned.engineer", "subtype": "engineer", "name": "Engineer", "skin": "combat.engineer", "item": "owned_engineer_spawn_egg"}
@@ -36,7 +36,7 @@
         {"id": "empire.spellcaster.2", "subtype": "spellcaster.2", "name": "Empire Enchanter", "skin": "empire.spellcaster.2", "item": "empire_spellcaster_2_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 30},
         {"id": "empire.spellcaster.3", "subtype": "spellcaster.3", "name": "Empire Magician", "skin": "empire.spellcaster.3", "item": "empire_spellcaster_3_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 35},
         {"id": "empire.spellcaster.4", "subtype": "spellcaster.4", "name": "Empire Wizard", "skin": "empire.spellcaster.4", "item": "empire_spellcaster_4_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 40},
-        {"id": "empire.bard", "subtype": "bard", "name": "Empire Bard", "skin": "empire.bard", "item": "empire_bard_spawn_egg", "glyph": "bard", "mainhand": "minecraft:stick", "health": 50},
+        {"id": "empire.bard", "subtype": "bard", "name": "Empire Bard", "skin": "empire.bard", "item": "empire_bard_spawn_egg", "glyph": "bard", "mainhand": "ancientempires:instrument_harp", "health": 50},
         {"id": "empire.trader", "subtype": "trader", "name": "Empire Merchant", "skin": "empire.trader", "item": "empire_trader_spawn_egg", "glyph": "trader", "mainhand": "minecraft:book", "health": 50},
         {"id": "empire.civilian.female", "subtype": "civilian.female", "name": "Empire Goodwife", "skin": "empire.civilian.female", "item": "empire_civilian_female_spawn_egg", "glyph": "civilian_female", "health": 10},
         {"id": "empire.civilian.male", "subtype": "civilian.male", "name": "Empire Serf", "skin": "empire.civilian.male", "item": "empire_civilian_male_spawn_egg", "glyph": "civilian_male", "health": 10}
@@ -61,7 +61,7 @@
         {"id": "norska.spellcaster.2", "subtype": "spellcaster.2", "name": "Norska Seidhr", "skin": "norska.spellcaster.2", "item": "norska_spellcaster_2_spawn_egg", "glyph": "spellcaster", "health": 30},
         {"id": "norska.spellcaster.3", "subtype": "spellcaster.3", "name": "Norska Goddi", "skin": "norska.spellcaster.3", "item": "norska_spellcaster_3_spawn_egg", "glyph": "spellcaster", "health": 60},
         {"id": "norska.spellcaster.4", "subtype": "spellcaster.4", "name": "Norska Varulfur", "skin": "norska.spellcaster.4", "item": "norska_spellcaster_4_spawn_egg", "glyph": "spellcaster", "health": 80},
-        {"id": "norska.bard", "subtype": "bard", "name": "Norska Saga Teller", "skin": "norska.bard", "item": "norska_bard_spawn_egg", "glyph": "bard", "mainhand": "minecraft:stick", "health": 50},
+        {"id": "norska.bard", "subtype": "bard", "name": "Norska Saga Teller", "skin": "norska.bard", "item": "norska_bard_spawn_egg", "glyph": "bard", "mainhand": "ancientempires:instrument_drum", "health": 50},
         {"id": "norska.trader", "subtype": "trader", "name": "Norska Trader", "skin": "norska.trader", "item": "norska_trader_spawn_egg", "glyph": "trader", "mainhand": "minecraft:book", "health": 50},
         {"id": "norska.civilian.female", "subtype": "civilian.female", "name": "Norska Matron", "skin": "norska.civilian.female", "item": "norska_civilian_female_spawn_egg", "glyph": "civilian_female", "health": 10},
         {"id": "norska.civilian.male", "subtype": "civilian.male", "name": "Norska Farmer", "skin": "norska.civilian.male", "item": "norska_civilian_male_spawn_egg", "glyph": "civilian_male", "health": 10}
@@ -81,7 +81,7 @@
         {"id": "brigand.leader.elite", "subtype": "leader.elite", "name": "Brigand Warlord", "skin": "brigand.leader.elite", "item": "brigand_leader_elite_spawn_egg", "glyph": "commander", "mainhand": "spartanweaponry:iron_halberd", "mainFallback": "minecraft:iron_sword", "health": 60},
         {"id": "brigand.siege_engineer", "subtype": "siege_engineer", "name": "Renegade Artificier", "skin": "brigand.siege_engineer", "item": "brigand_siege_engineer_spawn_egg", "glyph": "siege_engineer", "health": 30},
         {"id": "brigand.priest", "subtype": "priest", "name": "Heretic Priest", "skin": "brigand.priest", "item": "brigand_priest_spawn_egg", "glyph": "priest", "mainhand": "minecraft:book", "health": 40},
-        {"id": "brigand.bard", "subtype": "bard", "name": "Brigand Talespinner", "skin": "brigand.bard", "item": "brigand_bard_spawn_egg", "glyph": "bard", "mainhand": "minecraft:stick", "health": 50},
+        {"id": "brigand.bard", "subtype": "bard", "name": "Brigand Talespinner", "skin": "brigand.bard", "item": "brigand_bard_spawn_egg", "glyph": "bard", "mainhand": "ancientempires:instrument_lute", "health": 50},
         {"id": "brigand.trader", "subtype": "trader", "name": "Brigand Fence", "skin": "brigand.trader", "item": "brigand_trader_spawn_egg", "glyph": "trader", "mainhand": "minecraft:book", "health": 50},
         {"id": "brigand.civilian.female", "subtype": "civilian.female", "name": "Brigandess", "skin": "brigand.civilian.female", "item": "brigand_civilian_female_spawn_egg", "glyph": "civilian_female", "health": 10},
         {"id": "brigand.civilian.male", "subtype": "civilian.male", "name": "Brigand", "skin": "brigand.civilian.male", "item": "brigand_civilian_male_spawn_egg", "glyph": "civilian_male", "health": 10}
@@ -106,7 +106,7 @@
         {"id": "pirate.spellcaster.2", "subtype": "spellcaster.2", "name": "Voodoo Bone Priest", "skin": "pirate.spellcaster.2", "item": "pirate_spellcaster_2_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 30},
         {"id": "pirate.spellcaster.3", "subtype": "spellcaster.3", "name": "Voodoo Death Bringer", "skin": "pirate.spellcaster.3", "item": "pirate_spellcaster_3_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 40},
         {"id": "pirate.spellcaster.4", "subtype": "spellcaster.4", "name": "Baron Samedi", "skin": "pirate.spellcaster.4", "item": "pirate_spellcaster_4_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:skull", "health": 60},
-        {"id": "pirate.bard", "subtype": "bard", "name": "Pirate Shantyman", "skin": "pirate.bard", "item": "pirate_bard_spawn_egg", "glyph": "bard", "mainhand": "minecraft:stick", "health": 50},
+        {"id": "pirate.bard", "subtype": "bard", "name": "Pirate Shantyman", "skin": "pirate.bard", "item": "pirate_bard_spawn_egg", "glyph": "bard", "mainhand": "ancientempires:instrument_flute", "health": 50},
         {"id": "pirate.trader", "subtype": "trader", "name": "Smuggler Dealer", "skin": "pirate.trader", "item": "pirate_trader_spawn_egg", "glyph": "trader", "mainhand": "minecraft:book", "health": 50},
         {"id": "pirate.civilian.female", "subtype": "civilian.female", "name": "Pirate Strumpet", "skin": "pirate.civilian.female", "item": "pirate_civilian_female_spawn_egg", "glyph": "civilian_female", "health": 10},
         {"id": "pirate.civilian.male", "subtype": "civilian.male", "name": "Pirate Drunkard", "skin": "pirate.civilian.male", "item": "pirate_civilian_male_spawn_egg", "glyph": "civilian_male", "health": 10}
@@ -131,7 +131,7 @@
         {"id": "xoltec.spellcaster.2", "subtype": "spellcaster.2", "name": "Sacrificer", "skin": "xoltec.spellcaster.2", "item": "xoltec_spellcaster_2_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 30},
         {"id": "xoltec.spellcaster.3", "subtype": "spellcaster.3", "name": "Soul Ripper", "skin": "xoltec.spellcaster.3", "item": "xoltec_spellcaster_3_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 40},
         {"id": "xoltec.spellcaster.4", "subtype": "spellcaster.4", "name": "Demon Master", "skin": "xoltec.spellcaster.4", "item": "xoltec_spellcaster_4_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:skull", "health": 60},
-        {"id": "xoltec.bard", "subtype": "bard", "name": "Xoltec Codex Keeper", "skin": "xoltec.bard", "item": "xoltec_bard_spawn_egg", "glyph": "bard", "mainhand": "minecraft:stick", "health": 50},
+        {"id": "xoltec.bard", "subtype": "bard", "name": "Xoltec Codex Keeper", "skin": "xoltec.bard", "item": "xoltec_bard_spawn_egg", "glyph": "bard", "mainhand": "ancientempires:instrument_drum", "health": 50},
         {"id": "xoltec.trader", "subtype": "trader", "name": "Xoltec Trader", "skin": "xoltec.trader", "item": "xoltec_trader_spawn_egg", "glyph": "trader", "mainhand": "minecraft:book", "health": 50},
         {"id": "xoltec.civilian.female", "subtype": "civilian.female", "name": "Xoltec Matron", "skin": "xoltec.civilian.female", "item": "xoltec_civilian_female_spawn_egg", "glyph": "civilian_female", "health": 10},
         {"id": "xoltec.civilian.male", "subtype": "civilian.male", "name": "Xoltec Slave", "skin": "xoltec.civilian.male", "item": "xoltec_civilian_male_spawn_egg", "glyph": "civilian_male", "health": 10}
@@ -156,7 +156,7 @@
         {"id": "sarkonid.spellcaster.2", "subtype": "spellcaster.2", "name": "Sarkonid Conjurer", "skin": "sarkonid.spellcaster.2", "item": "sarkonid_spellcaster_2_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 30},
         {"id": "sarkonid.spellcaster.3", "subtype": "spellcaster.3", "name": "Sarkonid Sorcerer", "skin": "sarkonid.spellcaster.3", "item": "sarkonid_spellcaster_3_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 40},
         {"id": "sarkonid.spellcaster.4", "subtype": "spellcaster.4", "name": "Sarkonid Archimagi", "skin": "sarkonid.spellcaster.4", "item": "sarkonid_spellcaster_4_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:skull", "health": 60},
-        {"id": "sarkonid.bard", "subtype": "bard", "name": "Sarkonid Storyteller", "skin": "sarkonid.bard", "item": "sarkonid_bard_spawn_egg", "glyph": "bard", "mainhand": "minecraft:stick", "health": 50},
+        {"id": "sarkonid.bard", "subtype": "bard", "name": "Sarkonid Storyteller", "skin": "sarkonid.bard", "item": "sarkonid_bard_spawn_egg", "glyph": "bard", "mainhand": "ancientempires:instrument_harp", "health": 50},
         {"id": "sarkonid.trader", "subtype": "trader", "name": "Sarkonid Bazaari", "skin": "sarkonid.trader", "item": "sarkonid_trader_spawn_egg", "glyph": "trader", "mainhand": "minecraft:book", "health": 50},
         {"id": "sarkonid.civilian.female", "subtype": "civilian.female", "name": "Sarkonid woman", "skin": "sarkonid.civilian.female", "item": "sarkonid_civilian_female_spawn_egg", "glyph": "civilian_female", "health": 10},
         {"id": "sarkonid.civilian.male", "subtype": "civilian.male", "name": "Sarkonid man", "skin": "sarkonid.civilian.male", "item": "sarkonid_civilian_male_spawn_egg", "glyph": "civilian_male", "health": 10}
@@ -176,7 +176,7 @@
         {"id": "witchbane.leader.elite", "subtype": "leader.elite", "name": "Witchbane Grandmaster", "skin": "witchbane.leader.elite", "item": "witchbane_leader_elite_spawn_egg", "glyph": "commander", "mainhand": "minecraft:diamond_sword", "offhand": "minecraft:shield", "health": 100},
         {"id": "witchbane.siege_engineer", "subtype": "siege_engineer", "name": "Witchbane Artificier", "skin": "witchbane.siege_engineer", "item": "witchbane_siege_engineer_spawn_egg", "glyph": "siege_engineer", "health": 50},
         {"id": "witchbane.priest", "subtype": "priest", "name": "Witchbane Priest", "skin": "witchbane.priest", "item": "witchbane_priest_spawn_egg", "glyph": "priest", "mainhand": "minecraft:book", "health": 50},
-        {"id": "witchbane.bard", "subtype": "bard", "name": "Witchbane Hymn Singer", "skin": "witchbane.bard", "item": "witchbane_bard_spawn_egg", "glyph": "bard", "mainhand": "minecraft:stick", "health": 50},
+        {"id": "witchbane.bard", "subtype": "bard", "name": "Witchbane Hymn Singer", "skin": "witchbane.bard", "item": "witchbane_bard_spawn_egg", "glyph": "bard", "mainhand": "ancientempires:instrument_harp", "health": 50},
         {"id": "witchbane.trader", "subtype": "trader", "name": "Witchbane Trader", "skin": "witchbane.trader", "item": "witchbane_trader_spawn_egg", "glyph": "trader", "mainhand": "minecraft:book", "health": 50},
         {"id": "witchbane.civilian.female", "subtype": "civilian.female", "name": "Witchbane Nun", "skin": "witchbane.civilian.female", "item": "witchbane_civilian_female_spawn_egg", "glyph": "civilian_female", "health": 10},
         {"id": "witchbane.civilian.male", "subtype": "civilian.male", "name": "Witchbane Monk", "skin": "witchbane.civilian.male", "item": "witchbane_civilian_male_spawn_egg", "glyph": "civilian_male", "health": 10}
@@ -196,7 +196,7 @@
         {"id": "nogg.leader.elite", "subtype": "leader.elite", "name": "Nogg Lord", "skin": "nogg.leader.elite", "item": "nogg_leader_elite_spawn_egg", "glyph": "commander", "mainhand": "minecraft:diamond_sword", "health": 60},
         {"id": "nogg.siege_engineer", "subtype": "siege_engineer", "name": "Nogg Tinkerer", "skin": "nogg.siege_engineer", "item": "nogg_siege_engineer_spawn_egg", "glyph": "siege_engineer", "health": 40},
         {"id": "nogg.priest", "subtype": "priest", "name": "Nogg Healer", "skin": "nogg.priest", "item": "nogg_priest_spawn_egg", "glyph": "priest", "mainhand": "minecraft:book", "health": 50},
-        {"id": "nogg.bard", "subtype": "bard", "name": "Nogg Songsmith", "skin": "nogg.bard", "item": "nogg_bard_spawn_egg", "glyph": "bard", "mainhand": "minecraft:stick", "health": 50},
+        {"id": "nogg.bard", "subtype": "bard", "name": "Nogg Songsmith", "skin": "nogg.bard", "item": "nogg_bard_spawn_egg", "glyph": "bard", "mainhand": "ancientempires:instrument_flute", "health": 50},
         {"id": "nogg.trader", "subtype": "trader", "name": "Nogg Fairtrader", "skin": "nogg.trader", "item": "nogg_trader_spawn_egg", "glyph": "trader", "mainhand": "minecraft:book", "health": 50},
         {"id": "nogg.civilian.female", "subtype": "civilian.female", "name": "Nogg Woman", "skin": "nogg.civilian.female", "item": "nogg_civilian_female_spawn_egg", "glyph": "civilian_female", "health": 10},
         {"id": "nogg.civilian.male", "subtype": "civilian.male", "name": "Nogg Man", "skin": "nogg.civilian.male", "item": "nogg_civilian_male_spawn_egg", "glyph": "civilian_male", "health": 10}
@@ -216,7 +216,7 @@
         {"id": "buffloka.leader.elite", "subtype": "leader.elite", "name": "Buffloka Big Chief", "skin": "buffloka.leader.elite", "item": "buffloka_leader_elite_spawn_egg", "glyph": "commander", "mainhand": "minecraft:diamond_axe", "health": 60},
         {"id": "buffloka.siege_engineer", "subtype": "siege_engineer", "name": "Buffloka Bigshot", "skin": "buffloka.siege_engineer", "item": "buffloka_siege_engineer_spawn_egg", "glyph": "siege_engineer", "health": 30},
         {"id": "buffloka.priest", "subtype": "priest", "name": "Buffloka Medicine Man", "skin": "buffloka.priest", "item": "buffloka_priest_spawn_egg", "glyph": "priest", "mainhand": "minecraft:stick", "health": 40},
-        {"id": "buffloka.bard", "subtype": "bard", "name": "Buffloka Legendweaver", "skin": "buffloka.bard", "item": "buffloka_bard_spawn_egg", "glyph": "bard", "mainhand": "minecraft:stick", "health": 50},
+        {"id": "buffloka.bard", "subtype": "bard", "name": "Buffloka Legendweaver", "skin": "buffloka.bard", "item": "buffloka_bard_spawn_egg", "glyph": "bard", "mainhand": "ancientempires:instrument_lute", "health": 50},
         {"id": "buffloka.trader", "subtype": "trader", "name": "Buffloka Bargainer", "skin": "buffloka.trader", "item": "buffloka_trader_spawn_egg", "glyph": "trader", "mainhand": "minecraft:feather", "health": 50},
         {"id": "buffloka.civilian.female", "subtype": "civilian.female", "name": "Buffloka Woman", "skin": "buffloka.civilian.female", "item": "buffloka_civilian_female_spawn_egg", "glyph": "civilian_female", "health": 10},
         {"id": "buffloka.civilian.male", "subtype": "civilian.male", "name": "Buffloka Man", "skin": "buffloka.civilian.male", "item": "buffloka_civilian_male_spawn_egg", "glyph": "civilian_male", "health": 10}
@@ -241,7 +241,7 @@
         {"id": "reiksgard.spellcaster.2", "subtype": "spellcaster.2", "name": "Reiksgard Earth Wizard", "skin": "reiksgard.spellcaster.2", "item": "reiksgard_spellcaster_2_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 30},
         {"id": "reiksgard.spellcaster.3", "subtype": "spellcaster.3", "name": "Reiksgard Air Wizard", "skin": "reiksgard.spellcaster.3", "item": "reiksgard_spellcaster_3_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 35},
         {"id": "reiksgard.spellcaster.4", "subtype": "spellcaster.4", "name": "Reiksgard Fire Wizard", "skin": "reiksgard.spellcaster.4", "item": "reiksgard_spellcaster_4_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 40},
-        {"id": "reiksgard.bard", "subtype": "bard", "name": "Reiksgard Drummer", "skin": "reiksgard.bard", "item": "reiksgard_bard_spawn_egg", "glyph": "bard", "mainhand": "minecraft:stick", "health": 50},
+        {"id": "reiksgard.bard", "subtype": "bard", "name": "Reiksgard Drummer", "skin": "reiksgard.bard", "item": "reiksgard_bard_spawn_egg", "glyph": "bard", "mainhand": "ancientempires:instrument_lute", "health": 50},
         {"id": "reiksgard.trader", "subtype": "trader", "name": "Reiksgard Trader", "skin": "reiksgard.trader", "item": "reiksgard_trader_spawn_egg", "glyph": "trader", "mainhand": "minecraft:book", "health": 50},
         {"id": "reiksgard.civilian.female", "subtype": "civilian.female", "name": "Reiksgard Trossfrau", "skin": "reiksgard.civilian.female", "item": "reiksgard_civilian_female_spawn_egg", "glyph": "civilian_female", "health": 10},
         {"id": "reiksgard.civilian.male", "subtype": "civilian.male", "name": "Reiksgard Trossmann", "skin": "reiksgard.civilian.male", "item": "reiksgard_civilian_male_spawn_egg", "glyph": "civilian_male", "health": 10}
@@ -261,7 +261,7 @@
         {"id": "zimba.leader.elite", "subtype": "leader.elite", "name": "Zimba King", "skin": "zimba.leader.elite", "item": "zimba_leader_elite_spawn_egg", "glyph": "commander", "mainhand": "minecraft:diamond_sword", "health": 60},
         {"id": "zimba.siege_engineer", "subtype": "siege_engineer", "name": "Zimba Farshooter", "skin": "zimba.siege_engineer", "item": "zimba_siege_engineer_spawn_egg", "glyph": "siege_engineer", "health": 30},
         {"id": "zimba.priest", "subtype": "priest", "name": "Zimba Witchdoctor", "skin": "zimba.priest", "item": "zimba_priest_spawn_egg", "glyph": "priest", "mainhand": "minecraft:stick", "health": 40},
-        {"id": "zimba.bard", "subtype": "bard", "name": "Zimba Chanter", "skin": "zimba.bard", "item": "zimba_bard_spawn_egg", "glyph": "bard", "mainhand": "minecraft:stick", "health": 50},
+        {"id": "zimba.bard", "subtype": "bard", "name": "Zimba Chanter", "skin": "zimba.bard", "item": "zimba_bard_spawn_egg", "glyph": "bard", "mainhand": "ancientempires:instrument_lute", "health": 50},
         {"id": "zimba.trader", "subtype": "trader", "name": "Zimba Haggler", "skin": "zimba.trader", "item": "zimba_trader_spawn_egg", "glyph": "trader", "mainhand": "minecraft:stick", "health": 50},
         {"id": "zimba.civilian.female", "subtype": "civilian.female", "name": "Zimba Woman", "skin": "zimba.civilian.female", "item": "zimba_civilian_female_spawn_egg", "glyph": "civilian_female", "health": 10},
         {"id": "zimba.civilian.male", "subtype": "civilian.male", "name": "Zimba Man", "skin": "zimba.civilian.male", "item": "zimba_civilian_male_spawn_egg", "glyph": "civilian_male", "health": 10}
@@ -301,7 +301,7 @@
         {"id": "orc.spellcaster.1", "subtype": "spellcaster.1", "name": "Orc Corrupter", "skin": "orc.spellcaster.1", "item": "orc_spellcaster_1_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:book", "health": 30},
         {"id": "orc.spellcaster.2", "subtype": "spellcaster.2", "name": "Orc Stormcaller", "skin": "orc.spellcaster.2", "item": "orc_spellcaster_2_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 40},
         {"id": "orc.spellcaster.3", "subtype": "spellcaster.3", "name": "Orc Soulwalker", "skin": "orc.spellcaster.3", "item": "orc_spellcaster_3_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 40},
-        {"id": "orc.bard", "subtype": "bard", "name": "Orc Braggart", "skin": "orc.bard", "item": "orc_bard_spawn_egg", "glyph": "bard", "mainhand": "minecraft:stick", "health": 50},
+        {"id": "orc.bard", "subtype": "bard", "name": "Orc Braggart", "skin": "orc.bard", "item": "orc_bard_spawn_egg", "glyph": "bard", "mainhand": "ancientempires:instrument_drum", "health": 50},
         {"id": "orc.trader", "subtype": "trader", "name": "Orc Cheater", "skin": "orc.trader", "item": "orc_trader_spawn_egg", "glyph": "trader", "mainhand": "minecraft:feather", "health": 50},
         {"id": "orc.civilian.female", "subtype": "civilian.female", "name": "Orc Breeder", "skin": "orc.civilian.female", "item": "orc_civilian_female_spawn_egg", "glyph": "civilian_female", "health": 10},
         {"id": "orc.civilian.male", "subtype": "civilian.male", "name": "Orc Runt", "skin": "orc.civilian.male", "item": "orc_civilian_male_spawn_egg", "glyph": "civilian_male", "health": 10}
@@ -326,7 +326,7 @@
         {"id": "evil.spellcaster.2", "subtype": "spellcaster.2", "name": "Malice Warlock", "skin": "evil.spellcaster.2", "item": "evil_spellcaster_2_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 35},
         {"id": "evil.spellcaster.3", "subtype": "spellcaster.3", "name": "Malice Demonist", "skin": "evil.spellcaster.3", "item": "evil_spellcaster_3_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 40},
         {"id": "evil.spellcaster.4", "subtype": "spellcaster.4", "name": "Malice Sorceror", "skin": "evil.spellcaster.4", "item": "evil_spellcaster_4_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 50},
-        {"id": "evil.bard", "subtype": "bard", "name": "Malice Spell Chanter", "skin": "evil.bard", "item": "evil_bard_spawn_egg", "glyph": "bard", "mainhand": "minecraft:stick", "health": 50},
+        {"id": "evil.bard", "subtype": "bard", "name": "Malice Spell Chanter", "skin": "evil.bard", "item": "evil_bard_spawn_egg", "glyph": "bard", "mainhand": "ancientempires:instrument_lute", "health": 50},
         {"id": "evil.trader", "subtype": "trader", "name": "Malice Bargainer", "skin": "evil.trader", "item": "evil_trader_spawn_egg", "glyph": "trader", "mainhand": "minecraft:book", "health": 50},
         {"id": "evil.civilian.female", "subtype": "civilian.female", "name": "Malice Concubine", "skin": "evil.civilian.female", "item": "evil_civilian_female_spawn_egg", "glyph": "civilian_female", "health": 10},
         {"id": "evil.civilian.male", "subtype": "civilian.male", "name": "Malice Slave", "skin": "evil.civilian.male", "item": "evil_civilian_male_spawn_egg", "glyph": "civilian_male", "health": 10}
@@ -351,7 +351,7 @@
         {"id": "good.spellcaster.2", "subtype": "spellcaster.2", "name": "Guardian Enchanter", "skin": "good.spellcaster.2", "item": "good_spellcaster_2_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 30},
         {"id": "good.spellcaster.3", "subtype": "spellcaster.3", "name": "Guardian Sorcerer", "skin": "good.spellcaster.3", "item": "good_spellcaster_3_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 40},
         {"id": "good.spellcaster.4", "subtype": "spellcaster.4", "name": "Guardian Archimage", "skin": "good.spellcaster.4", "item": "good_spellcaster_4_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:skull", "health": 60},
-        {"id": "good.bard", "subtype": "bard", "name": "Guardian Fable Teller", "skin": "good.bard", "item": "good_bard_spawn_egg", "glyph": "bard", "mainhand": "minecraft:stick", "health": 50},
+        {"id": "good.bard", "subtype": "bard", "name": "Guardian Fable Teller", "skin": "good.bard", "item": "good_bard_spawn_egg", "glyph": "bard", "mainhand": "ancientempires:instrument_lute", "health": 50},
         {"id": "good.trader", "subtype": "trader", "name": "Guardian Fair Trader", "skin": "good.trader", "item": "good_trader_spawn_egg", "glyph": "trader", "mainhand": "minecraft:book", "health": 50},
         {"id": "good.civilian.female", "subtype": "civilian.female", "name": "Guardian Good Wife", "skin": "good.civilian.female", "item": "good_civilian_female_spawn_egg", "glyph": "civilian_female", "health": 10},
         {"id": "good.civilian.male", "subtype": "civilian.male", "name": "Guardian Good Man", "skin": "good.civilian.male", "item": "good_civilian_male_spawn_egg", "glyph": "civilian_male", "health": 10}
@@ -396,7 +396,7 @@
         {"id": "elf.spellcaster.2", "subtype": "spellcaster.2", "name": "Elf Spell Binder", "skin": "elf.spellcaster.2", "item": "elf_spellcaster_2_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "scale": 1.111, "health": 30},
         {"id": "elf.spellcaster.3", "subtype": "spellcaster.3", "name": "Elf Spell Weaver", "skin": "elf.spellcaster.3", "item": "elf_spellcaster_3_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "scale": 1.111, "health": 40},
         {"id": "elf.spellcaster.4", "subtype": "spellcaster.4", "name": "Elf Spell Lord", "skin": "elf.spellcaster.4", "item": "elf_spellcaster_4_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:skull", "scale": 1.111, "health": 60},
-        {"id": "elf.bard", "subtype": "bard", "name": "Elf Lore keeper", "skin": "elf.bard", "item": "elf_bard_spawn_egg", "glyph": "bard", "mainhand": "minecraft:stick", "scale": 1.111, "health": 50},
+        {"id": "elf.bard", "subtype": "bard", "name": "Elf Lore keeper", "skin": "elf.bard", "item": "elf_bard_spawn_egg", "glyph": "bard", "mainhand": "ancientempires:instrument_flute", "scale": 1.111, "health": 50},
         {"id": "elf.trader", "subtype": "trader", "name": "Elf Merchant", "skin": "elf.trader", "item": "elf_trader_spawn_egg", "glyph": "trader", "mainhand": "minecraft:book", "scale": 1.111, "health": 50},
         {"id": "elf.civilian.female", "subtype": "civilian.female", "name": "Elf Maiden", "skin": "elf.civilian.female", "item": "elf_civilian_female_spawn_egg", "glyph": "civilian_female", "scale": 1.111, "health": 10},
         {"id": "elf.civilian.male", "subtype": "civilian.male", "name": "Elf Wanderer", "skin": "elf.civilian.male", "item": "elf_civilian_male_spawn_egg", "glyph": "civilian_male", "scale": 1.111, "health": 10}
@@ -429,7 +429,7 @@
         {"id": "dwarf.spellcaster.2", "subtype": "spellcaster.2", "name": "Dwarf Ruby Wizard", "skin": "dwarf.spellcaster.2", "item": "dwarf_spellcaster_2_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "scale": 0.75, "health": 30},
         {"id": "dwarf.spellcaster.3", "subtype": "spellcaster.3", "name": "Dwarf Sapphire Wizard", "skin": "dwarf.spellcaster.3", "item": "dwarf_spellcaster_3_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "scale": 0.75, "health": 40},
         {"id": "dwarf.spellcaster.4", "subtype": "spellcaster.4", "name": "Dwarf Diamond Wizard", "skin": "dwarf.spellcaster.4", "item": "dwarf_spellcaster_4_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:skull", "scale": 0.75, "health": 60},
-        {"id": "dwarf.bard", "subtype": "bard", "name": "Dwarf Bard", "skin": "dwarf.bard", "item": "dwarf_bard_spawn_egg", "glyph": "bard", "mainhand": "minecraft:stick", "scale": 0.75, "health": 50},
+        {"id": "dwarf.bard", "subtype": "bard", "name": "Dwarf Bard", "skin": "dwarf.bard", "item": "dwarf_bard_spawn_egg", "glyph": "bard", "mainhand": "ancientempires:instrument_harp", "scale": 0.75, "health": 50},
         {"id": "dwarf.trader", "subtype": "trader", "name": "Dwarf Trader", "skin": "dwarf.trader", "item": "dwarf_trader_spawn_egg", "glyph": "trader", "mainhand": "minecraft:book", "scale": 0.75, "health": 50},
         {"id": "dwarf.civilian.female", "subtype": "civilian.female", "name": "Dwarf Matron", "skin": "dwarf.civilian.female", "item": "dwarf_civilian_female_spawn_egg", "glyph": "civilian_female", "scale": 0.75, "health": 10},
         {"id": "dwarf.civilian.male", "subtype": "civilian.male", "name": "Dwarf Worker", "skin": "dwarf.civilian.male", "item": "dwarf_civilian_male_spawn_egg", "glyph": "civilian_male", "scale": 0.75, "health": 10}
@@ -454,7 +454,7 @@
         {"id": "shakayana.spellcaster.2", "subtype": "spellcaster.2", "name": "Shakayana Earth Magi", "skin": "shakayana.spellcaster.2", "item": "shakayana_spellcaster_2_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 30},
         {"id": "shakayana.spellcaster.3", "subtype": "spellcaster.3", "name": "Shakayana Water Magi", "skin": "shakayana.spellcaster.3", "item": "shakayana_spellcaster_3_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 40},
         {"id": "shakayana.spellcaster.4", "subtype": "spellcaster.4", "name": "Shakayana Fire Magi", "skin": "shakayana.spellcaster.4", "item": "shakayana_spellcaster_4_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:skull", "health": 60},
-        {"id": "shakayana.bard", "subtype": "bard", "name": "Shakayana Harpist", "skin": "shakayana.bard", "item": "shakayana_bard_spawn_egg", "glyph": "bard", "mainhand": "minecraft:stick", "health": 50},
+        {"id": "shakayana.bard", "subtype": "bard", "name": "Shakayana Harpist", "skin": "shakayana.bard", "item": "shakayana_bard_spawn_egg", "glyph": "bard", "mainhand": "ancientempires:instrument_drum", "health": 50},
         {"id": "shakayana.trader", "subtype": "trader", "name": "Shakayana Merchant", "skin": "shakayana.trader", "item": "shakayana_trader_spawn_egg", "glyph": "trader", "mainhand": "minecraft:book", "health": 50},
         {"id": "shakayana.civilian.female", "subtype": "civilian.female", "name": "Shakayana woman", "skin": "shakayana.civilian.female", "item": "shakayana_civilian_female_spawn_egg", "glyph": "civilian_female", "health": 10},
         {"id": "shakayana.civilian.male", "subtype": "civilian.male", "name": "Shakayana man", "skin": "shakayana.civilian.male", "item": "shakayana_civilian_male_spawn_egg", "glyph": "civilian_male", "health": 10}
@@ -479,7 +479,7 @@
         {"id": "smingol.spellcaster.2", "subtype": "spellcaster.2", "name": "Smingol Lesser Magus", "skin": "smingol.spellcaster.2", "item": "smingol_spellcaster_2_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:skull", "health": 30},
         {"id": "smingol.spellcaster.3", "subtype": "spellcaster.3", "name": "Smingol Spellcaster", "skin": "smingol.spellcaster.3", "item": "smingol_spellcaster_3_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:skull", "health": 40},
         {"id": "smingol.spellcaster.4", "subtype": "spellcaster.4", "name": "Smingol Great Spellcaster", "skin": "smingol.spellcaster.4", "item": "smingol_spellcaster_4_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:skull", "health": 60},
-        {"id": "smingol.bard", "subtype": "bard", "name": "Smingol Throat Singer", "skin": "smingol.bard", "item": "smingol_bard_spawn_egg", "glyph": "bard", "mainhand": "minecraft:stick", "health": 50},
+        {"id": "smingol.bard", "subtype": "bard", "name": "Smingol Throat Singer", "skin": "smingol.bard", "item": "smingol_bard_spawn_egg", "glyph": "bard", "mainhand": "ancientempires:instrument_lute", "health": 50},
         {"id": "smingol.trader", "subtype": "trader", "name": "Smingol Trader", "skin": "smingol.trader", "item": "smingol_trader_spawn_egg", "glyph": "trader", "mainhand": "minecraft:book", "health": 50},
         {"id": "smingol.civilian.female", "subtype": "civilian.female", "name": "Smingol woman", "skin": "smingol.civilian.female", "item": "smingol_civilian_female_spawn_egg", "glyph": "civilian_female", "health": 10},
         {"id": "smingol.civilian.male", "subtype": "civilian.male", "name": "Smingol man", "skin": "smingol.civilian.male", "item": "smingol_civilian_male_spawn_egg", "glyph": "civilian_male", "health": 10}
@@ -518,7 +518,7 @@
         {"id": "zamurai.spellcaster.2", "subtype": "spellcaster.2", "name": "Zamurai Spellbinder", "skin": "zamurai.spellcaster.2", "item": "zamurai_spellcaster_2_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 30},
         {"id": "zamurai.spellcaster.3", "subtype": "spellcaster.3", "name": "Zamurai Spellbreaker", "skin": "zamurai.spellcaster.3", "item": "zamurai_spellcaster_3_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 40},
         {"id": "zamurai.spellcaster.4", "subtype": "spellcaster.4", "name": "Zamurai Spellmaster", "skin": "zamurai.spellcaster.4", "item": "zamurai_spellcaster_4_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:skull", "health": 60},
-        {"id": "zamurai.bard", "subtype": "bard", "name": "Zamurai Bard", "skin": "zamurai.bard", "item": "zamurai_bard_spawn_egg", "glyph": "bard", "mainhand": "minecraft:stick", "health": 50},
+        {"id": "zamurai.bard", "subtype": "bard", "name": "Zamurai Bard", "skin": "zamurai.bard", "item": "zamurai_bard_spawn_egg", "glyph": "bard", "mainhand": "ancientempires:instrument_lute", "health": 50},
         {"id": "zamurai.trader", "subtype": "trader", "name": "Zamurai Trader", "skin": "zamurai.trader", "item": "zamurai_trader_spawn_egg", "glyph": "trader", "mainhand": "minecraft:book", "health": 50},
         {"id": "zamurai.civilian.female", "subtype": "civilian.female", "name": "Zamurai woman", "skin": "zamurai.civilian.female", "item": "zamurai_civilian_female_spawn_egg", "glyph": "civilian_female", "health": 10},
         {"id": "zamurai.civilian.male", "subtype": "civilian.male", "name": "Zamurai man", "skin": "zamurai.civilian.male", "item": "zamurai_civilian_male_spawn_egg", "glyph": "civilian_male", "health": 10}
@@ -611,7 +611,7 @@
         {"id": "wizardly.spellcaster.2", "subtype": "spellcaster.2", "name": "Wizardly Spell Master", "skin": "wizardly.spellcaster.2", "item": "wizardly_spellcaster_2_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 30},
         {"id": "wizardly.spellcaster.3", "subtype": "spellcaster.3", "name": "Wizardly Spell Binder", "skin": "wizardly.spellcaster.3", "item": "wizardly_spellcaster_3_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 40},
         {"id": "wizardly.spellcaster.4", "subtype": "spellcaster.4", "name": "Wizardly Archimage", "skin": "wizardly.spellcaster.4", "item": "wizardly_spellcaster_4_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:skull", "health": 60},
-        {"id": "wizardly.bard", "subtype": "bard", "name": "Wizardly Spellsinger", "skin": "wizardly.bard", "item": "wizardly_bard_spawn_egg", "glyph": "bard", "mainhand": "minecraft:stick", "health": 50},
+        {"id": "wizardly.bard", "subtype": "bard", "name": "Wizardly Spellsinger", "skin": "wizardly.bard", "item": "wizardly_bard_spawn_egg", "glyph": "bard", "mainhand": "ancientempires:instrument_lute", "health": 50},
         {"id": "wizardly.trader", "subtype": "trader", "name": "Wizardly Apprentice", "skin": "wizardly.trader", "item": "wizardly_trader_spawn_egg", "glyph": "trader", "mainhand": "minecraft:book", "health": 50},
         {"id": "wizardly.civilian.female", "subtype": "civilian.female", "name": "Wizardly Girl Student", "skin": "wizardly.civilian.female", "item": "wizardly_civilian_female_spawn_egg", "glyph": "civilian_female", "mainhand": "minecraft:book", "scale": 0.667, "health": 10},
         {"id": "wizardly.civilian.male", "subtype": "civilian.male", "name": "Wizardly Boy Student", "skin": "wizardly.civilian.male", "item": "wizardly_civilian_male_spawn_egg", "glyph": "civilian_male", "mainhand": "minecraft:book", "scale": 0.667, "health": 10}
@@ -631,7 +631,7 @@
         {"id": "amazon.leader.elite", "subtype": "leader.elite", "name": "Amazon Queen", "skin": "amazon.leader.elite", "item": "amazon_leader_elite_spawn_egg", "glyph": "commander", "mainhand": "minecraft:golden_sword", "health": 60},
         {"id": "amazon.siege_engineer", "subtype": "siege_engineer", "name": "Amazon Warmaker", "skin": "amazon.siege_engineer", "item": "amazon_siege_engineer_spawn_egg", "glyph": "siege_engineer", "health": 30},
         {"id": "amazon.priest", "subtype": "priest", "name": "Amazon Priestess", "skin": "amazon.priest", "item": "amazon_priest_spawn_egg", "glyph": "priest", "mainhand": "minecraft:book", "health": 40},
-        {"id": "amazon.bard", "subtype": "bard", "name": "Amazon Singer", "skin": "amazon.bard", "item": "amazon_bard_spawn_egg", "glyph": "bard", "mainhand": "minecraft:stick", "health": 50},
+        {"id": "amazon.bard", "subtype": "bard", "name": "Amazon Singer", "skin": "amazon.bard", "item": "amazon_bard_spawn_egg", "glyph": "bard", "mainhand": "ancientempires:instrument_lute", "health": 50},
         {"id": "amazon.trader", "subtype": "trader", "name": "Amazon Bargainer", "skin": "amazon.trader", "item": "amazon_trader_spawn_egg", "glyph": "trader", "mainhand": "minecraft:book", "health": 50},
         {"id": "amazon.civilian.female", "subtype": "civilian.female", "name": "Amazon Childbearer", "skin": "amazon.civilian.female", "item": "amazon_civilian_female_spawn_egg", "glyph": "civilian_female", "health": 10},
         {"id": "amazon.civilian.male", "subtype": "civilian.male", "name": "Amazon Male Slave", "skin": "amazon.civilian.male", "item": "amazon_civilian_male_spawn_egg", "glyph": "civilian_male", "health": 10}
@@ -705,7 +705,7 @@
         {"id": "hobbit.archer.elite", "subtype": "archer.elite", "name": "Hobbit Sentry", "skin": "hobbit.archer.elite", "item": "hobbit_archer_elite_spawn_egg", "glyph": "archer", "mainhand": "minecraft:bow", "scale": 0.694, "health": 30},
         {"id": "hobbit.leader", "subtype": "leader", "name": "Hobbit Hero", "skin": "hobbit.leader", "item": "hobbit_leader_spawn_egg", "glyph": "commander", "mainhand": "minecraft:iron_sword", "scale": 0.694, "health": 70},
         {"id": "hobbit.priest", "subtype": "priest", "name": "Hobbit Vicar", "skin": "hobbit.priest", "item": "hobbit_priest_spawn_egg", "glyph": "priest", "mainhand": "minecraft:book", "scale": 0.694, "health": 50},
-        {"id": "hobbit.bard", "subtype": "bard", "name": "Hobbit Tavern Singer", "skin": "hobbit.bard", "item": "hobbit_bard_spawn_egg", "glyph": "bard", "mainhand": "minecraft:stick", "scale": 0.694, "health": 50},
+        {"id": "hobbit.bard", "subtype": "bard", "name": "Hobbit Tavern Singer", "skin": "hobbit.bard", "item": "hobbit_bard_spawn_egg", "glyph": "bard", "mainhand": "ancientempires:instrument_flute", "scale": 0.694, "health": 50},
         {"id": "hobbit.trader", "subtype": "trader", "name": "Hobbit Trader", "skin": "hobbit.trader", "item": "hobbit_trader_spawn_egg", "glyph": "trader", "mainhand": "minecraft:book", "scale": 0.694, "health": 50},
         {"id": "hobbit.civilian.female", "subtype": "civilian.female", "name": "Hobbit Goodwife", "skin": "hobbit.civilian.female", "item": "hobbit_civilian_female_spawn_egg", "glyph": "civilian_female", "scale": 0.694, "health": 10},
         {"id": "hobbit.civilian.male", "subtype": "civilian.male", "name": "Hobbit Goodman", "skin": "hobbit.civilian.male", "item": "hobbit_civilian_male_spawn_egg", "glyph": "civilian_male", "scale": 0.694, "health": 10}
@@ -828,7 +828,7 @@
         {"id": "demon.spellcaster.2", "subtype": "spellcaster.2", "name": "Mephistopheles", "skin": "demon.spellcaster.2", "item": "demon_spellcaster_2_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 30},
         {"id": "demon.spellcaster.3", "subtype": "spellcaster.3", "name": "Archfiend", "skin": "demon.spellcaster.3", "item": "demon_spellcaster_3_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:stick", "health": 40},
         {"id": "demon.spellcaster.4", "subtype": "spellcaster.4", "name": "Demon Prince", "skin": "demon.spellcaster.4", "item": "demon_spellcaster_4_spawn_egg", "glyph": "spellcaster", "mainhand": "minecraft:skull", "health": 60},
-        {"id": "demon.bard", "subtype": "bard", "name": "Demon Jester", "skin": "demon.bard", "item": "demon_bard_spawn_egg", "glyph": "bard", "mainhand": "minecraft:stick", "health": 50},
+        {"id": "demon.bard", "subtype": "bard", "name": "Demon Jester", "skin": "demon.bard", "item": "demon_bard_spawn_egg", "glyph": "bard", "mainhand": "ancientempires:instrument_drum", "health": 50},
         {"id": "demon.trader", "subtype": "trader", "name": "Demon Soul Thief", "skin": "demon.trader", "item": "demon_trader_spawn_egg", "glyph": "trader", "mainhand": "minecraft:book", "health": 50},
         {"id": "demon.civilian.female", "subtype": "civilian.female", "name": "Demon Succubus", "skin": "demon.civilian.female", "item": "demon_civilian_female_spawn_egg", "glyph": "civilian_female", "health": 10},
         {"id": "demon.civilian.male", "subtype": "civilian.male", "name": "Demon Damned Soul", "skin": "demon.civilian.male", "item": "demon_civilian_male_spawn_egg", "glyph": "civilian_male", "health": 10}
@@ -853,7 +853,7 @@
         {"id": "undead.spellcaster.2", "subtype": "spellcaster.2", "name": "Undead Necromancer", "skin": "undead.spellcaster.2", "item": "undead_spellcaster_2_spawn_egg", "glyph": "spellcaster", "health": 40},
         {"id": "undead.spellcaster.3", "subtype": "spellcaster.3", "name": "Undead Liche", "skin": "undead.spellcaster.3", "item": "undead_spellcaster_3_spawn_egg", "glyph": "spellcaster", "health": 50},
         {"id": "undead.spellcaster.4", "subtype": "spellcaster.4", "name": "Liche Master", "skin": "undead.spellcaster.4", "item": "undead_spellcaster_4_spawn_egg", "glyph": "spellcaster", "health": 60},
-        {"id": "undead.bard", "subtype": "bard", "name": "Banshee", "skin": "undead.bard", "item": "undead_bard_spawn_egg", "glyph": "bard", "mainhand": "minecraft:stick", "health": 50},
+        {"id": "undead.bard", "subtype": "bard", "name": "Banshee", "skin": "undead.bard", "item": "undead_bard_spawn_egg", "glyph": "bard", "mainhand": "ancientempires:instrument_lute", "health": 50},
         {"id": "undead.trader", "subtype": "trader", "name": "Undead Death Bargainer", "skin": "undead.trader", "item": "undead_trader_spawn_egg", "glyph": "trader", "mainhand": "minecraft:bone", "health": 50}
       ]
     },

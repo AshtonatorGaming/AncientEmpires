@@ -1,5 +1,7 @@
 package com.ancientempires.entity.npc;
 
+import com.ancientempires.item.InstrumentItem;
+import com.ancientempires.item.TradeOrderItem;
 import com.ancientempires.combat.WeaponClassifier;
 import com.ancientempires.item.BandageItem;
 import net.minecraft.world.item.AxeItem;
@@ -282,6 +284,14 @@ public enum NpcPath
         if (stack.getItem() instanceof RoutingOrderItem)
         {
             return "courier";
+        }
+        if (stack.getItem() instanceof TradeOrderItem)
+        {
+            return "trader";
+        }
+        if (stack.getItem() instanceof InstrumentItem)
+        {
+            return "bard";
         }
         return null;
     }

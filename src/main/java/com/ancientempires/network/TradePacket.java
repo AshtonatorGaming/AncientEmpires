@@ -1,5 +1,6 @@
 package com.ancientempires.network;
 
+import com.ancientempires.entity.npc.NpcShop;
 import com.ancientempires.client.TradeScreen;
 import com.ancientempires.entity.npc.NpcEntity;
 import com.ancientempires.entity.npc.NpcFactions;
@@ -43,8 +44,18 @@ public class TradePacket
             player.displayClientMessage(Component.translatable("message.ancientempires.trade.refused", trader.getDisplayName()), true);
             return;
         }
+        ModNetwork.send(player, new TradePacket(trader.getId(), true, views(player, trader)));
+    }
+
+    /** The goods: a player's trader's from its order and backpack, else the trader's own stock, brought up to date. */
+    private static List<NpcTrades.View> views(ServerPlayer player, NpcEntity trader)
+    {
+        if (NpcShop.isShop(trader))
+        {
+            return NpcShop.views(trader);
+        }
         trader.getTrades().update(player.level().getGameTime());
-        ModNetwork.send(player, new TradePacket(trader.getId(), true, trader.getTrades().views()));
+        return trader.getTrades().views();
     }
 
     private static boolean refused(ServerPlayer player, NpcEntity trader)
@@ -94,7 +105,14 @@ public class TradePacket
             {
                 return;
             }
-            if (trader.getTrades().perform(player, request.index, player.level().getGameTime()))
+            if (NpcShop.isShop(trader))
+            {
+                if (NpcShop.perform(trader, player, request.index))
+                {
+                    trader.swing(trader.getUsedItemHand());
+                }
+            }
+            else if (trader.getTrades().perform(player, request.index, player.level().getGameTime()))
             {
                 String faction = trader.getFaction();
                 int change = faction.isEmpty() ? 0 : NpcFactions.tradeChange(faction);
@@ -104,7 +122,7 @@ public class TradePacket
                 }
                 trader.swing(trader.getUsedItemHand());
             }
-            ModNetwork.send(player, new TradePacket(trader.getId(), false, trader.getTrades().views()));
+            ModNetwork.send(player, new TradePacket(trader.getId(), false, views(player, trader)));
         }
     }
 }

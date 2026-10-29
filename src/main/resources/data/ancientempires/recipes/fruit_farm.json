@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "AHA",
+    " C "
+  ],
+  "key": {
+    "A": {"item": "minecraft:apple"},
+    "H": {"tag": "minecraft:hoes"},
+    "C": {"tag": "forge:chests/wooden"}
+  },
+  "result": {"item": "ancientempires:fruit_farm"}
+}

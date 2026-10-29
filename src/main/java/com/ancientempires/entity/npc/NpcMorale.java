@@ -84,7 +84,8 @@ public final class NpcMorale
     public static final int REASON_FORMED = 13;
     public static final int REASON_LEADER_BROKEN = 14;
     public static final int REASON_HOME = 15;
-    public static final int REASON_COUNT = 16;
+    public static final int REASON_SONG = 16;
+    public static final int REASON_COUNT = 17;
     /** A term this large (in morale points) is worth naming. */
     private static final double REASON_THRESHOLD = 4.0D;
 
@@ -195,15 +196,15 @@ public final class NpcMorale
         {
             // Nothing going on: no count of the area, just back toward the base.
             float presence = this.presence();
-            this.value = drift(this.value, base + this.inspiredBonus() + presence + this.squad(), AncientEmpiresConfig.moraleRiseRate, AncientEmpiresConfig.moraleFallRate);
-            this.reasons = (this.npc.isInspired() ? 1 << REASON_INSPIRED : 0) | (presence > 0.0F ? 1 << REASON_OWNER : 0) | this.squadReasons();
+            this.value = drift(this.value, base + this.inspiredBonus() + presence + this.song() + this.squad(), AncientEmpiresConfig.moraleRiseRate, AncientEmpiresConfig.moraleFallRate);
+            this.reasons = (this.npc.isInspired() ? 1 << REASON_INSPIRED : 0) | (presence > 0.0F ? 1 << REASON_OWNER : 0) | this.squadReasons() | this.songReason();
             this.npc.level().getProfiler().pop();
             return;
         }
         Situation situation = this.look(base);
         Weights weights = Weights.fromConfig();
         float target = target(situation, weights) + this.shock + this.squad();
-        this.reasons = this.squadReasons() | reasons(situation, weights, this.shock) | (this.routs > 0 ? 1 << REASON_ROUTED_BEFORE : 0) | (this.bannerNear ? 1 << REASON_BANNER : 0) | (this.npc.isOnWatch() && AncientEmpiresConfig.nightWatchMorale > 0.0D ? 1 << REASON_WATCH : 0);
+        this.reasons = this.squadReasons() | reasons(situation, weights, this.shock) | (this.routs > 0 ? 1 << REASON_ROUTED_BEFORE : 0) | (this.bannerNear ? 1 << REASON_BANNER : 0) | (this.npc.isOnWatch() && AncientEmpiresConfig.nightWatchMorale > 0.0D ? 1 << REASON_WATCH : 0) | this.songReason();
         this.value = drift(this.value, target, AncientEmpiresConfig.moraleRiseRate, AncientEmpiresConfig.moraleFallRate);
         this.clearTicks = situation.enemies() > 0.0D ? 0 : this.clearTicks + interval;
         this.step();
@@ -303,7 +304,7 @@ public final class NpcMorale
         this.bannerNear = banner || carriesBanner(this.npc);
         return new Situation(base, this.npc.isInspired() ? this.npc.getInspiredStrength() : 0.0F, allies, enemies, health, flanked,
                 this.npc.getNeeds().hungry(), routing, this.presence() + (this.bannerNear ? (float) AncientEmpiresConfig.moraleBannerBonus : 0.0F)
-                        + (this.npc.isOnWatch() ? (float) AncientEmpiresConfig.nightWatchMorale : 0.0F));
+                        + (this.npc.isOnWatch() ? (float) AncientEmpiresConfig.nightWatchMorale : 0.0F) + this.song());
     }
 
     /** A standard: any banner in the off hand. */
@@ -318,6 +319,17 @@ public final class NpcMorale
     }
 
     /** A player's soldiers take heart from their owner fighting close by ({@code ownerPresenceBonus}). */
+    /** A bard's song heard lately ({@code bard.moraleBonus}). */
+    private float song()
+    {
+        return this.npc.hearsSong() ? (float) AncientEmpiresConfig.bardMoraleBonus : 0.0F;
+    }
+
+    private int songReason()
+    {
+        return this.npc.hearsSong() && AncientEmpiresConfig.bardMoraleBonus > 0.0D ? 1 << REASON_SONG : 0;
+    }
+
     private float presence()
     {
         if (!this.npc.isOwnedNpc() || AncientEmpiresConfig.moraleOwnerPresenceBonus <= 0.0D)

@@ -1,5 +1,7 @@
 package com.ancientempires.entity.npc;
 
+import net.minecraft.world.entity.player.Player;
+import com.ancientempires.item.TradeOrderItem;
 import com.ancientempires.block.WorksiteBlockEntity;
 import com.ancientempires.config.AncientEmpiresConfig;
 import com.ancientempires.item.OrderItem;
@@ -24,6 +26,9 @@ import java.util.List;
  * and the container as the stop says, takes a moment over it (shorter with
  * level, longer the more it moved), and goes on. A stop it cannot reach, or
  * that is gone, another player's worksite, or in another dimension, is passed by.
+ * A trader (Trade Order) walks its round the same way: at a container it banks
+ * its takings and restocks ({@link NpcShop}), and where the stop says it keeps
+ * shop for {@code trade.shopTicks}, at any block.
  */
 final class NpcCourierGoal extends Goal
 {
@@ -37,6 +42,8 @@ final class NpcCourierGoal extends Goal
     private static final int TICKS_PER_ITEM = 2;
     private static final int MIN_WORK = 10;
     private static final int MAX_WORK = 80;
+    /** Blocks within which a trader keeping shop turns to a player. */
+    private static final double CUSTOMER_RANGE = 6.0D;
 
     private final NpcEntity npc;
     private int nextCheck;
@@ -44,6 +51,8 @@ final class NpcCourierGoal extends Goal
     private int walking;
     private int working = -1;
     private int repath;
+    /** While {@code working} is under this, the trader keeps shop (0: not a shop stop). */
+    private int shopUntil;
 
     NpcCourierGoal(NpcEntity npc)
     {
@@ -51,11 +60,16 @@ final class NpcCourierGoal extends Goal
         this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }
 
-    /** The Routing Order it works by: in the main hand, else in the orders slot. */
+    /** The Routing or Trade Order it works by: in the main hand, else in the orders slot. */
     private ItemStack order()
     {
         ItemStack hand = this.npc.getMainHandItem();
-        return hand.getItem() instanceof RoutingOrderItem ? hand : this.npc.getInventory().ordersItem();
+        return isRound(hand) ? hand : this.npc.getInventory().ordersItem();
+    }
+
+    private static boolean isRound(ItemStack order)
+    {
+        return order.getItem() instanceof RoutingOrderItem || order.getItem() instanceof TradeOrderItem;
     }
 
     private List<OrderItem.Stop> route()
@@ -65,7 +79,7 @@ final class NpcCourierGoal extends Goal
 
     private boolean onDuty()
     {
-        return this.npc.getNpcPath() == NpcPath.WORKER && this.order().getItem() instanceof RoutingOrderItem && this.npc.isOwnedNpc()
+        return this.npc.getNpcPath() == NpcPath.WORKER && isRound(this.order()) && this.npc.isOwnedNpc()
                 && this.npc.getTarget() == null && !this.npc.isFollowing() && !this.npc.getNeeds().hungry() && this.npc.level().isDay()
                 && !this.npc.level().isRaining();
     }
@@ -117,11 +131,23 @@ final class NpcCourierGoal extends Goal
         }
         if (this.working >= 0)
         {
-            if (this.working % 10 == 0)
+            if (this.shopUntil > 0 && this.working < this.shopUntil)
             {
-                this.npc.swing(InteractionHand.MAIN_HAND);
+                // Keeping shop: it faces whoever comes by.
+                Player customer = this.npc.level().getNearestPlayer(this.npc, CUSTOMER_RANGE);
+                if (customer != null)
+                {
+                    this.npc.getLookControl().setLookAt(customer);
+                }
             }
-            this.npc.getLookControl().setLookAt(Vec3.atCenterOf(stop.pos()));
+            else
+            {
+                if (this.working % 10 == 0)
+                {
+                    this.npc.swing(InteractionHand.MAIN_HAND);
+                }
+                this.npc.getLookControl().setLookAt(Vec3.atCenterOf(stop.pos()));
+            }
             if (--this.working < 0)
             {
                 this.next();
@@ -146,23 +172,51 @@ final class NpcCourierGoal extends Goal
         }
         this.npc.getNavigation().stop();
         IItemHandler container = this.container(pos);
-        if (container == null)
+        int shop = 0;
+        int moved;
+        if (this.order().getItem() instanceof TradeOrderItem)
+        {
+            TradeOrderItem.Mode mode = TradeOrderItem.Mode.of(stop.mode());
+            moved = 0;
+            if (container != null && mode.banks())
+            {
+                moved += NpcShop.bank(this.npc, container);
+            }
+            if (container != null && mode.restocks())
+            {
+                moved += NpcShop.restock(this.npc, container);
+            }
+            shop = mode.keepsShop() ? AncientEmpiresConfig.tradeShopTicks : 0;
+            if (container == null && shop == 0)
+            {
+                this.next();
+                return;
+            }
+        }
+        else if (container == null)
         {
             this.next();
             return;
         }
-        int moved = transfer(this.npc.getInventory(), container, RoutingOrderItem.Mode.of(stop.mode()), stop.filter());
+        else
+        {
+            moved = transfer(this.npc.getInventory(), container, RoutingOrderItem.Mode.of(stop.mode()), stop.filter());
+        }
         if (moved > 0)
         {
             this.npc.addXp(AncientEmpiresConfig.levelXpPerWork);
         }
         // AW: the work time shrinks with level; ours with work speed, which levels raise.
         double speed = Math.max(0.25D, this.npc.getWorkSpeed());
-        this.working = (int) Math.max(MIN_WORK, Math.min(MAX_WORK, moved * TICKS_PER_ITEM / speed));
+        int work = (int) Math.max(MIN_WORK, Math.min(MAX_WORK, moved * TICKS_PER_ITEM / speed));
+        // The handling first, then the shop: working counts down, so the shop is its lower part.
+        this.shopUntil = shop;
+        this.working = work + shop;
     }
 
     private void next()
     {
+        this.shopUntil = 0;
         this.stopIndex++;
         this.walking = 0;
         this.working = -1;

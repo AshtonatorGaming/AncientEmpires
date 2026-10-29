@@ -26,7 +26,7 @@ public final class NpcJobGoal extends Goal
     {
         this.npc = npc;
         this.trades = List.of(new NpcFarmerGoal(npc), new NpcWoodcutterGoal(npc), new NpcMinerGoal(npc), new NpcRancherGoal(npc),
-                new NpcHunterGoal(npc), new NpcFisherGoal(npc), new NpcCookGoal(npc));
+                new NpcHunterGoal(npc), new NpcFisherGoal(npc), new NpcCookGoal(npc), new NpcFruitPickerGoal(npc));
         this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }
 
@@ -37,13 +37,17 @@ public final class NpcJobGoal extends Goal
         {
             return false;
         }
-        NpcWorkGoal<?> trade = this.tradeFor(this.npc.getMainHandItem());
-        if (trade == null || !trade.canUse())
+        // A tool may serve two trades (a hoe: crop farm, else fruit farm); the first that finds work runs.
+        ItemStack tool = this.npc.getMainHandItem();
+        for (NpcWorkGoal<?> trade : this.trades)
         {
-            return false;
+            if (trade.isTrade(tool) && trade.canUse())
+            {
+                this.active = trade;
+                return true;
+            }
         }
-        this.active = trade;
-        return true;
+        return false;
     }
 
     @Nullable
