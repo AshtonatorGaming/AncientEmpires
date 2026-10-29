@@ -70,7 +70,7 @@ public final class NpcSleepGoal extends Goal
         {
             return this.sleepy();
         }
-        return this.sleepy() && this.ticks < GIVE_UP_TICKS && this.npc.getBed() != null;
+        return this.sleepy() && this.ticks < GIVE_UP_TICKS && this.npc.getNeeds().bed() != null;
     }
 
     @Override
@@ -93,7 +93,7 @@ public final class NpcSleepGoal extends Goal
     @Override
     public void tick()
     {
-        BlockPos bed = this.npc.getBed();
+        BlockPos bed = this.npc.getNeeds().bed();
         if (bed == null || this.npc.isSleeping())
         {
             return;
@@ -122,7 +122,7 @@ public final class NpcSleepGoal extends Goal
      */
     private BlockPos bed()
     {
-        BlockPos bed = this.npc.getBed();
+        BlockPos bed = this.npc.getNeeds().bed();
         if (bed != null && isBedHead(this.npc.level().getBlockState(bed)))
         {
             return bed;
@@ -133,12 +133,12 @@ public final class NpcSleepGoal extends Goal
         }
         if (bed != null)
         {
-            this.npc.releaseBed();
+            this.npc.getNeeds().releaseBed();
         }
         BlockPos center = this.npc.getHome() != null ? this.npc.getHome() : this.npc.blockPosition();
         Optional<BlockPos> claimed = level.getPoiManager().take(type -> type.is(PoiTypes.HOME), (type, pos) -> true,
                 center, AncientEmpiresConfig.sleepBedRange);
-        claimed.ifPresent(this.npc::setBed);
+        claimed.ifPresent(this.npc.getNeeds()::setBed);
         return claimed.orElse(null);
     }
 

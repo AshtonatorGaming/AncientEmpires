@@ -131,7 +131,7 @@ public class NpcMenu extends AbstractContainerMenu
                 case STAT_MORALE_REASONS -> morale.reasons();
                 case STAT_GUARD -> shield ? Math.round(this.npc.getGuard().points() * 10.0F) : -1;
                 case STAT_GUARD_MAX -> shield ? Math.round(this.npc.getGuard().max() * 10.0F) : -1;
-                case STAT_HUNGRY -> this.npc.isHungry() ? 1 : 0;
+                case STAT_HUNGRY -> this.npc.getNeeds().hungry() ? 1 : 0;
                 default -> 0;
             };
         }

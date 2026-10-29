@@ -97,7 +97,7 @@ public enum NpcStatus
         {
             return SLEEP;
         }
-        if (npc.isHungry())
+        if (npc.getNeeds().hungry())
         {
             return HUNGRY;
         }

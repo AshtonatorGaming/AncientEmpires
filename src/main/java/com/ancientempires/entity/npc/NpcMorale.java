@@ -270,7 +270,7 @@ public final class NpcMorale
         float health = this.npc.getMaxHealth() <= 0.0F ? 1.0F : this.npc.getHealth() / this.npc.getMaxHealth();
         this.bannerNear = banner || carriesBanner(this.npc);
         return new Situation(base, this.npc.isInspired() ? this.npc.getInspiredStrength() : 0.0F, allies, enemies, health, flanked,
-                this.npc.isHungry(), routing, this.presence() + (this.bannerNear ? (float) AncientEmpiresConfig.moraleBannerBonus : 0.0F)
+                this.npc.getNeeds().hungry(), routing, this.presence() + (this.bannerNear ? (float) AncientEmpiresConfig.moraleBannerBonus : 0.0F)
                         + (this.npc.isOnWatch() ? (float) AncientEmpiresConfig.nightWatchMorale : 0.0F));
     }
 

@@ -75,10 +75,10 @@ public final class NpcJobGoal extends Goal
         lines.add(check(!npc.isFollowing(), "Not following"));
         lines.add(check(npc.getTarget() == null, "Not fighting"));
         lines.add(check(!npc.isPassenger(), "Not riding"));
-        lines.add(check(!npc.isHungry(), "Not hungry"));
+        lines.add(check(!npc.getNeeds().hungry(), "Not hungry"));
         lines.add(check(npc.level().isDay(), "Daytime"));
         lines.add(check(!npc.level().isRainingAt(npc.blockPosition().above()), "No rain on it"));
-        BlockPos site = npc.getWorksite();
+        BlockPos site = npc.getNeeds().worksite();
         lines.add(check(site != null, site == null
                 ? "Worksite found (none yet; it searches its owner's worksites of its trade within work.searchRange of its home)"
                 : "Worksite at " + site.toShortString()));

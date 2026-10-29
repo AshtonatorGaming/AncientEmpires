@@ -52,7 +52,7 @@ final class NpcGovernorGoal extends Goal
     private boolean governs()
     {
         return AncientEmpiresConfig.governorEnabled && this.npc.getNpcPath() == NpcPath.WORKER && holdsMap(this.npc.getMainHandItem())
-                && this.npc.isOwnedNpc() && this.npc.getTarget() == null && !this.npc.isFollowing() && !this.npc.isHungry()
+                && this.npc.isOwnedNpc() && this.npc.getTarget() == null && !this.npc.isFollowing() && !this.npc.getNeeds().hungry()
                 && this.npc.level().isDay();
     }
 

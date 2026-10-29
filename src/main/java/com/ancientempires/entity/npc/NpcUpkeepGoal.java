@@ -53,11 +53,11 @@ public final class NpcUpkeepGoal extends Goal
             return false;
         }
         this.nextCheck = this.npc.tickCount + CHECK_INTERVAL + (this.npc.getId() & 15);
-        if (!this.npc.isMealDue() || !this.free())
+        if (!this.npc.getNeeds().mealDue() || !this.free())
         {
             return false;
         }
-        if (this.npc.mealFromCredit())
+        if (this.npc.getNeeds().mealFromCredit())
         {
             return false;
         }
@@ -69,12 +69,12 @@ public final class NpcUpkeepGoal extends Goal
         if (hall == null && !AncientEmpiresConfig.upkeepRequireHall)
         {
             // No Town Hall in reach: this NPC lives off the land, as before halls existed.
-            this.npc.skipMeal();
+            this.npc.getNeeds().skipMeal();
             return false;
         }
         if (hall == null || hall.storedRations() <= 0.0D)
         {
-            this.npc.setHungry(true);
+            this.npc.getNeeds().setHungry(true);
             this.nextCheck = this.npc.tickCount + RETRY_TICKS;
             return false;
         }
@@ -104,7 +104,7 @@ public final class NpcUpkeepGoal extends Goal
         {
             return false;
         }
-        return this.fetchFrom != null || (this.npc.isMealDue() && this.foodSlot() >= 0);
+        return this.fetchFrom != null || (this.npc.getNeeds().mealDue() && this.foodSlot() >= 0);
     }
 
     @Override
@@ -143,7 +143,7 @@ public final class NpcUpkeepGoal extends Goal
         if (this.swappedSlot >= 0)
         {
             this.swapBack();
-            if (!this.npc.isMealDue())
+            if (!this.npc.getNeeds().mealDue())
             {
                 this.nextCheck = 0;
                 this.fetchFrom = null;
@@ -156,7 +156,7 @@ public final class NpcUpkeepGoal extends Goal
             return;
         }
         int slot = this.foodSlot();
-        if (slot >= 0 && this.npc.isMealDue())
+        if (slot >= 0 && this.npc.getNeeds().mealDue())
         {
             this.startEating(slot);
         }

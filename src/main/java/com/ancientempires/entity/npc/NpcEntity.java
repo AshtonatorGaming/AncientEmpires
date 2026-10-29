@@ -175,11 +175,6 @@ public class NpcEntity extends PathfinderMob
     private static final String[] LEGACY_PATH_KEYS = {"AeCalling", "AeRole"};
     private static final String LEVY_KEY = "AeLevy";
     private static final String REVENGE_KEY = "AeRevenge";
-    private static final String WORKSITE_KEY = "AeWorksite";
-    private static final String HUNGRY_KEY = "AeHungry";
-    private static final String NEXT_MEAL_KEY = "AeNextMeal";
-    private static final String MEAL_CREDIT_KEY = "AeMealCredit";
-    private static final String BED_KEY = "AeBed";
 
     private final NpcInventory inventory = new NpcInventory(this);
     private final NpcSidearm sidearm = new NpcSidearm(this);
@@ -199,6 +194,7 @@ public class NpcEntity extends PathfinderMob
     private final NpcProgress progress = new NpcProgress(this);
     private final NpcAttack attack = new NpcAttack(this);
     private final NpcHold hold = new NpcHold(this);
+    private final NpcNeeds needs = new NpcNeeds(this);
     /** The NPC spawner that made it (its home), its slot there, and whether it is a garrison. Not packed. */
     @Nullable
     private BlockPos spawnerPos;
@@ -233,21 +229,9 @@ public class NpcEntity extends PathfinderMob
     private LivingEntity fearSource;
     /** Players this NPC holds a faction-mate's death against, with the game time it ends. Saved as {@code AeRevenge}. */
     private final Map<UUID, Long> revenge = new HashMap<>();
-    /** Saved as {@code AeWorksite}. */
-    @Nullable
-    private BlockPos worksite;
-    /** Saved as {@code AeBed}. */
-    @Nullable
-    private BlockPos bed;
-    /** Saved as {@code AeHungry}. */
-    private boolean hungry;
     /** Set for a death a Town Hall records, from {@code upkeep.keepOnDeath}: those items stay for the record. */
     private boolean keepEquipmentOnDeath;
     private boolean keepBackpackOnDeath;
-    /** Game time the next meal is due; unset until the NPC first ticks. Saved as {@code AeNextMeal}. */
-    private long nextMeal = -1L;
-    /** Rations eaten ahead (a food bundle covers several days). Saved as {@code AeMealCredit}. */
-    private double mealCredit;
 
 
     /** Bumped on any hand change. Not saved; a fresh load starts every cache cold. */
@@ -856,103 +840,13 @@ public class NpcEntity extends PathfinderMob
      * Faction rows do not claim the placer. Owned rows read {@link #SPAWN_OWNER}.
      */
     /** Sets the NPC's home in its current dimension. Immigration uses this for newcomers. */
-    /** The worksite this NPC last worked at, such as its crop farm; checked again before each shift. */
-    @Nullable
-    public BlockPos getWorksite()
-    {
-        return this.worksite;
-    }
-
-    public void setWorksite(@Nullable BlockPos worksite)
-    {
-        this.worksite = worksite == null ? null : worksite.immutable();
-    }
-
-    /** The bed this NPC has claimed in vanilla's bed index, or null. */
-    @Nullable
-    public BlockPos getBed()
-    {
-        return this.bed;
-    }
-
-    void setBed(@Nullable BlockPos bed)
-    {
-        this.bed = bed == null ? null : bed.immutable();
-    }
-
-    /** Gives the claimed bed back to the bed index (death, repack, or the bed is gone). */
-    void releaseBed()
-    {
-        if (this.bed != null && this.level() instanceof ServerLevel level)
-        {
-            if (this.isSleeping())
-            {
-                this.stopSleeping();
-            }
-            // A broken bed is already gone from the index, and releasing it there throws.
-            if (level.getPoiManager().existsAtPosition(PoiTypes.HOME, this.bed))
-            {
-                level.getPoiManager().release(this.bed);
-            }
-        }
-        this.bed = null;
-    }
-
-    /** Missed its last upkeep: a hungry worker does not work. Set by the Town Hall. */
-    public boolean isHungry()
-    {
-        return this.hungry;
-    }
-
-    public void setHungry(boolean hungry)
-    {
-        this.hungry = hungry;
-    }
-
-    /** An owned NPC whose meal is due ({@code upkeep.mealInterval}). Faction NPCs live off their faction. */
-    public boolean isMealDue()
-    {
-        if (!AncientEmpiresConfig.upkeepEnabled || !this.isOwnedNpc() || this.isCreative())
-        {
-            return false;
-        }
-        long now = this.level().getGameTime();
-        if (this.nextMeal < 0L)
-        {
-            // A new NPC arrives fed.
-            this.nextMeal = now + AncientEmpiresConfig.upkeepMealInterval;
-        }
-        return now >= this.nextMeal;
-    }
-
-    /** Takes a meal from rations already eaten ahead. Returns false if there are none. */
-    public boolean mealFromCredit()
-    {
-        if (this.mealCredit < 1.0D)
-        {
-            return false;
-        }
-        this.mealCredit -= 1.0D;
-        this.nextMeal = this.level().getGameTime() + AncientEmpiresConfig.upkeepMealInterval;
-        this.hungry = false;
-        return true;
-    }
-
-    /** A meal that needs no food (no Town Hall to depend on): the NPC is fed until the next one. */
-    public void skipMeal()
-    {
-        this.nextMeal = this.level().getGameTime() + AncientEmpiresConfig.upkeepMealInterval;
-        this.hungry = false;
-    }
-
     /** Vanilla eating ends here; what was eaten counts toward the NPC's rations. */
     @Override
     public ItemStack eat(Level level, ItemStack food)
     {
         if (!level.isClientSide)
         {
-            this.mealCredit += TownHallBlockEntity.rations(food);
-            this.mealFromCredit();
+            this.needs.ate(food);
         }
         return super.eat(level, food);
     }
@@ -1643,6 +1537,12 @@ public class NpcEntity extends PathfinderMob
         return this.hold;
     }
 
+    /** Meals, the claimed bed, and the last worksite. */
+    public NpcNeeds getNeeds()
+    {
+        return this.needs;
+    }
+
     public NpcProgress getProgress()
     {
         return this.progress;
@@ -2023,7 +1923,7 @@ public class NpcEntity extends PathfinderMob
         // The egg carries the bow as the primary weapon, the same as a reload.
         this.sidearm.restore();
         this.mount.beforeRepack();
-        this.releaseBed();
+        this.getNeeds().releaseBed();
         // Out of any unit: placed again it is a new NPC, and its unit stands alone meanwhile.
         this.chain.depart(false);
         // A repacked NPC forgets its home: placed again, the spot it lands on is its new one.
@@ -2051,7 +1951,7 @@ public class NpcEntity extends PathfinderMob
     {
         this.sidearm.restore();
         this.mount.beforeRepack();
-        this.releaseBed();
+        this.getNeeds().releaseBed();
         this.chain.depart(false);
         ItemStack scroll = this.createPackedItem(false);
         if (!scroll.isEmpty())
@@ -2762,7 +2662,7 @@ public class NpcEntity extends PathfinderMob
         super.die(source);
         if (alive)
         {
-            this.releaseBed();
+            this.getNeeds().releaseBed();
         }
         if (alive)
         {
@@ -2827,26 +2727,7 @@ public class NpcEntity extends PathfinderMob
         this.mount.save(tag);
         this.morale.save(tag);
         this.chain.save(tag);
-        if (this.worksite != null)
-        {
-            tag.putLong(WORKSITE_KEY, this.worksite.asLong());
-        }
-        if (this.hungry)
-        {
-            tag.putBoolean(HUNGRY_KEY, true);
-        }
-        if (this.nextMeal >= 0L)
-        {
-            tag.putLong(NEXT_MEAL_KEY, this.nextMeal);
-        }
-        if (this.mealCredit > 0.0D)
-        {
-            tag.putDouble(MEAL_CREDIT_KEY, this.mealCredit);
-        }
-        if (this.bed != null)
-        {
-            tag.putLong(BED_KEY, this.bed.asLong());
-        }
+        this.needs.save(tag);
         if (!this.revenge.isEmpty())
         {
             ListTag grudges = new ListTag();
@@ -2934,11 +2815,7 @@ public class NpcEntity extends PathfinderMob
         this.mount.load(tag);
         this.morale.load(tag);
         this.chain.load(tag);
-        this.worksite = tag.contains(WORKSITE_KEY) ? BlockPos.of(tag.getLong(WORKSITE_KEY)) : null;
-        this.hungry = tag.getBoolean(HUNGRY_KEY);
-        this.nextMeal = tag.contains(NEXT_MEAL_KEY) ? tag.getLong(NEXT_MEAL_KEY) : -1L;
-        this.mealCredit = tag.getDouble(MEAL_CREDIT_KEY);
-        this.bed = tag.contains(BED_KEY) ? BlockPos.of(tag.getLong(BED_KEY)) : null;
+        this.needs.load(tag);
         this.revenge.clear();
         for (Tag element : tag.getList(REVENGE_KEY, Tag.TAG_COMPOUND))
         {

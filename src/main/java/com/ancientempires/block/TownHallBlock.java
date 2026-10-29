@@ -107,7 +107,7 @@ public final class TownHallBlock extends BaseEntityBlock
                     npc -> hall.owner().equals(npc.getOwner())))
             {
                 total++;
-                if (npc.isHungry())
+                if (npc.getNeeds().hungry())
                 {
                     hungry++;
                 }

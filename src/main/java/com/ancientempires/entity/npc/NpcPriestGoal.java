@@ -51,7 +51,7 @@ public final class NpcPriestGoal extends Goal
     private boolean isPriest()
     {
         return this.npc.getNpcPath() == NpcPath.WORKER && NpcPath.isScripture(this.npc.getMainHandItem())
-                && this.npc.isOwnedNpc() && this.npc.getTarget() == null && !this.npc.isFollowing() && !this.npc.isHungry();
+                && this.npc.isOwnedNpc() && this.npc.getTarget() == null && !this.npc.isFollowing() && !this.npc.getNeeds().hungry();
     }
 
     @Override

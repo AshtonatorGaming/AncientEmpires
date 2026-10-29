@@ -187,7 +187,7 @@ public abstract class NpcWorkGoal<T extends WorksiteBlockEntity> extends Goal
     {
         return this.npc.getNpcPath() == NpcPath.WORKER && this.isTool(this.npc.getMainHandItem())
                 && this.npc.isOwnedNpc() && !this.npc.isFollowing() && this.npc.getTarget() == null
-                && !this.npc.isPassenger() && !this.npc.isHungry()
+                && !this.npc.isPassenger() && !this.npc.getNeeds().hungry()
                 && this.npc.level().isDay() && !this.npc.level().isRainingAt(this.npc.blockPosition().above());
     }
 
@@ -765,7 +765,7 @@ public abstract class NpcWorkGoal<T extends WorksiteBlockEntity> extends Goal
     @Nullable
     private T findSite()
     {
-        BlockPos known = this.npc.getWorksite();
+        BlockPos known = this.npc.getNeeds().worksite();
         if (known != null)
         {
             BlockEntity entity = this.npc.level().getBlockEntity(known);
@@ -803,7 +803,7 @@ public abstract class NpcWorkGoal<T extends WorksiteBlockEntity> extends Goal
         }
         if (best != null)
         {
-            this.npc.setWorksite(best.getBlockPos());
+            this.npc.getNeeds().setWorksite(best.getBlockPos());
         }
         return best;
     }
