@@ -622,7 +622,8 @@ public final class StructureGameTests
         for (int i = 0; i < 4; i++)
         {
             NpcEntity soldier = squadNpc(helper, owner, new BlockPos(minX + 5, 1, minZ + 8 + i), NpcRank.SOLDIER, 5);
-            soldier.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
+            // The last one is an archer: it stands in the rows behind the swords.
+            soldier.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(i == 3 ? Items.BOW : Items.IRON_SWORD));
             helper.assertTrue(NpcChain.toggle(sergeant, soldier) == NpcChain.Assign.ADDED, "soldier " + i + " joins");
             soldiers.add(soldier);
         }
@@ -642,8 +643,15 @@ public final class StructureGameTests
         helper.runAfterDelay(50, () ->
         {
             Set<LivingEntity> fought = new HashSet<>();
+            // Facing east, behind is west: the archer's slot lies west of every sword's.
+            double archerX = sergeant.getChain().slotOf(soldiers.get(3)).x;
+            for (NpcEntity sword : soldiers.subList(0, 3))
+            {
+                helper.assertTrue(archerX < sergeant.getChain().slotOf(sword).x, "the archer stands behind the line");
+            }
             for (NpcEntity soldier : soldiers)
             {
+                helper.assertTrue(soldier.getTarget() != null || soldier.getChain().formedNearLeader(), "in formation near its sergeant (squad morale)");
                 helper.assertTrue(soldier.getChain().grunt(), "a soldier in formation is a grunt");
                 LivingEntity target = soldier.getTarget();
                 AncientEmpires.LOGGER.info("GAMETEST unit fight: soldier {} target {}", soldier.getId(), target == null ? "none" : target.getId());

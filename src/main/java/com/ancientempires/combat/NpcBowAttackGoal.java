@@ -152,13 +152,13 @@ public class NpcBowAttackGoal extends Goal
             return;
         }
         this.stopDraw();
-        if (this.shouldClose(target))
+        if (this.shouldClose(target) && !this.npc.getChain().formed())
         {
             this.face(target);
             this.approach(target);
             return;
         }
-        if (!this.npc.getHold().holding() && !this.npc.getTargetMemory().targetVisible())
+        if (!this.stationed() && !this.npc.getTargetMemory().targetVisible())
         {
             // Lost sight: walk to where the target was last seen to find a shot again.
             this.seek();
@@ -280,7 +280,7 @@ public class NpcBowAttackGoal extends Goal
             this.npc.getNavigation().stop();
             this.wanderDelay = 15;
         }
-        if (this.npc.getHold().holding())
+        if (this.stationed())
         {
             this.npc.getNavigation().stop();
             return;
@@ -310,6 +310,16 @@ public class NpcBowAttackGoal extends Goal
         }
         this.npc.getNavigation().moveTo(spot.x, spot.y, spot.z, WANDER_SPEED);
         this.wanderDelay = 40 + this.npc.getRandom().nextInt(40);
+    }
+
+    /**
+     * On a post: holding position, or in a unit's formation (its slot is its
+     * post, in the archers' rows behind the line). It shoots from there and
+     * does not walk off to find a shot or close the range.
+     */
+    private boolean stationed()
+    {
+        return this.npc.getHold().holding() || this.npc.getChain().formed();
     }
 
     private void pathTowardHold()

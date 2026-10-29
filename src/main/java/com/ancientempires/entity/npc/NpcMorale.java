@@ -81,7 +81,9 @@ public final class NpcMorale
     public static final int REASON_ROUTED_BEFORE = 10;
     public static final int REASON_BANNER = 11;
     public static final int REASON_WATCH = 12;
-    public static final int REASON_COUNT = 13;
+    public static final int REASON_FORMED = 13;
+    public static final int REASON_LEADER_BROKEN = 14;
+    public static final int REASON_COUNT = 15;
     /** A term this large (in morale points) is worth naming. */
     private static final double REASON_THRESHOLD = 4.0D;
 
@@ -192,19 +194,46 @@ public final class NpcMorale
         {
             // Nothing going on: no count of the area, just back toward the base.
             float presence = this.presence();
-            this.value = drift(this.value, base + this.inspiredBonus() + presence, AncientEmpiresConfig.moraleRiseRate, AncientEmpiresConfig.moraleFallRate);
-            this.reasons = (this.npc.isInspired() ? 1 << REASON_INSPIRED : 0) | (presence > 0.0F ? 1 << REASON_OWNER : 0);
+            this.value = drift(this.value, base + this.inspiredBonus() + presence + this.squad(), AncientEmpiresConfig.moraleRiseRate, AncientEmpiresConfig.moraleFallRate);
+            this.reasons = (this.npc.isInspired() ? 1 << REASON_INSPIRED : 0) | (presence > 0.0F ? 1 << REASON_OWNER : 0) | this.squadReasons();
             this.npc.level().getProfiler().pop();
             return;
         }
         Situation situation = this.look(base);
         Weights weights = Weights.fromConfig();
-        float target = target(situation, weights) + this.shock;
-        this.reasons = reasons(situation, weights, this.shock) | (this.routs > 0 ? 1 << REASON_ROUTED_BEFORE : 0) | (this.bannerNear ? 1 << REASON_BANNER : 0) | (this.npc.isOnWatch() && AncientEmpiresConfig.nightWatchMorale > 0.0D ? 1 << REASON_WATCH : 0);
+        float target = target(situation, weights) + this.shock + this.squad();
+        this.reasons = this.squadReasons() | reasons(situation, weights, this.shock) | (this.routs > 0 ? 1 << REASON_ROUTED_BEFORE : 0) | (this.bannerNear ? 1 << REASON_BANNER : 0) | (this.npc.isOnWatch() && AncientEmpiresConfig.nightWatchMorale > 0.0D ? 1 << REASON_WATCH : 0);
         this.value = drift(this.value, target, AncientEmpiresConfig.moraleRiseRate, AncientEmpiresConfig.moraleFallRate);
         this.clearTicks = situation.enemies() > 0.0D ? 0 : this.clearTicks + interval;
         this.step();
         this.npc.level().getProfiler().pop();
+    }
+
+    /**
+     * The unit's hold on a soldier (the chain of command): standing in
+     * formation near its leader steadies it ({@code chain.formationMorale});
+     * its leader broken shakes it ({@code chain.leaderBrokenMorale}) while that lasts.
+     */
+    private float squad()
+    {
+        NpcChain chain = this.npc.getChain();
+        if (!chain.inChain())
+        {
+            return 0.0F;
+        }
+        return (chain.formedNearLeader() ? (float) AncientEmpiresConfig.chainFormationMorale : 0.0F)
+                - (chain.leaderBroken() ? (float) AncientEmpiresConfig.chainLeaderBrokenMorale : 0.0F);
+    }
+
+    private int squadReasons()
+    {
+        NpcChain chain = this.npc.getChain();
+        if (!chain.inChain())
+        {
+            return 0;
+        }
+        return (chain.formedNearLeader() && AncientEmpiresConfig.chainFormationMorale > 0.0D ? 1 << REASON_FORMED : 0)
+                | (chain.leaderBroken() && AncientEmpiresConfig.chainLeaderBrokenMorale > 0.0D ? 1 << REASON_LEADER_BROKEN : 0);
     }
 
     private boolean isCalm()

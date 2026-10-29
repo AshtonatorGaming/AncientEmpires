@@ -106,6 +106,8 @@ public final class NpcChain
     private final Map<UUID, LivingEntity> assigned = new HashMap<>();
     private final Map<UUID, Long> releaseAt = new HashMap<>();
     private long planAt = -1L;
+    /** Game time until which a released rider is charging (faster, and its first hit at speed lands harder). */
+    private long chargeUntil = -1L;
 
     NpcChain(NpcEntity npc)
     {
@@ -209,6 +211,44 @@ public final class NpcChain
         }
         Long from = this.releaseAt.get(member.getUUID());
         return from == null || this.npc.level().getGameTime() >= from ? enemy : null;
+    }
+
+    /** A released rider's charge: on until {@code chargeTicks} pass or its first hit lands. */
+    public boolean charging()
+    {
+        return this.chargeUntil >= 0L && this.npc.level().getGameTime() < this.chargeUntil;
+    }
+
+    /**
+     * The damage multiplier for a melee hit now: {@code chargeDamage} for a
+     * charging rider still moving at {@code chargeMinSpeed} (blocks a tick) or
+     * more, which spends the charge; else 1.
+     */
+    public float chargeHit()
+    {
+        if (!this.charging())
+        {
+            return 1.0F;
+        }
+        this.chargeUntil = -1L;
+        Entity mount = this.npc.getVehicle();
+        double speed = (mount != null ? mount : this.npc).getDeltaMovement().horizontalDistance();
+        return speed >= AncientEmpiresConfig.chainChargeMinSpeed ? (float) AncientEmpiresConfig.chainChargeDamage : 1.0F;
+    }
+
+    /** Whether this soldier stands in formation within {@code formationMoraleRange} of its leader (squad morale). */
+    public boolean formedNearLeader()
+    {
+        NpcEntity current = this.leader();
+        double range = AncientEmpiresConfig.chainFormationMoraleRange;
+        return this.formed() && current != null && this.npc.distanceToSqr(current) <= range * range;
+    }
+
+    /** Whether this NPC's leader has broken (routing, shattered, or surrendered): its unit is shaken while it lasts. */
+    public boolean leaderBroken()
+    {
+        NpcEntity current = this.leader();
+        return current != null && current.getMorale().isBroken();
     }
 
     /** Whether this NPC keeps a slot in its leader's formation now. */
@@ -559,6 +599,11 @@ public final class NpcChain
             if (handed != null && handed != target && (target == null || !target.isAlive()))
             {
                 this.npc.setTarget(handed);
+                if (this.npc.isPassenger())
+                {
+                    // A rider released into the fight charges (VISION: charge bonus).
+                    this.chargeUntil = now + AncientEmpiresConfig.chainChargeTicks;
+                }
             }
         }
         else if (effective == NpcOrder.ATTACK && target == null && this.holder.orderTarget != null
@@ -805,16 +850,53 @@ public final class NpcChain
         int lineWidth = AncientEmpiresConfig.chainLineWidth;
         int columnWidth = AncientEmpiresConfig.chainColumnWidth;
         double spacing = AncientEmpiresConfig.chainSpacing;
+        // Melee on foot in the front ranks, archers in the rows behind them, riders behind those at double spacing.
         List<UUID> soldiers = new ArrayList<>();
+        List<UUID> archers = new ArrayList<>();
+        List<UUID> riders = new ArrayList<>();
         List<UUID> leaders = new ArrayList<>();
         for (UUID id : this.members)
         {
-            (this.officers.contains(id) ? leaders : soldiers).add(id);
+            Entity member = this.npc.level() instanceof ServerLevel level ? level.getEntity(id) : null;
+            if (this.officers.contains(id))
+            {
+                leaders.add(id);
+            }
+            else if (member instanceof NpcEntity npc && npc.isPassenger())
+            {
+                riders.add(id);
+            }
+            else if (member instanceof NpcEntity npc && npc.isHoldingBow())
+            {
+                archers.add(id);
+            }
+            else
+            {
+                soldiers.add(id);
+            }
         }
         for (int i = 0; i < soldiers.size(); i++)
         {
             double[] slot = this.formation.soldierSlot(i, soldiers.size(), lineWidth, columnWidth, spacing);
             this.slots.put(soldiers.get(i), place(here, slot, forwardX, forwardZ, rightX, rightZ));
+        }
+        // Archers start a row of their own behind the last melee row, however short that one is.
+        int meleeRows = this.formation.rows(soldiers.size(), lineWidth, columnWidth);
+        double rowGap = this.formation.spacing(spacing);
+        for (int i = 0; i < archers.size(); i++)
+        {
+            double[] slot = this.formation.soldierSlot(i, archers.size(), lineWidth, columnWidth, spacing);
+            slot[1] += meleeRows * rowGap;
+            this.slots.put(archers.get(i), place(here, slot, forwardX, forwardZ, rightX, rightZ));
+        }
+        int footRows = meleeRows + this.formation.rows(archers.size(), lineWidth, columnWidth);
+        double riderSpacing = spacing * AncientEmpiresConfig.chainRiderSpacing;
+        double riderBack = Math.max(0.0D, footRows * rowGap - this.formation.lead(spacing)) + this.formation.spacing(riderSpacing);
+        for (int i = 0; i < riders.size(); i++)
+        {
+            double[] slot = this.formation.soldierSlot(i, riders.size(), Math.max(1, lineWidth / 2), columnWidth, riderSpacing);
+            slot[1] += riderBack + this.formation.lead(riderSpacing);
+            this.slots.put(riders.get(i), place(here, slot, forwardX, forwardZ, rightX, rightZ));
         }
         // Officers' units, assumed full: as wide and deep as a whole squad in this formation, standing ahead.
         int squad = AncientEmpiresConfig.chainSquadSize;
@@ -822,7 +904,7 @@ public final class NpcChain
         double frontage = Math.min(squad, this.formation.width(lineWidth, columnWidth)) * gap;
         double behind = this.formation.depthBehind(squad, lineWidth, columnWidth, spacing);
         double depth = this.formation.lead(spacing) + behind;
-        int ownRows = this.formation.rows(soldiers.size(), lineWidth, columnWidth);
+        int ownRows = footRows + (riders.isEmpty() ? 0 : this.formation.rows(riders.size(), Math.max(1, lineWidth / 2), columnWidth));
         for (int i = 0; i < leaders.size(); i++)
         {
             double[] slot = this.formation.officerSlot(i, leaders.size(), ownRows, frontage, behind, depth, spacing);

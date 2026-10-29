@@ -700,8 +700,13 @@ its own unless noted). Before adding behavior, check what AW did first.
   `releaseStagger` ticks apart, nearest first; nothing under Free or Fall back. A grunt (formed, no unit of its own)
   never runs `NpcTargetGoal`; it takes its hand-out (`handedTo`) when it has no live foe, so a hit still turns it on
   the attacker; its fighting skill (shield, dodge, duel) is untouched. Officers keep their own scans. Game test
-  `squadFightsWhatItIsHanded`. Next: squad morale (formation and the sergeant's state), cavalry charge release,
-  unit-type rules (archers' rear line), then the command screen (phase 4).
+  `squadFightsWhatItIsHanded`. Unit types in the layout: melee on foot in the front ranks, archers from the next row
+  behind (a bow-holding grunt shoots from its slot: `NpcBowAttackGoal.stationed`, no wandering, seeking, or closing),
+  riders behind those at `riderSpacing` and half the width. A rider released into a fight charges (`charging`,
+  `chargeTicks`): `chargeSpeed` on the approach, and its first hit (`chargeHit`) does `chargeDamage` if its mount still
+  moves at `chargeMinSpeed`. Squad morale (`NpcMorale.squad`): `formationMorale` in formation within
+  `formationMoraleRange` of the leader, minus `leaderBrokenMorale` while the leader is broken; reasons 13 and 14.
+  Phase 3 done. Next: the command screen (phase 4); anti-charge pikes later.
 - Command (`NpcCommand`, `command` config, DESIGN Tier 1): every rank above soldier pulses an
   aura every `auraTicks` at its rank's `strengthByRank` (0.5, 1, 1.25) over allied soldiers
   within `radiusByRank` (8, 12, 16): `damageBonus` (15%) melee damage with any weapon and `armorBonus` armour, as

@@ -73,6 +73,9 @@ fills, and eases a border ring into the land (AW's preGeneration). Unseen in gam
 
 Chain of command: plan in docs/chain-of-command.md (decisions agreed 2026-10-28: screen + order item, squads of 16, manual joining, grunts lobotomised in formation, garrisons last). Build phase 1 next.
 
+Phase 3 finished: squad morale (formation +8, broken leader -12), archers in their own rear rows shooting from their
+slots, riders behind at double spacing charging on release (x1.25 speed, x1.5 first hit at speed). Cavalry charge not
+covered by a test, not seen in game. Next: phase 4, the command screen.
 Chain phase 3 built: leaders plan and hand out targets (spread, staggered release); grunts skip their scan. Game
 test squadFightsWhatItIsHanded (2 and 2 on two husks, both killed). Not seen in game. Still in phase 3: squad morale,
 archers' rear line and cavalry charge release.

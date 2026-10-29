@@ -201,7 +201,7 @@ public class NpcMeleeAttackGoal extends Goal
             }
             else
             {
-                this.moveToward(target, AncientEmpiresConfig.approachSpeed);
+                this.moveToward(target, AncientEmpiresConfig.approachSpeed * (this.npc.getChain().charging() ? AncientEmpiresConfig.chainChargeSpeed : 1.0D));
             }
             return;
         }
@@ -216,7 +216,7 @@ public class NpcMeleeAttackGoal extends Goal
         if (!this.canEngage(target, next) || !this.hasLineOfSight(target))
         {
             this.facingWait = 0;
-            this.moveToward(target, AncientEmpiresConfig.approachSpeed);
+            this.moveToward(target, AncientEmpiresConfig.approachSpeed * (this.npc.getChain().charging() ? AncientEmpiresConfig.chainChargeSpeed : 1.0D));
             return;
         }
         if (!this.canCommitFacing(target, next))
@@ -560,6 +560,8 @@ public class NpcMeleeAttackGoal extends Goal
         damage += EnchantmentHelper.getDamageBonus(weapon, target.getMobType());
         // Role proficiency: archers and skirmishers in melee, and levies, hit softer.
         damage *= this.npc.getMeleeProficiency();
+        // A charging rider's first hit at speed (the chain of command's charge release).
+        damage *= this.npc.getChain().chargeHit();
         if (damage < 0.0F)
         {
             damage = 0.0F;

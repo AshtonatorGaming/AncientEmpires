@@ -412,6 +412,14 @@ Chain of command (see [chain-of-command.md](chain-of-command.md)): a player's se
 | `planTicks` | `20` | 5 to 200 | Ticks between a leader's looks over the field for its unit (one scan for the whole unit; its soldiers do none). |
 | `engageRange` | `16.0` | 4.0 to 64.0 | Blocks around a leader in which it picks enemies for its unit (the order's leash still applies to each soldier). |
 | `releaseStagger` | `3` | 0 to 40 | Ticks between soldiers released into a fight, nearest the enemy first. |
+| `formationMorale` | `8.0` | 0.0 to 50.0 | Morale a soldier gains standing in formation near its leader. |
+| `formationMoraleRange` | `10.0` | 2.0 to 64.0 | Blocks from its leader within which a soldier in formation counts as with it. |
+| `leaderBrokenMorale` | `12.0` | 0.0 to 50.0 | Morale a soldier loses while its leader is routing, shattered, or surrendered. |
+| `riderSpacing` | `2.0` | 1.0 to 4.0 | Riders' spacing in formation, as a multiple of spacing (they stand in the rear rows, at half the line's width). |
+| `chargeTicks` | `60` | 0 to 400 | A rider released into a fight charges for this many ticks (until its first hit). |
+| `chargeSpeed` | `1.25` | 1.0 to 2.0 | Speed multiplier on a charging rider's approach. |
+| `chargeDamage` | `1.5` | 1.0 to 4.0 | Damage multiplier on a charging rider's first hit while still moving fast. |
+| `chargeMinSpeed` | `0.15` | 0.0 to 1.0 | Blocks a tick the rider (its mount) must be moving for the charge to land harder. |
 | `spreadWeight` | `3.0` | 0.0 to 32.0 | How much a soldier prefers an enemy fewer of its unit are on: blocks of extra distance per soldier already on it. 0 lets them all pile on the nearest. |
 
 ### `[sunlight]`
