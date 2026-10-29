@@ -1,5 +1,6 @@
 package com.ancientempires.registry;
 
+import com.ancientempires.block.CraftingStationBlockEntity;
 import com.ancientempires.block.FruitFarmBlockEntity;
 import com.ancientempires.AncientEmpires;
 import com.ancientempires.block.FlagBlockEntity;
@@ -78,6 +79,8 @@ public final class ModBlockEntities
                     ModBlocks.STATUE.get()).build(null));
     public static final RegistryObject<BlockEntityType<FlagBlockEntity>> FLAG = BLOCK_ENTITIES.register("flag",
             () -> BlockEntityType.Builder.of(FlagBlockEntity::new, ModBlocks.FLAG.get()).build(null));
+    public static final RegistryObject<BlockEntityType<CraftingStationBlockEntity>> CRAFTING_STATION = BLOCK_ENTITIES.register("crafting_station",
+            () -> BlockEntityType.Builder.of(CraftingStationBlockEntity::new, ModBlocks.CRAFTING_STATION.get()).build(null));
     public static final RegistryObject<BlockEntityType<KitchenBlockEntity>> KITCHEN = BLOCK_ENTITIES.register("kitchen",
             () -> BlockEntityType.Builder.of(KitchenBlockEntity::new, ModBlocks.KITCHEN.get()).build(null));
 

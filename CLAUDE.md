@@ -210,6 +210,11 @@ instead of reflecting per call), Skirmisher thresholds (about 4.5 to 28 blocks).
   for the tool that finds work). Picks cocoa (a bean set back), sweet berries and glow berries (left growing), melons and
   pumpkins, from two below to seven above the block; sets carried cocoa beans (its supply) on jungle logs. Game test
   `fruitPickerPicksBerries`.
+- Craftsman (AW parity, auto crafting by hand): `CraftingStationBlock` (no area, one store); sneak-click with an item sets the
+  recipe (`setRecipeFor`: the crafting recipe named after the item, else the first; special recipes skipped), sneak-click
+  empty clears. A Worker-path NPC holding a crafting table (`NpcCraftsmanGoal`) crafts it from the store, worked out on a
+  copy first (ingredients by `Ingredient`, leftovers like buckets kept), every `work.craftTicks`, until `craftTarget` are
+  in store. Game test `craftsmanMakesItsRecipe`.
 - Town Hall alarm (AW parity): redstone power on a hall sounds it (a bell, a message to the owner); scheduled block
   ticks every 40 call its owner's NPCs within `upkeep.range` (`NpcEntity.alarm`, held 100 ticks, not saved), so an idle
   hall costs nothing. `NpcAlarmGoal` (priority 2): civilians shelter at home or the hall (`upkeep.alarmShelter`), soldiers

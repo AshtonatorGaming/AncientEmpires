@@ -281,6 +281,10 @@ public enum NpcPath
         {
             return "cook";
         }
+        if (stack.is(Items.CRAFTING_TABLE))
+        {
+            return "craftsman";
+        }
         if (stack.getItem() instanceof RoutingOrderItem)
         {
             return "courier";

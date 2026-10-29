@@ -31,7 +31,7 @@ same thing. Decisions marked **?** are the user's to make before building.
 | --- | --- | --- |
 | Crop farm, tree farm, animal farm, fish farm, quarry | By hand, with areas and upgrades | Done |
 | Fruit farm (cocoa, melons and pumpkins picked, berries) | `FruitFarmBlock`, `NpcFruitPickerGoal` | Done 2026-10-29: a hoe worker without a crop farm (or with a Work Order naming it) picks cocoa (replanted), berries, glow berries, melons, pumpkins; sets cocoa on jungle logs |
-| Auto crafting station (a worker crafts a set recipe) | Cook only | **Missing**: craftsman |
+| Auto crafting station (a worker crafts a set recipe) | `CraftingStationBlock`, `NpcCraftsmanGoal` | Done 2026-10-29: sneak-click the station with the item wanted; a worker holding a crafting table crafts it from the store, up to `work.craftTarget` |
 | Ore processor | Nothing | Missing (small) |
 | Worksite upgrades | Ours | Done |
 | Torque power (hand crank, Stirling, waterwheel, windmill, shafts, flywheels) running worksites without NPCs | Nothing | Skip (decided): worksites stay NPC-run |

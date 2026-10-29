@@ -150,8 +150,11 @@ layers: service record and journal done (2026-10-29); epithets, mood, origin, tr
 the fruit farm, the craftsman.
 
 Parity, 2026-10-29 (user away, "work on everything you can for testing later"): the owned trader (Trade Order, goods
-editor, round), the bard (instruments, AW's songs, cheer), and the fruit farm done, none seen in game. Next in
-docs/aw-parity.md order: the craftsman (auto crafting), the ore processor, then the survival structure builder.
+editor, round), the bard (instruments, AW's songs, cheer), the fruit farm, and the craftsman (crafting station) done,
+none seen in game. Next in docs/aw-parity.md order: the ore processor (needs a decision: AW's was a torque machine),
+then the survival structure builder.
+Game tests stand side by side and reach past their arenas: clear only entities without the run's `RUN_TAG`, and keep
+entities within about 100 blocks of the origin (further ones never tick).
 
 **The plan now lives in docs/roadmap.md** (reassessed 2026-10-29: phases Stabilize, Close the loop, Deepen war, Deepen towns). Read it first.
 

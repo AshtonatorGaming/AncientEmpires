@@ -221,6 +221,8 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.ConfigValue<List<? extends Integer>> FISH_MAX_SIZE;
     private static final ForgeConfigSpec.BooleanValue FISH_RECAST;
     private static final ForgeConfigSpec.IntValue COOK_TICKS;
+    private static final ForgeConfigSpec.IntValue CRAFT_TICKS;
+    private static final ForgeConfigSpec.IntValue CRAFT_TARGET;
     private static final ForgeConfigSpec.IntValue COOK_BUNDLE_NUTRITION;
     private static final ForgeConfigSpec.IntValue COOK_BUNDLE_TARGET;
     private static final ForgeConfigSpec.BooleanValue UPKEEP_ENABLED;
@@ -1039,6 +1041,12 @@ public final class AncientEmpiresConfig
         COOK_BUNDLE_TARGET = builder
                 .comment("A cook stops packing bundles once the kitchen holds this many.")
                 .defineInRange("cookBundleTarget", 16, 1, 1024);
+        CRAFT_TICKS = builder
+                .comment("Ticks a craftsman (holding a crafting table) takes for one craft at its crafting station; shorter with work speed.")
+                .defineInRange("craftTicks", 80, 5, 1200);
+        CRAFT_TARGET = builder
+                .comment("A craftsman stops once its station's store holds this many of what it makes.")
+                .defineInRange("craftTarget", 64, 1, 4096);
         builder.pop();
 
         builder.comment("Food and the Town Hall, as in Ancient Warfare. NPCs feed themselves; nothing here runs on a timer.").push("upkeep");
@@ -1648,6 +1656,8 @@ public final class AncientEmpiresConfig
     public static List<? extends Integer> fishMaxSize = List.of(17, 23, 29);
     public static boolean fishRecast = true;
     public static int cookTicks = 100;
+    public static int craftTicks = 80;
+    public static int craftTarget = 64;
     public static int cookBundleNutrition = 24;
     public static int cookBundleTarget = 16;
     public static boolean upkeepEnabled = true;
@@ -2115,6 +2125,8 @@ public final class AncientEmpiresConfig
         fishMaxSize = FISH_MAX_SIZE.get();
         fishRecast = FISH_RECAST.get();
         cookTicks = COOK_TICKS.get();
+        craftTicks = CRAFT_TICKS.get();
+        craftTarget = CRAFT_TARGET.get();
         cookBundleNutrition = COOK_BUNDLE_NUTRITION.get();
         cookBundleTarget = COOK_BUNDLE_TARGET.get();
         upkeepEnabled = UPKEEP_ENABLED.get();

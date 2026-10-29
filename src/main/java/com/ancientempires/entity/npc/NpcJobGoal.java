@@ -26,7 +26,7 @@ public final class NpcJobGoal extends Goal
     {
         this.npc = npc;
         this.trades = List.of(new NpcFarmerGoal(npc), new NpcWoodcutterGoal(npc), new NpcMinerGoal(npc), new NpcRancherGoal(npc),
-                new NpcHunterGoal(npc), new NpcFisherGoal(npc), new NpcCookGoal(npc), new NpcFruitPickerGoal(npc));
+                new NpcHunterGoal(npc), new NpcFisherGoal(npc), new NpcCookGoal(npc), new NpcFruitPickerGoal(npc), new NpcCraftsmanGoal(npc));
         this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }
 

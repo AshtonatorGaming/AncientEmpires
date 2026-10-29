@@ -135,6 +135,8 @@ public final class ModItems
             () -> new BlockItem(ModBlocks.HUNTING_LODGE.get(), new Item.Properties()));
     public static final RegistryObject<Item> FISHING_DOCK = ITEMS.register("fishing_dock",
             () -> new BlockItem(ModBlocks.FISHING_DOCK.get(), new Item.Properties()));
+    public static final RegistryObject<Item> CRAFTING_STATION = ITEMS.register("crafting_station",
+            () -> new BlockItem(ModBlocks.CRAFTING_STATION.get(), new Item.Properties()));
     public static final RegistryObject<Item> KITCHEN = ITEMS.register("kitchen",
             () -> new BlockItem(ModBlocks.KITCHEN.get(), new Item.Properties()));
     public static final RegistryObject<Item> TOWN_HALL = ITEMS.register("town_hall",

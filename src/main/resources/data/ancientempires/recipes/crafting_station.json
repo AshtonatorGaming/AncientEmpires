@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "ITI",
+    " C "
+  ],
+  "key": {
+    "I": {"tag": "forge:ingots/iron"},
+    "T": {"item": "minecraft:crafting_table"},
+    "C": {"tag": "forge:chests/wooden"}
+  },
+  "result": {"item": "ancientempires:crafting_station"}
+}

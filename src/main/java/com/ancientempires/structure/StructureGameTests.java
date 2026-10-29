@@ -1,5 +1,6 @@
 package com.ancientempires.structure;
 
+import com.ancientempires.block.CraftingStationBlockEntity;
 import com.ancientempires.entity.npc.NpcJobGoal;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.world.level.block.SweetBerryBushBlock;
@@ -1158,6 +1159,43 @@ public final class StructureGameTests
             picker.discard();
             level.removeBlock(base, false);
             level.removeBlock(bush, false);
+        });
+    }
+
+    /** AW parity, auto crafting: a worker holding a crafting table makes its station's recipe (sticks) from its store (planks). */
+    @GameTest(template = ARENA, timeoutTicks = 600)
+    public static void craftsmanMakesItsRecipe(GameTestHelper helper)
+    {
+        ServerLevel level = helper.getLevel();
+        BlockPos base = helper.absolutePos(new BlockPos(-40, 1, 100));
+        level.getEntitiesOfClass(LivingEntity.class, new AABB(base).inflate(8.0D), living -> !(living instanceof Player) && !living.getTags().contains(RUN_TAG))
+                .forEach(Entity::discard);
+        level.setDayTime(1000L);
+        level.setWeatherParameters(6000, 0, false, false);
+        for (BlockPos cell : BlockPos.betweenClosed(base.offset(-4, -1, -3), base.offset(4, 3, 3)))
+        {
+            level.setBlockAndUpdate(cell, cell.getY() < base.getY() ? Blocks.STONE.defaultBlockState() : Blocks.AIR.defaultBlockState());
+        }
+        UUID owner = UUID.randomUUID();
+        level.setBlockAndUpdate(base, ModBlocks.CRAFTING_STATION.get().defaultBlockState());
+        CraftingStationBlockEntity station = (CraftingStationBlockEntity) level.getBlockEntity(base);
+        station.setOwner(owner);
+        helper.assertTrue(station.setRecipeFor(new ItemStack(Items.STICK)).isPresent(), "a recipe for sticks");
+        station.store().setItem(0, new ItemStack(Items.OAK_PLANKS, 4));
+        NpcEntity craftsman = squadNpc(helper, owner, new BlockPos(-42, 1, 100), NpcRank.SOLDIER, 1);
+        craftsman.setNpcPath(NpcPath.WORKER);
+        craftsman.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.CRAFTING_TABLE));
+        helper.assertTrue("craftsman".equals(craftsman.getRoleId()), "a crafting table makes a craftsman, is " + craftsman.getRoleId());
+        helper.succeedWhen(() ->
+        {
+            int sticks = 0;
+            for (int slot = 0; slot < station.store().getContainerSize(); slot++)
+            {
+                sticks += station.store().getItem(slot).is(Items.STICK) ? station.store().getItem(slot).getCount() : 0;
+            }
+            helper.assertTrue(sticks >= 4, "sticks made in the store, has " + sticks + "; " + NpcJobGoal.diagnose(craftsman));
+            craftsman.discard();
+            level.removeBlock(base, false);
         });
     }
 

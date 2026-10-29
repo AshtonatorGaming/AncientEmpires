@@ -1,5 +1,6 @@
 package com.ancientempires.registry;
 
+import com.ancientempires.block.CraftingStationBlock;
 import com.ancientempires.block.FruitFarmBlock;
 import com.ancientempires.AncientEmpires;
 import com.ancientempires.block.AnimalPenBlock;
@@ -126,6 +127,12 @@ public final class ModBlocks
 
     public static final RegistryObject<Block> FISHING_DOCK = BLOCKS.register("fishing_dock",
             () -> new FishingDockBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOD)
+                    .strength(2.5F)
+                    .sound(SoundType.WOOD)));
+
+    public static final RegistryObject<Block> CRAFTING_STATION = BLOCKS.register("crafting_station",
+            () -> new CraftingStationBlock(BlockBehaviour.Properties.of()
                     .mapColor(MapColor.WOOD)
                     .strength(2.5F)
                     .sound(SoundType.WOOD)));
