@@ -89,7 +89,7 @@ public final class BlockOutlines
     }
 
     /** Lines drawn over everything (no depth test), as the outline must show through the walls between. */
-    private static final class Types extends RenderType
+    static final class Types extends RenderType
     {
         static final RenderType LINES_THROUGH = create("ancientempires_lines_through", DefaultVertexFormat.POSITION_COLOR_NORMAL,
                 VertexFormat.Mode.LINES, 256, false, false, CompositeState.builder()

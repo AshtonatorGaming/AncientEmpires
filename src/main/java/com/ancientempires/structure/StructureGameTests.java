@@ -693,16 +693,26 @@ public final class StructureGameTests
         helper.assertTrue(stranger.getChain().leaderId() == null, "another player's soldier is not touched");
         int number = sergeant.getChain().unitNumber();
         helper.assertTrue(number >= 1 && number <= 9, "a new unit gets a number for the order keys, has " + number);
-        NpcArmy.command(player, Set.of(number), NpcArmy.Command.FALL_BACK);
+        NpcArmy.command(player, Set.of(number), NpcArmy.Command.FALL_BACK, null);
         helper.assertTrue(sergeant.getChain().order() == NpcOrder.FALL_BACK, "the wheel's order reaches the unit by its number");
-        NpcArmy.command(player, Set.of(), NpcArmy.Command.FOLLOW);
+        NpcArmy.command(player, Set.of(), NpcArmy.Command.FOLLOW, null);
         helper.assertTrue(sergeant.getChain().order() == NpcOrder.FOLLOW, "no number picked means every unit");
-        NpcArmy.command(player, Set.of(number == 9 ? 8 : number + 1), NpcArmy.Command.FREE);
+        NpcArmy.command(player, Set.of(number == 9 ? 8 : number + 1), NpcArmy.Command.FREE, null);
         helper.assertTrue(sergeant.getChain().order() == NpcOrder.FOLLOW, "another number leaves it be");
         NpcArmy.act(player, NpcArmy.Action.RENAME, sergeant.getUUID(), null, "Iron Wolves");
         NpcArmy.act(player, NpcArmy.Action.HOLD, sergeant.getUUID(), null, "");
         helper.assertTrue("Iron Wolves".equals(sergeant.getChain().name()), "the unit is named");
         helper.assertTrue(sergeant.getChain().order() == NpcOrder.HOLD, "the unit holds");
+        // A front line dragged six blocks along x, facing south: the unit stands across it, its leader behind it.
+        BlockPos lineAt = helper.absolutePos(new BlockPos(-30, 1, 36));
+        Vec3 from = new Vec3(lineAt.getX() - 3.0D, lineAt.getY(), lineAt.getZ() + 0.5D);
+        Vec3 to = new Vec3(lineAt.getX() + 3.0D, lineAt.getY(), lineAt.getZ() + 0.5D);
+        NpcArmy.command(player, Set.of(number), NpcArmy.Command.DEFEND, new NpcArmy.Placement(from, to, 0.0F));
+        BlockPos held = sergeant.getChain().orderPos();
+        helper.assertTrue(sergeant.getChain().order() == NpcOrder.DEFEND && held != null, "the placed order is given");
+        helper.assertTrue(sergeant.getChain().width() == 2, "a one-soldier unit stands two abreast at least, has " + sergeant.getChain().width());
+        helper.assertTrue(held.getZ() < lineAt.getZ() + 0.5D && Math.abs(held.getX() + 0.5D - lineAt.getX()) <= 1.0D,
+                "the leader stands behind the middle of the line, at " + held + " for a line at " + lineAt);
         List<ArmyPacket.Entry> army = NpcArmy.list(player);
         helper.assertTrue(army.stream().anyMatch(entry -> entry.id().equals(soldier.getUUID()) && sergeant.getUUID().equals(entry.leader())),
                 "the list shows the soldier under its sergeant");

@@ -24,5 +24,6 @@ public final class ClientArmy
     static void set(List<ArmyPacket.Entry> entries)
     {
         latest = List.copyOf(entries);
+        ArmyPicks.refreshGlow();
     }
 }

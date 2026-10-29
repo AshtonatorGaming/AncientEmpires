@@ -2,6 +2,7 @@ package com.ancientempires.network;
 
 import com.ancientempires.client.CommandScreen;
 import com.ancientempires.entity.npc.NpcArmy;
+import com.ancientempires.entity.npc.NpcStance;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
@@ -20,11 +21,25 @@ public class ArmyPacket
      * One soldier as the screen shows it. {@code name} and {@code rankName} are
      * text components as JSON; {@code order} and {@code formation} are ordinals
      * ({@code NpcOrder}, {@code NpcFormation}), {@code ownOrder} whether the
-     * unit holds it itself (top of a chain, or detached).
+     * unit holds it itself (top of a chain, or detached). {@code stance} packs
+     * its stance: engage ordinal, fire ordinal shifted by 2, shields up at bit 4;
+     * {@code width} its dragged frontage (0 for the configured one), {@code morale} 0 to 100.
      */
     public record Entry(UUID id, String name, int rank, int level, float health, int order, boolean ownOrder, int formation,
-            @Nullable UUID leader, int members, float distance, String unitName, boolean archer, boolean mounted, String rankName, int unitNumber)
+            @Nullable UUID leader, int members, float distance, String unitName, boolean archer, boolean mounted, String rankName, int unitNumber,
+            float spread, int width, int stance, float morale)
     {
+        /** Packs a stance for {@code stance}. */
+        public static int pack(NpcStance stance)
+        {
+            return stance.engage().ordinal() | stance.fire().ordinal() << 2 | (stance.shieldsUp() ? 16 : 0);
+        }
+
+        public NpcStance unpackStance()
+        {
+            return new NpcStance(NpcStance.Engage.values()[Math.min(this.stance & 3, NpcStance.Engage.values().length - 1)],
+                    NpcStance.Fire.values()[Math.min(this.stance >> 2 & 3, NpcStance.Fire.values().length - 1)], (this.stance & 16) != 0);
+        }
     }
 
     private final boolean open;
@@ -62,6 +77,10 @@ public class ArmyPacket
             buffer.writeBoolean(entry.mounted());
             buffer.writeUtf(entry.rankName(), 256);
             buffer.writeByte(entry.unitNumber());
+            buffer.writeFloat(entry.spread());
+            buffer.writeByte(entry.width());
+            buffer.writeByte(entry.stance());
+            buffer.writeFloat(entry.morale());
         }
     }
 
@@ -88,7 +107,12 @@ public class ArmyPacket
             boolean mounted = buffer.readBoolean();
             String rankName = buffer.readUtf(256);
             int unitNumber = buffer.readByte();
-            entries.add(new Entry(id, name, rank, level, health, order, ownOrder, formation, leader, members, distance, unitName, archer, mounted, rankName, unitNumber));
+            float spread = buffer.readFloat();
+            int width = buffer.readByte();
+            int stance = buffer.readByte();
+            float morale = buffer.readFloat();
+            entries.add(new Entry(id, name, rank, level, health, order, ownOrder, formation, leader, members, distance, unitName, archer, mounted, rankName, unitNumber,
+                    spread, width, stance, morale));
         }
         return new ArmyPacket(open, entries);
     }

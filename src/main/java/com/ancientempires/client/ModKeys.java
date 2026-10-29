@@ -59,9 +59,14 @@ public final class ModKeys
             }
             while (ORDERS.consumeClick())
             {
-                if (Minecraft.getInstance().screen == null)
+                if (PlacementMode.active())
                 {
-                    CommandWheelScreen.open();
+                    // The order key again while placing calls it off.
+                    PlacementMode.cancel();
+                }
+                else if (Minecraft.getInstance().screen == null)
+                {
+                    BattleWheelScreen.open();
                 }
             }
             while (COMMAND.consumeClick())

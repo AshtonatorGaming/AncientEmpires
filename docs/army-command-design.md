@@ -268,3 +268,6 @@ Each step is playable on its own. Step 1 makes the existing wheel better straigh
 
 - Step 1, the order model: built 2026-10-29 (see CLAUDE.md, chain of command). The current V wheel has submenus for
   Formation, Stance, and Maneuver as a stand-in until step 2's ring.
+- Step 2, the battle wheel and placement: built 2026-10-29. The ring tree, units bar, gold glow on picked units, and
+  placement with ghosts (click a spot, drag the front line, scroll to turn). Facing is its own Maneuver entries rather
+  than a Facing submenu. Not yet: hovering a unit in the bar to preview just that unit's glow.

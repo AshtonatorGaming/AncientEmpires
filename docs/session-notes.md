@@ -116,7 +116,11 @@ nothing committed. In the game, try:
 - the V wheel's Formation, Stance, and Maneuver submenus;
 - a far Hold, which forms up and then marches.
 
-Next is step 2: the ring wheel, units bar, glow, and click or drag-the-line placement with ghosts.
+Step 1 is committed (63dee22).
+
+Step 2 is built: the ring wheel, units bar, glow, and placement with ghosts. Unit tests and all 22 game tests
+pass, and the jar is installed. Not seen in game and not committed: the drawing, glow, ghosts, and mouse handling are
+client-only and untested. Next is step 3, the War Table: the banner-hall chart, the ledger roster, and drag and drop.
 
 ## Next, in order
 

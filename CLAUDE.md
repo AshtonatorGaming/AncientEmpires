@@ -719,9 +719,16 @@ its own unless noted). Before adding behavior, check what AW did first.
   garrison captain or above dead or under `garrisonSallyHealth` sallies the structure's units: Attack at whoever struck
   it (unposted; when that one falls they Hold there, formed), else Free. Back inside the spawner a soldier `depart`s.
   Battle orders, Mount & Blade style (the user's choice over the flag-first flow): hold V (`ModKeys.ORDERS`) for
-  `CommandWheelScreen` (view frozen as aimed; 1-9 pick units by `AeUnitNumber`, 0 all, remembered), pick Follow, Hold
-  here, Defend here, Charge (the creature aimed at, else Free), Fall back to me, Free, or a Formation, Stance, or
-  Maneuver submenu (a stand-in tree until the ring wheel); click or let go.
+  `BattleWheelScreen`, a drawn ring (view frozen as aimed): Move and Defend (into `PlacementMode`), Charge (names the
+  creature aimed at), Follow me, Fall back, Free, and Formation, Stance, Maneuver rings with Back; the current formation
+  and stances of the picked units are rimmed gold, the hovered slice's hint is in the middle. A units bar across the top
+  (All, then each numbered unit with size, order, morale pip); 1-9 or clicks pick units (`ArmyPicks`, remembered), 0
+  all; picked units glow gold on the owner's screen only (`NpcGlow`, `NpcEntity.isCurrentlyGlowing`). Placement: the
+  crosshair is live, ghosts (line boxes through walls) show every soldier's spot; click = there facing away (scroll
+  turns), hold and turn = drag the front line (its length shared by the units' front ranks, each standing that many
+  abreast: `AeWidth`), right click / V / any screen cancels. Ghosts and the server lay out with the same
+  `FormationLayout` (`of`, `place`, `shareLine`); `NpcArmy.Placement` rides `UnitOrderPacket`, snapped to the ground by
+  `NpcArmy.ground`. Several units side by side, their fronts on the line, leaders behind.
   Order model, second pass (docs/army-command-design.md step 1): formations `NpcFormation` line, column, shield wall
   (0.75 spacing, shields raised while standing), wedge (rows 1, 3, 5, leader behind the last), square (rim facing out,
   archers and riders inside; `NpcChain.facingOf`), skirmish (old `loose` saves map to it); archers and riders behind the

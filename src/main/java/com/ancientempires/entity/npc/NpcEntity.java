@@ -1591,6 +1591,19 @@ public class NpcEntity extends PathfinderMob
         this.applyDropChances();
     }
 
+    /** Also outlined, on its owner's screen only, while picked on the battle wheel ({@link NpcGlow}). */
+    @Override
+    public boolean isCurrentlyGlowing()
+    {
+        return super.isCurrentlyGlowing() || this.level().isClientSide() && NpcGlow.has(this.getId());
+    }
+
+    @Override
+    public int getTeamColor()
+    {
+        return this.level().isClientSide() && NpcGlow.has(this.getId()) ? NpcGlow.COLOR : super.getTeamColor();
+    }
+
     /**
      * A bow in the main hand, including a Spartan longbow. A crossbow is not a bow.
      */

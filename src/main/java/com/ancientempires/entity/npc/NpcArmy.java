@@ -7,6 +7,8 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.util.Mth;
@@ -94,7 +96,8 @@ public final class NpcArmy
             entries.add(new ArmyPacket.Entry(npc.getUUID(), Component.Serializer.toJson(npc.getDisplayName()), npc.getRank().ordinal(),
                     npc.getLevel(), npc.getHealth() / Math.max(1.0F, npc.getMaxHealth()), chain.effectiveOrder().ordinal(), own != null,
                     chain.formation().ordinal(), chain.leaderId(), chain.members().size(), (float) Math.sqrt(npc.distanceToSqr(player)),
-                    chain.name(), npc.isHoldingBow(), npc.isPassenger(), Component.Serializer.toJson(npc.getRankName()), chain.unitNumber()));
+                    chain.name(), npc.isHoldingBow(), npc.isPassenger(), Component.Serializer.toJson(npc.getRankName()), chain.unitNumber(),
+                    (float) chain.spread(), chain.width(), ArmyPacket.Entry.pack(chain.stance()), npc.getMorale().value()));
         }
         return entries;
     }
@@ -170,15 +173,65 @@ public final class NpcArmy
     }
 
     /**
-     * An order from the command wheel to the player's units with these
-     * numbers (all of them for none), aimed along the player's look: Hold and
-     * Defend at the block looked at (several units side by side across it,
-     * facing the player's way), Charge at the creature looked at (else a free
-     * charge), Fall back to the player, Follow, Free; a formation or stance
-     * for each unit; or a maneuver of the spot each holds (Face takes the
-     * player's way, turns pivot each unit in place).
+     * Where the player placed a Hold or Defend in placement mode: a spot
+     * ({@code from} and {@code to} the same) or a dragged front line from one
+     * to the other, and the way the units face.
      */
-    public static void command(ServerPlayer player, Set<Integer> units, Command command)
+    public record Placement(Vec3 from, Vec3 to, float facing)
+    {
+        /** Blocks of drag from which a placement is a front line rather than a spot. */
+        public static final double LINE_FROM = 2.0D;
+
+        public double length()
+        {
+            return Math.sqrt(Math.pow(this.to.x - this.from.x, 2) + Math.pow(this.to.z - this.from.z, 2));
+        }
+
+        public boolean line()
+        {
+            return this.length() >= LINE_FROM;
+        }
+    }
+
+    /** Blocks between units standing side by side. */
+    public static double unitGap()
+    {
+        return AncientEmpiresConfig.chainSpacing * 2.0D;
+    }
+
+    /**
+     * Where a leader placed at {@code x, z} stands: on the ground within ten
+     * blocks above or below {@code y} (the first open spot over something
+     * solid, searching down from three above), else at {@code y}.
+     */
+    public static BlockPos ground(Level level, double x, double y, double z)
+    {
+        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+        int top = Mth.floor(y) + 3;
+        for (int at = top; at >= top - 13; at--)
+        {
+            pos.set(Mth.floor(x), at, Mth.floor(z));
+            BlockState feet = level.getBlockState(pos);
+            BlockState below = level.getBlockState(pos.below());
+            if (feet.getCollisionShape(level, pos).isEmpty() && !below.getCollisionShape(level, pos.below()).isEmpty() && feet.getFluidState().isEmpty())
+            {
+                return pos.immutable();
+            }
+        }
+        return BlockPos.containing(x, y, z);
+    }
+
+    /**
+     * An order from the command wheel to the player's units with these
+     * numbers (all of them for none). Hold and Defend go where the player
+     * placed them ({@code placement}: a spot or a dragged front line), else at
+     * the block looked at; several units stand side by side across it, their
+     * fronts on the line (FormationLayout.place). Charge at the creature
+     * looked at (else a free charge), Fall back to the player, Follow, Free;
+     * a formation or stance for each unit; or a maneuver of the spot each
+     * holds (Face takes the player's way, turns pivot each unit in place).
+     */
+    public static void command(ServerPlayer player, Set<Integer> units, Command command, @Nullable Placement placement)
     {
         ServerLevel level = player.serverLevel();
         List<NpcEntity> leaders = new ArrayList<>();
@@ -197,6 +250,12 @@ public final class NpcArmy
         }
         leaders.sort(Comparator.comparingInt(npc -> npc.getChain().unitNumber()));
         Vec3 eye = player.getEyePosition();
+        if (placement != null && (placement.from().distanceTo(eye) > AIM_RANGE + 8.0D || placement.to().distanceTo(eye) > AIM_RANGE + 8.0D
+                || placement.length() > AncientEmpiresConfig.chainSpacing * 64.0D))
+        {
+            // Out of reach for any honest client.
+            placement = null;
+        }
         Vec3 end = eye.add(player.getViewVector(1.0F).scale(AIM_RANGE));
         BlockHitResult block = level.clip(new ClipContext(eye, end, ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, player));
         Vec3 reach = block.getType() == HitResult.Type.MISS ? end : block.getLocation();
@@ -204,27 +263,48 @@ public final class NpcArmy
                 entity -> entity instanceof LivingEntity living && living.isAlive() && entity != player
                         && !(entity instanceof NpcEntity npc && player.getUUID().equals(npc.getOwner())), AIM_RANGE * AIM_RANGE);
         BlockPos spot = block.getType() == HitResult.Type.MISS ? null : block.getBlockPos().relative(block.getDirection());
-        float facing = player.getYRot();
-        // Units given a spot together stand side by side across it, each as wide as its front rank.
-        double radians = facing * Mth.DEG_TO_RAD;
-        double rightX = -Math.cos(radians);
-        double rightZ = -Math.sin(radians);
-        double gap = AncientEmpiresConfig.chainSpacing * 2.0D;
-        double[] widths = new double[leaders.size()];
-        double total = 0.0D;
-        for (int i = 0; i < leaders.size(); i++)
+        float facing = placement != null ? placement.facing() : player.getYRot();
+        BlockPos[] spots = null;
+        if (command == Command.HOLD || command == Command.DEFEND || command == Command.FALL_BACK)
         {
-            NpcChain chain = leaders.get(i).getChain();
-            widths[i] = chain.formation().frontage(Math.max(1, chain.soldierCount()), AncientEmpiresConfig.chainLineWidth, AncientEmpiresConfig.chainColumnWidth,
-                    AncientEmpiresConfig.chainSpacing * chain.spread());
-            total += widths[i] + (i > 0 ? gap : 0.0D);
+            FormationLayout.Unit[] shapes = new FormationLayout.Unit[leaders.size()];
+            for (int i = 0; i < shapes.length; i++)
+            {
+                shapes[i] = leaders.get(i).getChain().unitShape();
+            }
+            Vec3 at;
+            double length = 0.0D;
+            if (command == Command.FALL_BACK)
+            {
+                at = player.position();
+            }
+            else if (placement != null)
+            {
+                at = placement.line() ? placement.from().add(placement.to()).scale(0.5D) : placement.from();
+                length = placement.line() ? placement.length() : 0.0D;
+            }
+            else
+            {
+                at = spot == null ? null : Vec3.atBottomCenterOf(spot);
+            }
+            if (at != null)
+            {
+                FormationLayout.Placed[] where = FormationLayout.place(shapes, at.x, at.z, facing, length, unitGap());
+                spots = new BlockPos[where.length];
+                for (int i = 0; i < where.length; i++)
+                {
+                    if (where[i].width() > 0)
+                    {
+                        // A dragged line: the unit stands as many abreast as its share of it holds.
+                        leaders.get(i).getChain().setWidth(where[i].width());
+                    }
+                    spots[i] = ground(level, where[i].x(), at.y, where[i].z());
+                }
+            }
         }
-        double offset = -total / 2.0D;
         for (int i = 0; i < leaders.size(); i++)
         {
             NpcChain chain = leaders.get(i).getChain();
-            double along = offset + widths[i] / 2.0D;
-            offset += widths[i] + gap;
             switch (command)
             {
                 case FOLLOW -> chain.setOrder(NpcOrder.FOLLOW, null, Float.NaN, null);
@@ -252,11 +332,11 @@ public final class NpcArmy
                 case CLOSE_RANKS -> chain.stepSpread(false);
                 case SPREAD_OUT -> chain.stepSpread(true);
                 case RELEASE -> chain.release();
-                case HOLD, DEFEND ->
+                case HOLD, DEFEND, FALL_BACK ->
                 {
-                    BlockPos at = spot == null ? leaders.get(i).blockPosition()
-                            : BlockPos.containing(spot.getX() + 0.5D + rightX * along, spot.getY(), spot.getZ() + 0.5D + rightZ * along);
-                    chain.setOrder(command == Command.HOLD ? NpcOrder.HOLD : NpcOrder.DEFEND, at, facing, null);
+                    BlockPos at = spots == null ? leaders.get(i).blockPosition() : spots[i];
+                    NpcOrder order = command == Command.HOLD ? NpcOrder.HOLD : command == Command.DEFEND ? NpcOrder.DEFEND : NpcOrder.FALL_BACK;
+                    chain.setOrder(order, at, facing, null);
                 }
                 case CHARGE ->
                 {
@@ -269,13 +349,11 @@ public final class NpcArmy
                         chain.setOrder(NpcOrder.FREE, null, Float.NaN, null);
                     }
                 }
-                case FALL_BACK -> chain.setOrder(NpcOrder.FALL_BACK,
-                        BlockPos.containing(player.getX() + rightX * along, player.getY(), player.getZ() + rightZ * along), facing, null);
             }
         }
         player.displayClientMessage(Component.translatable("message.ancientempires.army.ordered", units.isEmpty()
                 ? Component.translatable("gui.ancientempires.army.all_units") : Component.literal(units.stream().sorted().map(String::valueOf).collect(Collectors.joining(", "))),
-                Component.translatable("gui.ancientempires.army.command." + command.name().toLowerCase(Locale.ROOT))), true);
+                Component.translatable("gui.ancientempires.army.command." + command.id())), true);
     }
 
     @Nullable

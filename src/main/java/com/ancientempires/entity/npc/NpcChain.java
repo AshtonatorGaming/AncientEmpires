@@ -64,6 +64,7 @@ public final class NpcChain
     private static final String NUMBER_KEY = "AeUnitNumber";
     private static final String STANCE_KEY = "AeStance";
     private static final String SPREAD_KEY = "AeSpread";
+    private static final String WIDTH_KEY = "AeWidth";
     /** Ticks of each volley in which a Volley unit's archers may loose. */
     private static final int VOLLEY_WINDOW = 4;
     /** Ticks between a marching leader's looks at its stragglers. */
@@ -136,6 +137,8 @@ public final class NpcChain
     private NpcStance stance;
     /** Spacing multiplier of this leader's layout (Close ranks, Spread out). */
     private double spread = 1.0D;
+    /** Soldiers abreast in this leader's line, set by a dragged front line; 0 for the configured width. */
+    private int width;
     /** The order holder's march (form up, then march) to a far spot. */
     private March march = March.NONE;
     private long marchSince;
@@ -405,6 +408,18 @@ public final class NpcChain
     public double spread()
     {
         return this.spread;
+    }
+
+    public int width()
+    {
+        return this.width;
+    }
+
+    /** Soldiers abreast in this unit's line (a dragged front line), 0 for the configured width. */
+    public void setWidth(int width)
+    {
+        this.width = Math.max(0, Math.min(width, 64));
+        this.slotsAt = -1L;
     }
 
     /** Closes the ranks one step (0.75, 1, 2 times the spacing), or opens them with {@code wider}. */
@@ -792,6 +807,7 @@ public final class NpcChain
             next.formation = this.formation;
             next.stance = this.stance;
             next.spread = this.spread;
+            next.width = this.width;
             next.posted = this.posted;
             next.unitNumber = this.unitNumber > 0 ? this.unitNumber : next.unitNumber;
             next.name = this.name.isEmpty() ? next.name : this.name;
@@ -1304,12 +1320,6 @@ public final class NpcChain
         double forwardZ = forward[1];
         double rightX = -forwardZ;
         double rightZ = forwardX;
-        int lineWidth = AncientEmpiresConfig.chainLineWidth;
-        int columnWidth = AncientEmpiresConfig.chainColumnWidth;
-        double spacing = AncientEmpiresConfig.chainSpacing * this.spread;
-        NpcFormation shape = this.formation;
-        NpcFormation support = shape.support();
-        // Melee on foot in the front ranks, archers in the rows behind them, riders behind those at double spacing.
         List<UUID> soldiers = new ArrayList<>();
         List<UUID> archers = new ArrayList<>();
         List<UUID> riders = new ArrayList<>();
@@ -1334,78 +1344,72 @@ public final class NpcChain
                 soldiers.add(id);
             }
         }
-        double riderSpacing = spacing * AncientEmpiresConfig.chainRiderSpacing;
-        int riderWidth = Math.max(1, lineWidth / 2);
-        boolean mounted = soldiers.isEmpty() && archers.isEmpty() && !riders.isEmpty();
-        if (mounted)
+        FormationLayout layout = FormationLayout.of(this.formation, soldiers.size(), archers.size(), riders.size(), leaders.size(), this.layoutSettings());
+        List<UUID> front = layout.mounted() ? riders : soldiers;
+        for (int i = 0; i < front.size(); i++)
         {
-            // Horse alone: the riders are the front ranks, at their own spacing.
-            soldiers = riders;
-            riders = new ArrayList<>();
-        }
-        double meleeSpacing = mounted ? riderSpacing : spacing;
-        int meleeWidth = mounted ? riderWidth : lineWidth;
-        double front = 0.0D;
-        for (int i = 0; i < soldiers.size(); i++)
-        {
-            double[] slot = shape.soldierSlot(i, soldiers.size(), meleeWidth, columnWidth, meleeSpacing);
-            front = Math.max(front, -slot[1]);
+            double[] slot = layout.melee()[i];
             Vec3 at = place(here, slot, forwardX, forwardZ, rightX, rightZ);
-            this.slots.put(soldiers.get(i), at);
-            if (shape.facesOut() && slot[0] * slot[0] + slot[1] * slot[1] > 1.0E-6)
+            this.slots.put(front.get(i), at);
+            if (this.formation.facesOut() && slot[0] * slot[0] + slot[1] * slot[1] > 1.0E-6)
             {
-                this.slotFacings.put(soldiers.get(i), NpcFormation.yawToward(here.x, here.z, at.x, at.z));
+                this.slotFacings.put(front.get(i), NpcFormation.yawToward(here.x, here.z, at.x, at.z));
             }
         }
-        if (shape == NpcFormation.SQUARE)
+        for (int i = 0; i < archers.size(); i++)
         {
-            // Archers and riders inside the square.
-            List<UUID> inside = new ArrayList<>(archers);
-            inside.addAll(riders);
-            int side = NpcFormation.squareSide(Math.max(1, soldiers.size()));
-            for (int i = 0; i < inside.size(); i++)
-            {
-                double[] slot = NpcFormation.insideSquare(i, inside.size(), side, shape.spacing(spacing));
-                this.slots.put(inside.get(i), place(here, slot, forwardX, forwardZ, rightX, rightZ));
-            }
+            this.slots.put(archers.get(i), place(here, layout.archers()[i], forwardX, forwardZ, rightX, rightZ));
         }
-        else
+        for (int i = 0; i < layout.riders().length; i++)
         {
-            // Archers start a row of their own behind the last melee row, however short that one is.
-            double rowGap = support.spacing(spacing);
-            double rear = soldiers.isEmpty() ? -support.lead(spacing) - rowGap : shape.rearmost(soldiers.size(), meleeWidth, columnWidth, meleeSpacing);
-            double archerShift = rear + rowGap + support.lead(spacing);
-            for (int i = 0; i < archers.size(); i++)
-            {
-                double[] slot = support.soldierSlot(i, archers.size(), lineWidth, columnWidth, spacing);
-                slot[1] += archerShift;
-                front = Math.max(front, -slot[1]);
-                this.slots.put(archers.get(i), place(here, slot, forwardX, forwardZ, rightX, rightZ));
-            }
-            if (!archers.isEmpty())
-            {
-                rear = support.rearmost(archers.size(), lineWidth, columnWidth, spacing) + archerShift;
-            }
-            NpcFormation riderShape = shape == NpcFormation.WEDGE ? NpcFormation.WEDGE : support;
-            double riderBack = Math.max(0.0D, rear + rowGap) + riderShape.spacing(riderSpacing)
-                    - riderShape.frontmost(riders.size(), riderWidth, columnWidth, riderSpacing);
-            for (int i = 0; i < riders.size(); i++)
-            {
-                double[] slot = riderShape.soldierSlot(i, riders.size(), riderWidth, columnWidth, riderSpacing);
-                slot[1] += riderBack;
-                this.slots.put(riders.get(i), place(here, slot, forwardX, forwardZ, rightX, rightZ));
-            }
+            this.slots.put(riders.get(i), place(here, layout.riders()[i], forwardX, forwardZ, rightX, rightZ));
         }
-        // Officers' units, assumed full: as wide and deep as a whole squad in this formation, standing ahead.
-        int squad = AncientEmpiresConfig.chainSquadSize;
-        double frontage = shape.frontage(squad, lineWidth, columnWidth, spacing);
-        double behind = shape.depthBehind(squad, lineWidth, columnWidth, spacing);
-        double depth = -shape.frontmost(squad, lineWidth, columnWidth, spacing) + behind;
         for (int i = 0; i < leaders.size(); i++)
         {
-            double[] slot = shape.officerSlot(i, leaders.size(), front, frontage, behind, depth, spacing);
-            this.slots.put(leaders.get(i), place(here, slot, forwardX, forwardZ, rightX, rightZ));
+            this.slots.put(leaders.get(i), place(here, layout.officers()[i], forwardX, forwardZ, rightX, rightZ));
         }
+    }
+
+    /** This leader's unit as {@link FormationLayout#place} takes it: its shape, members by kind, layout numbers. */
+    public FormationLayout.Unit unitShape()
+    {
+        int melee = 0;
+        int archers = 0;
+        int riders = 0;
+        for (UUID id : this.members)
+        {
+            Entity member = this.npc.level() instanceof ServerLevel level ? level.getEntity(id) : null;
+            if (this.officers.contains(id))
+            {
+                continue;
+            }
+            if (member instanceof NpcEntity npc && npc.isPassenger())
+            {
+                riders++;
+            }
+            else if (member instanceof NpcEntity npc && npc.isHoldingBow())
+            {
+                archers++;
+            }
+            else
+            {
+                melee++;
+            }
+        }
+        return new FormationLayout.Unit(this.formation, melee, archers, riders, this.officers.size(), this.layoutSettings());
+    }
+
+    /** The numbers this leader's layout uses: its own frontage if a dragged line set one, its spread. */
+    public FormationLayout.Settings layoutSettings()
+    {
+        return settings(this.width, this.spread);
+    }
+
+    /** Layout numbers for a unit with frontage {@code width} (0 for the configured line) and {@code spread}. */
+    public static FormationLayout.Settings settings(int width, double spread)
+    {
+        return new FormationLayout.Settings(width > 0 ? width : AncientEmpiresConfig.chainLineWidth, AncientEmpiresConfig.chainColumnWidth,
+                AncientEmpiresConfig.chainSpacing * spread, AncientEmpiresConfig.chainRiderSpacing, AncientEmpiresConfig.chainSquadSize);
     }
 
     private static Vec3 place(Vec3 here, double[] slot, double forwardX, double forwardZ, double rightX, double rightZ)
@@ -1468,6 +1472,10 @@ public final class NpcChain
         {
             tag.putDouble(SPREAD_KEY, this.spread);
         }
+        if (this.width > 0)
+        {
+            tag.putInt(WIDTH_KEY, this.width);
+        }
     }
 
     void load(CompoundTag tag)
@@ -1493,6 +1501,7 @@ public final class NpcChain
         this.unitNumber = Mth.clamp(tag.getInt(NUMBER_KEY), 0, 9);
         this.stance = tag.contains(STANCE_KEY) ? NpcStance.load(tag.getCompound(STANCE_KEY)) : null;
         this.spread = tag.contains(SPREAD_KEY) ? Mth.clamp(tag.getDouble(SPREAD_KEY), 0.5D, 3.0D) : 1.0D;
+        this.width = Mth.clamp(tag.getInt(WIDTH_KEY), 0, 64);
         this.holder = this;
         this.stanceSource = this;
     }
