@@ -41,6 +41,9 @@ public final class ModCreativeTabs
                         output.accept(ModItems.COIN_ANCIENT.get());
                         output.accept(ModItems.COIN_PURSE.get());
                         output.accept(ModItems.ROUTING_ORDER.get());
+                        output.accept(ModItems.WORK_ORDER.get());
+                        output.accept(ModItems.UPKEEP_ORDER.get());
+                        output.accept(ModItems.COMBAT_ORDER.get());
                         output.accept(ModItems.COIN_STACK_COPPER.get());
                         output.accept(ModItems.COIN_STACK_SILVER.get());
                         output.accept(ModItems.COIN_STACK_GOLD.get());

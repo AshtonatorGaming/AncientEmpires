@@ -1058,6 +1058,31 @@ public final class StructureGameTests
         helper.succeed();
     }
 
+    /** AW parity, patrols: a soldier with a Combat Order in its orders slot walks its points. */
+    @GameTest(template = ARENA, timeoutTicks = 600)
+    public static void soldierWalksItsPatrol(GameTestHelper helper)
+    {
+        ServerLevel level = helper.getLevel();
+        BlockPos base = helper.absolutePos(new BlockPos(-90, 1, 80));
+        level.getEntitiesOfClass(LivingEntity.class, new AABB(base).inflate(12.0D), living -> !(living instanceof Player)).forEach(Entity::discard);
+        for (BlockPos cell : BlockPos.betweenClosed(base.offset(-8, -1, -3), base.offset(8, 3, 3)))
+        {
+            level.setBlockAndUpdate(cell, cell.getY() < base.getY() ? Blocks.STONE.defaultBlockState() : Blocks.AIR.defaultBlockState());
+        }
+        NpcEntity guard = squadNpc(helper, UUID.randomUUID(), new BlockPos(-96, 1, 80), NpcRank.SOLDIER, 3);
+        ItemStack order = new ItemStack(ModItems.COMBAT_ORDER.get());
+        String dimension = level.dimension().location().toString();
+        OrderItem.addStop(order, base.offset(-6, -1, 0), dimension, 0, ItemStack.EMPTY);
+        OrderItem.addStop(order, base.offset(6, -1, 0), dimension, 0, ItemStack.EMPTY);
+        guard.getInventory().setItem(NpcInventory.ORDERS_SLOT, order);
+        BlockPos far = base.offset(6, 0, 0);
+        helper.succeedWhen(() ->
+        {
+            helper.assertTrue(guard.position().distanceTo(Vec3.atBottomCenterOf(far)) < 2.5D, "the guard reached its far point, at " + guard.blockPosition());
+            guard.discard();
+        });
+    }
+
     private static NpcEntity squadNpc(GameTestHelper helper, UUID owner, BlockPos at, NpcRank rank, int npcLevel)
     {
         NpcEntity npc = ModEntities.NPC.get().create(helper.getLevel());

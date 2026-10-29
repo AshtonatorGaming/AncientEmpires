@@ -1,5 +1,7 @@
 package com.ancientempires.entity.npc;
 
+import com.ancientempires.item.OrderItem;
+import com.ancientempires.item.WorkOrderItem;
 import com.ancientempires.block.WorksiteBlockEntity;
 import com.ancientempires.config.AncientEmpiresConfig;
 import net.minecraft.core.BlockPos;
@@ -765,6 +767,11 @@ public abstract class NpcWorkGoal<T extends WorksiteBlockEntity> extends Goal
     @Nullable
     private T findSite()
     {
+        ItemStack order = this.npc.getInventory().ordersItem();
+        if (order.getItem() instanceof WorkOrderItem)
+        {
+            return this.listedSite(order);
+        }
         BlockPos known = this.npc.getNeeds().worksite();
         if (known != null)
         {
@@ -806,6 +813,43 @@ public abstract class NpcWorkGoal<T extends WorksiteBlockEntity> extends Goal
             this.npc.getNeeds().setWorksite(best.getBlockPos());
         }
         return best;
+    }
+
+    /**
+     * With a Work Order: the site it was last at while that is still listed, else
+     * the first listed site of this trade (its owner's, in this dimension).
+     */
+    @Nullable
+    private T listedSite(ItemStack order)
+    {
+        String dimension = this.npc.level().dimension().location().toString();
+        BlockPos known = this.npc.getNeeds().worksite();
+        T first = null;
+        for (OrderItem.Stop stop : OrderItem.stops(order))
+        {
+            if (!stop.dimension().equals(dimension))
+            {
+                continue;
+            }
+            BlockEntity entity = this.npc.level().getBlockEntity(stop.pos());
+            if (this.siteType.isInstance(entity) && this.ownedBySame(this.siteType.cast(entity)))
+            {
+                T site = this.siteType.cast(entity);
+                if (stop.pos().equals(known))
+                {
+                    return site;
+                }
+                if (first == null)
+                {
+                    first = site;
+                }
+            }
+        }
+        if (first != null)
+        {
+            this.npc.getNeeds().setWorksite(first.getBlockPos());
+        }
+        return first;
     }
 
     private boolean ownedBySame(WorksiteBlockEntity site)

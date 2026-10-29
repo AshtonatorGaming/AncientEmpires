@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {"item": "minecraft:paper"},
+    {"item": "minecraft:ink_sac"},
+    {"item": "minecraft:stick"}
+  ],
+  "result": {"item": "ancientempires:work_order"}
+}

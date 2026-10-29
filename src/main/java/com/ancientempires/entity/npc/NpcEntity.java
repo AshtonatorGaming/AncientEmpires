@@ -431,6 +431,7 @@ public class NpcEntity extends PathfinderMob
         goals.add(this.addGoal(3, new NpcOrderGoal(this)));
         goals.add(this.addGoal(3, new NpcFormationGoal(this)));
         goals.add(this.addGoal(3, new NpcHoldPositionGoal(this, 0.9D)));
+        goals.add(this.addGoal(4, new NpcPatrolGoal(this)));
         // Ancient Warfare's order: the owner's fight first, then the NPC's own, then scanning.
         targets.add(this.addTarget(1, new NpcOwnerDefenseGoal(this, NpcOwnerDefenseGoal.Mode.DEFEND)));
         targets.add(this.addTarget(2, new NpcOwnerDefenseGoal(this, NpcOwnerDefenseGoal.Mode.ASSIST)));

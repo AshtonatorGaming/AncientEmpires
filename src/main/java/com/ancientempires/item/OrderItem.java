@@ -70,6 +70,12 @@ public abstract class OrderItem extends Item
     /** Whether a block can be a stop of this order (a container, a worksite...). */
     protected abstract boolean accepts(Level level, BlockPos pos);
 
+    /** Most stops this kind of order holds (an upkeep order names one place). */
+    protected int maxStops()
+    {
+        return MAX_STOPS;
+    }
+
     public static List<Stop> stops(ItemStack order)
     {
         List<Stop> stops = new ArrayList<>();
@@ -139,9 +145,9 @@ public abstract class OrderItem extends Item
             stops.set(at, next);
             player.displayClientMessage(describe(at, next, this), true);
         }
-        else if (stops.size() >= MAX_STOPS)
+        else if (stops.size() >= this.maxStops())
         {
-            player.displayClientMessage(Component.translatable("item.ancientempires.order.full", MAX_STOPS), true);
+            player.displayClientMessage(Component.translatable("item.ancientempires.order.full", this.maxStops()), true);
             return InteractionResult.CONSUME;
         }
         else

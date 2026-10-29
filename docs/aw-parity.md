@@ -11,9 +11,9 @@ same thing. Decisions marked **?** are the user's to make before building.
 | --- | --- | --- |
 | Combat, worker, priest, medic NPCs; faction soldiers, archers, leaders, elites, mounted, civilians, priests | Paths, equipment roles, roster | Done |
 | Command baton (move, attack, hold) | Battle wheel, War Table, cohorts | Done (beyond AW) |
-| Combat Order: patrol points for soldiers (`NpcAIPlayerOwnedPatrol`) | Nothing | **Missing**: patrols |
-| Work Order: a list of worksites with times | Nearest own site, automatic | Partial: no assigning a worker to a chosen site or a rota |
-| Upkeep Order: where to eat | Nearest Town Hall in range | Partial: no chosen upkeep spot |
+| Combat Order: patrol points for soldiers (`NpcAIPlayerOwnedPatrol`) | `CombatOrderItem`, `NpcPatrolGoal` | Done 2026-10-29: points walked in turn, day and night; "stand watch" waits |
+| Work Order: a list of worksites with times | `WorkOrderItem` | Done 2026-10-29: the first listed site of its trade (no rota or times yet) |
+| Upkeep Order: where to eat | `UpkeepOrderItem` | Done 2026-10-29: a Town Hall or any container (a chest) |
 | Routing Order + Courier: carries items between chests on a route | `RoutingOrderItem`, `NpcCourierGoal` | Done 2026-10-29: six of AW's twelve modes (all, only, except; each way) |
 | Trade Order + Trader: player-owned trader runs a trade route (POTrade) | Nothing | **Missing**: owned trader |
 | Faction traders (FactionTrade): buy and sell; the only way to raise standing | `NpcTrades`, `TradeScreen`, the Coin Purse | Done 2026-10-29: template traders keep AW's goods; coins by worth through a purse |

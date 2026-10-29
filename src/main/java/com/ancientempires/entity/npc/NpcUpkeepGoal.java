@@ -1,5 +1,11 @@
 package com.ancientempires.entity.npc;
 
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import com.ancientempires.block.WorksiteBlockEntity;
+import com.ancientempires.item.OrderItem;
+import com.ancientempires.item.UpkeepOrderItem;
 import com.ancientempires.block.NpcUpkeep;
 import com.ancientempires.block.TownHallBlockEntity;
 import com.ancientempires.config.AncientEmpiresConfig;
@@ -34,6 +40,9 @@ public final class NpcUpkeepGoal extends Goal
     private int nextCheck;
     @Nullable
     private TownHallBlockEntity fetchFrom;
+    /** A container named by an Upkeep Order (not a hall) to fetch from, while walking there. */
+    @Nullable
+    private BlockPos pantryAt;
     private int walkTicks;
     private int repath;
     /** Backpack index of the item swapped into the hand to eat, or -1. */
@@ -63,6 +72,24 @@ public final class NpcUpkeepGoal extends Goal
         }
         if (this.foodSlot() >= 0)
         {
+            return true;
+        }
+        BlockPos pantry = this.pantry();
+        if (pantry != null)
+        {
+            IItemHandler store = this.handlerAt(pantry);
+            if (store == null || storedRations(store) <= 0.0D)
+            {
+                this.npc.getNeeds().setHungry(true);
+                this.nextCheck = this.npc.tickCount + RETRY_TICKS;
+                return false;
+            }
+            if (AncientEmpiresConfig.upkeepDelivery == AncientEmpiresConfig.Delivery.TELEPORT)
+            {
+                this.takeFrom(store);
+                return this.foodSlot() >= 0;
+            }
+            this.pantryAt = pantry;
             return true;
         }
         TownHallBlockEntity hall = this.hall();
@@ -104,7 +131,7 @@ public final class NpcUpkeepGoal extends Goal
         {
             return false;
         }
-        return this.fetchFrom != null || (this.npc.getNeeds().mealDue() && this.foodSlot() >= 0);
+        return this.fetchFrom != null || this.pantryAt != null || (this.npc.getNeeds().mealDue() && this.foodSlot() >= 0);
     }
 
     @Override
@@ -123,6 +150,7 @@ public final class NpcUpkeepGoal extends Goal
         }
         this.swapBack();
         this.fetchFrom = null;
+        this.pantryAt = null;
         this.npc.getNavigation().stop();
     }
 
@@ -155,6 +183,11 @@ public final class NpcUpkeepGoal extends Goal
             this.walkToHall();
             return;
         }
+        if (this.pantryAt != null)
+        {
+            this.walkToPantry();
+            return;
+        }
         int slot = this.foodSlot();
         if (slot >= 0 && this.npc.getNeeds().mealDue())
         {
@@ -184,6 +217,110 @@ public final class NpcUpkeepGoal extends Goal
         this.npc.swing(InteractionHand.MAIN_HAND);
         this.takeFrom(hall);
         this.fetchFrom = null;
+    }
+
+    /** Walks to the ordered container and takes its food there, as at a hall. */
+    private void walkToPantry()
+    {
+        BlockPos pos = this.pantryAt;
+        if (++this.walkTicks > GIVE_UP_TICKS)
+        {
+            this.pantryAt = null;
+            return;
+        }
+        if (this.npc.distanceToSqr(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D) > REACH_SQR)
+        {
+            if (--this.repath <= 0)
+            {
+                this.repath = 20;
+                // A chest is solid: the path ends beside it.
+                this.npc.getNavigation().moveTo(this.npc.getNavigation().createPath(pos, 1), 1.0D);
+            }
+            return;
+        }
+        this.npc.getNavigation().stop();
+        this.npc.swing(InteractionHand.MAIN_HAND);
+        IItemHandler store = this.handlerAt(pos);
+        if (store != null)
+        {
+            this.takeFrom(store);
+        }
+        this.pantryAt = null;
+    }
+
+    /**
+     * The container an Upkeep Order names, when it is not a Town Hall (halls keep
+     * their own path): in this dimension, holding items, and not another player's worksite.
+     */
+    @Nullable
+    private BlockPos pantry()
+    {
+        ItemStack order = this.npc.getInventory().upkeepItem();
+        if (!(order.getItem() instanceof UpkeepOrderItem))
+        {
+            return null;
+        }
+        for (OrderItem.Stop stop : OrderItem.stops(order))
+        {
+            BlockEntity entity = this.npc.level().getBlockEntity(stop.pos());
+            if (stop.dimension().equals(this.npc.level().dimension().location().toString()) && entity != null && !(entity instanceof TownHallBlockEntity)
+                    && !(entity instanceof WorksiteBlockEntity site && site.owner() != null && !site.owner().equals(this.npc.getOwner())))
+            {
+                return stop.pos();
+            }
+        }
+        return null;
+    }
+
+    @Nullable
+    private IItemHandler handlerAt(BlockPos pos)
+    {
+        BlockEntity entity = this.npc.level().getBlockEntity(pos);
+        return entity == null ? null : entity.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(null);
+    }
+
+    /** Rations in a container (food counted as the hall counts it). */
+    private static double storedRations(IItemHandler store)
+    {
+        double total = 0.0D;
+        for (int slot = 0; slot < store.getSlots(); slot++)
+        {
+            ItemStack stack = store.getStackInSlot(slot);
+            total += TownHallBlockEntity.rations(stack) * stack.getCount();
+        }
+        return total;
+    }
+
+    /** Takes {@code upkeep.carryRations} of food from a container into the backpack; what does not fit stays. */
+    private void takeFrom(IItemHandler store)
+    {
+        double got = 0.0D;
+        for (int slot = 0; slot < store.getSlots() && got < AncientEmpiresConfig.upkeepCarryRations; slot++)
+        {
+            ItemStack stack = store.getStackInSlot(slot);
+            double each = TownHallBlockEntity.rations(stack);
+            if (each <= 0.0D)
+            {
+                continue;
+            }
+            int count = 0;
+            while (count < stack.getCount() && got + count * each < AncientEmpiresConfig.upkeepCarryRations)
+            {
+                count++;
+            }
+            ItemStack taken = store.extractItem(slot, Math.max(1, count), true);
+            ItemStack rest = this.npc.getInventory().addToBackpack(taken);
+            int fits = taken.getCount() - rest.getCount();
+            if (fits > 0)
+            {
+                store.extractItem(slot, fits, false);
+                got += fits * each;
+            }
+            if (!rest.isEmpty())
+            {
+                break;
+            }
+        }
     }
 
     /** Takes {@code upkeep.carryRations} of food into the backpack; what does not fit goes back. */
@@ -241,6 +378,19 @@ public final class NpcUpkeepGoal extends Goal
         if (!(this.npc.level() instanceof ServerLevel level) || this.npc.getOwner() == null)
         {
             return null;
+        }
+        ItemStack order = this.npc.getInventory().upkeepItem();
+        if (order.getItem() instanceof UpkeepOrderItem)
+        {
+            // An Upkeep Order names the hall: its owner's, in this dimension.
+            for (OrderItem.Stop stop : OrderItem.stops(order))
+            {
+                if (stop.dimension().equals(level.dimension().location().toString()) && level.getBlockEntity(stop.pos()) instanceof TownHallBlockEntity hall
+                        && this.npc.getOwner().equals(hall.owner()))
+                {
+                    return hall;
+                }
+            }
         }
         return NpcUpkeep.hallFor(level, this.npc.blockPosition(), this.npc.getOwner());
     }

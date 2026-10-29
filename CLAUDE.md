@@ -186,6 +186,12 @@ instead of reflecting per call), Skirmisher thresholds (about 4.5 to 28 blocks).
   `NpcLeveling.onDeath`, battles in `setTarget`, wounds in `hurt`, routs, priest revival, band changes, insignia, joining a
   unit, entering service) and sent with the NPC screen's open data. Shown on the Sheet and the Journal tab. Game test
   `serviceRecordKeepsTheStory`.
+- More orders (AW parity), each in the NPC's orders or upkeep slot: `WorkOrderItem` (a worker works the first listed
+  worksite of its trade, keeping the one it was at while listed: `NpcWorkGoal.listedSite`), `UpkeepOrderItem` (one
+  place: a Town Hall, or any container, a chest, read through Forge's item handler: `NpcUpkeepGoal.pantry`), `CombatOrderItem`
+  (`NpcPatrolGoal`, priority 4, soldiers: points walked in turn day and night, "stand watch" waits 10 s; not under a unit
+  order other than Free, following, holding, or broken). Placeholder icons are vanilla banner patterns. Game test
+  `soldierWalksItsPatrol`.
 - Gates (S3, `gate/`; read from AW's decompiled 1.12 code): `GateEntity` spans its opening (`pos1`, `pos2` as given,
   one block thick) and, while closed, fills it with `GateProxyBlock`s (invisible, solid, unmineable; clicks and blows go
   to the gate), so collision and paths treat it as a wall; opening clears them. Seven `GateType`s: vertical wood and
