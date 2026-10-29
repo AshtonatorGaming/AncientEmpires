@@ -71,6 +71,8 @@ block so the whole banner is clickable. Chest use in an unclaimed faction struct
 for 8 s. Land sites: groundSlope 3 (was maxSlope 8) avoids hillsides; terrain_adaptation none, and the piece clears,
 fills, and eases a border ring into the land (AW's preGeneration). Unseen in game: all of it.
 
+Chain of command: plan in docs/chain-of-command.md (decisions agreed 2026-10-28: screen + order item, squads of 16, manual joining, grunts lobotomised in formation, garrisons last). Build phase 1 next.
+
 ## Next, in order
 
 1. Finish the play test above; fix what the user finds.
