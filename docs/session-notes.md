@@ -142,6 +142,8 @@ play; fix each the same way.
 Committed since: the text fitting and UI fixes (a6ee65c); the cohort model's core (step 3.5, see the design doc's
 Progress for what is left). Neither installed yet when written (the user's game was open).
 
+**The plan now lives in docs/roadmap.md** (reassessed 2026-10-29: phases Stabilize, Close the loop, Deepen war, Deepen towns). Read it first.
+
 **Agreed order of work** (so we don't get lost):
 1. Done: UI text fitting, the War Table and wheel fixes.
 2. Done (core): the cohort model. Polish next week: command post, mounted commanders, mixed cohorts, the bar grouped
