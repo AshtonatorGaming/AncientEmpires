@@ -219,7 +219,7 @@ public final class AttackProfiles
     @Nullable
     private static AttackSwing fromBetterCombat(NpcEntity npc, BetterCombatBridge.WeaponSnapshot mainWeapon, @Nullable BetterCombatBridge.WeaponSnapshot offWeapon, boolean unarmed)
     {
-        int combo = npc.getComboIndex();
+        int combo = npc.getAttack().comboIndex();
         boolean dual = offWeapon != null;
         boolean alternating = unarmed || dual;
         boolean offHand = alternating && Math.floorMod(combo, 2) == 1;

@@ -265,7 +265,7 @@ public final class NpcGuard
         // A vanilla mob or player has no wind-up: its swing is the hit, so just after it is the opening.
         // Turn-taking is between two guards: a foe with no shield is always "readying", so deferring
         // to it left a shield NPC waiting for a turn that never came.
-        if (this.npc.getTarget() instanceof NpcEntity other && (other.isAttackWindowOpen()
+        if (this.npc.getTarget() instanceof NpcEntity other && (other.getAttack().windowOpen()
                 || other.hasShieldInOffhand() && other.getGuard().strikesBefore(this)))
         {
             // Caught lowering it: cancel the strike, so the shield goes straight back up.
@@ -313,7 +313,7 @@ public final class NpcGuard
     /** This NPC began readying a strike before {@code other} did (or {@code other} has not). */
     private boolean strikesBefore(NpcGuard other)
     {
-        return strikesFirst(this.wantsToStrike && !this.npc.isAttackWindowOpen(), this.strikeSince, other.wantsToStrike, other.strikeSince);
+        return strikesFirst(this.wantsToStrike && !this.npc.getAttack().windowOpen(), this.strikeSince, other.wantsToStrike, other.strikeSince);
     }
 
     /**

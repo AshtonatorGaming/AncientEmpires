@@ -146,17 +146,17 @@ public class NpcMeleeAttackGoal extends Goal
             MobCombatBridge.cancel(this.npc);
             if (landed && swing != null)
             {
-                this.npc.completeSwing(swing.cooldownTicks());
+                this.npc.getAttack().completeSwing(swing.cooldownTicks());
             }
         }
         else if (this.phase == Phase.WINDUP)
         {
             this.stopFistClip();
-            this.npc.cancelAttackPresentation();
+            this.npc.getAttack().cancel();
         }
         else
         {
-            this.npc.closeAttackWindow();
+            this.npc.getAttack().close();
         }
         this.phase = Phase.APPROACH;
         this.windupLeft = 0;
@@ -261,7 +261,7 @@ public class NpcMeleeAttackGoal extends Goal
             else
             {
                 this.stopFistClip();
-                this.npc.cancelAttackPresentation();
+                this.npc.getAttack().cancel();
             }
             return;
         }
@@ -298,7 +298,7 @@ public class NpcMeleeAttackGoal extends Goal
         }
 
         this.windupLeft--;
-        this.npc.tickAttackWindow();
+        this.npc.getAttack().tickWindow();
         if (this.feintPlanned && this.windupLeft <= swing.windupTicks() / 2)
         {
             this.feint();
@@ -319,8 +319,8 @@ public class NpcMeleeAttackGoal extends Goal
             this.applyHit(target, swing, true);
         }
 
-        this.npc.completeSwing(swing.cooldownTicks());
-        this.npc.closeAttackWindow();
+        this.npc.getAttack().completeSwing(swing.cooldownTicks());
+        this.npc.getAttack().close();
         this.stepOut();
         // Plus a short pause between swings so weapons are not spammed (combat.attackPause, 0 off).
         this.recoveryLeft = swing.recoveryTicks() + AncientEmpiresConfig.attackPause;
@@ -357,7 +357,7 @@ public class NpcMeleeAttackGoal extends Goal
         else
         {
             this.stopFistClip();
-            this.npc.cancelAttackPresentation();
+            this.npc.getAttack().cancel();
         }
         this.npc.setSwingCommitted(false);
         this.phase = Phase.APPROACH;
@@ -391,7 +391,7 @@ public class NpcMeleeAttackGoal extends Goal
         this.feintPlanned = false;
         this.feintedLast = true;
         this.stopFistClip();
-        this.npc.cancelAttackPresentation();
+        this.npc.getAttack().cancel();
         this.recoveryLeft = AncientEmpiresConfig.feintRecoveryTicks;
         this.phase = Phase.APPROACH;
         this.active = null;
@@ -436,7 +436,7 @@ public class NpcMeleeAttackGoal extends Goal
         this.stoppedForWindup = false;
         this.pathCooldown = 0;
         this.feintPlanned = this.planFeint(this.npc.getTarget());
-        this.npc.openAttackWindow(swing);
+        this.npc.getAttack().open(swing);
         this.fistClip = false;
         if (this.usesFistClip(swing))
         {
@@ -497,7 +497,7 @@ public class NpcMeleeAttackGoal extends Goal
                 this.tryLandHit(target, swing, true);
             }
         }
-        this.npc.completeSwing(swing.cooldownTicks());
+        this.npc.getAttack().completeSwing(swing.cooldownTicks());
         this.recoveryLeft = Math.max(0, MobCombatBridge.attackCooldown(this.npc));
         this.phase = Phase.APPROACH;
         this.active = null;
@@ -631,7 +631,7 @@ public class NpcMeleeAttackGoal extends Goal
      */
     private AttackSwing preview()
     {
-        int combo = this.npc.getComboIndex();
+        int combo = this.npc.getAttack().comboIndex();
         int hands = this.npc.getHandsVersion();
         if (this.preview == null || combo != this.previewCombo || hands != this.previewHands)
         {
@@ -860,12 +860,12 @@ public class NpcMeleeAttackGoal extends Goal
             return true;
         }
         if (this.phase == Phase.WINDUP || this.npc.hasShieldInOffhand() || this.npc.isPassenger()
-                || !(target instanceof NpcEntity attacker) || !attacker.isAttackWindowOpen() || attacker.getTarget() != this.npc
-                || attacker.getAttackWindupRemaining() > AncientEmpiresConfig.dodgeLeadTicks)
+                || !(target instanceof NpcEntity attacker) || !attacker.getAttack().windowOpen() || attacker.getTarget() != this.npc
+                || attacker.getAttack().windupRemaining() > AncientEmpiresConfig.dodgeLeadTicks)
         {
             return false;
         }
-        int serial = attacker.getAttackWindowSerial();
+        int serial = attacker.getAttack().windowSerial();
         if (this.dodgeFor == attacker.getId() && this.dodgeSerial == serial)
         {
             return false;

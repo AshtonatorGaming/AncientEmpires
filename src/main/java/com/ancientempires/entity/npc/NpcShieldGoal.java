@@ -267,7 +267,7 @@ public final class NpcShieldGoal extends Goal
 
     static boolean swinging(LivingEntity attacker)
     {
-        if (attacker instanceof NpcEntity other && other.isAttackWindowOpen())
+        if (attacker instanceof NpcEntity other && other.getAttack().windowOpen())
         {
             return true;
         }

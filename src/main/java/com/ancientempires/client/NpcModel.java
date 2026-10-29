@@ -80,15 +80,15 @@ public class NpcModel extends PlayerModel<NpcEntity>
         {
             posed = true;
         }
-        if (!posed && !entity.isAttackWindowOpen())
+        if (!posed && !entity.getAttack().windowOpen())
         {
             posed = this.reactionPose(entity, ageInTicks);
         }
-        if (!posed && !entity.isAttackWindowOpen() && !entity.isUsingItem())
+        if (!posed && !entity.getAttack().windowOpen() && !entity.isUsingItem())
         {
             posed = this.holdLight(entity, ageInTicks);
         }
-        if (!posed && entity.isAttackWindowOpen() && this.attackTime <= 0.0F && !NpcCombatAnimations.attackClipOwnsArms(entity))
+        if (!posed && entity.getAttack().windowOpen() && this.attackTime <= 0.0F && !NpcCombatAnimations.attackClipOwnsArms(entity))
         {
             // Vanilla fallback wind-up: the arm drawn back until the swing at the hit.
             ModelPart arm = entity.getMainArm() == HumanoidArm.LEFT ? this.leftArm : this.rightArm;
@@ -96,7 +96,7 @@ public class NpcModel extends PlayerModel<NpcEntity>
             arm.yRot = 0.0F;
             arm.zRot = entity.getMainArm() == HumanoidArm.LEFT ? -0.1F : 0.1F;
         }
-        if (posed || entity.isAttackWindowOpen())
+        if (posed || entity.getAttack().windowOpen())
         {
             this.copyWear();
         }
@@ -153,7 +153,7 @@ public class NpcModel extends PlayerModel<NpcEntity>
     /** Whether {@code stack} is a night light this NPC holds out with our own pose (not Amendments'). */
     static boolean holdsLightOut(NpcEntity entity, ItemStack stack)
     {
-        return stack == entity.getOffhandItem() && NpcNightLight.isLight(stack) && !entity.isAttackWindowOpen() && !entity.isUsingItem()
+        return stack == entity.getOffhandItem() && NpcNightLight.isLight(stack) && !entity.getAttack().windowOpen() && !entity.isUsingItem()
                 && !NpcMoonlightCompat.posesArm(stack);
     }
 

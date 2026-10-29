@@ -111,13 +111,13 @@ public class NpcEntity extends PathfinderMob
     private static final ThreadLocal<UUID> SPAWN_OWNER = new ThreadLocal<>();
     private static final ThreadLocal<String> SPAWN_ROSTER = new ThreadLocal<>();
     private static final EntityDataAccessor<Optional<UUID>> DATA_OWNER = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.OPTIONAL_UUID);
-    private static final EntityDataAccessor<Boolean> DATA_ATTACK_WINDOW = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.BOOLEAN);
-    private static final EntityDataAccessor<String> DATA_ATTACK_ANIMATION = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.STRING);
-    private static final EntityDataAccessor<String> DATA_PRESENTATION_ID = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.STRING);
-    private static final EntityDataAccessor<Integer> DATA_PRESENTATION_LENGTH = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Float> DATA_PRESENTATION_UPSWING = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.FLOAT);
-    private static final EntityDataAccessor<Integer> DATA_PRESENTATION_WINDUP = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Integer> DATA_PRESENTATION_SERIAL = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.INT);
+    static final EntityDataAccessor<Boolean> DATA_ATTACK_WINDOW = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.BOOLEAN);
+    static final EntityDataAccessor<String> DATA_ATTACK_ANIMATION = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.STRING);
+    static final EntityDataAccessor<String> DATA_PRESENTATION_ID = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.STRING);
+    static final EntityDataAccessor<Integer> DATA_PRESENTATION_LENGTH = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.INT);
+    static final EntityDataAccessor<Float> DATA_PRESENTATION_UPSWING = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.FLOAT);
+    static final EntityDataAccessor<Integer> DATA_PRESENTATION_WINDUP = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.INT);
+    static final EntityDataAccessor<Integer> DATA_PRESENTATION_SERIAL = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> DATA_FOLLOWING = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> DATA_CREATIVE = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> DATA_HOLDING = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.BOOLEAN);
@@ -132,7 +132,7 @@ public class NpcEntity extends PathfinderMob
     private static final EntityDataAccessor<String> DATA_TRADE = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<Boolean> DATA_LEVIED = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.BOOLEAN);
     /** Off-hand beat of an empty-hand fist combo. Cleared with the presentation, not the attack window. */
-    private static final EntityDataAccessor<Boolean> DATA_ATTACK_OFFHAND = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.BOOLEAN);
+    static final EntityDataAccessor<Boolean> DATA_ATTACK_OFFHAND = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.BOOLEAN);
     /** 1 is a normal player body. Dwarf and giant eggs store a different scale. */
     private static final EntityDataAccessor<Float> DATA_BODY_SCALE = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.FLOAT);
     /** {@link NpcStatus} ordinal, for the icon over the head. */
@@ -202,6 +202,7 @@ public class NpcEntity extends PathfinderMob
     private final NpcMorale morale = new NpcMorale(this);
     private final NpcChain chain = new NpcChain(this);
     private final NpcProgress progress = new NpcProgress(this);
+    private final NpcAttack attack = new NpcAttack(this);
     /** The NPC spawner that made it (its home), its slot there, and whether it is a garrison. Not packed. */
     @Nullable
     private BlockPos spawnerPos;
@@ -211,8 +212,6 @@ public class NpcEntity extends PathfinderMob
     private float inheritedCommand;
     private int inspiredUntil;
     private float inspiredStrength;
-    /** Counts attack windows (see getAttackWindowSerial). */
-    private int attackWindowSerial;
     /** Own feint chance; below zero means the skill tier decides. */
     private float feintChance = -1.0F;
     /** Cached skill tier from the roster rank; below zero until first asked. */
@@ -259,16 +258,8 @@ public class NpcEntity extends PathfinderMob
     private BlockPos holdAnchor;
     private String holdDimension = "";
 
-    private int comboIndex;
-    private int ticksSinceSwing;
     /** Bumped on any hand change. Not saved; a fresh load starts every cache cold. */
     private int handsVersion;
-    private int lastSwingCooldown;
-
-    private boolean attackWindowOpen;
-    private int attackWindupRemaining;
-    @Nullable
-    private String attackAnimation;
 
     /** Client render flag. The inventory preview sets this so the nametag is skipped for that draw. */
     private boolean nameplateSuppressed;
@@ -1079,12 +1070,6 @@ public class NpcEntity extends PathfinderMob
         this.hurtCurrentlyUsedShield(amount);
     }
 
-    /** Counts attack windows, so a defender can tell one swing from the next. */
-    public int getAttackWindowSerial()
-    {
-        return this.attackWindowSerial;
-    }
-
     /** Chance to try a perfect block, by skill tier. */
     public double getParryChance()
     {
@@ -1111,7 +1096,7 @@ public class NpcEntity extends PathfinderMob
      */
     public boolean isSwingCommitted()
     {
-        return this.swingCommitted || this.attackWindowOpen;
+        return this.swingCommitted || this.attack.windowOpen();
     }
 
     public void setSwingCommitted(boolean committed)
@@ -1652,6 +1637,12 @@ public class NpcEntity extends PathfinderMob
     void invalidateProficiency()
     {
         this.proficiencyVersion = Integer.MIN_VALUE;
+    }
+
+    /** The swing as it happens: combo, attack window, and what the client plays for it. */
+    public NpcAttack getAttack()
+    {
+        return this.attack;
     }
 
     public NpcProgress getProgress()
@@ -2448,162 +2439,6 @@ public class NpcEntity extends PathfinderMob
         }
     }
 
-    public int getComboIndex()
-    {
-        return this.comboIndex;
-    }
-
-    /**
-     * Called when a swing finishes, hit or miss. The next swing advances the combo.
-     */
-    public void completeSwing(int cooldownTicks)
-    {
-        this.guard.clearStrike();
-        this.comboIndex++;
-        this.ticksSinceSwing = 0;
-        this.lastSwingCooldown = Math.max(1, cooldownTicks);
-    }
-
-    public void openAttackWindow(AttackSwing swing)
-    {
-        this.attackWindowSerial++;
-        this.attackWindowOpen = true;
-        this.attackWindupRemaining = swing.windupTicks();
-        this.attackAnimation = swing.animationId();
-        String id = swing.animationId() == null ? "" : swing.animationId();
-        this.entityData.set(DATA_ATTACK_WINDOW, true);
-        this.entityData.set(DATA_ATTACK_ANIMATION, id);
-        if (id.isEmpty())
-        {
-            this.clearPresentation();
-            return;
-        }
-        this.entityData.set(DATA_PRESENTATION_ID, id);
-        this.entityData.set(DATA_PRESENTATION_LENGTH, Math.max(1, swing.cooldownTicks()));
-        this.entityData.set(DATA_PRESENTATION_UPSWING, swing.animationUpswing());
-        this.entityData.set(DATA_PRESENTATION_WINDUP, swing.windupTicks());
-        this.entityData.set(DATA_ATTACK_OFFHAND, swing.offHand());
-        this.entityData.set(DATA_PRESENTATION_SERIAL, this.entityData.get(DATA_PRESENTATION_SERIAL) + 1);
-    }
-
-    public void tickAttackWindow()
-    {
-        if (this.attackWindupRemaining > 0)
-        {
-            this.attackWindupRemaining--;
-        }
-    }
-
-    public void closeAttackWindow()
-    {
-        this.guard.clearStrike();
-        // The swing landed; the arm follows through before the shield can come back up.
-        this.guard.holdDown(AncientEmpiresConfig.shieldFollowThroughTicks);
-        this.attackWindowOpen = false;
-        this.attackWindupRemaining = 0;
-        this.attackAnimation = null;
-        this.entityData.set(DATA_ATTACK_WINDOW, false);
-        this.entityData.set(DATA_ATTACK_ANIMATION, "");
-    }
-
-    /**
-     * Stops the swing and the animation that was started for it. A finished
-     * wind-up uses {@link #closeAttackWindow()} instead, so the follow-through
-     * can keep playing for the rest of the cooldown.
-     */
-    public void cancelAttackPresentation()
-    {
-        this.closeAttackWindow();
-        this.clearPresentation();
-    }
-
-    private void clearPresentation()
-    {
-        if (this.entityData.get(DATA_PRESENTATION_ID).isEmpty() && this.entityData.get(DATA_PRESENTATION_SERIAL) == 0)
-        {
-            return;
-        }
-        this.entityData.set(DATA_PRESENTATION_ID, "");
-        this.entityData.set(DATA_PRESENTATION_LENGTH, 0);
-        this.entityData.set(DATA_PRESENTATION_UPSWING, 0.0F);
-        this.entityData.set(DATA_PRESENTATION_WINDUP, 0);
-        this.entityData.set(DATA_ATTACK_OFFHAND, false);
-        this.entityData.set(DATA_PRESENTATION_SERIAL, this.entityData.get(DATA_PRESENTATION_SERIAL) + 1);
-    }
-
-    public boolean isAttackWindowOpen()
-    {
-        if (this.level().isClientSide)
-        {
-            return this.entityData.get(DATA_ATTACK_WINDOW);
-        }
-        return this.attackWindowOpen;
-    }
-
-    public int getAttackWindupRemaining()
-    {
-        return this.attackWindupRemaining;
-    }
-
-    /**
-     * Animation id from the swing that is currently winding up. Empty when the
-     * NPC is not in an attack window. The client copy reads the synced value.
-     */
-    @Nullable
-    public String getAttackAnimation()
-    {
-        if (this.level().isClientSide)
-        {
-            String synced = this.entityData.get(DATA_ATTACK_ANIMATION);
-            return synced.isEmpty() ? null : synced;
-        }
-        return this.attackAnimation;
-    }
-
-    /**
-     * Animation started when the attack window opened. It stays set through the
-     * recovery so the client can finish the same clip Better Combat would play
-     * for the full cooldown. Empty after a cancelled swing.
-     */
-    public String getAttackPresentationId()
-    {
-        return this.entityData.get(DATA_PRESENTATION_ID);
-    }
-
-    public int getAttackPresentationLength()
-    {
-        return this.entityData.get(DATA_PRESENTATION_LENGTH);
-    }
-
-    public float getAttackPresentationUpswing()
-    {
-        return this.entityData.get(DATA_PRESENTATION_UPSWING);
-    }
-
-    /**
-     * Server wind-up ticks of the current swing. The client times the clip so
-     * its hit frame lands on this tick, even when NPC wind-ups are scaled.
-     */
-    public int getAttackPresentationWindup()
-    {
-        return this.entityData.get(DATA_PRESENTATION_WINDUP);
-    }
-
-    public int getAttackPresentationSerial()
-    {
-        return this.entityData.get(DATA_PRESENTATION_SERIAL);
-    }
-
-    /**
-     * True when the current presentation is the off-hand beat of an empty-hand
-     * fist combo. A held weapon never sets this. It stays set through recovery
-     * and clears only when the presentation itself is cleared.
-     */
-    public boolean isAttackOffhand()
-    {
-        return this.entityData.get(DATA_ATTACK_OFFHAND);
-    }
-
     /**
      * Vanilla advances the arm swing only for monsters and players, so a
      * {@link PathfinderMob}'s {@code swing} would start and never play out:
@@ -2776,12 +2611,7 @@ public class NpcEntity extends PathfinderMob
             this.updateStatus();
         }
         this.level().getProfiler().pop();
-        this.ticksSinceSwing++;
-        if (this.comboIndex != 0 && this.lastSwingCooldown > 0
-                && this.ticksSinceSwing > this.lastSwingCooldown * AncientEmpiresConfig.comboResetRate)
-        {
-            this.comboIndex = 0;
-        }
+        this.attack.tick();
     }
 
     /**
@@ -2808,8 +2638,7 @@ public class NpcEntity extends PathfinderMob
         }
         if (slot == EquipmentSlot.MAINHAND && !ItemStack.isSameItemSameTags(previous, current))
         {
-            this.comboIndex = 0;
-            this.ticksSinceSwing = 0;
+            this.attack.resetCombo();
         }
     }
 

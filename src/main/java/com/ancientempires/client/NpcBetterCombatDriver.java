@@ -250,12 +250,12 @@ final class NpcBetterCombatDriver
 
         private void updateAttack(NpcEntity npc)
         {
-            int serial = npc.getAttackPresentationSerial();
+            int serial = npc.getAttack().presentationSerial();
             if (serial == this.playedSerial)
             {
                 return;
             }
-            String id = npc.getAttackPresentationId();
+            String id = npc.getAttack().presentationId();
             if (!AncientEmpiresConfig.betterCombatEnabled || id.isEmpty())
             {
                 // A cancelled swing never reaches its hit frame, so it leaves no trail.
@@ -294,7 +294,7 @@ final class NpcBetterCombatDriver
             this.lockLegs(copy);
             copy.torso.fullyEnablePart(true);
             copy.head.pitch.setEnabled(false);
-            float upswing = Mth.clamp(npc.getAttackPresentationUpswing(), 0.0F, 0.99F);
+            float upswing = Mth.clamp(npc.getAttack().presentationUpswing(), 0.0F, 0.99F);
             float multiplier = BetterCombatBridge.upswingMultiplier(0.5F);
             if (multiplier < 0.05F)
             {
@@ -304,8 +304,8 @@ final class NpcBetterCombatDriver
             // server's real wind-up can be longer (npcWindupScale), so the curve runs over
             // the length that puts its hit on that tick: the whole clip slows evenly
             // instead of bending around a different hit frame.
-            float cooldown = Math.max(1.0F, npc.getAttackPresentationLength());
-            int windup = npc.getAttackPresentationWindup();
+            float cooldown = Math.max(1.0F, npc.getAttack().presentationLength());
+            int windup = npc.getAttack().presentationWindup();
             float hitRate = upswing * Mth.clamp(multiplier, 0.2F, 1.0F);
             float length = windup > 0 && hitRate > 0.01F
                     ? Mth.clamp(windup / hitRate, cooldown * 0.5F, cooldown * 4.0F)
@@ -319,13 +319,13 @@ final class NpcBetterCombatDriver
             ));
             // Better Combat mirrors an off-hand swing, then mirrors again when the body is left-handed.
             boolean leftHanded = npc.getMainArm() == HumanoidArm.LEFT;
-            this.attack.mirror.setEnabled(leftHanded != npc.isAttackOffhand());
+            this.attack.mirror.setEnabled(leftHanded != npc.getAttack().offHand());
             KeyframeAnimationPlayer player = new CustomAnimationPlayer(copy.build(), 0);
             int fadeTicks = Math.max(0, copy.beginTick);
             this.attack.base.replaceAnimationWithFade(AbstractFadeModifier.standardFadeIn(fadeTicks, Ease.INOUTSINE), player);
             // The server lands the hit at the same fraction of the swing.
             this.trailId = id;
-            this.trailOffhand = npc.isAttackOffhand();
+            this.trailOffhand = npc.getAttack().offHand();
             this.trailDelay = Math.round(length * hitRate);
             return true;
         }

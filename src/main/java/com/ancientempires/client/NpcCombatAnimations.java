@@ -248,7 +248,7 @@ public final class NpcCombatAnimations
             else
             {
                 attack = poses == Status.READY && NpcBetterCombatDriver.attackActive(npc);
-                if (!attack && npc.isAttackWindowOpen())
+                if (!attack && npc.getAttack().windowOpen())
                 {
                     attack = true;
                 }
@@ -292,7 +292,7 @@ public final class NpcCombatAnimations
      */
     public static boolean attackClipOwnsArms(NpcEntity npc)
     {
-        return mobAnimatorOwnsModel() && !npc.getAttackPresentationId().isEmpty();
+        return mobAnimatorOwnsModel() && !npc.getAttack().presentationId().isEmpty();
     }
 
     /**

@@ -22,7 +22,7 @@ final class NpcParryPlanner
     static void tick(NpcEntity npc)
     {
         NpcGuard guard = npc.getGuard();
-        if (guard.planAt != Integer.MIN_VALUE && !(npc.getTarget() instanceof NpcEntity attacker && attacker.isAttackWindowOpen()))
+        if (guard.planAt != Integer.MIN_VALUE && !(npc.getTarget() instanceof NpcEntity attacker && attacker.getAttack().windowOpen()))
         {
             guard.planAt = Integer.MIN_VALUE;
         }
@@ -32,12 +32,12 @@ final class NpcParryPlanner
     static boolean waitToRaise(NpcEntity npc, LivingEntity threat)
     {
         if (!AncientEmpiresConfig.parryEnabled || npc.isRaisingShield() || !(threat instanceof NpcEntity attacker)
-                || !attacker.isAttackWindowOpen() || attacker.getTarget() != npc)
+                || !attacker.getAttack().windowOpen() || attacker.getTarget() != npc)
         {
             return false;
         }
         NpcGuard guard = npc.getGuard();
-        int serial = attacker.getAttackWindowSerial();
+        int serial = attacker.getAttack().windowSerial();
         if (guard.planFor != attacker.getId() || guard.planSerial != serial)
         {
             // A new swing: decide once whether to try for the perfect block, and when.
@@ -51,6 +51,6 @@ final class NpcParryPlanner
                 guard.planAt = AncientEmpiresConfig.parryWindowTicks / 2 + jitter;
             }
         }
-        return guard.planAt != Integer.MIN_VALUE && attacker.getAttackWindupRemaining() > guard.planAt;
+        return guard.planAt != Integer.MIN_VALUE && attacker.getAttack().windupRemaining() > guard.planAt;
     }
 }
