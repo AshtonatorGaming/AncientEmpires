@@ -84,6 +84,7 @@ import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -417,12 +418,16 @@ public class NpcEntity extends PathfinderMob
                 .add(Attributes.ATTACK_SPEED, 4.0D);
     }
 
+    /**
+     * The goals every NPC keeps; the rest come by path ({@link #refreshGoalSet}):
+     * a fighter (soldier, or a levied civilian) carries the combat, order, and
+     * target goals, a civilian the trades. An NPC only pays for goals it can use:
+     * the goal selector asks every idle goal whether to start, every other tick.
+     */
     @Override
     protected void registerGoals()
     {
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        // A surrendered soldier kneels; it outranks every goal that moves.
-        this.goalSelector.addGoal(0, new NpcSurrenderGoal(this));
         if (AncientEmpiresConfig.openDoors)
         {
             // Ancient Warfare's NpcAIDoor: open the doors on the path, close them once past.
@@ -432,49 +437,108 @@ public class NpcEntity extends PathfinderMob
         }
         // Gates as doors, for a player's own NPCs and only with gates.npcUse on (off by default).
         this.goalSelector.addGoal(0, new NpcGateGoal(this));
-        // A bow keeps this goal for the whole fight. Melee does not run while it does.
-        this.goalSelector.addGoal(1, new NpcBowAttackGoal(this));
-        // A Spartan throwing weapon keeps the skirmish goal; a drawn sidearm hands the fight to melee.
-        this.goalSelector.addGoal(1, new NpcSkirmishGoal(this));
-        // No flags: blocks beside the melee goal, lowered while the NPC swings.
-        this.goalSelector.addGoal(1, new NpcShieldGoal(this));
-        this.goalSelector.addGoal(1, new NpcMedicGoal(this));
         // Civilians and routing soldiers run instead of fighting; it holds the move flag above the combat goals.
         this.goalSelector.addGoal(1, new NpcFleeGoal(this));
         this.goalSelector.addGoal(1, new NpcBurningGoal(this));
         this.goalSelector.addGoal(1, new NpcSunGoal(this));
+        // Everyone keeps melee: a cornered civilian stands and fights with what it holds.
         this.goalSelector.addGoal(2, new NpcMeleeAttackGoal(this));
-        this.goalSelector.addGoal(3, new NpcOrderGoal(this));
-        this.goalSelector.addGoal(3, new NpcFormationGoal(this));
-        this.goalSelector.addGoal(3, new NpcHoldPositionGoal(this, 0.9D));
         this.goalSelector.addGoal(3, new NpcUpkeepGoal(this));
         this.goalSelector.addGoal(4, new NpcFollowOwnerGoal(this, 1.12D, 3.0F));
         this.goalSelector.addGoal(4, new NpcSleepGoal(this));
-        this.goalSelector.addGoal(4, new NpcPriestGoal(this));
-        this.goalSelector.addGoal(4, new NpcGovernorGoal(this));
-        // Every hands-on trade (farmer, woodcutter, miner, rancher, hunter, fisher, cook) as one goal: the tool picks it.
-        this.goalSelector.addGoal(4, new NpcJobGoal(this));
         this.goalSelector.addGoal(5, new NpcReturnHomeGoal(this, 0.9D));
         this.goalSelector.addGoal(6, new WaterAvoidingRandomStrollGoal(this, 0.8D));
         this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
 
-        // Ancient Warfare's order: the owner's fight first, then the NPC's own, then scanning.
-        this.targetSelector.addGoal(1, new NpcOwnerDefenseGoal(this, NpcOwnerDefenseGoal.Mode.DEFEND));
-        this.targetSelector.addGoal(2, new NpcOwnerDefenseGoal(this, NpcOwnerDefenseGoal.Mode.ASSIST));
+        // Hurt: alert allies (civilians too), and a cornered civilian's stand.
         this.targetSelector.addGoal(3, new NpcHurtByTargetGoal(this));
+    }
+
+    /** Goals only a fighter (a soldier, or a levied civilian) can use. */
+    private void addFighterGoals(List<Goal> goals, List<Goal> targets)
+    {
+        // A surrendered soldier kneels; it outranks every goal that moves.
+        goals.add(this.addGoal(0, new NpcSurrenderGoal(this)));
+        // A bow keeps this goal for the whole fight. Melee does not run while it does.
+        goals.add(this.addGoal(1, new NpcBowAttackGoal(this)));
+        // A Spartan throwing weapon keeps the skirmish goal; a drawn sidearm hands the fight to melee.
+        goals.add(this.addGoal(1, new NpcSkirmishGoal(this)));
+        // No flags: blocks beside the melee goal, lowered while the NPC swings.
+        goals.add(this.addGoal(1, new NpcShieldGoal(this)));
+        goals.add(this.addGoal(1, new NpcMedicGoal(this)));
+        goals.add(this.addGoal(3, new NpcOrderGoal(this)));
+        goals.add(this.addGoal(3, new NpcFormationGoal(this)));
+        goals.add(this.addGoal(3, new NpcHoldPositionGoal(this, 0.9D)));
+        // Ancient Warfare's order: the owner's fight first, then the NPC's own, then scanning.
+        targets.add(this.addTarget(1, new NpcOwnerDefenseGoal(this, NpcOwnerDefenseGoal.Mode.DEFEND)));
+        targets.add(this.addTarget(2, new NpcOwnerDefenseGoal(this, NpcOwnerDefenseGoal.Mode.ASSIST)));
         if (AncientEmpiresConfig.targetLegacyScan)
         {
             // The selectors only count candidates for the debug stats; the filter is unchanged.
-            this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Monster.class, 10, true, false,
-                    living -> NpcTargetCache.countLegacyCandidate()));
-            this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, NpcEntity.class, 10, true, false,
-                    living -> living instanceof NpcEntity other && this.acceptsTarget(other) && NpcTargetCache.countLegacyCandidate()));
+            targets.add(this.addTarget(4, new NearestAttackableTargetGoal<>(this, Monster.class, 10, true, false,
+                    living -> NpcTargetCache.countLegacyCandidate())));
+            targets.add(this.addTarget(5, new NearestAttackableTargetGoal<>(this, NpcEntity.class, 10, true, false,
+                    living -> living instanceof NpcEntity other && this.acceptsTarget(other) && NpcTargetCache.countLegacyCandidate())));
         }
         else
         {
-            this.targetSelector.addGoal(4, new NpcTargetGoal(this));
+            targets.add(this.addTarget(4, new NpcTargetGoal(this)));
         }
+    }
+
+    /** Goals only a civilian (settler or worker, not levied) can use: the trades. */
+    private void addCivilianGoals(List<Goal> goals)
+    {
+        goals.add(this.addGoal(4, new NpcPriestGoal(this)));
+        goals.add(this.addGoal(4, new NpcGovernorGoal(this)));
+        // Every hands-on trade (farmer, woodcutter, miner, rancher, hunter, fisher, cook) as one goal: the tool picks it.
+        goals.add(this.addGoal(4, new NpcJobGoal(this)));
+    }
+
+    private Goal addGoal(int priority, Goal goal)
+    {
+        this.goalSelector.addGoal(priority, goal);
+        return goal;
+    }
+
+    private Goal addTarget(int priority, Goal goal)
+    {
+        this.targetSelector.addGoal(priority, goal);
+        return goal;
+    }
+
+    /** Which path's goals are registered now: null for none yet, true for a fighter's, false for a civilian's. */
+    @Nullable
+    private Boolean fighterGoals;
+    private final List<Goal> pathGoals = new ArrayList<>();
+    private final List<Goal> pathTargets = new ArrayList<>();
+
+    /**
+     * Swaps the path's goals in when the NPC becomes a fighter or a civilian
+     * (its path chosen or read from its roster row, a levy called or
+     * dismissed). One compare a tick otherwise.
+     */
+    private void refreshGoalSet()
+    {
+        boolean fighter = this.getNpcPath().combat() || this.isLevied();
+        if (this.fighterGoals != null && this.fighterGoals == fighter)
+        {
+            return;
+        }
+        this.pathGoals.forEach(this.goalSelector::removeGoal);
+        this.pathTargets.forEach(this.targetSelector::removeGoal);
+        this.pathGoals.clear();
+        this.pathTargets.clear();
+        if (fighter)
+        {
+            this.addFighterGoals(this.pathGoals, this.pathTargets);
+        }
+        else
+        {
+            this.addCivilianGoals(this.pathGoals);
+        }
+        this.fighterGoals = fighter;
     }
 
     /**
@@ -2666,7 +2730,41 @@ public class NpcEntity extends PathfinderMob
     public void aiStep()
     {
         this.updateSwingTime();
+        if (aiTiming && !this.level().isClientSide)
+        {
+            long start = System.nanoTime();
+            super.aiStep();
+            int path = this.getNpcPath().ordinal();
+            AI_NANOS[path] += System.nanoTime() - start;
+            AI_STEPS[path]++;
+            return;
+        }
         super.aiStep();
+    }
+
+    /** Benchmark only (StructureGameTests.npcGoalCost): time every server AI step, by path. Off in play. */
+    public static boolean aiTiming;
+    private static final long[] AI_NANOS = new long[NpcPath.values().length];
+    private static final long[] AI_STEPS = new long[NpcPath.values().length];
+    private static final long[] AI_CUSTOM_NANOS = new long[NpcPath.values().length];
+
+    public static void resetAiTiming()
+    {
+        Arrays.fill(AI_NANOS, 0L);
+        Arrays.fill(AI_STEPS, 0L);
+        Arrays.fill(AI_CUSTOM_NANOS, 0L);
+    }
+
+    /** Average microseconds per AI step of NPCs on {@code path} since the reset. */
+    public static double aiMicros(NpcPath path)
+    {
+        return AI_STEPS[path.ordinal()] == 0L ? 0.0D : AI_NANOS[path.ordinal()] / 1000.0D / AI_STEPS[path.ordinal()];
+    }
+
+    /** Of that, the part spent in this mod's own per-tick work ({@code customServerAiStep}). */
+    public static double aiCustomMicros(NpcPath path)
+    {
+        return AI_STEPS[path.ordinal()] == 0L ? 0.0D : AI_CUSTOM_NANOS[path.ordinal()] / 1000.0D / AI_STEPS[path.ordinal()];
     }
 
     /** Reused by updateStatus, so the half-second status check allocates nothing. */
@@ -2715,7 +2813,18 @@ public class NpcEntity extends PathfinderMob
     @Override
     protected void customServerAiStep()
     {
+        long customStart = aiTiming ? System.nanoTime() : 0L;
+        this.customServerAiStepTimed();
+        if (aiTiming)
+        {
+            AI_CUSTOM_NANOS[this.getNpcPath().ordinal()] += System.nanoTime() - customStart;
+        }
+    }
+
+    private void customServerAiStepTimed()
+    {
         super.customServerAiStep();
+        this.refreshGoalSet();
         LivingEntity target = this.getTarget();
         if (target != null && this.avoidsFights())
         {

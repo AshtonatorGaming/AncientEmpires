@@ -32,7 +32,11 @@ instead of reflecting per call), Skirmisher thresholds (about 4.5 to 28 blocks).
 
 ## Architecture (as read from the code)
 
-- `entity/npc/NpcEntity` - the NPC. Goals: 0 Float, `OpenDoorGoal`, `NpcNightDoorsGoal`;
+- `entity/npc/NpcEntity` - the NPC. Goals come in sets by path (`refreshGoalSet`, checked each tick, swapped when the
+  path or a levy changes): every NPC keeps float, doors, gates, flee, burning, sun, melee (a cornered civilian's stand),
+  upkeep, follow, sleep, home, wander, looks, and the hurt-by target; a fighter (soldier path or levied) adds surrender,
+  bow, skirmish, shield, medic, order, formation, hold, owner defense, and the target scan; a civilian adds job, priest,
+  governor. Priorities as listed next. Goals: 0 Float, `OpenDoorGoal`, `NpcNightDoorsGoal`;
   1 `NpcBowAttackGoal`, `NpcShieldGoal` (no flags), `NpcFleeGoal` (civilians only);
   2 `NpcMeleeAttackGoal`; 3 hold position, `NpcUpkeepGoal`; 4 follow, sleep, priest, and `NpcJobGoal`
   (every hands-on trade in one goal: the main-hand tool picks the farmer, woodcutter, miner,
@@ -811,6 +815,15 @@ and the UI screens.
 Suggested order: (1) the cheap fixes (items 3-5 and the client skin churn); (2) sidearm
 fallback, equipment-change driven; (3) Better Combat snapshot caching; (4) shared
 target-scan design.
+
+### Measured (2026-10-28, game test `npcGoalCost`, 100 idle soldiers and 100 idle workers)
+
+About 20 to 28 microseconds per NPC per tick, with 20% noise between runs; spreading them out changed nothing, so
+crowding is not it. This mod's own per-tick work (`customServerAiStep`: morale, guard, sidearm, target memory,
+command, chain) is about 1 us of that (soldiers), 0.5 (workers); the rest is vanilla's mob step (goal selection,
+pathfinding, sensing, movement). Registering goals by path made no difference beyond the noise: idle goal checks were
+already cheap. What would pay is fewer NPCs pathing and scanning: the chain's lobotomised grunts (phase 3).
+`NpcEntity.aiTiming` turns the timer on (benchmark only).
 
 ### Verdicts after checking the code (perf-and-sidearm branch)
 

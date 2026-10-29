@@ -72,6 +72,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.Locale;
 import java.util.UUID;
 import java.util.stream.IntStream;
 
@@ -527,6 +528,57 @@ public final class StructureGameTests
                 helper.assertTrue(heir.getUUID().equals(soldier.getChain().leaderId()), "the others answer to the heir");
             }
             helper.succeed();
+        });
+    }
+
+    /**
+     * Benchmark, not a check: a crowd of idle soldiers and workers (no enemy,
+     * daytime, walled in) and the average server AI step of each, by path, so
+     * the cost of the goals an NPC carries can be compared before and after a
+     * change. Logged as GAMETEST goal cost.
+     */
+    @GameTest(template = ARENA, timeoutTicks = 800, required = false)
+    public static void npcGoalCost(GameTestHelper helper)
+    {
+        ServerLevel level = helper.getLevel();
+        level.setDayTime(6000L);
+        int minX = 40;
+        int minZ = -60;
+        int size = 60;
+        for (int x = minX - 1; x <= minX + size; x++)
+        {
+            for (int z = minZ - 1; z <= minZ + size; z++)
+            {
+                boolean wall = x < minX || z < minZ || x >= minX + size || z >= minZ + size;
+                helper.setBlock(new BlockPos(x, 0, z), Blocks.STONE);
+                for (int y = 1; y <= 4; y++)
+                {
+                    helper.setBlock(new BlockPos(x, y, z), wall && y <= 3 ? Blocks.STONE_BRICKS : Blocks.AIR);
+                }
+            }
+        }
+        AABB pen = new AABB(helper.absolutePos(new BlockPos(minX, 1, minZ)), helper.absolutePos(new BlockPos(minX + size, 4, minZ + size)));
+        level.getEntitiesOfClass(NpcEntity.class, pen).forEach(NpcEntity::discard);
+        UUID owner = UUID.randomUUID();
+        int each = 100;
+        for (int i = 0; i < each * 2; i++)
+        {
+            NpcEntity npc = squadNpc(helper, owner, new BlockPos(minX + 2 + (i % 14) * 4, 1, minZ + 2 + (i / 14) * 4), NpcRank.SOLDIER, 1);
+            npc.setNpcPath(i % 2 == 0 ? NpcPath.SOLDIER : NpcPath.WORKER);
+        }
+        helper.runAfterDelay(60, () ->
+        {
+            NpcEntity.resetAiTiming();
+            NpcEntity.aiTiming = true;
+            helper.runAfterDelay(300, () ->
+            {
+                NpcEntity.aiTiming = false;
+                AncientEmpires.LOGGER.info("GAMETEST goal cost: soldier {} us ({} our own), worker {} us ({} our own) per AI step ({} of each, 300 ticks)",
+                        String.format(Locale.ROOT, "%.2f", NpcEntity.aiMicros(NpcPath.SOLDIER)), String.format(Locale.ROOT, "%.2f", NpcEntity.aiCustomMicros(NpcPath.SOLDIER)),
+                        String.format(Locale.ROOT, "%.2f", NpcEntity.aiMicros(NpcPath.WORKER)), String.format(Locale.ROOT, "%.2f", NpcEntity.aiCustomMicros(NpcPath.WORKER)), each);
+                level.getEntitiesOfClass(NpcEntity.class, pen).forEach(NpcEntity::discard);
+                helper.succeed();
+            });
         });
     }
 

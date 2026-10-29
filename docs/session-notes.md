@@ -73,6 +73,9 @@ fills, and eases a border ring into the land (AW's preGeneration). Unseen in gam
 
 Chain of command: plan in docs/chain-of-command.md (decisions agreed 2026-10-28: screen + order item, squads of 16, manual joining, grunts lobotomised in formation, garrisons last). Build phase 1 next.
 
+Measured (npcGoalCost game test): ~20-28 us per idle NPC per tick, ~1 us of it this mod's own per-tick work, the
+rest vanilla's mob step; goals registered by path now (no measurable gain, kept for tidiness). Splitting NpcEntity's
+source is maintenance only, not speed. Next: phase 3 (lobotomised grunts are the real saving).
 Chain of command phase 2 built too (Hold, Defend, Attack, Fall back via the Signal Flag; target leashes; leaders
 stand behind their front rank per the user's layout note; soldiers step onto exact slots). Not seen in game yet.
 Chain of command phase 1 built (links, Signal Flag, Follow in line/column/loose, succession, ledger, squad command,
