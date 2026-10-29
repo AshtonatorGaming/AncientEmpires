@@ -12,6 +12,11 @@ Decided with the user 2026-10-29: layout A, a tab strip left of the panel, then 
   reasons, guard, fed or hungry). The popup still opens from the role label.
 - **Orders**: the orders and upkeep orders, each with its stops (a courier's held Routing Order counts).
 
+After the first look (2026-10-29): the Sheet and Orders pages take the whole panel (the player's inventory and the
+commands belong to Gear only); the Sheet has a tall portrait and who the NPC is (path and trade, owner or faction,
+home); Orders is a duty page (what it is doing now, home, a card per order with its icon and stops); the order slots
+are labelled like the equipment cross, with a faint paper (orders) and bread (upkeep).
+
 Other tabs hide the NPC's slots through vanilla's `Slot.isActive` (creative tabs' way), so they neither draw nor take
 clicks; the name, commands, and the player's inventory stay on every tab.
 

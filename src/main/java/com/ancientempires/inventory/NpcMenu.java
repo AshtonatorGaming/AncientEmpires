@@ -86,13 +86,13 @@ public class NpcMenu extends AbstractContainerMenu
             for (int column = 0; column < 9; column++)
             {
                 int index = NpcInventory.CONTAINER_SIZE + column + row * 9;
-                this.addSlot(new Slot(playerInventory, column + row * 9 + 9, NpcLayout.slotX(index), NpcLayout.slotY(index)));
+                this.addSlot(new NpcSlot(playerInventory, column + row * 9 + 9, NpcLayout.slotX(index), NpcLayout.slotY(index), this::npcSlotsShown, false));
             }
         }
         for (int column = 0; column < 9; column++)
         {
             int index = NpcInventory.CONTAINER_SIZE + 27 + column;
-            this.addSlot(new Slot(playerInventory, column, NpcLayout.slotX(index), NpcLayout.slotY(index)));
+            this.addSlot(new NpcSlot(playerInventory, column, NpcLayout.slotX(index), NpcLayout.slotY(index), this::npcSlotsShown, false));
         }
     }
 
@@ -116,7 +116,7 @@ public class NpcMenu extends AbstractContainerMenu
         return index >= 0 && index < this.slots.size() && this.slots.get(index) instanceof GearSlot gear && gear.icon != null ? gear.icon.getSecond() : null;
     }
 
-    /** Whether the NPC's own slots are shown (the screen's Gear tab); other tabs hide them, and hidden slots take no clicks. */
+    /** Whether the slots are shown (the screen's Gear tab): other tabs hide the NPC's and the player's, and hidden slots take no clicks. */
     public boolean npcSlotsShown()
     {
         return this.npcSlotsShown;

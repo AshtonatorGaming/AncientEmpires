@@ -11,6 +11,10 @@ import com.ancientempires.network.ModNetwork;
 import com.ancientempires.registry.ModMenus;
 import com.ancientempires.registry.ModItems;
 import com.ancientempires.item.OrderItem;
+import com.ancientempires.entity.npc.NpcStatus;
+import com.ancientempires.entity.npc.NpcFactions;
+import net.minecraft.core.BlockPos;
+import java.util.Locale;
 import net.minecraft.world.item.ItemStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -122,7 +126,6 @@ public class NpcScreen extends AbstractContainerScreen<NpcMenu>
         this.tabButton(Tab.GEAR, new ItemStack(Items.IRON_CHESTPLATE), "gui.ancientempires.npc.tab.gear");
         this.tabButton(Tab.SHEET, new ItemStack(Items.WRITABLE_BOOK), "gui.ancientempires.npc.tab.sheet");
         this.tabButton(Tab.ORDERS, new ItemStack(ModItems.ROUTING_ORDER.get()), "gui.ancientempires.npc.tab.orders");
-        this.showTab(this.tab);
 
         this.commands.clear();
         this.command(NpcGui.Icon.FOLLOW, "gui.ancientempires.npc.follow", NpcMenu.BUTTON_FOLLOW, active(npc, NpcEntity::isFollowing));
@@ -137,6 +140,7 @@ public class NpcScreen extends AbstractContainerScreen<NpcMenu>
         this.commands.get(CREATIVE).visible = showCreative();
         this.commands.get(LEVY).visible = showLevy(npc);
         this.placeCommands();
+        this.showTab(this.tab);
     }
 
     /** A tab in the strip left of the panel, its icon an item. */
@@ -165,6 +169,7 @@ public class NpcScreen extends AbstractContainerScreen<NpcMenu>
         {
             this.roleButton.visible = gear;
         }
+        this.layoutCommands();
         return true;
     }
 
@@ -224,20 +229,19 @@ public class NpcScreen extends AbstractContainerScreen<NpcMenu>
     private void layoutCommands()
     {
         NpcEntity npc = this.menu.getNpc();
-        boolean hold = showHold(npc);
-        boolean creative = showCreative();
-        boolean levy = showLevy(npc);
-        NpcButton holdButton = this.commands.get(HOLD);
-        NpcButton creativeButton = this.commands.get(CREATIVE);
-        NpcButton levyButton = this.commands.get(LEVY);
-        if (holdButton.visible == hold && creativeButton.visible == creative && levyButton.visible == levy)
+        // The commands belong to the Gear tab; the other pages use the room.
+        boolean gear = this.tab == Tab.GEAR;
+        boolean changed = false;
+        for (int index = 0; index < this.commands.size(); index++)
         {
-            return;
+            boolean show = gear && (index == HOLD ? showHold(npc) : index == CREATIVE ? showCreative() : index != LEVY || showLevy(npc));
+            changed |= this.commands.get(index).visible != show;
+            this.commands.get(index).visible = show;
         }
-        holdButton.visible = hold;
-        creativeButton.visible = creative;
-        levyButton.visible = levy;
-        this.placeCommands();
+        if (changed)
+        {
+            this.placeCommands();
+        }
     }
 
     private static boolean showHold(NpcEntity npc)
@@ -486,13 +490,24 @@ public class NpcScreen extends AbstractContainerScreen<NpcMenu>
         }
     }
 
+    /** An item drawn faint (a label for what goes somewhere): the item, then the cell's colour over it, mostly opaque. */
+    private void ghostItem(GuiGraphics graphics, ItemStack stack, int x, int y)
+    {
+        graphics.renderItem(stack, x, y);
+        graphics.pose().pushPose();
+        graphics.pose().translate(0.0F, 0.0F, 200.0F);
+        graphics.fill(x, y, x + 16, y + 16, (NpcGui.SLOT_FILL & 0xFFFFFF) | 0xA8000000);
+        graphics.pose().popPose();
+    }
+
     /** The page of the Sheet or Orders tab, over the area the gear takes on the Gear tab. */
     private void renderPage(GuiGraphics graphics, int left, int top, int mouseX, int mouseY)
     {
         int x = left + NpcLayout.CROSS_X;
         int y = top + NpcLayout.PREVIEW_Y;
         int width = NpcLayout.WIDTH - NpcLayout.CROSS_X * 2;
-        int height = NpcLayout.BUTTON_Y - NpcLayout.PREVIEW_Y - 4;
+        // The whole panel below the name: neither the commands nor the player's inventory are needed here.
+        int height = NpcLayout.HEIGHT - NpcLayout.PREVIEW_Y - 8;
         NpcGui.bevel(graphics, x, y, width, height, NpcGui.INK);
         NpcEntity npc = this.menu.getNpc();
         if (npc == null)
@@ -501,20 +516,80 @@ public class NpcScreen extends AbstractContainerScreen<NpcMenu>
         }
         if (this.tab == Tab.SHEET)
         {
-            // The NPC itself beside its sheet, so the page is about someone.
-            int previewW = 58;
-            if (this.preview != null)
-            {
-                this.preview.render(graphics, x + 2, y + 2, previewW, height - 4, mouseX, mouseY);
-            }
-            NpcStatsSheet.draw(graphics, this.font, this.menu, npc, x + previewW + 8, y + 4, width - previewW - 14);
+            this.renderSheet(graphics, npc, x, y, width, height, mouseX, mouseY);
             return;
         }
+        this.renderDuty(graphics, npc, x, y, width);
+    }
+
+    /**
+     * The character sheet: the NPC drawn tall on the left, its stats beside it,
+     * and below them who it is (path and trade, faction or owner, home).
+     */
+    private void renderSheet(GuiGraphics graphics, NpcEntity npc, int x, int y, int width, int height, int mouseX, int mouseY)
+    {
+        int portraitW = 74;
+        int portraitH = 150;
+        NpcGui.bevel(graphics, x + 4, y + 4, portraitW, portraitH, NpcGui.SLOT_FILL);
+        if (this.preview != null)
+        {
+            this.preview.render(graphics, x + 5, y + 5, portraitW - 2, portraitH - 2, mouseX, mouseY);
+        }
+        NpcStatsSheet.draw(graphics, this.font, this.menu, npc, x + portraitW + 10, y + 6, width - portraitW - 16);
+        int line = y + portraitH + 10;
         int inner = width - 12;
-        int line = y + 5;
-        line = this.orderSection(graphics, Component.translatable("gui.ancientempires.npc.orders_title"), this.orders(npc), x + 6, line, inner, 6);
-        line += 4;
-        this.orderSection(graphics, Component.translatable("gui.ancientempires.npc.upkeep_title"), npc.getInventory().upkeepItem(), x + 6, line, inner, 2);
+        graphics.fill(x + 6, line - 4, x + width - 6, line - 3, NpcGui.BUTTON);
+        Component path = Component.translatable("gui.ancientempires.npc.sheet.path",
+                Component.translatable(NpcPath.translationKey(npc.getNpcPath().id())), Component.translatable(NpcPath.translationKey(npc.getRoleId())));
+        FitText.draw(graphics, this.font, path.getString(), x + 6, line, inner, 10, NpcGui.NAME_INK, false, true);
+        line += 12;
+        FitText.draw(graphics, this.font, this.allegiance(npc).getString(), x + 6, line, inner, 10, NpcGui.NAME_INK, false, true);
+        line += 12;
+        FitText.draw(graphics, this.font, home(npc).getString(), x + 6, line, inner, 10, NpcGui.NAME_HINT, false, true);
+        line += 14;
+        FitText.draw(graphics, this.font, Component.translatable("gui.ancientempires.npc.sheet.record_soon").getString(), x + 6, line, inner, 10,
+                NpcGui.NAME_HINT, false, false);
+    }
+
+    /** Whom the NPC serves: its owner by name (or "a player" when not online), or its faction. */
+    private Component allegiance(NpcEntity npc)
+    {
+        if (npc.getOwner() != null)
+        {
+            String name = null;
+            if (this.minecraft != null && this.minecraft.getConnection() != null && this.minecraft.getConnection().getPlayerInfo(npc.getOwner()) != null)
+            {
+                name = this.minecraft.getConnection().getPlayerInfo(npc.getOwner()).getProfile().getName();
+            }
+            return Component.translatable("gui.ancientempires.npc.sheet.owner", name != null ? Component.literal(name) : Component.translatable("gui.ancientempires.npc.sheet.someone"));
+        }
+        return npc.getFaction().isEmpty() ? Component.translatable("gui.ancientempires.npc.sheet.free")
+                : Component.translatable("gui.ancientempires.npc.sheet.faction", NpcFactions.displayName(npc.getFaction()));
+    }
+
+    private static Component home(NpcEntity npc)
+    {
+        BlockPos home = npc.getHome();
+        return home == null ? Component.translatable("gui.ancientempires.npc.sheet.no_home")
+                : Component.translatable("gui.ancientempires.npc.sheet.home", home.getX(), home.getY(), home.getZ());
+    }
+
+    /** The duty page: what the NPC is doing now, its home, and a card per order with its stops. */
+    private void renderDuty(GuiGraphics graphics, NpcEntity npc, int x, int y, int width)
+    {
+        int inner = width - 12;
+        int line = y + 6;
+        NpcStatus status = npc.getStatus();
+        Component doing = Component.translatable("gui.ancientempires.npc.doing." + status.name().toLowerCase(Locale.ROOT));
+        FitText.draw(graphics, this.font, Component.translatable("gui.ancientempires.npc.now", doing).getString(), x + 6, line, inner, 10, NpcGui.GOLD, false, true);
+        line += 12;
+        FitText.draw(graphics, this.font, home(npc).getString(), x + 6, line, inner, 10, NpcGui.NAME_HINT, false, true);
+        line += 16;
+        line = this.orderCard(graphics, Component.translatable("gui.ancientempires.npc.orders_title"), this.orders(npc), "gui.ancientempires.npc.orders_none",
+                x + 4, line, width - 8, 8);
+        line += 6;
+        this.orderCard(graphics, Component.translatable("gui.ancientempires.npc.upkeep_title"), npc.getInventory().upkeepItem(), "gui.ancientempires.npc.upkeep_none",
+                x + 4, line, width - 8, 3);
     }
 
     /** The order the NPC works by: a Routing Order in hand (a courier's), else the orders slot's. */
@@ -524,33 +599,40 @@ public class NpcScreen extends AbstractContainerScreen<NpcMenu>
         return hand.getItem() instanceof OrderItem ? hand : npc.getInventory().ordersItem();
     }
 
-    /** A heading, the order's name (or what happens without one), and up to {@code most} of its stops. Returns the next line. */
-    private int orderSection(GuiGraphics graphics, Component heading, ItemStack order, int x, int line, int width, int most)
+    /**
+     * A card for one order: the order's icon (a faint paper when there is none),
+     * its heading and name, then up to {@code most} stops, numbered. Returns the
+     * line under the card.
+     */
+    private int orderCard(GuiGraphics graphics, Component heading, ItemStack order, String noneKey, int x, int y, int width, int most)
     {
-        FitText.draw(graphics, this.font, heading.getString(), x, line, width, 10, NpcGui.GOLD, false, true);
-        line += 11;
+        List<Component> stops = OrderItem.lines(order);
+        int shown = Math.min(most, stops.size());
+        int height = 24 + shown * 10 + (stops.size() > most ? 10 : 0) + (order.isEmpty() ? 0 : 2);
+        NpcGui.bevel(graphics, x, y, width, height, NpcGui.SLOT_FILL);
         if (order.isEmpty())
         {
-            String none = heading.getString().equals(Component.translatable("gui.ancientempires.npc.upkeep_title").getString())
-                    ? "gui.ancientempires.npc.upkeep_none" : "gui.ancientempires.npc.orders_none";
-            FitText.draw(graphics, this.font, Component.translatable(none).getString(), x + 4, line, width - 4, 10, NpcGui.NAME_HINT, false, false);
-            return line + 11;
+            this.ghostItem(graphics, new ItemStack(Items.PAPER), x + 4, y + 4);
         }
-        FitText.draw(graphics, this.font, order.getHoverName().getString(), x + 4, line, width - 4, 10, NpcGui.NAME_INK, false, true);
-        line += 11;
-        List<Component> stops = OrderItem.lines(order);
-        for (int i = 0; i < Math.min(most, stops.size()); i++)
+        else
         {
-            FitText.draw(graphics, this.font, stops.get(i).getString(), x + 8, line, width - 8, 10, NpcGui.NAME_INK, false, false);
+            graphics.renderItem(order, x + 4, y + 4);
+        }
+        FitText.draw(graphics, this.font, heading.getString(), x + 24, y + 3, width - 28, 10, NpcGui.GOLD, false, true);
+        Component name = order.isEmpty() ? Component.translatable(noneKey) : order.getHoverName();
+        FitText.draw(graphics, this.font, name.getString(), x + 24, y + 13, width - 28, 10, order.isEmpty() ? NpcGui.NAME_HINT : NpcGui.NAME_INK, false, false);
+        int line = y + 25;
+        for (int i = 0; i < shown; i++)
+        {
+            FitText.draw(graphics, this.font, stops.get(i).getString(), x + 8, line, width - 12, 10, NpcGui.NAME_INK, false, false);
             line += 10;
         }
         if (stops.size() > most)
         {
-            FitText.draw(graphics, this.font, Component.translatable("item.ancientempires.order.more", stops.size() - most).getString(), x + 8, line, width - 8, 10,
+            FitText.draw(graphics, this.font, Component.translatable("item.ancientempires.order.more", stops.size() - most).getString(), x + 8, line, width - 12, 10,
                     NpcGui.NAME_HINT, false, false);
-            line += 10;
         }
-        return line;
+        return y + height;
     }
 
     /**
@@ -599,10 +681,15 @@ public class NpcScreen extends AbstractContainerScreen<NpcMenu>
             // A faint parchment-tinted outline of what goes here.
             TextureAtlasSprite sprite = this.minecraft.getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(icon);
             RenderSystem.enableBlend();
-            graphics.setColor(0.92F, 0.82F, 0.62F, 0.35F);
+            graphics.setColor(0.92F, 0.82F, 0.62F, 0.7F);
             graphics.blit(this.leftPos + slot.x, this.topPos + slot.y, 0, 16, 16, sprite);
             graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
             RenderSystem.disableBlend();
+        }
+        else if (!slot.hasItem() && (index == NpcInventory.ORDERS_SLOT || index == NpcInventory.UPKEEP_SLOT))
+        {
+            // The order slots' labels, as the equipment cross has them: a faint paper for orders, bread for upkeep.
+            this.ghostItem(graphics, new ItemStack(index == NpcInventory.ORDERS_SLOT ? Items.PAPER : Items.BREAD), this.leftPos + slot.x, this.topPos + slot.y);
         }
     }
 
@@ -622,8 +709,11 @@ public class NpcScreen extends AbstractContainerScreen<NpcMenu>
             FitText.draw(graphics, this.font, Component.translatable("gui.ancientempires.npc.backpack").getString(),
                     NpcLayout.BACKPACK_X, NpcLayout.BACKPACK_LABEL_Y, backpackW, NpcLayout.SECTION_LABEL_H, NpcGui.NAME_INK, true, true);
         }
-        FitText.draw(graphics, this.font, Component.translatable("gui.ancientempires.npc.inventory").getString(),
-                NpcLayout.PLAYER_X, NpcLayout.PLAYER_LABEL_Y, 9 * SLOT, NpcLayout.SECTION_LABEL_H, NpcGui.NAME_INK, false, true);
+        if (this.tab == Tab.GEAR)
+        {
+            FitText.draw(graphics, this.font, Component.translatable("gui.ancientempires.npc.inventory").getString(),
+                    NpcLayout.PLAYER_X, NpcLayout.PLAYER_LABEL_Y, 9 * SLOT, NpcLayout.SECTION_LABEL_H, NpcGui.NAME_INK, false, true);
+        }
         NpcEntity npc = this.menu.getNpc();
         if (npc != null && npc.levels() && this.tab == Tab.GEAR)
         {
