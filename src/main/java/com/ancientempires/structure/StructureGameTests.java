@@ -11,6 +11,7 @@ import com.ancientempires.entity.npc.NpcPath;
 import com.ancientempires.entity.npc.NpcOrder;
 import com.ancientempires.entity.npc.NpcChain;
 import com.ancientempires.entity.npc.NpcStance;
+import com.ancientempires.entity.npc.NpcFormation;
 import com.ancientempires.gate.GateEntity;
 import com.ancientempires.gate.GateType;
 import com.ancientempires.registry.ModEntities;
@@ -702,6 +703,11 @@ public final class StructureGameTests
         NpcArmy.act(player, NpcArmy.Action.RENAME, sergeant.getUUID(), null, "Iron Wolves");
         NpcArmy.act(player, NpcArmy.Action.HOLD, sergeant.getUUID(), null, "");
         helper.assertTrue("Iron Wolves".equals(sergeant.getChain().name()), "the unit is named");
+        NpcArmy.act(player, NpcArmy.Action.SET_FORMATION, sergeant.getUUID(), null, "wedge");
+        NpcArmy.act(player, NpcArmy.Action.SET_ENGAGE, sergeant.getUUID(), null, "PASSIVE");
+        NpcArmy.act(player, NpcArmy.Action.SHIELDS, sergeant.getUUID(), null, "");
+        helper.assertTrue(sergeant.getChain().formation() == NpcFormation.WEDGE, "the War Table sets the formation");
+        helper.assertTrue(sergeant.getChain().stance().engage() == NpcStance.Engage.PASSIVE && sergeant.getChain().stance().shieldsUp(), "and the stance");
         helper.assertTrue(sergeant.getChain().order() == NpcOrder.HOLD, "the unit holds");
         // A front line dragged six blocks along x, facing south: the unit stands across it, its leader behind it.
         BlockPos lineAt = helper.absolutePos(new BlockPos(-30, 1, 36));

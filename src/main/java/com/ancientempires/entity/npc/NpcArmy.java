@@ -46,7 +46,9 @@ public final class NpcArmy
     /** What the screen can ask for. */
     public enum Action
     {
-        FOLLOW, FREE, HOLD, FALL_BACK, FORMATION, REJOIN, REMOVE, MOVE, RENAME, FLAG, NUMBER
+        FOLLOW, FREE, HOLD, FALL_BACK, FORMATION, REJOIN, REMOVE, MOVE, RENAME, FLAG, NUMBER,
+        /** The War Table's settings, the value by name in the text: a formation, an engagement, a fire order. */
+        SET_FORMATION, SET_ENGAGE, SET_FIRE, SHIELDS
     }
 
     /**
@@ -97,7 +99,8 @@ public final class NpcArmy
                     npc.getLevel(), npc.getHealth() / Math.max(1.0F, npc.getMaxHealth()), chain.effectiveOrder().ordinal(), own != null,
                     chain.formation().ordinal(), chain.leaderId(), chain.members().size(), (float) Math.sqrt(npc.distanceToSqr(player)),
                     chain.name(), npc.isHoldingBow(), npc.isPassenger(), Component.Serializer.toJson(npc.getRankName()), chain.unitNumber(),
-                    (float) chain.spread(), chain.width(), ArmyPacket.Entry.pack(chain.stance()), npc.getMorale().value()));
+                    (float) chain.spread(), chain.width(), ArmyPacket.Entry.pack(chain.stance()), npc.getMorale().value(),
+                    npc.getSkinId(), npc.getRoleId(), NpcProgress.bandKey(npc.getNpcPath(), npc.getProgress().band()), npc.getMorale().isBroken()));
         }
         return entries;
     }
@@ -135,6 +138,28 @@ public final class NpcArmy
             }
             case RENAME -> chain.setName(text.length() > NAME_LENGTH ? text.substring(0, NAME_LENGTH) : text);
             case NUMBER -> chain.setUnitNumber((chain.unitNumber() + 1) % 10);
+            case SET_FORMATION -> chain.setFormation(NpcFormation.byName(text));
+            case SET_ENGAGE ->
+            {
+                for (NpcStance.Engage engage : NpcStance.Engage.values())
+                {
+                    if (engage.name().equalsIgnoreCase(text))
+                    {
+                        chain.setStance(chain.stance().with(engage));
+                    }
+                }
+            }
+            case SET_FIRE ->
+            {
+                for (NpcStance.Fire fire : NpcStance.Fire.values())
+                {
+                    if (fire.name().equalsIgnoreCase(text))
+                    {
+                        chain.setStance(chain.stance().with(fire));
+                    }
+                }
+            }
+            case SHIELDS -> chain.setStance(chain.stance().withShields(!chain.stance().shieldsUp()));
             case FLAG ->
             {
                 ItemStack held = player.getItemInHand(InteractionHand.MAIN_HAND);

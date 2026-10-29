@@ -1,6 +1,6 @@
 package com.ancientempires.network;
 
-import com.ancientempires.client.CommandScreen;
+import com.ancientempires.client.WarTableScreen;
 import com.ancientempires.entity.npc.NpcArmy;
 import com.ancientempires.entity.npc.NpcStance;
 import net.minecraft.network.FriendlyByteBuf;
@@ -27,7 +27,7 @@ public class ArmyPacket
      */
     public record Entry(UUID id, String name, int rank, int level, float health, int order, boolean ownOrder, int formation,
             @Nullable UUID leader, int members, float distance, String unitName, boolean archer, boolean mounted, String rankName, int unitNumber,
-            float spread, int width, int stance, float morale)
+            float spread, int width, int stance, float morale, String skin, String role, String band, boolean broken)
     {
         /** Packs a stance for {@code stance}. */
         public static int pack(NpcStance stance)
@@ -81,6 +81,10 @@ public class ArmyPacket
             buffer.writeByte(entry.width());
             buffer.writeByte(entry.stance());
             buffer.writeFloat(entry.morale());
+            buffer.writeUtf(entry.skin(), 256);
+            buffer.writeUtf(entry.role(), 64);
+            buffer.writeUtf(entry.band(), 64);
+            buffer.writeBoolean(entry.broken());
         }
     }
 
@@ -111,14 +115,18 @@ public class ArmyPacket
             int width = buffer.readByte();
             int stance = buffer.readByte();
             float morale = buffer.readFloat();
+            String skin = buffer.readUtf(256);
+            String role = buffer.readUtf(64);
+            String band = buffer.readUtf(64);
+            boolean broken = buffer.readBoolean();
             entries.add(new Entry(id, name, rank, level, health, order, ownOrder, formation, leader, members, distance, unitName, archer, mounted, rankName, unitNumber,
-                    spread, width, stance, morale));
+                    spread, width, stance, morale, skin, role, band, broken));
         }
         return new ArmyPacket(open, entries);
     }
 
     public static void handle(ArmyPacket packet, Supplier<NetworkEvent.Context> context)
     {
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> CommandScreen.show(packet.open, packet.entries));
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> WarTableScreen.show(packet.open, packet.entries));
     }
 }

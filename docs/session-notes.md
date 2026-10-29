@@ -118,9 +118,16 @@ nothing committed. In the game, try:
 
 Step 1 is committed (63dee22).
 
-Step 2 is built: the ring wheel, units bar, glow, and placement with ghosts. Unit tests and all 22 game tests
-pass, and the jar is installed. Not seen in game and not committed: the drawing, glow, ghosts, and mouse handling are
-client-only and untested. Next is step 3, the War Table: the banner-hall chart, the ledger roster, and drag and drop.
+Step 2 is committed (c96c1ad) and pushed: branch `structures` is on origin, tracking.
+
+Step 3, the War Table, is built: the banner-hall chart, the ledger page and roster, reserves, drag and drop,
+hover glow, Locate, and look-and-K to pick a soldier up. Tests pass. The screens are client-only and not seen in game
+yet.
+
+Next is step 4, commanders deciding: the battle brain, with configurable chatter (personalities later). After that:
+- the horn's "planned operations";
+- kill tracking for the ledger;
+- the map tab.
 
 ## Next, in order
 

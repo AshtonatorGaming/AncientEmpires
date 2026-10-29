@@ -316,7 +316,7 @@ public final class BattleWheelScreen extends Screen
             graphics.pose().scale(1.5F, 1.5F, 1.0F);
             graphics.drawString(this.font, String.valueOf(unit.getKey()), 0, 0, picked || all ? GOLD : 0xFF907A58);
             graphics.pose().popPose();
-            String name = leader.unitName().isEmpty() ? CommandScreen.parse(leader.name()).getString() : leader.unitName();
+            String name = leader.unitName().isEmpty() ? ClientArmy.parse(leader.name()).getString() : leader.unitName();
             graphics.drawString(this.font, this.font.plainSubstrByWidth(name, BAR_WIDTH - 24), x + 18, BAR_TOP + 4, PARCHMENT);
             NpcOrder order = NpcOrder.values()[Math.min(leader.order(), NpcOrder.values().length - 1)];
             Component line = Component.literal(leader.members() + " · ").append(Component.translatable("order.ancientempires." + order.id()));

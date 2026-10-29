@@ -706,11 +706,20 @@ its own unless noted). Before adding behavior, check what AW did first.
   `chargeTicks`): `chargeSpeed` on the approach, and its first hit (`chargeHit`) does `chargeDamage` if its mount still
   moves at `chargeMinSpeed`. Squad morale (`NpcMorale.squad`): `formationMorale` in formation within
   `formationMoraleRange` of the leader, minus `leaderBrokenMorale` while the leader is broken; reasons 13 and 14.
-  Phase 3 done. Phase 4, the command screen (`CommandScreen`, key K, `ModKeys.COMMAND`): the player's soldiers loaded in
-  their dimension (`NpcArmy.list`, nearest first, at most 256) as a tree, top leaders first, then those in no unit;
-  per row Follow, Free, Hold there, Fall back to me, next formation, rejoin, leave unit, move under another leader
-  (Move, then click it), unit name (`AeUnitName`, kept by an heir), and take up on the held Signal Flag. `ArmyActionPacket`
-  asks (list or action, checked against ownership in `NpcArmy.act`), `ArmyPacket` answers and redraws. Game test
+  Phase 3 done. Phase 4, now the War Table (`WarTableScreen`, key K, `ModKeys.COMMAND`; it replaced the list screen):
+  the player's soldiers loaded in their dimension (`NpcArmy.list`, nearest first, at most 256; Nearby filters to 64
+  blocks). A banner hall: a banner per leader (members, or sergeant and up), general over captains over sergeants, ink
+  lines, cloth in the unit number's colour, the leader's face, the rank's insignia, tails shortening with the unit's
+  health, darkened when the leader breaks; name, strength, order, health and morale under it; pan by dragging, zoom
+  with the scroll wheel. The ledger (parchment page) for the picked banner: the leader drawn in full when loaded, rank,
+  level, band, the unit name edited in place (Enter), number, health and morale, formation / engage / fire / shields
+  (click to cycle: `NpcArmy.Action` SET_FORMATION, SET_ENGAGE, SET_FIRE, SHIELDS), Follow / Hold / To me / Free, Locate
+  (glows 10 s, `ArmyPicks.glowFor`), and the roster (face, name, trade, level, health, morale). Reserves along the
+  bottom: soldiers in no unit. Drag and drop: a face onto a banner enlists (MOVE), a banner onto a higher one attaches,
+  a face onto the reserves or a banner onto the bare table takes it out (REMOVE); refusals are checked first as
+  `NpcChain.toggle` does (`refusal`) and shown at the cursor. Hovering outlines those soldiers in the world. Opened while
+  looking at your soldier, it starts with that soldier in hand. `ArmyActionPacket` asks (list or action, checked
+  against ownership in `NpcArmy.act`), `ArmyPacket` answers (with skin, role, band, stance, morale) and redraws. Game test
   `commandScreenActions` (a fake player). Phase 5, garrisons (`NpcGarrison`, `chain.garrisons`): a garrison spawner's
   people come out as one unit (`NpcChain.link`, no owner checks; the best leads, an acting sergeant if none ranks), on
   Defend at the spawner facing whoever set it off, and posted (`posted`, `AePosted`; the user: garrisons have their

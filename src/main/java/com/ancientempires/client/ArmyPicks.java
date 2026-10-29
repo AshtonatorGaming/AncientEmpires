@@ -12,6 +12,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.Entity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,6 +37,10 @@ public final class ArmyPicks
     private static final Set<Integer> SELECTED = new TreeSet<>();
     /** Whether picked units glow now (the wheel is open, or placing). */
     private static boolean glowing;
+    /** Soldiers glowing instead of the picked units (the War Table's hover or Locate), and until when (-1: until cleared). */
+    @Nullable
+    private static Set<UUID> only;
+    private static long onlyUntil = -1L;
 
     private ArmyPicks()
     {
@@ -137,6 +142,44 @@ public final class ArmyPicks
         return new FormationLayout.Unit(formation, melee, archers, riders, officers, NpcChain.settings(leader.width(), leader.spread()));
     }
 
+    /** Only these soldiers glow (the War Table's hover), until cleared with none. */
+    public static void glowOnly(Set<UUID> soldiers)
+    {
+        only = soldiers.isEmpty() ? null : Set.copyOf(soldiers);
+        onlyUntil = -1L;
+        refreshGlow();
+    }
+
+    /** These soldiers glow for {@code ticks} (the War Table's Locate). */
+    public static void glowFor(Set<UUID> soldiers, int ticks)
+    {
+        Minecraft minecraft = Minecraft.getInstance();
+        only = Set.copyOf(soldiers);
+        onlyUntil = minecraft.level == null ? -1L : minecraft.level.getGameTime() + ticks;
+        refreshGlow();
+    }
+
+    /** Client tick: a Locate glow runs out, and the glow is matched to who has come in sight, once a second. */
+    static void tick()
+    {
+        Minecraft minecraft = Minecraft.getInstance();
+        if (minecraft.level == null)
+        {
+            return;
+        }
+        long now = minecraft.level.getGameTime();
+        if (only != null && onlyUntil >= 0L && now >= onlyUntil)
+        {
+            only = null;
+            onlyUntil = -1L;
+            refreshGlow();
+        }
+        else if ((only != null || glowing) && now % 20L == 0L)
+        {
+            refreshGlow();
+        }
+    }
+
     /** Starts or stops the picked units glowing. */
     public static void setGlowing(boolean on)
     {
@@ -148,17 +191,24 @@ public final class ArmyPicks
     public static void refreshGlow()
     {
         Minecraft minecraft = Minecraft.getInstance();
-        if (!glowing || minecraft.level == null)
+        if (!glowing && only == null || minecraft.level == null)
         {
             NpcGlow.clear();
             return;
         }
         Map<UUID, List<ArmyPacket.Entry>> children = children();
         Set<UUID> wanted = new HashSet<>();
-        List<UUID> open = new ArrayList<>();
-        for (ArmyPacket.Entry leader : pickedUnits())
+        if (only != null)
         {
-            open.add(leader.id());
+            wanted.addAll(only);
+        }
+        List<UUID> open = new ArrayList<>();
+        if (only == null)
+        {
+            for (ArmyPacket.Entry leader : pickedUnits())
+            {
+                open.add(leader.id());
+            }
         }
         while (!open.isEmpty())
         {

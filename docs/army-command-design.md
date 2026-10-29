@@ -271,3 +271,7 @@ Each step is playable on its own. Step 1 makes the existing wheel better straigh
 - Step 2, the battle wheel and placement: built 2026-10-29. The ring tree, units bar, gold glow on picked units, and
   placement with ghosts (click a spot, drag the front line, scroll to turn). Facing is its own Maneuver entries rather
   than a Facing submenu. Not yet: hovering a unit in the bar to preview just that unit's glow.
+- Step 3, the War Table: built 2026-10-29 (A, the banner hall, for the chart; C, the ledger, for the page and roster).
+  It replaces the old K list screen. The Signal Flag stays as it was for now; repurposing it is open. Not yet: kills and
+  "fell at" lines in the ledger (no kill tracking yet), units away from the player shown from the ledger, and B, the map
+  tab.

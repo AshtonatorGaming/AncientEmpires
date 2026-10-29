@@ -1,6 +1,7 @@
 package com.ancientempires.client;
 
 import com.ancientempires.AncientEmpires;
+import com.ancientempires.entity.npc.NpcEntity;
 import com.ancientempires.network.ModNetwork;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
@@ -12,7 +13,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.lwjgl.glfw.GLFW;
 
-/** The faction standings key (J by default) and the command screen's (K), rebindable in Controls. */
+/** The faction standings key (J by default), the War Table's (K), and the battle wheel's (V, held), rebindable in Controls. */
 @Mod.EventBusSubscriber(modid = AncientEmpires.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public final class ModKeys
 {
@@ -69,10 +70,15 @@ public final class ModKeys
                     BattleWheelScreen.open();
                 }
             }
+            ArmyPicks.tick();
             while (COMMAND.consumeClick())
             {
-                if (Minecraft.getInstance().screen == null)
+                Minecraft minecraft = Minecraft.getInstance();
+                if (minecraft.screen == null)
                 {
+                    // Looking at one of your soldiers: the War Table opens with it in hand.
+                    WarTableScreen.carryNext(minecraft.crosshairPickEntity instanceof NpcEntity npc && minecraft.player.getUUID().equals(npc.getOwner())
+                            ? npc.getUUID() : null);
                     ModNetwork.requestArmy();
                 }
             }
