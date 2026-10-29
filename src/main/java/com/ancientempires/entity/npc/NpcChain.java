@@ -65,6 +65,9 @@ public final class NpcChain
     private static final int PRUNE_TICKS = 100;
     /** Ticks a leader's slot layout is kept before it is worked out again, if it has not moved. */
     private static final int SLOT_TICKS = 10;
+    /** Blocks a moving leader goes, and degrees it turns, before its unit's slots are laid out again. */
+    private static final double SLOT_MOVE = 2.5D;
+    private static final float SLOT_TURN = 25.0F;
     /** How far up a loop check looks (soldier, sergeant, captain, general and one spare). */
     private static final int MAX_DEPTH = 5;
     /** Blocks from its rally point at which a falling-back unit stops and holds. */
@@ -872,15 +875,38 @@ public final class NpcChain
     public Vec3 slotOf(NpcEntity member)
     {
         long now = this.npc.level().getGameTime();
-        Vec3 here = this.npc.position();
+        Vec3 here = this.origin();
         float facing = this.facing();
+        // Slots stay put until the leader has really moved or turned: shuffling about its spot no longer
+        // nudges the whole unit, and a marching column trails its leader rather than re-forming each step.
+        double moved = this.holdsOrder() && this.orderPos != null && this.effectiveOrder().anchored() ? 0.25D : SLOT_MOVE * SLOT_MOVE;
         if (this.slotsAt < 0L || this.slotsFormation != this.formation || now - this.slotsAt > SLOT_TICKS
-                && (this.slotsFrom.distanceToSqr(here) > 1.0D || Math.abs(Mth.wrapDegrees(facing - this.slotsFacing)) > 15.0F))
+                && (this.slotsFrom.distanceToSqr(here) > moved || Math.abs(Mth.wrapDegrees(facing - this.slotsFacing)) > SLOT_TURN))
         {
             this.layout(here, facing);
             this.slotsAt = now;
         }
         return this.slots.get(member.getUUID());
+    }
+
+    /**
+     * Where this leader's formation is laid out from: the order's spot itself
+     * while it holds one there (its own shuffling about the spot moves no slot),
+     * else where the leader stands.
+     */
+    private Vec3 origin()
+    {
+        if (this.holdsOrder() && this.orderPos != null && this.effectiveOrder().anchored())
+        {
+            return Vec3.atBottomCenterOf(this.orderPos);
+        }
+        return this.npc.position();
+    }
+
+    /** Whether {@code other} is in the same unit (the same order holder over both): they do not shove each other. */
+    public boolean sameUnit(NpcEntity other)
+    {
+        return this.inChain() && other.getChain().inChain() && other.getChain().holder == this.holder;
     }
 
     private void layout(Vec3 here, float facing)

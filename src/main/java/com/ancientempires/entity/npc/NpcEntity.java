@@ -2364,6 +2364,17 @@ public class NpcEntity extends PathfinderMob
      * Spawned by an NPC spawner: its home is the spawner, and a garrison NPC is
      * taken back in when every player is far, or tells the spawner when it dies.
      */
+    /** Soldiers of one unit do not shove each other: packed in formation, pushing kept the line jostling. */
+    @Override
+    protected void doPush(Entity entity)
+    {
+        if (entity instanceof NpcEntity other && this.chain.sameUnit(other))
+        {
+            return;
+        }
+        super.doPush(entity);
+    }
+
     /** A garrison soldier: sent out by a one-shot spawner, which takes it back in. */
     public boolean isGarrison()
     {
