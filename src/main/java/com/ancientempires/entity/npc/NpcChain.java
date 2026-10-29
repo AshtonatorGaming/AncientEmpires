@@ -936,6 +936,22 @@ public final class NpcChain
             this.resolve(level);
         }
         NpcEntity current = this.leader();
+        if (current != null && (this.npc.getRank() != NpcRank.SOLDIER) != current.getChain().officers.contains(this.npc.getUUID()))
+        {
+            // Promoted (or demoted) in place: its commander's officer list follows its rank, as linking would have set it.
+            NpcChain over = current.getChain();
+            if (this.npc.getRank() != NpcRank.SOLDIER)
+            {
+                over.officers.add(this.npc.getUUID());
+                this.holder = this;
+                this.adopt(over);
+            }
+            else
+            {
+                over.officers.remove(this.npc.getUUID());
+            }
+            over.slotsAt = -1L;
+        }
         if (this.order == null && current != null && this.officer())
         {
             this.adopt(current.getChain());
@@ -1015,8 +1031,18 @@ public final class NpcChain
         if (order == NpcOrder.ATTACK && this.holder.orderTarget != null
                 && level.getEntity(this.holder.orderTarget) instanceof LivingEntity ordered && ordered.isAlive())
         {
-            // An attack order: everyone on that one.
+            // A charge: at that one and the enemies around it, spread over them as in any fight; nobody waits its turn.
             enemies.add(ordered);
+            double range = AncientEmpiresConfig.chainEngageRange;
+            double reach = Math.sqrt(this.npc.distanceToSqr(ordered)) + range;
+            for (LivingEntity candidate : NpcTargetCache.candidates(this.npc, reach))
+            {
+                if (candidate != ordered && candidate != this.npc && candidate.isAlive() && !candidate.isRemoved()
+                        && candidate.distanceToSqr(ordered) <= range * range && this.npc.getRelations().scanTarget(candidate))
+                {
+                    enemies.add(candidate);
+                }
+            }
         }
         else
         {
@@ -1097,11 +1123,30 @@ public final class NpcChain
             if (best != null)
             {
                 this.assigned.put(soldier.getUUID(), best);
-                this.releaseAt.put(soldier.getUUID(), now + (long) turn * AncientEmpiresConfig.chainReleaseStagger);
+                this.releaseAt.put(soldier.getUUID(), order == NpcOrder.ATTACK ? now : now + (long) turn * AncientEmpiresConfig.chainReleaseStagger);
                 load.merge(best, 1, Integer::sum);
                 turn++;
             }
         }
+    }
+
+    /** The enemy (as this NPC's own scan would take it) nearest {@code around} within {@code range} of it, or null. */
+    @Nullable
+    public LivingEntity enemyNear(Vec3 around, double range)
+    {
+        LivingEntity best = null;
+        double bestDistance = range * range;
+        double reach = Math.sqrt(this.npc.position().distanceToSqr(around)) + range;
+        for (LivingEntity candidate : NpcTargetCache.candidates(this.npc, reach))
+        {
+            double distance = candidate.position().distanceToSqr(around);
+            if (candidate != this.npc && candidate.isAlive() && !candidate.isRemoved() && distance <= bestDistance && this.npc.getRelations().scanTarget(candidate))
+            {
+                best = candidate;
+                bestDistance = distance;
+            }
+        }
+        return best;
     }
 
     private static double nearest(NpcEntity soldier, List<LivingEntity> enemies)
@@ -1121,8 +1166,17 @@ public final class NpcChain
             Entity enemy = this.orderTarget == null ? null : level.getEntity(this.orderTarget);
             if (!(enemy instanceof LivingEntity living) || !living.isAlive())
             {
-                // The enemy fell (or is gone): hold where the unit stands.
-                this.setOrder(NpcOrder.HOLD, this.npc.blockPosition(), this.facing(), null);
+                // The enemy fell (or is gone): on to the nearest of its fellows, else hold where the unit stands.
+                LivingEntity next = this.enemyNear(enemy == null ? this.npc.position() : enemy.position(), AncientEmpiresConfig.chainEngageRange);
+                if (next != null)
+                {
+                    this.orderTarget = next.getUUID();
+                    this.planAt = -1L;
+                }
+                else
+                {
+                    this.setOrder(NpcOrder.HOLD, this.npc.blockPosition(), this.facing(), null);
+                }
             }
         }
         else if (this.order == NpcOrder.FALL_BACK && this.orderPos != null

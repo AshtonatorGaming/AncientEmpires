@@ -334,6 +334,7 @@
   "gui.ancientempires.army.number": "Unit number: %s (click for the next)",
   "message.ancientempires.army.ordered": "%s: %s",
   "message.ancientempires.army.no_units": "None of your units take that number here",
+  "message.ancientempires.army.no_enemy": "No enemy or ground there to charge",
   "gui.ancientempires.army.title": "Your Army",
   "gui.ancientempires.army.empty": "No soldiers of yours are near.",
   "gui.ancientempires.army.unassigned": "In no unit (%s)",

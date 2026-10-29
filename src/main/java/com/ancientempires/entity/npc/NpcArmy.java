@@ -72,6 +72,8 @@ public final class NpcArmy
 
     /** How far the command wheel's aim reaches, in blocks. */
     private static final double AIM_RANGE = 96.0D;
+    /** Blocks around where the player looks that a charge looks for an enemy, when not aimed at one. */
+    private static final double CHARGE_FIND = 12.0D;
 
     private NpcArmy()
     {
@@ -361,13 +363,19 @@ public final class NpcArmy
                 }
                 case CHARGE ->
                 {
-                    if (creature != null)
+                    // At the creature aimed at, else the enemy nearest where the player looks; with none there, a run to the spot.
+                    LivingEntity enemy = creature != null ? (LivingEntity) creature.getEntity() : chain.enemyNear(reach, CHARGE_FIND);
+                    if (enemy != null)
                     {
-                        chain.setOrder(NpcOrder.ATTACK, null, Float.NaN, creature.getEntity().getUUID());
+                        chain.setOrder(NpcOrder.ATTACK, null, Float.NaN, enemy.getUUID());
+                    }
+                    else if (spot != null)
+                    {
+                        chain.setOrder(NpcOrder.HOLD, spot, facing, null);
                     }
                     else
                     {
-                        chain.setOrder(NpcOrder.FREE, null, Float.NaN, null);
+                        player.displayClientMessage(Component.translatable("message.ancientempires.army.no_enemy"), true);
                     }
                 }
             }
