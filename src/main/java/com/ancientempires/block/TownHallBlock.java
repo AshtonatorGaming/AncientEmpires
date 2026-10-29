@@ -16,6 +16,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -30,13 +34,63 @@ import java.util.List;
  * The Town Hall. Right-click opens its food store (food bundles or any food;
  * hoppers work too); its owner's NPCs nearby come here for rations. Sneak-right-click empty-handed shows how many of the
  * owner's NPCs it reaches, how many went hungry, its food, and the fallen it
- * has recorded. Owner or admin only.
+ * has recorded. Owner or admin only. Powered by redstone (a lever, a button, a
+ * tripwire), it sounds the alarm (AW's): every {@link #ALARM_PULSE} ticks its
+ * owner's NPCs within {@code upkeep.range} answer it (NpcAlarmGoal), until the
+ * power goes. Scheduled ticks only while it sounds; an idle hall costs nothing.
  */
 public final class TownHallBlock extends BaseEntityBlock
 {
     public TownHallBlock(Properties properties)
     {
         super(properties);
+    }
+
+    /** Ticks between the alarm's calls, and how long one call holds an NPC. */
+    private static final int ALARM_PULSE = 40;
+    private static final int ALARM_HOLD = 100;
+
+    @Override
+    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighbor, BlockPos from, boolean moving)
+    {
+        super.neighborChanged(state, level, pos, neighbor, from, moving);
+        if (level instanceof ServerLevel server && level.hasNeighborSignal(pos) && !server.getBlockTicks().hasScheduledTick(pos, this))
+        {
+            server.playSound(null, pos, SoundEvents.BELL_BLOCK, SoundSource.BLOCKS, 2.0F, 0.9F);
+            if (level.getBlockEntity(pos) instanceof TownHallBlockEntity hall && hall.owner() != null)
+            {
+                Player owner = level.getPlayerByUUID(hall.owner());
+                if (owner != null)
+                {
+                    owner.displayClientMessage(Component.translatable("message.ancientempires.town_hall.alarm"), true);
+                }
+            }
+            server.scheduleTick(pos, this, 1);
+        }
+    }
+
+    /** The alarm's call: the owner's NPCs in range answer it, and the bell rings now and then; again while powered. */
+    @Override
+    public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random)
+    {
+        if (!level.hasNeighborSignal(pos))
+        {
+            return;
+        }
+        if (level.getBlockEntity(pos) instanceof TownHallBlockEntity hall && hall.owner() != null)
+        {
+            double range = AncientEmpiresConfig.upkeepRange;
+            for (NpcEntity npc : level.getEntitiesOfClass(NpcEntity.class, new AABB(pos).inflate(range, range / 2.0D, range),
+                    npc -> hall.owner().equals(npc.getOwner())))
+            {
+                npc.alarm(pos, level.getGameTime() + ALARM_HOLD);
+            }
+        }
+        if (level.getGameTime() % (ALARM_PULSE * 2L) < ALARM_PULSE)
+        {
+            level.playSound(null, pos, SoundEvents.BELL_BLOCK, SoundSource.BLOCKS, 2.0F, 0.9F);
+        }
+        level.scheduleTick(pos, this, ALARM_PULSE);
     }
 
     @Override

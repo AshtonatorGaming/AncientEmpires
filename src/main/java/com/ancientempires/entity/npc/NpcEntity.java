@@ -194,6 +194,10 @@ public class NpcEntity extends PathfinderMob
     private final NpcChain chain = new NpcChain(this);
     private final NpcTrades trades = new NpcTrades();
     private final NpcRecord record = new NpcRecord();
+    /** The Town Hall sounding the alarm this NPC answers, and until when (not saved: the hall calls again while it sounds). */
+    @Nullable
+    private BlockPos alarmHall;
+    private long alarmUntil;
     private final NpcProgress progress = new NpcProgress(this);
     private final NpcAttack attack = new NpcAttack(this);
     private final NpcHold hold = new NpcHold(this);
@@ -404,6 +408,7 @@ public class NpcEntity extends PathfinderMob
         this.goalSelector.addGoal(1, new NpcSunGoal(this));
         // Everyone keeps melee: a cornered civilian stands and fights with what it holds.
         this.goalSelector.addGoal(2, new NpcMeleeAttackGoal(this));
+        this.goalSelector.addGoal(2, new NpcAlarmGoal(this));
         this.goalSelector.addGoal(3, new NpcUpkeepGoal(this));
         this.goalSelector.addGoal(4, new NpcFollowOwnerGoal(this, 1.12D, 3.0F));
         this.goalSelector.addGoal(4, new NpcSleepGoal(this));
@@ -720,6 +725,20 @@ public class NpcEntity extends PathfinderMob
 
     /** Morale: steady, wavering, routing, shattered, surrendered. */
     /** This NPC's place in a chain of command (leader, unit, order, formation). */
+    /** Called by its owner's Town Hall sounding the alarm: it answers until {@code until} (game time). */
+    public void alarm(BlockPos hall, long until)
+    {
+        this.alarmHall = hall.immutable();
+        this.alarmUntil = until;
+    }
+
+    /** The hall whose alarm it answers now, or null. */
+    @Nullable
+    public BlockPos alarmHall()
+    {
+        return this.alarmHall != null && this.level().getGameTime() < this.alarmUntil ? this.alarmHall : null;
+    }
+
     /** Its service record and journal (kills, battles, wounds, the story so far). */
     public NpcRecord getRecord()
     {

@@ -1,9 +1,10 @@
 {
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {"item": "minecraft:paper"},
-    {"item": "minecraft:ink_sac"},
-    {"item": "minecraft:stick"}
-  ],
+  "type": "minecraft:crafting_shaped",
+  "pattern": ["D", "P", "W"],
+  "key": {
+    "D": {"tag": "forge:dyes/gray"},
+    "P": {"item": "minecraft:paper"},
+    "W": {"tag": "minecraft:planks"}
+  },
   "result": {"item": "ancientempires:work_order"}
 }

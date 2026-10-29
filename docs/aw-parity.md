@@ -18,7 +18,7 @@ same thing. Decisions marked **?** are the user's to make before building.
 | Trade Order + Trader: player-owned trader runs a trade route (POTrade) | Nothing | **Missing**: owned trader |
 | Faction traders (FactionTrade): buy and sell; the only way to raise standing | `NpcTrades`, `TradeScreen`, the Coin Purse | Done 2026-10-29: template traders keep AW's goods; coins by worth through a purse |
 | Bard (instrument, sings: morale) | Role label only | **Missing**: bard |
-| Town Hall alarm (`AlarmResponse`): civilians hide, soldiers muster | War Horn calls | Partial: no hall alarm |
+| Town Hall alarm (`AlarmResponse`): civilians hide, soldiers muster | `TownHallBlock` alarm, `NpcAlarmGoal` | Done 2026-10-29: redstone-powered hall; civilians to home or hall (`upkeep.alarmShelter`), soldiers muster. Later: an inner sanctum for great threats |
 | Recruiting Station (`npc/tile/TileRecruitingStation` in the 1.12 jar) | Settler recipe, Settlers' Post | To look up: the user does not remember it; check AW's code before deciding |
 | Siege engineer (NPC crews a vehicle; `ai/vehicle`) | Nothing | Missing, needs vehicles |
 | Spellcaster (Electroblob's Wizardry compat) | Nothing | **Port** (decided): spellcaster NPCs through a magic-mod bridge |
@@ -80,6 +80,7 @@ same thing. Decisions marked **?** are the user's to make before building.
 - **Backpacks:** AW's couriers stored goods in a backpack item; ours carry everything in the backpack every NPC has.
 - **Chunk loaders: yes**, behind a setting. **Recruiting station:** to look up in AW's code.
 - Research ideas, raw: docs/research-ideas.md.
+- Order icons and recipes are AW's own (dye over paper over planks; no research).
 - **Siege vehicles: port**, so structures' engines work, last in the parity order. Later, compat so NPC crews can use
   other mods' more refined siege equipment.
 

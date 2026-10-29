@@ -192,6 +192,10 @@ instead of reflecting per call), Skirmisher thresholds (about 4.5 to 28 blocks).
   (`NpcPatrolGoal`, priority 4, soldiers: points walked in turn day and night, "stand watch" waits 10 s; not under a unit
   order other than Free, following, holding, or broken). Placeholder icons are vanilla banner patterns. Game test
   `soldierWalksItsPatrol`.
+- Town Hall alarm (AW parity): redstone power on a hall sounds it (a bell, a message to the owner); scheduled block
+  ticks every 40 call its owner's NPCs within `upkeep.range` (`NpcEntity.alarm`, held 100 ticks, not saved), so an idle
+  hall costs nothing. `NpcAlarmGoal` (priority 2): civilians shelter at home or the hall (`upkeep.alarmShelter`), soldiers
+  muster within 8 of the hall; the alarm status icon shows. Game test `townHallAlarmCallsItsPeople`.
 - Gates (S3, `gate/`; read from AW's decompiled 1.12 code): `GateEntity` spans its opening (`pos1`, `pos2` as given,
   one block thick) and, while closed, fills it with `GateProxyBlock`s (invisible, solid, unmineable; clicks and blows go
   to the gate), so collision and paths treat it as a wall; opening clears them. Seven `GateType`s: vertical wood and

@@ -1083,6 +1083,38 @@ public final class StructureGameTests
         });
     }
 
+    /** AW parity, the Town Hall alarm: powered, the hall calls its owner's workers to shelter beside it. */
+    @GameTest(template = ARENA, timeoutTicks = 600)
+    public static void townHallAlarmCallsItsPeople(GameTestHelper helper)
+    {
+        ServerLevel level = helper.getLevel();
+        BlockPos base = helper.absolutePos(new BlockPos(-90, 1, 100));
+        level.getEntitiesOfClass(LivingEntity.class, new AABB(base).inflate(14.0D), living -> !(living instanceof Player)).forEach(Entity::discard);
+        for (BlockPos cell : BlockPos.betweenClosed(base.offset(-10, -1, -3), base.offset(10, 3, 3)))
+        {
+            level.setBlockAndUpdate(cell, cell.getY() < base.getY() ? Blocks.STONE.defaultBlockState() : Blocks.AIR.defaultBlockState());
+        }
+        FakePlayer player = FakePlayerFactory.getMinecraft(level);
+        BlockState hallState = ModBlocks.TOWN_HALL.get().defaultBlockState();
+        level.setBlockAndUpdate(base, hallState);
+        hallState.getBlock().setPlacedBy(level, base, hallState, player, new ItemStack(ModBlocks.TOWN_HALL.get()));
+        NpcEntity worker = squadNpc(helper, player.getUUID(), new BlockPos(-81, 1, 100), NpcRank.SOLDIER, 1);
+        worker.setNpcPath(NpcPath.WORKER);
+        // Shelter at the hall for this test (the default sends civilians home).
+        AncientEmpiresConfig.Shelter shelter = AncientEmpiresConfig.upkeepAlarmShelter;
+        AncientEmpiresConfig.upkeepAlarmShelter = AncientEmpiresConfig.Shelter.HALL;
+        level.setBlockAndUpdate(base.above(), Blocks.REDSTONE_BLOCK.defaultBlockState());
+        helper.succeedWhen(() ->
+        {
+            helper.assertTrue(worker.alarmHall() != null && worker.distanceToSqr(Vec3.atBottomCenterOf(base)) < 4.5D * 4.5D,
+                    "the worker answers the alarm and shelters by the hall, at " + worker.blockPosition() + " answering " + worker.alarmHall());
+            AncientEmpiresConfig.upkeepAlarmShelter = shelter;
+            worker.discard();
+            level.removeBlock(base.above(), false);
+            level.removeBlock(base, false);
+        });
+    }
+
     private static NpcEntity squadNpc(GameTestHelper helper, UUID owner, BlockPos at, NpcRank rank, int npcLevel)
     {
         NpcEntity npc = ModEntities.NPC.get().create(helper.getLevel());

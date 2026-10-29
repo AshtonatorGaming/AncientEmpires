@@ -525,6 +525,7 @@
   "gui.ancientempires.npc.sheet.no_home": "No home",
   "gui.ancientempires.npc.sheet.record_soon": "Service record and journal: coming next",
   "gui.ancientempires.npc.tab.journal": "Journal",
+  "message.ancientempires.town_hall.alarm": "The Town Hall sounds the alarm: your people take shelter and your soldiers muster",
   "gui.ancientempires.record.counts": "Kills %s · Battles %s · Wounds %s · Routs %s",
   "gui.ancientempires.record.counts_raised": "Kills %s · Battles %s · Wounds %s · Routs %s · Raised %s",
   "gui.ancientempires.record.best": "Best kill: %s",

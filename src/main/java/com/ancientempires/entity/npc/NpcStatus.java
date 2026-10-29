@@ -67,7 +67,7 @@ public enum NpcStatus
         {
             return ATTACK;
         }
-        if (npc.isRallied())
+        if (npc.isRallied() || npc.alarmHall() != null)
         {
             return ALARM;
         }

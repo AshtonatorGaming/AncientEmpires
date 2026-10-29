@@ -221,6 +221,7 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.IntValue UPKEEP_MEAL_INTERVAL;
     private static final ForgeConfigSpec.IntValue UPKEEP_CARRY_RATIONS;
     private static final ForgeConfigSpec.EnumValue<Delivery> UPKEEP_DELIVERY;
+    private static final ForgeConfigSpec.EnumValue<Shelter> UPKEEP_ALARM_SHELTER;
     private static final ForgeConfigSpec.BooleanValue UPKEEP_REQUIRE_HALL;
     private static final ForgeConfigSpec.BooleanValue BURNING_PANIC;
     private static final ForgeConfigSpec.DoubleValue MEDIC_BANDAGE_HEAL;
@@ -1048,6 +1049,9 @@ public final class AncientEmpiresConfig
         UPKEEP_CARRY_RATIONS = builder
                 .comment("Rations an NPC takes from its hall when its backpack has no food, so it can eat on the road (campaigns) for a while.")
                 .defineInRange("carryRations", 3, 1, 32);
+        UPKEEP_ALARM_SHELTER = builder
+                .comment("Where workers and settlers shelter while their Town Hall sounds the alarm (a redstone-powered hall): HOME (their own home, else the hall) or HALL. Soldiers muster at the hall either way.")
+                .defineEnum("alarmShelter", Shelter.HOME);
         UPKEEP_DELIVERY = builder
                 .comment("WALK: an NPC out of food walks to its hall to take some. TELEPORT: the food appears in its backpack, from the hall's store.")
                 .defineEnum("delivery", Delivery.WALK);
@@ -1630,6 +1634,7 @@ public final class AncientEmpiresConfig
     public static int upkeepMealInterval = 24000;
     public static int upkeepCarryRations = 3;
     public static Delivery upkeepDelivery = Delivery.WALK;
+    public static Shelter upkeepAlarmShelter = Shelter.HOME;
     public static boolean upkeepRequireHall = false;
     public static boolean burningPanic = true;
     public static double medicBandageHeal = 6.0D;
@@ -1831,6 +1836,12 @@ public final class AncientEmpiresConfig
     public enum Delivery
     {
         WALK, TELEPORT
+    }
+
+    /** Where civilians shelter during a Town Hall alarm. */
+    public enum Shelter
+    {
+        HOME, HALL
     }
     public static int upkeepFallenRecords = 16;
     public static KeepOnDeath upkeepKeepOnDeath = KeepOnDeath.NONE;
@@ -2081,6 +2092,7 @@ public final class AncientEmpiresConfig
         upkeepMealInterval = UPKEEP_MEAL_INTERVAL.get();
         upkeepCarryRations = UPKEEP_CARRY_RATIONS.get();
         upkeepDelivery = UPKEEP_DELIVERY.get();
+        upkeepAlarmShelter = UPKEEP_ALARM_SHELTER.get();
         upkeepRequireHall = UPKEEP_REQUIRE_HALL.get();
         burningPanic = BURNING_PANIC.get();
         medicBandageHeal = MEDIC_BANDAGE_HEAL.get();

@@ -146,7 +146,8 @@ Parity started (2026-10-29, the user: parity before polish): faction trading don
 the order base and the courier done. Next: Work, Upkeep, Combat orders, then the owned trader (Trade Order and a
 goods editor). NPC screen redesign, layout A (docs/npc-screen-design.md): tabs and the two order slots built 2026-10-29; the sheet's
 layers: service record and journal done (2026-10-29); epithets, mood, origin, traits later. Work, Upkeep, Combat orders done
-(2026-10-29). Next in parity: the owned trader (Trade Order and a goods editor), the Town Hall alarm, the bard.
+(2026-10-29). Town Hall alarm done. Next in parity: the owned trader (Trade Order and a goods editor), the bard,
+the fruit farm, the craftsman.
 
 **The plan now lives in docs/roadmap.md** (reassessed 2026-10-29: phases Stabilize, Close the loop, Deepen war, Deepen towns). Read it first.
 
