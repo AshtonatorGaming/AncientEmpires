@@ -74,6 +74,10 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.Locale;
 import java.util.UUID;
+import net.minecraftforge.common.util.FakePlayerFactory;
+import net.minecraftforge.common.util.FakePlayer;
+import com.ancientempires.network.ArmyPacket;
+import com.ancientempires.entity.npc.NpcArmy;
 import java.util.Set;
 import java.util.HashSet;
 import net.minecraft.world.item.Items;
@@ -664,6 +668,37 @@ public final class StructureGameTests
             helper.assertTrue(fought.size() == 2, "the unit spreads over both enemies, on " + fought.size());
             helper.succeedWhen(() -> helper.assertTrue(husks.stream().noneMatch(LivingEntity::isAlive), "both husks fall"));
         });
+    }
+
+    /**
+     * The command screen's server side: listing a player's army and carrying
+     * out its actions, only on the player's own soldiers.
+     */
+    @GameTest(template = ARENA, timeoutTicks = 100)
+    public static void commandScreenActions(GameTestHelper helper)
+    {
+        ServerLevel level = helper.getLevel();
+        FakePlayer player = FakePlayerFactory.getMinecraft(level);
+        player.moveTo(helper.absolutePos(new BlockPos(-30, 1, 30)).getCenter());
+        level.getEntitiesOfClass(NpcEntity.class, new AABB(helper.absolutePos(new BlockPos(-30, 1, 30))).inflate(8.0D)).forEach(NpcEntity::discard);
+        NpcEntity sergeant = squadNpc(helper, player.getUUID(), new BlockPos(-30, 1, 32), NpcRank.SERGEANT, 5);
+        NpcEntity soldier = squadNpc(helper, player.getUUID(), new BlockPos(-28, 1, 32), NpcRank.SOLDIER, 2);
+        NpcEntity stranger = squadNpc(helper, UUID.randomUUID(), new BlockPos(-26, 1, 32), NpcRank.SOLDIER, 2);
+        NpcArmy.act(player, NpcArmy.Action.MOVE, soldier.getUUID(), sergeant.getUUID(), "");
+        helper.assertTrue(sergeant.getUUID().equals(soldier.getChain().leaderId()), "Move puts the soldier under the sergeant");
+        NpcArmy.act(player, NpcArmy.Action.MOVE, stranger.getUUID(), sergeant.getUUID(), "");
+        helper.assertTrue(stranger.getChain().leaderId() == null, "another player's soldier is not touched");
+        NpcArmy.act(player, NpcArmy.Action.RENAME, sergeant.getUUID(), null, "Iron Wolves");
+        NpcArmy.act(player, NpcArmy.Action.HOLD, sergeant.getUUID(), null, "");
+        helper.assertTrue("Iron Wolves".equals(sergeant.getChain().name()), "the unit is named");
+        helper.assertTrue(sergeant.getChain().order() == NpcOrder.HOLD, "the unit holds");
+        List<ArmyPacket.Entry> army = NpcArmy.list(player);
+        helper.assertTrue(army.stream().anyMatch(entry -> entry.id().equals(soldier.getUUID()) && sergeant.getUUID().equals(entry.leader())),
+                "the list shows the soldier under its sergeant");
+        helper.assertTrue(army.stream().noneMatch(entry -> entry.id().equals(stranger.getUUID())), "and only the player's own");
+        NpcArmy.act(player, NpcArmy.Action.REMOVE, soldier.getUUID(), null, "");
+        helper.assertTrue(soldier.getChain().leaderId() == null, "Leave takes it out of the unit");
+        helper.succeed();
     }
 
     private static NpcEntity squadNpc(GameTestHelper helper, UUID owner, BlockPos at, NpcRank rank, int npcLevel)

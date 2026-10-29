@@ -1,5 +1,6 @@
 package com.ancientempires.network;
 
+import com.ancientempires.entity.npc.NpcArmy;
 import com.ancientempires.AncientEmpires;
 import com.ancientempires.block.WorksiteArea;
 import com.ancientempires.block.WorksiteBlockEntity;
@@ -23,7 +24,7 @@ import java.util.List;
 public final class ModNetwork
 {
     /** Bump whenever a packet is added or changes shape, so mismatched clients are refused cleanly. */
-    private static final String PROTOCOL = "9";
+    private static final String PROTOCOL = "10";
     private static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(
             ResourceLocation.parse(AncientEmpires.MOD_ID + ":main"),
             () -> PROTOCOL,
@@ -82,12 +83,33 @@ public final class ModNetwork
                 .decoder(OutlinePacket::decode)
                 .consumerMainThread(OutlinePacket::handle)
                 .add();
+        CHANNEL.messageBuilder(ArmyActionPacket.class, nextId++, NetworkDirection.PLAY_TO_SERVER)
+                .encoder(ArmyActionPacket::encode)
+                .decoder(ArmyActionPacket::decode)
+                .consumerMainThread(ArmyActionPacket::handle)
+                .add();
+        CHANNEL.messageBuilder(ArmyPacket.class, nextId++, NetworkDirection.PLAY_TO_CLIENT)
+                .encoder(ArmyPacket::encode)
+                .decoder(ArmyPacket::decode)
+                .consumerMainThread(ArmyPacket::handle)
+                .add();
     }
 
     /** Outlines blocks for one player, through walls, for a few seconds. */
     public static void outline(ServerPlayer player, List<BlockPos> blocks, OutlinePacket.Kind kind)
     {
         CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), new OutlinePacket(blocks, kind));
+    }
+
+    /** The player's army, for the command screen ({@code open}: open it; else refresh it if open). */
+    public static void sendArmy(ServerPlayer player, boolean open)
+    {
+        CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), new ArmyPacket(open, NpcArmy.list(player)));
+    }
+
+    public static void requestArmy()
+    {
+        CHANNEL.sendToServer(ArmyActionPacket.request());
     }
 
     public static void sendToServer(Object packet)

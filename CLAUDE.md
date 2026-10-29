@@ -706,7 +706,12 @@ its own unless noted). Before adding behavior, check what AW did first.
   `chargeTicks`): `chargeSpeed` on the approach, and its first hit (`chargeHit`) does `chargeDamage` if its mount still
   moves at `chargeMinSpeed`. Squad morale (`NpcMorale.squad`): `formationMorale` in formation within
   `formationMoraleRange` of the leader, minus `leaderBrokenMorale` while the leader is broken; reasons 13 and 14.
-  Phase 3 done. Next: the command screen (phase 4); anti-charge pikes later.
+  Phase 3 done. Phase 4, the command screen (`CommandScreen`, key K, `ModKeys.COMMAND`): the player's soldiers loaded in
+  their dimension (`NpcArmy.list`, nearest first, at most 256) as a tree, top leaders first, then those in no unit;
+  per row Follow, Free, Hold there, Fall back to me, next formation, rejoin, leave unit, move under another leader
+  (Move, then click it), unit name (`AeUnitName`, kept by an heir), and take up on the held Signal Flag. `ArmyActionPacket`
+  asks (list or action, checked against ownership in `NpcArmy.act`), `ArmyPacket` answers and redraws. Game test
+  `commandScreenActions` (a fake player). Next: phase 5, garrisons; anti-charge pikes later.
 - Command (`NpcCommand`, `command` config, DESIGN Tier 1): every rank above soldier pulses an
   aura every `auraTicks` at its rank's `strengthByRank` (0.5, 1, 1.25) over allied soldiers
   within `radiusByRank` (8, 12, 16): `damageBonus` (15%) melee damage with any weapon and `armorBonus` armour, as

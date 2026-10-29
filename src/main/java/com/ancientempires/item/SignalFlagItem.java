@@ -108,13 +108,19 @@ public class SignalFlagItem extends Item
             say(player, "message.ancientempires.signal.not_soldier", npc.getDisplayName());
             return InteractionResult.CONSUME;
         }
-        CompoundTag tag = flag.getOrCreateTag();
-        tag.putUUID(LEADER_KEY, npc.getUUID());
-        tag.putString(LEADER_NAME_KEY, Component.Serializer.toJson(npc.getDisplayName()));
+        select(flag, npc);
         NpcChain chain = npc.getChain();
         say(player, "message.ancientempires.signal.selected", npc.getDisplayName(), count(npc), orderName(chain),
                 Component.translatable("formation.ancientempires." + chain.formation().id()));
         return InteractionResult.CONSUME;
+    }
+
+    /** Takes up {@code leader}'s unit on this flag (also from the command screen). */
+    public static void select(ItemStack flag, NpcEntity leader)
+    {
+        CompoundTag tag = flag.getOrCreateTag();
+        tag.putUUID(LEADER_KEY, leader.getUUID());
+        tag.putString(LEADER_NAME_KEY, Component.Serializer.toJson(leader.getDisplayName()));
     }
 
     /** On a block: Hold there (again on the spot: Defend), or sneaking, Fall back to it. */

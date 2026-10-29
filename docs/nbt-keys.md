@@ -27,6 +27,7 @@ The NPC entity is `ancientempires:npc`. Besides vanilla's mob keys (`Health`, `H
 | `AeOrderPos` | long | no | The order's spot (Hold, Defend, Fall back), as a packed block position. |
 | `AeOrderFacing` | float | no | The way the unit faces at that spot (a yaw). |
 | `AeOrderTarget` | UUID | no | Attack: the enemy the unit goes for. |
+| `AeUnitName` | text | no | The unit's name, given on the command screen. |
 | `AeFormation` | text | no | `column` or `loose` (absent: line). |
 | `AeRank` | text | yes | `soldier`, `sergeant`, `captain`, or `general`, when set by insignia or command. Without it, the rank comes from the roster row. |
 | `AeSkill` | int | yes | Pins the NPC's skill to one entry (0 to 3) of every `skill` list, instead of reading the lists by level. For testing or special NPCs. |

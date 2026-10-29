@@ -73,6 +73,8 @@ fills, and eases a border ring into the land (AW's preGeneration). Unseen in gam
 
 Chain of command: plan in docs/chain-of-command.md (decisions agreed 2026-10-28: screen + order item, squads of 16, manual joining, grunts lobotomised in formation, garrisons last). Build phase 1 next.
 
+Chain phase 4 built: command screen on K (tree, orders, move, rename, take up on flag); server side game-tested,
+the screen itself not seen in game.
 Phase 3 finished: squad morale (formation +8, broken leader -12), archers in their own rear rows shooting from their
 slots, riders behind at double spacing charging on release (x1.25 speed, x1.5 first hit at speed). Cavalry charge not
 covered by a test, not seen in game. Next: phase 4, the command screen.

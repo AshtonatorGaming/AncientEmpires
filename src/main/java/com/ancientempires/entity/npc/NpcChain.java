@@ -58,6 +58,7 @@ public final class NpcChain
     private static final String ORDER_FACING_KEY = "AeOrderFacing";
     private static final String ORDER_TARGET_KEY = "AeOrderTarget";
     private static final String FORMATION_KEY = "AeFormation";
+    private static final String NAME_KEY = "AeUnitName";
     /** Ticks between looking for a missing leader, and between a leader's member checks. */
     private static final int RESOLVE_TICKS = 20;
     private static final int PRUNE_TICKS = 100;
@@ -89,6 +90,8 @@ public final class NpcChain
     @Nullable
     private UUID orderTarget;
     private NpcFormation formation = NpcFormation.LINE;
+    /** The unit's name, given on the command screen ("Iron Wolves"); empty for none. */
+    private String name = "";
 
     @Nullable
     private NpcEntity leader;
@@ -282,6 +285,16 @@ public final class NpcChain
         this.holder = this.order != null || top ? this : this.holder;
         this.npc.setFollowing(top && order == NpcOrder.FOLLOW);
         this.slotsAt = -1L;
+    }
+
+    public String name()
+    {
+        return this.name;
+    }
+
+    public void setName(String name)
+    {
+        this.name = name.strip();
     }
 
     public void setFormation(NpcFormation formation)
@@ -495,6 +508,7 @@ public final class NpcChain
             next.orderFacing = this.orderFacing;
             next.orderTarget = this.orderTarget;
             next.formation = this.formation;
+            next.name = this.name.isEmpty() ? next.name : this.name;
             next.holder = this.holder == this ? next : this.holder;
             next.slotsAt = -1L;
             // At the top of a chain the heir carries the order on (following the owner, say).
@@ -952,6 +966,10 @@ public final class NpcChain
         {
             tag.putString(FORMATION_KEY, this.formation.id());
         }
+        if (!this.name.isEmpty())
+        {
+            tag.putString(NAME_KEY, this.name);
+        }
     }
 
     void load(CompoundTag tag)
@@ -972,6 +990,7 @@ public final class NpcChain
         this.orderFacing = tag.contains(ORDER_FACING_KEY) ? tag.getFloat(ORDER_FACING_KEY) : Float.NaN;
         this.orderTarget = tag.hasUUID(ORDER_TARGET_KEY) ? tag.getUUID(ORDER_TARGET_KEY) : null;
         this.formation = NpcFormation.byName(tag.getString(FORMATION_KEY));
+        this.name = tag.getString(NAME_KEY);
         this.holder = this;
     }
 }

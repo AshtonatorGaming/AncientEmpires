@@ -12,12 +12,14 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.lwjgl.glfw.GLFW;
 
-/** The faction standings key (J by default, rebindable in Controls). */
+/** The faction standings key (J by default) and the command screen's (K), rebindable in Controls. */
 @Mod.EventBusSubscriber(modid = AncientEmpires.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public final class ModKeys
 {
     public static final KeyMapping STANDINGS = new KeyMapping("key.ancientempires.standings",
             InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_J, "key.categories.ancientempires");
+    public static final KeyMapping COMMAND = new KeyMapping("key.ancientempires.command",
+            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_K, "key.categories.ancientempires");
 
     private ModKeys()
     {
@@ -27,6 +29,7 @@ public final class ModKeys
     public static void onRegisterKeys(RegisterKeyMappingsEvent event)
     {
         event.register(STANDINGS);
+        event.register(COMMAND);
     }
 
     @Mod.EventBusSubscriber(modid = AncientEmpires.MOD_ID, value = Dist.CLIENT)
@@ -48,6 +51,13 @@ public final class ModKeys
                 if (Minecraft.getInstance().screen == null)
                 {
                     ModNetwork.requestStandings();
+                }
+            }
+            while (COMMAND.consumeClick())
+            {
+                if (Minecraft.getInstance().screen == null)
+                {
+                    ModNetwork.requestArmy();
                 }
             }
         }
