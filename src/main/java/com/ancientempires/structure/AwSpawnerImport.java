@@ -3,7 +3,11 @@ package com.ancientempires.structure;
 import com.ancientempires.block.NpcSpawnerBlock;
 import com.ancientempires.config.AncientEmpiresConfig;
 import com.ancientempires.block.NpcSpawnerBlockEntity;
+import com.ancientempires.entity.npc.NpcEntity;
 import com.ancientempires.entity.npc.NpcRoster;
+import com.ancientempires.registry.ModEntities;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraftforge.event.ForgeEventFactory;
 import com.ancientempires.entity.npc.NpcSkins;
 import com.ancientempires.item.MobScrollItem;
 import com.ancientempires.registry.ModBlocks;
@@ -163,6 +167,59 @@ public final class AwSpawnerImport
             stack.getOrCreateTag().putInt(NpcSpawnerBlockEntity.MIN_COUNT_KEY, least);
         }
         return stack;
+    }
+
+    /**
+     * An AW NPC placed directly in a template (an {@code AWNpc} entry: traders,
+     * townsfolk, guards standing about): our roster NPC there, with the name,
+     * gear, and skin the template gave it, and a trader's goods. Faction NPCs
+     * only; AW's player-owned kinds have no faction row and are reported.
+     */
+    static boolean placeNpc(ServerLevelAccessor level, CompoundTag rule, double x, double y, double z, float yaw, Map<String, Integer> report)
+    {
+        String id = rule.getString("mobID");
+        CompoundTag data = rule.getCompound("entityData");
+        if (!id.startsWith(NPC_PREFIX))
+        {
+            report.merge("AW NPC " + id, 1, Integer::sum);
+            return false;
+        }
+        String rosterId = data.getString("factionName") + "." + id.substring(NPC_PREFIX.length());
+        if (NpcRoster.byId(rosterId) == null)
+        {
+            report.merge("unknown roster row " + rosterId, 1, Integer::sum);
+            return false;
+        }
+        NpcEntity npc = ModEntities.NPC.get().create(level.getLevel());
+        if (npc == null)
+        {
+            return false;
+        }
+        npc.moveTo(x, y, z, yaw, 0.0F);
+        npc.setYHeadRot(yaw);
+        NpcEntity.beginSpawnRoster(rosterId);
+        try
+        {
+            ForgeEventFactory.onFinalizeSpawn(npc, level, level.getCurrentDifficultyAt(npc.blockPosition()), MobSpawnType.STRUCTURE, null, null);
+        }
+        finally
+        {
+            NpcEntity.endSpawnRoster();
+        }
+        CompoundTag extra = npcData(data, rosterId);
+        if (!extra.isEmpty())
+        {
+            CompoundTag saved = npc.saveWithoutId(new CompoundTag());
+            saved.merge(extra);
+            npc.load(saved);
+        }
+        if (data.contains("tradeList"))
+        {
+            npc.getTrades().loadAw(data.getCompound("tradeList"));
+        }
+        npc.setPersistenceRequired();
+        level.addFreshEntityWithPassengers(npc);
+        return true;
     }
 
     /**

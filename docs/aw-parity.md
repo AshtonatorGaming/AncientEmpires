@@ -16,7 +16,7 @@ same thing. Decisions marked **?** are the user's to make before building.
 | Upkeep Order: where to eat | Nearest Town Hall in range | Partial: no chosen upkeep spot |
 | Routing Order + Courier: carries items between chests on a route | Nothing | **Missing**: courier |
 | Trade Order + Trader: player-owned trader runs a trade route (POTrade) | Nothing | **Missing**: owned trader |
-| Faction traders (FactionTrade): buy and sell; the only way to raise standing | Nothing | **Missing**: faction trading |
+| Faction traders (FactionTrade): buy and sell; the only way to raise standing | `NpcTrades`, `TradeScreen`, the Coin Purse | Done 2026-10-29: template traders keep AW's goods; coins by worth through a purse |
 | Bard (instrument, sings: morale) | Role label only | **Missing**: bard |
 | Town Hall alarm (`AlarmResponse`): civilians hide, soldiers muster | War Horn calls | Partial: no hall alarm |
 | Recruiting Station (`npc/tile/TileRecruitingStation` in the 1.12 jar) | Settler recipe, Settlers' Post | To look up: the user does not remember it; check AW's code before deciding |
@@ -75,13 +75,18 @@ same thing. Decisions marked **?** are the user's to make before building.
   slowly push toward advancements that grant buffs and new options (better work speed, drill, morale, building
   bonuses, and the like) rather than unlocking crafting. A Worker-path scholar at a study (or a priest at a shrine)
   gains progress over time; the player picks the next advancement. Designed after parity; not a parity item.
-- **Spellcasters (Wizardry): port.** Electroblob's Wizardry has no official 1.20.1 Forge release that I know of; check
-  what the pack has (Iron's Spells 'n Books is the big 1.20.1 one) and build one bridge with an adapter per mod.
+- **Spellcasters: port, for both Electroblob's Wizardry and Iron's Spells 'n Books** (both exist on 1.20.1; the user
+  corrected Claude). One bridge, an adapter per mod; Hundred Years War has Iron's compat worth reading first.
 - **Backpacks:** AW's couriers stored goods in a backpack item; ours carry everything in the backpack every NPC has.
 - **Chunk loaders: yes**, behind a setting. **Recruiting station:** to look up in AW's code.
 - Research ideas, raw: docs/research-ideas.md.
 - **Siege vehicles: port**, so structures' engines work, last in the parity order. Later, compat so NPC crews can use
   other mods' more refined siege equipment.
+
+- **Money (user, 2026-10-29):** AW's stacks of four coins were painful. A Coin Purse holds one sum (Millénaire's
+  purse, Mount and Blade's one money count); coin prices draw from purses then loose coins, with change, and coin
+  payouts go into the purse. 8 copper a silver, 8 silver a gold; ancient coins 8 gold for now (`trade` config,
+  balance untested). Barter (goods for goods, arrows for diamonds) is any trade without coins.
 
 ## DESIGN.md items jumped past
 

@@ -167,6 +167,9 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.BooleanValue RELATIONS_ENABLED;
     private static final ForgeConfigSpec.DoubleValue RELATIONS_REVENGE_RANGE;
     private static final ForgeConfigSpec.IntValue RELATIONS_REVENGE_TICKS;
+    private static final ForgeConfigSpec.IntValue TRADE_SILVER_VALUE;
+    private static final ForgeConfigSpec.IntValue TRADE_GOLD_VALUE;
+    private static final ForgeConfigSpec.IntValue TRADE_ANCIENT_VALUE;
     private static final ForgeConfigSpec.IntValue RELATIONS_STANDING_LIMIT;
     private static final ForgeConfigSpec.BooleanValue RELATIONS_COUNT_CREATIVE;
     private static final ForgeConfigSpec.BooleanValue IMMIGRATION_ENABLED;
@@ -888,6 +891,12 @@ public final class AncientEmpiresConfig
                 .define("countCreativeKills", false);
         builder.pop();
 
+        builder.comment("Trading with faction traders, and money: coins count by worth, and a Coin Purse holds one sum (in copper) that trades draw from and pay into.").push("trade");
+        TRADE_SILVER_VALUE = builder.comment("Copper coins one silver coin is worth.").defineInRange("silverValue", 8, 1, 1000000);
+        TRADE_GOLD_VALUE = builder.comment("Copper coins one gold coin is worth (8 silver).").defineInRange("goldValue", 64, 1, 1000000);
+        TRADE_ANCIENT_VALUE = builder.comment("Copper coins one ancient coin is worth (8 gold). Ancient coins were rare treasure in Ancient Warfare; the balance is untested.").defineInRange("ancientValue", 512, 1, 1000000);
+        builder.pop();
+
         builder.comment("Settlers' Posts: Dwarf Fortress style immigration. Checked once per in-game day, at the day change.").push("immigration");
         IMMIGRATION_ENABLED = builder
                 .comment("Whether open posts draw settlers at all.")
@@ -1567,6 +1576,9 @@ public final class AncientEmpiresConfig
     public static boolean relationsEnabled = true;
     public static double relationsRevengeRange = 50.0D;
     public static int relationsRevengeTicks = 6000;
+    public static int tradeSilverValue = 8;
+    public static int tradeGoldValue = 64;
+    public static int tradeAncientValue = 512;
     public static int relationsStandingLimit = 1000;
     public static boolean relationsCountCreative = false;
     public static boolean immigrationEnabled = true;
@@ -2015,6 +2027,9 @@ public final class AncientEmpiresConfig
         relationsEnabled = RELATIONS_ENABLED.get();
         relationsRevengeRange = RELATIONS_REVENGE_RANGE.get();
         relationsRevengeTicks = RELATIONS_REVENGE_TICKS.get();
+        tradeSilverValue = TRADE_SILVER_VALUE.get();
+        tradeGoldValue = TRADE_GOLD_VALUE.get();
+        tradeAncientValue = TRADE_ANCIENT_VALUE.get();
         relationsStandingLimit = RELATIONS_STANDING_LIMIT.get();
         relationsCountCreative = RELATIONS_COUNT_CREATIVE.get();
         immigrationEnabled = IMMIGRATION_ENABLED.get();

@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {"item": "minecraft:leather"},
+    {"item": "minecraft:string"}
+  ],
+  "result": {"item": "ancientempires:coin_purse"}
+}

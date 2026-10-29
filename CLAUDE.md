@@ -162,6 +162,15 @@ instead of reflecting per call), Skirmisher thresholds (about 4.5 to 28 blocks).
   the loot lock (containers shut while one of the faction sees you; `allowStealing` otherwise). Imported garrison
   trigger ranges are scaled by `structures.triggerRangeScale` (1.5) and floored at `triggerMinRange` (10): tight
   structures spawned their people on top of the player.
+- Trading (AW parity, 2026-10-29): AW's NPCs placed directly in templates (`AWNpc`: traders, townsfolk, guards) are
+  now placed (`AwSpawnerImport.placeNpc`: the roster row, the template's name, gear, and skin; Forge's finalize event on
+  the generating level), and a trader keeps AW's goods (`NpcTrades`, saved `AeTrades`; 139 templates carry them): up
+  to nine stacks each way per trade, a stock refilled one use every `refill` ticks. Right-click a trader to trade
+  (`TradePacket`, `TradeScreen`; an admin sneaks for the inventory), unless its faction is hostile to you; each trade
+  adds the faction's `trade` standing change (factions.json). Money (`item/Coins`, `CoinPurseItem`): coins count by
+  worth (`trade` config: 8, 64, 512 copper), a Coin Purse (leather and string) holds one sum; use it to gather loose
+  coins, sneak-use to pour them out; coin prices are paid from purses then coins with change, coin payouts go into a
+  purse. Game test `templateTraderSellsForThePurse`. Not yet: AW's creative trade editor, owned traders on routes.
 - Gates (S3, `gate/`; read from AW's decompiled 1.12 code): `GateEntity` spans its opening (`pos1`, `pos2` as given,
   one block thick) and, while closed, fills it with `GateProxyBlock`s (invisible, solid, unmineable; clicks and blows go
   to the gate), so collision and paths treat it as a wall; opening clears them. Seven `GateType`s: vertical wood and

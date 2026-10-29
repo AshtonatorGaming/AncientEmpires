@@ -24,7 +24,7 @@ import java.util.List;
 public final class ModNetwork
 {
     /** Bump whenever a packet is added or changes shape, so mismatched clients are refused cleanly. */
-    private static final String PROTOCOL = "13";
+    private static final String PROTOCOL = "14";
     private static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(
             ResourceLocation.parse(AncientEmpires.MOD_ID + ":main"),
             () -> PROTOCOL,
@@ -93,6 +93,16 @@ public final class ModNetwork
                 .decoder(ArmyPacket::decode)
                 .consumerMainThread(ArmyPacket::handle)
                 .add();
+        CHANNEL.messageBuilder(TradePacket.class, nextId++, NetworkDirection.PLAY_TO_CLIENT)
+                .encoder(TradePacket::encode)
+                .decoder(TradePacket::decode)
+                .consumerMainThread(TradePacket::handle)
+                .add();
+        CHANNEL.messageBuilder(TradePacket.Request.class, nextId++, NetworkDirection.PLAY_TO_SERVER)
+                .encoder(TradePacket.Request::encode)
+                .decoder(TradePacket.Request::decode)
+                .consumerMainThread(TradePacket.Request::handle)
+                .add();
         CHANNEL.messageBuilder(UnitOrderPacket.class, nextId++, NetworkDirection.PLAY_TO_SERVER)
                 .encoder(UnitOrderPacket::encode)
                 .decoder(UnitOrderPacket::decode)
@@ -121,6 +131,12 @@ public final class ModNetwork
     public static void requestArmyRefresh()
     {
         CHANNEL.sendToServer(new ArmyActionPacket(false, null, null, null, ""));
+    }
+
+    /** One packet to one player. */
+    public static void send(ServerPlayer player, Object packet)
+    {
+        CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), packet);
     }
 
     public static void sendToServer(Object packet)

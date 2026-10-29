@@ -1,5 +1,11 @@
 package com.ancientempires.structure;
 
+import com.ancientempires.registry.ModItems;
+import com.ancientempires.item.CoinPurseItem;
+import com.ancientempires.item.Coins;
+import com.ancientempires.entity.npc.NpcFactions;
+import com.ancientempires.entity.npc.NpcStandings;
+import com.ancientempires.entity.npc.NpcTrades;
 import com.ancientempires.AncientEmpires;
 import com.google.gson.JsonObject;
 import com.ancientempires.block.FlagBlockEntity;
@@ -930,6 +936,60 @@ public final class StructureGameTests
         Vec3 slot = cohortChain.slotOf(cohort.get(0));
         helper.assertTrue(slot != null && slot.distanceTo(Vec3.atBottomCenterOf(cohortAt)) < 4.0D, "the cohort forms on its own sergeant, at " + slot);
         everyone.forEach(NpcEntity::discard);
+        helper.succeed();
+    }
+
+    /**
+     * AW parity, traders: a template's trader comes out of the structure with
+     * its goods (the Dwarf Smithy's smith), and a coin-priced trade is paid
+     * from a purse, its change left there, the goods given, and the faction's
+     * trade standing gained.
+     */
+    @GameTest(template = ARENA, timeoutTicks = 400)
+    public static void templateTraderSellsForThePurse(GameTestHelper helper)
+    {
+        String path = "normal/awnationdwarf/dwarfsmithy";
+        BlockPos anchor = helper.absolutePos(new BlockPos(0, 1, 0)).offset(300, 0, 200);
+        AePlacer.Report report = placeAndLog(helper, path, anchor, Rotation.NONE);
+        ServerLevel level = helper.getLevel();
+        List<NpcEntity> traders = level.getEntitiesOfClass(NpcEntity.class, new AABB(anchor).inflate(48.0D), npc -> !npc.getTrades().isEmpty());
+        helper.assertTrue(!traders.isEmpty(), "the smithy's trader stands there with goods; " + report.entities() + " entities placed, skipped " + report.skipped());
+        NpcEntity trader = traders.get(0);
+        NpcTrades.Trade coinTrade = null;
+        int index = -1;
+        for (int i = 0; i < trader.getTrades().list().size(); i++)
+        {
+            NpcTrades.Trade trade = trader.getTrades().list().get(i);
+            if (trade.available() > 0 && trade.input().stream().allMatch(Coins::isCoin) && trade.output().stream().noneMatch(Coins::isCoin))
+            {
+                coinTrade = trade;
+                index = i;
+                break;
+            }
+        }
+        helper.assertTrue(coinTrade != null, "a trade priced in coins, among " + trader.getTrades().list().size());
+        FakePlayer player = FakePlayerFactory.getMinecraft(level);
+        player.getInventory().clearContent();
+        ItemStack purse = new ItemStack(ModItems.COIN_PURSE.get());
+        long price = Coins.worth(coinTrade.input());
+        CoinPurseItem.set(purse, price + 5L);
+        player.getInventory().add(purse);
+        String faction = trader.getFaction();
+        NpcStandings standings = NpcStandings.get(level.getServer());
+        int before = standings.get(player.getUUID(), faction);
+        ItemStack goods = coinTrade.output().get(0).copy();
+        helper.assertTrue(trader.getTrades().perform(player, index, level.getGameTime()), "the trade goes through");
+        int change = NpcFactions.tradeChange(faction);
+        if (change != 0)
+        {
+            standings.adjust(player.getUUID(), faction, change);
+        }
+        helper.assertTrue(CoinPurseItem.held(player.getInventory().items.stream().filter(stack -> stack.is(ModItems.COIN_PURSE.get())).findFirst().orElseThrow()) == 5L,
+                "the purse paid " + price + " and kept the 5 over");
+        helper.assertTrue(player.getInventory().countItem(goods.getItem()) >= goods.getCount(), "the goods were given: " + goods);
+        helper.assertTrue(standings.get(player.getUUID(), faction) == before + change, "standing with " + faction + " moved by " + change);
+        player.getInventory().clearContent();
+        level.getEntitiesOfClass(NpcEntity.class, new AABB(anchor).inflate(48.0D)).forEach(NpcEntity::discard);
         helper.succeed();
     }
 

@@ -142,6 +142,9 @@ play; fix each the same way.
 Committed since: the text fitting and UI fixes (a6ee65c); the cohort model's core (step 3.5, see the design doc's
 Progress for what is left). Neither installed yet when written (the user's game was open).
 
+Parity started (2026-10-29, the user: parity before polish): faction trading done (template traders, the Coin Purse);
+next in docs/aw-parity.md: the owned trader and courier, patrols, the Town Hall alarm, the bard.
+
 **The plan now lives in docs/roadmap.md** (reassessed 2026-10-29: phases Stabilize, Close the loop, Deepen war, Deepen towns). Read it first.
 
 **Agreed order of work** (so we don't get lost):

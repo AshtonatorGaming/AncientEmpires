@@ -1,6 +1,7 @@
 package com.ancientempires.entity.npc;
 
 import com.ancientempires.AncientEmpires;
+import com.ancientempires.network.TradePacket;
 import com.ancientempires.block.NpcUpkeep;
 import com.ancientempires.block.NpcSpawnerBlockEntity;
 import com.ancientempires.block.TownHallBlockEntity;
@@ -190,6 +191,7 @@ public class NpcEntity extends PathfinderMob
     private final NpcGuard guard = new NpcGuard(this);
     private final NpcMorale morale = new NpcMorale(this);
     private final NpcChain chain = new NpcChain(this);
+    private final NpcTrades trades = new NpcTrades();
     private final NpcProgress progress = new NpcProgress(this);
     private final NpcAttack attack = new NpcAttack(this);
     private final NpcHold hold = new NpcHold(this);
@@ -710,6 +712,12 @@ public class NpcEntity extends PathfinderMob
 
     /** Morale: steady, wavering, routing, shattered, surrendered. */
     /** This NPC's place in a chain of command (leader, unit, order, formation). */
+    /** A trader's goods (from its structure template), empty for everyone else. */
+    public NpcTrades getTrades()
+    {
+        return this.trades;
+    }
+
     public NpcChain getChain()
     {
         return this.chain;
@@ -2309,6 +2317,15 @@ public class NpcEntity extends PathfinderMob
         {
             return InteractionResult.PASS;
         }
+        // A trader trades with anyone its faction is not hostile to (AW's faction traders); an admin sneaks to open it instead.
+        if (!this.trades.isEmpty() && !(player.isShiftKeyDown() && this.canOpenInventory(player)))
+        {
+            if (!this.level().isClientSide && player instanceof ServerPlayer serverPlayer)
+            {
+                TradePacket.open(serverPlayer, this);
+            }
+            return InteractionResult.sidedSuccess(this.level().isClientSide);
+        }
         // An NPC the player may not command (any faction NPC, unless an admin) takes no right-click:
         // the click passes on to the held item, so a shield raised while looking at an enemy blocks
         // instead of showing a message.
@@ -2596,6 +2613,7 @@ public class NpcEntity extends PathfinderMob
         this.mount.save(tag);
         this.morale.save(tag);
         this.chain.save(tag);
+        this.trades.save(tag);
         this.needs.save(tag);
         this.relations.save(tag);
         this.writeRoster(tag);
@@ -2673,6 +2691,7 @@ public class NpcEntity extends PathfinderMob
         this.mount.load(tag);
         this.morale.load(tag);
         this.chain.load(tag);
+        this.trades.load(tag);
         this.needs.load(tag);
         this.relations.load(tag);
         if (tag.contains(ROSTER_KEY))

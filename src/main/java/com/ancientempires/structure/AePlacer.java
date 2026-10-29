@@ -529,7 +529,8 @@ public final class AePlacer
                 }
                 continue;
             }
-            if (nbt.contains("aeRule"))
+            boolean npc = entry.getString("plugin").equals("AWNpc");
+            if (nbt.contains("aeRule") && !npc)
             {
                 skipped.merge(entry.getString("plugin") + " " + nbt.getString("id"), 1, Integer::sum);
                 continue;
@@ -542,6 +543,16 @@ public final class AePlacer
             BlockPos block = BlockPos.containing(worldX, worldY, worldZ);
             if (limit != null && !limit.isInside(block))
             {
+                continue;
+            }
+            if (npc)
+            {
+                CompoundTag rule = nbt.getCompound("aeRule");
+                float yaw = Mth.wrapDegrees(rule.getFloat("rotation") + rotationDegrees(rotation));
+                if (AwSpawnerImport.placeNpc(level, rule, worldX, worldY, worldZ, yaw, skipped))
+                {
+                    count++;
+                }
                 continue;
             }
             nbt.putString("id", AeRemap.entityId(nbt.getString("id")));
@@ -569,6 +580,18 @@ public final class AePlacer
             count++;
         }
         return count;
+    }
+
+    /** Degrees a structure turned by {@code rotation} turns what stands in it (yaw grows clockwise). */
+    private static float rotationDegrees(Rotation rotation)
+    {
+        return switch (rotation)
+        {
+            case NONE -> 0.0F;
+            case CLOCKWISE_90 -> 90.0F;
+            case CLOCKWISE_180 -> 180.0F;
+            case COUNTERCLOCKWISE_90 -> 270.0F;
+        };
     }
 
     /**
