@@ -30,7 +30,7 @@ public class NpcFollowOwnerGoal extends Goal
     public boolean canUse()
     {
         // Synced flags first. Most NPCs are not following, so the player lookup is skipped.
-        if (!this.npc.isFollowing() || this.npc.isArcherHolding())
+        if (!this.npc.isFollowing() || this.npc.getHold().archerHolding())
         {
             this.owner = null;
             return false;
@@ -42,7 +42,7 @@ public class NpcFollowOwnerGoal extends Goal
     @Override
     public boolean canContinueToUse()
     {
-        return this.npc.isFollowing() && !this.npc.isArcherHolding() && this.owner != null && this.owner.isAlive() && !this.owner.isSpectator();
+        return this.npc.isFollowing() && !this.npc.getHold().archerHolding() && this.owner != null && this.owner.isAlive() && !this.owner.isSpectator();
     }
 
     @Override

@@ -157,7 +157,7 @@ public final class NpcSkirmishGoal extends Goal
     /** Steps back from a foe that got too close, to a safe spot, as AncientTactics' skirmishers did. */
     private void kite(LivingEntity target)
     {
-        if (this.npc.isHoldingPosition() || --this.repath > 0 && !this.npc.getNavigation().isDone())
+        if (this.npc.getHold().holding() || --this.repath > 0 && !this.npc.getNavigation().isDone())
         {
             return;
         }

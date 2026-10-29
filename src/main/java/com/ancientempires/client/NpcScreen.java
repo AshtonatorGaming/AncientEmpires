@@ -108,7 +108,7 @@ public class NpcScreen extends AbstractContainerScreen<NpcMenu>
         this.command(NpcGui.Icon.SET_HOME, "gui.ancientempires.npc.set_home", NpcMenu.BUTTON_SET_HOME, active(npc, entity -> entity.getHome() != null));
         this.command(NpcGui.Icon.CLOSE, "gui.ancientempires.npc.clear_home", NpcMenu.BUTTON_CLEAR_HOME, null);
         this.command(NpcGui.Icon.REPACK, "gui.ancientempires.npc.repack", NpcMenu.BUTTON_REPACK, null);
-        this.command(NpcGui.Icon.HOLD, "gui.ancientempires.npc.hold", NpcMenu.BUTTON_HOLD, active(npc, NpcEntity::isHoldingPosition));
+        this.command(NpcGui.Icon.HOLD, "gui.ancientempires.npc.hold", NpcMenu.BUTTON_HOLD, active(npc, holder -> holder.getHold().holding()));
         this.command(NpcGui.Icon.CREATIVE, "gui.ancientempires.npc.creative", NpcMenu.BUTTON_CREATIVE, active(npc, NpcEntity::isCreative));
         this.command(NpcGui.Icon.LEVY, "gui.ancientempires.npc.levy", NpcMenu.BUTTON_LEVY, active(npc, NpcEntity::isLevied));
         this.command(NpcGui.Icon.MOUNT, "gui.ancientempires.npc.mount", NpcMenu.BUTTON_MOUNT, active(npc, NpcEntity::isPassenger));

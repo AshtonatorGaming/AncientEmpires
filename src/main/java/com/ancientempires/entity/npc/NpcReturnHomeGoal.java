@@ -154,7 +154,7 @@ public class NpcReturnHomeGoal extends Goal
 
     private boolean eligible()
     {
-        if (this.npc.isFollowing() || this.npc.isArcherHolding() || this.npc.getHome() == null)
+        if (this.npc.isFollowing() || this.npc.getHold().archerHolding() || this.npc.getHome() == null)
         {
             return false;
         }

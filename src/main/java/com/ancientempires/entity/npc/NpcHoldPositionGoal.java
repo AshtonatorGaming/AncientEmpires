@@ -25,13 +25,13 @@ public class NpcHoldPositionGoal extends Goal
     @Override
     public boolean canUse()
     {
-        return this.npc.isArcherHolding();
+        return this.npc.getHold().archerHolding();
     }
 
     @Override
     public boolean canContinueToUse()
     {
-        return this.npc.isArcherHolding();
+        return this.npc.getHold().archerHolding();
     }
 
     @Override
@@ -49,11 +49,11 @@ public class NpcHoldPositionGoal extends Goal
     @Override
     public void tick()
     {
-        if (this.npc.getHoldAnchor() == null)
+        if (this.npc.getHold().anchor() == null)
         {
-            this.npc.captureHoldAnchor();
+            this.npc.getHold().capture();
         }
-        if (!this.npc.isOutsideHold())
+        if (!this.npc.getHold().outside())
         {
             this.npc.getNavigation().stop();
             return;
@@ -61,7 +61,7 @@ public class NpcHoldPositionGoal extends Goal
         if (--this.repath <= 0)
         {
             this.repath = this.adjustedTickDelay(10);
-            this.npc.moveTowardHold(this.speed);
+            this.npc.getHold().moveToward(this.speed);
         }
     }
 }

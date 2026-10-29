@@ -51,7 +51,7 @@ public final class NpcSidearm
     public int corneredSlot(LivingEntity target)
     {
         if (!AncientEmpiresConfig.sidearmEnabled || this.bowSlot >= 0 || this.cooldown > 0
-                || this.npc.isHoldingPosition())
+                || this.npc.getHold().holding())
         {
             return -1;
         }

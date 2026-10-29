@@ -77,7 +77,7 @@ public enum NpcStatus
         {
             return FOLLOW;
         }
-        if (npc.isHoldingPosition() || runs(running, NpcHoldPositionGoal.class))
+        if (npc.getHold().holding() || runs(running, NpcHoldPositionGoal.class))
         {
             return GUARD;
         }

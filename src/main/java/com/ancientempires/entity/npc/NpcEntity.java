@@ -120,7 +120,7 @@ public class NpcEntity extends PathfinderMob
     static final EntityDataAccessor<Integer> DATA_PRESENTATION_SERIAL = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> DATA_FOLLOWING = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> DATA_CREATIVE = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.BOOLEAN);
-    private static final EntityDataAccessor<Boolean> DATA_HOLDING = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.BOOLEAN);
+    static final EntityDataAccessor<Boolean> DATA_HOLDING = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Optional<BlockPos>> DATA_HOME = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.OPTIONAL_BLOCK_POS);
     private static final EntityDataAccessor<String> DATA_HOME_DIM = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<String> DATA_SKIN = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.STRING);
@@ -149,11 +149,6 @@ public class NpcEntity extends PathfinderMob
     private static final EntityDataAccessor<ItemStack> DATA_BANNER = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.ITEM_STACK);
     private static final String FOLLOWING_KEY = "Following";
     private static final String CREATIVE_KEY = "Creative";
-    private static final String HOLDING_KEY = "HoldPosition";
-    private static final String HOLD_KEY = "HoldPos";
-    private static final String HOLD_DIM_KEY = "HoldDim";
-    /** How far a sentry may be from the spot captured when hold was turned on. */
-    public static final double HOLD_LEASH = 4.0D;
     private static final String HOME_KEY = "Home";
     private static final String HOME_DIM_KEY = "HomeDim";
     private static final String SKIN_KEY = "Skin";
@@ -203,6 +198,7 @@ public class NpcEntity extends PathfinderMob
     private final NpcChain chain = new NpcChain(this);
     private final NpcProgress progress = new NpcProgress(this);
     private final NpcAttack attack = new NpcAttack(this);
+    private final NpcHold hold = new NpcHold(this);
     /** The NPC spawner that made it (its home), its slot there, and whether it is a garrison. Not packed. */
     @Nullable
     private BlockPos spawnerPos;
@@ -253,10 +249,6 @@ public class NpcEntity extends PathfinderMob
     /** Rations eaten ahead (a food bundle covers several days). Saved as {@code AeMealCredit}. */
     private double mealCredit;
 
-    /** Server post for {@link #HOLDING_KEY}. The client only needs the boolean. */
-    @Nullable
-    private BlockPos holdAnchor;
-    private String holdDimension = "";
 
     /** Bumped on any hand change. Not saved; a fresh load starts every cache cold. */
     private int handsVersion;
@@ -1375,7 +1367,7 @@ public class NpcEntity extends PathfinderMob
             this.setLevied(true);
         }
         this.morale.hornRally();
-        this.setHoldingPosition(false);
+        this.getHold().setHolding(false);
         this.setFollowing(true);
         this.rallyUntil = this.tickCount + AncientEmpiresConfig.hornRallyTicks;
     }
@@ -1645,6 +1637,12 @@ public class NpcEntity extends PathfinderMob
         return this.attack;
     }
 
+    /** Hold position, the archer sentry: the flag and the post. */
+    public NpcHold getHold()
+    {
+        return this.hold;
+    }
+
     public NpcProgress getProgress()
     {
         return this.progress;
@@ -1866,42 +1864,6 @@ public class NpcEntity extends PathfinderMob
         this.applyDropChances();
     }
 
-    public boolean isHoldingPosition()
-    {
-        return this.entityData.get(DATA_HOLDING);
-    }
-
-    /**
-     * Hold is the archer sentry. A sword or an empty hand ignores the flag.
-     */
-    public boolean isArcherHolding()
-    {
-        return this.isHoldingBow() && this.isHoldingPosition();
-    }
-
-    public void setHoldingPosition(boolean holding)
-    {
-        this.entityData.set(DATA_HOLDING, holding);
-    }
-
-    @Nullable
-    public BlockPos getHoldAnchor()
-    {
-        return this.holdAnchor;
-    }
-
-    public void captureHoldAnchor()
-    {
-        this.holdAnchor = this.blockPosition();
-        this.holdDimension = this.level().dimension().location().toString();
-    }
-
-    public void clearHoldAnchor()
-    {
-        this.holdAnchor = null;
-        this.holdDimension = "";
-    }
-
     /**
      * A bow in the main hand, including a Spartan longbow. A crossbow is not a bow.
      */
@@ -1924,43 +1886,6 @@ public class NpcEntity extends PathfinderMob
         return this.isUsingItem()
                 && this.getUsedItemHand() == InteractionHand.MAIN_HAND
                 && this.isHoldingBow();
-    }
-
-    public boolean isOutsideHold()
-    {
-        if (!this.isHoldingPosition())
-        {
-            return false;
-        }
-        this.ensureHoldAnchor();
-        BlockPos anchor = this.holdAnchor;
-        if (anchor == null)
-        {
-            return false;
-        }
-        double x = anchor.getX() + 0.5D;
-        double z = anchor.getZ() + 0.5D;
-        return this.distanceToSqr(x, anchor.getY(), z) > HOLD_LEASH * HOLD_LEASH;
-    }
-
-    public void moveTowardHold(double speed)
-    {
-        this.ensureHoldAnchor();
-        BlockPos anchor = this.holdAnchor;
-        if (anchor == null)
-        {
-            return;
-        }
-        this.getNavigation().moveTo(anchor.getX() + 0.5D, anchor.getY(), anchor.getZ() + 0.5D, speed);
-    }
-
-    private void ensureHoldAnchor()
-    {
-        String here = this.level().dimension().location().toString();
-        if (this.holdAnchor == null || this.holdDimension.isEmpty() || !this.holdDimension.equals(here))
-        {
-            this.captureHoldAnchor();
-        }
     }
 
     @Nullable
@@ -2242,8 +2167,7 @@ public class NpcEntity extends PathfinderMob
         tag.putString(FACTION_KEY, this.getFaction());
         tag.putBoolean(FOLLOWING_KEY, this.isFollowing());
         tag.putBoolean(CREATIVE_KEY, this.isCreative());
-        tag.putBoolean(HOLDING_KEY, this.isHoldingPosition());
-        this.writeHoldAnchor(tag);
+        this.hold.save(tag);
         tag.putFloat(BODY_SCALE_KEY, this.getBodyScale());
         BlockPos home = this.getHome();
         if (keepHome && home != null)
@@ -2271,36 +2195,6 @@ public class NpcEntity extends PathfinderMob
         else if (customName != null)
         {
             tag.putString(CUSTOM_NAME_KEY, Component.Serializer.toJson(customName));
-        }
-    }
-
-    private void writeHoldAnchor(CompoundTag tag)
-    {
-        BlockPos anchor = this.holdAnchor;
-        if (!this.isHoldingPosition() || anchor == null)
-        {
-            return;
-        }
-        tag.putLong(HOLD_KEY, anchor.asLong());
-        tag.putString(HOLD_DIM_KEY, this.holdDimension);
-    }
-
-    private void readHoldAnchor(CompoundTag tag)
-    {
-        this.setHoldingPosition(tag.getBoolean(HOLDING_KEY));
-        if (!this.isHoldingPosition())
-        {
-            this.clearHoldAnchor();
-            return;
-        }
-        if (tag.contains(HOLD_KEY))
-        {
-            this.holdAnchor = BlockPos.of(tag.getLong(HOLD_KEY));
-            this.holdDimension = tag.getString(HOLD_DIM_KEY);
-        }
-        else
-        {
-            this.captureHoldAnchor();
         }
     }
 
@@ -2391,15 +2285,15 @@ public class NpcEntity extends PathfinderMob
         {
             return;
         }
-        boolean holding = !this.isHoldingPosition();
-        this.setHoldingPosition(holding);
+        boolean holding = !this.getHold().holding();
+        this.getHold().setHolding(holding);
         if (holding)
         {
-            this.captureHoldAnchor();
+            this.getHold().capture();
         }
         else
         {
-            this.clearHoldAnchor();
+            this.getHold().clear();
         }
         player.displayClientMessage(Component.translatable(holding
                 ? "message.ancientempires.npc.hold_on"
@@ -2989,8 +2883,7 @@ public class NpcEntity extends PathfinderMob
         }
         tag.putBoolean(FOLLOWING_KEY, this.isFollowing());
         tag.putBoolean(CREATIVE_KEY, this.isCreative());
-        tag.putBoolean(HOLDING_KEY, this.isHoldingPosition());
-        this.writeHoldAnchor(tag);
+        this.hold.save(tag);
         BlockPos home = this.getHome();
         if (home != null)
         {
@@ -3094,7 +2987,7 @@ public class NpcEntity extends PathfinderMob
         }
         this.setFollowing(tag.getBoolean(FOLLOWING_KEY));
         this.setCreative(tag.getBoolean(CREATIVE_KEY));
-        this.readHoldAnchor(tag);
+        this.hold.load(tag);
         if (tag.getBoolean(NO_HOME_KEY))
         {
             this.entityData.set(DATA_HOME, Optional.empty());

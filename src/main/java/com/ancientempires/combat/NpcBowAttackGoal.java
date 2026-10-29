@@ -121,7 +121,7 @@ public class NpcBowAttackGoal extends Goal
         {
             return;
         }
-        if (this.npc.isHoldingPosition() && this.npc.isOutsideHold())
+        if (this.npc.getHold().holding() && this.npc.getHold().outside())
         {
             this.stopDraw();
             if (!this.returning)
@@ -158,7 +158,7 @@ public class NpcBowAttackGoal extends Goal
             this.approach(target);
             return;
         }
-        if (!this.npc.isHoldingPosition() && !this.npc.getTargetMemory().targetVisible())
+        if (!this.npc.getHold().holding() && !this.npc.getTargetMemory().targetVisible())
         {
             // Lost sight: walk to where the target was last seen to find a shot again.
             this.seek();
@@ -204,7 +204,7 @@ public class NpcBowAttackGoal extends Goal
      */
     private boolean shouldClose(LivingEntity target)
     {
-        if (this.npc.isHoldingPosition() || !this.npc.getSensing().hasLineOfSight(target))
+        if (this.npc.getHold().holding() || !this.npc.getSensing().hasLineOfSight(target))
         {
             return false;
         }
@@ -280,7 +280,7 @@ public class NpcBowAttackGoal extends Goal
             this.npc.getNavigation().stop();
             this.wanderDelay = 15;
         }
-        if (this.npc.isHoldingPosition())
+        if (this.npc.getHold().holding())
         {
             this.npc.getNavigation().stop();
             return;
@@ -320,7 +320,7 @@ public class NpcBowAttackGoal extends Goal
             return;
         }
         this.repath = 10;
-        this.npc.moveTowardHold(0.9D);
+        this.npc.getHold().moveToward(0.9D);
     }
 
     private void beginDraw()
