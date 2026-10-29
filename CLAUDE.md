@@ -694,7 +694,14 @@ its own unless noted). Before adding behavior, check what AW did first.
   for the last two blocks, faces the unit's heading, and a target takes it out of formation until the fight ends. Death or repack `depart`s: the best member (rank, then level) takes the
   place, order, and the rest of the unit, and the command aura (`NpcCommand.succeed` prefers it); `NpcChainLedger`
   (per-dimension saved data, 7 days) answers unloaded links (away, or gone and to whom). `/ancientempires squad`.
-  Phases 1 and 2 done. Next: phase 3, unit fighting with lobotomised grunts.
+  Phase 3, fighting as a unit: a leader with soldiers plans every `planTicks` (`NpcChain.plan`): one scan of the
+  shared candidates within `engageRange` (an Attack order's enemy alone), then each soldier keeps a live, allowed
+  target or is handed the nearest enemy plus `spreadWeight` blocks per soldier already on it, released
+  `releaseStagger` ticks apart, nearest first; nothing under Free or Fall back. A grunt (formed, no unit of its own)
+  never runs `NpcTargetGoal`; it takes its hand-out (`handedTo`) when it has no live foe, so a hit still turns it on
+  the attacker; its fighting skill (shield, dodge, duel) is untouched. Officers keep their own scans. Game test
+  `squadFightsWhatItIsHanded`. Next: squad morale (formation and the sergeant's state), cavalry charge release,
+  unit-type rules (archers' rear line), then the command screen (phase 4).
 - Command (`NpcCommand`, `command` config, DESIGN Tier 1): every rank above soldier pulses an
   aura every `auraTicks` at its rank's `strengthByRank` (0.5, 1, 1.25) over allied soldiers
   within `radiusByRank` (8, 12, 16): `damageBonus` (15%) melee damage with any weapon and `armorBonus` armour, as

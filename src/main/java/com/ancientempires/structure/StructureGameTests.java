@@ -74,6 +74,14 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.Locale;
 import java.util.UUID;
+import java.util.Set;
+import java.util.HashSet;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.entity.monster.Husk;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
 import java.util.stream.IntStream;
 
 /**
@@ -579,6 +587,74 @@ public final class StructureGameTests
                 level.getEntitiesOfClass(NpcEntity.class, pen).forEach(NpcEntity::discard);
                 helper.succeed();
             });
+        });
+    }
+
+    /**
+     * Chain of command, phase 3: a holding squad's sergeant hands out the
+     * enemies in front of its line, spread over both, and its soldiers (who do
+     * no scanning of their own) fight what they are handed until both fall.
+     */
+    @GameTest(template = ARENA, timeoutTicks = 900)
+    public static void squadFightsWhatItIsHanded(GameTestHelper helper)
+    {
+        ServerLevel level = helper.getLevel();
+        level.setDayTime(6000L);
+        int minX = 10;
+        int minZ = 10;
+        for (int x = minX; x <= minX + 20; x++)
+        {
+            for (int z = minZ; z <= minZ + 20; z++)
+            {
+                helper.setBlock(new BlockPos(x, 0, z), Blocks.STONE);
+                for (int y = 1; y <= 4; y++)
+                {
+                    helper.setBlock(new BlockPos(x, y, z), Blocks.AIR);
+                }
+            }
+        }
+        AABB field = new AABB(helper.absolutePos(new BlockPos(minX, 0, minZ)), helper.absolutePos(new BlockPos(minX + 21, 5, minZ + 21)));
+        level.getEntitiesOfClass(LivingEntity.class, field, living -> !(living instanceof Player)).forEach(Entity::discard);
+        UUID owner = UUID.randomUUID();
+        NpcEntity sergeant = squadNpc(helper, owner, new BlockPos(minX + 6, 1, minZ + 10), NpcRank.SERGEANT, 5);
+        sergeant.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
+        List<NpcEntity> soldiers = new ArrayList<>();
+        for (int i = 0; i < 4; i++)
+        {
+            NpcEntity soldier = squadNpc(helper, owner, new BlockPos(minX + 5, 1, minZ + 8 + i), NpcRank.SOLDIER, 5);
+            soldier.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
+            helper.assertTrue(NpcChain.toggle(sergeant, soldier) == NpcChain.Assign.ADDED, "soldier " + i + " joins");
+            soldiers.add(soldier);
+        }
+        // Hold facing east; the two husks stand (no AI) just in front of the line, apart.
+        sergeant.getChain().setOrder(NpcOrder.HOLD, helper.absolutePos(new BlockPos(minX + 6, 1, minZ + 10)), -90.0F, null);
+        List<LivingEntity> husks = new ArrayList<>();
+        for (int dz : new int[] {-3, 3})
+        {
+            Husk husk = EntityType.HUSK.create(level);
+            BlockPos at = helper.absolutePos(new BlockPos(minX + 9, 1, minZ + 10 + dz));
+            husk.moveTo(at.getX() + 0.5D, at.getY(), at.getZ() + 0.5D, 90.0F, 0.0F);
+            husk.setNoAi(true);
+            husk.setPersistenceRequired();
+            level.addFreshEntity(husk);
+            husks.add(husk);
+        }
+        helper.runAfterDelay(50, () ->
+        {
+            Set<LivingEntity> fought = new HashSet<>();
+            for (NpcEntity soldier : soldiers)
+            {
+                helper.assertTrue(soldier.getChain().grunt(), "a soldier in formation is a grunt");
+                LivingEntity target = soldier.getTarget();
+                AncientEmpires.LOGGER.info("GAMETEST unit fight: soldier {} target {}", soldier.getId(), target == null ? "none" : target.getId());
+                if (target != null)
+                {
+                    helper.assertTrue(husks.contains(target), "a grunt fights only what its sergeant handed it");
+                    fought.add(target);
+                }
+            }
+            helper.assertTrue(fought.size() == 2, "the unit spreads over both enemies, on " + fought.size());
+            helper.succeedWhen(() -> helper.assertTrue(husks.stream().noneMatch(LivingEntity::isAlive), "both husks fall"));
         });
     }
 

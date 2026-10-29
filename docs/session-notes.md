@@ -73,6 +73,9 @@ fills, and eases a border ring into the land (AW's preGeneration). Unseen in gam
 
 Chain of command: plan in docs/chain-of-command.md (decisions agreed 2026-10-28: screen + order item, squads of 16, manual joining, grunts lobotomised in formation, garrisons last). Build phase 1 next.
 
+Chain phase 3 built: leaders plan and hand out targets (spread, staggered release); grunts skip their scan. Game
+test squadFightsWhatItIsHanded (2 and 2 on two husks, both killed). Not seen in game. Still in phase 3: squad morale,
+archers' rear line and cavalry charge release.
 NpcEntity split (2026-10-28): 3443 to 2717 lines; NpcProgress, NpcAttack, NpcHold, NpcNeeds, NpcRelations (see CLAUDE.md).
 Path/levy/civilian and packing stay on the entity (setTarget override, every field). Next: chain phase 3.
 Measured (npcGoalCost game test): ~20-28 us per idle NPC per tick, ~1 us of it this mod's own per-tick work, the

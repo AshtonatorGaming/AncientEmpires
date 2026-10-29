@@ -246,6 +246,10 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.DoubleValue CHAIN_FOLLOW_LEASH;
     private static final ForgeConfigSpec.DoubleValue CHAIN_RANGED_LEASH;
     private static final ForgeConfigSpec.DoubleValue CHAIN_CORNER_RANGE;
+    private static final ForgeConfigSpec.IntValue CHAIN_PLAN_TICKS;
+    private static final ForgeConfigSpec.DoubleValue CHAIN_ENGAGE_RANGE;
+    private static final ForgeConfigSpec.IntValue CHAIN_RELEASE_STAGGER;
+    private static final ForgeConfigSpec.DoubleValue CHAIN_SPREAD_WEIGHT;
     private static final ForgeConfigSpec.ConfigValue<List<? extends Double>> COMMAND_STRENGTH;
     private static final ForgeConfigSpec.ConfigValue<List<? extends Double>> COMMAND_RADIUS;
     private static final ForgeConfigSpec.ConfigValue<List<? extends Integer>> COMMAND_PROMOTE_LEVELS;
@@ -1085,6 +1089,10 @@ public final class AncientEmpiresConfig
         CHAIN_FOLLOW_LEASH = builder.comment("Follow: blocks from the unit's leader within which its soldiers fight; they let go of anything further.").defineInRange("followLeash", 24.0D, 4.0D, 64.0D);
         CHAIN_RANGED_LEASH = builder.comment("Extra blocks of reach for a soldier with a bow, so a holding line of archers still shoots.").defineInRange("rangedLeash", 24.0D, 0.0D, 64.0D);
         CHAIN_CORNER_RANGE = builder.comment("Fall back: an enemy this close is fought anyway (cornered).").defineInRange("cornerRange", 2.5D, 1.0D, 8.0D);
+        CHAIN_PLAN_TICKS = builder.comment("Ticks between a leader's looks over the field for its unit (one scan for the whole unit; its soldiers do none).").defineInRange("planTicks", 20, 5, 200);
+        CHAIN_ENGAGE_RANGE = builder.comment("Blocks around a leader in which it picks enemies for its unit (the order's leash still applies to each soldier).").defineInRange("engageRange", 16.0D, 4.0D, 64.0D);
+        CHAIN_RELEASE_STAGGER = builder.comment("Ticks between soldiers released into a fight, nearest the enemy first.").defineInRange("releaseStagger", 3, 0, 40);
+        CHAIN_SPREAD_WEIGHT = builder.comment("How much a soldier prefers an enemy fewer of its unit are on: blocks of extra distance per soldier already on it. 0 lets them all pile on the nearest.").defineInRange("spreadWeight", 3.0D, 0.0D, 32.0D);
         builder.pop();
 
         builder.comment("Daylight: factions with \"sunlight\": \"burn\" in factions.json (the undead) burn in daylight like zombies (a helmet takes the wear) and seek shade once burning; \"avoid\" (vampires, as in Ancient Warfare) also keep to shade by day.").push("sunlight");
@@ -1588,6 +1596,10 @@ public final class AncientEmpiresConfig
     public static double chainFollowLeash = 24.0D;
     public static double chainRangedLeash = 24.0D;
     public static double chainCornerRange = 2.5D;
+    public static int chainPlanTicks = 20;
+    public static double chainEngageRange = 16.0D;
+    public static int chainReleaseStagger = 3;
+    public static double chainSpreadWeight = 3.0D;
     public static List<? extends Double> commandStrengthByRank = List.of(0.0D, 0.5D, 1.0D, 1.25D);
     public static List<? extends Double> commandRadiusByRank = List.of(0.0D, 8.0D, 12.0D, 16.0D);
     public static List<? extends Integer> commandPromoteLevels = List.of(1, 6, 12, 18);
@@ -2008,6 +2020,10 @@ public final class AncientEmpiresConfig
         chainFollowLeash = CHAIN_FOLLOW_LEASH.get();
         chainRangedLeash = CHAIN_RANGED_LEASH.get();
         chainCornerRange = CHAIN_CORNER_RANGE.get();
+        chainPlanTicks = CHAIN_PLAN_TICKS.get();
+        chainEngageRange = CHAIN_ENGAGE_RANGE.get();
+        chainReleaseStagger = CHAIN_RELEASE_STAGGER.get();
+        chainSpreadWeight = CHAIN_SPREAD_WEIGHT.get();
         commandStrengthByRank = COMMAND_STRENGTH.get();
         commandRadiusByRank = COMMAND_RADIUS.get();
         commandPromoteLevels = COMMAND_PROMOTE_LEVELS.get();

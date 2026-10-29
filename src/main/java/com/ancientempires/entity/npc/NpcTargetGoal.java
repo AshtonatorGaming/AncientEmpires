@@ -56,6 +56,11 @@ public final class NpcTargetGoal extends TargetGoal
         {
             return false;
         }
+        if (this.npc.getChain().grunt())
+        {
+            // A soldier in formation does not look for fights: its leader hands them out (NpcChain.plan).
+            return false;
+        }
         if (this.keepsHandedTarget())
         {
             return false;

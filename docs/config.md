@@ -409,6 +409,10 @@ Chain of command (see [chain-of-command.md](chain-of-command.md)): a player's se
 | `followLeash` | `24.0` | 4.0 to 64.0 | Follow: blocks from the unit's leader within which its soldiers fight; they let go of anything further. |
 | `rangedLeash` | `24.0` | 0.0 to 64.0 | Extra blocks of reach for a soldier with a bow, so a holding line of archers still shoots. |
 | `cornerRange` | `2.5` | 1.0 to 8.0 | Fall back: an enemy this close is fought anyway (cornered). |
+| `planTicks` | `20` | 5 to 200 | Ticks between a leader's looks over the field for its unit (one scan for the whole unit; its soldiers do none). |
+| `engageRange` | `16.0` | 4.0 to 64.0 | Blocks around a leader in which it picks enemies for its unit (the order's leash still applies to each soldier). |
+| `releaseStagger` | `3` | 0 to 40 | Ticks between soldiers released into a fight, nearest the enemy first. |
+| `spreadWeight` | `3.0` | 0.0 to 32.0 | How much a soldier prefers an enemy fewer of its unit are on: blocks of extra distance per soldier already on it. 0 lets them all pile on the nearest. |
 
 ### `[sunlight]`
 

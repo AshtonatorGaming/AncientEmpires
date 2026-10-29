@@ -34,6 +34,14 @@ import java.util.UUID;
  * soldier may fight ({@link #allowsTarget}): a holding line does not chase off,
  * a falling-back unit fights only when cornered.
  * <p>
+ * Fighting as a unit (phase 3): a leader scans for the unit, every
+ * {@code chain.planTicks}, and hands its soldiers their targets
+ * ({@link #plan}): the nearest enemy each, weighted so they spread over the
+ * foes in front rather than all pile on one, released a few ticks apart,
+ * nearest first. A soldier in formation is a grunt ({@link #grunt}): it never
+ * runs its own target scan and takes what it is handed, keeping only its own
+ * defence (a hit still turns it on the attacker) and its fighting skill.
+ * <p>
  * A link to an NPC that cannot be found is asked of {@link NpcChainLedger}:
  * away (wait, acting free meanwhile) or gone (follow its heir, or stand alone).
  * Only players' soldiers join, and only when their owner assigns them (the
@@ -94,6 +102,10 @@ public final class NpcChain
     private float slotsFacing;
     private NpcFormation slotsFormation;
     private long slotsAt = -1L;
+    /** A leader's hand-out: whom each of its soldiers fights, and from when (the staggered release). */
+    private final Map<UUID, LivingEntity> assigned = new HashMap<>();
+    private final Map<UUID, Long> releaseAt = new HashMap<>();
+    private long planAt = -1L;
 
     NpcChain(NpcEntity npc)
     {
@@ -168,6 +180,35 @@ public final class NpcChain
     public NpcFormation formation()
     {
         return this.formation;
+    }
+
+    /**
+     * A soldier in formation with no unit of its own: it does no thinking of
+     * its own (no target scan); its leader hands it its fights.
+     */
+    public boolean grunt()
+    {
+        return this.members.isEmpty() && this.formed();
+    }
+
+    /** Whom this leader has handed {@code member}, once its turn in the release has come; null for nobody yet. */
+    @Nullable
+    public LivingEntity handedTo(NpcEntity member)
+    {
+        LivingEntity enemy = this.assigned.get(member.getUUID());
+        if (enemy == null)
+        {
+            return null;
+        }
+        if (!enemy.isAlive() || enemy.isRemoved())
+        {
+            // That one fell: think again next tick.
+            this.assigned.remove(member.getUUID());
+            this.planAt = -1L;
+            return null;
+        }
+        Long from = this.releaseAt.get(member.getUUID());
+        return from == null || this.npc.level().getGameTime() >= from ? enemy : null;
     }
 
     /** Whether this NPC keeps a slot in its leader's formation now. */
@@ -350,6 +391,8 @@ public final class NpcChain
 
     private void drop(UUID member)
     {
+        this.assigned.remove(member);
+        this.releaseAt.remove(member);
         if (this.members.remove(member))
         {
             this.officers.remove(member);
@@ -500,17 +543,134 @@ public final class NpcChain
                 this.prune(level);
             }
         }
+        if (this.soldierCount() > 0 && (this.planAt < 0L || now >= this.planAt))
+        {
+            this.planAt = now + AncientEmpiresConfig.chainPlanTicks;
+            this.npc.level().getProfiler().push("ancientempires_unit_plan");
+            this.plan(level, now);
+            this.npc.level().getProfiler().pop();
+        }
         NpcOrder effective = this.effectiveOrder();
-        if (effective == NpcOrder.ATTACK && this.npc.getTarget() == null && this.holder.orderTarget != null
+        LivingEntity target = this.npc.getTarget();
+        if (this.grunt())
+        {
+            // A grunt fights what it is handed; it keeps a live foe it already has (one that hit it, say).
+            LivingEntity handed = current.getChain().handedTo(this.npc);
+            if (handed != null && handed != target && (target == null || !target.isAlive()))
+            {
+                this.npc.setTarget(handed);
+            }
+        }
+        else if (effective == NpcOrder.ATTACK && target == null && this.holder.orderTarget != null
                 && level.getEntity(this.holder.orderTarget) instanceof LivingEntity enemy && enemy.isAlive())
         {
             this.npc.setTarget(enemy);
         }
-        else if (this.npc.getTarget() != null && now % 10L == Math.floorMod(this.npc.getId(), 10) && !this.allowsTarget(this.npc.getTarget()))
+        if (this.npc.getTarget() != null && now % 10L == Math.floorMod(this.npc.getId(), 10) && !this.allowsTarget(this.npc.getTarget()))
         {
             // Out of what the order allows (a holding line does not chase off).
             this.npc.setTarget(null);
         }
+    }
+
+    /**
+     * The leader thinks for its unit: one scan of the shared candidates around
+     * it (the attack order's enemy alone, if there is one), then each soldier
+     * keeps a target that is still alive and allowed, and the rest are handed
+     * the nearest enemy, weighted by how many are on it already
+     * ({@code chain.spreadWeight} blocks each), released {@code releaseStagger}
+     * ticks apart, nearest first. Nobody is handed anything under Free or Fall back.
+     */
+    private void plan(ServerLevel level, long now)
+    {
+        NpcOrder order = this.effectiveOrder();
+        if (order == NpcOrder.FREE || order == NpcOrder.FALL_BACK)
+        {
+            this.assigned.clear();
+            this.releaseAt.clear();
+            return;
+        }
+        List<LivingEntity> enemies = new ArrayList<>();
+        if (order == NpcOrder.ATTACK && this.holder.orderTarget != null
+                && level.getEntity(this.holder.orderTarget) instanceof LivingEntity ordered && ordered.isAlive())
+        {
+            // An attack order: everyone on that one.
+            enemies.add(ordered);
+        }
+        else
+        {
+            double range = AncientEmpiresConfig.chainEngageRange;
+            for (LivingEntity candidate : NpcTargetCache.candidates(this.npc, range))
+            {
+                if (candidate != this.npc && candidate.isAlive() && !candidate.isRemoved() && this.npc.distanceToSqr(candidate) <= range * range
+                        && this.npc.getRelations().scanTarget(candidate))
+                {
+                    enemies.add(candidate);
+                }
+            }
+        }
+        List<NpcEntity> waiting = new ArrayList<>();
+        Map<LivingEntity, Integer> load = new HashMap<>();
+        for (UUID id : this.members)
+        {
+            if (this.officers.contains(id) || !(level.getEntity(id) instanceof NpcEntity soldier) || !soldier.isAlive() || soldier.avoidsFights())
+            {
+                this.assigned.remove(id);
+                continue;
+            }
+            LivingEntity kept = this.assigned.get(id);
+            if (kept != null && kept.isAlive() && enemies.contains(kept) && soldier.getChain().allowsTarget(kept))
+            {
+                load.merge(kept, 1, Integer::sum);
+                continue;
+            }
+            this.assigned.remove(id);
+            this.releaseAt.remove(id);
+            waiting.add(soldier);
+        }
+        if (enemies.isEmpty() || waiting.isEmpty())
+        {
+            return;
+        }
+        // The front goes first: those nearest an enemy.
+        waiting.sort((a, b) -> Double.compare(nearest(a, enemies), nearest(b, enemies)));
+        double spread = AncientEmpiresConfig.chainSpreadWeight;
+        int turn = 0;
+        for (NpcEntity soldier : waiting)
+        {
+            LivingEntity best = null;
+            double bestScore = Double.MAX_VALUE;
+            for (LivingEntity enemy : enemies)
+            {
+                if (!soldier.getChain().allowsTarget(enemy))
+                {
+                    continue;
+                }
+                double score = Math.sqrt(soldier.distanceToSqr(enemy)) + load.getOrDefault(enemy, 0) * spread;
+                if (score < bestScore)
+                {
+                    bestScore = score;
+                    best = enemy;
+                }
+            }
+            if (best != null)
+            {
+                this.assigned.put(soldier.getUUID(), best);
+                this.releaseAt.put(soldier.getUUID(), now + (long) turn * AncientEmpiresConfig.chainReleaseStagger);
+                load.merge(best, 1, Integer::sum);
+                turn++;
+            }
+        }
+    }
+
+    private static double nearest(NpcEntity soldier, List<LivingEntity> enemies)
+    {
+        double best = Double.MAX_VALUE;
+        for (LivingEntity enemy : enemies)
+        {
+            best = Math.min(best, soldier.distanceToSqr(enemy));
+        }
+        return best;
     }
 
     private void carryOut(ServerLevel level)
