@@ -32,7 +32,13 @@ instead of reflecting per call), Skirmisher thresholds (about 4.5 to 28 blocks).
 
 ## Architecture (as read from the code)
 
-- `entity/npc/NpcEntity` - the NPC. Goals come in sets by path (`refreshGoalSet`, checked each tick, swapped when the
+- `entity/npc/NpcEntity` - the NPC, with its state in components it owns (each saves and loads its own keys):
+  `NpcProgress` (level, XP, rank, work speed), `NpcAttack` (combo, attack window, swing presentation), `NpcHold`
+  (archer post), `NpcNeeds` (meals, bed, worksite), `NpcRelations` (allies, hostility, scan acceptance, revenge),
+  `NpcChain`, `NpcMorale`, `NpcGuard`, `NpcSidearm`, `NpcMount`, `NpcTargetMemory`, `NpcInventory`. Reach them with
+  `npc.getProgress()`, `getAttack()`, ...; the most used (level, rank, path, levy, avoidsFights) keep pass-throughs.
+  Kept on the entity: path, levy, and civilian behaviour (its `setTarget` override is the hub), packing and save/load,
+  menus and interaction, vanilla overrides. Goals come in sets by path (`refreshGoalSet`, checked each tick, swapped when the
   path or a levy changes): every NPC keeps float, doors, gates, flee, burning, sun, melee (a cornered civilian's stand),
   upkeep, follow, sleep, home, wander, looks, and the hurt-by target; a fighter (soldier path or levied) adds surrender,
   bow, skirmish, shield, medic, order, formation, hold, owner defense, and the target scan; a civilian adds job, priest,
