@@ -10,6 +10,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
@@ -61,6 +62,18 @@ public final class NpcChain
     private static final String NAME_KEY = "AeUnitName";
     private static final String POSTED_KEY = "AePosted";
     private static final String NUMBER_KEY = "AeUnitNumber";
+    private static final String STANCE_KEY = "AeStance";
+    private static final String SPREAD_KEY = "AeSpread";
+    /** Ticks of each volley in which a Volley unit's archers may loose. */
+    private static final int VOLLEY_WINDOW = 4;
+    /** Ticks between a marching leader's looks at its stragglers. */
+    private static final int MARCH_CHECK_TICKS = 10;
+    /** Blocks from its spot at which a marching unit stops marching and deploys there. */
+    private static final double DEPLOY = 3.0D;
+    /** Ticks a hit counts as provoking a Passive unit. */
+    private static final int PROVOKED_TICKS = 200;
+    /** The spacing a unit closes to and opens out to (Close ranks, Spread out), around 1. */
+    private static final double[] SPREADS = {0.75D, 1.0D, 2.0D};
     /** Ticks between looking for a missing leader, and between a leader's member checks. */
     private static final int RESOLVE_TICKS = 20;
     private static final int PRUNE_TICKS = 100;
@@ -68,11 +81,23 @@ public final class NpcChain
     private static final int SLOT_TICKS = 10;
     /** Blocks a moving leader goes, and degrees it turns, before its unit's slots are laid out again. */
     private static final double SLOT_MOVE = 2.5D;
+    /** A marching leader re-lays its slots every block, laid out this far ahead of it, so the ranks walk steadily ahead. */
+    private static final double MARCH_SLOT_MOVE = 1.0D;
     private static final float SLOT_TURN = 25.0F;
     /** How far up a loop check looks (soldier, sergeant, captain, general and one spare). */
     private static final int MAX_DEPTH = 5;
     /** Blocks from its rally point at which a falling-back unit stops and holds. */
     private static final double RALLIED = 2.0D;
+
+    /**
+     * A move to a far spot (docs/army-command-design.md): the unit first forms
+     * up where it stands facing the spot, then marches there with its leader
+     * at {@code chain.marchSpeed}, its front rank ahead of it.
+     */
+    public enum March
+    {
+        NONE, FORMING, MARCHING
+    }
 
     /** Why an assignment was refused, or that it went through. */
     public enum Assign
@@ -106,15 +131,38 @@ public final class NpcChain
     private int unitNumber;
     /** The unit's name, given on the command screen ("Iron Wolves"); empty for none. */
     private String name = "";
+    /** This leader's own stance, or null to take the one above it. */
+    @Nullable
+    private NpcStance stance;
+    /** Spacing multiplier of this leader's layout (Close ranks, Spread out). */
+    private double spread = 1.0D;
+    /** The order holder's march (form up, then march) to a far spot. */
+    private March march = March.NONE;
+    private long marchSince;
+    private Vec3 formFrom;
+    private float marchHeading;
+    /** Whether a marching leader is waiting for stragglers. */
+    private boolean straggling;
+    /**
+     * Released: the unit fights freely without giving up its order's spot, and
+     * goes back to its slots once no enemy has been in reach for
+     * {@code chain.releaseCalmTicks}.
+     */
+    private boolean released;
+    private long calmSince = -1L;
 
     @Nullable
     private NpcEntity leader;
     /** Whose order this NPC acts on (itself, or the holder above it). */
     private NpcChain holder = this;
+    /** Whose stance this NPC fights by (itself, or the nearest above with one). */
+    private NpcChain stanceSource = this;
     /** The way the unit faces while moving: where its leader last walked. */
     private float facing = Float.NaN;
     private Vec3 lastPos;
     private final Map<UUID, Vec3> slots = new HashMap<>();
+    /** Members that face their own way (out of a square), not the unit's. */
+    private final Map<UUID, Float> slotFacings = new HashMap<>();
     private Vec3 slotsFrom;
     private float slotsFacing;
     private NpcFormation slotsFormation;
@@ -298,8 +346,149 @@ public final class NpcChain
         }
         this.holder = this.order != null || top ? this : this.holder;
         this.posted = false;
+        this.released = false;
         this.npc.setFollowing(top && order == NpcOrder.FOLLOW);
+        this.startMarch();
         this.slotsAt = -1L;
+    }
+
+    /**
+     * A Hold or Defend spot further than {@code chain.formUpDistance} from a
+     * leader with a unit: form up first, then march. Anything else goes straight.
+     */
+    private void startMarch()
+    {
+        this.march = March.NONE;
+        this.straggling = false;
+        if (this.order != NpcOrder.HOLD && this.order != NpcOrder.DEFEND || this.orderPos == null || this.members.isEmpty())
+        {
+            return;
+        }
+        Vec3 spot = Vec3.atBottomCenterOf(this.orderPos);
+        Vec3 here = this.npc.position();
+        double far = AncientEmpiresConfig.chainFormUpDistance;
+        if (here.distanceToSqr(spot.x, here.y, spot.z) > far * far)
+        {
+            this.march = March.FORMING;
+            this.marchSince = this.npc.level().getGameTime();
+            this.formFrom = here;
+            this.marchHeading = NpcFormation.yawToward(here.x, here.z, spot.x, spot.z);
+        }
+    }
+
+    /** Where this unit's order holder is in a march to a far spot. */
+    public March march()
+    {
+        return this.holder.march;
+    }
+
+    /** Whether a marching leader is halted for its stragglers. */
+    public boolean straggling()
+    {
+        return this.holder.straggling;
+    }
+
+    /** The stance this NPC fights by: its own, or the nearest one above it. */
+    public NpcStance stance()
+    {
+        NpcStance own = this.stanceSource.stance;
+        return own == null ? NpcStance.DEFAULT : own;
+    }
+
+    /** Sets this leader's stance; its unit, and units under it without their own, take it. */
+    public void setStance(NpcStance stance)
+    {
+        this.stance = stance;
+        this.stanceSource = this;
+    }
+
+    public double spread()
+    {
+        return this.spread;
+    }
+
+    /** Closes the ranks one step (0.75, 1, 2 times the spacing), or opens them with {@code wider}. */
+    public void stepSpread(boolean wider)
+    {
+        int at = 1;
+        for (int i = 0; i < SPREADS.length; i++)
+        {
+            if (Math.abs(SPREADS[i] - this.spread) < 1.0E-6)
+            {
+                at = i;
+            }
+        }
+        this.spread = SPREADS[Mth.clamp(at + (wider ? 1 : -1), 0, SPREADS.length - 1)];
+        this.slotsAt = -1L;
+    }
+
+    /**
+     * Whether a Volley unit's archers may loose now: only in the few ticks of
+     * each volley, so those at full draw loose together. Always for any other fire.
+     */
+    public boolean volleyReady()
+    {
+        NpcChain source = this.stanceSource;
+        if (this.stance().fire() != NpcStance.Fire.VOLLEY || !this.inChain())
+        {
+            return true;
+        }
+        long beat = this.npc.level().getGameTime() + source.npc.getId();
+        return Math.floorMod(beat, AncientEmpiresConfig.chainVolleyTicks) < VOLLEY_WINDOW;
+    }
+
+    /**
+     * Moves the spot this unit holds {@code blocks} along its facing (back for
+     * negative). A unit not holding a spot (following, free) first takes one
+     * where it stands, facing its way.
+     */
+    public void advance(double blocks)
+    {
+        this.anchorHere();
+        double[] forward = NpcFormation.forward(this.orderFacing);
+        BlockPos to = BlockPos.containing(this.orderPos.getX() + 0.5D + forward[0] * blocks, this.orderPos.getY(),
+                this.orderPos.getZ() + 0.5D + forward[1] * blocks);
+        this.setOrder(this.order, to, this.orderFacing, null);
+    }
+
+    /** Turns the unit {@code degrees} in place (positive to its right), holding a spot where it stands if it held none. */
+    public void turn(float degrees)
+    {
+        this.anchorHere();
+        this.face(this.orderFacing + degrees);
+    }
+
+    /** Faces the unit {@code yaw} in place, holding a spot where it stands if it held none. */
+    public void face(float yaw)
+    {
+        this.anchorHere();
+        this.orderFacing = Mth.wrapDegrees(yaw);
+        this.slotsAt = -1L;
+    }
+
+    /** Takes a Hold where the unit stands, facing its way, unless it already holds a spot of its own. */
+    private void anchorHere()
+    {
+        if (!this.holdsOrder() || this.order == null || !this.order.anchored() || this.orderPos == null || Float.isNaN(this.orderFacing))
+        {
+            Vec3 at = this.origin();
+            this.setOrder(NpcOrder.HOLD, BlockPos.containing(at), this.facing(), null);
+        }
+    }
+
+    /** Lets the unit fight freely without giving up its spot; it re-forms there once the fight is over. */
+    public void release()
+    {
+        this.anchorHere();
+        this.released = true;
+        this.calmSince = -1L;
+        this.planAt = -1L;
+    }
+
+    /** Whether this unit's order holder has released it into a free fight. */
+    public boolean released()
+    {
+        return this.holder.released;
     }
 
     public int unitNumber()
@@ -367,7 +556,11 @@ public final class NpcChain
      * or Free, anything goes; Follow keeps within {@code followLeash} of the
      * holder, Hold within {@code holdRange} of the NPC's own place in the line,
      * Defend within {@code defendRadius} of the spot, Fall back only what is
-     * on top of it; Attack anything. Soldiers with a bow reach further.
+     * on top of it; Attack anything. Soldiers with a bow reach further. The
+     * stance narrows or widens that: an Aggressive unit reaches
+     * {@code aggressiveLeash} further, a Passive one fights only what provoked
+     * it, archers under Hold fire only what is on top of them, and a released
+     * unit anything (but when falling back).
      */
     public boolean allowsTarget(LivingEntity target)
     {
@@ -375,15 +568,50 @@ public final class NpcChain
         {
             return true;
         }
-        double reach = this.npc.isHoldingBow() ? AncientEmpiresConfig.chainRangedLeash : 0.0D;
-        return switch (this.effectiveOrder())
+        NpcStance stance = this.stance();
+        boolean bow = this.npc.isHoldingBow();
+        NpcOrder order = this.effectiveOrder();
+        if (order == NpcOrder.FALL_BACK || bow && stance.fire() == NpcStance.Fire.HOLD)
+        {
+            return this.cornered(target);
+        }
+        if (stance.engage() == NpcStance.Engage.PASSIVE && !this.provoked(target))
+        {
+            return false;
+        }
+        if (this.released())
+        {
+            return true;
+        }
+        double reach = (bow ? AncientEmpiresConfig.chainRangedLeash : 0.0D)
+                + (stance.engage() == NpcStance.Engage.AGGRESSIVE ? AncientEmpiresConfig.chainAggressiveLeash : 0.0D);
+        return switch (order)
         {
             case FREE, ATTACK -> true;
             case FOLLOW -> within(target, this.holder.npc.position(), AncientEmpiresConfig.chainFollowLeash + reach);
             case HOLD -> within(target, this.place(), AncientEmpiresConfig.chainHoldRange + reach);
             case DEFEND -> this.orderPos() == null || within(target, Vec3.atBottomCenterOf(this.orderPos()), AncientEmpiresConfig.chainDefendRadius + reach);
-            case FALL_BACK -> this.npc.distanceToSqr(target) <= AncientEmpiresConfig.chainCornerRange * AncientEmpiresConfig.chainCornerRange;
+            case FALL_BACK -> this.cornered(target);
         };
+    }
+
+    private boolean cornered(LivingEntity target)
+    {
+        return this.npc.distanceToSqr(target) <= AncientEmpiresConfig.chainCornerRange * AncientEmpiresConfig.chainCornerRange;
+    }
+
+    /**
+     * Whether {@code target} started it, for a Passive unit: it hit this NPC
+     * lately, is after this NPC or someone of its unit, or is on top of it.
+     */
+    private boolean provoked(LivingEntity target)
+    {
+        if (this.cornered(target) || target == this.npc.getLastHurtByMob()
+                && this.npc.tickCount - this.npc.getLastHurtByMobTimestamp() <= PROVOKED_TICKS)
+        {
+            return true;
+        }
+        return target instanceof Mob mob && mob.getTarget() instanceof NpcEntity victim && (victim == this.npc || victim.getChain().sameUnit(this.npc));
     }
 
     private static boolean within(LivingEntity target, Vec3 from, double range)
@@ -562,6 +790,8 @@ public final class NpcChain
             next.orderFacing = this.orderFacing;
             next.orderTarget = this.orderTarget;
             next.formation = this.formation;
+            next.stance = this.stance;
+            next.spread = this.spread;
             next.posted = this.posted;
             next.unitNumber = this.unitNumber > 0 ? this.unitNumber : next.unitNumber;
             next.name = this.name.isEmpty() ? next.name : this.name;
@@ -636,6 +866,7 @@ public final class NpcChain
         }
         NpcEntity current = this.leader();
         this.holder = this.order != null || this.leaderId == null || current == null ? this : current.getChain().holder;
+        this.stanceSource = this.stance != null || current == null ? this : current.getChain().stanceSource;
         if (this.holder == this && this.leaderId != null && current == null && this.order == null)
         {
             // The leader is away: act free until it is back.
@@ -715,6 +946,10 @@ public final class NpcChain
         else
         {
             double range = AncientEmpiresConfig.chainEngageRange;
+            if (this.released() || this.stance().engage() == NpcStance.Engage.AGGRESSIVE)
+            {
+                range += AncientEmpiresConfig.chainAggressiveLeash;
+            }
             for (LivingEntity candidate : NpcTargetCache.candidates(this.npc, range))
             {
                 if (candidate != this.npc && candidate.isAlive() && !candidate.isRemoved() && this.npc.distanceToSqr(candidate) <= range * range
@@ -722,6 +957,22 @@ public final class NpcChain
                 {
                     enemies.add(candidate);
                 }
+            }
+        }
+        if (this.holder.released)
+        {
+            // A released unit re-forms once nothing has been in reach for a while.
+            if (!enemies.isEmpty())
+            {
+                this.holder.calmSince = -1L;
+            }
+            else if (this.holder.calmSince < 0L)
+            {
+                this.holder.calmSince = now;
+            }
+            else if (now - this.holder.calmSince >= AncientEmpiresConfig.chainReleaseCalmTicks)
+            {
+                this.holder.released = false;
             }
         }
         List<NpcEntity> waiting = new ArrayList<>();
@@ -804,6 +1055,80 @@ public final class NpcChain
         {
             this.setOrder(NpcOrder.HOLD, this.orderPos, this.orderFacing, null);
         }
+        if (this.march != March.NONE)
+        {
+            this.npc.level().getProfiler().push("ancientempires_unit_march");
+            this.marchStep(level.getGameTime());
+            this.npc.level().getProfiler().pop();
+        }
+    }
+
+    /**
+     * Forming: done once {@code formUpReady} of the unit stands in its slots,
+     * or after {@code formUpTicks}. Marching: the leader halts while more than
+     * {@code marchStraggleShare} of the unit is {@code marchStraggle} off its
+     * slots, and deploys at the spot.
+     */
+    private void marchStep(long now)
+    {
+        if (this.orderPos == null || this.order == null || !this.order.anchored() || this.members.isEmpty())
+        {
+            this.march = March.NONE;
+            return;
+        }
+        if (this.march == March.FORMING)
+        {
+            if (now - this.marchSince >= AncientEmpiresConfig.chainFormUpTicks
+                    || this.shareWithin(AncientEmpiresConfig.chainSlotTolerance) >= AncientEmpiresConfig.chainFormUpReady)
+            {
+                this.march = March.MARCHING;
+                this.marchSince = now;
+                this.slotsAt = -1L;
+            }
+            return;
+        }
+        Vec3 spot = Vec3.atBottomCenterOf(this.orderPos);
+        if (this.npc.position().distanceToSqr(spot.x, this.npc.getY(), spot.z) <= DEPLOY * DEPLOY)
+        {
+            this.march = March.NONE;
+            this.straggling = false;
+            this.slotsAt = -1L;
+            return;
+        }
+        if (now % MARCH_CHECK_TICKS == Math.floorMod(this.npc.getId(), MARCH_CHECK_TICKS))
+        {
+            double off = 1.0D - this.shareWithin(AncientEmpiresConfig.chainMarchStraggle);
+            // Halts past the share and goes on once half of that have caught up.
+            this.straggling = this.straggling ? off > AncientEmpiresConfig.chainMarchStraggleShare / 2.0D : off > AncientEmpiresConfig.chainMarchStraggleShare;
+        }
+    }
+
+    /** The share of this leader's loaded members within {@code range} of their slots (1 for none). */
+    private double shareWithin(double range)
+    {
+        if (!(this.npc.level() instanceof ServerLevel level))
+        {
+            return 1.0D;
+        }
+        int counted = 0;
+        int within = 0;
+        for (UUID id : this.members)
+        {
+            if (level.getEntity(id) instanceof NpcEntity member && member.isAlive())
+            {
+                Vec3 slot = this.slotOf(member);
+                if (slot == null)
+                {
+                    continue;
+                }
+                counted++;
+                if (member.position().distanceToSqr(slot.x, member.getY(), slot.z) <= range * range)
+                {
+                    within++;
+                }
+            }
+        }
+        return counted == 0 ? 1.0D : (double) within / counted;
     }
 
     private void resolve(ServerLevel level)
@@ -875,14 +1200,34 @@ public final class NpcChain
         }
     }
 
-    /** The way this unit faces, in degrees (a mob's yaw): the order's facing at a held spot, else where it walks. */
+    /**
+     * The way this unit faces, in degrees (a mob's yaw): toward the spot while
+     * forming up, the way its order holder walks while marching, the order's
+     * facing at a held spot, else where it walks.
+     */
     public float facing()
     {
-        if (this.effectiveOrder().anchored() && !Float.isNaN(this.holder.orderFacing))
+        NpcChain over = this.holder;
+        if (over.march == March.FORMING)
         {
-            return this.holder.orderFacing;
+            return over.marchHeading;
+        }
+        if (over.march == March.MARCHING)
+        {
+            return Float.isNaN(over.facing) ? over.marchHeading : over.facing;
+        }
+        if (this.effectiveOrder().anchored() && !Float.isNaN(over.orderFacing))
+        {
+            return over.orderFacing;
         }
         return Float.isNaN(this.facing) ? this.npc.getYRot() : this.facing;
+    }
+
+    /** The way {@code member} faces in its slot: out of a square, else the unit's way. */
+    public float facingOf(NpcEntity member)
+    {
+        Float own = this.slotFacings.get(member.getUUID());
+        return own != null ? own : this.facing();
     }
 
     /**
@@ -898,7 +1243,7 @@ public final class NpcChain
         float facing = this.facing();
         // Slots stay put until the leader has really moved or turned: shuffling about its spot no longer
         // nudges the whole unit, and a marching column trails its leader rather than re-forming each step.
-        double moved = this.holdsOrder() && this.orderPos != null && this.effectiveOrder().anchored() ? 0.25D : SLOT_MOVE * SLOT_MOVE;
+        double moved = this.fixedOrigin() ? 0.25D : this.holdsOrder() && this.march == March.MARCHING ? MARCH_SLOT_MOVE * MARCH_SLOT_MOVE : SLOT_MOVE * SLOT_MOVE;
         if (this.slotsAt < 0L || this.slotsFormation != this.formation || now - this.slotsAt > SLOT_TICKS
                 && (this.slotsFrom.distanceToSqr(here) > moved || Math.abs(Mth.wrapDegrees(facing - this.slotsFacing)) > SLOT_TURN))
         {
@@ -911,15 +1256,33 @@ public final class NpcChain
     /**
      * Where this leader's formation is laid out from: the order's spot itself
      * while it holds one there (its own shuffling about the spot moves no slot),
-     * else where the leader stands.
+     * where it stood while its unit forms up for a march, else where the leader
+     * stands.
      */
     private Vec3 origin()
     {
-        if (this.holdsOrder() && this.orderPos != null && this.effectiveOrder().anchored())
+        if (this.holdsOrder() && this.march == March.FORMING && this.formFrom != null)
+        {
+            return this.formFrom;
+        }
+        if (this.holdsOrder() && this.orderPos != null && this.effectiveOrder().anchored() && this.march == March.NONE)
         {
             return Vec3.atBottomCenterOf(this.orderPos);
         }
+        if (this.holdsOrder() && this.march == March.MARCHING)
+        {
+            // Laid out a re-layout's walk ahead, so the slots lead the marching leader rather than trail it.
+            double[] forward = NpcFormation.forward(this.facing());
+            return this.npc.position().add(forward[0] * MARCH_SLOT_MOVE, 0.0D, forward[1] * MARCH_SLOT_MOVE);
+        }
         return this.npc.position();
+    }
+
+    /** Whether the layout's origin stands still (a held spot, or where a unit forms up), not on the walking leader. */
+    private boolean fixedOrigin()
+    {
+        return this.holdsOrder() && (this.march == March.FORMING
+                || this.march == March.NONE && this.orderPos != null && this.effectiveOrder().anchored());
     }
 
     /** Whether {@code other} is in the same unit (the same order holder over both): they do not shove each other. */
@@ -934,15 +1297,18 @@ public final class NpcChain
         this.slotsFrom = here;
         this.slotsFacing = facing;
         this.slotsFormation = this.formation;
-        double radians = facing * Mth.DEG_TO_RAD;
+        this.slotFacings.clear();
+        double[] forward = NpcFormation.forward(facing);
         // A mob facing yaw 0 looks south (+z); its right is west (-x).
-        double forwardX = -Math.sin(radians);
-        double forwardZ = Math.cos(radians);
+        double forwardX = forward[0];
+        double forwardZ = forward[1];
         double rightX = -forwardZ;
         double rightZ = forwardX;
         int lineWidth = AncientEmpiresConfig.chainLineWidth;
         int columnWidth = AncientEmpiresConfig.chainColumnWidth;
-        double spacing = AncientEmpiresConfig.chainSpacing;
+        double spacing = AncientEmpiresConfig.chainSpacing * this.spread;
+        NpcFormation shape = this.formation;
+        NpcFormation support = shape.support();
         // Melee on foot in the front ranks, archers in the rows behind them, riders behind those at double spacing.
         List<UUID> soldiers = new ArrayList<>();
         List<UUID> archers = new ArrayList<>();
@@ -968,39 +1334,76 @@ public final class NpcChain
                 soldiers.add(id);
             }
         }
+        double riderSpacing = spacing * AncientEmpiresConfig.chainRiderSpacing;
+        int riderWidth = Math.max(1, lineWidth / 2);
+        boolean mounted = soldiers.isEmpty() && archers.isEmpty() && !riders.isEmpty();
+        if (mounted)
+        {
+            // Horse alone: the riders are the front ranks, at their own spacing.
+            soldiers = riders;
+            riders = new ArrayList<>();
+        }
+        double meleeSpacing = mounted ? riderSpacing : spacing;
+        int meleeWidth = mounted ? riderWidth : lineWidth;
+        double front = 0.0D;
         for (int i = 0; i < soldiers.size(); i++)
         {
-            double[] slot = this.formation.soldierSlot(i, soldiers.size(), lineWidth, columnWidth, spacing);
-            this.slots.put(soldiers.get(i), place(here, slot, forwardX, forwardZ, rightX, rightZ));
+            double[] slot = shape.soldierSlot(i, soldiers.size(), meleeWidth, columnWidth, meleeSpacing);
+            front = Math.max(front, -slot[1]);
+            Vec3 at = place(here, slot, forwardX, forwardZ, rightX, rightZ);
+            this.slots.put(soldiers.get(i), at);
+            if (shape.facesOut() && slot[0] * slot[0] + slot[1] * slot[1] > 1.0E-6)
+            {
+                this.slotFacings.put(soldiers.get(i), NpcFormation.yawToward(here.x, here.z, at.x, at.z));
+            }
         }
-        // Archers start a row of their own behind the last melee row, however short that one is.
-        int meleeRows = this.formation.rows(soldiers.size(), lineWidth, columnWidth);
-        double rowGap = this.formation.spacing(spacing);
-        for (int i = 0; i < archers.size(); i++)
+        if (shape == NpcFormation.SQUARE)
         {
-            double[] slot = this.formation.soldierSlot(i, archers.size(), lineWidth, columnWidth, spacing);
-            slot[1] += meleeRows * rowGap;
-            this.slots.put(archers.get(i), place(here, slot, forwardX, forwardZ, rightX, rightZ));
+            // Archers and riders inside the square.
+            List<UUID> inside = new ArrayList<>(archers);
+            inside.addAll(riders);
+            int side = NpcFormation.squareSide(Math.max(1, soldiers.size()));
+            for (int i = 0; i < inside.size(); i++)
+            {
+                double[] slot = NpcFormation.insideSquare(i, inside.size(), side, shape.spacing(spacing));
+                this.slots.put(inside.get(i), place(here, slot, forwardX, forwardZ, rightX, rightZ));
+            }
         }
-        int footRows = meleeRows + this.formation.rows(archers.size(), lineWidth, columnWidth);
-        double riderSpacing = spacing * AncientEmpiresConfig.chainRiderSpacing;
-        double riderBack = Math.max(0.0D, footRows * rowGap - this.formation.lead(spacing)) + this.formation.spacing(riderSpacing);
-        for (int i = 0; i < riders.size(); i++)
+        else
         {
-            double[] slot = this.formation.soldierSlot(i, riders.size(), Math.max(1, lineWidth / 2), columnWidth, riderSpacing);
-            slot[1] += riderBack + this.formation.lead(riderSpacing);
-            this.slots.put(riders.get(i), place(here, slot, forwardX, forwardZ, rightX, rightZ));
+            // Archers start a row of their own behind the last melee row, however short that one is.
+            double rowGap = support.spacing(spacing);
+            double rear = soldiers.isEmpty() ? -support.lead(spacing) - rowGap : shape.rearmost(soldiers.size(), meleeWidth, columnWidth, meleeSpacing);
+            double archerShift = rear + rowGap + support.lead(spacing);
+            for (int i = 0; i < archers.size(); i++)
+            {
+                double[] slot = support.soldierSlot(i, archers.size(), lineWidth, columnWidth, spacing);
+                slot[1] += archerShift;
+                front = Math.max(front, -slot[1]);
+                this.slots.put(archers.get(i), place(here, slot, forwardX, forwardZ, rightX, rightZ));
+            }
+            if (!archers.isEmpty())
+            {
+                rear = support.rearmost(archers.size(), lineWidth, columnWidth, spacing) + archerShift;
+            }
+            NpcFormation riderShape = shape == NpcFormation.WEDGE ? NpcFormation.WEDGE : support;
+            double riderBack = Math.max(0.0D, rear + rowGap) + riderShape.spacing(riderSpacing)
+                    - riderShape.frontmost(riders.size(), riderWidth, columnWidth, riderSpacing);
+            for (int i = 0; i < riders.size(); i++)
+            {
+                double[] slot = riderShape.soldierSlot(i, riders.size(), riderWidth, columnWidth, riderSpacing);
+                slot[1] += riderBack;
+                this.slots.put(riders.get(i), place(here, slot, forwardX, forwardZ, rightX, rightZ));
+            }
         }
         // Officers' units, assumed full: as wide and deep as a whole squad in this formation, standing ahead.
         int squad = AncientEmpiresConfig.chainSquadSize;
-        double gap = this.formation.spacing(spacing);
-        double frontage = Math.min(squad, this.formation.width(lineWidth, columnWidth)) * gap;
-        double behind = this.formation.depthBehind(squad, lineWidth, columnWidth, spacing);
-        double depth = this.formation.lead(spacing) + behind;
-        int ownRows = footRows + (riders.isEmpty() ? 0 : this.formation.rows(riders.size(), Math.max(1, lineWidth / 2), columnWidth));
+        double frontage = shape.frontage(squad, lineWidth, columnWidth, spacing);
+        double behind = shape.depthBehind(squad, lineWidth, columnWidth, spacing);
+        double depth = -shape.frontmost(squad, lineWidth, columnWidth, spacing) + behind;
         for (int i = 0; i < leaders.size(); i++)
         {
-            double[] slot = this.formation.officerSlot(i, leaders.size(), ownRows, frontage, behind, depth, spacing);
+            double[] slot = shape.officerSlot(i, leaders.size(), front, frontage, behind, depth, spacing);
             this.slots.put(leaders.get(i), place(here, slot, forwardX, forwardZ, rightX, rightZ));
         }
     }
@@ -1057,6 +1460,14 @@ public final class NpcChain
         {
             tag.putInt(NUMBER_KEY, this.unitNumber);
         }
+        if (this.stance != null)
+        {
+            tag.put(STANCE_KEY, this.stance.save());
+        }
+        if (this.spread != 1.0D)
+        {
+            tag.putDouble(SPREAD_KEY, this.spread);
+        }
     }
 
     void load(CompoundTag tag)
@@ -1080,6 +1491,9 @@ public final class NpcChain
         this.name = tag.getString(NAME_KEY);
         this.posted = tag.getBoolean(POSTED_KEY);
         this.unitNumber = Mth.clamp(tag.getInt(NUMBER_KEY), 0, 9);
+        this.stance = tag.contains(STANCE_KEY) ? NpcStance.load(tag.getCompound(STANCE_KEY)) : null;
+        this.spread = tag.contains(SPREAD_KEY) ? Mth.clamp(tag.getDouble(SPREAD_KEY), 0.5D, 3.0D) : 1.0D;
         this.holder = this;
+        this.stanceSource = this;
     }
 }

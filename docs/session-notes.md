@@ -99,6 +99,25 @@ game test squadFormsUpAndSucceeds). Not seen in game yet. Raised by the user: Np
 goals per NPC whose canUse runs every other tick. Plan after phase 1 lands: measure with the stress test, then
 register goals by path (soldiers no job goals, workers no combat goals) and split NpcEntity into components.
 
+Army command second pass (2026-10-29): research in docs/command-ux-research.md (HYW, Recruits); the design in
+docs/army-command-design.md, covering:
+- War Table (K) replacing the Signal Flag;
+- a ring-tree battle wheel;
+- click or drag-the-line placement with ghosts;
+- form then march;
+- formations, maneuvers, and stances;
+- commanders' battle brain (decision 6).
+
+The user picked A (banner hall) for the chart and C (ledger) for the roster, with B (map) as a tab later. Their
+answers are in the doc.
+
+Step 1 (order model) is built and all 22 game tests pass. The jar is installed; nothing is seen in game yet and
+nothing committed. In the game, try:
+- the V wheel's Formation, Stance, and Maneuver submenus;
+- a far Hold, which forms up and then marches.
+
+Next is step 2: the ring wheel, units bar, glow, and click or drag-the-line placement with ghosts.
+
 ## Next, in order
 
 1. Finish the play test above; fix what the user finds.

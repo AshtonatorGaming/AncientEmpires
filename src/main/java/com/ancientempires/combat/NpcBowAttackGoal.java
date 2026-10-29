@@ -237,8 +237,9 @@ public class NpcBowAttackGoal extends Goal
             this.beginDraw();
         }
         this.drawTicks++;
-        if (this.drawTicks >= this.drawGoal)
+        if (this.drawTicks >= this.drawGoal && this.npc.getChain().volleyReady())
         {
+            // A volley unit's archers hold the full draw until the volley, then loose together.
             this.release(target);
             this.cooldownTicks = COOLDOWN_TICKS;
         }

@@ -720,7 +720,19 @@ its own unless noted). Before adding behavior, check what AW did first.
   it (unposted; when that one falls they Hold there, formed), else Free. Back inside the spawner a soldier `depart`s.
   Battle orders, Mount & Blade style (the user's choice over the flag-first flow): hold V (`ModKeys.ORDERS`) for
   `CommandWheelScreen` (view frozen as aimed; 1-9 pick units by `AeUnitNumber`, 0 all, remembered), pick Follow, Hold
-  here, Defend here, Charge (the creature aimed at, else Free), Fall back to me, Free, or next formation; click or let go.
+  here, Defend here, Charge (the creature aimed at, else Free), Fall back to me, Free, or a Formation, Stance, or
+  Maneuver submenu (a stand-in tree until the ring wheel); click or let go.
+  Order model, second pass (docs/army-command-design.md step 1): formations `NpcFormation` line, column, shield wall
+  (0.75 spacing, shields raised while standing), wedge (rows 1, 3, 5, leader behind the last), square (rim facing out,
+  archers and riders inside; `NpcChain.facingOf`), skirmish (old `loose` saves map to it); archers and riders behind the
+  melee rows (`support`), a horse-only unit's riders are its front ranks. `NpcStance` (`AeStance`, inherited through
+  `stanceSource` one link up): engage Aggressive (`aggressiveLeash` further) / Hold the line / Passive (only what
+  provoked it), fire At will / Hold (archers only when cornered) / Volley (`volleyReady`: full draw held, loosed in the
+  same 4 ticks of every `volleyTicks`), shields up. Maneuvers: `advance`, `turn`, `face`, `stepSpread` (`AeSpread` 0.75,
+  1, 2), `release` (fights freely, re-forms after `releaseCalmTicks` quiet). Form then march (`NpcChain.March`): Hold or
+  Defend further than `formUpDistance` forms up facing the spot (`formUpReady` or `formUpTicks`), marches at
+  `marchSpeed` with slots laid a block ahead and re-laid every block, halts while `marchStraggleShare` straggle, deploys
+  within 3 blocks. `NpcPathBudget`: `pathsPerTick` per owner. Game tests `unitFormsThenMarches`, `stancesAndManeuvers`.
   `UnitOrderPacket` to `NpcArmy.command`, which raycasts 96 blocks and stands several units side by side across the
   spot. A unit takes its owner's lowest free number when it first takes a soldier (`NpcArmy.freeNumber`); the K screen
   cycles it. Formations steadied: laid out from a held spot, re-laid only past 2.5 blocks or 25 degrees, no shoving

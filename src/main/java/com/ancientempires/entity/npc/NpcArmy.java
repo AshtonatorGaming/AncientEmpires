@@ -47,10 +47,22 @@ public final class NpcArmy
         FOLLOW, FREE, HOLD, FALL_BACK, FORMATION, REJOIN, REMOVE, MOVE, RENAME, FLAG, NUMBER
     }
 
-    /** The command wheel's orders (Mount & Blade's): given to the selected units, aimed where the player looks. */
+    /**
+     * The command wheel's orders (Mount & Blade's): given to the selected
+     * units, aimed where the player looks. Orders, then formations, stances,
+     * and maneuvers (small changes to the order a unit holds).
+     */
     public enum Command
     {
-        FOLLOW, HOLD, DEFEND, CHARGE, FALL_BACK, FREE, FORMATION
+        FOLLOW, HOLD, DEFEND, CHARGE, FALL_BACK, FREE,
+        LINE, COLUMN, SHIELD_WALL, WEDGE, SQUARE, SKIRMISH,
+        AGGRESSIVE, HOLD_LINE, PASSIVE, FIRE_AT_WILL, HOLD_FIRE, VOLLEY, SHIELDS,
+        FACE, ABOUT_TURN, LEFT, RIGHT, ADVANCE, BACK, CLOSE_RANKS, SPREAD_OUT, RELEASE;
+
+        public String id()
+        {
+            return this.name().toLowerCase(Locale.ROOT);
+        }
     }
 
     /** How far the command wheel's aim reaches, in blocks. */
@@ -162,7 +174,9 @@ public final class NpcArmy
      * numbers (all of them for none), aimed along the player's look: Hold and
      * Defend at the block looked at (several units side by side across it,
      * facing the player's way), Charge at the creature looked at (else a free
-     * charge), Fall back to the player, Follow, Free, or the next formation.
+     * charge), Fall back to the player, Follow, Free; a formation or stance
+     * for each unit; or a maneuver of the spot each holds (Face takes the
+     * player's way, turns pivot each unit in place).
      */
     public static void command(ServerPlayer player, Set<Integer> units, Command command)
     {
@@ -201,7 +215,8 @@ public final class NpcArmy
         for (int i = 0; i < leaders.size(); i++)
         {
             NpcChain chain = leaders.get(i).getChain();
-            widths[i] = Math.max(1, Math.min(AncientEmpiresConfig.chainLineWidth, chain.soldierCount())) * chain.formation().spacing(AncientEmpiresConfig.chainSpacing);
+            widths[i] = chain.formation().frontage(Math.max(1, chain.soldierCount()), AncientEmpiresConfig.chainLineWidth, AncientEmpiresConfig.chainColumnWidth,
+                    AncientEmpiresConfig.chainSpacing * chain.spread());
             total += widths[i] + (i > 0 ? gap : 0.0D);
         }
         double offset = -total / 2.0D;
@@ -214,7 +229,29 @@ public final class NpcArmy
             {
                 case FOLLOW -> chain.setOrder(NpcOrder.FOLLOW, null, Float.NaN, null);
                 case FREE -> chain.setOrder(NpcOrder.FREE, null, Float.NaN, null);
-                case FORMATION -> chain.setFormation(chain.formation().next());
+                case LINE -> chain.setFormation(NpcFormation.LINE);
+                case COLUMN -> chain.setFormation(NpcFormation.COLUMN);
+                case SHIELD_WALL -> chain.setFormation(NpcFormation.SHIELD_WALL);
+                case WEDGE -> chain.setFormation(NpcFormation.WEDGE);
+                case SQUARE -> chain.setFormation(NpcFormation.SQUARE);
+                case SKIRMISH -> chain.setFormation(NpcFormation.SKIRMISH);
+                case AGGRESSIVE -> chain.setStance(chain.stance().with(NpcStance.Engage.AGGRESSIVE));
+                case HOLD_LINE -> chain.setStance(chain.stance().with(NpcStance.Engage.HOLD_LINE));
+                case PASSIVE -> chain.setStance(chain.stance().with(NpcStance.Engage.PASSIVE));
+                case FIRE_AT_WILL -> chain.setStance(chain.stance().with(NpcStance.Fire.AT_WILL));
+                case HOLD_FIRE -> chain.setStance(chain.stance().with(NpcStance.Fire.HOLD));
+                case VOLLEY -> chain.setStance(chain.stance().with(NpcStance.Fire.VOLLEY));
+                case SHIELDS -> chain.setStance(chain.stance().withShields(!chain.stance().shieldsUp()));
+                case FACE -> chain.face(facing);
+                case ABOUT_TURN -> chain.turn(180.0F);
+                // Yaw grows clockwise seen from above: a unit's left is less.
+                case LEFT -> chain.turn(-90.0F);
+                case RIGHT -> chain.turn(90.0F);
+                case ADVANCE -> chain.advance(AncientEmpiresConfig.chainManeuverStep);
+                case BACK -> chain.advance(-AncientEmpiresConfig.chainManeuverStep);
+                case CLOSE_RANKS -> chain.stepSpread(false);
+                case SPREAD_OUT -> chain.stepSpread(true);
+                case RELEASE -> chain.release();
                 case HOLD, DEFEND ->
                 {
                     BlockPos at = spot == null ? leaders.get(i).blockPosition()

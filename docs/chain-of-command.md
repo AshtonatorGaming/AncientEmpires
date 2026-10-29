@@ -138,3 +138,11 @@ returning today's behaviour.
 3. Joining: only when the player assigns a soldier. Nobody joins on their own.
 4. Faction garrisons come after owned armies feel right (phase 5 stays last).
 5. Grunts are lobotomised in formation (above); leaders carry the AI.
+6. Commanders decide (user, 2026-10-29): a leader left without the player's micromanagement (Free, or an order
+   that leaves it room, such as Defend or Attack) should try its best to win. Higher ranks decide more: a sergeant
+   picks targets (phase 3), a captain and a general read the field (sides' size, morale, health, ranged against
+   shields and riders, ground) and pick an approach for their units (charge, advance in line, hold and let the
+   archers work, refuse a flank, fall back and regroup), telling the owner in a line of chat. Faction commanders
+   use the same brain. Recruits' patrol leaders are the reference for the shape, not the rules.
+7. Not taken from other mods: field supply (upkeep stays as is), and their unit types one to one. Common ideas
+   (sappers, a gate charge) are fair game; their niche units stay theirs.

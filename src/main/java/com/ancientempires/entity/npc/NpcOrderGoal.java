@@ -58,6 +58,10 @@ public class NpcOrderGoal extends Goal
     public void stop()
     {
         this.npc.getNavigation().stop();
+        if (this.npc.getTarget() == null)
+        {
+            this.npc.getGuard().lower();
+        }
     }
 
     @Override
@@ -75,6 +79,14 @@ public class NpcOrderGoal extends Goal
         {
             return;
         }
+        NpcChain.March march = chain.march();
+        if (march == NpcChain.March.FORMING || march == NpcChain.March.MARCHING && chain.straggling())
+        {
+            // Forming up, or waiting for stragglers: stand, facing the way to go.
+            this.halt();
+            this.face(chain.facing());
+            return;
+        }
         Vec3 spot = Vec3.atBottomCenterOf(pos);
         double dx = spot.x - this.npc.getX();
         double dz = spot.z - this.npc.getZ();
@@ -83,18 +95,45 @@ public class NpcOrderGoal extends Goal
         {
             if (--this.repath <= 0)
             {
+                if (!NpcPathBudget.take(this.npc))
+                {
+                    this.repath = 1;
+                    return;
+                }
                 this.repath = this.adjustedTickDelay(REPATH_TICKS);
-                boolean hurry = chain.effectiveOrder() == NpcOrder.FALL_BACK || off > AncientEmpiresConfig.chainCatchUpDistance;
-                this.npc.getNavigation().moveTo(spot.x, spot.y, spot.z, hurry ? AncientEmpiresConfig.chainCatchUpSpeed : AncientEmpiresConfig.chainWalkSpeed);
+                double speed;
+                if (march == NpcChain.March.MARCHING)
+                {
+                    speed = AncientEmpiresConfig.chainMarchSpeed;
+                }
+                else
+                {
+                    boolean hurry = chain.effectiveOrder() == NpcOrder.FALL_BACK || off > AncientEmpiresConfig.chainCatchUpDistance;
+                    speed = hurry ? AncientEmpiresConfig.chainCatchUpSpeed : AncientEmpiresConfig.chainWalkSpeed;
+                }
+                this.npc.getNavigation().moveTo(spot.x, spot.y, spot.z, speed);
             }
             return;
         }
+        this.halt();
+        this.face(chain.facing());
+        if (chain.formation().shieldsUp() || chain.stance().shieldsUp())
+        {
+            this.npc.getGuard().raise();
+        }
+    }
+
+    private void halt()
+    {
         if (!this.npc.getNavigation().isDone())
         {
             this.npc.getNavigation().stop();
             this.repath = 0;
         }
-        float facing = chain.facing();
+    }
+
+    private void face(float facing)
+    {
         double radians = facing * Mth.DEG_TO_RAD;
         this.npc.getLookControl().setLookAt(this.npc.getX() - Math.sin(radians) * 8.0D, this.npc.getEyeY(), this.npc.getZ() + Math.cos(radians) * 8.0D);
         this.npc.setYBodyRot(Mth.approachDegrees(this.npc.yBodyRot, facing, 10.0F));

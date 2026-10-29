@@ -10,6 +10,7 @@ import com.ancientempires.entity.npc.NpcRank;
 import com.ancientempires.entity.npc.NpcPath;
 import com.ancientempires.entity.npc.NpcOrder;
 import com.ancientempires.entity.npc.NpcChain;
+import com.ancientempires.entity.npc.NpcStance;
 import com.ancientempires.gate.GateEntity;
 import com.ancientempires.gate.GateType;
 import com.ancientempires.registry.ModEntities;
@@ -47,6 +48,7 @@ import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.util.Mth;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraft.nbt.CompoundTag;
@@ -751,6 +753,113 @@ public final class StructureGameTests
         attacker.discard();
         people.forEach(NpcEntity::discard);
         helper.succeed();
+    }
+
+    /**
+     * Form, then march: a sergeant ordered to hold a spot 28 blocks off first
+     * forms its soldiers up where it stands, facing the spot, then marches
+     * there with its front rank ahead of it, and deploys in its slots.
+     */
+    @GameTest(template = ARENA, timeoutTicks = 700)
+    public static void unitFormsThenMarches(GameTestHelper helper)
+    {
+        ServerLevel level = helper.getLevel();
+        level.setDayTime(6000L);
+        int minX = 40;
+        int minZ = 8;
+        for (int x = minX; x <= minX + 38; x++)
+        {
+            for (int z = minZ; z <= minZ + 14; z++)
+            {
+                helper.setBlock(new BlockPos(x, 0, z), Blocks.STONE);
+                for (int y = 1; y <= 4; y++)
+                {
+                    helper.setBlock(new BlockPos(x, y, z), Blocks.AIR);
+                }
+            }
+        }
+        AABB field = new AABB(helper.absolutePos(new BlockPos(minX, 0, minZ)), helper.absolutePos(new BlockPos(minX + 39, 5, minZ + 15)));
+        level.getEntitiesOfClass(LivingEntity.class, field, living -> !(living instanceof Player)).forEach(Entity::discard);
+        UUID owner = UUID.randomUUID();
+        NpcEntity sergeant = squadNpc(helper, owner, new BlockPos(minX + 4, 1, minZ + 7), NpcRank.SERGEANT, 5);
+        List<NpcEntity> soldiers = new ArrayList<>();
+        for (int i = 0; i < 4; i++)
+        {
+            NpcEntity soldier = squadNpc(helper, owner, new BlockPos(minX + 2, 1, minZ + 5 + i), NpcRank.SOLDIER, 5);
+            soldier.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
+            helper.assertTrue(NpcChain.toggle(sergeant, soldier) == NpcChain.Assign.ADDED, "soldier " + i + " joins");
+            soldiers.add(soldier);
+        }
+        Vec3 start = sergeant.position();
+        BlockPos spot = helper.absolutePos(new BlockPos(minX + 32, 1, minZ + 7));
+        sergeant.getChain().setOrder(NpcOrder.HOLD, spot, -90.0F, null);
+        helper.assertTrue(sergeant.getChain().march() == NpcChain.March.FORMING, "a far spot: forms up first");
+        helper.runAfterDelay(10, () -> helper.assertTrue(sergeant.position().distanceTo(start) < 1.5D, "the sergeant waits while its unit forms up"));
+        helper.runAfterDelay(150, () ->
+        {
+            helper.assertTrue(sergeant.getChain().march() == NpcChain.March.MARCHING, "marching, is " + sergeant.getChain().march());
+            helper.assertTrue(sergeant.getX() > start.x + 2.0D, "the sergeant has set off, at " + sergeant.position());
+            double ahead = soldiers.stream().mapToDouble(soldier -> soldier.getX() - sergeant.getX()).average().orElse(0.0D);
+            AncientEmpires.LOGGER.info("GAMETEST march soldiers ahead by {} on average, sergeant at {}", ahead, sergeant.position());
+            helper.assertTrue(ahead > 0.0D, "the front rank marches ahead of its sergeant, by " + ahead);
+        });
+        helper.runAfterDelay(600, () ->
+        {
+            helper.assertTrue(sergeant.getChain().march() == NpcChain.March.NONE, "deployed, is " + sergeant.getChain().march());
+            helper.assertTrue(sergeant.position().distanceTo(Vec3.atBottomCenterOf(spot)) <= 2.0D, "the sergeant holds the spot, at " + sergeant.position());
+            for (NpcEntity soldier : soldiers)
+            {
+                Vec3 slot = sergeant.getChain().slotOf(soldier);
+                double off = Math.sqrt(Math.pow(slot.x - soldier.getX(), 2) + Math.pow(slot.z - soldier.getZ(), 2));
+                helper.assertTrue(off <= 1.0D, "in its slot at the spot, off by " + off);
+            }
+            helper.succeed();
+        });
+    }
+
+    /**
+     * Stances and maneuvers: a Passive unit leaves a foe alone until it goes
+     * for one of them, archers under Hold fire draw on nothing beyond arm's
+     * length, Advance moves the held spot along the facing, and a turn
+     * changes the facing in place.
+     */
+    @GameTest(template = ARENA, timeoutTicks = 100)
+    public static void stancesAndManeuvers(GameTestHelper helper)
+    {
+        ServerLevel level = helper.getLevel();
+        BlockPos base = helper.absolutePos(new BlockPos(-60, 1, 40));
+        level.getEntitiesOfClass(LivingEntity.class, new AABB(base).inflate(12.0D), living -> !(living instanceof Player)).forEach(Entity::discard);
+        UUID owner = UUID.randomUUID();
+        NpcEntity sergeant = squadNpc(helper, owner, new BlockPos(-60, 1, 40), NpcRank.SERGEANT, 5);
+        NpcEntity swordsman = squadNpc(helper, owner, new BlockPos(-59, 1, 41), NpcRank.SOLDIER, 5);
+        swordsman.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
+        NpcEntity archer = squadNpc(helper, owner, new BlockPos(-59, 1, 39), NpcRank.SOLDIER, 5);
+        archer.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BOW));
+        NpcChain.toggle(sergeant, swordsman);
+        NpcChain.toggle(sergeant, archer);
+        NpcChain chain = sergeant.getChain();
+        chain.setOrder(NpcOrder.HOLD, base, -90.0F, null);
+        Husk husk = EntityType.HUSK.create(level);
+        husk.moveTo(base.getX() + 4.5D, base.getY(), base.getZ() + 0.5D, 0.0F, 0.0F);
+        husk.setNoAi(true);
+        level.addFreshEntity(husk);
+        helper.assertTrue(swordsman.getChain().allowsTarget(husk), "holding the line: a foe at the line is fair game");
+        chain.setStance(chain.stance().with(NpcStance.Engage.PASSIVE).with(NpcStance.Fire.HOLD));
+        helper.runAfterDelay(2, () ->
+        {
+            helper.assertTrue(swordsman.getChain().stance().engage() == NpcStance.Engage.PASSIVE, "the soldier takes its leader's stance");
+            helper.assertTrue(!swordsman.getChain().allowsTarget(husk), "passive: a foe minding its own business is left alone");
+            helper.assertTrue(!archer.getChain().allowsTarget(husk), "hold fire: no shot at four blocks");
+            husk.setTarget(swordsman);
+            helper.assertTrue(swordsman.getChain().allowsTarget(husk), "passive: a foe going for one of the unit is fought");
+            chain.advance(5.0D);
+            helper.assertTrue(chain.orderPos().getX() == base.getX() + 5 && chain.orderPos().getZ() == base.getZ(), "advance: five blocks east, at " + chain.orderPos());
+            chain.turn(90.0F);
+            helper.assertTrue(Math.abs(Mth.wrapDegrees(chain.facing() - 0.0F)) < 1.0E-3F, "a right turn from east faces south, faces " + chain.facing());
+            husk.discard();
+            List.of(sergeant, swordsman, archer).forEach(NpcEntity::discard);
+            helper.succeed();
+        });
     }
 
     private static NpcEntity squadNpc(GameTestHelper helper, UUID owner, BlockPos at, NpcRank rank, int npcLevel)
