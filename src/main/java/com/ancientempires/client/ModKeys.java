@@ -20,6 +20,9 @@ public final class ModKeys
             InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_J, "key.categories.ancientempires");
     public static final KeyMapping COMMAND = new KeyMapping("key.ancientempires.command",
             InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_K, "key.categories.ancientempires");
+    /** Held: the command wheel (Mount & Blade's battle orders). */
+    public static final KeyMapping ORDERS = new KeyMapping("key.ancientempires.orders",
+            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_V, "key.categories.ancientempires");
 
     private ModKeys()
     {
@@ -30,6 +33,7 @@ public final class ModKeys
     {
         event.register(STANDINGS);
         event.register(COMMAND);
+        event.register(ORDERS);
     }
 
     @Mod.EventBusSubscriber(modid = AncientEmpires.MOD_ID, value = Dist.CLIENT)
@@ -51,6 +55,13 @@ public final class ModKeys
                 if (Minecraft.getInstance().screen == null)
                 {
                     ModNetwork.requestStandings();
+                }
+            }
+            while (ORDERS.consumeClick())
+            {
+                if (Minecraft.getInstance().screen == null)
+                {
+                    CommandWheelScreen.open();
                 }
             }
             while (COMMAND.consumeClick())

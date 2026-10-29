@@ -689,6 +689,14 @@ public final class StructureGameTests
         helper.assertTrue(sergeant.getUUID().equals(soldier.getChain().leaderId()), "Move puts the soldier under the sergeant");
         NpcArmy.act(player, NpcArmy.Action.MOVE, stranger.getUUID(), sergeant.getUUID(), "");
         helper.assertTrue(stranger.getChain().leaderId() == null, "another player's soldier is not touched");
+        int number = sergeant.getChain().unitNumber();
+        helper.assertTrue(number >= 1 && number <= 9, "a new unit gets a number for the order keys, has " + number);
+        NpcArmy.command(player, Set.of(number), NpcArmy.Command.FALL_BACK);
+        helper.assertTrue(sergeant.getChain().order() == NpcOrder.FALL_BACK, "the wheel's order reaches the unit by its number");
+        NpcArmy.command(player, Set.of(), NpcArmy.Command.FOLLOW);
+        helper.assertTrue(sergeant.getChain().order() == NpcOrder.FOLLOW, "no number picked means every unit");
+        NpcArmy.command(player, Set.of(number == 9 ? 8 : number + 1), NpcArmy.Command.FREE);
+        helper.assertTrue(sergeant.getChain().order() == NpcOrder.FOLLOW, "another number leaves it be");
         NpcArmy.act(player, NpcArmy.Action.RENAME, sergeant.getUUID(), null, "Iron Wolves");
         NpcArmy.act(player, NpcArmy.Action.HOLD, sergeant.getUUID(), null, "");
         helper.assertTrue("Iron Wolves".equals(sergeant.getChain().name()), "the unit is named");

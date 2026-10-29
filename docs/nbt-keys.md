@@ -28,6 +28,7 @@ The NPC entity is `ancientempires:npc`. Besides vanilla's mob keys (`Health`, `H
 | `AeOrderFacing` | float | no | The way the unit faces at that spot (a yaw). |
 | `AeOrderTarget` | UUID | no | Attack: the enemy the unit goes for. |
 | `AePosted` | boolean | no | The unit holds its order from its posts (a garrison): no formation, each fights from its own spot. |
+| `AeUnitNumber` | int | no | The unit's number (1 to 9) for the battle order keys. |
 | `AeUnitName` | text | no | The unit's name, given on the command screen. |
 | `AeFormation` | text | no | `column` or `loose` (absent: line). |
 | `AeRank` | text | yes | `soldier`, `sergeant`, `captain`, or `general`, when set by insignia or command. Without it, the rank comes from the roster row. |

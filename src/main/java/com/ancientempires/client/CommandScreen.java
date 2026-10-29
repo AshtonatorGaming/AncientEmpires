@@ -70,6 +70,7 @@ public final class CommandScreen extends Screen
     /** The army arrived: opens the screen (from the key) or refreshes the open one (after an action). */
     public static void show(boolean open, List<ArmyPacket.Entry> entries)
     {
+        ClientArmy.set(entries);
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.screen instanceof CommandScreen screen)
         {
@@ -195,6 +196,10 @@ public final class CommandScreen extends Screen
             this.button(x, y, "formation", NpcArmy.Action.FORMATION);
             this.button(x + BUTTON_W + 4, y, "flag", NpcArmy.Action.FLAG);
             y += 22;
+            this.addRenderableWidget(Button.builder(Component.translatable("gui.ancientempires.army.number",
+                    entry.unitNumber() == 0 ? "-" : Integer.toString(entry.unitNumber())), button -> this.send(NpcArmy.Action.NUMBER, entry.id(), null, ""))
+                    .bounds(x, y, BUTTON_W * 2 + 4, 20).build());
+            y += 22;
         }
         if (entry.leader() != null)
         {
@@ -319,7 +324,7 @@ public final class CommandScreen extends Screen
         String meters = Math.round(entry.distance()) + "m";
         graphics.drawString(this.font, meters, right - this.font.width(meters), y + 1, 0xFF909090);
         String level = "Lv" + entry.level();
-        String unit = entry.members() > 0 ? " (" + entry.members() + ")" : "";
+        String unit = (entry.members() > 0 ? " (" + entry.members() + ")" : "") + (entry.unitNumber() > 0 && entry.members() > 0 ? " [" + entry.unitNumber() + "]" : "");
         Component name = parse(entry.name());
         String label = kind + name.getString() + unit;
         int nameRoom = right - x - this.font.width(meters) - 70;
@@ -354,7 +359,7 @@ public final class CommandScreen extends Screen
         }
     }
 
-    private static Component parse(String json)
+    static Component parse(String json)
     {
         try
         {

@@ -23,7 +23,7 @@ public class ArmyPacket
      * unit holds it itself (top of a chain, or detached).
      */
     public record Entry(UUID id, String name, int rank, int level, float health, int order, boolean ownOrder, int formation,
-            @Nullable UUID leader, int members, float distance, String unitName, boolean archer, boolean mounted, String rankName)
+            @Nullable UUID leader, int members, float distance, String unitName, boolean archer, boolean mounted, String rankName, int unitNumber)
     {
     }
 
@@ -61,6 +61,7 @@ public class ArmyPacket
             buffer.writeBoolean(entry.archer());
             buffer.writeBoolean(entry.mounted());
             buffer.writeUtf(entry.rankName(), 256);
+            buffer.writeByte(entry.unitNumber());
         }
     }
 
@@ -86,7 +87,8 @@ public class ArmyPacket
             boolean archer = buffer.readBoolean();
             boolean mounted = buffer.readBoolean();
             String rankName = buffer.readUtf(256);
-            entries.add(new Entry(id, name, rank, level, health, order, ownOrder, formation, leader, members, distance, unitName, archer, mounted, rankName));
+            int unitNumber = buffer.readByte();
+            entries.add(new Entry(id, name, rank, level, health, order, ownOrder, formation, leader, members, distance, unitName, archer, mounted, rankName, unitNumber));
         }
         return new ArmyPacket(open, entries);
     }

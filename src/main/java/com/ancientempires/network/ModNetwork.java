@@ -24,7 +24,7 @@ import java.util.List;
 public final class ModNetwork
 {
     /** Bump whenever a packet is added or changes shape, so mismatched clients are refused cleanly. */
-    private static final String PROTOCOL = "10";
+    private static final String PROTOCOL = "11";
     private static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(
             ResourceLocation.parse(AncientEmpires.MOD_ID + ":main"),
             () -> PROTOCOL,
@@ -93,6 +93,11 @@ public final class ModNetwork
                 .decoder(ArmyPacket::decode)
                 .consumerMainThread(ArmyPacket::handle)
                 .add();
+        CHANNEL.messageBuilder(UnitOrderPacket.class, nextId++, NetworkDirection.PLAY_TO_SERVER)
+                .encoder(UnitOrderPacket::encode)
+                .decoder(UnitOrderPacket::decode)
+                .consumerMainThread(UnitOrderPacket::handle)
+                .add();
     }
 
     /** Outlines blocks for one player, through walls, for a few seconds. */
@@ -110,6 +115,12 @@ public final class ModNetwork
     public static void requestArmy()
     {
         CHANNEL.sendToServer(ArmyActionPacket.request());
+    }
+
+    /** A fresh army list without opening the command screen (the wheel's unit panel). */
+    public static void requestArmyRefresh()
+    {
+        CHANNEL.sendToServer(new ArmyActionPacket(false, null, null, null, ""));
     }
 
     public static void sendToServer(Object packet)

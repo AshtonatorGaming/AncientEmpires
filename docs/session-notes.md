@@ -73,6 +73,9 @@ fills, and eases a border ring into the land (AW's preGeneration). Unseen in gam
 
 Chain of command: plan in docs/chain-of-command.md (decisions agreed 2026-10-28: screen + order item, squads of 16, manual joining, grunts lobotomised in formation, garrisons last). Build phase 1 next.
 
+Battle orders (M&B style): hold V for the command wheel, 1-9/0 pick units, orders aimed by the crosshair; unit
+numbers auto-given, cycled in K. Formation fumbling fixed (spot origin, 2.5-block hysteresis, no shoving in a unit).
+Not seen in game.
 Chain phase 5 built: garrisons come out as one posted unit (Defend at the spawner, no formation, per the user), home
 ground morale, sally at the commander's attacker when it falls or drops under 30%. All five planned phases done; not
 seen in game. Next: the user's play test of the chain; later phase 6 (charge counters, doctrines, director).

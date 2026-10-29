@@ -60,6 +60,7 @@ public final class NpcChain
     private static final String FORMATION_KEY = "AeFormation";
     private static final String NAME_KEY = "AeUnitName";
     private static final String POSTED_KEY = "AePosted";
+    private static final String NUMBER_KEY = "AeUnitNumber";
     /** Ticks between looking for a missing leader, and between a leader's member checks. */
     private static final int RESOLVE_TICKS = 20;
     private static final int PRUNE_TICKS = 100;
@@ -101,6 +102,8 @@ public final class NpcChain
      * takes it off its posts.
      */
     private boolean posted;
+    /** The unit's number for the order keys (1 to 9; 0 for none), given when it first takes a soldier. */
+    private int unitNumber;
     /** The unit's name, given on the command screen ("Iron Wolves"); empty for none. */
     private String name = "";
 
@@ -299,6 +302,16 @@ public final class NpcChain
         this.slotsAt = -1L;
     }
 
+    public int unitNumber()
+    {
+        return this.unitNumber;
+    }
+
+    public void setUnitNumber(int number)
+    {
+        this.unitNumber = Mth.clamp(number, 0, 9);
+    }
+
     public String name()
     {
         return this.name;
@@ -435,6 +448,11 @@ public final class NpcChain
             above = above.getChain().leader();
         }
         link(leader, soldier);
+        if (chain.unitNumber == 0 && leader.level() instanceof ServerLevel level && leader.getOwner() != null)
+        {
+            // A new unit gets the owner's lowest free number, for the order keys.
+            chain.unitNumber = NpcArmy.freeNumber(level, leader.getOwner());
+        }
         return Assign.ADDED;
     }
 
@@ -545,6 +563,7 @@ public final class NpcChain
             next.orderTarget = this.orderTarget;
             next.formation = this.formation;
             next.posted = this.posted;
+            next.unitNumber = this.unitNumber > 0 ? this.unitNumber : next.unitNumber;
             next.name = this.name.isEmpty() ? next.name : this.name;
             next.holder = this.holder == this ? next : this.holder;
             next.slotsAt = -1L;
@@ -1034,6 +1053,10 @@ public final class NpcChain
         {
             tag.putBoolean(POSTED_KEY, true);
         }
+        if (this.unitNumber > 0)
+        {
+            tag.putInt(NUMBER_KEY, this.unitNumber);
+        }
     }
 
     void load(CompoundTag tag)
@@ -1056,6 +1079,7 @@ public final class NpcChain
         this.formation = NpcFormation.byName(tag.getString(FORMATION_KEY));
         this.name = tag.getString(NAME_KEY);
         this.posted = tag.getBoolean(POSTED_KEY);
+        this.unitNumber = Mth.clamp(tag.getInt(NUMBER_KEY), 0, 9);
         this.holder = this;
     }
 }
