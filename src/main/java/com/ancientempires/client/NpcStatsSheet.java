@@ -97,7 +97,7 @@ final class NpcStatsSheet extends NpcPopupScreen
                 }
                 boolean good = reason == NpcMorale.REASON_OUTNUMBERING || reason == NpcMorale.REASON_HEARTENED
                         || reason == NpcMorale.REASON_INSPIRED || reason == NpcMorale.REASON_OWNER || reason == NpcMorale.REASON_BANNER
-                        || reason == NpcMorale.REASON_WATCH || reason == NpcMorale.REASON_FORMED;
+                        || reason == NpcMorale.REASON_WATCH || reason == NpcMorale.REASON_FORMED || reason == NpcMorale.REASON_HOME;
                 FitText.draw(graphics, font, (good ? "+ " : "- ") + Component.translatable("gui.ancientempires.morale.reason." + reason).getString(),
                         left + 4, line, inner - 4, 10, good ? 0xFF9FD07F : 0xFFE08A70, false, true);
                 line += LINE - 1;

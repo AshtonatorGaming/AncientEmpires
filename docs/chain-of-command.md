@@ -1,6 +1,8 @@
 # Chain of command (plan)
 
-Status: phases 1 to 4 built (2026-10-28); phase 5 (garrisons) next. Formation layout revised with the user: soldiers form
+Status: phases 1 to 5 built (2026-10-28). Garrisons were revised with the user: no formation while defending (they
+keep their builder's posts), formation only after a sally. Still open: the banner as a stand-in leader while the real
+commander is unspawned (needs virtual NPCs, with the director); phase 6 items. Formation layout revised with the user: soldiers form
 the front, a leader stands just behind its own front rank, a captain behind its squads, a general behind its captains. Sources: VISION.md (Architectural Primitives, Military
 Hierarchy and Scale, Garrison Rules, Charge Bonus, Companions) and DESIGN.md (Tier 1 command aura and succession,
 Tier 2 doctrines and squad rules, Tier 4 living chain of command).

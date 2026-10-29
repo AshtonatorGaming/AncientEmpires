@@ -59,6 +59,7 @@ public final class NpcChain
     private static final String ORDER_TARGET_KEY = "AeOrderTarget";
     private static final String FORMATION_KEY = "AeFormation";
     private static final String NAME_KEY = "AeUnitName";
+    private static final String POSTED_KEY = "AePosted";
     /** Ticks between looking for a missing leader, and between a leader's member checks. */
     private static final int RESOLVE_TICKS = 20;
     private static final int PRUNE_TICKS = 100;
@@ -90,6 +91,13 @@ public final class NpcChain
     @Nullable
     private UUID orderTarget;
     private NpcFormation formation = NpcFormation.LINE;
+    /**
+     * A posted unit (a structure's garrison) holds its order from where each
+     * soldier stands, its own post: no formation, no leader walking to the
+     * spot, each fighting for itself within the order's leash. Any new order
+     * takes it off its posts.
+     */
+    private boolean posted;
     /** The unit's name, given on the command screen ("Iron Wolves"); empty for none. */
     private String name = "";
 
@@ -257,7 +265,7 @@ public final class NpcChain
     /** Whether this NPC keeps a slot in its leader's formation now. */
     public boolean formed()
     {
-        return AncientEmpiresConfig.chainEnabled && !this.holdsOrder() && this.leader() != null && this.effectiveOrder().formed();
+        return AncientEmpiresConfig.chainEnabled && !this.holdsOrder() && this.leader() != null && this.effectiveOrder().formed() && !this.holder.posted;
     }
 
     /**
@@ -283,6 +291,7 @@ public final class NpcChain
             this.orderTarget = target;
         }
         this.holder = this.order != null || top ? this : this.holder;
+        this.posted = false;
         this.npc.setFollowing(top && order == NpcOrder.FOLLOW);
         this.slotsAt = -1L;
     }
@@ -295,6 +304,18 @@ public final class NpcChain
     public void setName(String name)
     {
         this.name = name.strip();
+    }
+
+    /** Whether this unit holds its order from its posts ({@link #posted}). */
+    public boolean posted()
+    {
+        return this.holder.posted;
+    }
+
+    /** Puts this unit on its posts (set after its order: a new order takes it off them). */
+    public void setPosted(boolean posted)
+    {
+        this.posted = posted;
     }
 
     public void setFormation(NpcFormation formation)
@@ -410,6 +431,19 @@ public final class NpcChain
             }
             above = above.getChain().leader();
         }
+        link(leader, soldier);
+        return Assign.ADDED;
+    }
+
+    /**
+     * Puts {@code soldier} under {@code leader} with no checks: a player's
+     * assignment once {@link #toggle} has checked it, or a faction garrison
+     * forming up as it comes out ({@link NpcGarrison}), where an acting
+     * sergeant of soldier rank may lead.
+     */
+    static void link(NpcEntity leader, NpcEntity soldier)
+    {
+        NpcChain chain = leader.getChain();
         NpcChain own = soldier.getChain();
         own.leave();
         own.leaderId = leader.getUUID();
@@ -421,12 +455,11 @@ public final class NpcChain
         own.holder = chain.holder;
         soldier.setFollowing(false);
         chain.members.add(soldier.getUUID());
-        if (officer)
+        if (soldier.getRank() != NpcRank.SOLDIER)
         {
             chain.officers.add(soldier.getUUID());
         }
         chain.slotsAt = -1L;
-        return Assign.ADDED;
     }
 
     /** Takes this NPC out of its leader's unit (its own unit stays with it). */
@@ -508,6 +541,7 @@ public final class NpcChain
             next.orderFacing = this.orderFacing;
             next.orderTarget = this.orderTarget;
             next.formation = this.formation;
+            next.posted = this.posted;
             next.name = this.name.isEmpty() ? next.name : this.name;
             next.holder = this.holder == this ? next : this.holder;
             next.slotsAt = -1L;
@@ -597,7 +631,7 @@ public final class NpcChain
                 this.prune(level);
             }
         }
-        if (this.soldierCount() > 0 && (this.planAt < 0L || now >= this.planAt))
+        if (this.soldierCount() > 0 && !this.posted() && (this.planAt < 0L || now >= this.planAt))
         {
             this.planAt = now + AncientEmpiresConfig.chainPlanTicks;
             this.npc.level().getProfiler().push("ancientempires_unit_plan");
@@ -970,6 +1004,10 @@ public final class NpcChain
         {
             tag.putString(NAME_KEY, this.name);
         }
+        if (this.posted)
+        {
+            tag.putBoolean(POSTED_KEY, true);
+        }
     }
 
     void load(CompoundTag tag)
@@ -991,6 +1029,7 @@ public final class NpcChain
         this.orderTarget = tag.hasUUID(ORDER_TARGET_KEY) ? tag.getUUID(ORDER_TARGET_KEY) : null;
         this.formation = NpcFormation.byName(tag.getString(FORMATION_KEY));
         this.name = tag.getString(NAME_KEY);
+        this.posted = tag.getBoolean(POSTED_KEY);
         this.holder = this;
     }
 }

@@ -74,6 +74,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.Locale;
 import java.util.UUID;
+import com.ancientempires.entity.npc.NpcGarrison;
 import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.common.util.FakePlayer;
 import com.ancientempires.network.ArmyPacket;
@@ -698,6 +699,49 @@ public final class StructureGameTests
         helper.assertTrue(army.stream().noneMatch(entry -> entry.id().equals(stranger.getUUID())), "and only the player's own");
         NpcArmy.act(player, NpcArmy.Action.REMOVE, soldier.getUUID(), null, "");
         helper.assertTrue(soldier.getChain().leaderId() == null, "Leave takes it out of the unit");
+        helper.succeed();
+    }
+
+    /**
+     * Chain of command, phase 5: a garrison's people come out as one unit under
+     * its captain, defending the spawner from their posts (no formation, each
+     * fighting for itself); the captain badly hurt sends them out at its attacker.
+     */
+    @GameTest(template = ARENA, timeoutTicks = 100)
+    public static void garrisonDefendsThenSallies(GameTestHelper helper)
+    {
+        ServerLevel level = helper.getLevel();
+        BlockPos spawner = helper.absolutePos(new BlockPos(-30, 1, -40));
+        level.getEntitiesOfClass(NpcEntity.class, new AABB(spawner).inflate(10.0D)).forEach(NpcEntity::discard);
+        List<NpcEntity> people = new ArrayList<>();
+        for (int i = 0; i < 4; i++)
+        {
+            NpcEntity npc = ModEntities.NPC.get().create(level);
+            npc.moveTo(spawner.getX() + 0.5D + i * 2, spawner.getY(), spawner.getZ() + 2.5D, 0.0F, 0.0F);
+            npc.assignFaction("empire");
+            npc.setNpcPath(NpcPath.SOLDIER);
+            npc.setRank(i == 2 ? NpcRank.CAPTAIN : NpcRank.SOLDIER);
+            npc.linkSpawner(spawner, 0, true);
+            level.addFreshEntity(npc);
+            people.add(npc);
+        }
+        NpcGarrison.form(level, people, spawner, null);
+        NpcEntity captain = people.get(2);
+        helper.assertTrue(captain.getChain().members().size() == 3, "the captain leads the garrison");
+        helper.assertTrue(captain.getChain().order() == NpcOrder.DEFEND && captain.getChain().posted(), "defending the spawner from its posts");
+        for (NpcEntity npc : people)
+        {
+            helper.assertTrue(!npc.getChain().formed() && !npc.getChain().grunt(), "a posted soldier keeps its post and its own wits");
+        }
+        Husk attacker = EntityType.HUSK.create(level);
+        attacker.moveTo(spawner.getX() + 8.5D, spawner.getY(), spawner.getZ() + 2.5D, 0.0F, 0.0F);
+        attacker.setNoAi(true);
+        level.addFreshEntity(attacker);
+        captain.hurt(level.damageSources().mobAttack(attacker), captain.getMaxHealth() * 0.8F);
+        helper.assertTrue(captain.getChain().order() == NpcOrder.ATTACK, "the wounded captain's garrison sallies out at its attacker, has " + captain.getChain().order());
+        helper.assertTrue(!captain.getChain().posted(), "off its posts");
+        attacker.discard();
+        people.forEach(NpcEntity::discard);
         helper.succeed();
     }
 

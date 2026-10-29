@@ -83,7 +83,8 @@ public final class NpcMorale
     public static final int REASON_WATCH = 12;
     public static final int REASON_FORMED = 13;
     public static final int REASON_LEADER_BROKEN = 14;
-    public static final int REASON_COUNT = 15;
+    public static final int REASON_HOME = 15;
+    public static final int REASON_COUNT = 16;
     /** A term this large (in morale points) is worth naming. */
     private static final double REASON_THRESHOLD = 4.0D;
 
@@ -217,22 +218,24 @@ public final class NpcMorale
     private float squad()
     {
         NpcChain chain = this.npc.getChain();
+        float home = NpcGarrison.onHomeGround(this.npc) ? (float) AncientEmpiresConfig.chainHomeGroundMorale : 0.0F;
         if (!chain.inChain())
         {
-            return 0.0F;
+            return home;
         }
-        return (chain.formedNearLeader() ? (float) AncientEmpiresConfig.chainFormationMorale : 0.0F)
+        return home + (chain.formedNearLeader() ? (float) AncientEmpiresConfig.chainFormationMorale : 0.0F)
                 - (chain.leaderBroken() ? (float) AncientEmpiresConfig.chainLeaderBrokenMorale : 0.0F);
     }
 
     private int squadReasons()
     {
         NpcChain chain = this.npc.getChain();
+        int home = AncientEmpiresConfig.chainHomeGroundMorale > 0.0D && NpcGarrison.onHomeGround(this.npc) ? 1 << REASON_HOME : 0;
         if (!chain.inChain())
         {
-            return 0;
+            return home;
         }
-        return (chain.formedNearLeader() && AncientEmpiresConfig.chainFormationMorale > 0.0D ? 1 << REASON_FORMED : 0)
+        return home | (chain.formedNearLeader() && AncientEmpiresConfig.chainFormationMorale > 0.0D ? 1 << REASON_FORMED : 0)
                 | (chain.leaderBroken() && AncientEmpiresConfig.chainLeaderBrokenMorale > 0.0D ? 1 << REASON_LEADER_BROKEN : 0);
     }
 

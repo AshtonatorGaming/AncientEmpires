@@ -34,7 +34,7 @@ public class NpcOrderGoal extends Goal
     public boolean canUse()
     {
         NpcChain chain = this.npc.getChain();
-        if (!AncientEmpiresConfig.chainEnabled || !chain.holdsOrder() || chain.orderPos() == null || this.npc.isSleeping())
+        if (!AncientEmpiresConfig.chainEnabled || !chain.holdsOrder() || chain.posted() || chain.orderPos() == null || this.npc.isSleeping())
         {
             return false;
         }

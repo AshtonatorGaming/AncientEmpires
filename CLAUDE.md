@@ -711,7 +711,15 @@ its own unless noted). Before adding behavior, check what AW did first.
   per row Follow, Free, Hold there, Fall back to me, next formation, rejoin, leave unit, move under another leader
   (Move, then click it), unit name (`AeUnitName`, kept by an heir), and take up on the held Signal Flag. `ArmyActionPacket`
   asks (list or action, checked against ownership in `NpcArmy.act`), `ArmyPacket` answers and redraws. Game test
-  `commandScreenActions` (a fake player). Next: phase 5, garrisons; anti-charge pikes later.
+  `commandScreenActions` (a fake player). Phase 5, garrisons (`NpcGarrison`, `chain.garrisons`): a garrison spawner's
+  people come out as one unit (`NpcChain.link`, no owner checks; the best leads, an acting sergeant if none ranks), on
+  Defend at the spawner facing whoever set it off, and posted (`posted`, `AePosted`; the user: garrisons have their
+  builder's posts, no formation): not formed, not grunts, no leader walk, no hand-out; each fights from its spot within
+  the defend radius. Home ground: `homeGroundMorale` inside an unclaimed structure of its own faction (reason 15). A
+  garrison captain or above dead or under `garrisonSallyHealth` sallies the structure's units: Attack at whoever struck
+  it (unposted; when that one falls they Hold there, formed), else Free. Back inside the spawner a soldier `depart`s.
+  Game test `garrisonDefendsThenSallies`. Not done (VISION): the banner as a stand-in leader while commanders stay
+  unspawned (needs virtual NPCs). Anti-charge pikes later.
 - Command (`NpcCommand`, `command` config, DESIGN Tier 1): every rank above soldier pulses an
   aura every `auraTicks` at its rank's `strengthByRank` (0.5, 1, 1.25) over allied soldiers
   within `radiusByRank` (8, 12, 16): `damageBonus` (15%) melee damage with any weapon and `armorBonus` armour, as

@@ -420,6 +420,9 @@ Chain of command (see [chain-of-command.md](chain-of-command.md)): a player's se
 | `chargeSpeed` | `1.25` | 1.0 to 2.0 | Speed multiplier on a charging rider's approach. |
 | `chargeDamage` | `1.5` | 1.0 to 4.0 | Damage multiplier on a charging rider's first hit while still moving fast. |
 | `chargeMinSpeed` | `0.15` | 0.0 to 1.0 | Blocks a tick the rider (its mount) must be moving for the charge to land harder. |
+| `garrisons` | `true` | true / false | A garrison spawner's people come out as one unit (its best leads), defending the spawner from their posts; off: each acts alone, as before. |
+| `homeGroundMorale` | `8.0` | 0.0 to 50.0 | Morale a garrison soldier gains inside an unclaimed structure of its own faction. |
+| `garrisonSallyHealth` | `0.3` | 0.0 to 1.0 | A garrison commander (captain or above) under this share of its health, or dead, sends the structure's garrison out after the invaders. |
 | `spreadWeight` | `3.0` | 0.0 to 32.0 | How much a soldier prefers an enemy fewer of its unit are on: blocks of extra distance per soldier already on it. 0 lets them all pile on the nearest. |
 
 ### `[sunlight]`

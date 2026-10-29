@@ -1,5 +1,8 @@
 package com.ancientempires.block;
 
+import java.util.List;
+import java.util.ArrayList;
+import com.ancientempires.entity.npc.NpcGarrison;
 import com.ancientempires.entity.npc.NpcEntity;
 import com.ancientempires.entity.npc.NpcSafety;
 import com.ancientempires.item.MobScrollItem;
@@ -328,17 +331,27 @@ public final class NpcSpawnerBlockEntity extends BlockEntity
             this.settle(level.getRandom());
         }
         // Everyone out, each slot's stack being how many of that one.
+        List<NpcEntity> people = new ArrayList<>();
         for (int slot = 0; slot < SLOTS; slot++)
         {
             ItemStack stack = this.slots.getItem(slot);
             for (int copy = 0; copy < stack.getCount(); copy++)
             {
-                if (this.spawnOne(level, stack, slot, true))
+                Entity spawned = this.spawnOne(level, stack, slot, true);
+                if (spawned != null)
                 {
                     this.out++;
+                    if (spawned instanceof NpcEntity npc)
+                    {
+                        people.add(npc);
+                    }
                 }
             }
         }
+        // They come out as one unit, defending this spawner (the chain of command's garrisons).
+        Player trigger = level.getNearestPlayer(this.worldPosition.getX() + 0.5D, this.worldPosition.getY() + 0.5D, this.worldPosition.getZ() + 0.5D,
+                this.playerRange, false);
+        NpcGarrison.form(level, people, this.worldPosition, trigger);
         this.setChanged();
     }
 
@@ -394,7 +407,7 @@ public final class NpcSpawnerBlockEntity extends BlockEntity
             ItemStack stack = this.slots.getItem(slot);
             if (!stack.isEmpty() && pick-- == 0)
             {
-                if (this.spawnOne(level, stack, slot, false))
+                if (this.spawnOne(level, stack, slot, false) != null)
                 {
                     this.spawned++;
                     this.setChanged();
@@ -404,13 +417,14 @@ public final class NpcSpawnerBlockEntity extends BlockEntity
         }
     }
 
-    /** One entity from a slot's scroll or egg, on safe ground within spawnRadius, its home here. */
-    private boolean spawnOne(ServerLevel level, ItemStack stack, int slot, boolean garrison)
+    /** One entity from a slot's scroll or egg, on safe ground within spawnRadius, its home here; null if none came. */
+    @Nullable
+    private Entity spawnOne(ServerLevel level, ItemStack stack, int slot, boolean garrison)
     {
         BlockPos at = this.findSpot(level);
         if (at == null)
         {
-            return false;
+            return null;
         }
         ItemStack one = stack.copyWithCount(1);
         Entity spawned;
@@ -429,7 +443,7 @@ public final class NpcSpawnerBlockEntity extends BlockEntity
         }
         else
         {
-            return false;
+            return null;
         }
         if (spawned instanceof NpcEntity npc)
         {
@@ -439,7 +453,7 @@ public final class NpcSpawnerBlockEntity extends BlockEntity
         {
             mob.setPersistenceRequired();
         }
-        return spawned != null;
+        return spawned;
     }
 
     @Nullable

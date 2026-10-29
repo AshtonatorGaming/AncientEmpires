@@ -258,6 +258,9 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.DoubleValue CHAIN_CHARGE_SPEED;
     private static final ForgeConfigSpec.DoubleValue CHAIN_CHARGE_DAMAGE;
     private static final ForgeConfigSpec.DoubleValue CHAIN_CHARGE_MIN_SPEED;
+    private static final ForgeConfigSpec.BooleanValue CHAIN_GARRISONS;
+    private static final ForgeConfigSpec.DoubleValue CHAIN_HOME_GROUND_MORALE;
+    private static final ForgeConfigSpec.DoubleValue CHAIN_GARRISON_SALLY_HEALTH;
     private static final ForgeConfigSpec.ConfigValue<List<? extends Double>> COMMAND_STRENGTH;
     private static final ForgeConfigSpec.ConfigValue<List<? extends Double>> COMMAND_RADIUS;
     private static final ForgeConfigSpec.ConfigValue<List<? extends Integer>> COMMAND_PROMOTE_LEVELS;
@@ -1109,6 +1112,9 @@ public final class AncientEmpiresConfig
         CHAIN_CHARGE_SPEED = builder.comment("Speed multiplier on a charging rider's approach.").defineInRange("chargeSpeed", 1.25D, 1.0D, 2.0D);
         CHAIN_CHARGE_DAMAGE = builder.comment("Damage multiplier on a charging rider's first hit while still moving fast.").defineInRange("chargeDamage", 1.5D, 1.0D, 4.0D);
         CHAIN_CHARGE_MIN_SPEED = builder.comment("Blocks a tick the rider (its mount) must be moving for the charge to land harder.").defineInRange("chargeMinSpeed", 0.15D, 0.0D, 1.0D);
+        CHAIN_GARRISONS = builder.comment("A garrison spawner's people come out as one unit (its best leads) defending the spawner; off: each acts alone, as before.").define("garrisons", true);
+        CHAIN_HOME_GROUND_MORALE = builder.comment("Morale a garrison soldier gains inside an unclaimed structure of its own faction.").defineInRange("homeGroundMorale", 8.0D, 0.0D, 50.0D);
+        CHAIN_GARRISON_SALLY_HEALTH = builder.comment("A garrison commander (captain or above) under this share of its health, or dead, sends the structure's garrison out after the invaders.").defineInRange("garrisonSallyHealth", 0.3D, 0.0D, 1.0D);
         builder.pop();
 
         builder.comment("Daylight: factions with \"sunlight\": \"burn\" in factions.json (the undead) burn in daylight like zombies (a helmet takes the wear) and seek shade once burning; \"avoid\" (vampires, as in Ancient Warfare) also keep to shade by day.").push("sunlight");
@@ -1624,6 +1630,9 @@ public final class AncientEmpiresConfig
     public static double chainChargeSpeed = 1.25D;
     public static double chainChargeDamage = 1.5D;
     public static double chainChargeMinSpeed = 0.15D;
+    public static boolean chainGarrisons = true;
+    public static double chainHomeGroundMorale = 8.0D;
+    public static double chainGarrisonSallyHealth = 0.3D;
     public static List<? extends Double> commandStrengthByRank = List.of(0.0D, 0.5D, 1.0D, 1.25D);
     public static List<? extends Double> commandRadiusByRank = List.of(0.0D, 8.0D, 12.0D, 16.0D);
     public static List<? extends Integer> commandPromoteLevels = List.of(1, 6, 12, 18);
@@ -2056,6 +2065,9 @@ public final class AncientEmpiresConfig
         chainChargeSpeed = CHAIN_CHARGE_SPEED.get();
         chainChargeDamage = CHAIN_CHARGE_DAMAGE.get();
         chainChargeMinSpeed = CHAIN_CHARGE_MIN_SPEED.get();
+        chainGarrisons = CHAIN_GARRISONS.get();
+        chainHomeGroundMorale = CHAIN_HOME_GROUND_MORALE.get();
+        chainGarrisonSallyHealth = CHAIN_GARRISON_SALLY_HEALTH.get();
         commandStrengthByRank = COMMAND_STRENGTH.get();
         commandRadiusByRank = COMMAND_RADIUS.get();
         commandPromoteLevels = COMMAND_PROMOTE_LEVELS.get();

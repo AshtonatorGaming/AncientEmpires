@@ -2364,6 +2364,12 @@ public class NpcEntity extends PathfinderMob
      * Spawned by an NPC spawner: its home is the spawner, and a garrison NPC is
      * taken back in when every player is far, or tells the spawner when it dies.
      */
+    /** A garrison soldier: sent out by a one-shot spawner, which takes it back in. */
+    public boolean isGarrison()
+    {
+        return this.garrison;
+    }
+
     public void linkSpawner(BlockPos spawner, int slot, boolean garrison)
     {
         this.spawnerPos = spawner.immutable();
@@ -2408,6 +2414,8 @@ public class NpcEntity extends PathfinderMob
             if (near == null || near.isSpectator())
             {
                 spawner.onGarrisonReturn();
+                // Back inside: out of its unit for good (it comes out a new soldier next time).
+                this.chain.depart(false);
                 this.discard();
             }
             return;
@@ -2450,6 +2458,11 @@ public class NpcEntity extends PathfinderMob
         if (hurt && !this.level().isClientSide)
         {
             this.morale.onHurt(source);
+            if (NpcGarrison.callsSally(this, false))
+            {
+                // The commander is badly hurt: the garrison sallies out at its attacker.
+                NpcGarrison.sallyOut(this, source.getEntity());
+            }
         }
         return hurt;
     }
@@ -2464,6 +2477,11 @@ public class NpcEntity extends PathfinderMob
             // The unit's next in line takes this NPC's place in the chain, and its command.
             NpcEntity heir = this.chain.depart(true);
             NpcCommand.succeed(this, source.getEntity() instanceof LivingEntity killer ? killer : null, heir);
+            if (NpcGarrison.callsSally(this, true))
+            {
+                // The structure's commander fell: its garrison sallies out at the killer (the heir's unit too).
+                NpcGarrison.sallyOut(this, source.getEntity());
+            }
             NpcMorale.onDeath(this, command, source.getEntity());
         }
         if (this.garrison && !this.isRemoved() && !this.dead && this.spawner() != null)
