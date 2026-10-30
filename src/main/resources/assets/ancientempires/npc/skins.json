@@ -153,8 +153,8 @@
           "skins": [
             {"id": "empire.spellcaster.3#empire_magician_1", "type": "empire.spellcaster.3", "name": "Empire Magician 1", "file": "empire_magician_1.png"},
             {"id": "empire.spellcaster.3#empire_magician_2", "type": "empire.spellcaster.3", "name": "Empire Magician 2", "file": "empire_magician_2.png"},
-            {"id": "empire.spellcaster.3#empire_magician_3", "type": "empire.spellcaster.3", "name": "Empire Magician 2", "file": "empire_magician_3.png"},
-            {"id": "empire.spellcaster.3#empire_magician_4", "type": "empire.spellcaster.3", "name": "Empire Magician 3", "file": "empire_magician_4.png"}
+            {"id": "empire.spellcaster.3#empire_magician_3", "type": "empire.spellcaster.3", "name": "Empire Magician 3", "file": "empire_magician_3.png"},
+            {"id": "empire.spellcaster.3#empire_magician_4", "type": "empire.spellcaster.3", "name": "Empire Magician 4", "file": "empire_magician_4.png"}
           ]
         },
         {
@@ -2696,11 +2696,11 @@
           "id": "spellcaster.1",
           "name": "Spellcaster 1",
           "skins": [
-            {"id": "orc.spellcaster.1#orc_shaman_1", "type": "orc.spellcaster.1", "name": "Orc Corrupter 8", "file": "orc_shaman_1.png"},
-            {"id": "orc.spellcaster.1#orc_shaman_2", "type": "orc.spellcaster.1", "name": "Orc Corrupter 9", "file": "orc_shaman_2.png"},
-            {"id": "orc.spellcaster.1#orc_shaman_3", "type": "orc.spellcaster.1", "name": "Orc Corrupter 10", "file": "orc_shaman_3.png"},
-            {"id": "orc.spellcaster.1#orc_shaman_4", "type": "orc.spellcaster.1", "name": "Orc Corrupter 11", "file": "orc_shaman_4.png"},
-            {"id": "orc.spellcaster.1#orc_shaman_5", "type": "orc.spellcaster.1", "name": "Orc Corrupter 12", "file": "orc_shaman_5.png"}
+            {"id": "orc.spellcaster.1#orc_shaman_1", "type": "orc.spellcaster.1", "name": "Orc Corrupter 1", "file": "orc_shaman_1.png"},
+            {"id": "orc.spellcaster.1#orc_shaman_2", "type": "orc.spellcaster.1", "name": "Orc Corrupter 2", "file": "orc_shaman_2.png"},
+            {"id": "orc.spellcaster.1#orc_shaman_3", "type": "orc.spellcaster.1", "name": "Orc Corrupter 3", "file": "orc_shaman_3.png"},
+            {"id": "orc.spellcaster.1#orc_shaman_4", "type": "orc.spellcaster.1", "name": "Orc Corrupter 4", "file": "orc_shaman_4.png"},
+            {"id": "orc.spellcaster.1#orc_shaman_5", "type": "orc.spellcaster.1", "name": "Orc Corrupter 5", "file": "orc_shaman_5.png"}
           ]
         },
         {
@@ -4082,7 +4082,7 @@
           "name": "Spellcaster 1",
           "skins": [
             {"id": "smingol.spellcaster.1#smingol_mage_1", "type": "smingol.spellcaster.1", "name": "Smingol Magus 1", "file": "smingol_mage_1.png"},
-            {"id": "smingol.spellcaster.1#smingol_mage_2", "type": "smingol.spellcaster.1", "name": "Smingol Magus 1", "file": "smingol_mage_2.png"}
+            {"id": "smingol.spellcaster.1#smingol_mage_2", "type": "smingol.spellcaster.1", "name": "Smingol Magus 2", "file": "smingol_mage_2.png"}
           ]
         },
         {
@@ -6153,7 +6153,7 @@
           "name": "Spellcaster 1",
           "skins": [
             {"id": "vampire.spellcaster.1#vampire_count_dracula", "type": "vampire.spellcaster.1", "name": "Vampire Strigoi 1", "file": "vampire_count_dracula.png"},
-            {"id": "vampire.spellcaster.1#vampire_lord_4", "type": "vampire.spellcaster.1", "name": "Vampire Strigoi 1", "file": "vampire_lord_4.png"}
+            {"id": "vampire.spellcaster.1#vampire_lord_4", "type": "vampire.spellcaster.1", "name": "Vampire Strigoi 2", "file": "vampire_lord_4.png"}
           ]
         },
         {
@@ -6774,10 +6774,10 @@
           "id": "loose.buffloka",
           "name": "Extra Buffloka",
           "skins": [
-            {"id": "loose.buffloka#buffloka_trader_6", "type": "loose.buffloka", "name": "Buffloka Trader 6", "file": "buffloka_trader_6.png"},
+            {"id": "loose.buffloka#buffloka_trader_6", "type": "loose.buffloka", "name": "Buffloka Trader 1", "file": "buffloka_trader_6.png"},
             {"id": "loose.buffloka#buffloka_chief", "type": "loose.buffloka", "name": "Buffloka Chief", "file": "buffloka_chief.png"},
-            {"id": "loose.buffloka#buffloka_trader_8", "type": "loose.buffloka", "name": "Buffloka Trader 8", "file": "buffloka_trader_8.png"},
-            {"id": "loose.buffloka#buffloka_trader_7", "type": "loose.buffloka", "name": "Buffloka Trader 7", "file": "buffloka_trader_7.png"}
+            {"id": "loose.buffloka#buffloka_trader_8", "type": "loose.buffloka", "name": "Buffloka Trader 2", "file": "buffloka_trader_8.png"},
+            {"id": "loose.buffloka#buffloka_trader_7", "type": "loose.buffloka", "name": "Buffloka Trader 3", "file": "buffloka_trader_7.png"}
           ]
         },
         {
@@ -6868,7 +6868,7 @@
           "skins": [
             {"id": "loose.custom#custom_outlaw_merry_man_1", "type": "loose.custom", "name": "Outlaw Merry Man 1", "file": "custom_outlaw_merry_man_1.png"},
             {"id": "loose.custom#custom_villager_town_bowman", "type": "loose.custom", "name": "Villager Town Bowman", "file": "custom_villager_town_bowman.png"},
-            {"id": "loose.custom#custom_mercenary_5", "type": "loose.custom", "name": "Mercenary 5", "file": "custom_mercenary_5.png"},
+            {"id": "loose.custom#custom_mercenary_5", "type": "loose.custom", "name": "Mercenary 1", "file": "custom_mercenary_5.png"},
             {"id": "loose.custom#custom_dungeon_raider_half_orc_thief", "type": "loose.custom", "name": "Dungeon Raider Half Orc Thief", "file": "custom_dungeon_raider_half_orc_thief.png"},
             {"id": "loose.custom#custom_villager_tavern_wench_3", "type": "loose.custom", "name": "Villager Tavern Wench 3", "file": "custom_villager_tavern_wench_3.png"},
             {"id": "loose.custom#custom_adventuress_3", "type": "loose.custom", "name": "Adventuress 3", "file": "custom_adventuress_3.png"},
@@ -7371,7 +7371,7 @@
           "name": "Extra Custom 17",
           "skins": [
             {"id": "loose.custom#custom_gypsy_woman_4", "type": "loose.custom", "name": "Gypsy Woman 4", "file": "custom_gypsy_woman_4.png"},
-            {"id": "loose.custom#custom_villager_miner_2", "type": "loose.custom", "name": "Villager Miner 2", "file": "custom_villager_miner_2.png"},
+            {"id": "loose.custom#custom_villager_miner_2", "type": "loose.custom", "name": "Villager Miner 1", "file": "custom_villager_miner_2.png"},
             {"id": "loose.custom#custom_adventurer_elf_thief", "type": "loose.custom", "name": "Adventurer Elf Thief", "file": "custom_adventurer_elf_thief.png"},
             {"id": "loose.custom#custom_assassin_3", "type": "loose.custom", "name": "Assassin 3", "file": "custom_assassin_3.png"},
             {"id": "loose.custom#custom_rogue_winter", "type": "loose.custom", "name": "Rogue Winter", "file": "custom_rogue_winter.png"},
@@ -7384,7 +7384,7 @@
             {"id": "loose.custom#custom_god_norska_nott_goddess_of_night", "type": "loose.custom", "name": "God Norska Nott Goddess Of Night", "file": "custom_god_norska_nott_goddess_of_night.png"},
             {"id": "loose.custom#custom_monster_lava_lord", "type": "loose.custom", "name": "Monster Lava Lord", "file": "custom_monster_lava_lord.png"},
             {"id": "loose.custom#custom_hero_8", "type": "loose.custom", "name": "Hero 8", "file": "custom_hero_8.png"},
-            {"id": "loose.custom#custom_villager_miner_1", "type": "loose.custom", "name": "Villager Miner 1", "file": "custom_villager_miner_1.png"},
+            {"id": "loose.custom#custom_villager_miner_1", "type": "loose.custom", "name": "Villager Miner 2", "file": "custom_villager_miner_1.png"},
             {"id": "loose.custom#custom_empire_imperial_guard_4", "type": "loose.custom", "name": "Empire Imperial Guard 4", "file": "custom_empire_imperial_guard_4.png"},
             {"id": "loose.custom#custom_monster_swamp_witch", "type": "loose.custom", "name": "Monster Swamp Witch", "file": "custom_monster_swamp_witch.png"},
             {"id": "loose.custom#custom_fairy_tale_santa", "type": "loose.custom", "name": "Fairy Tale Santa", "file": "custom_fairy_tale_santa.png"},
@@ -7428,7 +7428,7 @@
             {"id": "loose.custom#custom_crabman_1", "type": "loose.custom", "name": "Crabman 1", "file": "custom_crabman_1.png"},
             {"id": "loose.custom#custom_god_zimba_hunting_god", "type": "loose.custom", "name": "God Zimba Hunting God", "file": "custom_god_zimba_hunting_god.png"},
             {"id": "loose.custom#custom_adventurer_thief_2", "type": "loose.custom", "name": "Adventurer Thief 2", "file": "custom_adventurer_thief_2.png"},
-            {"id": "loose.custom#custom_crabman_4", "type": "loose.custom", "name": "Crabman 4", "file": "custom_crabman_4.png"},
+            {"id": "loose.custom#custom_crabman_4", "type": "loose.custom", "name": "Crabman 2", "file": "custom_crabman_4.png"},
             {"id": "loose.custom#custom_monster_sabretoothed_flippetygibbet", "type": "loose.custom", "name": "Monster Sabretoothed Flippetygibbet", "file": "custom_monster_sabretoothed_flippetygibbet.png"},
             {"id": "loose.custom#custom_villager_goodwife_1", "type": "loose.custom", "name": "Villager Goodwife 1", "file": "custom_villager_goodwife_1.png"},
             {"id": "loose.custom#custom_sorcerer_2", "type": "loose.custom", "name": "Sorcerer 2", "file": "custom_sorcerer_2.png"},
@@ -7598,7 +7598,7 @@
             {"id": "loose.custom#custom_villager_village_idiot", "type": "loose.custom", "name": "Villager Village Idiot", "file": "custom_villager_village_idiot.png"},
             {"id": "loose.custom#custom_viking_thane", "type": "loose.custom", "name": "Viking Thane", "file": "custom_viking_thane.png"},
             {"id": "loose.custom#custom_monty_python_tim", "type": "loose.custom", "name": "Monty Python Tim", "file": "custom_monty_python_tim.png"},
-            {"id": "loose.custom#custom_tribesman_12", "type": "loose.custom", "name": "Tribesman 12", "file": "custom_tribesman_12.png"},
+            {"id": "loose.custom#custom_tribesman_12", "type": "loose.custom", "name": "Tribesman 1", "file": "custom_tribesman_12.png"},
             {"id": "loose.custom#custom_fairy_tale_santa_elf_2", "type": "loose.custom", "name": "Fairy Tale Santa Elf 2", "file": "custom_fairy_tale_santa_elf_2.png"},
             {"id": "loose.custom#custom_monster_patchwork_ghost", "type": "loose.custom", "name": "Monster Patchwork Ghost", "file": "custom_monster_patchwork_ghost.png"},
             {"id": "loose.custom#custom_lotr_wizard_radagast", "type": "loose.custom", "name": "Lotr Wizard Radagast", "file": "custom_lotr_wizard_radagast.png"},
@@ -7609,7 +7609,7 @@
             {"id": "loose.custom#custom_lotr_ranger_4", "type": "loose.custom", "name": "Lotr Ranger 4", "file": "custom_lotr_ranger_4.png"},
             {"id": "loose.custom#custom_monster_bat_creature", "type": "loose.custom", "name": "Monster Bat Creature", "file": "custom_monster_bat_creature.png"},
             {"id": "loose.custom#custom_trader_wool_merchant", "type": "loose.custom", "name": "Trader Wool Merchant", "file": "custom_trader_wool_merchant.png"},
-            {"id": "loose.custom#custom_tribesman_15", "type": "loose.custom", "name": "Tribesman 15", "file": "custom_tribesman_15.png"},
+            {"id": "loose.custom#custom_tribesman_15", "type": "loose.custom", "name": "Tribesman 2", "file": "custom_tribesman_15.png"},
             {"id": "loose.custom#custom_adventurer_lost_samurai_ronin", "type": "loose.custom", "name": "Adventurer Lost Samurai Ronin", "file": "custom_adventurer_lost_samurai_ronin.png"},
             {"id": "loose.custom#custom_monster_shroom", "type": "loose.custom", "name": "Monster Shroom", "file": "custom_monster_shroom.png"},
             {"id": "loose.custom#custom_monster_insect_fly_man", "type": "loose.custom", "name": "Monster Insect Fly Man", "file": "custom_monster_insect_fly_man.png"},
@@ -7631,7 +7631,7 @@
             {"id": "loose.custom#custom_monster_grey", "type": "loose.custom", "name": "Monster Grey", "file": "custom_monster_grey.png"},
             {"id": "loose.custom#custom_adventurer_bold_rogue", "type": "loose.custom", "name": "Adventurer Bold Rogue", "file": "custom_adventurer_bold_rogue.png"},
             {"id": "loose.custom#custom_villager_cook", "type": "loose.custom", "name": "Villager Cook", "file": "custom_villager_cook.png"},
-            {"id": "loose.custom#custom_hero_16", "type": "loose.custom", "name": "Hero 16", "file": "custom_hero_16.png"},
+            {"id": "loose.custom#custom_hero_16", "type": "loose.custom", "name": "Hero 1", "file": "custom_hero_16.png"},
             {"id": "loose.custom#custom_villager_town_guard", "type": "loose.custom", "name": "Villager Town Guard", "file": "custom_villager_town_guard.png"},
             {"id": "loose.custom#custom_fairy_tale_santa_elf_1", "type": "loose.custom", "name": "Fairy Tale Santa Elf 1", "file": "custom_fairy_tale_santa_elf_1.png"},
             {"id": "loose.custom#custom_royal_court_kings_jester", "type": "loose.custom", "name": "Royal Court Kings Jester", "file": "custom_royal_court_kings_jester.png"},
@@ -7639,7 +7639,7 @@
             {"id": "loose.custom#custom_adventurer_hobbit_1", "type": "loose.custom", "name": "Adventurer Hobbit 1", "file": "custom_adventurer_hobbit_1.png"},
             {"id": "loose.custom#custom_adventurer_norska_warrior_2", "type": "loose.custom", "name": "Adventurer Norska Warrior 2", "file": "custom_adventurer_norska_warrior_2.png"},
             {"id": "loose.custom#custom_monster_dragon_knight", "type": "loose.custom", "name": "Monster Dragon Knight", "file": "custom_monster_dragon_knight.png"},
-            {"id": "loose.custom#custom_hero_3", "type": "loose.custom", "name": "Hero 3", "file": "custom_hero_3.png"},
+            {"id": "loose.custom#custom_hero_3", "type": "loose.custom", "name": "Hero 2", "file": "custom_hero_3.png"},
             {"id": "loose.custom#custom_lotr_dunedain_3", "type": "loose.custom", "name": "Lotr Dunedain 3", "file": "custom_lotr_dunedain_3.png"},
             {"id": "loose.custom#custom_villager_town_mayor", "type": "loose.custom", "name": "Villager Town Mayor", "file": "custom_villager_town_mayor.png"},
             {"id": "loose.custom#custom_lotr_laketown_bard_the_bowman", "type": "loose.custom", "name": "Lotr Laketown Bard The Bowman", "file": "custom_lotr_laketown_bard_the_bowman.png"},
@@ -7878,7 +7878,7 @@
             {"id": "loose.custom#custom_monster_silent_gentleman_1", "type": "loose.custom", "name": "Monster Silent Gentleman 1", "file": "custom_monster_silent_gentleman_1.png"},
             {"id": "loose.custom#custom_lotr_mordor_gorbag", "type": "loose.custom", "name": "Lotr Mordor Gorbag", "file": "custom_lotr_mordor_gorbag.png"},
             {"id": "loose.custom#custom_dw_patrician_vetinari", "type": "loose.custom", "name": "Dw Patrician Vetinari", "file": "custom_dw_patrician_vetinari.png"},
-            {"id": "loose.custom#custom_lotr_elf_6", "type": "loose.custom", "name": "Lotr Elf 6", "file": "custom_lotr_elf_6.png"},
+            {"id": "loose.custom#custom_lotr_elf_6", "type": "loose.custom", "name": "Lotr Elf 1", "file": "custom_lotr_elf_6.png"},
             {"id": "loose.custom#custom_monty_python_camelot_black_knight", "type": "loose.custom", "name": "Monty Python Camelot Black Knight", "file": "custom_monty_python_camelot_black_knight.png"},
             {"id": "loose.custom#custom_myth_buster", "type": "loose.custom", "name": "Myth Buster", "file": "custom_myth_buster.png"},
             {"id": "loose.custom#custom_monster_sealsker_cursed", "type": "loose.custom", "name": "Monster Sealsker Cursed", "file": "custom_monster_sealsker_cursed.png"},
@@ -7947,7 +7947,7 @@
           "name": "Extra Custom 33",
           "skins": [
             {"id": "loose.custom#custom_dungeon_raider_rogue", "type": "loose.custom", "name": "Dungeon Raider Rogue", "file": "custom_dungeon_raider_rogue.png"},
-            {"id": "loose.custom#custom_hero_17", "type": "loose.custom", "name": "Hero 17", "file": "custom_hero_17.png"},
+            {"id": "loose.custom#custom_hero_17", "type": "loose.custom", "name": "Hero 1", "file": "custom_hero_17.png"},
             {"id": "loose.custom#custom_royal_court_nobleman_4", "type": "loose.custom", "name": "Royal Court Nobleman 4", "file": "custom_royal_court_nobleman_4.png"},
             {"id": "loose.custom#custom_villager_butcher", "type": "loose.custom", "name": "Villager Butcher", "file": "custom_villager_butcher.png"},
             {"id": "loose.custom#custom_villager_questing_knight", "type": "loose.custom", "name": "Villager Questing Knight", "file": "custom_villager_questing_knight.png"},
@@ -7984,7 +7984,7 @@
           "skins": [
             {"id": "loose.custom#custom_monster_dragonkin", "type": "loose.custom", "name": "Monster Dragonkin", "file": "custom_monster_dragonkin.png"},
             {"id": "loose.custom#custom_monster_slenderman", "type": "loose.custom", "name": "Monster Slenderman", "file": "custom_monster_slenderman.png"},
-            {"id": "loose.custom#custom_village_criminal_bandit_3", "type": "loose.custom", "name": "Village Criminal Bandit 3", "file": "custom_village_criminal_bandit_3.png"},
+            {"id": "loose.custom#custom_village_criminal_bandit_3", "type": "loose.custom", "name": "Village Criminal Bandit 1", "file": "custom_village_criminal_bandit_3.png"},
             {"id": "loose.custom#custom_monster_deep_dweller", "type": "loose.custom", "name": "Monster Deep Dweller", "file": "custom_monster_deep_dweller.png"},
             {"id": "loose.custom#custom_monster_sid_the_sloth", "type": "loose.custom", "name": "Monster Sid The Sloth", "file": "custom_monster_sid_the_sloth.png"},
             {"id": "loose.custom#custom_lotr_mordor_guritz", "type": "loose.custom", "name": "Lotr Mordor Guritz", "file": "custom_lotr_mordor_guritz.png"},
@@ -7999,7 +7999,7 @@
             {"id": "loose.custom#custom_monster_undead_voodoo_zombie", "type": "loose.custom", "name": "Monster Undead Voodoo Zombie", "file": "custom_monster_undead_voodoo_zombie.png"},
             {"id": "loose.custom#custom_adventurer_lost_samurai_retainer_1", "type": "loose.custom", "name": "Adventurer Lost Samurai Retainer 1", "file": "custom_adventurer_lost_samurai_retainer_1.png"},
             {"id": "loose.custom#custom_monster_dark_mage", "type": "loose.custom", "name": "Monster Dark Mage", "file": "custom_monster_dark_mage.png"},
-            {"id": "loose.custom#custom_village_criminal_bandit_7", "type": "loose.custom", "name": "Village Criminal Bandit 7", "file": "custom_village_criminal_bandit_7.png"},
+            {"id": "loose.custom#custom_village_criminal_bandit_7", "type": "loose.custom", "name": "Village Criminal Bandit 2", "file": "custom_village_criminal_bandit_7.png"},
             {"id": "loose.custom#custom_lotr_mordor_nazgul_2", "type": "loose.custom", "name": "Lotr Mordor Nazgul 2", "file": "custom_lotr_mordor_nazgul_2.png"},
             {"id": "loose.custom#custom_villager_girl_2", "type": "loose.custom", "name": "Villager Girl 2", "file": "custom_villager_girl_2.png"},
             {"id": "loose.custom#custom_monster_ishtari_tomb_guardian", "type": "loose.custom", "name": "Monster Ishtari Tomb Guardian", "file": "custom_monster_ishtari_tomb_guardian.png"},
@@ -8054,7 +8054,7 @@
           "id": "loose.custom~36",
           "name": "Extra Custom 36",
           "skins": [
-            {"id": "loose.custom#custom_hero_6", "type": "loose.custom", "name": "Hero 6", "file": "custom_hero_6.png"},
+            {"id": "loose.custom#custom_hero_6", "type": "loose.custom", "name": "Hero 1", "file": "custom_hero_6.png"},
             {"id": "loose.custom#custom_villager_seamstress_2", "type": "loose.custom", "name": "Villager Seamstress 2", "file": "custom_villager_seamstress_2.png"},
             {"id": "loose.custom#custom_monster_demon_red_guard_1", "type": "loose.custom", "name": "Monster Demon Red Guard 1", "file": "custom_monster_demon_red_guard_1.png"},
             {"id": "loose.custom#custom_god_angel_2", "type": "loose.custom", "name": "God Angel 2", "file": "custom_god_angel_2.png"},
@@ -8062,14 +8062,14 @@
             {"id": "loose.custom#custom_adventurer_bard_1", "type": "loose.custom", "name": "Adventurer Bard 1", "file": "custom_adventurer_bard_1.png"},
             {"id": "loose.custom#custom_villager_serving_girl_2", "type": "loose.custom", "name": "Villager Serving Girl 2", "file": "custom_villager_serving_girl_2.png"},
             {"id": "loose.custom#custom_fairy_tale_alice_white_rabbit", "type": "loose.custom", "name": "Fairy Tale Alice White Rabbit", "file": "custom_fairy_tale_alice_white_rabbit.png"},
-            {"id": "loose.custom#custom_hero_18", "type": "loose.custom", "name": "Hero 18", "file": "custom_hero_18.png"},
+            {"id": "loose.custom#custom_hero_18", "type": "loose.custom", "name": "Hero 2", "file": "custom_hero_18.png"},
             {"id": "loose.custom#custom_adventurer_spyro", "type": "loose.custom", "name": "Adventurer Spyro", "file": "custom_adventurer_spyro.png"},
             {"id": "loose.custom#custom_monster_little_red_riding_wolf", "type": "loose.custom", "name": "Monster Little Red Riding Wolf", "file": "custom_monster_little_red_riding_wolf.png"},
             {"id": "loose.custom#custom_monster_woodland_lurker", "type": "loose.custom", "name": "Monster Woodland Lurker", "file": "custom_monster_woodland_lurker.png"},
             {"id": "loose.custom#custom_wildling_woman", "type": "loose.custom", "name": "Wildling Woman", "file": "custom_wildling_woman.png"},
             {"id": "loose.custom#custom_hunter_2", "type": "loose.custom", "name": "Hunter 2", "file": "custom_hunter_2.png"},
             {"id": "loose.custom#custom_lotr_saruman_lurtz_2", "type": "loose.custom", "name": "Lotr Saruman Lurtz 2", "file": "custom_lotr_saruman_lurtz_2.png"},
-            {"id": "loose.custom#custom_tribesman_6", "type": "loose.custom", "name": "Tribesman 6", "file": "custom_tribesman_6.png"},
+            {"id": "loose.custom#custom_tribesman_6", "type": "loose.custom", "name": "Tribesman 1", "file": "custom_tribesman_6.png"},
             {"id": "loose.custom#custom_villager_peasant_3", "type": "loose.custom", "name": "Villager Peasant 3", "file": "custom_villager_peasant_3.png"},
             {"id": "loose.custom#custom_monster_animated_daedric_armour", "type": "loose.custom", "name": "Monster Animated Daedric Armour", "file": "custom_monster_animated_daedric_armour.png"},
             {"id": "loose.custom#custom_monster_selenite_queen", "type": "loose.custom", "name": "Monster Selenite Queen", "file": "custom_monster_selenite_queen.png"},
@@ -8077,7 +8077,7 @@
             {"id": "loose.custom#custom_monster_weretiger", "type": "loose.custom", "name": "Monster Weretiger", "file": "custom_monster_weretiger.png"},
             {"id": "loose.custom#custom_lotr_saruman_ugluk", "type": "loose.custom", "name": "Lotr Saruman Ugluk", "file": "custom_lotr_saruman_ugluk.png"},
             {"id": "loose.custom#custom_only_fools_grandad", "type": "loose.custom", "name": "Only Fools Grandad", "file": "custom_only_fools_grandad.png"},
-            {"id": "loose.custom#custom_tribesman_16", "type": "loose.custom", "name": "Tribesman 16", "file": "custom_tribesman_16.png"},
+            {"id": "loose.custom#custom_tribesman_16", "type": "loose.custom", "name": "Tribesman 2", "file": "custom_tribesman_16.png"},
             {"id": "loose.custom#custom_undead_revenant", "type": "loose.custom", "name": "Undead Revenant", "file": "custom_undead_revenant.png"},
             {"id": "loose.custom#custom_adventurer_uhtred_of_babbenburg", "type": "loose.custom", "name": "Adventurer Uhtred Of Babbenburg", "file": "custom_adventurer_uhtred_of_babbenburg.png"},
             {"id": "loose.custom#custom_monster_mine_lurker", "type": "loose.custom", "name": "Monster Mine Lurker", "file": "custom_monster_mine_lurker.png"},
@@ -8638,7 +8638,7 @@
             {"id": "loose.custom#custom_god_ishtar_bast", "type": "loose.custom", "name": "God Ishtar Bast", "file": "custom_god_ishtar_bast.png"},
             {"id": "loose.custom#custom_villager_noblewoman_2", "type": "loose.custom", "name": "Villager Noblewoman 2", "file": "custom_villager_noblewoman_2.png"},
             {"id": "loose.custom#custom_lotr_rohan_eomer_1", "type": "loose.custom", "name": "Lotr Rohan Eomer 1", "file": "custom_lotr_rohan_eomer_1.png"},
-            {"id": "loose.custom#custom_lotr_mordor_orc_3", "type": "loose.custom", "name": "Lotr Mordor Orc 3", "file": "custom_lotr_mordor_orc_3.png"},
+            {"id": "loose.custom#custom_lotr_mordor_orc_3", "type": "loose.custom", "name": "Lotr Mordor Orc 1", "file": "custom_lotr_mordor_orc_3.png"},
             {"id": "loose.custom#custom_eastern_princess", "type": "loose.custom", "name": "Eastern Princess", "file": "custom_eastern_princess.png"},
             {"id": "loose.custom#custom_gypsy_girl_esmerelda", "type": "loose.custom", "name": "Gypsy Girl Esmerelda", "file": "custom_gypsy_girl_esmerelda.png"},
             {"id": "loose.custom#custom_tribesman_islander_woman", "type": "loose.custom", "name": "Tribesman Islander Woman", "file": "custom_tribesman_islander_woman.png"},
@@ -8649,7 +8649,7 @@
             {"id": "loose.custom#custom_adventurer_bard_2", "type": "loose.custom", "name": "Adventurer Bard 2", "file": "custom_adventurer_bard_2.png"},
             {"id": "loose.custom#custom_dw_angua_von_uberwald", "type": "loose.custom", "name": "Dw Angua Von Uberwald", "file": "custom_dw_angua_von_uberwald.png"},
             {"id": "loose.custom#custom_adventurer_lost_samurai_sorcerer", "type": "loose.custom", "name": "Adventurer Lost Samurai Sorcerer", "file": "custom_adventurer_lost_samurai_sorcerer.png"},
-            {"id": "loose.custom#custom_lotr_mordor_orc_5", "type": "loose.custom", "name": "Lotr Mordor Orc 5", "file": "custom_lotr_mordor_orc_5.png"},
+            {"id": "loose.custom#custom_lotr_mordor_orc_5", "type": "loose.custom", "name": "Lotr Mordor Orc 2", "file": "custom_lotr_mordor_orc_5.png"},
             {"id": "loose.custom#custom_monster_elf_wicked_mage", "type": "loose.custom", "name": "Monster Elf Wicked Mage", "file": "custom_monster_elf_wicked_mage.png"},
             {"id": "loose.custom#custom_monster_sand_bandit", "type": "loose.custom", "name": "Monster Sand Bandit", "file": "custom_monster_sand_bandit.png"},
             {"id": "loose.custom#custom_lotr_mordor_ratbag", "type": "loose.custom", "name": "Lotr Mordor Ratbag", "file": "custom_lotr_mordor_ratbag.png"},
@@ -8679,12 +8679,12 @@
             {"id": "loose.custom#custom_monster_troll_arctic_troll", "type": "loose.custom", "name": "Monster Troll Arctic Troll", "file": "custom_monster_troll_arctic_troll.png"},
             {"id": "loose.custom#custom_monster_myconid_1", "type": "loose.custom", "name": "Monster Myconid 1", "file": "custom_monster_myconid_1.png"},
             {"id": "loose.custom#custom_minecraftia_emerald_order_soldier", "type": "loose.custom", "name": "Minecraftia Emerald Order Soldier", "file": "custom_minecraftia_emerald_order_soldier.png"},
-            {"id": "loose.custom#custom_tribesman_2", "type": "loose.custom", "name": "Tribesman 2", "file": "custom_tribesman_2.png"},
+            {"id": "loose.custom#custom_tribesman_2", "type": "loose.custom", "name": "Tribesman 1", "file": "custom_tribesman_2.png"},
             {"id": "loose.custom#custom_god_priestess_5", "type": "loose.custom", "name": "God Priestess 5", "file": "custom_god_priestess_5.png"},
             {"id": "loose.custom#custom_villager_good_witch_herbalist", "type": "loose.custom", "name": "Villager Good Witch Herbalist", "file": "custom_villager_good_witch_herbalist.png"},
             {"id": "loose.custom#custom_merchant_2", "type": "loose.custom", "name": "Merchant 2", "file": "custom_merchant_2.png"},
             {"id": "loose.custom#custom_villager_fire_juggler", "type": "loose.custom", "name": "Villager Fire Juggler", "file": "custom_villager_fire_juggler.png"},
-            {"id": "loose.custom#custom_tribesman_7", "type": "loose.custom", "name": "Tribesman 7", "file": "custom_tribesman_7.png"},
+            {"id": "loose.custom#custom_tribesman_7", "type": "loose.custom", "name": "Tribesman 2", "file": "custom_tribesman_7.png"},
             {"id": "loose.custom#custom_villager_shopkeep_butcher", "type": "loose.custom", "name": "Villager Shopkeep Butcher", "file": "custom_villager_shopkeep_butcher.png"},
             {"id": "loose.custom#custom_monster_monstrous_shadow", "type": "loose.custom", "name": "Monster Monstrous Shadow", "file": "custom_monster_monstrous_shadow.png"},
             {"id": "loose.custom#custom_monster_bloodwraith", "type": "loose.custom", "name": "Monster Bloodwraith", "file": "custom_monster_bloodwraith.png"},
@@ -8798,13 +8798,13 @@
           "id": "loose.dwarf",
           "name": "Extra Dwarf",
           "skins": [
-            {"id": "loose.dwarf#dwarf_noble_4", "type": "loose.dwarf", "name": "Dwarf Noble 4", "file": "dwarf_noble_4.png"},
+            {"id": "loose.dwarf#dwarf_noble_4", "type": "loose.dwarf", "name": "Dwarf Noble 1", "file": "dwarf_noble_4.png"},
             {"id": "loose.dwarf#dwarf_kings_champion", "type": "loose.dwarf", "name": "Dwarf Kings Champion", "file": "dwarf_kings_champion.png"},
             {"id": "loose.dwarf#dwarf_noble_2", "type": "loose.dwarf", "name": "Dwarf Noble 2", "file": "dwarf_noble_2.png"},
             {"id": "loose.dwarf#dwarf_guard_1", "type": "loose.dwarf", "name": "Dwarf Guard 1", "file": "dwarf_guard_1.png"},
             {"id": "loose.dwarf#dwarf_warrior_9", "type": "loose.dwarf", "name": "Dwarf Warrior 9", "file": "dwarf_warrior_9.png"},
-            {"id": "loose.dwarf#dwarf_noble_1", "type": "loose.dwarf", "name": "Dwarf Noble 1", "file": "dwarf_noble_1.png"},
-            {"id": "loose.dwarf#dwarf_noble_3", "type": "loose.dwarf", "name": "Dwarf Noble 3", "file": "dwarf_noble_3.png"}
+            {"id": "loose.dwarf#dwarf_noble_1", "type": "loose.dwarf", "name": "Dwarf Noble 3", "file": "dwarf_noble_1.png"},
+            {"id": "loose.dwarf#dwarf_noble_3", "type": "loose.dwarf", "name": "Dwarf Noble 4", "file": "dwarf_noble_3.png"}
           ]
         },
         {
@@ -8832,9 +8832,9 @@
           "id": "loose.evil",
           "name": "Extra Evil",
           "skins": [
-            {"id": "loose.evil#evil_cultist_2", "type": "loose.evil", "name": "Evil Cultist 2", "file": "evil_cultist_2.png"},
+            {"id": "loose.evil#evil_cultist_2", "type": "loose.evil", "name": "Evil Cultist 1", "file": "evil_cultist_2.png"},
             {"id": "loose.evil#evil_trader_1", "type": "loose.evil", "name": "Evil Trader 1", "file": "evil_trader_1.png"},
-            {"id": "loose.evil#evil_cultist_1", "type": "loose.evil", "name": "Evil Cultist 1", "file": "evil_cultist_1.png"},
+            {"id": "loose.evil#evil_cultist_1", "type": "loose.evil", "name": "Evil Cultist 2", "file": "evil_cultist_1.png"},
             {"id": "loose.evil#evil_cultist_3", "type": "loose.evil", "name": "Evil Cultist 3", "file": "evil_cultist_3.png"}
           ]
         },
@@ -8871,16 +8871,16 @@
           "name": "Extra Guild",
           "skins": [
             {"id": "loose.guild#guild_mechant_13", "type": "loose.guild", "name": "Guild Mechant 13", "file": "guild_mechant_13.png"},
-            {"id": "loose.guild#guild_merchant_officer_4", "type": "loose.guild", "name": "Guild Merchant Officer 4", "file": "guild_merchant_officer_4.png"},
-            {"id": "loose.guild#guild_merchant_officer_3", "type": "loose.guild", "name": "Guild Merchant Officer 3", "file": "guild_merchant_officer_3.png"}
+            {"id": "loose.guild#guild_merchant_officer_4", "type": "loose.guild", "name": "Guild Merchant Officer 1", "file": "guild_merchant_officer_4.png"},
+            {"id": "loose.guild#guild_merchant_officer_3", "type": "loose.guild", "name": "Guild Merchant Officer 2", "file": "guild_merchant_officer_3.png"}
           ]
         },
         {
           "id": "loose.hill",
           "name": "Extra Hill",
           "skins": [
-            {"id": "loose.hill#hill_giant_10", "type": "loose.hill", "name": "Hill Giant 10", "file": "hill_giant_10.png"},
-            {"id": "loose.hill#hill_giant_9", "type": "loose.hill", "name": "Hill Giant 9", "file": "hill_giant_9.png"}
+            {"id": "loose.hill#hill_giant_10", "type": "loose.hill", "name": "Hill Giant 1", "file": "hill_giant_10.png"},
+            {"id": "loose.hill#hill_giant_9", "type": "loose.hill", "name": "Hill Giant 2", "file": "hill_giant_9.png"}
           ]
         },
         {
@@ -8968,9 +8968,9 @@
           "id": "loose.minossian",
           "name": "Extra Minossian",
           "skins": [
-            {"id": "loose.minossian#minossian_priest_2", "type": "loose.minossian", "name": "Minossian Priest 2", "file": "minossian_priest_2.png"},
+            {"id": "loose.minossian#minossian_priest_2", "type": "loose.minossian", "name": "Minossian Priest 1", "file": "minossian_priest_2.png"},
             {"id": "loose.minossian#minossian_priest_red", "type": "loose.minossian", "name": "Minossian Priest Red", "file": "minossian_priest_red.png"},
-            {"id": "loose.minossian#minossian_priest_1", "type": "loose.minossian", "name": "Minossian Priest 1", "file": "minossian_priest_1.png"},
+            {"id": "loose.minossian#minossian_priest_1", "type": "loose.minossian", "name": "Minossian Priest 2", "file": "minossian_priest_1.png"},
             {"id": "loose.minossian#minossian_priest_blue", "type": "loose.minossian", "name": "Minossian Priest Blue", "file": "minossian_priest_blue.png"}
           ]
         },
@@ -8980,9 +8980,9 @@
           "skins": [
             {"id": "loose.norska#norska_priestess_of_freya_2", "type": "loose.norska", "name": "Norska Priestess Of Freya 2", "file": "norska_priestess_of_freya_2.png"},
             {"id": "loose.norska#norska_bowman_1", "type": "loose.norska", "name": "Norska Bowman 1", "file": "norska_bowman_1.png"},
-            {"id": "loose.norska#norska_goddi_3", "type": "loose.norska", "name": "Norska Goddi 3", "file": "norska_goddi_3.png"},
-            {"id": "loose.norska#norska_goddi_1", "type": "loose.norska", "name": "Norska Goddi 1", "file": "norska_goddi_1.png"},
-            {"id": "loose.norska#norska_goddi_2", "type": "loose.norska", "name": "Norska Goddi 2", "file": "norska_goddi_2.png"}
+            {"id": "loose.norska#norska_goddi_3", "type": "loose.norska", "name": "Norska Goddi 1", "file": "norska_goddi_3.png"},
+            {"id": "loose.norska#norska_goddi_1", "type": "loose.norska", "name": "Norska Goddi 2", "file": "norska_goddi_1.png"},
+            {"id": "loose.norska#norska_goddi_2", "type": "loose.norska", "name": "Norska Goddi 3", "file": "norska_goddi_2.png"}
           ]
         },
         {
@@ -8990,14 +8990,14 @@
           "name": "Extra Old",
           "skins": [
             {"id": "loose.old#old_minossian_priest_blue", "type": "loose.old", "name": "Old Minossian Priest Blue", "file": "old_minossian_priest_blue.png"},
-            {"id": "loose.old#old_minossian_mage_3", "type": "loose.old", "name": "Old Minossian Mage 3", "file": "old_minossian_mage_3.png"},
+            {"id": "loose.old#old_minossian_mage_3", "type": "loose.old", "name": "Old Minossian Mage 1", "file": "old_minossian_mage_3.png"},
             {"id": "loose.old#old_minossian_mage", "type": "loose.old", "name": "Old Minossian Mage", "file": "old_minossian_mage.png"},
-            {"id": "loose.old#old_minossian_mage_1", "type": "loose.old", "name": "Old Minossian Mage 1", "file": "old_minossian_mage_1.png"},
-            {"id": "loose.old#old_minossian_mage_4", "type": "loose.old", "name": "Old Minossian Mage 4", "file": "old_minossian_mage_4.png"},
+            {"id": "loose.old#old_minossian_mage_1", "type": "loose.old", "name": "Old Minossian Mage 2", "file": "old_minossian_mage_1.png"},
+            {"id": "loose.old#old_minossian_mage_4", "type": "loose.old", "name": "Old Minossian Mage 3", "file": "old_minossian_mage_4.png"},
             {"id": "loose.old#old_minossian_general", "type": "loose.old", "name": "Old Minossian General", "file": "old_minossian_general.png"},
             {"id": "loose.old#old_minossian_priest_red", "type": "loose.old", "name": "Old Minossian Priest Red", "file": "old_minossian_priest_red.png"},
             {"id": "loose.old#old_minossian_princess", "type": "loose.old", "name": "Old Minossian Princess", "file": "old_minossian_princess.png"},
-            {"id": "loose.old#old_minossian_mage_2", "type": "loose.old", "name": "Old Minossian Mage 2", "file": "old_minossian_mage_2.png"}
+            {"id": "loose.old#old_minossian_mage_2", "type": "loose.old", "name": "Old Minossian Mage 4", "file": "old_minossian_mage_2.png"}
           ]
         },
         {
@@ -9051,10 +9051,10 @@
           "id": "loose.undead",
           "name": "Extra Undead",
           "skins": [
-            {"id": "loose.undead#undead_wraith_king_2", "type": "loose.undead", "name": "Undead Wraith King 2", "file": "undead_wraith_king_2.png"},
+            {"id": "loose.undead#undead_wraith_king_2", "type": "loose.undead", "name": "Undead Wraith King 1", "file": "undead_wraith_king_2.png"},
             {"id": "loose.undead#undead_lich", "type": "loose.undead", "name": "Undead Lich", "file": "undead_lich.png"},
-            {"id": "loose.undead#undead_wraith_king_3", "type": "loose.undead", "name": "Undead Wraith King 3", "file": "undead_wraith_king_3.png"},
-            {"id": "loose.undead#undead_wraith_king_1", "type": "loose.undead", "name": "Undead Wraith King 1", "file": "undead_wraith_king_1.png"},
+            {"id": "loose.undead#undead_wraith_king_3", "type": "loose.undead", "name": "Undead Wraith King 2", "file": "undead_wraith_king_3.png"},
+            {"id": "loose.undead#undead_wraith_king_1", "type": "loose.undead", "name": "Undead Wraith King 3", "file": "undead_wraith_king_1.png"},
             {"id": "loose.undead#undead_mage_1", "type": "loose.undead", "name": "Undead Mage 1", "file": "undead_mage_1.png"},
             {"id": "loose.undead#undead_mage_2", "type": "loose.undead", "name": "Undead Mage 2", "file": "undead_mage_2.png"}
           ]
@@ -9091,10 +9091,10 @@
           "name": "Extra Xoltec",
           "skins": [
             {"id": "loose.xoltec#xoltec_7", "type": "loose.xoltec", "name": "Xoltec 7", "file": "xoltec_7.png"},
-            {"id": "loose.xoltec#xoltec_priest_7", "type": "loose.xoltec", "name": "Xoltec Priest 7", "file": "xoltec_priest_7.png"},
+            {"id": "loose.xoltec#xoltec_priest_7", "type": "loose.xoltec", "name": "Xoltec Priest 1", "file": "xoltec_priest_7.png"},
             {"id": "loose.xoltec#xoltec_priest_2", "type": "loose.xoltec", "name": "Xoltec Priest 2", "file": "xoltec_priest_2.png"},
             {"id": "loose.xoltec#xoltec_temple_guard2", "type": "loose.xoltec", "name": "Xoltec Temple Guard 2", "file": "xoltec_temple_guard2.png"},
-            {"id": "loose.xoltec#xoltec_priest_8", "type": "loose.xoltec", "name": "Xoltec Priest 8", "file": "xoltec_priest_8.png"}
+            {"id": "loose.xoltec#xoltec_priest_8", "type": "loose.xoltec", "name": "Xoltec Priest 3", "file": "xoltec_priest_8.png"}
           ]
         },
         {
@@ -9106,10 +9106,10 @@
             {"id": "loose.zamurai#zamurai_oni_goblin", "type": "loose.zamurai", "name": "Zamurai Oni Goblin", "file": "zamurai_oni_goblin.png"},
             {"id": "loose.zamurai#zamurai_ronin", "type": "loose.zamurai", "name": "Zamurai Ronin", "file": "zamurai_ronin.png"},
             {"id": "loose.zamurai#zamurai_emperor_2", "type": "loose.zamurai", "name": "Zamurai Emperor 2", "file": "zamurai_emperor_2.png"},
-            {"id": "loose.zamurai#zamurai_woman_4", "type": "loose.zamurai", "name": "Zamurai Woman 4", "file": "zamurai_woman_4.png"},
+            {"id": "loose.zamurai#zamurai_woman_4", "type": "loose.zamurai", "name": "Zamurai Woman 1", "file": "zamurai_woman_4.png"},
             {"id": "loose.zamurai#zamurai_emperor", "type": "loose.zamurai", "name": "Zamurai Emperor", "file": "zamurai_emperor.png"},
             {"id": "loose.zamurai#zamurai_sorcerer", "type": "loose.zamurai", "name": "Zamurai Sorcerer", "file": "zamurai_sorcerer.png"},
-            {"id": "loose.zamurai#zamurai_woman_3", "type": "loose.zamurai", "name": "Zamurai Woman 3", "file": "zamurai_woman_3.png"},
+            {"id": "loose.zamurai#zamurai_woman_3", "type": "loose.zamurai", "name": "Zamurai Woman 2", "file": "zamurai_woman_3.png"},
             {"id": "loose.zamurai#zamurai_spearman", "type": "loose.zamurai", "name": "Zamurai Spearman", "file": "zamurai_spearman.png"},
             {"id": "loose.zamurai#zamurai_warrior_8", "type": "loose.zamurai", "name": "Zamurai Warrior 8", "file": "zamurai_warrior_8.png"}
           ]
