@@ -2,6 +2,7 @@ package com.ancientempires.block.decor;
 
 import com.ancientempires.registry.ModBlockEntities;
 import com.ancientempires.client.ClientScreens;
+import com.ancientempires.entity.npc.NpcEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -39,7 +40,8 @@ public class AwSoundBlock extends BaseEntityBlock
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
     {
-        if (!(level.getBlockEntity(pos) instanceof AwSoundBlockEntity sound))
+        // Admins only (creative): structures hide these in their walls, and any player could re-skin or retune them.
+        if (!(level.getBlockEntity(pos) instanceof AwSoundBlockEntity sound) || !NpcEntity.mayToggleCreative(player))
         {
             return InteractionResult.PASS;
         }

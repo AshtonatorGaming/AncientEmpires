@@ -8,6 +8,7 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.AttachedStemBlock;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CaveVines;
 import net.minecraft.world.level.block.CocoaBlock;
@@ -90,27 +91,90 @@ public final class FruitFarmBlockEntity extends WorksiteBlockEntity
     {
         this.pick.clear();
         this.plant.clear();
+        // Every block of the area and a one-block rim read once into a grid, so the neighbour tests
+        // (a cocoa spot's log, a melon's stem) read the grid instead of the level: about one read per cell.
         BlockPos.MutableBlockPos cell = new BlockPos.MutableBlockPos();
         int baseY = this.worldPosition.getY();
-        for (int x = this.minX(); x <= this.maxX(); x++)
+        int x0 = this.minX() - 1;
+        int z0 = this.minZ() - 1;
+        int y0 = baseY - 2;
+        int width = this.maxX() - this.minX() + 3;
+        int depth = this.maxZ() - this.minZ() + 3;
+        int height = REACH_UP + 3;
+        BlockState[] grid = new BlockState[width * depth * height];
+        for (int x = 0; x < width; x++)
         {
-            for (int z = this.minZ(); z <= this.maxZ(); z++)
+            for (int z = 0; z < depth; z++)
             {
-                for (int y = baseY - 2; y <= baseY + REACH_UP; y++)
+                for (int y = 0; y < height; y++)
                 {
-                    cell.set(x, y, z);
-                    BlockState state = level.getBlockState(cell);
-                    if (isRipe(state))
+                    grid[(x * depth + z) * height + y] = level.getBlockState(cell.set(x0 + x, y0 + y, z0 + z));
+                }
+            }
+        }
+        for (int x = 1; x < width - 1; x++)
+        {
+            for (int z = 1; z < depth - 1; z++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    BlockState state = grid[(x * depth + z) * height + y];
+                    if (isRipe(state) && (!isGourd(state) || hasStem(grid, depth, height, x, y, z)))
                     {
-                        this.pick.add(cell.immutable());
+                        this.pick.add(new BlockPos(x0 + x, y0 + y, z0 + z));
                     }
-                    else if (state.isAir() && cocoaFacing(level, cell) != null)
+                    else if (state.isAir() && hasLog(grid, depth, height, x, y, z))
                     {
-                        this.plant.add(cell.immutable());
+                        this.plant.add(new BlockPos(x0 + x, y0 + y, z0 + z));
                     }
                 }
             }
         }
+    }
+
+    /** A melon or pumpkin: fruit only where a stem grew it, never one set down as a block. */
+    public static boolean isGourd(BlockState state)
+    {
+        return state.is(Blocks.MELON) || state.is(Blocks.PUMPKIN);
+    }
+
+    private static boolean hasStem(BlockState[] grid, int depth, int height, int x, int y, int z)
+    {
+        for (Direction side : Direction.Plane.HORIZONTAL)
+        {
+            BlockState next = grid[((x + side.getStepX()) * depth + z + side.getStepZ()) * height + y];
+            if (next.getBlock() instanceof AttachedStemBlock && next.getValue(AttachedStemBlock.FACING) == side.getOpposite())
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean hasLog(BlockState[] grid, int depth, int height, int x, int y, int z)
+    {
+        for (Direction side : Direction.Plane.HORIZONTAL)
+        {
+            if (grid[((x + side.getStepX()) * depth + z + side.getStepZ()) * height + y].is(BlockTags.JUNGLE_LOGS))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** A melon or pumpkin beside the stem that grew it (the picker's check at the block). */
+    public static boolean stemGrown(Level level, BlockPos pos)
+    {
+        for (Direction side : Direction.Plane.HORIZONTAL)
+        {
+            BlockState next = level.getBlockState(pos.relative(side));
+            if (next.getBlock() instanceof AttachedStemBlock && next.getValue(AttachedStemBlock.FACING) == side.getOpposite())
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     /** Fruit ready to pick: a grown cocoa pod, a ripe berry bush, glow berries, a melon or pumpkin. */

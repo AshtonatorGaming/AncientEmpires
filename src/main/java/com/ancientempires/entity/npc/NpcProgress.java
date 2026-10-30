@@ -36,6 +36,12 @@ public final class NpcProgress
     private NpcRank rankOverride;
     /** tickCount until which a governor oversees this worker. */
     private int governedUntil;
+    /**
+     * XP toward the next level. Kept here, not in synced entity data: it changes on every hit and work
+     * action and only the NPC's own screen shows it, so the screen's container data carries it
+     * ({@code NpcMenu.STAT_XP}), filled in on the client by {@link #showXp}.
+     */
+    private double xp;
 
     NpcProgress(NpcEntity npc)
     {
@@ -61,7 +67,16 @@ public final class NpcProgress
     /** XP toward the next level. */
     public float xp()
     {
-        return this.npc.getEntityData().get(NpcEntity.DATA_XP);
+        return (float) this.xp;
+    }
+
+    /** The client's copy, from the open screen's container data. */
+    public void showXp(int xp)
+    {
+        if (this.npc.level().isClientSide)
+        {
+            this.xp = xp;
+        }
     }
 
     /** XP from this level to the next, or 0 at the cap. */
@@ -141,7 +156,7 @@ public final class NpcProgress
         {
             xp = 0.0D;
         }
-        this.npc.getEntityData().set(NpcEntity.DATA_XP, (float) xp);
+        this.xp = xp;
         if (gained > 0)
         {
             float before = this.npc.getMaxHealth();
@@ -265,7 +280,7 @@ public final class NpcProgress
         }
         if (tag.contains(LEVEL_KEY))
         {
-            this.npc.getEntityData().set(NpcEntity.DATA_XP, tag.getFloat(XP_KEY));
+            this.xp = tag.getFloat(XP_KEY);
             this.setLevel(tag.getInt(LEVEL_KEY));
         }
     }

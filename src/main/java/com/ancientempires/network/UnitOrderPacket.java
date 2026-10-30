@@ -66,6 +66,11 @@ public class UnitOrderPacket
             }
         }
         NpcArmy.Placement placement = buffer.readBoolean() ? new NpcArmy.Placement(readVec(buffer), readVec(buffer), buffer.readFloat()) : null;
+        if (placement != null && !(finite(placement.from()) && finite(placement.to()) && Float.isFinite(placement.facing())))
+        {
+            // NaN passes every range check (its comparisons are all false) and floors to the origin: refuse it.
+            placement = null;
+        }
         return new UnitOrderPacket(units, command, placement);
     }
 
@@ -76,6 +81,11 @@ public class UnitOrderPacket
         buffer.writeDouble(vec.z);
     }
 
+    private static boolean finite(Vec3 vec)
+    {
+        return Double.isFinite(vec.x) && Double.isFinite(vec.y) && Double.isFinite(vec.z);
+    }
+
     private static Vec3 readVec(FriendlyByteBuf buffer)
     {
         return new Vec3(buffer.readDouble(), buffer.readDouble(), buffer.readDouble());
@@ -84,10 +94,10 @@ public class UnitOrderPacket
     public static void handle(UnitOrderPacket packet, Supplier<NetworkEvent.Context> context)
     {
         ServerPlayer player = context.get().getSender();
-        if (player != null)
+        if (player != null && ArmyThrottle.allowAction(player))
         {
             NpcArmy.command(player, packet.units, packet.command, packet.placement);
-            ModNetwork.sendArmy(player, false);
+            ArmyThrottle.requestList(player, false);
         }
     }
 }

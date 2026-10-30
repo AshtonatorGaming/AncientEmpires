@@ -2,17 +2,26 @@ package com.ancientempires.structure;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.ancientempires.worldgen.AwSites;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.SlabBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.chunk.LevelChunk;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BedPart;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.SlabType;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -75,6 +84,51 @@ public final class AeBuilds
             }
         }
         return offset;
+    }
+
+    /**
+     * Why a survival build may not go here, or null when it may: the whole
+     * footprint must be loaded, outside every structure, open to the player
+     * (spawn protection, world border, at its corners and key), and free of
+     * block entities (chests, furnaces, beds...), so a build never takes
+     * someone's stores or machines. Other blocks in the way are mined as it
+     * goes, their drops left on the ground.
+     */
+    @Nullable
+    public static Component refusal(ServerLevel level, Player player, BoundingBox bounds, BlockPos key)
+    {
+        if (AwSites.overlaps(level.dimension(), bounds, 0))
+        {
+            return Component.translatable("item.ancientempires.blueprint.structure");
+        }
+        for (BlockPos corner : List.of(key, new BlockPos(bounds.minX(), bounds.minY(), bounds.minZ()), new BlockPos(bounds.maxX(), bounds.minY(), bounds.minZ()),
+                new BlockPos(bounds.minX(), bounds.minY(), bounds.maxZ()), new BlockPos(bounds.maxX(), bounds.minY(), bounds.maxZ())))
+        {
+            if (!level.mayInteract(player, corner))
+            {
+                return Component.translatable("item.ancientempires.blueprint.forbidden");
+            }
+        }
+        for (int cx = bounds.minX() >> 4; cx <= bounds.maxX() >> 4; cx++)
+        {
+            for (int cz = bounds.minZ() >> 4; cz <= bounds.maxZ() >> 4; cz++)
+            {
+                LevelChunk chunk = level.getChunkSource().getChunkNow(cx, cz);
+                if (chunk == null)
+                {
+                    return Component.translatable("item.ancientempires.blueprint.unloaded");
+                }
+                for (BlockEntity entity : chunk.getBlockEntities().values())
+                {
+                    BlockPos pos = entity.getBlockPos();
+                    if (bounds.isInside(pos) && !pos.equals(key))
+                    {
+                        return Component.translatable("item.ancientempires.blueprint.blocked", entity.getBlockState().getBlock().getName(), pos.getX(), pos.getY(), pos.getZ());
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     /**

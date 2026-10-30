@@ -34,6 +34,7 @@ final class NpcPatrolGoal extends Goal
     private int walking;
     private int watching = -1;
     private int repath;
+    private final OrderItem.StopCache stops = new OrderItem.StopCache();
 
     NpcPatrolGoal(NpcEntity npc)
     {
@@ -43,7 +44,7 @@ final class NpcPatrolGoal extends Goal
 
     private List<OrderItem.Stop> route()
     {
-        return this.npc.getInventory().ordersItem().getItem() instanceof CombatOrderItem ? OrderItem.stops(this.npc.getInventory().ordersItem()) : List.of();
+        return this.npc.getInventory().ordersItem().getItem() instanceof CombatOrderItem ? this.stops.of(this.npc.getInventory().ordersItem()) : List.of();
     }
 
     private boolean onDuty()
@@ -73,6 +74,8 @@ final class NpcPatrolGoal extends Goal
     @Override
     public void start()
     {
+        // Resumes at the point the order says it was walking to.
+        this.point = OrderItem.progress(this.npc.getInventory().ordersItem());
         this.walking = 0;
         this.watching = -1;
         this.repath = 0;
@@ -141,7 +144,8 @@ final class NpcPatrolGoal extends Goal
 
     private void next()
     {
-        this.point++;
+        this.point = (this.point + 1) % Math.max(1, this.route().size());
+        OrderItem.setProgress(this.npc.getInventory().ordersItem(), this.point);
         this.walking = 0;
         this.watching = -1;
         this.repath = 0;

@@ -1,6 +1,7 @@
 package com.ancientempires.network;
 
 import com.ancientempires.block.decor.AwSoundBlockEntity;
+import com.ancientempires.entity.npc.NpcEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -37,7 +38,7 @@ public class SoundBlockPacket
     public static void handle(SoundBlockPacket packet, Supplier<NetworkEvent.Context> context)
     {
         ServerPlayer player = context.get().getSender();
-        if (player == null || player.distanceToSqr(packet.pos.getCenter()) > 64.0D || !player.level().isLoaded(packet.pos))
+        if (player == null || !NpcEntity.mayToggleCreative(player) || player.distanceToSqr(packet.pos.getCenter()) > 64.0D || !player.level().isLoaded(packet.pos))
         {
             return;
         }

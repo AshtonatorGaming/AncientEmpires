@@ -77,10 +77,10 @@ public class ArmyActionPacket
         {
             return;
         }
-        if (packet.action != null && packet.subject != null)
+        if (packet.action != null && packet.subject != null && ArmyThrottle.allowAction(player))
         {
             NpcArmy.act(player, packet.action, packet.subject, packet.other, packet.text);
         }
-        ModNetwork.sendArmy(player, packet.open);
+        ArmyThrottle.requestList(player, packet.open);
     }
 }

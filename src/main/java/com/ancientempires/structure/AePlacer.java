@@ -24,7 +24,10 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Clearable;
+import net.minecraft.world.Container;
+import net.minecraft.world.Containers;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
@@ -36,6 +39,7 @@ import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
@@ -104,7 +108,20 @@ public final class AePlacer
     public static Report place(ServerLevelAccessor level, AeTemplate template, String name, int[] offset, BlockPos anchor, Rotation rotation,
             @Nullable BoundingBox limit)
     {
-        return place(level, template, name, offset, anchor, rotation, limit, null);
+        return place(level, template, name, offset, anchor, rotation, limit, null, false);
+    }
+
+    /**
+     * A survival build's share (the Structure Builder's layer): the cells in
+     * {@code box}, paid for by the player. Nothing is wiped: what stood in a
+     * cell drops (a container's contents with it). Nothing is free: no
+     * garrison spawners, no loot tables or AW loot, no template container
+     * contents, coin stacks at one layer, and no template entities (NPCs,
+     * gates, siege engines).
+     */
+    public static Report placeSurvival(ServerLevel level, AeTemplate template, String name, int[] offset, BlockPos anchor, Rotation rotation, BoundingBox box)
+    {
+        return place(level, template, name, offset, anchor, rotation, box, null, true);
     }
 
     /**
@@ -118,7 +135,7 @@ public final class AePlacer
     public static Report placeInChunk(WorldGenLevel level, AeTemplate template, String name, int[] offset, BlockPos anchor, Rotation rotation,
             BoundingBox chunkBox, String faction)
     {
-        return place(level, template, name, offset, anchor, rotation, chunkBox, faction);
+        return place(level, template, name, offset, anchor, rotation, chunkBox, faction, false);
     }
 
     /**
@@ -166,7 +183,7 @@ public final class AePlacer
     }
 
     private static Report place(ServerLevelAccessor level, AeTemplate template, String name, int[] offset, BlockPos anchor, Rotation rotation,
-            @Nullable BoundingBox limit, @Nullable String worldGenFaction)
+            @Nullable BoundingBox limit, @Nullable String worldGenFaction, boolean survival)
     {
         BlockState proxy = ModBlocks.GATE_PROXY.get().defaultBlockState();
         Map<BlockPos, String> protectionFlags = new LinkedHashMap<>();
@@ -204,7 +221,24 @@ public final class AePlacer
                         return;
                     }
                     BlockEntity old = level.getBlockEntity(pos);
-                    if (old != null)
+                    if (survival)
+                    {
+                        BlockState was = level.getBlockState(pos);
+                        if (was == states[state] && old == null)
+                        {
+                            return;
+                        }
+                        if (!was.isAir() && level instanceof ServerLevel server)
+                        {
+                            // A player's build never wipes: what stood here drops, a container's contents too.
+                            if (old instanceof Container container)
+                            {
+                                Containers.dropContents(server, pos, container);
+                            }
+                            Block.dropResources(was, server, pos, old);
+                        }
+                    }
+                    else if (old != null)
                     {
                         Clearable.tryClear(old);
                     }
@@ -214,7 +248,17 @@ public final class AePlacer
                     CompoundTag nbt = template.blockEntityAt(x, y, z);
                     try
                     {
-                        if (nbt != null && nbt.contains("aeRule"))
+                        if (survival && nbt != null && nbt.contains("aeRule")
+                                && template.palette().get(state).getString("Name").equals("ancientwarfarestructure:advanced_spawner"))
+                        {
+                            // No garrison in a player's build.
+                            level.setBlock(pos, Blocks.AIR.defaultBlockState(), FLAGS);
+                        }
+                        else if (survival && nbt != null && nbt.contains("aeRule") && template.palette().get(state).getString("Name").contains("coin_stack"))
+                        {
+                            // Paid as one coin stack: it stays at one layer.
+                        }
+                        else if (nbt != null && nbt.contains("aeRule"))
                         {
                             String blockName = template.palette().get(state).getString("Name");
                             if (placeAw(level, pos, blockName, nbt.getCompound("aeRule"), rotation, skipped, protectionFlags, factions))
@@ -239,6 +283,10 @@ public final class AePlacer
                                     protectionFlags.put(pos.immutable(), flag.faction());
                                 }
                             }
+                        }
+                        if (survival)
+                        {
+                            stripLoot(level.getBlockEntity(pos));
                         }
                     }
                     catch (RuntimeException exception)
@@ -299,7 +347,7 @@ public final class AePlacer
         int entities;
         try
         {
-            entities = placeEntities(level, template, offset, anchor, rotation, limit, skipped);
+            entities = survival ? 0 : placeEntities(level, template, offset, anchor, rotation, limit, skipped);
         }
         catch (RuntimeException exception)
         {
@@ -373,6 +421,22 @@ public final class AePlacer
                 entity.setProtection(true, record);
             }
         }
+    }
+
+    /** A survival build's block entity holds nothing it was not paid for: no items, no loot table, no AW loot extras. */
+    private static void stripLoot(@Nullable BlockEntity blockEntity)
+    {
+        if (blockEntity == null)
+        {
+            return;
+        }
+        if (blockEntity instanceof RandomizableContainerBlockEntity container)
+        {
+            container.setLootTable(null, 0L);
+        }
+        Clearable.tryClear(blockEntity);
+        blockEntity.getPersistentData().remove(AwLoot.KEY);
+        blockEntity.setChanged();
     }
 
     /** AW's own blocks that have become ours; false leaves the table's stand-in. */

@@ -143,13 +143,20 @@ public class NpcEntity extends PathfinderMob
     private static final EntityDataAccessor<Boolean> DATA_STAGGERED = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.BOOLEAN);
     /** {@link NpcBadge} ordinal, for the badge beside the status icon. */
     private static final EntityDataAccessor<Byte> DATA_BADGE = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.BYTE);
-    /** Level 1 to {@code levels.maxLevel}, and the XP toward the next, for the inventory. */
+    /** Level 1 to {@code levels.maxLevel}, for the inventory (XP rides the screen's container data, {@code NpcMenu.STAT_XP}). */
     static final EntityDataAccessor<Byte> DATA_LEVEL = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.BYTE);
-    static final EntityDataAccessor<Float> DATA_XP = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.FLOAT);
     /** {@link NpcRank} ordinal, for the inventory label. */
     static final EntityDataAccessor<Byte> DATA_RANK = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.BYTE);
     /** The banner a standard bearer carries (off hand or backpack), drawn on its back. */
     private static final EntityDataAccessor<ItemStack> DATA_BANNER = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.ITEM_STACK);
+    /**
+     * Whether it trades with players ({@link #TRADER_FACTION} goods, {@link #TRADER_SHOP} a player's shop), so the
+     * client's right-click agrees with the server's: trades and the orders slot are not synced, and a client that
+     * answered PASS went on to use the held item (a pearl thrown, food eaten) as the trade screen opened.
+     */
+    private static final EntityDataAccessor<Byte> DATA_TRADER = SynchedEntityData.defineId(NpcEntity.class, EntityDataSerializers.BYTE);
+    private static final byte TRADER_FACTION = 1;
+    private static final byte TRADER_SHOP = 2;
     private static final String FOLLOWING_KEY = "Following";
     private static final String CREATIVE_KEY = "Creative";
     private static final String HOME_KEY = "Home";
@@ -197,6 +204,9 @@ public class NpcEntity extends PathfinderMob
     private final NpcRecord record = new NpcRecord();
     /** tickCount until which a bard's song cheers this NPC (not saved). */
     private int songUntil;
+    /** The song this NPC is playing as a bard (null when not), so a bard breaking off spares another's same song. Not saved. */
+    @Nullable
+    ResourceLocation playingSong;
     /** The Town Hall sounding the alarm this NPC answers, and until when (not saved: the hall calls again while it sounds). */
     @Nullable
     private BlockPos alarmHall;
@@ -297,7 +307,7 @@ public class NpcEntity extends PathfinderMob
         this.entityData.define(DATA_LEVEL, (byte) 1);
         this.entityData.define(DATA_RANK, (byte) 0);
         this.entityData.define(DATA_BANNER, ItemStack.EMPTY);
-        this.entityData.define(DATA_XP, 0.0F);
+        this.entityData.define(DATA_TRADER, (byte) 0);
     }
 
     /**
@@ -2227,6 +2237,11 @@ public class NpcEntity extends PathfinderMob
         {
             this.entityData.set(DATA_RANK, rank);
         }
+        byte trader = NpcShop.isShop(this) ? TRADER_SHOP : this.trades.isEmpty() ? 0 : TRADER_FACTION;
+        if (this.entityData.get(DATA_TRADER) != trader)
+        {
+            this.entityData.set(DATA_TRADER, trader);
+        }
         byte badge = (byte) NpcBadge.of(this).ordinal();
         if (this.entityData.get(DATA_BADGE) != badge)
         {
@@ -2386,7 +2401,7 @@ public class NpcEntity extends PathfinderMob
             return InteractionResult.PASS;
         }
         // A player's trader trades with everyone but its owner, who sneaks to trade and clicks plainly for the inventory.
-        if (NpcShop.isShop(this) && (!this.canOpenInventory(player) || player.isShiftKeyDown()))
+        if (this.isTrader(TRADER_SHOP) && (!this.canOpenInventory(player) || player.isShiftKeyDown()))
         {
             if (!this.level().isClientSide && player instanceof ServerPlayer serverPlayer)
             {
@@ -2395,7 +2410,7 @@ public class NpcEntity extends PathfinderMob
             return InteractionResult.sidedSuccess(this.level().isClientSide);
         }
         // A trader trades with anyone its faction is not hostile to (AW's faction traders); an admin sneaks to open it instead.
-        if (!this.trades.isEmpty() && !(player.isShiftKeyDown() && this.canOpenInventory(player)))
+        if (this.isTrader(TRADER_FACTION) && !(player.isShiftKeyDown() && this.canOpenInventory(player)))
         {
             if (!this.level().isClientSide && player instanceof ServerPlayer serverPlayer)
             {
@@ -2436,6 +2451,16 @@ public class NpcEntity extends PathfinderMob
             });
         }
         return InteractionResult.sidedSuccess(this.level().isClientSide);
+    }
+
+    /** Whether it trades as {@code kind}: worked out on the server, the synced flag on the client (see {@link #DATA_TRADER}). */
+    private boolean isTrader(byte kind)
+    {
+        if (this.level().isClientSide)
+        {
+            return this.entityData.get(DATA_TRADER) == kind;
+        }
+        return kind == TRADER_SHOP ? NpcShop.isShop(this) : !NpcShop.isShop(this) && !this.trades.isEmpty();
     }
 
     /** Command passed to this NPC when its commander fell (0 for none); see {@link NpcCommand}. */

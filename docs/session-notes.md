@@ -4,6 +4,11 @@ Short state of the work, so a compacted or fresh session picks up without losing
 detail lives in CLAUDE.md (architecture, done/not done), STRUCTURES.md (structure plan and findings), DESIGN.md and
 VISION.md (vision). Update at the end of each chunk of work.
 
+## Latest (2026-10-30)
+
+- Networking, bug, and performance sweep: docs/analysis-2026-10.md (findings), docs/fix-log.md (every fix and the rules
+  to keep; read its rules before new code). All fixed but P5; protocol 17; 33 game tests pass. Not seen in game.
+
 ## Where things stand (2026-10-28)
 
 - Branch `structures` (from perf-and-sidearm, with the vanilla-screen NPC inventory merged: ModularUI gone, EMI works).

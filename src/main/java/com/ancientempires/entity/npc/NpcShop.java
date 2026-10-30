@@ -164,11 +164,13 @@ public final class NpcShop
     {
         List<TradeOrderItem.Goods> goods = goods(npc);
         int moved = 0;
+        // Its own next meals stay with it (else every bank stop sent it to the hall to eat).
+        boolean[] food = NpcStores.keptFood(npc.getInventory());
         for (int slot = NpcInventory.BACKPACK_START; slot < NpcInventory.SLOT_COUNT; slot++)
         {
             ItemStack held = npc.getInventory().getItem(slot);
             boolean money = Coins.isCoin(held) || held.getItem() instanceof CoinPurseItem;
-            if (held.isEmpty() || held.getItem() instanceof OrderItem || !money && sells(goods, held))
+            if (held.isEmpty() || held.getItem() instanceof OrderItem || !money && sells(goods, held) || food[slot - NpcInventory.BACKPACK_START])
             {
                 continue;
             }

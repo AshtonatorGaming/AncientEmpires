@@ -41,6 +41,11 @@ public final class StructureBuilderBlockEntity extends WorksiteBlockEntity
     private ResourceLocation template;
     private Rotation rotation = Rotation.NONE;
     private int layer;
+    /** The next layer's cost, kept for the template object and layer it was worked out for (a builder asks every few seconds). */
+    @Nullable
+    private AeTemplate costTemplate;
+    private int costLayer = -1;
+    private Map<Item, Integer> cost = Map.of();
 
     public StructureBuilderBlockEntity(BlockPos pos, BlockState state)
     {
@@ -50,6 +55,7 @@ public final class StructureBuilderBlockEntity extends WorksiteBlockEntity
     /** Starts a build of {@code template} turned by {@code rotation}, its key on this block. */
     public void start(ResourceLocation template, Rotation rotation)
     {
+        this.costLayer = -1;
         this.template = template;
         this.rotation = rotation;
         this.layer = 0;
@@ -121,7 +127,7 @@ public final class StructureBuilderBlockEntity extends WorksiteBlockEntity
             return missing;
         }
         Map<Item, Integer> stored = this.stored();
-        AeBuilds.layerCost(template.get(), this.layer).forEach((item, count) ->
+        this.layerCost(template.get()).forEach((item, count) ->
         {
             int lacking = count - stored.getOrDefault(item, 0);
             if (lacking > 0)
@@ -130,6 +136,18 @@ public final class StructureBuilderBlockEntity extends WorksiteBlockEntity
             }
         });
         return missing;
+    }
+
+    /** The next layer's cost, worked out once per layer (and again after templates reload). */
+    private Map<Item, Integer> layerCost(AeTemplate template)
+    {
+        if (template != this.costTemplate || this.layer != this.costLayer)
+        {
+            this.costTemplate = template;
+            this.costLayer = this.layer;
+            this.cost = AeBuilds.layerCost(template, this.layer);
+        }
+        return this.cost;
     }
 
     private Map<Item, Integer> stored()
@@ -167,12 +185,12 @@ public final class StructureBuilderBlockEntity extends WorksiteBlockEntity
         AeTemplate template = this.loaded().orElseThrow();
         String name = AeTemplates.name(this.template);
         int[] offset = AeBuilds.offset(this.template);
-        AeBuilds.layerCost(template, this.layer).forEach(this::take);
+        this.layerCost(template).forEach(this::take);
         BoundingBox bounds = AePlacer.bounds(template, offset, this.worldPosition, this.rotation);
         int y = bounds.minY() + this.layer;
         for (BoundingBox box : around(bounds, y, this.worldPosition))
         {
-            AePlacer.place(level, template, name, offset, this.worldPosition, this.rotation, box);
+            AePlacer.placeSurvival(level, template, name, offset, this.worldPosition, this.rotation, box);
         }
         this.layer++;
         this.setChanged();
@@ -192,7 +210,7 @@ public final class StructureBuilderBlockEntity extends WorksiteBlockEntity
         level.removeBlock(key, false);
         if (bounds.isInside(key))
         {
-            AePlacer.place(level, template, name, offset, key, rotation, BoundingBox.fromCorners(key, key));
+            AePlacer.placeSurvival(level, template, name, offset, key, rotation, BoundingBox.fromCorners(key, key));
         }
         if (owner != null)
         {

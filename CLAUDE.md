@@ -1057,6 +1057,20 @@ guessing it compiles.
 - Never start a "last time" field at `Long.MIN_VALUE` and test `now - last < interval`: the
   subtraction overflows and the check never passes (this kept every worksite from ever
   scanning). Use -1 for "never" and test it first.
+- Lessons from fixed bugs live in `docs/fix-log.md` (rules first, then each fix). Read its rules before writing new
+  code; add an entry when you fix a real bug. The short form:
+  - A stored position (NBT, order stop, memory, packet) is read only after a dimension check and `isLoaded`: server
+    `getBlockEntity`/`getBlockState` load the chunk on the main thread. Use `NpcStores` for order stops.
+  - Packets: permission, then reach, then `isLoaded`, then read the world. Reject non-finite floats (NaN passes range
+    checks). Rate-limit any reply that walks entities or sends kilobytes (`ArmyThrottle`).
+  - State that decides `mobInteract`'s result must be synced, or the client returns PASS and the held item is used too.
+  - Survival placement never deletes or gives free things: drop what is replaced, check the footprint first, strip
+    loot and spawners (`AePlacer.placeSurvival`). `Clearable.tryClear` is for world generation and admin commands.
+  - NPC order workers obey the same locks as players (`NpcStores.mayUse`); admin-only blocks check creative on the
+    block and on its packet.
+  - Often-changing values only the NPC's own screen shows go through menu container data, not synced entity data.
+  - No per-tick NBT parsing in goals (cache by tag identity); save goal state that must survive a reload; handle every
+    insert's remainder (put it back or drop it).
 - `/ancientempires work`, looking at an NPC, lists every condition its work needs.
 - `/ancientempires stress <perSide> <factionA> <factionB>` (op) spawns two faction armies 24 blocks
   apart in front of you (soldier, archer, leader rows; tagged `AeStress`) for profiling with Spark;

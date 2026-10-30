@@ -5,7 +5,8 @@ added in the last two sessions and never seen in game: orders, the Town Hall ala
 fruit farm, the craftsman, survival building, and the NPC screen's order slots. Not a profile: performance items are
 reasoned from the code, so measure before and after any change.
 
-Fixed here (one line, trivially safe): **N1** below. Everything else is left for the user to choose.
+**Status:** all findings are fixed except P5 (negligible); see `docs/fix-log.md` for each fix and the rules drawn from
+them. N1 was fixed with this report (9dd7b87), the rest in the commit after it.
 
 Severity: **High** = item loss, server stalls, or an exploit reachable in normal play; **Medium** = a visible bug, an
 exploit needing another player or a modified client, or a cost that grows with play; **Low** = cosmetic, edge case, or

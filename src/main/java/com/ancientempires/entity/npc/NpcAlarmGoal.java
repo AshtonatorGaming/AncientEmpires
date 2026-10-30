@@ -70,7 +70,9 @@ final class NpcAlarmGoal extends Goal
             return;
         }
         boolean soldier = this.npc.getNpcPath().combat() && !this.npc.avoidsFights();
-        BlockPos home = this.npc.getHome();
+        // A home in another dimension is no shelter here.
+        String homeDimension = this.npc.getHomeDimension();
+        BlockPos home = homeDimension.isEmpty() || homeDimension.equals(this.npc.level().dimension().location().toString()) ? this.npc.getHome() : null;
         BlockPos shelter = !soldier && AncientEmpiresConfig.upkeepAlarmShelter == AncientEmpiresConfig.Shelter.HOME && home != null ? home : hall;
         double near = soldier ? MUSTER : shelter == home ? HOME_REACH : SHELTER;
         if (this.npc.distanceToSqr(shelter.getX() + 0.5D, this.npc.getY(), shelter.getZ() + 0.5D) <= near * near)

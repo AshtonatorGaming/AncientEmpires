@@ -1,9 +1,8 @@
 package com.ancientempires.entity.npc;
 
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import com.ancientempires.block.WorksiteBlockEntity;
 import com.ancientempires.item.OrderItem;
 import com.ancientempires.item.UpkeepOrderItem;
 import com.ancientempires.block.NpcUpkeep;
@@ -250,7 +249,8 @@ public final class NpcUpkeepGoal extends Goal
 
     /**
      * The container an Upkeep Order names, when it is not a Town Hall (halls keep
-     * their own path): in this dimension, holding items, and not another player's worksite.
+     * their own path): in this dimension, within {@code upkeep.range} as a hall must be, in a loaded chunk (a
+     * stored spot is never read otherwise: that would load its chunk), and a container the NPC may use ({@link NpcStores}).
      */
     @Nullable
     private BlockPos pantry()
@@ -260,11 +260,15 @@ public final class NpcUpkeepGoal extends Goal
         {
             return null;
         }
+        double range = AncientEmpiresConfig.upkeepRange;
         for (OrderItem.Stop stop : OrderItem.stops(order))
         {
-            BlockEntity entity = this.npc.level().getBlockEntity(stop.pos());
-            if (stop.dimension().equals(this.npc.level().dimension().location().toString()) && entity != null && !(entity instanceof TownHallBlockEntity)
-                    && !(entity instanceof WorksiteBlockEntity site && site.owner() != null && !site.owner().equals(this.npc.getOwner())))
+            if (stop.pos().distToCenterSqr(this.npc.position()) > range * range)
+            {
+                continue;
+            }
+            BlockEntity entity = NpcStores.at(this.npc.level(), stop.dimension(), stop.pos());
+            if (entity != null && !(entity instanceof TownHallBlockEntity) && NpcStores.mayUse(this.npc, entity))
             {
                 return stop.pos();
             }
@@ -275,8 +279,7 @@ public final class NpcUpkeepGoal extends Goal
     @Nullable
     private IItemHandler handlerAt(BlockPos pos)
     {
-        BlockEntity entity = this.npc.level().getBlockEntity(pos);
-        return entity == null ? null : entity.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(null);
+        return NpcStores.handler(this.npc, pos);
     }
 
     /** Rations in a container (food counted as the hall counts it). */
@@ -331,7 +334,12 @@ public final class NpcUpkeepGoal extends Goal
             ItemStack rest = this.npc.getInventory().addToBackpack(food);
             if (!rest.isEmpty())
             {
-                HopperBlockEntity.addItem(null, hall.store(), rest, null);
+                // Back into the hall; what its store will not take falls beside it rather than vanishing.
+                ItemStack left = HopperBlockEntity.addItem(null, hall.store(), rest, null);
+                if (!left.isEmpty())
+                {
+                    Block.popResource(this.npc.level(), hall.getBlockPos().above(), left);
+                }
             }
         }
     }
@@ -385,7 +393,7 @@ public final class NpcUpkeepGoal extends Goal
             // An Upkeep Order names the hall: its owner's, in this dimension.
             for (OrderItem.Stop stop : OrderItem.stops(order))
             {
-                if (stop.dimension().equals(level.dimension().location().toString()) && level.getBlockEntity(stop.pos()) instanceof TownHallBlockEntity hall
+                if (NpcStores.at(level, stop.dimension(), stop.pos()) instanceof TownHallBlockEntity hall
                         && this.npc.getOwner().equals(hall.owner()))
                 {
                     return hall;

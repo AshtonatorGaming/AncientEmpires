@@ -52,8 +52,8 @@ public final class StructureClaims
     {
     }
 
-    /** The unclaimed faction structure a block is in, or null. */
-    private static StructureRecords.Record held(ServerLevel level, BlockPos pos)
+    /** The unclaimed faction structure a block is in (its containers locked), or null. */
+    public static StructureRecords.Record held(ServerLevel level, BlockPos pos)
     {
         StructureRecords.Record record = StructureRecords.get(level).at(pos);
         return record != null && !record.claimed() && !record.faction.isEmpty() ? record : null;

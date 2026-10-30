@@ -55,7 +55,9 @@ public class NpcMenu extends AbstractContainerMenu
     public static final int STAT_HUNGRY = 5;
     /** The morale reasons past the sixteenth (container data is shorts). */
     public static final int STAT_MORALE_REASONS_HIGH = 6;
-    private static final int STAT_COUNT = 7;
+    /** XP toward the next level (whole points), kept off the synced entity data since it changes on every hit. */
+    public static final int STAT_XP = 7;
+    private static final int STAT_COUNT = 8;
 
     @Nullable
     private final NpcEntity npc;
@@ -165,6 +167,7 @@ public class NpcMenu extends AbstractContainerMenu
                 case STAT_GUARD -> shield ? Math.round(this.npc.getGuard().points() * 10.0F) : -1;
                 case STAT_GUARD_MAX -> shield ? Math.round(this.npc.getGuard().max() * 10.0F) : -1;
                 case STAT_HUNGRY -> this.npc.getNeeds().hungry() ? 1 : 0;
+                case STAT_XP -> (int) Math.min(Short.MAX_VALUE, this.npc.getXp());
                 default -> 0;
             };
         }
@@ -178,6 +181,16 @@ public class NpcMenu extends AbstractContainerMenu
         public int getCount()
         {
             return STAT_COUNT;
+        }
+    }
+
+    @Override
+    public void setData(int id, int value)
+    {
+        super.setData(id, value);
+        if (id == STAT_XP && this.npc != null)
+        {
+            this.npc.getProgress().showXp(value);
         }
     }
 

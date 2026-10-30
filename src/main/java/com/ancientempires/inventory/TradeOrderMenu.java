@@ -120,17 +120,11 @@ public class TradeOrderMenu extends AbstractContainerMenu
         this.pages.set(Math.max(1, goods.size()));
         this.page.set(Math.min(this.page.get(), this.pages.get() - 1));
         this.ghosts.clearContent();
-        if (this.page.get() < goods.size())
+        // Each stack in the slot it was set in, not packed to the front.
+        ItemStack[] slots = TradeOrderItem.editorSlots(this.order(), this.page.get());
+        for (int i = 0; i < GHOSTS; i++)
         {
-            TradeOrderItem.Goods trade = goods.get(this.page.get());
-            for (int i = 0; i < trade.input().size() && i < SIDE; i++)
-            {
-                this.ghosts.setItem(i, trade.input().get(i).copy());
-            }
-            for (int i = 0; i < trade.output().size() && i < SIDE; i++)
-            {
-                this.ghosts.setItem(SIDE + i, trade.output().get(i).copy());
-            }
+            this.ghosts.setItem(i, slots[i]);
         }
     }
 

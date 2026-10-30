@@ -773,7 +773,8 @@ public abstract class NpcWorkGoal<T extends WorksiteBlockEntity> extends Goal
             return this.listedSite(order);
         }
         BlockPos known = this.npc.getNeeds().worksite();
-        if (known != null)
+        // Only a loaded chunk: reading the remembered site's block entity would load its chunk every check.
+        if (known != null && this.npc.level().isLoaded(known))
         {
             BlockEntity entity = this.npc.level().getBlockEntity(known);
             if (this.siteType.isInstance(entity) && this.ownedBySame(this.siteType.cast(entity)))
@@ -822,16 +823,11 @@ public abstract class NpcWorkGoal<T extends WorksiteBlockEntity> extends Goal
     @Nullable
     private T listedSite(ItemStack order)
     {
-        String dimension = this.npc.level().dimension().location().toString();
         BlockPos known = this.npc.getNeeds().worksite();
         T first = null;
         for (OrderItem.Stop stop : OrderItem.stops(order))
         {
-            if (!stop.dimension().equals(dimension))
-            {
-                continue;
-            }
-            BlockEntity entity = this.npc.level().getBlockEntity(stop.pos());
+            BlockEntity entity = NpcStores.at(this.npc.level(), stop.dimension(), stop.pos());
             if (this.siteType.isInstance(entity) && this.ownedBySame(this.siteType.cast(entity)))
             {
                 T site = this.siteType.cast(entity);

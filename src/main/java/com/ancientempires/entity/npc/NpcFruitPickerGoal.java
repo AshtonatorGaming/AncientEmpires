@@ -113,7 +113,7 @@ public final class NpcFruitPickerGoal extends NpcWorkGoal<FruitFarmBlockEntity>
     private void pick(ServerLevel level, BlockPos pos)
     {
         BlockState state = level.getBlockState(pos);
-        if (!FruitFarmBlockEntity.isRipe(state))
+        if (!FruitFarmBlockEntity.isRipe(state) || FruitFarmBlockEntity.isGourd(state) && !FruitFarmBlockEntity.stemGrown(level, pos))
         {
             return;
         }

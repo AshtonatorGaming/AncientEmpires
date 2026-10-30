@@ -56,6 +56,6 @@ Deferred polish: cohort command posts, mounted commanders, order slot outlines, 
 - Don't push to `main`; don't edit `libs/`. Commits end with `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>`.
 - Never replace the jar while the game runs (check for `javaw`).
 - No python here; scripts in node. Bash heredocs with apostrophes fail; write scripts with the Write tool. Files may be CRLF.
-- Config: three edits per setting in `AncientEmpiresConfig`. Bump `ModNetwork.PROTOCOL` (now "16") when packets change.
+- Config: three edits per setting in `AncientEmpiresConfig`. Bump `ModNetwork.PROTOCOL` (now "17") when packets change.
 - Game tests: see CLAUDE.md's Tests section (run tag, origin range, own batch for big footprints).
 - Parity first; new systems only if they serve the current phase. Port ideas, not code. Breaking changes are fine.

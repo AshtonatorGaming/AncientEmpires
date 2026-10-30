@@ -172,7 +172,11 @@ public final class NpcTrades
         if (trade.refill > 0)
         {
             trade.available--;
-            trade.refillAt = now + trade.refill;
+            if (trade.refillAt <= 0L)
+            {
+                // A refill already on its way keeps its time: restarting it on every sale meant a busy trade never refilled.
+                trade.refillAt = now + trade.refill;
+            }
         }
         return true;
     }

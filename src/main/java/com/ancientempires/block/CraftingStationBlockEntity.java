@@ -17,6 +17,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -165,12 +166,13 @@ public final class CraftingStationBlockEntity extends WorksiteBlockEntity
             copy.setItem(slot, store.getItem(slot).copy());
         }
         List<ItemStack> leftovers = new ArrayList<>();
-        for (Ingredient ingredient : recipe.getIngredients())
+        // The pickiest ingredients choose first: taken in recipe order, one that accepts several items could
+        // take the only stack a stricter one needed, and a craftable recipe would read as not.
+        List<Ingredient> needed = new ArrayList<>(recipe.getIngredients());
+        needed.removeIf(Ingredient::isEmpty);
+        needed.sort(Comparator.comparingInt(ingredient -> ingredient.getItems().length));
+        for (Ingredient ingredient : needed)
         {
-            if (ingredient.isEmpty())
-            {
-                continue;
-            }
             int found = -1;
             for (int slot = 0; slot < copy.getContainerSize() && found < 0; slot++)
             {

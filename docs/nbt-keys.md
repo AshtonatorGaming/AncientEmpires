@@ -116,6 +116,9 @@ These appear only inside a packed scroll's `EntityTag`, to undo what placing a s
 | `AeHornCall` | War Horn | The selected call: rally, call to arms, or stand down. |
 | `AeGate` | Gate Spawner | The first corner clicked, while choosing a gate's opening. |
 | `AeMinCount` | a scroll in a spawner | The fewest of this scroll a garrison sends out (the stack size is the most). From Ancient Warfare's spawners. |
+| `AeStops` | any order | The stops: position (`Pos`), dimension (`Dim`), mode, and filter item. |
+| `AeStopAt` | Routing, Trade, or Combat Order | The stop the NPC carrying it is on, so a reload resumes the round there. |
+| `AeGoods` | Trade Order | Its trades (`In`, `Out`), each stack with its editor slot (`Slot`). |
 
 ## Block keys
 

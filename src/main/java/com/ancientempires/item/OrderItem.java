@@ -31,6 +31,7 @@ import java.util.List;
 public abstract class OrderItem extends Item
 {
     private static final String STOPS = "AeStops";
+    private static final String PROGRESS = "AeStopAt";
     /** Most stops one order holds. */
     public static final int MAX_STOPS = 16;
 
@@ -74,6 +75,42 @@ public abstract class OrderItem extends Item
     protected int maxStops()
     {
         return MAX_STOPS;
+    }
+
+    /** The stop an NPC walking this order is on (from 0), kept on the order so a reload resumes the round there. */
+    public static int progress(ItemStack order)
+    {
+        return order.hasTag() ? order.getTag().getInt(PROGRESS) : 0;
+    }
+
+    public static void setProgress(ItemStack order, int stop)
+    {
+        if (!order.isEmpty())
+        {
+            order.getOrCreateTag().putInt(PROGRESS, stop);
+        }
+    }
+
+    /**
+     * An order's stops parsed once and kept while its stop list is the same
+     * tag (every change writes a new list), for goals that read the route each tick.
+     */
+    public static final class StopCache
+    {
+        @Nullable
+        private Tag list;
+        private List<Stop> stops = List.of();
+
+        public List<Stop> of(ItemStack order)
+        {
+            Tag list = order.hasTag() ? order.getTag().get(STOPS) : null;
+            if (list != this.list)
+            {
+                this.list = list;
+                this.stops = list == null ? List.of() : List.copyOf(stops(order));
+            }
+            return this.stops;
+        }
     }
 
     public static List<Stop> stops(ItemStack order)

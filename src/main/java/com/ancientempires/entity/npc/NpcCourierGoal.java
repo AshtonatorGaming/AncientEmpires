@@ -2,7 +2,6 @@ package com.ancientempires.entity.npc;
 
 import net.minecraft.world.entity.player.Player;
 import com.ancientempires.item.TradeOrderItem;
-import com.ancientempires.block.WorksiteBlockEntity;
 import com.ancientempires.config.AncientEmpiresConfig;
 import com.ancientempires.item.OrderItem;
 import com.ancientempires.item.RoutingOrderItem;
@@ -10,9 +9,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 
@@ -53,6 +50,7 @@ final class NpcCourierGoal extends Goal
     private int repath;
     /** While {@code working} is under this, the trader keeps shop (0: not a shop stop). */
     private int shopUntil;
+    private final OrderItem.StopCache stops = new OrderItem.StopCache();
 
     NpcCourierGoal(NpcEntity npc)
     {
@@ -74,7 +72,7 @@ final class NpcCourierGoal extends Goal
 
     private List<OrderItem.Stop> route()
     {
-        return OrderItem.stops(this.order());
+        return this.stops.of(this.order());
     }
 
     private boolean onDuty()
@@ -104,6 +102,8 @@ final class NpcCourierGoal extends Goal
     @Override
     public void start()
     {
+        // The round resumes where the order says it was (kept on the order, so a reload does not restart it).
+        this.stopIndex = OrderItem.progress(this.order());
         this.walking = 0;
         this.working = -1;
         this.repath = 0;
@@ -217,21 +217,17 @@ final class NpcCourierGoal extends Goal
     private void next()
     {
         this.shopUntil = 0;
-        this.stopIndex++;
+        this.stopIndex = (this.stopIndex + 1) % Math.max(1, this.route().size());
+        OrderItem.setProgress(this.order(), this.stopIndex);
         this.walking = 0;
         this.working = -1;
         this.repath = 0;
     }
 
-    /** The stop's item handler, unless the block is gone or is another player's worksite. */
+    /** The stop's item handler, unless the block is gone, another player's worksite, or in a faction structure still held. */
     private IItemHandler container(BlockPos pos)
     {
-        BlockEntity entity = this.npc.level().getBlockEntity(pos);
-        if (entity == null || entity instanceof WorksiteBlockEntity site && site.owner() != null && !site.owner().equals(this.npc.getOwner()))
-        {
-            return null;
-        }
-        return entity.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(null);
+        return NpcStores.handler(this.npc, pos);
     }
 
     /**
@@ -245,10 +241,13 @@ final class NpcCourierGoal extends Goal
         int moved = 0;
         if (mode.deposits())
         {
+            // Its own next meals stay with it, unless the stop names that food as its filter.
+            boolean[] food = NpcStores.keptFood(backpack);
             for (int slot = NpcInventory.BACKPACK_START; slot < NpcInventory.SLOT_COUNT; slot++)
             {
                 ItemStack held = backpack.getItem(slot);
-                if (held.isEmpty() || held.getItem() instanceof OrderItem || !mode.moves(held, filter))
+                boolean meal = food[slot - NpcInventory.BACKPACK_START] && !ItemStack.isSameItem(held, filter);
+                if (held.isEmpty() || held.getItem() instanceof OrderItem || meal || !mode.moves(held, filter))
                 {
                     continue;
                 }

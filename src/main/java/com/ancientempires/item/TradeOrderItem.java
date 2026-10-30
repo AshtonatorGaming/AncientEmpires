@@ -22,6 +22,7 @@ import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -152,17 +153,56 @@ public class TradeOrderItem extends OrderItem
         return stacks;
     }
 
+    /** The stacks, each with its editor slot ({@code Slot}), so the goods editor shows them where they were set. */
     private static ListTag write(List<ItemStack> stacks)
     {
         ListTag list = new ListTag();
-        for (ItemStack stack : stacks)
+        for (int i = 0; i < stacks.size(); i++)
         {
-            if (!stack.isEmpty())
+            if (!stacks.get(i).isEmpty())
             {
-                list.add(stack.save(new CompoundTag()));
+                CompoundTag tag = stacks.get(i).save(new CompoundTag());
+                tag.putByte("Slot", (byte) i);
+                list.add(tag);
             }
         }
         return list;
+    }
+
+    /**
+     * One trade of the order as the goods editor lays it out: the customer's
+     * nine slots, then the trader's, each stack in the slot it was set in
+     * (older orders, saved without slots, fill from the first).
+     */
+    public static ItemStack[] editorSlots(ItemStack order, int index)
+    {
+        ItemStack[] slots = new ItemStack[NpcTrades.SIDE * 2];
+        Arrays.fill(slots, ItemStack.EMPTY);
+        ListTag trades = order.hasTag() ? order.getTag().getList(GOODS, Tag.TAG_COMPOUND) : new ListTag();
+        if (index < 0 || index >= trades.size())
+        {
+            return slots;
+        }
+        CompoundTag trade = trades.getCompound(index);
+        placeSide(trade.getList("In", Tag.TAG_COMPOUND), slots, 0);
+        placeSide(trade.getList("Out", Tag.TAG_COMPOUND), slots, NpcTrades.SIDE);
+        return slots;
+    }
+
+    private static void placeSide(ListTag list, ItemStack[] slots, int start)
+    {
+        int next = 0;
+        for (Tag entry : list)
+        {
+            CompoundTag tag = (CompoundTag) entry;
+            int slot = tag.contains("Slot", Tag.TAG_BYTE) ? tag.getByte("Slot") : next;
+            ItemStack stack = ItemStack.of(tag);
+            if (slot >= 0 && slot < NpcTrades.SIDE && slots[start + slot].isEmpty() && !stack.isEmpty())
+            {
+                slots[start + slot] = stack;
+            }
+            next = slot + 1;
+        }
     }
 
     /** Opens the goods editor (not while pointing at a block: that adds a stop). */
