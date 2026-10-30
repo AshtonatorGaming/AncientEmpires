@@ -153,8 +153,8 @@
           "skins": [
             {"id": "empire.spellcaster.3#empire_magician_1", "type": "empire.spellcaster.3", "name": "Empire Magician 1", "file": "empire_magician_1.png"},
             {"id": "empire.spellcaster.3#empire_magician_2", "type": "empire.spellcaster.3", "name": "Empire Magician 2", "file": "empire_magician_2.png"},
-            {"id": "empire.spellcaster.3#empire_magician_3", "type": "empire.spellcaster.3", "name": "Empire Magician 3", "file": "empire_magician_3.png"},
-            {"id": "empire.spellcaster.3#empire_magician_4", "type": "empire.spellcaster.3", "name": "Empire Magician 4", "file": "empire_magician_4.png"}
+            {"id": "empire.spellcaster.3#empire_magician_3", "type": "empire.spellcaster.3", "name": "Empire Magician 2", "file": "empire_magician_3.png"},
+            {"id": "empire.spellcaster.3#empire_magician_4", "type": "empire.spellcaster.3", "name": "Empire Magician 3", "file": "empire_magician_4.png"}
           ]
         },
         {
@@ -2696,11 +2696,11 @@
           "id": "spellcaster.1",
           "name": "Spellcaster 1",
           "skins": [
-            {"id": "orc.spellcaster.1#orc_shaman_1", "type": "orc.spellcaster.1", "name": "Orc Corrupter 1", "file": "orc_shaman_1.png"},
-            {"id": "orc.spellcaster.1#orc_shaman_2", "type": "orc.spellcaster.1", "name": "Orc Corrupter 2", "file": "orc_shaman_2.png"},
-            {"id": "orc.spellcaster.1#orc_shaman_3", "type": "orc.spellcaster.1", "name": "Orc Corrupter 3", "file": "orc_shaman_3.png"},
-            {"id": "orc.spellcaster.1#orc_shaman_4", "type": "orc.spellcaster.1", "name": "Orc Corrupter 4", "file": "orc_shaman_4.png"},
-            {"id": "orc.spellcaster.1#orc_shaman_5", "type": "orc.spellcaster.1", "name": "Orc Corrupter 5", "file": "orc_shaman_5.png"}
+            {"id": "orc.spellcaster.1#orc_shaman_1", "type": "orc.spellcaster.1", "name": "Orc Corrupter 8", "file": "orc_shaman_1.png"},
+            {"id": "orc.spellcaster.1#orc_shaman_2", "type": "orc.spellcaster.1", "name": "Orc Corrupter 9", "file": "orc_shaman_2.png"},
+            {"id": "orc.spellcaster.1#orc_shaman_3", "type": "orc.spellcaster.1", "name": "Orc Corrupter 10", "file": "orc_shaman_3.png"},
+            {"id": "orc.spellcaster.1#orc_shaman_4", "type": "orc.spellcaster.1", "name": "Orc Corrupter 11", "file": "orc_shaman_4.png"},
+            {"id": "orc.spellcaster.1#orc_shaman_5", "type": "orc.spellcaster.1", "name": "Orc Corrupter 12", "file": "orc_shaman_5.png"}
           ]
         },
         {
@@ -2855,16 +2855,16 @@
           "name": "Leader",
           "skins": [
             {"id": "evil.leader#evil_bringer", "type": "evil.leader", "name": "Malice Warlord 1", "file": "evil_bringer.png"},
-            {"id": "evil.leader#evil_death", "type": "evil.leader", "name": "Malice Warlord 4", "file": "evil_death.png"},
-            {"id": "evil.leader#evil_death_knight", "type": "evil.leader", "name": "Malice Warlord 5", "file": "evil_death_knight.png"},
-            {"id": "evil.leader#evil_death_knight_2", "type": "evil.leader", "name": "Malice Warlord 6", "file": "evil_death_knight_2.png"},
-            {"id": "evil.leader#evil_death_knight_3", "type": "evil.leader", "name": "Malice Warlord 7", "file": "evil_death_knight_3.png"},
-            {"id": "evil.leader#evil_death_knight_4", "type": "evil.leader", "name": "Malice Warlord 8", "file": "evil_death_knight_4.png"},
-            {"id": "evil.leader#evil_death_knight_red", "type": "evil.leader", "name": "Malice Warlord 9", "file": "evil_death_knight_red.png"},
-            {"id": "evil.leader#evil_death_knight_yellow", "type": "evil.leader", "name": "Malice Warlord 10", "file": "evil_death_knight_yellow.png"},
-            {"id": "evil.leader#evil_gold_knight", "type": "evil.leader", "name": "Malice Warlord 11", "file": "evil_gold_knight.png"},
-            {"id": "evil.leader#evil_knight", "type": "evil.leader", "name": "Malice Warlord 12", "file": "evil_knight.png"},
-            {"id": "evil.leader#evil_lord", "type": "evil.leader", "name": "Malice Warlord 13", "file": "evil_lord.png"}
+            {"id": "evil.leader#evil_death", "type": "evil.leader", "name": "Malice Warlord 2", "file": "evil_death.png"},
+            {"id": "evil.leader#evil_death_knight", "type": "evil.leader", "name": "Malice Warlord 3", "file": "evil_death_knight.png"},
+            {"id": "evil.leader#evil_death_knight_2", "type": "evil.leader", "name": "Malice Warlord 4", "file": "evil_death_knight_2.png"},
+            {"id": "evil.leader#evil_death_knight_3", "type": "evil.leader", "name": "Malice Warlord 5", "file": "evil_death_knight_3.png"},
+            {"id": "evil.leader#evil_death_knight_4", "type": "evil.leader", "name": "Malice Warlord 6", "file": "evil_death_knight_4.png"},
+            {"id": "evil.leader#evil_death_knight_red", "type": "evil.leader", "name": "Malice Warlord 7", "file": "evil_death_knight_red.png"},
+            {"id": "evil.leader#evil_death_knight_yellow", "type": "evil.leader", "name": "Malice Warlord 8", "file": "evil_death_knight_yellow.png"},
+            {"id": "evil.leader#evil_gold_knight", "type": "evil.leader", "name": "Malice Warlord 9", "file": "evil_gold_knight.png"},
+            {"id": "evil.leader#evil_knight", "type": "evil.leader", "name": "Malice Warlord 10", "file": "evil_knight.png"},
+            {"id": "evil.leader#evil_lord", "type": "evil.leader", "name": "Malice Warlord 11", "file": "evil_lord.png"}
           ]
         },
         {
@@ -4082,7 +4082,7 @@
           "name": "Spellcaster 1",
           "skins": [
             {"id": "smingol.spellcaster.1#smingol_mage_1", "type": "smingol.spellcaster.1", "name": "Smingol Magus 1", "file": "smingol_mage_1.png"},
-            {"id": "smingol.spellcaster.1#smingol_mage_2", "type": "smingol.spellcaster.1", "name": "Smingol Magus 2", "file": "smingol_mage_2.png"}
+            {"id": "smingol.spellcaster.1#smingol_mage_2", "type": "smingol.spellcaster.1", "name": "Smingol Magus 1", "file": "smingol_mage_2.png"}
           ]
         },
         {
@@ -6055,10 +6055,10 @@
           "name": "Soldier",
           "skins": [
             {"id": "vampire.soldier#frankensteins_monster_1", "type": "vampire.soldier", "name": "Frankenstein Monster 1", "file": "frankensteins_monster_1.png"},
-            {"id": "vampire.soldier#frankensteins_monster_2", "type": "vampire.soldier", "name": "Frankenstein Monster 3", "file": "frankensteins_monster_2.png"},
-            {"id": "vampire.soldier#frankensteins_monster_3", "type": "vampire.soldier", "name": "Frankenstein Monster 5", "file": "frankensteins_monster_3.png"},
-            {"id": "vampire.soldier#frankensteins_monster_4", "type": "vampire.soldier", "name": "Frankenstein Monster 7", "file": "frankensteins_monster_4.png"},
-            {"id": "vampire.soldier#frankensteins_monster_5", "type": "vampire.soldier", "name": "Frankenstein Monster 9", "file": "frankensteins_monster_5.png"}
+            {"id": "vampire.soldier#frankensteins_monster_2", "type": "vampire.soldier", "name": "Frankenstein Monster 2", "file": "frankensteins_monster_2.png"},
+            {"id": "vampire.soldier#frankensteins_monster_3", "type": "vampire.soldier", "name": "Frankenstein Monster 3", "file": "frankensteins_monster_3.png"},
+            {"id": "vampire.soldier#frankensteins_monster_4", "type": "vampire.soldier", "name": "Frankenstein Monster 4", "file": "frankensteins_monster_4.png"},
+            {"id": "vampire.soldier#frankensteins_monster_5", "type": "vampire.soldier", "name": "Frankenstein Monster 5", "file": "frankensteins_monster_5.png"}
           ]
         },
         {
@@ -6066,10 +6066,10 @@
           "name": "Soldier Elite",
           "skins": [
             {"id": "vampire.soldier.elite#vampire_bride_1", "type": "vampire.soldier.elite", "name": "Vampire Bride 1", "file": "vampire_bride_1.png"},
-            {"id": "vampire.soldier.elite#vampire_bride_2", "type": "vampire.soldier.elite", "name": "Vampire Bride 3", "file": "vampire_bride_2.png"},
-            {"id": "vampire.soldier.elite#vampire_bride_3", "type": "vampire.soldier.elite", "name": "Vampire Bride 5", "file": "vampire_bride_3.png"},
-            {"id": "vampire.soldier.elite#vampire_lady", "type": "vampire.soldier.elite", "name": "Vampire Bride 7", "file": "vampire_lady.png"},
-            {"id": "vampire.soldier.elite#vampire_queen", "type": "vampire.soldier.elite", "name": "Vampire Bride 9", "file": "vampire_queen.png"}
+            {"id": "vampire.soldier.elite#vampire_bride_2", "type": "vampire.soldier.elite", "name": "Vampire Bride 2", "file": "vampire_bride_2.png"},
+            {"id": "vampire.soldier.elite#vampire_bride_3", "type": "vampire.soldier.elite", "name": "Vampire Bride 3", "file": "vampire_bride_3.png"},
+            {"id": "vampire.soldier.elite#vampire_lady", "type": "vampire.soldier.elite", "name": "Vampire Bride 4", "file": "vampire_lady.png"},
+            {"id": "vampire.soldier.elite#vampire_queen", "type": "vampire.soldier.elite", "name": "Vampire Bride 5", "file": "vampire_queen.png"}
           ]
         },
         {
@@ -6077,7 +6077,7 @@
           "name": "Archer",
           "skins": [
             {"id": "vampire.archer#szygany_guard_1", "type": "vampire.archer", "name": "Vampire Szygany Guard 1", "file": "szygany_guard_1.png"},
-            {"id": "vampire.archer#szygany_guard_2", "type": "vampire.archer", "name": "Vampire Szygany Guard 3", "file": "szygany_guard_2.png"}
+            {"id": "vampire.archer#szygany_guard_2", "type": "vampire.archer", "name": "Vampire Szygany Guard 2", "file": "szygany_guard_2.png"}
           ]
         },
         {
@@ -6085,7 +6085,7 @@
           "name": "Archer Elite",
           "skins": [
             {"id": "vampire.archer.elite#szygany_day_guard_1", "type": "vampire.archer.elite", "name": "Vampire Szygany Watcher 1", "file": "szygany_day_guard_1.png"},
-            {"id": "vampire.archer.elite#szygany_day_guard_2", "type": "vampire.archer.elite", "name": "Vampire Szygany Watcher 3", "file": "szygany_day_guard_2.png"}
+            {"id": "vampire.archer.elite#szygany_day_guard_2", "type": "vampire.archer.elite", "name": "Vampire Szygany Watcher 2", "file": "szygany_day_guard_2.png"}
           ]
         },
         {
@@ -6100,8 +6100,8 @@
           "name": "Mounted Archer",
           "skins": [
             {"id": "vampire.mounted_archer#szygany_day_guard_1", "type": "vampire.mounted_archer", "name": "Vampire Szygany Blood Hunter 1", "file": "szygany_day_guard_1.png"},
-            {"id": "vampire.mounted_archer#szygany_day_guard_2", "type": "vampire.mounted_archer", "name": "Vampire Szygany Blood Hunter 3", "file": "szygany_day_guard_2.png"},
-            {"id": "vampire.mounted_archer#szygany_guard_2", "type": "vampire.mounted_archer", "name": "Vampire Szygany Blood Hunter 5", "file": "szygany_guard_2.png"}
+            {"id": "vampire.mounted_archer#szygany_day_guard_2", "type": "vampire.mounted_archer", "name": "Vampire Szygany Blood Hunter 2", "file": "szygany_day_guard_2.png"},
+            {"id": "vampire.mounted_archer#szygany_guard_2", "type": "vampire.mounted_archer", "name": "Vampire Szygany Blood Hunter 3", "file": "szygany_guard_2.png"}
           ]
         },
         {
@@ -6109,9 +6109,9 @@
           "name": "Leader",
           "skins": [
             {"id": "vampire.leader#nosferatu_1", "type": "vampire.leader", "name": "Vampire Nosferatu 1", "file": "nosferatu_1.png"},
-            {"id": "vampire.leader#nosferatu_2", "type": "vampire.leader", "name": "Vampire Nosferatu 3", "file": "nosferatu_2.png"},
-            {"id": "vampire.leader#nosferatu_count_orlok", "type": "vampire.leader", "name": "Vampire Nosferatu 5", "file": "nosferatu_count_orlok.png"},
-            {"id": "vampire.leader#nosferatu_lord", "type": "vampire.leader", "name": "Vampire Nosferatu 7", "file": "nosferatu_lord.png"}
+            {"id": "vampire.leader#nosferatu_2", "type": "vampire.leader", "name": "Vampire Nosferatu 2", "file": "nosferatu_2.png"},
+            {"id": "vampire.leader#nosferatu_count_orlok", "type": "vampire.leader", "name": "Vampire Nosferatu 3", "file": "nosferatu_count_orlok.png"},
+            {"id": "vampire.leader#nosferatu_lord", "type": "vampire.leader", "name": "Vampire Nosferatu 4", "file": "nosferatu_lord.png"}
           ]
         },
         {
@@ -6119,10 +6119,10 @@
           "name": "Leader Elite",
           "skins": [
             {"id": "vampire.leader.elite#vampire_count_dracula", "type": "vampire.leader.elite", "name": "Vampire Drakul 1", "file": "vampire_count_dracula.png"},
-            {"id": "vampire.leader.elite#vampire_dracula_enraged", "type": "vampire.leader.elite", "name": "Vampire Drakul 3", "file": "vampire_dracula_enraged.png"},
-            {"id": "vampire.leader.elite#vampire_lord_1", "type": "vampire.leader.elite", "name": "Vampire Drakul 5", "file": "vampire_lord_1.png"},
-            {"id": "vampire.leader.elite#vampire_lord_2", "type": "vampire.leader.elite", "name": "Vampire Drakul 7", "file": "vampire_lord_2.png"},
-            {"id": "vampire.leader.elite#vampire_vlad_drakul", "type": "vampire.leader.elite", "name": "Vampire Drakul 9", "file": "vampire_vlad_drakul.png"}
+            {"id": "vampire.leader.elite#vampire_dracula_enraged", "type": "vampire.leader.elite", "name": "Vampire Drakul 2", "file": "vampire_dracula_enraged.png"},
+            {"id": "vampire.leader.elite#vampire_lord_1", "type": "vampire.leader.elite", "name": "Vampire Drakul 3", "file": "vampire_lord_1.png"},
+            {"id": "vampire.leader.elite#vampire_lord_2", "type": "vampire.leader.elite", "name": "Vampire Drakul 4", "file": "vampire_lord_2.png"},
+            {"id": "vampire.leader.elite#vampire_vlad_drakul", "type": "vampire.leader.elite", "name": "Vampire Drakul 5", "file": "vampire_vlad_drakul.png"}
           ]
         },
         {
@@ -6130,7 +6130,7 @@
           "name": "Siege Engineer",
           "skins": [
             {"id": "vampire.siege_engineer#szygany_guard_1", "type": "vampire.siege_engineer", "name": "Vampire Szygany Warcrafter 1", "file": "szygany_guard_1.png"},
-            {"id": "vampire.siege_engineer#szygany_guard_2", "type": "vampire.siege_engineer", "name": "Vampire Szygany Warcrafter 3", "file": "szygany_guard_2.png"}
+            {"id": "vampire.siege_engineer#szygany_guard_2", "type": "vampire.siege_engineer", "name": "Vampire Szygany Warcrafter 2", "file": "szygany_guard_2.png"}
           ]
         },
         {
@@ -6153,7 +6153,7 @@
           "name": "Spellcaster 1",
           "skins": [
             {"id": "vampire.spellcaster.1#vampire_count_dracula", "type": "vampire.spellcaster.1", "name": "Vampire Strigoi 1", "file": "vampire_count_dracula.png"},
-            {"id": "vampire.spellcaster.1#vampire_lord_4", "type": "vampire.spellcaster.1", "name": "Vampire Strigoi 2", "file": "vampire_lord_4.png"}
+            {"id": "vampire.spellcaster.1#vampire_lord_4", "type": "vampire.spellcaster.1", "name": "Vampire Strigoi 1", "file": "vampire_lord_4.png"}
           ]
         },
         {
@@ -6190,7 +6190,7 @@
           "name": "Civilian Female",
           "skins": [
             {"id": "vampire.civilian.female#blood_slave_girl_1", "type": "vampire.civilian.female", "name": "Vampire Blood Slave 1", "file": "blood_slave_girl_1.png"},
-            {"id": "vampire.civilian.female#blood_slave_girl_2", "type": "vampire.civilian.female", "name": "Vampire Blood Slave 3", "file": "blood_slave_girl_2.png"}
+            {"id": "vampire.civilian.female#blood_slave_girl_2", "type": "vampire.civilian.female", "name": "Vampire Blood Slave 2", "file": "blood_slave_girl_2.png"}
           ]
         },
         {
@@ -6198,9 +6198,9 @@
           "name": "Civilian Male",
           "skins": [
             {"id": "vampire.civilian.male#vampire_thrall_1", "type": "vampire.civilian.male", "name": "Vampire Thrall 1", "file": "vampire_thrall_1.png"},
-            {"id": "vampire.civilian.male#vampire_thrall_2", "type": "vampire.civilian.male", "name": "Vampire Thrall 3", "file": "vampire_thrall_2.png"},
-            {"id": "vampire.civilian.male#vampire_thrall_3", "type": "vampire.civilian.male", "name": "Vampire Thrall 5", "file": "vampire_thrall_3.png"},
-            {"id": "vampire.civilian.male#vampire_thrall_4", "type": "vampire.civilian.male", "name": "Vampire Thrall 7", "file": "vampire_thrall_4.png"}
+            {"id": "vampire.civilian.male#vampire_thrall_2", "type": "vampire.civilian.male", "name": "Vampire Thrall 2", "file": "vampire_thrall_2.png"},
+            {"id": "vampire.civilian.male#vampire_thrall_3", "type": "vampire.civilian.male", "name": "Vampire Thrall 3", "file": "vampire_thrall_3.png"},
+            {"id": "vampire.civilian.male#vampire_thrall_4", "type": "vampire.civilian.male", "name": "Vampire Thrall 4", "file": "vampire_thrall_4.png"}
           ]
         }
       ]
@@ -6371,14 +6371,14 @@
           "name": "Soldier",
           "skins": [
             {"id": "undead.soldier#undead_bloated_corpse", "type": "undead.soldier", "name": "Undead Zombie 1", "file": "undead_bloated_corpse.png"},
-            {"id": "undead.soldier#undead_burned_corpse", "type": "undead.soldier", "name": "Undead Zombie 3", "file": "undead_burned_corpse.png"},
-            {"id": "undead.soldier#undead_decaying_corpse", "type": "undead.soldier", "name": "Undead Zombie 5", "file": "undead_decaying_corpse.png"},
-            {"id": "undead.soldier#undead_drowned_corpse", "type": "undead.soldier", "name": "Undead Zombie 7", "file": "undead_drowned_corpse.png"},
-            {"id": "undead.soldier#undead_grave_zombie", "type": "undead.soldier", "name": "Undead Zombie 9", "file": "undead_grave_zombie.png"},
-            {"id": "undead.soldier#undead_lynched-corpse", "type": "undead.soldier", "name": "Undead Zombie 11", "file": "undead_lynched-corpse.png"},
-            {"id": "undead.soldier#undead_rotting_corpse", "type": "undead.soldier", "name": "Undead Zombie 13", "file": "undead_rotting_corpse.png"},
-            {"id": "undead.soldier#undead_zombie", "type": "undead.soldier", "name": "Undead Zombie 15", "file": "undead_zombie.png"},
-            {"id": "undead.soldier#undead_zombie_warrior", "type": "undead.soldier", "name": "Undead Zombie 17", "file": "undead_zombie_warrior.png"}
+            {"id": "undead.soldier#undead_burned_corpse", "type": "undead.soldier", "name": "Undead Zombie 2", "file": "undead_burned_corpse.png"},
+            {"id": "undead.soldier#undead_decaying_corpse", "type": "undead.soldier", "name": "Undead Zombie 3", "file": "undead_decaying_corpse.png"},
+            {"id": "undead.soldier#undead_drowned_corpse", "type": "undead.soldier", "name": "Undead Zombie 4", "file": "undead_drowned_corpse.png"},
+            {"id": "undead.soldier#undead_grave_zombie", "type": "undead.soldier", "name": "Undead Zombie 5", "file": "undead_grave_zombie.png"},
+            {"id": "undead.soldier#undead_lynched-corpse", "type": "undead.soldier", "name": "Undead Zombie 6", "file": "undead_lynched-corpse.png"},
+            {"id": "undead.soldier#undead_rotting_corpse", "type": "undead.soldier", "name": "Undead Zombie 7", "file": "undead_rotting_corpse.png"},
+            {"id": "undead.soldier#undead_zombie", "type": "undead.soldier", "name": "Undead Zombie 8", "file": "undead_zombie.png"},
+            {"id": "undead.soldier#undead_zombie_warrior", "type": "undead.soldier", "name": "Undead Zombie 9", "file": "undead_zombie_warrior.png"}
           ]
         },
         {
@@ -6386,11 +6386,11 @@
           "name": "Soldier Elite",
           "skins": [
             {"id": "undead.soldier.elite#undead_spectre_1", "type": "undead.soldier.elite", "name": "Undead Spectre 1", "file": "undead_spectre_1.png"},
-            {"id": "undead.soldier.elite#undead_spectre_2", "type": "undead.soldier.elite", "name": "Undead Spectre 3", "file": "undead_spectre_2.png"},
-            {"id": "undead.soldier.elite#undead_spectre_3", "type": "undead.soldier.elite", "name": "Undead Spectre 5", "file": "undead_spectre_3.png"},
-            {"id": "undead.soldier.elite#undead_wraith_1", "type": "undead.soldier.elite", "name": "Undead Spectre 7", "file": "undead_wraith_1.png"},
-            {"id": "undead.soldier.elite#undead_wraith_2", "type": "undead.soldier.elite", "name": "Undead Spectre 9", "file": "undead_wraith_2.png"},
-            {"id": "undead.soldier.elite#undead_wraith_3", "type": "undead.soldier.elite", "name": "Undead Spectre 11", "file": "undead_wraith_3.png"}
+            {"id": "undead.soldier.elite#undead_spectre_2", "type": "undead.soldier.elite", "name": "Undead Spectre 2", "file": "undead_spectre_2.png"},
+            {"id": "undead.soldier.elite#undead_spectre_3", "type": "undead.soldier.elite", "name": "Undead Spectre 3", "file": "undead_spectre_3.png"},
+            {"id": "undead.soldier.elite#undead_wraith_1", "type": "undead.soldier.elite", "name": "Undead Spectre 4", "file": "undead_wraith_1.png"},
+            {"id": "undead.soldier.elite#undead_wraith_2", "type": "undead.soldier.elite", "name": "Undead Spectre 5", "file": "undead_wraith_2.png"},
+            {"id": "undead.soldier.elite#undead_wraith_3", "type": "undead.soldier.elite", "name": "Undead Spectre 6", "file": "undead_wraith_3.png"}
           ]
         },
         {
@@ -6405,11 +6405,11 @@
           "name": "Archer Elite",
           "skins": [
             {"id": "undead.archer.elite#undead_lich_1", "type": "undead.archer.elite", "name": "Undead Lich 1", "file": "undead_lich_1.png"},
-            {"id": "undead.archer.elite#undead_lich_3", "type": "undead.archer.elite", "name": "Undead Lich 3", "file": "undead_lich_3.png"},
-            {"id": "undead.archer.elite#undead_lich_4", "type": "undead.archer.elite", "name": "Undead Lich 5", "file": "undead_lich_4.png"},
-            {"id": "undead.archer.elite#undead_lich_5", "type": "undead.archer.elite", "name": "Undead Lich 7", "file": "undead_lich_5.png"},
-            {"id": "undead.archer.elite#undead_lich_6", "type": "undead.archer.elite", "name": "Undead Lich 9", "file": "undead_lich_6.png"},
-            {"id": "undead.archer.elite#undead_lich_7", "type": "undead.archer.elite", "name": "Undead Lich 11", "file": "undead_lich_7.png"}
+            {"id": "undead.archer.elite#undead_lich_3", "type": "undead.archer.elite", "name": "Undead Lich 2", "file": "undead_lich_3.png"},
+            {"id": "undead.archer.elite#undead_lich_4", "type": "undead.archer.elite", "name": "Undead Lich 3", "file": "undead_lich_4.png"},
+            {"id": "undead.archer.elite#undead_lich_5", "type": "undead.archer.elite", "name": "Undead Lich 4", "file": "undead_lich_5.png"},
+            {"id": "undead.archer.elite#undead_lich_6", "type": "undead.archer.elite", "name": "Undead Lich 5", "file": "undead_lich_6.png"},
+            {"id": "undead.archer.elite#undead_lich_7", "type": "undead.archer.elite", "name": "Undead Lich 6", "file": "undead_lich_7.png"}
           ]
         },
         {
@@ -6417,12 +6417,12 @@
           "name": "Cavalry",
           "skins": [
             {"id": "undead.cavalry#undead_death_knight", "type": "undead.cavalry", "name": "Undead Wraith Rider 1", "file": "undead_death_knight.png"},
-            {"id": "undead.cavalry#undead_dread_knight", "type": "undead.cavalry", "name": "Undead Wraith Rider 3", "file": "undead_dread_knight.png"},
-            {"id": "undead.cavalry#undead_revenant_knight", "type": "undead.cavalry", "name": "Undead Wraith Rider 5", "file": "undead_revenant_knight.png"},
-            {"id": "undead.cavalry#undead_wraith_rider_1", "type": "undead.cavalry", "name": "Undead Wraith Rider 7", "file": "undead_wraith_rider_1.png"},
-            {"id": "undead.cavalry#undead_wraith_rider_2", "type": "undead.cavalry", "name": "Undead Wraith Rider 9", "file": "undead_wraith_rider_2.png"},
-            {"id": "undead.cavalry#undead_wraith_rider_3", "type": "undead.cavalry", "name": "Undead Wraith Rider 11", "file": "undead_wraith_rider_3.png"},
-            {"id": "undead.cavalry#undead_wraith_rider_4", "type": "undead.cavalry", "name": "Undead Wraith Rider 13", "file": "undead_wraith_rider_4.png"}
+            {"id": "undead.cavalry#undead_dread_knight", "type": "undead.cavalry", "name": "Undead Wraith Rider 2", "file": "undead_dread_knight.png"},
+            {"id": "undead.cavalry#undead_revenant_knight", "type": "undead.cavalry", "name": "Undead Wraith Rider 3", "file": "undead_revenant_knight.png"},
+            {"id": "undead.cavalry#undead_wraith_rider_1", "type": "undead.cavalry", "name": "Undead Wraith Rider 4", "file": "undead_wraith_rider_1.png"},
+            {"id": "undead.cavalry#undead_wraith_rider_2", "type": "undead.cavalry", "name": "Undead Wraith Rider 5", "file": "undead_wraith_rider_2.png"},
+            {"id": "undead.cavalry#undead_wraith_rider_3", "type": "undead.cavalry", "name": "Undead Wraith Rider 6", "file": "undead_wraith_rider_3.png"},
+            {"id": "undead.cavalry#undead_wraith_rider_4", "type": "undead.cavalry", "name": "Undead Wraith Rider 7", "file": "undead_wraith_rider_4.png"}
           ]
         },
         {
@@ -6430,11 +6430,11 @@
           "name": "Mounted Archer",
           "skins": [
             {"id": "undead.mounted_archer#undead_ghost_1", "type": "undead.mounted_archer", "name": "Undead Ghost Rider 1", "file": "undead_ghost_1.png"},
-            {"id": "undead.mounted_archer#undead_ghost_2", "type": "undead.mounted_archer", "name": "Undead Ghost Rider 3", "file": "undead_ghost_2.png"},
-            {"id": "undead.mounted_archer#undead_ghost_3", "type": "undead.mounted_archer", "name": "Undead Ghost Rider 5", "file": "undead_ghost_3.png"},
-            {"id": "undead.mounted_archer#undead_ghost_6", "type": "undead.mounted_archer", "name": "Undead Ghost Rider 7", "file": "undead_ghost_6.png"},
-            {"id": "undead.mounted_archer#undead_ghost_7", "type": "undead.mounted_archer", "name": "Undead Ghost Rider 9", "file": "undead_ghost_7.png"},
-            {"id": "undead.mounted_archer#undead_ghost_8", "type": "undead.mounted_archer", "name": "Undead Ghost Rider 11", "file": "undead_ghost_8.png"}
+            {"id": "undead.mounted_archer#undead_ghost_2", "type": "undead.mounted_archer", "name": "Undead Ghost Rider 2", "file": "undead_ghost_2.png"},
+            {"id": "undead.mounted_archer#undead_ghost_3", "type": "undead.mounted_archer", "name": "Undead Ghost Rider 3", "file": "undead_ghost_3.png"},
+            {"id": "undead.mounted_archer#undead_ghost_6", "type": "undead.mounted_archer", "name": "Undead Ghost Rider 4", "file": "undead_ghost_6.png"},
+            {"id": "undead.mounted_archer#undead_ghost_7", "type": "undead.mounted_archer", "name": "Undead Ghost Rider 5", "file": "undead_ghost_7.png"},
+            {"id": "undead.mounted_archer#undead_ghost_8", "type": "undead.mounted_archer", "name": "Undead Ghost Rider 6", "file": "undead_ghost_8.png"}
           ]
         },
         {
@@ -6442,11 +6442,11 @@
           "name": "Leader",
           "skins": [
             {"id": "undead.leader#undead_death_knight", "type": "undead.leader", "name": "Undead Death Knight 1", "file": "undead_death_knight.png"},
-            {"id": "undead.leader#undead_death_knight_red", "type": "undead.leader", "name": "Undead Death Knight 3", "file": "undead_death_knight_red.png"},
-            {"id": "undead.leader#undead_death_knight_yellow", "type": "undead.leader", "name": "Undead Death Knight 5", "file": "undead_death_knight_yellow.png"},
-            {"id": "undead.leader#undead_dread_knight", "type": "undead.leader", "name": "Undead Death Knight 7", "file": "undead_dread_knight.png"},
-            {"id": "undead.leader#undead_revenant_knight", "type": "undead.leader", "name": "Undead Death Knight 9", "file": "undead_revenant_knight.png"},
-            {"id": "undead.leader#undead_warlord", "type": "undead.leader", "name": "Undead Death Knight 11", "file": "undead_warlord.png"}
+            {"id": "undead.leader#undead_death_knight_red", "type": "undead.leader", "name": "Undead Death Knight 2", "file": "undead_death_knight_red.png"},
+            {"id": "undead.leader#undead_death_knight_yellow", "type": "undead.leader", "name": "Undead Death Knight 3", "file": "undead_death_knight_yellow.png"},
+            {"id": "undead.leader#undead_dread_knight", "type": "undead.leader", "name": "Undead Death Knight 4", "file": "undead_dread_knight.png"},
+            {"id": "undead.leader#undead_revenant_knight", "type": "undead.leader", "name": "Undead Death Knight 5", "file": "undead_revenant_knight.png"},
+            {"id": "undead.leader#undead_warlord", "type": "undead.leader", "name": "Undead Death Knight 6", "file": "undead_warlord.png"}
           ]
         },
         {
@@ -6454,10 +6454,10 @@
           "name": "Leader Elite",
           "skins": [
             {"id": "undead.leader.elite#undead_lich_lord_1", "type": "undead.leader.elite", "name": "Undead Liche Lord 1", "file": "undead_lich_lord_1.png"},
-            {"id": "undead.leader.elite#undead_lich_lord_2", "type": "undead.leader.elite", "name": "Undead Liche Lord 3", "file": "undead_lich_lord_2.png"},
-            {"id": "undead.leader.elite#undead_lich_lord_4", "type": "undead.leader.elite", "name": "Undead Liche Lord 5", "file": "undead_lich_lord_4.png"},
-            {"id": "undead.leader.elite#undead_lich_lord_7", "type": "undead.leader.elite", "name": "Undead Liche Lord 7", "file": "undead_lich_lord_7.png"},
-            {"id": "undead.leader.elite#undead_lich_lord_8", "type": "undead.leader.elite", "name": "Undead Liche Lord 9", "file": "undead_lich_lord_8.png"}
+            {"id": "undead.leader.elite#undead_lich_lord_2", "type": "undead.leader.elite", "name": "Undead Liche Lord 2", "file": "undead_lich_lord_2.png"},
+            {"id": "undead.leader.elite#undead_lich_lord_4", "type": "undead.leader.elite", "name": "Undead Liche Lord 3", "file": "undead_lich_lord_4.png"},
+            {"id": "undead.leader.elite#undead_lich_lord_7", "type": "undead.leader.elite", "name": "Undead Liche Lord 4", "file": "undead_lich_lord_7.png"},
+            {"id": "undead.leader.elite#undead_lich_lord_8", "type": "undead.leader.elite", "name": "Undead Liche Lord 5", "file": "undead_lich_lord_8.png"}
           ]
         },
         {
@@ -6472,9 +6472,9 @@
           "name": "Priest",
           "skins": [
             {"id": "undead.priest#undead_lich_priest_1", "type": "undead.priest", "name": "Undead Liche 1", "file": "undead_lich_priest_1.png"},
-            {"id": "undead.priest#undead_lich_priest_2", "type": "undead.priest", "name": "Undead Liche 3", "file": "undead_lich_priest_2.png"},
-            {"id": "undead.priest#undead_lich_priest_3", "type": "undead.priest", "name": "Undead Liche 5", "file": "undead_lich_priest_3.png"},
-            {"id": "undead.priest#undead_lich_priest_4", "type": "undead.priest", "name": "Undead Liche 7", "file": "undead_lich_priest_4.png"}
+            {"id": "undead.priest#undead_lich_priest_2", "type": "undead.priest", "name": "Undead Liche 2", "file": "undead_lich_priest_2.png"},
+            {"id": "undead.priest#undead_lich_priest_3", "type": "undead.priest", "name": "Undead Liche 3", "file": "undead_lich_priest_3.png"},
+            {"id": "undead.priest#undead_lich_priest_4", "type": "undead.priest", "name": "Undead Liche 4", "file": "undead_lich_priest_4.png"}
           ]
         },
         {
@@ -6496,7 +6496,7 @@
           "name": "Spellcaster 2",
           "skins": [
             {"id": "undead.spellcaster.2#undead_necromancer", "type": "undead.spellcaster.2", "name": "Undead Necromancer 1", "file": "undead_necromancer.png"},
-            {"id": "undead.spellcaster.2#undead_necromancer_2", "type": "undead.spellcaster.2", "name": "Undead Necromancer 3", "file": "undead_necromancer_2.png"}
+            {"id": "undead.spellcaster.2#undead_necromancer_2", "type": "undead.spellcaster.2", "name": "Undead Necromancer 2", "file": "undead_necromancer_2.png"}
           ]
         },
         {
@@ -6504,7 +6504,7 @@
           "name": "Spellcaster 3",
           "skins": [
             {"id": "undead.spellcaster.3#undead_lich_2", "type": "undead.spellcaster.3", "name": "Undead Liche 1", "file": "undead_lich_2.png"},
-            {"id": "undead.spellcaster.3#undead_lich_4", "type": "undead.spellcaster.3", "name": "Undead Liche 3", "file": "undead_lich_4.png"}
+            {"id": "undead.spellcaster.3#undead_lich_4", "type": "undead.spellcaster.3", "name": "Undead Liche 2", "file": "undead_lich_4.png"}
           ]
         },
         {
@@ -6512,8 +6512,8 @@
           "name": "Spellcaster 4",
           "skins": [
             {"id": "undead.spellcaster.4#undead_lich_lord_3", "type": "undead.spellcaster.4", "name": "Liche Master 1", "file": "undead_lich_lord_3.png"},
-            {"id": "undead.spellcaster.4#undead_lich_lord_5", "type": "undead.spellcaster.4", "name": "Liche Master 3", "file": "undead_lich_lord_5.png"},
-            {"id": "undead.spellcaster.4#undead_lich_lord_6", "type": "undead.spellcaster.4", "name": "Liche Master 5", "file": "undead_lich_lord_6.png"}
+            {"id": "undead.spellcaster.4#undead_lich_lord_5", "type": "undead.spellcaster.4", "name": "Liche Master 2", "file": "undead_lich_lord_5.png"},
+            {"id": "undead.spellcaster.4#undead_lich_lord_6", "type": "undead.spellcaster.4", "name": "Liche Master 3", "file": "undead_lich_lord_6.png"}
           ]
         },
         {
@@ -6528,7 +6528,7 @@
           "name": "Trader",
           "skins": [
             {"id": "undead.trader#undead_death_trader", "type": "undead.trader", "name": "Undead Death Bargainer 1", "file": "undead_death_trader.png"},
-            {"id": "undead.trader#undead_wight", "type": "undead.trader", "name": "Undead Death Bargainer 3", "file": "undead_wight.png"}
+            {"id": "undead.trader#undead_wight", "type": "undead.trader", "name": "Undead Death Bargainer 2", "file": "undead_wight.png"}
           ]
         }
       ]
