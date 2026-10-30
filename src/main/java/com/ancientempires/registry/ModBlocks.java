@@ -1,5 +1,7 @@
 package com.ancientempires.registry;
 
+import com.ancientempires.block.DraftingStationBlock;
+import com.ancientempires.block.StructureBuilderBlock;
 import com.ancientempires.block.CraftingStationBlock;
 import com.ancientempires.block.FruitFarmBlock;
 import com.ancientempires.AncientEmpires;
@@ -133,6 +135,18 @@ public final class ModBlocks
 
     public static final RegistryObject<Block> CRAFTING_STATION = BLOCKS.register("crafting_station",
             () -> new CraftingStationBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOD)
+                    .strength(2.5F)
+                    .sound(SoundType.WOOD)));
+
+    /** A structure under construction, set down by a Blueprint (no item of its own). */
+    public static final RegistryObject<Block> STRUCTURE_BUILDER = BLOCKS.register("structure_builder",
+            () -> new StructureBuilderBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOD)
+                    .strength(2.0F)
+                    .sound(SoundType.SCAFFOLDING)));
+    public static final RegistryObject<Block> DRAFTING_STATION = BLOCKS.register("drafting_station",
+            () -> new DraftingStationBlock(BlockBehaviour.Properties.of()
                     .mapColor(MapColor.WOOD)
                     .strength(2.5F)
                     .sound(SoundType.WOOD)));

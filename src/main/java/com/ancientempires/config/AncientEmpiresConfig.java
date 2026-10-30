@@ -313,6 +313,8 @@ public final class AncientEmpiresConfig
     private static final ForgeConfigSpec.ConfigValue<String> GOVERNOR_TAX_ITEM;
     private static final ForgeConfigSpec.IntValue GOVERNOR_TAX_TICKS;
     private static final ForgeConfigSpec.IntValue STRUCTURES_CACHE_MB;
+    private static final ForgeConfigSpec.IntValue STRUCTURES_BUILDER_LAYER_TICKS;
+    private static final ForgeConfigSpec.IntValue STRUCTURES_BLUEPRINT_PAPER;
     private static final ForgeConfigSpec.ConfigValue<String> STRUCTURES_MISSING_BLOCK;
     private static final ForgeConfigSpec.ConfigValue<String> STRUCTURES_MISSING_ENTITY;
     private static final ForgeConfigSpec.BooleanValue STRUCTURES_WORLDGEN;
@@ -1212,6 +1214,8 @@ public final class AncientEmpiresConfig
 
         builder.comment("Structure templates (STRUCTURES.md): Ancient Warfare's library, converted, placed by /ancientempires structure and later by world generation.").push("structures");
         STRUCTURES_CACHE_MB = builder.comment("Memory for templates kept loaded, in MB; the least recently used are dropped past it. The largest AW island takes about 27.").defineInRange("templateCacheMb", 256, 16, 4096);
+        STRUCTURES_BUILDER_LAYER_TICKS = builder.comment("Ticks a builder (a worker holding a shovel) takes to lay one layer of a Structure Builder's template, once its store holds the layer's materials; shorter with work speed.").defineInRange("builderLayerTicks", 100, 1, 12000);
+        STRUCTURES_BLUEPRINT_PAPER = builder.comment("Paper a Drafting Station takes for one Blueprint (none in creative).").defineInRange("blueprintPaper", 4, 0, 64);
         STRUCTURES_MISSING_BLOCK = builder.comment("What a block becomes when neither this game nor the ae_remap tables know it (a mod that is not installed).").define("missingBlock", "minecraft:air");
         STRUCTURES_MISSING_ENTITY = builder.comment("What a spawner's mob becomes when neither this game nor the ae_remap tables know it (a mod that is not installed). Empty: nothing spawns.").define("missingEntity", "minecraft:zombie");
         STRUCTURES_WORLDGEN = builder.comment("AW's structures generate in new chunks (AW's enable_structure_generation). Off for worlds that want no faction structures.").define("worldGen", true);
@@ -1755,6 +1759,8 @@ public final class AncientEmpiresConfig
     public static String governorTaxItem = "minecraft:gold_nugget";
     public static int governorTaxTicksPerWorker = 2400;
     public static int structuresTemplateCacheMb = 256;
+    public static int builderLayerTicks = 100;
+    public static int structuresBlueprintPaper = 4;
     public static String structuresMissingBlock = "minecraft:air";
     public static String structuresMissingEntity = "minecraft:zombie";
     public static boolean structuresWorldGen = true;
@@ -2224,6 +2230,8 @@ public final class AncientEmpiresConfig
         governorTaxItem = GOVERNOR_TAX_ITEM.get();
         governorTaxTicksPerWorker = GOVERNOR_TAX_TICKS.get();
         structuresTemplateCacheMb = STRUCTURES_CACHE_MB.get();
+        builderLayerTicks = STRUCTURES_BUILDER_LAYER_TICKS.get();
+        structuresBlueprintPaper = STRUCTURES_BLUEPRINT_PAPER.get();
         structuresMissingBlock = STRUCTURES_MISSING_BLOCK.get();
         structuresMissingEntity = STRUCTURES_MISSING_ENTITY.get();
         structuresWorldGen = STRUCTURES_WORLDGEN.get();

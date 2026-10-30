@@ -1,5 +1,6 @@
 package com.ancientempires.registry;
 
+import com.ancientempires.item.BlueprintItem;
 import com.ancientempires.item.InstrumentItem;
 import com.ancientempires.item.TradeOrderItem;
 import com.ancientempires.AncientEmpires;
@@ -137,6 +138,9 @@ public final class ModItems
             () -> new BlockItem(ModBlocks.FISHING_DOCK.get(), new Item.Properties()));
     public static final RegistryObject<Item> CRAFTING_STATION = ITEMS.register("crafting_station",
             () -> new BlockItem(ModBlocks.CRAFTING_STATION.get(), new Item.Properties()));
+    public static final RegistryObject<Item> DRAFTING_STATION = ITEMS.register("drafting_station",
+            () -> new BlockItem(ModBlocks.DRAFTING_STATION.get(), new Item.Properties()));
+    public static final RegistryObject<Item> BLUEPRINT = ITEMS.register("blueprint", () -> new BlueprintItem(new Item.Properties()));
     public static final RegistryObject<Item> KITCHEN = ITEMS.register("kitchen",
             () -> new BlockItem(ModBlocks.KITCHEN.get(), new Item.Properties()));
     public static final RegistryObject<Item> TOWN_HALL = ITEMS.register("town_hall",

@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PPP",
+    " T "
+  ],
+  "key": {
+    "P": {"item": "minecraft:paper"},
+    "T": {"item": "minecraft:cartography_table"}
+  },
+  "result": {"item": "ancientempires:drafting_station"}
+}

@@ -153,6 +153,10 @@ Parity, 2026-10-29 (user away, "work on everything you can for testing later"): 
 editor, round), the bard (instruments, AW's songs, cheer), the fruit farm, and the craftsman (crafting station) done,
 none seen in game. Next in docs/aw-parity.md order: the ore processor (needs a decision: AW's was a torque machine),
 then the survival structure builder.
+Survival building done too (Drafting Station, Blueprint, Structure Builder, builder NPC with a shovel); the ore
+processor needs nothing (AW's was a stub). Next in docs/aw-parity.md order: the manual, then towns and the missing site
+types, the warehouse, siege vehicles, spellcasters, chunk loaders, the recruiting station.
+The old test world is backed up in the scratchpad (world.bak); a fresh one passes all 33.
 Game tests stand side by side and reach past their arenas: clear only entities without the run's `RUN_TAG`, and keep
 entities within about 100 blocks of the origin (further ones never tick).
 

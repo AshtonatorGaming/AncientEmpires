@@ -1,5 +1,6 @@
 package com.ancientempires.entity.npc;
 
+import net.minecraft.world.item.ShovelItem;
 import com.ancientempires.item.InstrumentItem;
 import com.ancientempires.item.TradeOrderItem;
 import com.ancientempires.combat.WeaponClassifier;
@@ -284,6 +285,10 @@ public enum NpcPath
         if (stack.is(Items.CRAFTING_TABLE))
         {
             return "craftsman";
+        }
+        if (stack.getItem() instanceof ShovelItem)
+        {
+            return "builder";
         }
         if (stack.getItem() instanceof RoutingOrderItem)
         {

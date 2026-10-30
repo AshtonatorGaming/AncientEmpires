@@ -215,6 +215,15 @@ instead of reflecting per call), Skirmisher thresholds (about 4.5 to 28 blocks).
   empty clears. A Worker-path NPC holding a crafting table (`NpcCraftsmanGoal`) crafts it from the store, worked out on a
   copy first (ingredients by `Ingredient`, leftovers like buckets kept), every `work.craftTicks`, until `craftTarget` are
   in store. Game test `craftsmanMakesItsRecipe`.
+- Survival building (AW parity): `DraftingStationBlock` lists AW's survival templates (`AeBuilds.survival`, sidecar
+  `validation.survival`; `DraftingPacket`, `DraftingScreen` with search) and drafts a `BlueprintItem` for `structures.blueprintPaper`
+  paper. Used on the ground the Blueprint sets a `StructureBuilderBlock` on the build key, the front toward the player. Its
+  entity (a worksite: owner, store, no area) lays the template a layer at a time from the bottom (`AePlacer.place` with a
+  one-layer limit, sparing its own cell), once the store holds that layer's cost (`AeBuilds.layerCost`: a block's item,
+  upper halves, bed heads and liquids free, double slabs two); after the last layer it gives way (store dropped) and the
+  key cell is placed. A Worker-path NPC holding a shovel (`NpcBuilderGoal`, role Builder) does the laying,
+  `structures.builderLayerTicks` a layer. Sneak-click the builder for its layer and what it lacks. Game test
+  `builderLaysItsStructure` (own batch).
 - Town Hall alarm (AW parity): redstone power on a hall sounds it (a bell, a message to the owner); scheduled block
   ticks every 40 call its owner's NPCs within `upkeep.range` (`NpcEntity.alarm`, held 100 ticks, not saved), so an idle
   hall costs nothing. `NpcAlarmGoal` (priority 2): civilians shelter at home or the hall (`upkeep.alarmShelter`), soldiers
@@ -1011,6 +1020,9 @@ already cheap. What would pay is fewer NPCs pathing and scanning: the chain's lo
   the same method. Also `NpcCommand.inherited` and the morale math (`NpcMorale.target`, `drift`,
   `decay`, `fromBehind`), and the level curve and skill reading (`NpcLeveling`). Structures: `AwsTemplate`
   parsing and 1.12 position packing, `AeTemplate` round trips, chest pairing and door/leaf mending.
+- Game tests share one level and reach past their arenas; tests are laid out by name, so a new test can shift others
+  onto each other's ground. Clear only entities without the run's `RUN_TAG` (and tag what tests spawn), keep entities
+  within about 100 blocks of the origin (further ones never tick), and give a test with a big footprint its own `batch`.
 - `./gradlew runGameTestServer` runs `StructureGameTests` on a headless server (arena
   `structures/gametest_arena.nbt`): real templates placed, blocks resolved, fences connected, timings logged
   as `GAMETEST`. Dev runs remap library mixin refmaps (`mixin.env.remapRefMap` in `build.gradle`).

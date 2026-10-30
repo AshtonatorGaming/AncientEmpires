@@ -32,7 +32,7 @@ same thing. Decisions marked **?** are the user's to make before building.
 | Crop farm, tree farm, animal farm, fish farm, quarry | By hand, with areas and upgrades | Done |
 | Fruit farm (cocoa, melons and pumpkins picked, berries) | `FruitFarmBlock`, `NpcFruitPickerGoal` | Done 2026-10-29: a hoe worker without a crop farm (or with a Work Order naming it) picks cocoa (replanted), berries, glow berries, melons, pumpkins; sets cocoa on jungle logs |
 | Auto crafting station (a worker crafts a set recipe) | `CraftingStationBlock`, `NpcCraftsmanGoal` | Done 2026-10-29: sneak-click the station with the item wanted; a worker holding a crafting table crafts it from the store, up to `work.craftTarget` |
-| Ore processor | Nothing | Missing (small) |
+| Ore processor | Nothing | Nothing to port: AW's `TileOreProcessor` is an empty stub (no actions) |
 | Worksite upgrades | Ours | Done |
 | Torque power (hand crank, Stirling, waterwheel, windmill, shafts, flywheels) running worksites without NPCs | Nothing | Skip (decided): worksites stay NPC-run |
 | Warehouse (storage, interface, stock viewer, crafting station, stock linker): one networked store workers fill and players order from | Nothing | **Port** (decided) |
@@ -54,7 +54,7 @@ same thing. Decisions marked **?** are the user's to make before building.
 | AW | Ours | Status |
 | --- | --- | --- |
 | Templates, world generation, scanner, gates, advanced spawner, loot, coins, flags, claiming, decor | Ours (S1 to S5) | Done |
-| Survival structure builder (Structure Builder block plus Drafting Station: build a template from supplied resources) | Admin `/structure place` only | **Missing**: the survival way to build a template |
+| Survival structure builder (Structure Builder block plus Drafting Station: build a template from supplied resources) | `DraftingStationBlock`, `BlueprintItem`, `StructureBuilderBlock`, `NpcBuilderGoal` | Done 2026-10-29: draft a Blueprint of one of AW's 91 survival templates (paper); it sets a builder whose store takes the materials (couriers can deliver), and a worker with a shovel lays it a layer at a time. Unlike AW, materials are paid per layer at the site, not up front |
 | Town builder and town generation (`.awt`) | Nothing | **Missing**: towns |
 | Sky, underground, harbor, lava site types | Not placed | Missing |
 | Loot Chest Placer, Spawner Placer | Capture wand only | Missing (small; builder tools) |

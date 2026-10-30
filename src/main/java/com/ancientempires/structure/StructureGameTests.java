@@ -1,5 +1,8 @@
 package com.ancientempires.structure;
 
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.item.Item;
+import com.ancientempires.block.StructureBuilderBlockEntity;
 import com.ancientempires.block.CraftingStationBlockEntity;
 import com.ancientempires.entity.npc.NpcJobGoal;
 import com.mojang.authlib.GameProfile;
@@ -58,7 +61,6 @@ import com.ancientempires.block.decor.CoffinBlockEntity;
 import com.ancientempires.block.decor.AwSoundBlockEntity;
 import com.ancientempires.block.decor.AwDecorBlockEntity;
 import com.ancientempires.block.decor.AwDecorBlock;
-import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
 import net.minecraft.core.Direction;
@@ -481,11 +483,13 @@ public final class StructureGameTests
         }
         GateEntity gate = GateEntity.create(level, helper.absolutePos(new BlockPos(-20, 1, -20)), helper.absolutePos(new BlockPos(-20, 2, -20)),
                 GateType.VERTICAL_WOOD, Direction.EAST, owner);
+        gate.addTag(RUN_TAG);
         level.addFreshEntity(gate);
         NpcEntity npc = ModEntities.NPC.get().create(level);
         BlockPos start = helper.absolutePos(new BlockPos(-24, 1, -20));
         npc.moveTo(start.getX() + 0.5D, start.getY(), start.getZ() + 0.5D, 0.0F, 0.0F);
         npc.setOwner(owner);
+        npc.addTag(RUN_TAG);
         level.addFreshEntity(npc);
         BlockPos goal = helper.absolutePos(new BlockPos(-16, 1, -20));
         helper.onEachTick(() ->
@@ -664,6 +668,7 @@ public final class StructureGameTests
             husk.moveTo(at.getX() + 0.5D, at.getY(), at.getZ() + 0.5D, 90.0F, 0.0F);
             husk.setNoAi(true);
             husk.setPersistenceRequired();
+            husk.addTag(RUN_TAG);
             level.addFreshEntity(husk);
             husks.add(husk);
         }
@@ -767,6 +772,7 @@ public final class StructureGameTests
             npc.setNpcPath(NpcPath.SOLDIER);
             npc.setRank(i == 2 ? NpcRank.CAPTAIN : NpcRank.SOLDIER);
             npc.linkSpawner(spawner, 0, true);
+            npc.addTag(RUN_TAG);
             level.addFreshEntity(npc);
             people.add(npc);
         }
@@ -781,6 +787,7 @@ public final class StructureGameTests
         Husk attacker = EntityType.HUSK.create(level);
         attacker.moveTo(spawner.getX() + 8.5D, spawner.getY(), spawner.getZ() + 2.5D, 0.0F, 0.0F);
         attacker.setNoAi(true);
+        attacker.addTag(RUN_TAG);
         level.addFreshEntity(attacker);
         captain.hurt(level.damageSources().mobAttack(attacker), captain.getMaxHealth() * 0.8F);
         helper.assertTrue(captain.getChain().order() == NpcOrder.ATTACK, "the wounded captain's garrison sallies out at its attacker, has " + captain.getChain().order());
@@ -877,6 +884,7 @@ public final class StructureGameTests
         Husk husk = EntityType.HUSK.create(level);
         husk.moveTo(base.getX() + 4.5D, base.getY(), base.getZ() + 0.5D, 0.0F, 0.0F);
         husk.setNoAi(true);
+        husk.addTag(RUN_TAG);
         level.addFreshEntity(husk);
         helper.assertTrue(swordsman.getChain().allowsTarget(husk), "holding the line: a foe at the line is fair game");
         chain.setStance(chain.stance().with(NpcStance.Engage.PASSIVE).with(NpcStance.Fire.HOLD));
@@ -963,47 +971,51 @@ public final class StructureGameTests
     {
         String path = "normal/awnationdwarf/dwarfsmithy";
         BlockPos anchor = helper.absolutePos(new BlockPos(0, 1, 0)).offset(300, 0, 200);
-        AePlacer.Report report = placeAndLog(helper, path, anchor, Rotation.NONE);
         ServerLevel level = helper.getLevel();
-        List<NpcEntity> traders = level.getEntitiesOfClass(NpcEntity.class, new AABB(anchor).inflate(48.0D), npc -> !npc.getTrades().isEmpty());
-        helper.assertTrue(!traders.isEmpty(), "the smithy's trader stands there with goods; " + report.entities() + " entities placed, skipped " + report.skipped());
-        NpcEntity trader = traders.get(0);
-        NpcTrades.Trade coinTrade = null;
-        int index = -1;
-        for (int i = 0; i < trader.getTrades().list().size(); i++)
+        AePlacer.Report report = placeAndLog(helper, path, anchor, Rotation.NONE);
+        // The trader may show a tick or so after it is placed, once its chunk is in use.
+        helper.succeedWhen(() ->
         {
-            NpcTrades.Trade trade = trader.getTrades().list().get(i);
-            if (trade.available() > 0 && trade.input().stream().allMatch(Coins::isCoin) && trade.output().stream().noneMatch(Coins::isCoin))
+            List<NpcEntity> traders = level.getEntitiesOfClass(NpcEntity.class, new AABB(anchor).inflate(48.0D), npc -> !npc.getTrades().isEmpty());
+            helper.assertTrue(!traders.isEmpty(), "the smithy's trader stands there with goods; " + report.entities() + " entities placed, skipped " + report.skipped() + "; near: "
+                    + level.getEntitiesOfClass(Entity.class, new AABB(anchor).inflate(48.0D)).stream().map(e -> e.getType().toShortString() + "@" + e.blockPosition().toShortString() + (e instanceof NpcEntity n ? " trades " + n.getTrades().list().size() + " removed " + n.isRemoved() : "")).toList());
+            NpcEntity trader = traders.get(0);
+            NpcTrades.Trade coinTrade = null;
+            int index = -1;
+            for (int i = 0; i < trader.getTrades().list().size(); i++)
             {
-                coinTrade = trade;
-                index = i;
-                break;
+                NpcTrades.Trade trade = trader.getTrades().list().get(i);
+                if (trade.available() > 0 && trade.input().stream().allMatch(Coins::isCoin) && trade.output().stream().noneMatch(Coins::isCoin))
+                {
+                    coinTrade = trade;
+                    index = i;
+                    break;
+                }
             }
-        }
-        helper.assertTrue(coinTrade != null, "a trade priced in coins, among " + trader.getTrades().list().size());
-        FakePlayer player = FakePlayerFactory.getMinecraft(level);
-        player.getInventory().clearContent();
-        ItemStack purse = new ItemStack(ModItems.COIN_PURSE.get());
-        long price = Coins.worth(coinTrade.input());
-        CoinPurseItem.set(purse, price + 5L);
-        player.getInventory().add(purse);
-        String faction = trader.getFaction();
-        NpcStandings standings = NpcStandings.get(level.getServer());
-        int before = standings.get(player.getUUID(), faction);
-        ItemStack goods = coinTrade.output().get(0).copy();
-        helper.assertTrue(trader.getTrades().perform(player, index, level.getGameTime()), "the trade goes through");
-        int change = NpcFactions.tradeChange(faction);
-        if (change != 0)
-        {
-            standings.adjust(player.getUUID(), faction, change);
-        }
-        helper.assertTrue(CoinPurseItem.held(player.getInventory().items.stream().filter(stack -> stack.is(ModItems.COIN_PURSE.get())).findFirst().orElseThrow()) == 5L,
-                "the purse paid " + price + " and kept the 5 over");
-        helper.assertTrue(player.getInventory().countItem(goods.getItem()) >= goods.getCount(), "the goods were given: " + goods);
-        helper.assertTrue(standings.get(player.getUUID(), faction) == before + change, "standing with " + faction + " moved by " + change);
-        player.getInventory().clearContent();
-        level.getEntitiesOfClass(NpcEntity.class, new AABB(anchor).inflate(48.0D)).forEach(NpcEntity::discard);
-        helper.succeed();
+            helper.assertTrue(coinTrade != null, "a trade priced in coins, among " + trader.getTrades().list().size());
+            FakePlayer player = FakePlayerFactory.getMinecraft(level);
+            player.getInventory().clearContent();
+            ItemStack purse = new ItemStack(ModItems.COIN_PURSE.get());
+            long price = Coins.worth(coinTrade.input());
+            CoinPurseItem.set(purse, price + 5L);
+            player.getInventory().add(purse);
+            String faction = trader.getFaction();
+            NpcStandings standings = NpcStandings.get(level.getServer());
+            int before = standings.get(player.getUUID(), faction);
+            ItemStack goods = coinTrade.output().get(0).copy();
+            helper.assertTrue(trader.getTrades().perform(player, index, level.getGameTime()), "the trade goes through");
+            int change = NpcFactions.tradeChange(faction);
+            if (change != 0)
+            {
+                standings.adjust(player.getUUID(), faction, change);
+            }
+            helper.assertTrue(CoinPurseItem.held(player.getInventory().items.stream().filter(stack -> stack.is(ModItems.COIN_PURSE.get())).findFirst().orElseThrow()) == 5L,
+                    "the purse paid " + price + " and kept the 5 over");
+            helper.assertTrue(player.getInventory().countItem(goods.getItem()) >= goods.getCount(), "the goods were given: " + goods);
+            helper.assertTrue(standings.get(player.getUUID(), faction) == before + change, "standing with " + faction + " moved by " + change);
+            player.getInventory().clearContent();
+            level.getEntitiesOfClass(NpcEntity.class, new AABB(anchor).inflate(48.0D)).forEach(NpcEntity::discard);
+        });
     }
 
     /** AW parity, couriers: a worker holding a Routing Order carries a chest's goods to another along its route. */
@@ -1035,6 +1047,7 @@ public final class StructureGameTests
         helper.assertTrue("courier".equals(courier.getRoleId()), "holding a Routing Order makes a courier, is " + courier.getRoleId());
         helper.succeedWhen(() ->
         {
+            helper.assertTrue(level.getBlockEntity(to) instanceof ChestBlockEntity, "the second chest stands");
             ItemStack arrived = ((ChestBlockEntity) level.getBlockEntity(to)).getItem(0);
             helper.assertTrue(arrived.is(Items.COBBLESTONE) && arrived.getCount() == 10, "the goods reached the second chest, has " + arrived);
             courier.discard();
@@ -1209,6 +1222,7 @@ public final class StructureGameTests
         BlockPos at = helper.absolutePos(new BlockPos(-58, 1, 46));
         husk.moveTo(at.getX() + 0.5D, at.getY(), at.getZ() + 0.5D, 0.0F, 0.0F);
         husk.setNoAi(true);
+        husk.addTag(RUN_TAG);
         level.addFreshEntity(husk);
         husk.hurt(veteran.damageSources().mobAttack(veteran), 1000.0F);
         NpcRecord record = veteran.getRecord();
@@ -1295,6 +1309,7 @@ public final class StructureGameTests
         npc.setNpcPath(NpcPath.SOLDIER);
         npc.setRank(rank);
         npc.setLevel(npcLevel);
+        npc.addTag(RUN_TAG);
         helper.getLevel().addFreshEntity(npc);
         return npc;
     }
@@ -1559,4 +1574,60 @@ public final class StructureGameTests
         }
         helper.succeed();
     }
+
+    /**
+     * AW parity, survival building: a Structure Builder with a survival template
+     * (two layers of cobblestone) and its materials in store is laid layer by
+     * layer by a worker holding a shovel, and gives way when done.
+     */
+    // Its own batch: tests are laid out by name, and a new name early in the order moved the others onto each other's ground.
+    @GameTest(template = ARENA, timeoutTicks = 100, batch = "survival_building")
+    public static void builderLaysItsStructure(GameTestHelper helper)
+    {
+        ServerLevel level = helper.getLevel();
+        ResourceLocation id = AeTemplates.byName("fillcobble2x16x16");
+        helper.assertTrue(id != null && AeBuilds.isSurvival(id), "the cobble fill is a survival template");
+        AeTemplate template = AeTemplates.get(id).orElseThrow();
+        // Far out: a 16 by 16 fill would cover other tests' ground.
+        BlockPos key = helper.absolutePos(new BlockPos(0, 1, 0)).offset(-300, 0, -300);
+        BoundingBox bounds = AePlacer.bounds(template, AeBuilds.offset(id), key, Rotation.NONE);
+        for (BlockPos cell : BlockPos.betweenClosed(bounds.minX() - 3, bounds.minY() - 1, bounds.minZ() - 3, bounds.maxX() + 3, bounds.maxY() + 3, bounds.maxZ() + 3))
+        {
+            level.setBlockAndUpdate(cell, cell.getY() < bounds.minY() ? Blocks.STONE.defaultBlockState() : Blocks.AIR.defaultBlockState());
+        }
+        UUID owner = UUID.randomUUID();
+        level.setBlockAndUpdate(key, ModBlocks.STRUCTURE_BUILDER.get().defaultBlockState());
+        StructureBuilderBlockEntity builder = (StructureBuilderBlockEntity) level.getBlockEntity(key);
+        builder.setOwner(owner);
+        builder.start(id, Rotation.NONE);
+        int slot = 0;
+        for (int y = 0; y < template.sizeY(); y++)
+        {
+            for (Map.Entry<Item, Integer> cost : AeBuilds.layerCost(template, y).entrySet())
+            {
+                for (int left = cost.getValue(); left > 0; left -= 64)
+                {
+                    builder.store().setItem(slot++, new ItemStack(cost.getKey(), Math.min(64, left)));
+                }
+            }
+        }
+        helper.assertTrue(builder.missing().isEmpty(), "the first layer's materials are in store: " + builder.missing());
+        NpcEntity worker = squadNpc(helper, owner, new BlockPos(-20, 1, 125), NpcRank.SOLDIER, 1);
+        worker.setNpcPath(NpcPath.WORKER);
+        worker.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SHOVEL));
+        helper.assertTrue("builder".equals(worker.getRoleId()), "a shovel makes a builder, is " + worker.getRoleId());
+        worker.discard();
+        // The builder's work (NpcBuilderGoal.act), done here a layer a call.
+        helper.assertTrue(builder.buildLayer() && builder.layer() == 1, "the first layer is laid");
+        helper.assertTrue(builder.buildLayer(), "the second layer is laid");
+        helper.assertFalse(level.getBlockState(key).is(ModBlocks.STRUCTURE_BUILDER.get()), "the builder gives way when done");
+        int cobble = 0;
+        for (BlockPos cell : BlockPos.betweenClosed(bounds.minX(), bounds.minY(), bounds.minZ(), bounds.maxX(), bounds.maxY(), bounds.maxZ()))
+        {
+            cobble += level.getBlockState(cell).is(Blocks.COBBLESTONE) ? 1 : 0;
+        }
+        helper.assertTrue(cobble > 100, "the fill is laid, " + cobble + " cobblestone");
+        helper.succeed();
+    }
+
 }
