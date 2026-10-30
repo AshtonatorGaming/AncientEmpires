@@ -85,8 +85,9 @@ public class DraftingPacket
         public static void handle(Request request, Supplier<NetworkEvent.Context> context)
         {
             ServerPlayer player = context.get().getSender();
-            if (player == null || !player.level().getBlockState(request.station).is(ModBlocks.DRAFTING_STATION.get())
-                    || player.distanceToSqr(request.station.getCenter()) > REACH * REACH)
+            // Reach first: reading a far block would load (or generate) its chunk.
+            if (player == null || player.distanceToSqr(request.station.getCenter()) > REACH * REACH
+                    || !player.level().getBlockState(request.station).is(ModBlocks.DRAFTING_STATION.get()))
             {
                 return;
             }
